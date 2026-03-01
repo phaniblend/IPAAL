@@ -1,0 +1,10 @@
+import createINPACTEngine from "./inpact_engine_shared";
+const NODES = [
+  { id: "intro", type: "reveal", phase: "Problem", content: { tag: "PROBLEM #48 (TypeScript)", title: "Unnecessary Re-renders — Typed", body: "Fix performance bug with React.memo, useMemo, useCallback Use TypeScript where appropriate.", usecase: "Stop re-renders." } },
+  { id: "objectives", type: "objectives", phase: "Objectives", items: ["Type state and props", "Implement step by step", "Export typed component"] },
+  { id: "step1", type: "question", phase: "Step 1 of 3", paal: "Set up the initial structure and typed state for this problem.", answer_keywords: ["import", "usestate", "interface"], seed_code: "import { useState } from 'react'\n\nexport default function App() {\n  // Step 1\n}", feedback_correct: "✅ Step 1 done.", feedback_partial: "Add typed setup.", feedback_wrong: "Set up structure", expected: "Initial setup" },
+  { id: "step2", type: "question", phase: "Step 2 of 3", paal: "Implement the core logic or UI with proper types.", answer_keywords: ["return", "type"], seed_code: "import { useState } from 'react'\n\nexport default function App() {\n  // Step 2\n}", feedback_correct: "✅ Step 2 done.", feedback_partial: "Core logic in place.", feedback_wrong: "Implement core", expected: "Core implementation" },
+  { id: "step3", type: "question", phase: "Step 3 of 3", paal: "Wire everything together and export the typed component.", answer_keywords: ["export", "default"], seed_code: "import { useState } from 'react'\n\nexport default function App() {\n  // Step 3\n}", feedback_correct: "✅ Problem #48 (TS) complete.", feedback_partial: "Export and finish.", feedback_wrong: "Export component", expected: "Complete" },
+];
+const sideItems = [{ label: "Problem", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
+export default createINPACTEngine({ NODES, sideItems, problemNum: 48, title: "Unnecessary Re-renders (TS)", shortName: "TS — UNNECESSARY REREND" });

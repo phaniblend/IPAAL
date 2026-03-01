@@ -142,8 +142,8 @@ export default function Counter() {
     id: "step3",
     type: "question",
     phase: "Step 4 of 6",
-    paal: "Write the JSX. Show the current count in a paragraph. Add two buttons — one to increment count by 1, one to decrement by 1.",
-    hint: "Increment: setCount(prev => prev + 1)\nDecrement: setCount(prev => prev - 1)\n\nBoth use the functional update form since the new value depends on the old one.",
+    paal: "Write the JSX. Show the current count in a paragraph. Add two buttons — one to increment count by 1, one to decrement by 1. Wire each button with onClick: the +1 button should call setCount(prev => prev + 1), the -1 button should call setCount(prev => prev - 1).",
+    hint: "Paragraph: <p>Count: {count}</p>. Buttons: <button onClick={() => setCount(prev => prev + 1)}>+1</button> and <button onClick={() => setCount(prev => prev - 1)}>-1</button>. Both use the functional update form.",
     analogy: {
       title: "Similar pattern — score tracker",
       code: `<p>Score: {score}</p>\n<button onClick={() => setScore(p => p + 1)}>+1</button>\n<button onClick={() => setScore(p => p - 1)}>-1</button>`,
@@ -183,7 +183,7 @@ export default function Counter() {
     document.title = 'Count: ' + count
   }, [count])
 
-  // Step 3: JSX — paragraph showing count + two buttons (+1 and -1)
+  // Step 3: JSX — paragraph with {count}, two buttons with onClick for +1 and -1
 
 }`,
   },
@@ -293,7 +293,11 @@ export default function Counter() {
     document.title = 'Count: ' + count
   }, [count])
 
-  // Step 5: add the mount-only useEffect, then submit the full component
+  useEffect(() => {
+    console.log('Counter mounted')
+  }, [])
+
+  // Step 6: full component — remove this comment and submit when ready
   return (
     <div>
       <p>Count: {count}</p>
@@ -348,7 +352,7 @@ export default function INPACTEngine({ onNextProblem }) {
     if (n?.id === "step3" && userChoices.userJSX["step1b"]) {
       const base = userChoices.userJSX["step1b"].replace(/\/\/\s*Step\s*\d[^\n]*/g, "").replace(/\n{3,}/g, "\n\n").trimEnd()
         .replace(/}\s*$/, "").trimEnd();
-      return base + "\n  // Step 3: JSX — paragraph showing count + two buttons (+1 and -1)\n}";
+      return base + "\n  // Step 3: JSX — paragraph with {count}, two buttons with onClick for +1 and -1\n}";
     }
     let seed = n?.seed_code ?? "";
     seed = seed.replace(/\bcount\b/g, userChoices.varName).replace(/\bsetCount\b/g, userChoices.setterName);
@@ -507,7 +511,7 @@ export default function INPACTEngine({ onNextProblem }) {
               {attempts > 1 && !showExpected && <button style={s.btn("ghost")} onClick={() => setShowExpected(true)}>SHOW ANSWER</button>}
               <button style={{ ...s.btn("ghost"), borderColor: "#4a5568" }} onClick={() => { const seed = getSeed(NODES[nodeIndex]); setAnswer(seed); setResult(null); setAttempts(0); setShowHint(false); setShowExpected(false); setSyntaxMsg(null); }}>↺ TRY AGAIN</button>
             </>
-          ) : <button style={s.btn("primary")} onClick={next}>NEXT STEP →</button>}
+          ) : <button style={s.btn("primary")} onClick={next}>{nodeIndex === NODES.length - 1 ? "DONE →" : "NEXT STEP →"}</button>}
         </div>
         {showAnalogy && node.analogy && (
           <div onClick={() => setShowAnalogy(false)} style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.75)", zIndex: 100, display: "flex", alignItems: "center", justifyContent: "center" }}>
@@ -607,13 +611,16 @@ export default function INPACTEngine({ onNextProblem }) {
 
   function renderNode() {
     if (nodeIndex >= NODES.length) return (
-      <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", minHeight: "60vh", textAlign: "center" }}>
+      <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", minHeight: "60vh", textAlign: "center", padding: "24px" }}>
         <div style={{ fontSize: "48px", marginBottom: "24px" }}>🎯</div>
         <h1 style={s.h1}>Problem #7 Complete</h1>
-        {onNextProblem && (
+        <p style={{ color: "#64748b", fontSize: "14px", marginBottom: "24px" }}>Step 6 of 6 — all done. Use ← All Problems above to pick another, or go to the next problem.</p>
+        {onNextProblem ? (
           <div style={s.btnRow}>
             <button style={s.btn("primary")} onClick={onNextProblem}>NEXT PROBLEM →</button>
           </div>
+        ) : (
+          <p style={{ color: "#64748b", fontSize: "13px" }}>Use ← All Problems to return to the list.</p>
         )}
       </div>
     );

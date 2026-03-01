@@ -124,12 +124,31 @@ export default function createINPACTEngine(config) {
           <div style={s.phase}>{node.phase}</div>
           <div style={s.paalBox}><div style={s.paalLabel}>PAAL</div><div style={s.paalText}>{node.paal}</div></div>
           {node.seed_code && <div style={{ fontSize: "10px", color: "#4a5568", marginBottom: "8px" }}>CODE BUILT SO FAR — edit below</div>}
-          <CodeEditor value={answer} onChange={setAnswer} height="320px" />
+          <CodeEditor value={answer} onChange={setAnswer} height="320px" cursorAtEndOfLine={node.cursorLine} />
           {showHint && <div style={s.hintBox}>💡 {node.hint}</div>}
           {fbMsg && <div style={s.feedback(result)}>{fbMsg}</div>}
-          {showExpected && node.expected && <div><div style={{ ...s.paalLabel, marginTop: "16px" }}>EXPECTED</div><div style={s.expectedBox}>{node.expected}</div></div>}
+          {showExpected && (
+            <div style={{ marginTop: "16px" }}>
+              {node.example_code ? (
+                <div>
+                  <div style={{ ...s.paalLabel, marginBottom: "6px" }}>EXAMPLE (similar pattern — not the exact answer)</div>
+                  <div style={s.expectedBox}>{node.example_code}</div>
+                </div>
+              ) : (
+                node.expected && <div><div style={{ ...s.paalLabel, marginBottom: "6px" }}>EXPECTED</div><div style={s.expectedBox}>{node.expected}</div></div>
+              )}
+            </div>
+          )}
           <div style={s.btnRow}>
-            {result !== "correct" ? <><button style={s.btn("primary")} onClick={submit}>SUBMIT</button>{attempts > 0 && !showHint && <button style={s.btn("secondary")} onClick={() => setShowHint(true)}>SHOW HINT</button>}{attempts > 1 && !showExpected && <button style={s.btn("ghost")} onClick={() => setShowExpected(true)}>SHOW ANSWER</button>}</> : <button style={s.btn("primary")} onClick={next}>NEXT STEP →</button>}
+            {result !== "correct" ? (
+              <>
+                <button style={s.btn("primary")} onClick={submit}>CHECK MY CODE</button>
+                {!showExpected && <button style={s.btn("secondary")} onClick={() => setShowExpected(true)}>SHOW ME EXAMPLE</button>}
+                {attempts > 0 && !showHint && <button style={s.btn("secondary")} onClick={() => setShowHint(true)}>SHOW HINT</button>}
+              </>
+            ) : (
+              <button style={s.btn("primary")} onClick={next}>NEXT STEP →</button>
+            )}
           </div>
         </div>
       );
