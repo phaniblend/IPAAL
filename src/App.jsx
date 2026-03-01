@@ -2,6 +2,8 @@ import { useState } from 'react'
 import LandingPage from './LandingPage'
 import { TS_FUNDAMENTALS_CURRICULUM } from './engines/typescript/inpact_tsf_index'
 import { JS_FUNDAMENTALS_CURRICULUM } from './engines/javascript/inpact_jsf_index'
+import { NODE_FUNDAMENTALS_CURRICULUM } from './engines/node/inpact_nodef_index'
+import { JS_DEEP_CURRICULUM } from './engines/JS/inpact_js_index'
 import INPACTEngineTSF01 from './engines/typescript/inpact_tsf01_engine'
 import INPACTEngineTSF02 from './engines/typescript/inpact_tsf02_engine'
 import INPACTEngineTSF03 from './engines/typescript/inpact_tsf03_engine'
@@ -22,6 +24,24 @@ import INPACTEngineJSF07 from './engines/javascript/inpact_jsf07_engine'
 import INPACTEngineJSF08 from './engines/javascript/inpact_jsf08_engine'
 import INPACTEngineJSF09 from './engines/javascript/inpact_jsf09_engine'
 import INPACTEngineJSF10 from './engines/javascript/inpact_jsf10_engine'
+import INPACTEngineJSF12 from './engines/javascript/inpact_jsf12_engine'
+import INPACTEngineJSF13 from './engines/javascript/inpact_jsf13_engine'
+import INPACTEngineJSF14 from './engines/javascript/inpact_jsf14_engine'
+import INPACTEngineJSF15 from './engines/javascript/inpact_jsf15_engine'
+import INPACTEngineNODEF01 from './engines/node/inpact_nodef01_engine'
+import INPACTEngineJSF11 from './engines/JS/inpact_jsf11_engine'
+import INPACTEngineJSB01 from './engines/JS/inpact_jsb01_engine'
+import INPACTEngineJSB02 from './engines/JS/inpact_jsb02_engine'
+import INPACTEngineJSB03 from './engines/JS/inpact_jsb03_engine'
+import INPACTEngineJSB04 from './engines/JS/inpact_jsb04_engine'
+import INPACTEngineJSB05 from './engines/JS/inpact_jsb05_engine'
+import INPACTEngineJSB06 from './engines/JS/inpact_jsb06_engine'
+import INPACTEngineJSC01 from './engines/JS/inpact_jsc01_engine'
+import INPACTEngineJSC02 from './engines/JS/inpact_jsc02_engine'
+import INPACTEngineJSC03 from './engines/JS/inpact_jsc03_engine'
+import INPACTEngineJSC04 from './engines/JS/inpact_jsc04_engine'
+import INPACTEngineJSC05 from './engines/JS/inpact_jsc05_engine'
+import INPACTEngineJSD01 from './engines/JS/inpact_jsd01_engine'
 import INPACTEngineP01 from './engines/inpact_p01_engine'
 import INPACTEngineP02 from './engines/inpact_p02_engine'
 import INPACTEngineP03 from './engines/inpact_p03_engine'
@@ -456,12 +476,40 @@ const ENGINES_JSF = [
   INPACTEngineJSF08,
   INPACTEngineJSF09,
   INPACTEngineJSF10,
+  INPACTEngineJSF12,
+  INPACTEngineJSF13,
+  INPACTEngineJSF14,
+  INPACTEngineJSF15,
+]
+
+// Node.js Fundamentals: 1 problem (nodef01)
+const ENGINES_NODE = [
+  INPACTEngineNODEF01,
+]
+
+// JS Deep Dive: 13 problems (jsf11, jsb01–06, jsc01–05, jsd01)
+const ENGINES_JS = [
+  INPACTEngineJSF11,
+  INPACTEngineJSB01,
+  INPACTEngineJSB02,
+  INPACTEngineJSB03,
+  INPACTEngineJSB04,
+  INPACTEngineJSB05,
+  INPACTEngineJSB06,
+  INPACTEngineJSC01,
+  INPACTEngineJSC02,
+  INPACTEngineJSC03,
+  INPACTEngineJSC04,
+  INPACTEngineJSC05,
+  INPACTEngineJSD01,
 ]
 
 function getEngines(track) {
   if (track === 'react-ts') return ENGINES_TS
   if (track === 'tsf') return ENGINES_TSF
   if (track === 'jsf') return ENGINES_JSF
+  if (track === 'node') return ENGINES_NODE
+  if (track === 'js') return ENGINES_JS
   return ENGINES
 }
 
@@ -472,11 +520,17 @@ function getProblemList(track) {
   if (track === 'jsf') {
     return JS_FUNDAMENTALS_CURRICULUM.map((c) => ({ title: c.title, shortName: c.shortName, why: c.why }))
   }
+  if (track === 'node') {
+    return NODE_FUNDAMENTALS_CURRICULUM.map((c) => ({ title: c.title, shortName: c.shortName, why: c.why }))
+  }
+  if (track === 'js') {
+    return JS_DEEP_CURRICULUM.map((c) => ({ title: c.title, shortName: c.shortName, why: c.why }))
+  }
   return null // react-js and react-ts use PROBLEM_LIST from LandingPage (100 items)
 }
 
 export default function App() {
-  const [track, setTrack] = useState('react-js') // 'react-js' | 'react-ts' | 'tsf' | 'jsf'
+  const [track, setTrack] = useState('react-js') // 'react-js' | 'react-ts' | 'tsf' | 'jsf' | 'node' | 'js'
   const [problemIndex, setProblemIndex] = useState(null) // null = landing, 0-based index = problem
   const onBackToProblems = () => setProblemIndex(null)
 

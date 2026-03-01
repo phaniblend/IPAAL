@@ -11,6 +11,10 @@ export const JS_FUNDAMENTALS_CURRICULUM = [
   { id: "jsf08", file: "inpact_jsf08_engine", shortName: "JS — DATA STRUCTURES", title: "Map, Set, WeakMap & Symbols",          topics: ["Map with any-type keys", "Set for dedup + union/intersection", "WeakMap for memory-safe caching", "Symbol unique keys", "Symbol.toPrimitive/.iterator", "EventEmitter using Map+Set"], why: "When plain objects aren't enough. Caching, dedup, and safe metadata use these." },
   { id: "jsf09", file: "inpact_jsf09_engine", shortName: "JS — GENERATORS",      title: "Generators, Iterators & Proxy",        topics: ["function* and yield", "Lazy generator pipelines", "Async generators for pagination/SSE", "Proxy get/set/has traps", "Reflect.get/set", "Reactive state with Proxy"], why: "Lazy data, reactive patterns, and framework internals. Senior-level JS toolkit." },
   { id: "jsf10", file: "inpact_jsf10_engine", shortName: "JS — PERFORMANCE",     title: "Performance, Memory & Event Loop",     topics: ["Event loop: stack/microtask/macrotask", "debounce + throttle from scratch", "Memory leak patterns + fixes", "requestAnimationFrame for animation", "Web Workers for heavy computation"], why: "Understand why UI janks, how to smooth it, and when to offload work." },
+  { id: "jsf12", file: "inpact_jsf12_engine", shortName: "JS — REGEX",           title: "Regular Expressions",                   why: "Validation, parsing, search — regex is in every layer of a real app." },
+  { id: "jsf13", file: "inpact_jsf13_engine", shortName: "JS — NUMBERS & DATES", title: "Numbers, Math, Date & Intl",            why: "Price formatting, dates, i18n — number and date work in every feature." },
+  { id: "jsf14", file: "inpact_jsf14_engine", shortName: "JS — COERCION",        title: "Type Coercion, Equality & Truthy/Falsy", why: "Coercion rules are the root cause of hundreds of real bugs — know them cold." },
+  { id: "jsf15", file: "inpact_jsf15_engine", shortName: "JS — SCOPE",           title: "Scope, Hoisting & the TDZ",             why: "Closure bugs, TDZ errors, hoisting surprises — daily debugging scenarios." },
 ];
 
 export default JS_FUNDAMENTALS_CURRICULUM;
