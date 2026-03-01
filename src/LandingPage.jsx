@@ -1,36 +1,37 @@
 import { useState } from "react";
 
+// Must match ENGINES order in App.jsx (p01, p02, … p30). Original p01–p08 differ from PROBLEMS.TXT.
 const PROBLEM_LIST = [
-  "Counter App",
-  "Toggle Visibility",
-  "Controlled Input",
-  "Form with Validation",
-  "Color Picker",
-  "Simple Timer",
-  "useEffect Basics",
-  "Dependency Array",
-  "Cleanup in useEffect",
-  "Multiple State Vars",
-  "Reusable Button",
-  "Card Component",
-  "Props Drilling",
-  "Default Props",
-  "Children Prop",
-  "Conditional Rendering",
-  "List Rendering",
-  "PropTypes / TypeScript Interface",
-  "Component Composition",
-  "Event Handling",
-  "Conditional Classes",
-  "Inline Styles",
-  "CSS Modules",
-  "Styled Component Pattern",
-  "Lifting State Up",
-  "Controlled vs Uncontrolled",
-  "Simple Todo List",
-  "Star Rating Component",
-  "Accordion",
-  "Image Gallery",
+  "Counter App",                           // P01
+  "Toggle Visibility",                     // P02
+  "Controlled Input",                      // P03
+  "Multiple State Variables",              // P04
+  "Conditional Rendering with Ternary",    // P05
+  "List Rendering with map()",             // P06
+  "useEffect & Side Effects",              // P07
+  "Forms & Validation",                    // P08
+  "Color Picker",                          // P09
+  "Multiple State Vars",                   // P10
+  "Reusable Button",                       // P11
+  "Card Component",                        // P12
+  "Props Drilling",                        // P13
+  "Default Props",                         // P14
+  "Children Prop",                         // P15
+  "Conditional Rendering",                // P16
+  "List Rendering",                        // P17
+  "PropTypes / TypeScript Interface",      // P18
+  "Component Composition",                 // P19
+  "Event Handling",                        // P20
+  "Conditional Classes",                   // P21
+  "Inline Styles",                         // P22
+  "CSS Modules",                           // P23
+  "Styled Component Pattern",              // P24
+  "Lifting State Up",                      // P25
+  "Controlled vs Uncontrolled",            // P26
+  "Simple Todo List",                      // P27
+  "Star Rating Component",                // P28
+  "Accordion",                             // P29
+  "Image Gallery",                         // P30
 ];
 
 if (typeof document !== "undefined" && !document.getElementById("dm-sans-font")) {

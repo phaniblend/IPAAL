@@ -26,7 +26,7 @@ export default function ToggleButton() {
   return (
     <button
       onClick={() => setIsActive(!isActive)}
-      className={\`btn ${isActive ? 'active' : ''}\`}
+      className={\`btn \${isActive ? 'active' : ''}\`}
       style={{ backgroundColor: isActive ? '#3b82f6' : '#ccc', color: isActive ? '#fff' : '#333' }}
     >
       Toggle

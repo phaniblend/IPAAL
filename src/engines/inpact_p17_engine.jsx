@@ -7,7 +7,7 @@ const NODES = [
 
 export default function ProductList() {
   // Step 1: map products to divs with key
-}`, feedback_correct: "✅ List rendered with keys.", feedback_partial: "Use .map() and add key={item.id} to the root element.", feedback_wrong: "return <div>{products.map(p => <div key={p.id}>{p.name} - ${p.price}</div>)}</div>", expected: "products.map(p => <div key={p.id}>... (see hint)" },
+}`, feedback_correct: "✅ List rendered with keys.", feedback_partial: "Use .map() and add key={item.id} to the root element.", feedback_wrong: "return <div>{products.map(p => <div key={p.id}>{p.name} - {p.price}</div>)}</div>", expected: "products.map(p => <div key={p.id}>... (see hint)" },
   { id: "step2", type: "question", phase: "Step 2 of 3", paal: "Wrap the list in a parent div or ul. Use key on the direct child of the map (the outer element). Keys must be unique among siblings and stable.", hint: "key goes on the top-level element inside map: <div key={p.id}>...</div>", answer_keywords: ["key", "unique", "sibling"], seed_code: `const products = [{ id: 1, name: 'Apple', price: 1 }, { id: 2, name: 'Bread', price: 2 }]
 
 export default function ProductList() {
@@ -23,7 +23,7 @@ const products = [{ id: 1, name: 'Apple', price: 1 }, { id: 2, name: 'Bread', pr
 export default function ProductList() {
   return (
     <div>
-      {products.map(p => <div key={p.id}>{p.name} - ${p.price}</div>)}
+      {products.map(p => <div key={p.id}>{p.name} - {p.price}</div>)}
     </div>
   )
 }`, feedback_correct: "✅ List rendering with keys complete. Keys enable efficient updates.", feedback_partial: "Comment that keys help React track list items.", feedback_wrong: "Keys help React reconcile the list.", expected: "Comment explaining key purpose." },
