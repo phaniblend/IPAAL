@@ -32,7 +32,7 @@ if (typeof document !== "undefined" && !document.getElementById("dm-sans-font"))
 
 export default function LandingPage({ track, onTrackChange, onSelectProblem, problemList }) {
   const [hover, setHover] = useState(null);
-  // problemList: null = use PROBLEM_LIST (100 React problems); array = TSF curriculum (10 items with title, shortName, why)
+  // problemList: null = use PROBLEM_LIST (100 React problems); array = curriculum (TSF/JSF: title, shortName, why)
   const list = problemList ?? PROBLEM_LIST.map((title) => ({ title }));
   const count = list.length;
 
@@ -116,6 +116,7 @@ export default function LandingPage({ track, onTrackChange, onSelectProblem, pro
         <div style={trackWrap}>
           <button type="button" style={trackBtn(track === "react-js")} onClick={() => onTrackChange("react-js")}>React · JavaScript</button>
           <button type="button" style={trackBtn(track === "react-ts")} onClick={() => onTrackChange("react-ts")}>React · TypeScript</button>
+          <button type="button" style={trackBtn(track === "jsf")} onClick={() => onTrackChange("jsf")}>JavaScript · Fundamentals</button>
           <button type="button" style={trackBtn(track === "tsf")} onClick={() => onTrackChange("tsf")}>TypeScript · Fundamentals</button>
         </div>
       </header>

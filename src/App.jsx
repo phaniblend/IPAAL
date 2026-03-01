@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import LandingPage from './LandingPage'
 import { TS_FUNDAMENTALS_CURRICULUM } from './engines/typescript/inpact_tsf_index'
+import { JS_FUNDAMENTALS_CURRICULUM } from './engines/javascript/inpact_jsf_index'
 import INPACTEngineTSF01 from './engines/typescript/inpact_tsf01_engine'
 import INPACTEngineTSF02 from './engines/typescript/inpact_tsf02_engine'
 import INPACTEngineTSF03 from './engines/typescript/inpact_tsf03_engine'
@@ -11,6 +12,16 @@ import INPACTEngineTSF07 from './engines/typescript/inpact_tsf07_engine'
 import INPACTEngineTSF08 from './engines/typescript/inpact_tsf08_engine'
 import INPACTEngineTSF09 from './engines/typescript/inpact_tsf09_engine'
 import INPACTEngineTSF10 from './engines/typescript/inpact_tsf10_engine'
+import INPACTEngineJSF01 from './engines/javascript/inpact_jsf01_engine'
+import INPACTEngineJSF02 from './engines/javascript/inpact_jsf02_engine'
+import INPACTEngineJSF03 from './engines/javascript/inpact_jsf03_engine'
+import INPACTEngineJSF04 from './engines/javascript/inpact_jsf04_engine'
+import INPACTEngineJSF05 from './engines/javascript/inpact_jsf05_engine'
+import INPACTEngineJSF06 from './engines/javascript/inpact_jsf06_engine'
+import INPACTEngineJSF07 from './engines/javascript/inpact_jsf07_engine'
+import INPACTEngineJSF08 from './engines/javascript/inpact_jsf08_engine'
+import INPACTEngineJSF09 from './engines/javascript/inpact_jsf09_engine'
+import INPACTEngineJSF10 from './engines/javascript/inpact_jsf10_engine'
 import INPACTEngineP01 from './engines/inpact_p01_engine'
 import INPACTEngineP02 from './engines/inpact_p02_engine'
 import INPACTEngineP03 from './engines/inpact_p03_engine'
@@ -433,9 +444,24 @@ const ENGINES_TSF = [
   INPACTEngineTSF10,
 ]
 
+// JavaScript Fundamentals: 10 language-first problems (no React)
+const ENGINES_JSF = [
+  INPACTEngineJSF01,
+  INPACTEngineJSF02,
+  INPACTEngineJSF03,
+  INPACTEngineJSF04,
+  INPACTEngineJSF05,
+  INPACTEngineJSF06,
+  INPACTEngineJSF07,
+  INPACTEngineJSF08,
+  INPACTEngineJSF09,
+  INPACTEngineJSF10,
+]
+
 function getEngines(track) {
   if (track === 'react-ts') return ENGINES_TS
   if (track === 'tsf') return ENGINES_TSF
+  if (track === 'jsf') return ENGINES_JSF
   return ENGINES
 }
 
@@ -443,11 +469,14 @@ function getProblemList(track) {
   if (track === 'tsf') {
     return TS_FUNDAMENTALS_CURRICULUM.map((c) => ({ title: c.title, shortName: c.shortName, why: c.why }))
   }
+  if (track === 'jsf') {
+    return JS_FUNDAMENTALS_CURRICULUM.map((c) => ({ title: c.title, shortName: c.shortName, why: c.why }))
+  }
   return null // react-js and react-ts use PROBLEM_LIST from LandingPage (100 items)
 }
 
 export default function App() {
-  const [track, setTrack] = useState('react-js') // 'react-js' | 'react-ts' | 'tsf'
+  const [track, setTrack] = useState('react-js') // 'react-js' | 'react-ts' | 'tsf' | 'jsf'
   const [problemIndex, setProblemIndex] = useState(null) // null = landing, 0-based index = problem
   const onBackToProblems = () => setProblemIndex(null)
 
