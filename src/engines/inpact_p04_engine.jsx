@@ -202,8 +202,8 @@ export default function ProfileCard() {
       if (!a.includes("{name}")) return `Age is showing — now add {name} to the paragraph too.`;
       return `Name is showing — now add {age} to the paragraph too.`;
     },
-    feedback_partial_no_p: `Inputs are wired — now add the output paragraph below them:\n<p>Hello, {name}! You are {age} years old.</p>`,
-    feedback_wrong: `Add below the inputs:\n<p>Hello, {name}! You are {age} years old.</p>`,
+    feedback_partial_no_p: `Inputs are wired — now add the output paragraph INSIDE the same div, directly under the two inputs:\n<p>Hello, {name}! You are {age} years old.</p>`,
+    feedback_wrong: `Inside the return's <div>, under the two inputs, add:\n<p>Hello, {name}! You are {age} years old.</p>`,
     expected: `<p>Hello, {name}! You are {age} years old.</p>`,
     seed_code: `import { useState } from 'react'
 
@@ -214,7 +214,6 @@ export default function ProfileCard() {
   const handleNameChange = (e) => setName(e.target.value)
   const handleAgeChange = (e) => setAge(e.target.value)
 
-  // Step 4: add the output paragraph showing both values
   return (
     <div>
       <input value={name} onChange={handleNameChange} placeholder="Your name" />
@@ -227,8 +226,8 @@ export default function ProfileCard() {
     id: "step5",
     type: "question",
     phase: "Step 5 of 5",
-    paal: `Here's everything you've built. The output paragraph is missing. Add it below the inputs, then submit the full component.`,
-    hint: `Full structure: import → two useState("") → two handlers → return with two wired inputs + output paragraph.`,
+    paal: `Here's everything you've built. The output paragraph is missing. Add it inside the same <div>, directly under the inputs, then submit the full component.`,
+    hint: `Full structure: import → two useState("") → two handlers → return with a single <div> containing: two wired inputs + the output paragraph.`,
     analogy: {
       title: "Reference — full multi-state pattern",
       code: `import { useState } from 'react'
@@ -299,7 +298,6 @@ export default function ProfileCard() {
     <div>
       <input value={name} onChange={handleNameChange} placeholder="Your name" />
       <input value={age} onChange={handleAgeChange} placeholder="Your age" />
-      // Step 5: add the output paragraph showing both name and age
     </div>
   )
 }`,
@@ -420,7 +418,7 @@ export default function INPACTEngine({ onNextProblem }) {
     progressTrack: { flex: 1, height: "3px", background: "#1e2733", borderRadius: "2px", overflow: "hidden" },
     progressFill: { height: "100%", width: `${progress}%`, background: "linear-gradient(90deg, #00d4ff, #7c3aed)", transition: "width 0.5s ease" },
     progressLabel: { fontFamily: "'DM Sans', sans-serif", fontSize: "11px", color: "#4a5568", letterSpacing: "1px" },
-    body: { display: "flex", flex: 1 },
+    body: { display: "flex", flex: 1, minHeight: 0, overflow: "hidden" },
     sidebar: { width: "220px", background: "#0d1117", borderRight: "1px solid #1e2733", padding: "24px 0", flexShrink: 0 },
     sidebarLabel: { fontFamily: "'DM Sans', sans-serif", fontSize: "10px", color: "#4a5568", letterSpacing: "2px", padding: "0 20px 12px" },
     sideItem: (a, d) => ({ padding: "10px 20px", display: "flex", alignItems: "center", gap: "10px", cursor: "pointer", background: a ? "#1a2332" : "transparent", borderLeft: a ? "2px solid #00d4ff" : "2px solid transparent" }),
@@ -511,7 +509,8 @@ export default function INPACTEngine({ onNextProblem }) {
       : result === "wrong" ? node.feedback_wrong
       : null;
     const feedbackMsg = typeof rawFeedback === "function" ? rawFeedback(answer) : rawFeedback;
-    const feedbackType = ["naming", "syntax", ...partialResults].includes(result) ? "partial" : result;
+    const feedbackType = ["syntax", ...partialResults].includes(result) ? "partial" : result;
+    const isDone = result === "correct" || result === "naming";
 
     return (
       <div>
@@ -525,17 +524,19 @@ export default function INPACTEngine({ onNextProblem }) {
             </div>
           </div>
         )}
-        <CodeEditor value={answer} onChange={setAnswer} height="380px" />
-        {showHint && result !== "correct" && <div style={s.hintBox}>💡 HINT — {node.hint}</div>}
+        <div style={{ flex: 1, minHeight: 0, marginBottom: "8px" }}>
+          <CodeEditor value={answer} onChange={setAnswer} height="100%" />
+        </div>
+        {showHint && !isDone && <div style={s.hintBox}>💡 HINT — {node.hint}</div>}
         {feedbackMsg && <div style={s.feedback(feedbackType)}>{feedbackMsg}</div>}
-        {showExpected && result !== "correct" && (
+        {showExpected && !isDone && (
           <div>
             <div style={{ ...s.paalLabel, marginTop: "16px", marginBottom: "8px" }}>EXPECTED ANSWER</div>
             <div style={s.expectedBox}>{node.expected}</div>
           </div>
         )}
         <div style={s.btnRow}>
-          {result !== "correct" ? (
+          {!isDone ? (
             <>
               <button style={s.btn("primary")} onClick={submit}>SUBMIT</button>
               {node.analogy && <button style={{ ...s.btn("secondary"), background: "rgba(124,58,237,0.15)", border: "1px solid #7c3aed", color: "#9f7aea" }} onClick={() => setShowAnalogy(true)}>💡 SHOW ME AN EXAMPLE</button>}
@@ -612,7 +613,9 @@ export default function INPACTEngine({ onNextProblem }) {
         <div style={{ background: "rgba(0,212,255,0.05)", border: "1px solid rgba(0,212,255,0.15)", borderLeft: "3px solid #00d4ff", borderRadius: "8px", padding: "16px 20px", marginBottom: "24px", fontSize: "14px", color: "#a0aec0", lineHeight: "1.8" }}>
           Blank editor below — no hints, no seed. Reproduce the full ProfileCard component from memory. Hit <strong style={{ color: "#e2e8f0" }}>CHECK MY CODE</strong> when done.
         </div>
-        <CodeEditor value={answer} onChange={setAnswer} height="380px" />
+        <div style={{ flex: 1, minHeight: 0, marginBottom: "8px" }}>
+          <CodeEditor value={answer} onChange={setAnswer} height="100%" />
+        </div>
         {!wfsSubmitted ? (
           <div style={s.btnRow}><button style={s.btn("primary")} onClick={() => { if (answer.trim()) setWfsSubmitted(true); }}>CHECK MY CODE →</button></div>
         ) : (

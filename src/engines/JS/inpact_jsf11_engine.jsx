@@ -40,7 +40,7 @@ and never reaches for regex when a string method works fine.`,
 const name = 'Alice'
 const role = 'admin'
 
-// Interpolation — any expression works inside ${}:
+// Interpolation — any expression works inside \${}:
 const greeting = \`Hello, \${name}! You are a \${role.toUpperCase()}.\`
 
 // Multiline — no \\n needed:

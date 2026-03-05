@@ -428,7 +428,7 @@ export default function INPACTEngine({ onNextProblem }) {
       return;
     }
     setSyntaxMsg(null);
-    const res = evaluate(node, answer);
+    const res = runEvaluate(node, answer);
     setResult(res);
     setAttempts((a) => a + 1);
     if (attempts >= 1) setShowHint(true);

@@ -201,8 +201,8 @@ export { matches }`,
 function highlight(text, term) {
   if (!term) return text
   // Escape special regex chars in user input first:
-  const escaped = term.replace(/[.*+?^${}()|[\\]\\\\]/g, '\\\\$&')
-  const re = new RegExp(\`(\${escaped})\`, 'gi')   // build dynamic pattern
+  const escaped = term.replace(/[-/\\^$*+?.()|[\\]{}]/g, '\\\\$&')
+  const re = new RegExp('(' + escaped + ')', 'gi')   // build dynamic pattern
   return text.replace(re, '<mark>$1</mark>')       // $1 = capture group 1
 }
 
@@ -212,14 +212,14 @@ highlight('JavaScript is great', 'script')
 // replace with a function — dynamic replacement logic:
 // camelCase → kebab-case:
 function camelToKebab(str) {
-  return str.replace(/([A-Z])/g, (_, letter) => \`-\${letter.toLowerCase()}\`)
+  return str.replace(/([A-Z])/g, (_, letter) => '-' + letter.toLowerCase())
 }
 camelToKebab('backgroundColor')   // 'background-color'
 camelToKebab('maxWidth')           // 'max-width'
 
 // Template variable substitution:
 function interpolate(template, vars) {
-  return template.replace(/\\{\\{(\\w+)\\}\\}/g, (_, key) => vars[key] ?? \`{{${key}}}\`)
+  return template.replace(/\\{\\{(\\w+)\\}\\}/g, (_, key) => vars[key] ?? ('{{' + key + '}}'))
 }
 interpolate('Hello, {{name}}! You have {{count}} messages.', {
   name: 'Alice', count: 3

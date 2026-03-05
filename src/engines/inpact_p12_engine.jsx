@@ -15,7 +15,7 @@ const NODES = [
     </div>
   )
 }`, feedback_correct: "✅ Image displayed from prop.", feedback_partial: "Add <img src={image} alt={...} />.", feedback_wrong: "<img src={image} alt={title} />", expected: "<img src={image} alt={title} style={{ maxWidth: '100%' }} />" },
-  { id: "step3", type: "question", phase: "Step 3 of 3", paal: "Add a footer slot: accept footer as a prop (string or node) or use children. Render it at the bottom of the card. Export the component.", hint: "footer can be a prop: {footer}. Or use children for the whole card content.", answer_keywords: ["footer", "children", "export"], seed_code: `export default function Card({ title, description, image, footer }) {
+  { id: "step3", type: "question", phase: "Step 3 of 3", paal: "Add a footer slot: accept footer as a prop (string or node) or use children. Render it at the bottom of the card. Export the component.", hint: "footer can be a prop: {footer}. Or use children for the whole card content.", answer_keywords: ["footer", "export"], seed_code: `export default function Card({ title, description, image, footer }) {
   return (
     <div style={{ border: '1px solid #333', borderRadius: 8, padding: 16 }}>
       <h2>{title}</h2>
@@ -24,7 +24,7 @@ const NODES = [
       {/* Step 3: render footer */}
     </div>
   )
-}`, feedback_correct: "✅ Card with title, description, image, and footer complete.", feedback_partial: "Render the footer prop at the bottom.", feedback_wrong: "Add {footer} or {children} in the JSX.", expected: "<div>{footer}</div> or {footer}" },
+}`, feedback_correct: "✅ Card with title, description, image, and footer complete.", feedback_partial: "Render the footer prop at the bottom.", feedback_wrong: "Add {footer} at the bottom of the card (or <div>{footer}</div> — either is valid).", expected: "{footer}" },
 ];
 
 const sideItems = [{ label: "Problem", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];

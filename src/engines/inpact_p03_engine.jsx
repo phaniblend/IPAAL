@@ -541,7 +541,8 @@ export default function INPACTEngine({ onNextProblem }) {
       : result === "wrong" ? node.feedback_wrong
       : null;
     const feedbackMsg = typeof rawFeedback === "function" ? rawFeedback(answer) : rawFeedback;
-    const feedbackType = ["naming", "syntax", "named_param", "partial_onchange", "partial_value", "partial_interp", "partial_p"].includes(result) ? "partial" : result;
+    const feedbackType = ["syntax", "named_param", "partial_onchange", "partial_value", "partial_interp", "partial_p"].includes(result) ? "partial" : result;
+    const isDone = result === "correct" || result === "naming";
 
     return (
       <div>
@@ -561,7 +562,7 @@ export default function INPACTEngine({ onNextProblem }) {
 
         <CodeEditor value={answer} onChange={setAnswer} height="380px" />
 
-        {showHint && result !== "correct" && (
+        {showHint && !isDone && (
           <div style={s.hintBox}>💡 HINT — {node.hint}</div>
         )}
 
@@ -569,7 +570,7 @@ export default function INPACTEngine({ onNextProblem }) {
           <div style={s.feedback(feedbackType)}>{feedbackMsg}</div>
         )}
 
-        {showExpected && result !== "correct" && (
+        {showExpected && !isDone && (
           <div>
             <div style={{ ...s.paalLabel, marginTop: "16px", marginBottom: "8px" }}>EXPECTED ANSWER</div>
             <div style={s.expectedBox}>{node.expected}</div>
@@ -577,7 +578,7 @@ export default function INPACTEngine({ onNextProblem }) {
         )}
 
         <div style={s.btnRow}>
-          {result !== "correct" ? (
+          {!isDone ? (
             <>
               <button style={s.btn("primary")} onClick={submit}>SUBMIT</button>
               {node.analogy && (

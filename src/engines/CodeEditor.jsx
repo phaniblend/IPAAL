@@ -4,36 +4,39 @@ import { oneDark } from '@codemirror/theme-one-dark'
 import { EditorSelection } from '@codemirror/state'
 import { useCallback, useRef, useEffect } from 'react'
 
-export default function CodeEditor({ value, onChange, height = "320px", cursorAtEndOfLine }) {
+export default function CodeEditor({ value, onChange, height = "320px", cursorAtEndOfLine, cursorAtStartOfLine }) {
   const viewRef = useRef(null)
   const handleChange = useCallback((val) => {
     onChange(val)
   }, [onChange])
 
+  const placeCursor = useCallback((view) => {
+    if (!view) return
+    const doc = view.state.doc
+    const lineNum = cursorAtStartOfLine != null
+      ? Math.min(cursorAtStartOfLine, doc.lines)
+      : cursorAtEndOfLine != null
+        ? Math.min(cursorAtEndOfLine, doc.lines)
+        : null
+    if (lineNum == null) return
+    const line = doc.line(lineNum)
+    const pos = cursorAtStartOfLine != null ? line.from : line.to
+    view.dispatch({ selection: EditorSelection.cursor(pos) })
+    view.focus()
+  }, [cursorAtEndOfLine, cursorAtStartOfLine])
+
   useEffect(() => {
-    if (cursorAtEndOfLine == null || !viewRef.current) return
-    const view = viewRef.current
+    if ((cursorAtEndOfLine == null && cursorAtStartOfLine == null) || !viewRef.current) return
     const raf = requestAnimationFrame(() => {
-      if (!viewRef.current) return
-      const doc = viewRef.current.state.doc
-      const lineNum = Math.min(cursorAtEndOfLine, doc.lines)
-      const line = doc.line(lineNum)
-      viewRef.current.dispatch({ selection: EditorSelection.cursor(line.to) })
-      viewRef.current.focus()
+      if (viewRef.current) placeCursor(viewRef.current)
     })
     return () => cancelAnimationFrame(raf)
-  }, [value, cursorAtEndOfLine])
+  }, [cursorAtEndOfLine, cursorAtStartOfLine, placeCursor])
 
   const onCreateEditor = useCallback((view) => {
     viewRef.current = view
-    if (cursorAtEndOfLine != null && view) {
-      const doc = view.state.doc
-      const lineNum = Math.min(cursorAtEndOfLine, doc.lines)
-      const line = doc.line(lineNum)
-      view.dispatch({ selection: EditorSelection.cursor(line.to) })
-      view.focus()
-    }
-  }, [cursorAtEndOfLine])
+    if ((cursorAtEndOfLine != null || cursorAtStartOfLine != null) && view) placeCursor(view)
+  }, [cursorAtEndOfLine, cursorAtStartOfLine, placeCursor])
 
   return (
     <CodeMirror

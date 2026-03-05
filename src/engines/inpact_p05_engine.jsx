@@ -271,7 +271,6 @@ export default function StatusCard() {
   return (
     <div>
       <p>{isLoggedIn ? 'Welcome back!' : 'Please sign in'}</p>
-      // Step 5: add the button with onClick + ternary label
     </div>
   )
 }`,
@@ -326,7 +325,7 @@ export default function INPACTEngine({ onNextProblem }) {
     if (n?.id === "step5" && userChoices.userJSX4) {
       const base = userChoices.userJSX4.replace(/\/\/\s*Step\s*\d[^\n]*/g, "").replace(/\n{3,}/g, "\n\n").trimEnd()
         .replace(/}\s*$/, "").trimEnd();
-      return base + "\n      // Step 5: add the button here\n    </div>\n  )\n}";
+      return base + "\n}";
     }
     let seed = n?.seed_code ?? "";
     seed = seed.replace(/\bisLoggedIn\b/g, userChoices.varName);

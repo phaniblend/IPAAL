@@ -3,9 +3,11 @@ import createINPACTEngine from "./inpact_engine_shared";
 const NODES = [
   { id: "intro", type: "reveal", phase: "Problem", content: { tag: "PROBLEM #15", title: "Children Prop", body: `Build a Container component that wraps any children with a styled div (e.g. maxWidth, padding, border). Usage: <Container><h1>Hi</h1><p>Content</p></Container>.`, usecase: "Children prop is the standard way to create layout and wrapper components." } },
   { id: "objectives", type: "objectives", phase: "Objectives", items: ["Accept children as a prop", "Return a div that wraps {children}", "Apply inline styles (maxWidth, padding, etc.)"] },
-  { id: "step1", type: "question", phase: "Step 1 of 3", paal: "Create Container that accepts children and returns <div>{children}</div>.", hint: "function Container({ children }) { return <div>{children}</div> }", answer_keywords: ["container", "children", "div"], seed_code: `export default function Container({ children }) {
-  // Step 1: return div wrapping children
-}`, feedback_correct: "✅ Children rendered inside div.", feedback_partial: "Return <div>{children}</div>.", feedback_wrong: "return <div>{children}</div>", expected: "return <div>{children}</div>" },
+  { id: "step1", type: "question", phase: "Step 1 of 3", paal: "A Container component is started below. Inside the function, return a div that wraps the children: return <div>{children}</div>", hint: "function Container({ children }) { return <div>{children}</div> }", answer_keywords: ["container", "children", "div"], starter_code: `function Container({ children }) {
+
+}`, seed_code: `export default function Container({ children }) {
+  return <div>{children}</div>
+}`, feedback_correct: "✅ Children rendered inside div.", feedback_partial: "Return <div>{children}</div>.", feedback_wrong: "return <div>{children}</div>", expected: "function Container({ children }) { return <div>{children}</div> }" },
   { id: "step2", type: "question", phase: "Step 2 of 3", paal: "Add styles to the div: maxWidth (e.g. 600px), padding (e.g. 24px), and a border or background so the container is visible.", hint: "style={{ maxWidth: '600px', padding: 24, border: '1px solid #333' }}", answer_keywords: ["style", "maxwidth", "padding", "border"], seed_code: `export default function Container({ children }) {
   return (
     <div>

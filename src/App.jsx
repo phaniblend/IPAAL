@@ -4,6 +4,14 @@ import { TS_FUNDAMENTALS_CURRICULUM } from './engines/typescript/inpact_tsf_inde
 import { JS_FUNDAMENTALS_CURRICULUM } from './engines/javascript/inpact_jsf_index'
 import { NODE_FUNDAMENTALS_CURRICULUM } from './engines/node/inpact_nodef_index'
 import { JS_DEEP_CURRICULUM } from './engines/JS/inpact_js_index'
+import {
+  ENGINES_JS_INTERVIEW,
+  ENGINES_TS_INTERVIEW,
+  ENGINES_NODE_INTERVIEW,
+  JS_INTERVIEW_CURRICULUM,
+  TS_INTERVIEW_CURRICULUM,
+  NODE_INTERVIEW_CURRICULUM,
+} from './engines/interview/interviewEngines'
 import INPACTEngineTSF01 from './engines/typescript/inpact_tsf01_engine'
 import INPACTEngineTSF02 from './engines/typescript/inpact_tsf02_engine'
 import INPACTEngineTSF03 from './engines/typescript/inpact_tsf03_engine'
@@ -242,6 +250,17 @@ import INPACTEngineTS97 from './engines/inpact_ts97_engine'
 import INPACTEngineTS98 from './engines/inpact_ts98_engine'
 import INPACTEngineTS99 from './engines/inpact_ts99_engine'
 import INPACTEngineTS100 from './engines/inpact_ts100_engine'
+import { ENGINES_ANGULAR } from './engines/angular/inpact_ng_index'
+import { ENGINES_VUE } from './engines/vue/inpact_vue_index'
+import INPACTEngineAngularA01 from './engines/angular_a01_components'
+import INPACTEngineAngularA02 from './engines/angular/angular_a02_data_binding'
+import INPACTEngineAngularA03 from './engines/angular/angular_a03_services_di'
+import INPACTEngineAngularA04 from './engines/angular/angular_a04_rxjs'
+import INPACTEngineAngularA05 from './engines/angular/angular_a05_ngrx'
+import INPACTEngineAngularA06 from './engines/angular/angular_a06_routing'
+import INPACTEngineAngularA07 from './engines/angular/angular_a07_change_detection'
+import INPACTEngineAngularA08 from './engines/angular/angular_a08_module_federation'
+import INPACTEngineAngularA09 from './engines/angular/angular_a09_pipes'
 
 const ENGINES = [
   INPACTEngineP01,
@@ -505,7 +524,24 @@ const ENGINES_JS = [
 ]
 
 function getEngines(track) {
+  if (track === 'js-interview') return ENGINES_JS_INTERVIEW
+  if (track === 'ts-interview') return ENGINES_TS_INTERVIEW
+  if (track === 'node-interview') return ENGINES_NODE_INTERVIEW
   if (track === 'react-ts') return ENGINES_TS
+  if (track === 'angular')
+    return [
+      INPACTEngineAngularA01,
+      INPACTEngineAngularA02,
+      INPACTEngineAngularA03,
+      INPACTEngineAngularA04,
+      INPACTEngineAngularA05,
+      INPACTEngineAngularA06,
+      INPACTEngineAngularA07,
+      INPACTEngineAngularA08,
+      INPACTEngineAngularA09,
+      ...ENGINES_ANGULAR,
+    ]
+  if (track === 'vue') return ENGINES_VUE
   if (track === 'tsf') return ENGINES_TSF
   if (track === 'jsf') return ENGINES_JSF
   if (track === 'node') return ENGINES_NODE
@@ -514,6 +550,15 @@ function getEngines(track) {
 }
 
 function getProblemList(track) {
+  if (track === 'js-interview') {
+    return JS_INTERVIEW_CURRICULUM
+  }
+  if (track === 'ts-interview') {
+    return TS_INTERVIEW_CURRICULUM
+  }
+  if (track === 'node-interview') {
+    return NODE_INTERVIEW_CURRICULUM
+  }
   if (track === 'tsf') {
     return TS_FUNDAMENTALS_CURRICULUM.map((c) => ({ title: c.title, shortName: c.shortName, why: c.why }))
   }
@@ -526,11 +571,14 @@ function getProblemList(track) {
   if (track === 'js') {
     return JS_DEEP_CURRICULUM.map((c) => ({ title: c.title, shortName: c.shortName, why: c.why }))
   }
+  if (track === 'angular' || track === 'vue') {
+    return null // same 100 problem titles as React (PROBLEM_LIST in LandingPage)
+  }
   return null // react-js and react-ts use PROBLEM_LIST from LandingPage (100 items)
 }
 
 export default function App() {
-  const [track, setTrack] = useState('react-js') // 'react-js' | 'react-ts' | 'tsf' | 'jsf' | 'node' | 'js'
+  const [track, setTrack] = useState('react-js') // 'react-js' | 'react-ts' | 'angular' | 'vue' | 'tsf' | 'jsf' | 'node' | 'js' | 'js-interview' | 'ts-interview' | 'node-interview'
   const [problemIndex, setProblemIndex] = useState(null) // null = landing, 0-based index = problem
   const onBackToProblems = () => setProblemIndex(null)
 

@@ -32,18 +32,39 @@ export default function createINPACTEngine(config) {
     const [showHint, setShowHint] = useState(false);
     const [showExpected, setShowExpected] = useState(false);
     const [completedNodes, setCompletedNodes] = useState([]);
+    const [passedCodeByStepId, setPassedCodeByStepId] = useState({});
     const node = NODES[nodeIndex];
     const progress = NODES.length <= 1 ? 0 : Math.min(100, Math.round((nodeIndex / (NODES.length - 1)) * 100));
 
     useEffect(() => {
-      setAnswer(node?.seed_code ?? "");
       setResult(null);
       setAttempts(0);
       setShowHint(false);
       setShowExpected(false);
-    }, [nodeIndex]);
+      if (node?.type === "question") {
+        let initialCode = "";
+        if (node.id && passedCodeByStepId[node.id]) {
+          initialCode = passedCodeByStepId[node.id];
+        } else {
+          for (let i = nodeIndex - 1; i >= 0; i--) {
+            const prev = NODES[i];
+            if (prev?.type === "question" && prev.id && passedCodeByStepId[prev.id]) {
+              initialCode = passedCodeByStepId[prev.id];
+              break;
+            }
+          }
+          if (initialCode === "" && node.starter_code) {
+            initialCode = node.starter_code;
+          }
+        }
+        setAnswer(initialCode);
+      }
+    }, [nodeIndex, passedCodeByStepId]);
 
     function next() {
+      if (node?.type === "question" && node?.id && result === "correct") {
+        setPassedCodeByStepId((prev) => ({ ...prev, [node.id]: answer }));
+      }
       if (node?.id) setCompletedNodes((p) => (p.includes(node.id) ? p : [...p, node.id]));
       setNodeIndex((i) => Math.min(i + 1, NODES.length));
     }
@@ -119,12 +140,16 @@ export default function createINPACTEngine(config) {
     function renderQuestion() {
       const rawFb = result === "correct" ? node.feedback_correct : result === "partial" ? node.feedback_partial : result === "wrong" ? node.feedback_wrong : null;
       const fbMsg = typeof rawFb === "function" ? rawFb(answer) : rawFb;
+      const codeForCursor = answer || "";
+      const stepLineIndex = codeForCursor.split("\n").findIndex((l) => l.includes("// Step"));
+      const cursorAtStartOfLine = node.cursorAtStartOfLine ?? (stepLineIndex >= 0 ? stepLineIndex + 2 : undefined);
       return (
         <div>
           <div style={s.phase}>{node.phase}</div>
           <div style={s.paalBox}><div style={s.paalLabel}>PAAL</div><div style={s.paalText}>{node.paal}</div></div>
-          {node.seed_code && <div style={{ fontSize: "10px", color: "#4a5568", marginBottom: "8px" }}>CODE BUILT SO FAR — edit below</div>}
-          <CodeEditor value={answer} onChange={setAnswer} height="320px" cursorAtEndOfLine={node.cursorLine} />
+          <div style={{ fontSize: "10px", color: "#4a5568", marginBottom: "4px" }}>CODE BUILT SO FAR — edit below</div>
+          {cursorAtStartOfLine != null && <div style={{ fontSize: "10px", color: "#00d4ff", marginBottom: "8px" }}>Type your code below the comment.</div>}
+          <CodeEditor value={answer} onChange={setAnswer} height="320px" cursorAtEndOfLine={cursorAtStartOfLine == null ? node.cursorLine : undefined} cursorAtStartOfLine={cursorAtStartOfLine} />
           {showHint && <div style={s.hintBox}>💡 {node.hint}</div>}
           {fbMsg && <div style={s.feedback(result)}>{fbMsg}</div>}
           {showExpected && (

@@ -33,7 +33,24 @@ if (typeof document !== "undefined" && !document.getElementById("dm-sans-font"))
 export default function LandingPage({ track, onTrackChange, onSelectProblem, problemList }) {
   const [hover, setHover] = useState(null);
   // problemList: null = use PROBLEM_LIST (100 React problems); array = curriculum (TSF/JSF: title, shortName, why)
-  const list = problemList ?? PROBLEM_LIST.map((title) => ({ title }));
+  let list = problemList ?? PROBLEM_LIST.map((title) => ({ title }));
+
+  // Angular track: prefix with A01 Components engine as the first problem
+  if (track === "angular") {
+    list = [
+      { title: "Flight Status Card", shortName: "A01" },
+      { title: "Flight Search Form", shortName: "A02" },
+      { title: "Flight Data Service", shortName: "A03" },
+      { title: "Real-Time Flight Board", shortName: "A04" },
+      { title: "Flight Board State", shortName: "A05" },
+      { title: "Flight Portal Navigation", shortName: "A06" },
+      { title: "High-Performance Flight Board", shortName: "A07" },
+      { title: "United Portal Micro-Frontend Architecture", shortName: "A08" },
+      { title: "Pipes — Creation & Usage", shortName: "A09" },
+      ...PROBLEM_LIST.map((title) => ({ title })),
+    ];
+  }
+
   const count = list.length;
 
   const wrap = {
@@ -116,9 +133,23 @@ export default function LandingPage({ track, onTrackChange, onSelectProblem, pro
         <div style={trackWrap}>
           <button type="button" style={trackBtn(track === "react-js")} onClick={() => onTrackChange("react-js")}>React · JavaScript</button>
           <button type="button" style={trackBtn(track === "react-ts")} onClick={() => onTrackChange("react-ts")}>React · TypeScript</button>
+          <button type="button" style={trackBtn(track === "angular")} onClick={() => onTrackChange("angular")}>Angular</button>
+          <button type="button" style={trackBtn(track === "vue")} onClick={() => onTrackChange("vue")}>Vue</button>
+          <button type="button" style={trackBtn(track === "js-interview")} onClick={() => onTrackChange("js-interview")}>JavaScript · Interview 100</button>
+          <button type="button" style={trackBtn(track === "ts-interview")} onClick={() => onTrackChange("ts-interview")}>TypeScript · Interview 100</button>
+          <button type="button" style={trackBtn(track === "node-interview")} onClick={() => onTrackChange("node-interview")}>Node · Interview 100</button>
           <button type="button" style={trackBtn(track === "jsf")} onClick={() => onTrackChange("jsf")}>JavaScript · Fundamentals</button>
           <button type="button" style={trackBtn(track === "tsf")} onClick={() => onTrackChange("tsf")}>TypeScript · Fundamentals</button>
         </div>
+        {(track === "js-interview" || track === "ts-interview" || track === "node-interview") && (
+          <div style={{ ...subtitle, marginTop: "-16px", marginBottom: "16px", color: "#00d4ff" }}>
+            {track === "js-interview"
+              ? "JavaScript Interview Track — 100 problems"
+              : track === "ts-interview"
+              ? "TypeScript Interview Track — 100 problems"
+              : "Node Interview Track — 100 problems"}
+          </div>
+        )}
       </header>
       <div style={grid}>
         {list.map((item, i) => (

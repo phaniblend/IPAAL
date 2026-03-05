@@ -20,7 +20,7 @@ const NODES = [
     content: {
       tag: "PROBLEM #1",
       title: "Counter App",
-      body: `Build a page that shows a number starting at 0, with three buttons:
+      body: `Build a very simple React page that displays a number starting at 0 and lets the user change it using buttons:
 
   [ + ]     increases the number by 1
   [ - ]     decreases the number by 1
@@ -81,8 +81,8 @@ export default function Counter() {
     type: "question",
     phase: "Step 2 of 5",
     paal: "Write the JSX that displays count on screen and renders three buttons: +, -, and Reset. Don't wire them up yet.",
-    hint: "Use an <h1> to show the number. Three <button> elements below it.",
-    answer_keywords: ["return", "h1", "button", "count", "+", "-", "reset"],
+    hint: "Display the number in an element (e.g. <h1>{count}</h1> or <span>{count}</span>). Three <button> elements: +, -, and Reset.",
+    answer_keywords: ["return", "button", "count", "+", "-", "reset"],
     seed_code: `import { useState } from 'react'
 
 export default function Counter() {
@@ -105,7 +105,7 @@ return (
     },
     feedback_correct: "✅ Perfect. Your UI is on screen. count in curly braces tells React to display the live value — whenever count changes, React updates just that part of the DOM.",
     feedback_partial: "You're close — make sure you have all three buttons and you're displaying {count} in your JSX.",
-    feedback_wrong: "Start with a return statement wrapping a div. Inside: an <h1>{count}</h1> and three <button> elements.",
+    feedback_wrong: "Start with a return statement wrapping a div. Inside: display {count} in an element (e.g. <h1> or <span>) and three <button> elements: +, -, Reset.",
     expected: `return (
   <div>
     <h1>{count}</h1>

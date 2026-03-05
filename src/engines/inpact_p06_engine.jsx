@@ -406,7 +406,7 @@ export default function INPACTEngine({ onNextProblem }) {
     progressTrack: { flex: 1, height: "3px", background: "#1e2733", borderRadius: "2px", overflow: "hidden" },
     progressFill: { height: "100%", width: `${progress}%`, background: "linear-gradient(90deg,#00d4ff,#7c3aed)", transition: "width 0.5s ease" },
     lbl: { fontSize: "11px", color: "#4a5568", letterSpacing: "1px" },
-    body: { display: "flex", flex: 1 },
+    body: { display: "flex", flex: 1, minHeight: 0, overflow: "hidden" },
     sidebar: { width: "220px", background: "#0d1117", borderRight: "1px solid #1e2733", padding: "24px 0", flexShrink: 0 },
     si: (a, d) => ({ padding: "10px 20px", display: "flex", alignItems: "center", gap: "10px", cursor: "pointer", background: a ? "#1a2332" : "transparent", borderLeft: a ? "2px solid #00d4ff" : "2px solid transparent" }),
     dot: (a, d) => ({ width: "8px", height: "8px", borderRadius: "50%", background: d ? "#10b981" : a ? "#00d4ff" : "#2d3748", flexShrink: 0 }),
@@ -491,7 +491,9 @@ export default function INPACTEngine({ onNextProblem }) {
             <div style={{ fontSize: "10px", color: "#4a5568", letterSpacing: "2px" }}>CODE BUILT SO FAR — type below the comment</div>
           </div>
         )}
-        <CodeEditor value={answer} onChange={setAnswer} height="380px" />
+        <div style={{ flex: 1, minHeight: 0, marginBottom: "8px" }}>
+          <CodeEditor value={answer} onChange={setAnswer} height="100%" />
+        </div>
         {showHint && result !== "correct" && <div style={s.hint}>💡 HINT — {node.hint}</div>}
         {fbMsg && <div style={s.fb(fbType)}>{fbMsg}</div>}
         {showExpected && result !== "correct" && (

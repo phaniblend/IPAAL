@@ -14,11 +14,11 @@ const NODES = [
   { id: "objectives", type: "objectives", phase: "Objectives", items: ["Accept label, onClick, variant, disabled as props", "Apply different styles or classes per variant", "Disable the button when disabled is true"] },
   { id: "step1", type: "question", phase: "Step 1 of 3", paal: "Create a Button component that accepts props: label, onClick, variant, disabled. Return a <button> that shows label and calls onClick when clicked.", hint: "function Button({ label, onClick, variant, disabled }) { return <button onClick={onClick} disabled={disabled}>{label}</button> }", answer_keywords: ["button", "label", "onclick", "variant", "disabled", "props"], seed_code: `export default function Button({ label, onClick, variant, disabled }) {
   // Step 1: return <button> with label and onClick
-}`, feedback_correct: "✅ Button renders and responds to click.", feedback_partial: "Ensure you pass label and onClick to the button.", feedback_wrong: "Return <button onClick={onClick} disabled={disabled}>{label}</button>", expected: "return <button onClick={onClick} disabled={disabled}>{label}</button>" },
+}`, feedback_correct: "✅ Button renders and responds to click.", feedback_partial: "Ensure you pass label and onClick to the button.", feedback_wrong: "Return <button onClick={onClick} disabled={disabled}>{label}</button>", expected: "return <button onClick={onClick} disabled={disabled}>{label}</button>", example_code: "// Similar: a link component that takes text and onClick\nfunction Link({ text, onClick }) {\n  return <a href=\"#\" onClick={(e) => { e.preventDefault(); onClick(); }}>{text}</a>\n}" },
   { id: "step2", type: "question", phase: "Step 2 of 3", paal: "Apply different styles based on variant. Use inline styles: primary = blue, secondary = gray, danger = red.", hint: "const styles = { primary: { background: '#3b82f6' }, secondary: { background: '#6b7280' }, danger: { background: '#ef4444' } }; style={styles[variant] || styles.primary}", answer_keywords: ["variant", "style", "primary", "secondary", "danger", "background"], seed_code: `export default function Button({ label, onClick, variant = 'primary', disabled }) {
   // Step 2: apply style based on variant
   return <button onClick={onClick} disabled={disabled}>{label}</button>
-}`, feedback_correct: "✅ Variant drives button appearance.", feedback_partial: "Use variant to pick a style object for the button.", feedback_wrong: "Map variant to style object and pass to style={}.", expected: "const styles = { primary: { background: '#3b82f6', color: '#fff' }, secondary: { background: '#6b7280', color: '#fff' }, danger: { background: '#ef4444', color: '#fff' } }; return <button style={styles[variant] || styles.primary} ...>" },
+}`, feedback_correct: "✅ Variant drives button appearance.", feedback_partial: "Use variant to pick a style object for the button.", feedback_wrong: "Map variant to style object and pass to style={}.", expected: "const styles = { primary: { background: '#3b82f6', color: '#fff' }, secondary: { background: '#6b7280', color: '#fff' }, danger: { background: '#ef4444', color: '#fff' } }; return <button style={styles[variant] || styles.primary} ...>", example_code: "// Similar: Badge with size prop driving styles\nconst sizes = { sm: { fontSize: '12px' }, md: { fontSize: '14px' }, lg: { fontSize: '18px' } };\nreturn <span style={sizes[size] || sizes.md}>{label}</span>" },
   { id: "step3", type: "question", phase: "Step 3 of 3", paal: "When disabled is true, the button should be disabled and look muted (e.g. opacity 0.6). Export the component.", hint: "disabled={disabled} and style={{ ...style, opacity: disabled ? 0.6 : 1 }}", answer_keywords: ["disabled", "opacity", "export"], seed_code: `export default function Button({ label, onClick, variant = 'primary', disabled = false }) {
   const styles = { primary: { background: '#3b82f6', color: '#fff' }, secondary: { background: '#6b7280', color: '#fff' }, danger: { background: '#ef4444', color: '#fff' } }
   return (
@@ -26,7 +26,7 @@ const NODES = [
       {label}
     </button>
   )
-}`, feedback_correct: "✅ Reusable Button with variant and disabled complete.", feedback_partial: "Add disabled prop and muted style when disabled.", feedback_wrong: "Ensure disabled is passed to <button> and optionally reduce opacity when disabled.", expected: "Same as seed with opacity when disabled." },
+}`, feedback_correct: "✅ Reusable Button with variant and disabled complete.", feedback_partial: "Add disabled prop and muted style when disabled.", feedback_wrong: "Ensure disabled is passed to <button> and optionally reduce opacity when disabled.", expected: "Same as seed with opacity when disabled.", example_code: "// Similar: input that looks muted when disabled\n<input disabled={disabled} style={{ opacity: disabled ? 0.5 : 1 }} value={value} />" },
 ];
 
 function evaluate(node, answer) {
@@ -46,6 +46,7 @@ export default function INPACTEngine({ onNextProblem }) {
   const [result, setResult] = useState(null);
   const [attempts, setAttempts] = useState(0);
   const [showHint, setShowHint] = useState(false);
+  const [showExample, setShowExample] = useState(false);
   const [showExpected, setShowExpected] = useState(false);
   const [completedNodes, setCompletedNodes] = useState([]);
   const node = NODES[nodeIndex];
@@ -56,6 +57,7 @@ export default function INPACTEngine({ onNextProblem }) {
     setResult(null);
     setAttempts(0);
     setShowHint(false);
+    setShowExample(false);
     setShowExpected(false);
   }, [nodeIndex]);
 
@@ -145,10 +147,21 @@ export default function INPACTEngine({ onNextProblem }) {
         <CodeEditor value={answer} onChange={setAnswer} height="320px" />
         {showHint && <div style={s.hintBox}>💡 {node.hint}</div>}
         {fbMsg && <div style={s.feedback(result)}>{fbMsg}</div>}
+        {showExample && node.example_code && (
+          <div style={{ marginTop: "16px" }}>
+            <div style={{ ...s.paalLabel, marginBottom: "6px" }}>EXAMPLE (similar pattern — not the exact answer)</div>
+            <div style={s.expectedBox}>{node.example_code}</div>
+          </div>
+        )}
         {showExpected && node.expected && <div><div style={{ ...s.paalLabel, marginTop: "16px" }}>EXPECTED</div><div style={s.expectedBox}>{node.expected}</div></div>}
         <div style={s.btnRow}>
           {result !== "correct" ? (
-            <><button style={s.btn("primary")} onClick={submit}>SUBMIT</button>{attempts > 0 && !showHint && <button style={s.btn("secondary")} onClick={() => setShowHint(true)}>SHOW HINT</button>}{attempts > 1 && !showExpected && <button style={s.btn("ghost")} onClick={() => setShowExpected(true)}>SHOW ANSWER</button>}</>
+            <>
+              <button style={s.btn("primary")} onClick={submit}>SUBMIT</button>
+              {node.example_code && !showExample && <button style={s.btn("secondary")} onClick={() => setShowExample(true)}>SHOW ME EXAMPLE</button>}
+              {attempts > 0 && !showHint && <button style={s.btn("secondary")} onClick={() => setShowHint(true)}>SHOW HINT</button>}
+              {attempts > 1 && !showExpected && <button style={s.btn("ghost")} onClick={() => setShowExpected(true)}>SHOW ANSWER</button>}
+            </>
           ) : <button style={s.btn("primary")} onClick={next}>NEXT STEP →</button>}
         </div>
       </div>

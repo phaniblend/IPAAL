@@ -40,7 +40,7 @@ Build a <select> with options (e.g. Red, Green, Blue) and a div. When the user p
     phase: "Step 1 of 4",
     paal: "Declare state for the selected color. Use a string (e.g. \"red\" or \"#ff0000\"). Pick an initial value that matches one of the options you'll add later.",
     hint: "useState with a string. Example: useState(\"red\")",
-    answer_keywords: ["usestate", "color", "setcolor", "red", "green", "blue", "\""],
+    answer_keywords: ["usestate", "color", "setcolor", "red"],
     seed_code: `import { useState } from 'react'
 
 export default function ColorPicker() {
@@ -51,6 +51,7 @@ export default function ColorPicker() {
     feedback_partial: "Almost — use useState with a string initial value, e.g. \"red\".",
     feedback_wrong: "const [color, setColor] = useState(\"red\")",
     expected: `const [color, setColor] = useState("red")`,
+    example_code: "// Similar: state for a different string\nconst [theme, setTheme] = useState(\"dark\")",
   },
   {
     id: "step2",
@@ -75,6 +76,7 @@ export default function ColorPicker() {
   <option value="green">Green</option>
   <option value="blue">Blue</option>
 </select>`,
+    example_code: "// Similar: controlled input with value + onChange\n<input value={query} onChange={(e) => setQuery(e.target.value)} placeholder=\"Search\" />",
   },
   {
     id: "step3",
@@ -103,12 +105,13 @@ export default function ColorPicker() {
     feedback_partial: "Add a div with style={{ backgroundColor: color }}.",
     feedback_wrong: "<div style={{ backgroundColor: color }}>Preview</div>",
     expected: `<div style={{ backgroundColor: color, minHeight: "100px" }}>Preview</div>`,
+    example_code: "// Similar: dynamic style with a different property (e.g. text color or width)\n<div style={{ color: theme, width: \"200px\" }}>Sample text</div>",
   },
   {
     id: "step4",
     type: "question",
     phase: "Step 4 of 4",
-    paal: "Assemble the full component: state, controlled select, and div with dynamic background. Export default.",
+    paal: "You've built state, the controlled select, and the div with dynamic background. Check that everything is in place (and that you have export default), then submit.",
     hint: "Combine step 1–3 in one component.",
     answer_keywords: ["import", "usestate", "export", "default", "color", "select", "backgroundcolor"],
     seed_code: `import { useState } from 'react'
@@ -156,22 +159,43 @@ export default function INPACTEngine({ onNextProblem }) {
   const [result, setResult] = useState(null);
   const [attempts, setAttempts] = useState(0);
   const [showHint, setShowHint] = useState(false);
+  const [showExample, setShowExample] = useState(false);
   const [showExpected, setShowExpected] = useState(false);
   const [completedNodes, setCompletedNodes] = useState([]);
+  const [passedCodeByStepId, setPassedCodeByStepId] = useState({});
 
   const node = NODES[nodeIndex];
   const progress = NODES.length <= 1 ? 0 : Math.min(100, Math.round((nodeIndex / (NODES.length - 1)) * 100));
 
   useEffect(() => {
-    const seed = node?.seed_code ?? "";
-    setAnswer(seed);
     setResult(null);
     setAttempts(0);
     setShowHint(false);
+    setShowExample(false);
     setShowExpected(false);
-  }, [nodeIndex]);
+    if (node?.type === "question") {
+      let initialCode = "";
+      if (node.id && passedCodeByStepId[node.id]) {
+        initialCode = passedCodeByStepId[node.id];
+      } else {
+        for (let i = nodeIndex - 1; i >= 0; i--) {
+          const prev = NODES[i];
+          if (prev?.type === "question" && prev.id && passedCodeByStepId[prev.id]) {
+            initialCode = passedCodeByStepId[prev.id];
+            break;
+          }
+        }
+        if (initialCode === "" && node.starter_code) initialCode = node.starter_code;
+        if (initialCode === "") initialCode = node?.seed_code ?? "";
+      }
+      setAnswer(initialCode);
+    }
+  }, [nodeIndex, passedCodeByStepId]);
 
   function next() {
+    if (node?.type === "question" && node?.id && result === "correct") {
+      setPassedCodeByStepId((prev) => ({ ...prev, [node.id]: answer }));
+    }
     if (node?.id) setCompletedNodes((p) => (p.includes(node.id) ? p : [...p, node.id]));
     setNodeIndex((i) => Math.min(i + 1, NODES.length));
   }
@@ -270,11 +294,18 @@ export default function INPACTEngine({ onNextProblem }) {
         <CodeEditor value={answer} onChange={setAnswer} height="320px" />
         {showHint && <div style={s.hintBox}>💡 {node.hint}</div>}
         {fbMsg && <div style={s.feedback(result)}>{fbMsg}</div>}
+        {showExample && node.example_code && (
+          <div style={{ marginTop: "16px" }}>
+            <div style={{ ...s.paalLabel, marginBottom: "6px" }}>EXAMPLE (similar pattern — not the exact answer)</div>
+            <div style={s.expectedBox}>{node.example_code}</div>
+          </div>
+        )}
         {showExpected && <div><div style={{ ...s.paalLabel, marginTop: "16px" }}>EXPECTED</div><div style={s.expectedBox}>{node.expected}</div></div>}
         <div style={s.btnRow}>
           {result !== "correct" ? (
             <>
               <button style={s.btn("primary")} onClick={submit}>SUBMIT</button>
+              {node.example_code && !showExample && <button style={s.btn("secondary")} onClick={() => setShowExample(true)}>SHOW ME EXAMPLE</button>}
               {attempts > 0 && !showHint && <button style={s.btn("secondary")} onClick={() => setShowHint(true)}>SHOW HINT</button>}
               {attempts > 1 && !showExpected && <button style={s.btn("ghost")} onClick={() => setShowExpected(true)}>SHOW ANSWER</button>}
             </>
