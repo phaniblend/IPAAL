@@ -11,7 +11,7 @@ export default function Accordion() {
   const [openIndex, setOpenIndex] = useState(null)
   // Step 1: clickable headers
 }`, feedback_correct: "✅ Headers toggle openIndex.", feedback_partial: "Click handler sets openIndex to index.", feedback_wrong: "onClick={() => setOpenIndex(i)} on each header.", expected: "Headers that set openIndex." },
-  { id: "step2", type: "question", phase: "Step 2 of 3", paal: "For each panel, show content only when openIndex === index. So: {openIndex === i && <div>{panel.content}</div>}. Single-open: clicking another header closes the previous.", hint: "Content visible when openIndex === i", answer_keywords: ["openindex", "content", "conditional"], seed_code: `import { useState } from 'react'
+  { id: "step2", type: "question", phase: "Step 2 of 3", paal: "For each panel, show content only when openIndex === index. So: {openIndex === i && <div>{panel.content}</div>}. Single-open: clicking another header closes the previous.", hint: "Content visible when openIndex === i", answer_keywords: ["openindex", "content", "==="], seed_code: `import { useState } from 'react'
 
 const panels = [{ title: 'Panel 1', content: 'Content 1' }, { title: 'Panel 2', content: 'Content 2' }]
 
@@ -44,7 +44,7 @@ export default function Accordion() {
       ))}
     </div>
   )
-}`, feedback_correct: "✅ Accordion complete.", feedback_partial: "Toggle close and export.", feedback_wrong: "Click same panel to close.", expected: "Same as seed." },
+}`, feedback_correct: "✅ Accordion complete.", feedback_partial: "Toggle close and export.", feedback_wrong: "Click same panel to close.", expected: "Click same panel to close. Export the accordion component." },
 ];
 
 const sideItems = [{ label: "Problem", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];

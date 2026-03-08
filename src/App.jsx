@@ -3,7 +3,6 @@ import LandingPage from './LandingPage'
 import { TS_FUNDAMENTALS_CURRICULUM } from './engines/typescript/inpact_tsf_index'
 import { JS_FUNDAMENTALS_CURRICULUM } from './engines/javascript/inpact_jsf_index'
 import { NODE_FUNDAMENTALS_CURRICULUM } from './engines/node/inpact_nodef_index'
-import { JS_DEEP_CURRICULUM } from './engines/JS/inpact_js_index'
 import {
   ENGINES_JS_INTERVIEW,
   ENGINES_TS_INTERVIEW,
@@ -250,7 +249,6 @@ import INPACTEngineTS97 from './engines/inpact_ts97_engine'
 import INPACTEngineTS98 from './engines/inpact_ts98_engine'
 import INPACTEngineTS99 from './engines/inpact_ts99_engine'
 import INPACTEngineTS100 from './engines/inpact_ts100_engine'
-import { ENGINES_ANGULAR } from './engines/angular/inpact_ng_index'
 import { ENGINES_VUE } from './engines/vue/inpact_vue_index'
 import INPACTEngineAngularA01 from './engines/angular_a01_components'
 import INPACTEngineAngularA02 from './engines/angular/angular_a02_data_binding'
@@ -261,6 +259,108 @@ import INPACTEngineAngularA06 from './engines/angular/angular_a06_routing'
 import INPACTEngineAngularA07 from './engines/angular/angular_a07_change_detection'
 import INPACTEngineAngularA08 from './engines/angular/angular_a08_module_federation'
 import INPACTEngineAngularA09 from './engines/angular/angular_a09_pipes'
+import { ENGINES_ANGULAR_CURRICULUM } from './engines/angular/angular_curriculum_index'
+import INPACTEngineC01 from './engines/css/inpact_c01_engine'
+import INPACTEngineC02 from './engines/css/inpact_c02_engine'
+import INPACTEngineC03 from './engines/css/inpact_c03_engine'
+import INPACTEngineC04 from './engines/css/inpact_c04_engine'
+import INPACTEngineC05 from './engines/css/inpact_c05_engine'
+import INPACTEngineC06 from './engines/css/inpact_c06_engine'
+import INPACTEngineC07 from './engines/css/inpact_c07_engine'
+import INPACTEngineC08 from './engines/css/inpact_c08_engine'
+import INPACTEngineC09 from './engines/css/inpact_c09_engine'
+import INPACTEngineC10 from './engines/css/inpact_c10_engine'
+import INPACTEngineC11 from './engines/css/inpact_c11_engine'
+import INPACTEngineC12 from './engines/css/inpact_c12_engine'
+import INPACTEngineC13 from './engines/css/inpact_c13_engine'
+import INPACTEngineC14 from './engines/css/inpact_c14_engine'
+import INPACTEngineC15 from './engines/css/inpact_c15_engine'
+import INPACTEngineC16 from './engines/css/inpact_c16_engine'
+import INPACTEngineC17 from './engines/css/inpact_c17_engine'
+import INPACTEngineC18 from './engines/css/inpact_c18_engine'
+import INPACTEngineC19 from './engines/css/inpact_c19_engine'
+import INPACTEngineC20 from './engines/css/inpact_c20_engine'
+import INPACTEngineC21 from './engines/css/inpact_c21_engine'
+import INPACTEngineC22 from './engines/css/inpact_c22_engine'
+import INPACTEngineC23 from './engines/css/inpact_c23_engine'
+import INPACTEngineC24 from './engines/css/inpact_c24_engine'
+import INPACTEngineC25 from './engines/css/inpact_c25_engine'
+import INPACTEngineC26 from './engines/css/inpact_c26_engine'
+import INPACTEngineC27 from './engines/css/inpact_c27_engine'
+import INPACTEngineC28 from './engines/css/inpact_c28_engine'
+import INPACTEngineC29 from './engines/css/inpact_c29_engine'
+import INPACTEngineC30 from './engines/css/inpact_c30_engine'
+import INPACTEngineC31 from './engines/css/inpact_c31_engine'
+import INPACTEngineC32 from './engines/css/inpact_c32_engine'
+import INPACTEngineC33 from './engines/css/inpact_c33_engine'
+import INPACTEngineC34 from './engines/css/inpact_c34_engine'
+import INPACTEngineC35 from './engines/css/inpact_c35_engine'
+import INPACTEngineC36 from './engines/css/inpact_c36_engine'
+import INPACTEngineC37 from './engines/css/inpact_c37_engine'
+import INPACTEngineC38 from './engines/css/inpact_c38_engine'
+import INPACTEngineC39 from './engines/css/inpact_c39_engine'
+import INPACTEngineC40 from './engines/css/inpact_c40_engine'
+import INPACTEngineC41 from './engines/css/inpact_c41_engine'
+import INPACTEngineC42 from './engines/css/inpact_c42_engine'
+import INPACTEngineC43 from './engines/css/inpact_c43_engine'
+import INPACTEngineC44 from './engines/css/inpact_c44_engine'
+import INPACTEngineC45 from './engines/css/inpact_c45_engine'
+import INPACTEngineC46 from './engines/css/inpact_c46_engine'
+import INPACTEngineC47 from './engines/css/inpact_c47_engine'
+import INPACTEngineC48 from './engines/css/inpact_c48_engine'
+import INPACTEngineC49 from './engines/css/inpact_c49_engine'
+import INPACTEngineC50 from './engines/css/inpact_c50_engine'
+import INPACTEngineC51 from './engines/css/inpact_c51_engine'
+import INPACTEngineC52 from './engines/css/inpact_c52_engine'
+import INPACTEngineC53 from './engines/css/inpact_c53_engine'
+import INPACTEngineC54 from './engines/css/inpact_c54_engine'
+import INPACTEngineC55 from './engines/css/inpact_c55_engine'
+import INPACTEngineC56 from './engines/css/inpact_c56_engine'
+import INPACTEngineC57 from './engines/css/inpact_c57_engine'
+import INPACTEngineC58 from './engines/css/inpact_c58_engine'
+import INPACTEngineC59 from './engines/css/inpact_c59_engine'
+import INPACTEngineC60 from './engines/css/inpact_c60_engine'
+import INPACTEngineC61 from './engines/css/inpact_c61_engine'
+import INPACTEngineC62 from './engines/css/inpact_c62_engine'
+import INPACTEngineC63 from './engines/css/inpact_c63_engine'
+import INPACTEngineC64 from './engines/css/inpact_c64_engine'
+import INPACTEngineC65 from './engines/css/inpact_c65_engine'
+import INPACTEngineC66 from './engines/css/inpact_c66_engine'
+import INPACTEngineC67 from './engines/css/inpact_c67_engine'
+import INPACTEngineC68 from './engines/css/inpact_c68_engine'
+import INPACTEngineC69 from './engines/css/inpact_c69_engine'
+import INPACTEngineC70 from './engines/css/inpact_c70_engine'
+import INPACTEngineC71 from './engines/css/inpact_c71_engine'
+import INPACTEngineC72 from './engines/css/inpact_c72_engine'
+import INPACTEngineC73 from './engines/css/inpact_c73_engine'
+import INPACTEngineC74 from './engines/css/inpact_c74_engine'
+import INPACTEngineC75 from './engines/css/inpact_c75_engine'
+import INPACTEngineC76 from './engines/css/inpact_c76_engine'
+import INPACTEngineC77 from './engines/css/inpact_c77_engine'
+import INPACTEngineC78 from './engines/css/inpact_c78_engine'
+import INPACTEngineC79 from './engines/css/inpact_c79_engine'
+import INPACTEngineC80 from './engines/css/inpact_c80_engine'
+import INPACTEngineC81 from './engines/css/inpact_c81_engine'
+import INPACTEngineC82 from './engines/css/inpact_c82_engine'
+import INPACTEngineC83 from './engines/css/inpact_c83_engine'
+import INPACTEngineC84 from './engines/css/inpact_c84_engine'
+import INPACTEngineC85 from './engines/css/inpact_c85_engine'
+import INPACTEngineC86 from './engines/css/inpact_c86_engine'
+import INPACTEngineC87 from './engines/css/inpact_c87_engine'
+import INPACTEngineC88 from './engines/css/inpact_c88_engine'
+import INPACTEngineC89 from './engines/css/inpact_c89_engine'
+import INPACTEngineC90 from './engines/css/inpact_c90_engine'
+import INPACTEngineC91 from './engines/css/inpact_c91_engine'
+import INPACTEngineC92 from './engines/css/inpact_c92_engine'
+import INPACTEngineC93 from './engines/css/inpact_c93_engine'
+import INPACTEngineC94 from './engines/css/inpact_c94_engine'
+import INPACTEngineC95 from './engines/css/inpact_c95_engine'
+import INPACTEngineC96 from './engines/css/inpact_c96_engine'
+import INPACTEngineC97 from './engines/css/inpact_c97_engine'
+import INPACTEngineC98 from './engines/css/inpact_c98_engine'
+import INPACTEngineC99 from './engines/css/inpact_c99_engine'
+import INPACTEngineC100 from './engines/css/inpact_c100_engine'
+import { CSS_CURRICULUM } from './engines/css/inpact_css_index'
 
 const ENGINES = [
   INPACTEngineP01,
@@ -523,10 +623,114 @@ const ENGINES_JS = [
   INPACTEngineJSD01,
 ]
 
+// CSS — Module 1: Foundations (C01–C04)
+const ENGINES_CSS = [
+  INPACTEngineC01,
+  INPACTEngineC02,
+  INPACTEngineC03,
+  INPACTEngineC04,
+  INPACTEngineC05,
+  INPACTEngineC06,
+  INPACTEngineC07,
+  INPACTEngineC08,
+  INPACTEngineC09,
+  INPACTEngineC10,
+  INPACTEngineC11,
+  INPACTEngineC12,
+  INPACTEngineC13,
+  INPACTEngineC14,
+  INPACTEngineC15,
+  INPACTEngineC16,
+  INPACTEngineC17,
+  INPACTEngineC18,
+  INPACTEngineC19,
+  INPACTEngineC20,
+  INPACTEngineC21,
+  INPACTEngineC22,
+  INPACTEngineC23,
+  INPACTEngineC24,
+  INPACTEngineC25,
+  INPACTEngineC26,
+  INPACTEngineC27,
+  INPACTEngineC28,
+  INPACTEngineC29,
+  INPACTEngineC30,
+  INPACTEngineC31,
+  INPACTEngineC32,
+  INPACTEngineC33,
+  INPACTEngineC34,
+  INPACTEngineC35,
+  INPACTEngineC36,
+  INPACTEngineC37,
+  INPACTEngineC38,
+  INPACTEngineC39,
+  INPACTEngineC40,
+  INPACTEngineC41,
+  INPACTEngineC42,
+  INPACTEngineC43,
+  INPACTEngineC44,
+  INPACTEngineC45,
+  INPACTEngineC46,
+  INPACTEngineC47,
+  INPACTEngineC48,
+  INPACTEngineC49,
+  INPACTEngineC50,
+  INPACTEngineC51,
+  INPACTEngineC52,
+  INPACTEngineC53,
+  INPACTEngineC54,
+  INPACTEngineC55,
+  INPACTEngineC56,
+  INPACTEngineC57,
+  INPACTEngineC58,
+  INPACTEngineC59,
+  INPACTEngineC60,
+  INPACTEngineC61,
+  INPACTEngineC62,
+  INPACTEngineC63,
+  INPACTEngineC64,
+  INPACTEngineC65,
+  INPACTEngineC66,
+  INPACTEngineC67,
+  INPACTEngineC68,
+  INPACTEngineC69,
+  INPACTEngineC70,
+  INPACTEngineC71,
+  INPACTEngineC72,
+  INPACTEngineC73,
+  INPACTEngineC74,
+  INPACTEngineC75,
+  INPACTEngineC76,
+  INPACTEngineC77,
+  INPACTEngineC78,
+  INPACTEngineC79,
+  INPACTEngineC80,
+  INPACTEngineC81,
+  INPACTEngineC82,
+  INPACTEngineC83,
+  INPACTEngineC84,
+  INPACTEngineC85,
+  INPACTEngineC86,
+  INPACTEngineC87,
+  INPACTEngineC88,
+  INPACTEngineC89,
+  INPACTEngineC90,
+  INPACTEngineC91,
+  INPACTEngineC92,
+  INPACTEngineC93,
+  INPACTEngineC94,
+  INPACTEngineC95,
+  INPACTEngineC96,
+  INPACTEngineC97,
+  INPACTEngineC98,
+  INPACTEngineC99,
+  INPACTEngineC100,
+]
+
 function getEngines(track) {
-  if (track === 'js-interview') return ENGINES_JS_INTERVIEW
-  if (track === 'ts-interview') return ENGINES_TS_INTERVIEW
-  if (track === 'node-interview') return ENGINES_NODE_INTERVIEW
+  if (track === 'js') return [...ENGINES_JSF, ...ENGINES_JS_INTERVIEW]
+  if (track === 'ts') return [...ENGINES_TSF, ...ENGINES_TS_INTERVIEW]
+  if (track === 'node') return [...ENGINES_NODE, ...ENGINES_NODE_INTERVIEW]
   if (track === 'react-ts') return ENGINES_TS
   if (track === 'angular')
     return [
@@ -539,37 +743,28 @@ function getEngines(track) {
       INPACTEngineAngularA07,
       INPACTEngineAngularA08,
       INPACTEngineAngularA09,
-      ...ENGINES_ANGULAR,
+      ...ENGINES_ANGULAR_CURRICULUM,
     ]
   if (track === 'vue') return ENGINES_VUE
-  if (track === 'tsf') return ENGINES_TSF
-  if (track === 'jsf') return ENGINES_JSF
-  if (track === 'node') return ENGINES_NODE
-  if (track === 'js') return ENGINES_JS
+  if (track === 'css') return ENGINES_CSS
   return ENGINES
 }
 
 function getProblemList(track) {
-  if (track === 'js-interview') {
-    return JS_INTERVIEW_CURRICULUM
+  if (track === 'js') {
+    const jsFund = JS_FUNDAMENTALS_CURRICULUM.map((c) => ({ title: c.title, shortName: c.shortName, why: c.why }))
+    return [...jsFund, ...JS_INTERVIEW_CURRICULUM]
   }
-  if (track === 'ts-interview') {
-    return TS_INTERVIEW_CURRICULUM
-  }
-  if (track === 'node-interview') {
-    return NODE_INTERVIEW_CURRICULUM
-  }
-  if (track === 'tsf') {
-    return TS_FUNDAMENTALS_CURRICULUM.map((c) => ({ title: c.title, shortName: c.shortName, why: c.why }))
-  }
-  if (track === 'jsf') {
-    return JS_FUNDAMENTALS_CURRICULUM.map((c) => ({ title: c.title, shortName: c.shortName, why: c.why }))
+  if (track === 'ts') {
+    const tsFund = TS_FUNDAMENTALS_CURRICULUM.map((c) => ({ title: c.title, shortName: c.shortName, why: c.why }))
+    return [...tsFund, ...TS_INTERVIEW_CURRICULUM]
   }
   if (track === 'node') {
-    return NODE_FUNDAMENTALS_CURRICULUM.map((c) => ({ title: c.title, shortName: c.shortName, why: c.why }))
+    const nodeFund = NODE_FUNDAMENTALS_CURRICULUM.map((c) => ({ title: c.title, shortName: c.shortName, why: c.why }))
+    return [...nodeFund, ...NODE_INTERVIEW_CURRICULUM]
   }
-  if (track === 'js') {
-    return JS_DEEP_CURRICULUM.map((c) => ({ title: c.title, shortName: c.shortName, why: c.why }))
+  if (track === 'css') {
+    return CSS_CURRICULUM.map((c) => ({ title: c.title, shortName: c.shortName }))
   }
   if (track === 'angular' || track === 'vue') {
     return null // same 100 problem titles as React (PROBLEM_LIST in LandingPage)
@@ -578,7 +773,7 @@ function getProblemList(track) {
 }
 
 export default function App() {
-  const [track, setTrack] = useState('react-js') // 'react-js' | 'react-ts' | 'angular' | 'vue' | 'tsf' | 'jsf' | 'node' | 'js' | 'js-interview' | 'ts-interview' | 'node-interview'
+  const [track, setTrack] = useState('react-js') // 'react-js' | 'react-ts' | 'angular' | 'vue' | 'js' | 'ts' | 'node' | 'css'
   const [problemIndex, setProblemIndex] = useState(null) // null = landing, 0-based index = problem
   const onBackToProblems = () => setProblemIndex(null)
 

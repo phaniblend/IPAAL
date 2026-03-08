@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import CodeEditor from "../CodeEditor";
+import LessonEditorOutputTabs from "../LessonEditorOutputTabs";
 
 if (typeof document !== "undefined" && !document.getElementById("dm-sans-font")) {
   const link = document.createElement("link");
@@ -311,8 +312,10 @@ export default function AngularA09Pipes({ onNextProblem }) {
   const [showExpected, setShowExpected] = useState(false);
   const [showMe, setShowMe] = useState(false);
   const [completedNodes, setCompletedNodes] = useState([]);
+  const [mainTab, setMainTab] = useState("editor");
 
   const node = NODES[nodeIndex];
+  useEffect(() => { setMainTab("editor"); }, [nodeIndex]);
 
   const currentAnswer = (() => {
     if (answers[node.id] !== undefined) return answers[node.id];
@@ -383,11 +386,10 @@ export default function AngularA09Pipes({ onNextProblem }) {
 
   function renderQuestion() {
     const feedback = getFeedback();
-    return (
+    const editorContent = (
       <div>
         <div style={s.phase}>{node.phase}</div>
-        <div style={s.paalLabel}>TASK</div>
-        <div style={s.paalText}>{node.paal}</div>
+        <div style={{ fontSize: "11px", color: "#00d4ff", fontWeight: 600, letterSpacing: "0.05em", marginBottom: "8px" }}>CODE BUILT SO FAR — edit below</div>
         <div style={s.hint}>💡 {node.hint}</div>
         {!showMe && node.expected && (
           <div style={{ marginBottom: "12px" }}>
@@ -400,7 +402,7 @@ export default function AngularA09Pipes({ onNextProblem }) {
             <pre style={{ margin: 0, whiteSpace: "pre-wrap" }}>{node.expected}</pre>
           </div>
         )}
-        <CodeEditor value={currentAnswer} onChange={setCurrentAnswer} height="280px" />
+        <CodeEditor value={currentAnswer} onChange={setCurrentAnswer} height="240px" />
         {feedback && <div style={s.feedback(result)}>{feedback}</div>}
         {showExpected && node.expected && (
           <div style={{ ...s.pre, borderLeft: "2px solid #10b981", marginBottom: "16px" }}>
@@ -415,6 +417,11 @@ export default function AngularA09Pipes({ onNextProblem }) {
           {result && result !== "correct" && <button style={{ ...s.btn("secondary"), marginLeft: "auto" }} onClick={next}>SKIP →</button>}
         </div>
       </div>
+    );
+    return (
+      <LessonEditorOutputTabs node={node} nodes={NODES} mainTab={mainTab} setMainTab={setMainTab} answer={currentAnswer || ""}>
+        {editorContent}
+      </LessonEditorOutputTabs>
     );
   }
 

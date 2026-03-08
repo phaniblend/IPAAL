@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import CodeEditor from "../CodeEditor";
+import LessonEditorOutputTabs from "../LessonEditorOutputTabs";
 
 if (typeof document !== "undefined" && !document.getElementById("dm-sans-font")) {
   const link = document.createElement("link");
@@ -637,8 +638,10 @@ export default function AngularA05NgRx({ onNextProblem }) {
   const [showExpected, setShowExpected] = useState(false);
   const [completedNodes, setCompletedNodes] = useState([]);
   const [wfsChecked, setWfsChecked] = useState([]);
+  const [mainTab, setMainTab] = useState("editor");
 
   const node = NODES[nodeIndex];
+  useEffect(() => { setMainTab("lesson"); }, [nodeIndex]);
   const progress = Math.round((completedNodes.length / NODES.length) * 100);
 
   const currentAnswer = (() => {
@@ -717,7 +720,7 @@ export default function AngularA05NgRx({ onNextProblem }) {
 
   function renderQuestion() {
     const feedback = getFeedback();
-    return (
+    const editorContent = (
       <div>
         <div style={s.phase}>{node.phase}</div>
         {showAnalogy && node.analogy ? (
@@ -729,10 +732,9 @@ export default function AngularA05NgRx({ onNextProblem }) {
           </div>
         ) : (
           <>
-            <div style={s.paalLabel}>TASK</div>
-            <div style={s.paalText}>{node.paal}</div>
+            <div style={{ fontSize: "11px", color: "#00d4ff", fontWeight: 600, letterSpacing: "0.05em", marginBottom: "8px" }}>CODE BUILT SO FAR — edit below</div>
             <div style={s.hint}>💡 {node.hint}</div>
-            <CodeEditor value={currentAnswer} onChange={setCurrentAnswer} height="280px" />
+            <CodeEditor value={currentAnswer} onChange={setCurrentAnswer} height="240px" />
             {feedback && <div style={s.feedback(result)}>{feedback}</div>}
             {showExpected && node.expected && (
               <div style={{ ...s.pre, borderLeft: "2px solid #10b981", marginBottom: "16px" }}>
@@ -750,6 +752,11 @@ export default function AngularA05NgRx({ onNextProblem }) {
           </>
         )}
       </div>
+    );
+    return (
+      <LessonEditorOutputTabs node={node} nodes={NODES} mainTab={mainTab} setMainTab={setMainTab} answer={currentAnswer || ""}>
+        {editorContent}
+      </LessonEditorOutputTabs>
     );
   }
 

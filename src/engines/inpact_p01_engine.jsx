@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import CodeEditor from "./CodeEditor";
+import LessonEditorOutputTabs from "./LessonEditorOutputTabs";
 
 
 // Load DM Sans from Google Fonts
@@ -473,9 +474,11 @@ export default function INPACTEngine({ onNextProblem }) {
   const [objIndex, setObjIndex] = useState(0);
   const [wfsChecked, setWfsChecked] = useState([]);
   const [showAnalogy, setShowAnalogy] = useState(false);
+  const [mainTab, setMainTab] = useState("editor");
   const editorRef = useRef(null);
 
   const node = NODES[nodeIndex];
+  useEffect(() => { setMainTab("editor"); }, [nodeIndex]);
   const progress = NODES.length <= 1 ? 0 : Math.min(100, Math.round((nodeIndex / (NODES.length - 1)) * 100));
 
   useEffect(() => {
@@ -970,147 +973,72 @@ export default function INPACTEngine({ onNextProblem }) {
       : null;
     const feedbackMsg = typeof rawFeedback === "function" ? rawFeedback(answer) : rawFeedback;
 
-    return (
+    const editorContent = (
       <div>
         <div style={s.phase}>{node.phase}</div>
-        <div style={s.paalBox}>
-          <div style={s.paalLabel}>PAAL</div>
-          <div style={s.paalText}>{node.paal}</div>
-        </div>
-
         {node.seed_code && (
           <div style={{
             fontFamily: "'DM Sans', sans-serif",
-            fontSize: "10px",
-            color: "#4a5568",
-            letterSpacing: "1px",
+            fontSize: "11px",
+            color: "#00d4ff",
+            fontWeight: 600,
+            letterSpacing: "0.05em",
             marginBottom: "8px",
             display: "flex",
             alignItems: "center",
             gap: "8px",
           }}>
             <div style={{ width: "8px", height: "8px", borderRadius: "50%", background: "#10b981" }} />
-            CODE BUILT SO FAR — type below the comment
+            CODE BUILT SO FAR — edit below
           </div>
         )}
-        <CodeEditor value={answer} onChange={setAnswer} height="380px" />
-
-        {showHint && (
-          <div style={s.hintBox}>💡 HINT — {node.hint}</div>
-        )}
-
-        {feedbackMsg && (
-          <div style={s.feedback(result)}>{feedbackMsg}</div>
-        )}
-
+        <CodeEditor value={answer} onChange={setAnswer} height="240px" />
+        {showHint && <div style={s.hintBox}>💡 HINT — {node.hint}</div>}
+        {feedbackMsg && <div style={s.feedback(result)}>{feedbackMsg}</div>}
         {showExpected && (
           <div>
-            <div style={{ ...s.paalLabel, marginTop: "16px", marginBottom: "8px" }}>
-              EXPECTED ANSWER
-            </div>
+            <div style={{ ...s.paalLabel, marginTop: "16px", marginBottom: "8px" }}>EXPECTED ANSWER</div>
             <div style={s.expectedBox}>{node.expected}</div>
           </div>
         )}
-
         <div style={s.btnRow}>
           {result !== "correct" ? (
             <>
-              <button style={s.btn("primary")} onClick={submit}>
-                SUBMIT
-              </button>
+              <button style={s.btn("primary")} onClick={submit}>SUBMIT</button>
               {node.analogy && (
-                <button style={{
-                  ...s.btn("secondary"),
-                  background: "rgba(124,58,237,0.15)",
-                  border: "1px solid #7c3aed",
-                  color: "#9f7aea",
-                }} onClick={() => setShowAnalogy(true)}>
+                <button style={{ ...s.btn("secondary"), background: "rgba(124,58,237,0.15)", border: "1px solid #7c3aed", color: "#9f7aea" }} onClick={() => setShowAnalogy(true)}>
                   💡 SHOW ME AN EXAMPLE
                 </button>
               )}
-              {attempts > 0 && !showHint && (
-                <button style={s.btn("secondary")} onClick={() => setShowHint(true)}>
-                  SHOW HINT
-                </button>
-              )}
-              {attempts > 1 && !showExpected && (
-                <button style={s.btn("ghost")} onClick={() => setShowExpected(true)}>
-                  SHOW ANSWER
-                </button>
-              )}
+              {attempts > 0 && !showHint && <button style={s.btn("secondary")} onClick={() => setShowHint(true)}>SHOW HINT</button>}
+              {attempts > 1 && !showExpected && <button style={s.btn("ghost")} onClick={() => setShowExpected(true)}>SHOW ANSWER</button>}
             </>
           ) : (
-            <button style={s.btn("primary")} onClick={next}>
-              NEXT STEP →
-            </button>
+            <button style={s.btn("primary")} onClick={next}>NEXT STEP →</button>
           )}
         </div>
-
-        {/* Analogy Modal */}
         {showAnalogy && node.analogy && (
           <div
             onClick={() => setShowAnalogy(false)}
-            style={{
-              position: "fixed", inset: 0,
-              background: "rgba(0,0,0,0.75)",
-              zIndex: 100,
-              display: "flex", alignItems: "center", justifyContent: "center",
-              padding: "24px",
-            }}
+            style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.75)", zIndex: 100, display: "flex", alignItems: "center", justifyContent: "center", padding: "24px" }}
           >
-            <div
-              onClick={(e) => e.stopPropagation()}
-              style={{
-                background: "#0d1117",
-                border: "1px solid #7c3aed",
-                borderRadius: "12px",
-                padding: "32px",
-                maxWidth: "580px",
-                width: "100%",
-                boxShadow: "0 0 60px rgba(124,58,237,0.2)",
-              }}
-            >
-              <div style={{
-                fontFamily: "'Courier New',monospace",
-                fontSize: "10px", letterSpacing: "3px",
-                color: "#7c3aed", marginBottom: "16px",
-              }}>💡 ANALOGOUS EXAMPLE</div>
-              <div style={{
-                fontSize: "16px", fontWeight: "700",
-                color: "#f8fafc", marginBottom: "20px",
-              }}>{node.analogy.title}</div>
-              <pre style={{
-                fontFamily: "'Fira Code','Courier New',monospace",
-                fontSize: "13px", lineHeight: "1.8",
-                background: "#080c14",
-                border: "1px solid #1e2733",
-                borderRadius: "8px",
-                padding: "16px 20px",
-                color: "#10b981",
-                whiteSpace: "pre-wrap",
-                marginBottom: "20px",
-              }}>{node.analogy.code}</pre>
-              <div style={{
-                fontSize: "14px", color: "#a0aec0",
-                lineHeight: "1.7", marginBottom: "28px",
-                borderLeft: "2px solid #7c3aed",
-                paddingLeft: "16px",
-              }}>{node.analogy.explain}</div>
-              <div style={{
-                fontFamily: "'Courier New',monospace",
-                fontSize: "11px", color: "#4a5568",
-                marginBottom: "20px",
-              }}>Now apply the same pattern to your problem ↓</div>
-              <button
-                style={{ ...s.btn("primary"), width: "100%" }}
-                onClick={() => setShowAnalogy(false)}
-              >
-                GOT IT — LET ME TRY →
-              </button>
+            <div onClick={(e) => e.stopPropagation()} style={{ background: "#0d1117", border: "1px solid #7c3aed", borderRadius: "12px", padding: "32px", maxWidth: "580px", width: "100%", boxShadow: "0 0 60px rgba(124,58,237,0.2)" }}>
+              <div style={{ fontFamily: "'Courier New',monospace", fontSize: "10px", letterSpacing: "3px", color: "#7c3aed", marginBottom: "16px" }}>💡 ANALOGOUS EXAMPLE</div>
+              <div style={{ fontSize: "16px", fontWeight: "700", color: "#f8fafc", marginBottom: "20px" }}>{node.analogy.title}</div>
+              <pre style={{ fontFamily: "'Fira Code','Courier New',monospace", fontSize: "13px", lineHeight: "1.8", background: "#080c14", border: "1px solid #1e2733", borderRadius: "8px", padding: "16px 20px", color: "#10b981", whiteSpace: "pre-wrap", marginBottom: "20px" }}>{node.analogy.code}</pre>
+              <div style={{ fontSize: "14px", color: "#a0aec0", lineHeight: "1.7", marginBottom: "28px", borderLeft: "2px solid #7c3aed", paddingLeft: "16px" }}>{node.analogy.explain}</div>
+              <div style={{ fontFamily: "'Courier New',monospace", fontSize: "11px", color: "#4a5568", marginBottom: "20px" }}>Now apply the same pattern to your problem ↓</div>
+              <button style={{ ...s.btn("primary"), width: "100%" }} onClick={() => setShowAnalogy(false)}>GOT IT — LET ME TRY →</button>
             </div>
           </div>
         )}
       </div>
+    );
+
+    return (
+      <LessonEditorOutputTabs node={node} nodes={NODES} mainTab={mainTab} setMainTab={setMainTab} answer={answer || ""}>
+        {editorContent}
+      </LessonEditorOutputTabs>
     );
   }
 

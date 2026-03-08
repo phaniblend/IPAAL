@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import CodeEditor from "./CodeEditor";
+import { EditorTaskBlock } from "./LessonEditorOutputTabs";
 
 if (typeof document !== "undefined" && !document.getElementById("dm-sans-font")) {
   const link = document.createElement("link");
@@ -26,7 +27,7 @@ const NODES = [
       {label}
     </button>
   )
-}`, feedback_correct: "✅ Reusable Button with variant and disabled complete.", feedback_partial: "Add disabled prop and muted style when disabled.", feedback_wrong: "Ensure disabled is passed to <button> and optionally reduce opacity when disabled.", expected: "Same as seed with opacity when disabled.", example_code: "// Similar: input that looks muted when disabled\n<input disabled={disabled} style={{ opacity: disabled ? 0.5 : 1 }} value={value} />" },
+}`, feedback_correct: "✅ Reusable Button with variant and disabled complete.", feedback_partial: "Add disabled prop and muted style when disabled.", feedback_wrong: "Ensure disabled is passed to <button> and optionally reduce opacity when disabled.", expected: "Pass disabled to <button> and optionally style when disabled (e.g. opacity: disabled ? 0.5 : 1).", example_code: "// Similar: input that looks muted when disabled\n<input disabled={disabled} style={{ opacity: disabled ? 0.5 : 1 }} value={value} />" },
 ];
 
 function evaluate(node, answer) {
@@ -142,9 +143,9 @@ export default function INPACTEngine({ onNextProblem }) {
     return (
       <div>
         <div style={s.phase}>{node.phase}</div>
-        <div style={s.paalBox}><div style={s.paalLabel}>PAAL</div><div style={s.paalText}>{node.paal}</div></div>
+        <EditorTaskBlock node={node} />
         {node.seed_code && <div style={{ fontSize: "10px", color: "#4a5568", marginBottom: "8px" }}>CODE BUILT SO FAR — edit below</div>}
-        <CodeEditor value={answer} onChange={setAnswer} height="320px" />
+        <CodeEditor value={answer} onChange={setAnswer} height="240px" />
         {showHint && <div style={s.hintBox}>💡 {node.hint}</div>}
         {fbMsg && <div style={s.feedback(result)}>{fbMsg}</div>}
         {showExample && node.example_code && (

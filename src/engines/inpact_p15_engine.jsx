@@ -21,7 +21,7 @@ const NODES = [
       {children}
     </div>
   )
-}`, feedback_correct: "✅ Container with children prop complete.", feedback_partial: "Ensure export default.", feedback_wrong: "Export default function Container.", expected: "Same as seed." },
+}`, feedback_correct: "✅ Container with children prop complete.", feedback_partial: "Ensure export default.", feedback_wrong: "Export default function Container.", expected: "Export default function Container that accepts and renders children (e.g. {children})." },
 ];
 
 const sideItems = [{ label: "Problem", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];

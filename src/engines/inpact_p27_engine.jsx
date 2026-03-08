@@ -41,7 +41,7 @@ export default function TodoList() {
       </ul>
     </div>
   )
-}`, feedback_correct: "✅ Simple Todo List CRUD complete.", feedback_partial: "Add, toggle, delete and styling.", feedback_wrong: "Full CRUD and completed style.", expected: "Same as seed." },
+}`, feedback_correct: "✅ Simple Todo List CRUD complete.", feedback_partial: "Add, toggle, delete and styling.", feedback_wrong: "Full CRUD and completed style.", expected: "Add, toggle (map), delete (filter), style completed (line-through). Export." },
 ];
 
 const sideItems = [{ label: "Problem", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];

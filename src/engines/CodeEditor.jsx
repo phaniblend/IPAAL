@@ -2,9 +2,12 @@ import CodeMirror from '@uiw/react-codemirror'
 import { javascript } from '@codemirror/lang-javascript'
 import { oneDark } from '@codemirror/theme-one-dark'
 import { EditorSelection } from '@codemirror/state'
-import { useCallback, useRef, useEffect } from 'react'
+import { useCallback, useRef, useEffect, useMemo } from 'react'
 
-export default function CodeEditor({ value, onChange, height = "320px", cursorAtEndOfLine, cursorAtStartOfLine }) {
+// When language === "css" we use javascript() so the app runs without @codemirror/lang-css.
+// For CSS syntax highlighting: npm i @codemirror/lang-css, then use [langCss()] for the css case.
+export default function CodeEditor({ value, onChange, height = "240px", cursorAtEndOfLine, cursorAtStartOfLine, language = "javascript" }) {
+  const extensions = useMemo(() => [javascript({ jsx: true })], [])
   const viewRef = useRef(null)
   const handleChange = useCallback((val) => {
     onChange(val)
@@ -43,7 +46,7 @@ export default function CodeEditor({ value, onChange, height = "320px", cursorAt
       value={value}
       height={height}
       theme={oneDark}
-      extensions={[javascript({ jsx: true })]}
+      extensions={extensions}
       onChange={handleChange}
       onCreateEditor={onCreateEditor}
       basicSetup={{

@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import CodeEditor from "../CodeEditor";
+import LessonEditorOutputTabs from "../LessonEditorOutputTabs";
 
 if (typeof document !== "undefined" && !document.getElementById("dm-sans-font")) {
   const link = document.createElement("link");
@@ -368,8 +369,10 @@ export default function AngularA08ModuleFederation({ onNextProblem }) {
   const [showAnalogy, setShowAnalogy] = useState(false);
   const [showExpected, setShowExpected] = useState(false);
   const [completedNodes, setCompletedNodes] = useState([]);
+  const [mainTab, setMainTab] = useState("editor");
 
   const node = NODES[nodeIndex];
+  useEffect(() => { setMainTab("lesson"); }, [nodeIndex]);
 
   const currentAnswer = (() => {
     if (answers[node.id] !== undefined) return answers[node.id];
@@ -473,46 +476,30 @@ export default function AngularA08ModuleFederation({ onNextProblem }) {
 
   function renderQuestion() {
     const feedback = getFeedback();
-    return (
+    const editorContent = (
       <div>
         <div style={s.phase}>{node.phase}</div>
-            <div style={s.paalLabel}>TASK</div>
-            <div style={s.paalText}>{node.paal}</div>
-            <div style={s.hint}>💡 {node.hint}</div>
-        <CodeEditor value={currentAnswer} onChange={setCurrentAnswer} height="280px" />
-            {feedback && <div style={s.feedback(result)}>{feedback}</div>}
-            {showExpected && node.expected && (
-              <div style={{ ...s.pre, borderLeft: "2px solid #10b981", marginBottom: "16px" }}>
-            <div
-              style={{
-                fontSize: "9px",
-                fontWeight: 700,
-                letterSpacing: "0.15em",
-                color: "#10b981",
-                marginBottom: "8px",
-              }}
-            >
-              MODEL ANSWER
-            </div>
-                {node.expected}
-              </div>
-            )}
-            <div style={s.btnRow}>
-          <button style={s.btn("primary")} onClick={evaluate} disabled={!currentAnswer.trim()}>
-            CHECK →
-          </button>
-          {result && result !== "correct" && (
-            <button style={s.btn("secondary")} onClick={() => setShowExpected(true)}>
-              SHOW ANSWER
-            </button>
-          )}
-          {result === "correct" && (
-            <button style={s.btn("primary")} onClick={next}>
-              NEXT →
-            </button>
-          )}
+        <div style={{ fontSize: "11px", color: "#00d4ff", fontWeight: 600, letterSpacing: "0.05em", marginBottom: "8px" }}>CODE BUILT SO FAR — edit below</div>
+        <div style={s.hint}>💡 {node.hint}</div>
+        <CodeEditor value={currentAnswer} onChange={setCurrentAnswer} height="240px" />
+        {feedback && <div style={s.feedback(result)}>{feedback}</div>}
+        {showExpected && node.expected && (
+          <div style={{ ...s.pre, borderLeft: "2px solid #10b981", marginBottom: "16px" }}>
+            <div style={{ fontSize: "9px", fontWeight: 700, letterSpacing: "0.15em", color: "#10b981", marginBottom: "8px" }}>MODEL ANSWER</div>
+            {node.expected}
+          </div>
+        )}
+        <div style={s.btnRow}>
+          <button style={s.btn("primary")} onClick={evaluate} disabled={!currentAnswer.trim()}>CHECK →</button>
+          {result && result !== "correct" && <button style={s.btn("secondary")} onClick={() => setShowExpected(true)}>SHOW ANSWER</button>}
+          {result === "correct" && <button style={s.btn("primary")} onClick={next}>NEXT →</button>}
         </div>
       </div>
+    );
+    return (
+      <LessonEditorOutputTabs node={node} nodes={NODES} mainTab={mainTab} setMainTab={setMainTab} answer={currentAnswer || ""}>
+        {editorContent}
+      </LessonEditorOutputTabs>
     );
   }
 

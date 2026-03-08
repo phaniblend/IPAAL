@@ -14,7 +14,7 @@ export default function ToggleVisibility() {
   const [visible, setVisible] = useState<boolean>(true)
   // Step 2: toggle and button
 }`, feedback_correct: "✅ Toggle wired.", feedback_partial: "Button that flips visible.", feedback_wrong: "onClick={() => setVisible(prev => !prev)}", expected: "toggle handler and button" },
-  { id: "step3", type: "question", phase: "Step 3 of 3", paal: "Render a paragraph only when visible is true. Use {visible && <p>...</p>}. Export the component.", hint: "{visible && <p>You can see this.</p>}", answer_keywords: ["visible", "conditional", "return", "p"], seed_code: `import { useState } from 'react'
+  { id: "step3", type: "question", phase: "Step 3 of 3", paal: "Render a paragraph only when visible is true. Use {visible && <p>...</p>}. Export the component.", hint: "{visible && <p>You can see this.</p>}", answer_keywords: ["visible", "&&", "return", "<p>"], seed_code: `import { useState } from 'react'
 
 export default function ToggleVisibility() {
   const [visible, setVisible] = useState<boolean>(true)
@@ -24,7 +24,13 @@ export default function ToggleVisibility() {
       {visible && <p>You can see this.</p>}
     </div>
   )
-}`, feedback_correct: "✅ Toggle Visibility with TypeScript complete.", feedback_partial: "Conditional render and export.", feedback_wrong: "visible && <p>...</p>", expected: "Same as seed" },
+}`, feedback_correct: "✅ Toggle Visibility with TypeScript complete.", feedback_partial: "Conditional render and export.", feedback_wrong: "visible && <p>...</p>", expected: `Wrap button and paragraph in one element (e.g. <div>). Use {visible && <p>...</p>} for the conditional paragraph. Export the component. Example:
+  return (
+    <div>
+      <button onClick={...}>Toggle</button>
+      {visible && <p>You can see this.</p>}
+    </div>
+  )` },
 ];
 
 const sideItems = [{ label: "Problem", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];

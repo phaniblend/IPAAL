@@ -131,23 +131,33 @@ export default function LandingPage({ track, onTrackChange, onSelectProblem, pro
         <div style={logo}>INPACT</div>
         <div style={subtitle}>Problem-solving as a Learning — pick a problem to start</div>
         <div style={trackWrap}>
-          <button type="button" style={trackBtn(track === "react-js")} onClick={() => onTrackChange("react-js")}>React · JavaScript</button>
-          <button type="button" style={trackBtn(track === "react-ts")} onClick={() => onTrackChange("react-ts")}>React · TypeScript</button>
+          <button type="button" style={trackBtn(track === "react-js")} onClick={() => onTrackChange("react-js")}>React (JavaScript)</button>
+          <button type="button" style={trackBtn(track === "react-ts")} onClick={() => onTrackChange("react-ts")}>React (TypeScript)</button>
           <button type="button" style={trackBtn(track === "angular")} onClick={() => onTrackChange("angular")}>Angular</button>
           <button type="button" style={trackBtn(track === "vue")} onClick={() => onTrackChange("vue")}>Vue</button>
-          <button type="button" style={trackBtn(track === "js-interview")} onClick={() => onTrackChange("js-interview")}>JavaScript · Interview 100</button>
-          <button type="button" style={trackBtn(track === "ts-interview")} onClick={() => onTrackChange("ts-interview")}>TypeScript · Interview 100</button>
-          <button type="button" style={trackBtn(track === "node-interview")} onClick={() => onTrackChange("node-interview")}>Node · Interview 100</button>
-          <button type="button" style={trackBtn(track === "jsf")} onClick={() => onTrackChange("jsf")}>JavaScript · Fundamentals</button>
-          <button type="button" style={trackBtn(track === "tsf")} onClick={() => onTrackChange("tsf")}>TypeScript · Fundamentals</button>
+          <button type="button" style={trackBtn(track === "js")} onClick={() => onTrackChange("js")}>JavaScript</button>
+          <button type="button" style={trackBtn(track === "ts")} onClick={() => onTrackChange("ts")}>TypeScript</button>
+          <button type="button" style={trackBtn(track === "node")} onClick={() => onTrackChange("node")}>Node</button>
+          <button type="button" style={trackBtn(track === "css")} onClick={() => onTrackChange("css")}>CSS</button>
         </div>
-        {(track === "js-interview" || track === "ts-interview" || track === "node-interview") && (
+        {track === "react-ts" && (
           <div style={{ ...subtitle, marginTop: "-16px", marginBottom: "16px", color: "#00d4ff" }}>
-            {track === "js-interview"
-              ? "JavaScript Interview Track — 100 problems"
-              : track === "ts-interview"
-              ? "TypeScript Interview Track — 100 problems"
-              : "Node Interview Track — 100 problems"}
+            React with TypeScript — 100 typed React problems
+          </div>
+        )}
+        {track === "js" && (
+          <div style={{ ...subtitle, marginTop: "-16px", marginBottom: "16px", color: "#00d4ff" }}>
+            JavaScript — fundamentals + interview problems
+          </div>
+        )}
+        {track === "ts" && (
+          <div style={{ ...subtitle, marginTop: "-16px", marginBottom: "16px", color: "#00d4ff" }}>
+            TypeScript — fundamentals + interview problems
+          </div>
+        )}
+        {track === "node" && (
+          <div style={{ ...subtitle, marginTop: "-16px", marginBottom: "16px", color: "#00d4ff" }}>
+            Node.js — fundamentals + interview problems
           </div>
         )}
       </header>

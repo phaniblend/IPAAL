@@ -3,7 +3,7 @@ import createINPACTEngine from "./inpact_engine_shared";
 const NODES = [
   { id: "intro", type: "reveal", phase: "Problem", content: { tag: "PROBLEM #24", title: "Styled Component Pattern", body: `Build a themed button using CSS variables. Define --primary, --secondary on a wrapper or :root, and use them in inline styles or a style tag so the button reads var(--primary).`, usecase: "CSS variables enable theming without changing component code." } },
   { id: "objectives", type: "objectives", phase: "Objectives", items: ["Define CSS variables (e.g. --primary, --secondary) on a parent or :root", "Use var(--primary) in the button's style", "Render a button that uses the variables"] },
-  { id: "step1", type: "question", phase: "Step 1 of 3", paal: "Create a wrapper div with a style tag or inline style that sets CSS variables: --primary: '#3b82f6', --secondary: '#6b7280'. In React you can do style={{ ['--primary']: '#3b82f6' }} on the wrapper.", hint: "Wrapper: style={{ ['--primary']: '#3b82f6', ['--secondary']: '#6b7280' }} or <style>:root { --primary: #3b82f6; }", answer_keywords: ["primary", "secondary", "variable", "style", "root"], seed_code: `export default function ThemedButton() {
+  { id: "step1", type: "question", phase: "Step 1 of 3", paal: "Create a wrapper div with a style tag or inline style that sets CSS variables: --primary: '#3b82f6', --secondary: '#6b7280'. In React you can do style={{ ['--primary']: '#3b82f6' }} on the wrapper.", hint: "Wrapper: style={{ ['--primary']: '#3b82f6', ['--secondary']: '#6b7280' }} or <style>:root { --primary: #3b82f6; }", answer_keywords: ["primary", "secondary", "var", "style"], seed_code: `export default function ThemedButton() {
   // Step 1: wrapper with CSS variables
   return (
     <div>
@@ -25,7 +25,7 @@ const NODES = [
       <button style={{ backgroundColor: 'var(--secondary)', color: 'white', marginLeft: 8, padding: '8px 16px', border: 'none', borderRadius: 6 }}>Secondary</button>
     </div>
   )
-}`, feedback_correct: "✅ Themed buttons with CSS variables complete.", feedback_partial: "Both buttons use variables.", feedback_wrong: "Export and use var(--primary) and var(--secondary).", expected: "Same as seed." },
+}`, feedback_correct: "✅ Themed buttons with CSS variables complete.", feedback_partial: "Both buttons use variables.", feedback_wrong: "Export and use var(--primary) and var(--secondary).", expected: "Export and use var(--primary) and var(--secondary)." },
 ];
 
 const sideItems = [{ label: "Problem", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];

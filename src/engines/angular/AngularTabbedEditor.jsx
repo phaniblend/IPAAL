@@ -51,7 +51,7 @@ const basicSetup = {
 export default function AngularTabbedEditor({
   value = {},
   onChange,
-  height = "320px",
+  height = "240px",
   tabs = ["ts", "html", "css"],
 }) {
   const [activeTab, setActiveTab] = useState(tabs[0] || "ts");

@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import CodeEditor from "../CodeEditor";
+import LessonEditorOutputTabs from "../LessonEditorOutputTabs";
 
 if (typeof document !== "undefined" && !document.getElementById("dm-sans-font")) {
   const link = document.createElement("link");
@@ -307,7 +308,7 @@ filteredFlights = computed(() => {
     id: "step5", type: "question", phase: "Step 5 of 7",
     paal: "Use effect() to sync the statusFilter signal to localStorage whenever it changes. Show the cleanup function returned from effect() to cancel any pending work.",
     hint: "effect() runs when any signal it reads changes. It runs once on init, then again when dependencies change. Return a cleanup function for teardown.",
-    answer_keywords: ["effect(", "localstorage", "statusfilter()", "cleanup"],
+    answer_keywords: ["effect(", "localstorage", "statusfilter()", "return"],
     seed_code: `import { Component, signal, effect } from '@angular/core';
 
 // Step 5: effect() to sync statusFilter to localStorage
@@ -589,8 +590,10 @@ export default function AngularA07ChangeDetection({ onNextProblem }) {
   const [showExpected, setShowExpected] = useState(false);
   const [completedNodes, setCompletedNodes] = useState([]);
   const [wfsChecked, setWfsChecked] = useState([]);
+  const [mainTab, setMainTab] = useState("editor");
 
   const node = NODES[nodeIndex];
+  useEffect(() => { setMainTab("editor"); }, [nodeIndex]);
   const progress = Math.round((completedNodes.length / NODES.length) * 100);
 
   const currentAnswer = (() => {
@@ -662,7 +665,7 @@ export default function AngularA07ChangeDetection({ onNextProblem }) {
 
   function renderQuestion() {
     const feedback = getFeedback();
-    return (
+    const editorContent = (
       <div>
         <div style={s.phase}>{node.phase}</div>
         {showAnalogy && node.analogy ? (
@@ -674,10 +677,9 @@ export default function AngularA07ChangeDetection({ onNextProblem }) {
           </div>
         ) : (
           <>
-            <div style={s.paalLabel}>TASK</div>
-            <div style={s.paalText}>{node.paal}</div>
+            <div style={{ fontSize: "11px", color: "#00d4ff", fontWeight: 600, letterSpacing: "0.05em", marginBottom: "8px" }}>CODE BUILT SO FAR — edit below</div>
             <div style={s.hint}>💡 {node.hint}</div>
-            <CodeEditor value={currentAnswer} onChange={setCurrentAnswer} height="280px" />
+            <CodeEditor value={currentAnswer} onChange={setCurrentAnswer} height="240px" />
             {feedback && <div style={s.feedback(result)}>{feedback}</div>}
             {showExpected && node.expected && (
               <div style={{ ...s.pre, borderLeft: "2px solid #10b981", marginBottom: "16px" }}>
@@ -695,6 +697,11 @@ export default function AngularA07ChangeDetection({ onNextProblem }) {
           </>
         )}
       </div>
+    );
+    return (
+      <LessonEditorOutputTabs node={node} nodes={NODES} mainTab={mainTab} setMainTab={setMainTab} answer={currentAnswer || ""}>
+        {editorContent}
+      </LessonEditorOutputTabs>
     );
   }
 

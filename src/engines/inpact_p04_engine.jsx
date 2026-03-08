@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import CodeEditor from "./CodeEditor";
+import { EditorTaskBlock } from "./LessonEditorOutputTabs";
 
 // ─── TUTORIAL DATA ────────────────────────────────────────────────────────────
 const NODES = [
@@ -515,7 +516,7 @@ export default function INPACTEngine({ onNextProblem }) {
     return (
       <div>
         <div style={s.phase}>{node.phase}</div>
-        <div style={s.paalBox}><div style={s.paalText}>{node.paal}</div></div>
+        <EditorTaskBlock node={node} />
         {node.seed_code && (
           <div style={{ marginBottom: "8px" }}>
             <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "8px" }}>

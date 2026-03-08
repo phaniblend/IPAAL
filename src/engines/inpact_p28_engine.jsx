@@ -9,7 +9,7 @@ export default function StarRating() {
   const [rating, setRating] = useState(0)
   // Step 1: 5 clickable stars that set rating
 }`, feedback_correct: "✅ Clickable stars set rating.", feedback_partial: "Five elements, onClick sets rating.", feedback_wrong: "Five buttons, onClick={() => setRating(i + 1)}", expected: "5 stars, click sets rating." },
-  { id: "step2", type: "question", phase: "Step 2 of 3", paal: "Show filled vs empty: use ★ when index < rating (or <=), ☆ otherwise. Or use color: index < rating ? 'gold' : 'gray'.", hint: "star = index < rating ? '★' : '☆' or style color by index < rating", answer_keywords: ["filled", "empty", "star", "index", "rating"], seed_code: `import { useState } from 'react'
+  { id: "step2", type: "question", phase: "Step 2 of 3", paal: "Show filled vs empty: use ★ when index < rating (or <=), ☆ otherwise. Or use color: index < rating ? 'gold' : 'gray'.", hint: "star = index < rating ? '★' : '☆' or style color by index < rating", answer_keywords: ["index", "rating", "?", "color"], seed_code: `import { useState } from 'react'
 
 export default function StarRating() {
   const [rating, setRating] = useState(0)
@@ -23,7 +23,7 @@ export default function StarRating() {
     </div>
   )
 }`, feedback_correct: "✅ Filled/empty by rating.", feedback_partial: "Conditional star or color by rating.", feedback_wrong: "i <= rating ? '★' : '☆'", expected: "Filled for i <= rating, empty otherwise." },
-  { id: "step3", type: "question", phase: "Step 3 of 3", paal: "Display the current rating (e.g. 'Rating: 3'). Export the component. Optionally allow 0 to mean 'no rating' and clicking the same star again clears it.", hint: "setRating(rating === i ? 0 : i) to toggle off.", answer_keywords: ["display", "export", "rating"], seed_code: `import { useState } from 'react'
+  { id: "step3", type: "question", phase: "Step 3 of 3", paal: "Display the current rating (e.g. 'Rating: 3'). Export the component. Optionally allow 0 to mean 'no rating' and clicking the same star again clears it.", hint: "setRating(rating === i ? 0 : i) to toggle off.", answer_keywords: ["export", "rating"], seed_code: `import { useState } from 'react'
 
 export default function StarRating() {
   const [rating, setRating] = useState(0)
@@ -37,7 +37,7 @@ export default function StarRating() {
       <span>Rating: {rating}</span>
     </div>
   )
-}`, feedback_correct: "✅ Star rating component complete.", feedback_partial: "Show rating value and export.", feedback_wrong: "Display rating and export.", expected: "Same as seed." },
+}`, feedback_correct: "✅ Star rating component complete.", feedback_partial: "Show rating value and export.", feedback_wrong: "Display rating and export.", expected: "Show rating value and export the star rating component." },
 ];
 
 const sideItems = [{ label: "Problem", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];

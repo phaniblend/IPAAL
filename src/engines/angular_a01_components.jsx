@@ -1,5 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import CodeEditor from "./CodeEditor";
+import AngularTabbedEditor from "./angular/AngularTabbedEditor";
+import LessonEditorOutputTabs from "./LessonEditorOutputTabs";
 
 if (typeof document !== "undefined" && !document.getElementById("dm-sans-font")) {
   const link = document.createElement("link");
@@ -67,6 +69,7 @@ for their internal operations dashboard.`,
   {
     id: "step1",
     type: "question",
+    editor: "tabbed",
     phase: "Step 1 of 8",
     paal: "Declare the @Component decorator with a selector of 'ua-flight-card' and an external template file.",
     hint: "You need two imports: Component from @angular/core, and you need both selector and templateUrl in the decorator.",
@@ -128,6 +131,7 @@ export class FlightCardComponent {}`,
   {
     id: "step2",
     type: "question",
+    editor: "tabbed",
     phase: "Step 2 of 8",
     paal: "Add an @Input property called 'flight' typed as a Flight interface with flightNumber, origin, destination, and status fields.",
     hint: "Define the interface above the class. Then use @Input() inside the class body. You need to import Input from @angular/core.",
@@ -202,6 +206,7 @@ export class FlightCardComponent {
   {
     id: "step3",
     type: "question",
+    editor: "tabbed",
     phase: "Step 3 of 8",
     paal: "Add an @Output() called 'viewDetails' that emits the flightNumber string when the user clicks 'View Details'. Write the emitter property and the handler method.",
     hint: "You need EventEmitter from @angular/core. The emitter is typed as EventEmitter<string>. The handler calls this.viewDetails.emit(this.flight.flightNumber).",
@@ -270,6 +275,7 @@ onViewDetailsClick(): void {
   {
     id: "step4",
     type: "question",
+    editor: "tabbed",
     phase: "Step 4 of 8",
     paal: "Implement ngOnInit to log 'FlightCardComponent ready' to the console. The class must implement the OnInit interface.",
     hint: "Import OnInit from @angular/core. The class declaration becomes: export class FlightCardComponent implements OnInit",
@@ -337,6 +343,7 @@ export class FlightCardComponent implements OnInit {
   {
     id: "step5",
     type: "question",
+    editor: "tabbed",
     phase: "Step 5 of 8",
     paal: "Add ngOnDestroy to clean up. Create a destroy$ Subject, implement ngOnDestroy to call next() and complete() on it. This is the takeUntil cleanup pattern.",
     hint: "Import Subject from rxjs and OnDestroy from @angular/core. The Subject acts as a signal — anything that takeUntil(this.destroy$) will auto-unsubscribe.",
@@ -414,6 +421,7 @@ ngOnDestroy(): void {
   {
     id: "step6",
     type: "question",
+    editor: "tabbed",
     phase: "Step 6 of 8",
     paal: "Add ngOnChanges to detect when the flight @Input changes. Log the previous and current flightNumber values. Use the SimpleChanges type.",
     hint: "Import OnChanges and SimpleChanges from @angular/core. ngOnChanges fires BEFORE ngOnInit on first run, then again whenever an @Input value changes.",
@@ -493,6 +501,7 @@ ngOnChanges(changes: SimpleChanges): void {
   {
     id: "step7",
     type: "question",
+    editor: "tabbed",
     phase: "Step 7 of 8",
     paal: "Refactor FlightCardComponent to be a Standalone Component (Angular 14+). It should import CommonModule for *ngIf and *ngFor support.",
     hint: "Add standalone: true to the @Component decorator and add an imports array. Standalone components don't need to be declared in an NgModule.",
@@ -563,6 +572,7 @@ export class FlightCardComponent {}`,
   {
     id: "step8",
     type: "question",
+    editor: "tabbed",
     phase: "Step 8 of 8",
     paal: "This component uses ViewEncapsulation.None so its status styles (red for CANCELLED, amber for DELAYED) can bleed into child components. Add that to the decorator and explain in a comment why you chose None over Emulated.",
     hint: "Import ViewEncapsulation from @angular/core. Add encapsulation: ViewEncapsulation.None to the @Component decorator.",
@@ -1024,14 +1034,22 @@ export default function AngularA01Components({ onNextProblem }) {
   const [showExpected, setShowExpected] = useState(false);
   const [completedNodes, setCompletedNodes] = useState([]);
   const [wfsChecked, setWfsChecked] = useState([]);
+  const [mainTab, setMainTab] = useState("editor");
 
   const node = NODES[nodeIndex];
+
+  useEffect(() => {
+    setMainTab("editor");
+  }, [nodeIndex]);
   const progress = Math.round((completedNodes.length / NODES.length) * 100);
 
-  // Current answer for this node — persisted per node id.
-  // For question nodes not yet visited, carry forward the last answered question's code
-  // so each step builds on the previous one rather than starting from scratch.
-  const currentAnswer = (() => {
+  const isTabbedStep = node.type === "question" && node.editor === "tabbed";
+  function normalizeTabbedAnswer(raw) {
+    if (raw == null) return { ts: "", html: "", css: "" };
+    if (typeof raw === "object" && "ts" in raw) return { ts: raw.ts ?? "", html: raw.html ?? "", css: raw.css ?? "" };
+    return { ts: String(raw || ""), html: "", css: "" };
+  }
+  const rawAnswer = (() => {
     if (answers[node.id] !== undefined) return answers[node.id];
     if (node.type === "question") {
       for (let i = nodeIndex - 1; i >= 0; i--) {
@@ -1043,7 +1061,9 @@ export default function AngularA01Components({ onNextProblem }) {
     }
     return node.seed_code || "";
   })();
+  const currentAnswer = isTabbedStep ? normalizeTabbedAnswer(rawAnswer) : rawAnswer;
   const setCurrentAnswer = (val) => setAnswers((prev) => ({ ...prev, [node.id]: val }));
+  const tabbedHasContent = isTabbedStep && (currentAnswer.ts?.trim() || currentAnswer.html?.trim() || currentAnswer.css?.trim());
 
   function next() {
     if (!completedNodes.includes(node.id)) {
@@ -1056,13 +1076,14 @@ export default function AngularA01Components({ onNextProblem }) {
   }
 
   function evaluate() {
-    if (!currentAnswer.trim()) return;
+    const toEval = isTabbedStep ? (currentAnswer.ts || "") : currentAnswer;
+    if (!(typeof toEval === "string" && toEval.trim())) return;
     const evalFn = node.evaluate;
     let res;
     if (evalFn) {
-      res = evalFn(currentAnswer);
+      res = evalFn(toEval);
     } else {
-      const a = currentAnswer.toLowerCase();
+      const a = toEval.toLowerCase();
       const keywords = node.answer_keywords || [];
       const hits = keywords.filter((k) => a.includes(k.toLowerCase())).length;
       if (hits === keywords.length) res = "correct";
@@ -1080,7 +1101,8 @@ export default function AngularA01Components({ onNextProblem }) {
   function getFeedback() {
     if (!result) return null;
     const fb = node[`feedback_${result}`];
-    if (typeof fb === "function") return fb(answer);
+    const toEval = isTabbedStep ? (currentAnswer.ts || "") : currentAnswer;
+    if (typeof fb === "function") return fb(toEval);
     return fb;
   }
 
@@ -1123,10 +1145,9 @@ export default function AngularA01Components({ onNextProblem }) {
 
   function renderQuestion() {
     const feedback = getFeedback();
-    return (
+    const editorContent = (
       <div>
         <div style={s.phase}>{node.phase}</div>
-
         {showAnalogy && node.analogy ? (
           <div style={s.analogyCard}>
             <div style={s.analogyTitle}>💡 ANALOGY — {node.analogy.title}</div>
@@ -1140,53 +1161,49 @@ export default function AngularA01Components({ onNextProblem }) {
           </div>
         ) : (
           <>
-            <div style={s.paalLabel}>TASK</div>
-            <div style={s.paalText}>{node.paal}</div>
+            <div style={{ fontSize: "11px", color: "#00d4ff", fontWeight: 600, letterSpacing: "0.05em", marginBottom: "8px" }}>CODE BUILT SO FAR — edit below</div>
             <div style={s.hint}>💡 {node.hint}</div>
-
-            <CodeEditor
-              value={currentAnswer}
-              onChange={setCurrentAnswer}
-              height="280px"
-            />
-
-            {feedback && (
-              <div style={s.feedback(result)}>{feedback}</div>
+            {isTabbedStep ? (
+              <AngularTabbedEditor
+                value={currentAnswer}
+                onChange={setCurrentAnswer}
+                height="240px"
+              />
+            ) : (
+              <CodeEditor
+                value={currentAnswer}
+                onChange={setCurrentAnswer}
+                height="240px"
+              />
             )}
-
+            {feedback && <div style={s.feedback(result)}>{feedback}</div>}
             {showExpected && node.expected && (
               <div style={{ ...s.pre, borderLeft: "2px solid #10b981", marginBottom: "16px" }}>
                 <div style={{ fontSize: "9px", fontWeight: 700, letterSpacing: "0.15em", color: "#10b981", marginBottom: "8px" }}>MODEL ANSWER</div>
                 {node.expected}
               </div>
             )}
-
             <div style={s.btnRow}>
-              <button style={s.btn("primary")} onClick={evaluate} disabled={!currentAnswer.trim()}>
-                CHECK →
-              </button>
-              {node.analogy && (
-                <button style={s.btn("secondary")} onClick={() => setShowAnalogy(true)}>
-                  SEE ANALOGY
-                </button>
-              )}
-              {result && result !== "correct" && (
-                <button style={s.btn("ghost")} onClick={() => setShowExpected(true)}>
-                  SHOW ANSWER
-                </button>
-              )}
-              {result === "correct" && (
-                <button style={s.btn("primary")} onClick={next}>NEXT →</button>
-              )}
-              {result && result !== "correct" && (
-                <button style={{ ...s.btn("ghost"), marginLeft: "auto" }} onClick={next}>
-                  SKIP →
-                </button>
-              )}
+              <button style={s.btn("primary")} onClick={evaluate} disabled={isTabbedStep ? !tabbedHasContent : !currentAnswer.trim()}>CHECK →</button>
+              {node.analogy && <button style={s.btn("secondary")} onClick={() => setShowAnalogy(true)}>SEE ANALOGY</button>}
+              {result && result !== "correct" && <button style={s.btn("ghost")} onClick={() => setShowExpected(true)}>SHOW ANSWER</button>}
+              {result === "correct" && <button style={s.btn("primary")} onClick={next}>NEXT →</button>}
+              {result && result !== "correct" && <button style={{ ...s.btn("ghost"), marginLeft: "auto" }} onClick={next}>SKIP →</button>}
             </div>
           </>
         )}
       </div>
+    );
+    return (
+      <LessonEditorOutputTabs
+        node={node}
+        nodes={NODES}
+        mainTab={mainTab}
+        setMainTab={setMainTab}
+        answer={isTabbedStep ? JSON.stringify(currentAnswer) : (currentAnswer || "")}
+      >
+        {editorContent}
+      </LessonEditorOutputTabs>
     );
   }
 

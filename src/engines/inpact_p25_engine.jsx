@@ -46,7 +46,7 @@ export default function Parent() {
       <Controls onIncrement={() => setCount(c => c + 1)} onDecrement={() => setCount(c => c - 1)} />
     </div>
   )
-}`, feedback_correct: "✅ Lifting state up complete.", feedback_partial: "Decrement and export.", feedback_wrong: "onDecrement from parent to Controls.", expected: "Same as seed." },
+}`, feedback_correct: "✅ Lifting state up complete.", feedback_partial: "Decrement and export.", feedback_wrong: "onDecrement from parent to Controls.", expected: "onDecrement from parent to Controls. Export the component." },
 ];
 
 const sideItems = [{ label: "Problem", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];

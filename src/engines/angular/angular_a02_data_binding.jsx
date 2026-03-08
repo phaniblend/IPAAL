@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import CodeEditor from "../CodeEditor";
 import AngularTabbedEditor from "./AngularTabbedEditor";
+import LessonEditorOutputTabs from "../LessonEditorOutputTabs";
 
 if (typeof document !== "undefined" && !document.getElementById("dm-sans-font")) {
   const link = document.createElement("link");
@@ -613,6 +614,16 @@ export default function AngularA02DataBinding({ onNextProblem }) {
   const tabbedHasContent = isTabbedStep && currentAnswer && typeof currentAnswer === "object" &&
     ((currentAnswer.ts || "").trim() || (currentAnswer.html || "").trim() || (currentAnswer.css || "").trim());
 
+  const [mainTab, setMainTab] = useState("editor");
+  const getOutputPreview = (answer) => {
+    let a = typeof answer === "string"
+      ? (() => { try { const p = JSON.parse(answer); return p && typeof p === "object" ? p : { html: "", css: "" }; } catch (_) { return { html: "", css: "" }; } })()
+      : (answer && typeof answer === "object" ? answer : { html: "", css: "" });
+    return `<!DOCTYPE html><html><head><meta charset="utf-8"><style>${(a.css || "").trim()}</style></head><body>${(a.html || "").trim() || "<p>No HTML yet</p>"}</body></html>`;
+  };
+
+  useEffect(() => { setMainTab("lesson"); }, [nodeIndex]);
+
   function next() {
     if (!completedNodes.includes(node.id)) setCompletedNodes((p) => [...p, node.id]);
     setNodeIndex((i) => i + 1);
@@ -670,7 +681,7 @@ export default function AngularA02DataBinding({ onNextProblem }) {
 
   function renderQuestion() {
     const feedback = getFeedback();
-    return (
+    const editorContent = (
       <div>
         <div style={s.phase}>{node.phase}</div>
         {showAnalogy && node.analogy ? (
@@ -682,13 +693,12 @@ export default function AngularA02DataBinding({ onNextProblem }) {
           </div>
         ) : (
           <>
-            <div style={s.paalLabel}>TASK</div>
-            <div style={s.paalText}>{node.paal}</div>
+            <div style={{ fontSize: "11px", color: "#00d4ff", fontWeight: 600, letterSpacing: "0.05em", marginBottom: "8px" }}>CODE BUILT SO FAR — edit below</div>
             <div style={s.hint}>💡 {node.hint}</div>
             {isTabbedStep ? (
-              <AngularTabbedEditor value={currentAnswer} onChange={setCurrentAnswer} height="320px" />
+              <AngularTabbedEditor value={currentAnswer} onChange={setCurrentAnswer} height="240px" />
             ) : (
-              <CodeEditor value={currentAnswer} onChange={setCurrentAnswer} height="280px" />
+              <CodeEditor value={currentAnswer} onChange={setCurrentAnswer} height="240px" />
             )}
             {feedback && <div style={s.feedback(result)}>{feedback}</div>}
             {showExpected && node.expected && (
@@ -718,6 +728,18 @@ export default function AngularA02DataBinding({ onNextProblem }) {
           </>
         )}
       </div>
+    );
+    return (
+      <LessonEditorOutputTabs
+        node={node}
+        nodes={NODES}
+        mainTab={mainTab}
+        setMainTab={setMainTab}
+        answer={isTabbedStep ? (currentAnswer && typeof currentAnswer === "object" ? JSON.stringify(currentAnswer) : "") : (currentAnswer || "")}
+        getOutputPreview={isTabbedStep ? getOutputPreview : undefined}
+      >
+        {editorContent}
+      </LessonEditorOutputTabs>
     );
   }
 

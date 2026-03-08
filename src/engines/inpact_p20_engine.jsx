@@ -21,7 +21,7 @@ export default function KeyForm() {
     </form>
   )
 }`, feedback_correct: "✅ Enter submits, Escape clears.", feedback_partial: "Check e.key for Enter and Escape.", feedback_wrong: "onKeyDown: Enter -> submit, Escape -> setValue('').", expected: "onKeyDown with Enter and Escape handling." },
-  { id: "step3", type: "question", phase: "Step 3 of 3", paal: "Ensure the form has no submit button. Users submit only via Enter. Export the component.", hint: "Remove <button type=\"submit\"> if you had one; Enter is enough.", answer_keywords: ["export", "default", "button"], seed_code: `import { useState } from 'react'
+  { id: "step3", type: "question", phase: "Step 3 of 3", paal: "Ensure the form has no submit button. Users submit only via Enter. Export the component.", hint: "Remove <button type=\"submit\"> if you had one; Enter is enough.", answer_keywords: ["export", "default"], seed_code: `import { useState } from 'react'
 
 export default function KeyForm() {
   const [value, setValue] = useState('')
@@ -37,7 +37,7 @@ export default function KeyForm() {
       <input value={value} onChange={e => setValue(e.target.value)} placeholder="Type and press Enter or Esc" />
     </form>
   )
-}`, feedback_correct: "✅ Event handling with Enter and Escape complete.", feedback_partial: "No submit button, Enter and Escape only.", feedback_wrong: "Form with keyboard submit and clear.", expected: "Same as seed." },
+}`, feedback_correct: "✅ Event handling with Enter and Escape complete.", feedback_partial: "No submit button, Enter and Escape only.", feedback_wrong: "Form with keyboard submit and clear.", expected: "Form with keyboard submit (Enter) and clear (Escape)." },
 ];
 
 const sideItems = [{ label: "Problem", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];

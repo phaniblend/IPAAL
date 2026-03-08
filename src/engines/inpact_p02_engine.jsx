@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import CodeEditor from "./CodeEditor";
+import { EditorTaskBlock } from "./LessonEditorOutputTabs";
 
 
 // Load DM Sans from Google Fonts
@@ -885,9 +886,7 @@ export default function INPACTEngine({ onNextProblem }) {
     return (
       <div>
         <div style={s.phase}>{node.phase}</div>
-        <div style={s.paalBox}>
-          <div style={s.paalText}>{node.paal}</div>
-        </div>
+        <EditorTaskBlock node={node} />
 
         {node.seed_code && (
           <div style={{

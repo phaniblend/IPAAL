@@ -9,7 +9,7 @@ export default function ToggleButton() {
   const [isActive, setIsActive] = useState(false)
   // Step 1: button that toggles isActive
 }`, feedback_correct: "✅ Toggle state on click.", feedback_partial: "useState and onClick to toggle.", feedback_wrong: "onClick={() => setIsActive(!isActive)}", expected: "Button that toggles isActive." },
-  { id: "step2", type: "question", phase: "Step 2 of 3", paal: "Add a className to the button that includes 'active' when isActive is true. Use template literal or ternary: className={`btn ${isActive ? 'active' : ''}`}.", hint: "className={\`btn ${isActive ? 'active' : ''}\`} or className={'btn ' + (isActive ? 'active' : '')}", answer_keywords: ["classname", "active", "isactive", "template", "ternary"], seed_code: `import { useState } from 'react'
+  { id: "step2", type: "question", phase: "Step 2 of 3", paal: "Add a className to the button that includes 'active' when isActive is true. Use template literal or ternary: className={`btn ${isActive ? 'active' : ''}`}.", hint: "className={\`btn ${isActive ? 'active' : ''}\`} or className={'btn ' + (isActive ? 'active' : '')}", answer_keywords: ["classname", "active", "isactive", "?"], seed_code: `import { useState } from 'react'
 
 export default function ToggleButton() {
   const [isActive, setIsActive] = useState(false)
@@ -32,7 +32,7 @@ export default function ToggleButton() {
       Toggle
     </button>
   )
-}`, feedback_correct: "✅ Conditional classes and styles complete.", feedback_partial: "Visual difference when active.", feedback_wrong: "Apply style or class so active state is visible.", expected: "Same as seed." },
+}`, feedback_correct: "✅ Conditional classes and styles complete.", feedback_partial: "Visual difference when active.", feedback_wrong: "Apply style or class so active state is visible.", expected: "Apply style or class so active state is visible." },
 ];
 
 const sideItems = [{ label: "Problem", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];

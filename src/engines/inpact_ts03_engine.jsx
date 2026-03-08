@@ -24,7 +24,17 @@ export default function ControlledInput() {
       <p>Count: {text.length}</p>
     </div>
   )
-}`, feedback_correct: "✅ Controlled input with TypeScript complete.", feedback_partial: "Display text.length.", feedback_wrong: "Show count and export.", expected: "Same as seed" },
+}`, feedback_correct: "✅ Controlled input with TypeScript complete.", feedback_partial: "Display text.length and export the component.", feedback_wrong: "Show count and export.", expected: `Return a single <div> that contains the controlled <input> and a <p> showing {text.length}, and keep the component exported. For example:
+
+  export default function ControlledInput() {
+    const [text, setText] = useState<string>('')
+    return (
+      <div>
+        <input value={text} onChange={e => setText(e.target.value)} />
+        <p>Count: {text.length}</p>
+      </div>
+    )
+  }` },
 ];
 
 const sideItems = [{ label: "Problem", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];

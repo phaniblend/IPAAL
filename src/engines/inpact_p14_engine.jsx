@@ -11,7 +11,7 @@ const NODES = [
 }`, feedback_correct: "✅ Avatar renders with size and placeholder when image not provided.", feedback_partial: "img with src={image} and dimensions from size.", feedback_wrong: "<img src={image} style={{ width: size, height: size, borderRadius: '50%' }} />", expected: "img with src, width/height from size, borderRadius 50%." },
   { id: "step3", type: "question", phase: "Step 3 of 3", paal: "Export Avatar. When called as <Avatar /> with no props, it should show the placeholder at 40x40. When called as <Avatar image={url} size={64} /> it should use those values.", hint: "Default params handle missing props. No change needed if step 2 is correct.", answer_keywords: ["export", "default"], seed_code: `export default function Avatar({ image = 'https://via.placeholder.com/40', size = 40 }) {
   return <img src={image} alt="Avatar" style={{ width: size, height: size, borderRadius: '50%' }} />
-}`, feedback_correct: "✅ Avatar with default props complete.", feedback_partial: "Ensure export default and default params.", feedback_wrong: "Export default function Avatar with defaults.", expected: "Same as seed." },
+}`, feedback_correct: "✅ Avatar with default props complete.", feedback_partial: "Ensure export default and default params.", feedback_wrong: "Export default function Avatar with defaults.", expected: "Export default function Avatar with default params." },
 ];
 
 const sideItems = [{ label: "Problem", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];

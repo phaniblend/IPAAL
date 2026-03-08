@@ -45,7 +45,7 @@ export default function ImageGallery() {
       )}
     </div>
   )
-}`, feedback_correct: "✅ Image gallery with click-to-enlarge modal complete.", feedback_partial: "Click overlay to close, export.", feedback_wrong: "Overlay click closes; stopPropagation on image.", expected: "Same as seed." },
+}`, feedback_correct: "✅ Image gallery with click-to-enlarge modal complete.", feedback_partial: "Click overlay to close, export.", feedback_wrong: "Overlay click closes; stopPropagation on image.", expected: "Click overlay to close; stopPropagation on image. Export the gallery component." },
 ];
 
 const sideItems = [{ label: "Problem", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];

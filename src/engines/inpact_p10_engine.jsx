@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import CodeEditor from "./CodeEditor";
+import { EditorTaskBlock } from "./LessonEditorOutputTabs";
 
 if (typeof document !== "undefined" && !document.getElementById("dm-sans-font")) {
   const link = document.createElement("link");
@@ -238,11 +239,11 @@ export default function INPACTEngine({ onNextProblem }) {
     return (
       <div>
         <div style={s.phase}>{node.phase}</div>
-        <div style={s.paalBox}><div style={s.paalLabel}>PAAL</div><div style={s.paalText}>{node.paal}</div></div>
+        <EditorTaskBlock node={node} />
         {node.seed_code && (
           <div style={{ fontSize: "10px", color: "#4a5568", marginBottom: "8px" }}>CODE BUILT SO FAR — edit below</div>
         )}
-        <CodeEditor value={answer} onChange={setAnswer} height="320px" />
+        <CodeEditor value={answer} onChange={setAnswer} height="240px" />
         {showHint && <div style={s.hintBox}>💡 {node.hint}</div>}
         {fbMsg && <div style={s.feedback(result)}>{fbMsg}</div>}
         {showExpected && <div><div style={{ ...s.paalLabel, marginTop: "16px" }}>EXPECTED</div><div style={s.expectedBox}>{node.expected}</div></div>}
