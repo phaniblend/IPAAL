@@ -23,7 +23,7 @@ const NODES = [
     type: "question",
     phase: "Step 1 of 2",
     paal: `Implement ::before and ::after: create a .demo element (or use the default HTML) and apply the main property. Get the visual or behavior described in the lesson.`,
-    hint: ".box::before { content: ""; display: block; } .box::after { content: ""; }",
+    hint: ".box::before { content: \"\"; display: block; } .box::after { content: \"\"; }",
     answer_keywords: ["demo","before"],
     seed_code: `/* Step 1: ::before and ::after */
 .demo {
@@ -38,7 +38,7 @@ const NODES = [
     type: "question",
     phase: "Step 2 of 2",
     paal: `Extend your .demo with a second property or value related to ::before and ::after. Reinforce the pattern.`,
-    hint: "content: ""; required for pseudo-elements",
+    hint: "content: \"\"; required for pseudo-elements",
     answer_keywords: ["demo","content"],
     seed_code: `/* Step 2: extend ::before and ::after */
 .demo {

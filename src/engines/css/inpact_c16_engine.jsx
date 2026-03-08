@@ -23,7 +23,7 @@ const NODES = [
     type: "question",
     phase: "Step 1 of 2",
     paal: `Implement Grid template areas: create a .demo element (or use the default HTML) and apply the main property. Get the visual or behavior described in the lesson.`,
-    hint: "grid-template-areas: "header header" "side main" "footer footer";",
+    hint: "grid-template-areas: \"header header\" \"side main\" \"footer footer\";",
     answer_keywords: ["demo","grid-template-areas"],
     seed_code: `/* Step 1: Grid template areas */
 .demo {

@@ -149,7 +149,7 @@ export default function createINPACTEngine(config) {
       return (
         <div>
           <div style={s.phase}>{node.phase}</div>
-          <h1 style={s.h1}>After completing this problem, you'll be able to:</h1>
+          <h1 style={s.h1}>After completing this Lesson, you'll be able to:</h1>
           {node.items.map((item, i) => (
             <div key={i} style={{ display: "flex", gap: "16px", padding: "14px 0", borderBottom: "1px solid #1e2733" }}>
               <div style={{ fontSize: "11px", color: "#00d4ff", flexShrink: 0, minWidth: "20px" }}>{String(i + 1).padStart(2, "0")}</div>

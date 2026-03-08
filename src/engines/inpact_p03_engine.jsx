@@ -512,7 +512,7 @@ export default function INPACTEngine({ onNextProblem }) {
       <div>
         <style>{`@keyframes fadeUp { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }`}</style>
         <div style={s.phase}>{node.phase}</div>
-        <h1 style={s.h1}>After completing this problem, you'll be able to:</h1>
+        <h1 style={s.h1}>After completing this Lesson, you'll be able to:</h1>
         <div>
           {node.items.map((item, i) => (
             <div key={i} style={{ display: "flex", alignItems: "flex-start", gap: "16px", padding: "14px 0", borderBottom: "1px solid #1e2733", animation: "fadeUp 0.35s ease both", animationDelay: `${i * 80}ms` }}>

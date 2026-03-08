@@ -55,7 +55,7 @@ for (const file of files) {
   out.push("**description:** " + (body || "(No description)"));
   out.push("");
   out.push("**Learning objectives:**  ");
-  out.push("After completing this problem, you'll be able to:");
+  out.push("After completing this Lesson, you'll be able to:");
   items.forEach((item, i) => {
     out.push(String(i + 1).padStart(2, "0") + ". " + item + "  ");
   });

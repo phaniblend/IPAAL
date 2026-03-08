@@ -925,7 +925,7 @@ export default function INPACTEngine({ onNextProblem }) {
       <div>
         <style>{`@keyframes fadeUp { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }`}</style>
         <div style={s.phase}>{node.phase}</div>
-        <h1 style={s.h1}>After completing this problem, you'll be able to:</h1>
+        <h1 style={s.h1}>After completing this Lesson, you'll be able to:</h1>
         <div>
           {node.items.map((item, i) => (
             <div

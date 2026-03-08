@@ -23,7 +23,7 @@ const NODES = [
     type: "question",
     phase: "Step 1 of 2",
     paal: `Implement Attribute selectors: create a .demo element (or use the default HTML) and apply the main property. Get the visual or behavior described in the lesson.`,
-    hint: "[type="text"] or [href^="https"] or [class*="btn"]",
+    hint: "[type=\"text\"] or [href^=\"https\"] or [class*=\"btn\"]",
     answer_keywords: ["demo","[type="],
     seed_code: `/* Step 1: Attribute selectors */
 .demo {
@@ -38,7 +38,7 @@ const NODES = [
     type: "question",
     phase: "Step 2 of 2",
     paal: `Extend your .demo with a second property or value related to Attribute selectors. Reinforce the pattern.`,
-    hint: "[aria-hidden="true"]",
+    hint: "[aria-hidden=\"true\"]",
     answer_keywords: ["demo","[aria-"],
     seed_code: `/* Step 2: extend Attribute selectors */
 .demo {
