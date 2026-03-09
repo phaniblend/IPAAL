@@ -159,8 +159,6 @@ export default function createINPACTEngine(config) {
     }
 
     function renderEditorBlockScrollable() {
-      const rawFb = result === "correct" ? node.feedback_correct : result === "partial" ? node.feedback_partial : result === "wrong" ? node.feedback_wrong : null;
-      const fbMsg = typeof rawFb === "function" ? rawFb(answer) : rawFb;
       const codeForCursor = answerShape === "css-tabs" ? (parsedCssTabs?.css || "") : (answer || "");
       const stepLineIndex = codeForCursor.split("\n").findIndex((l) => l.includes("// Step"));
       const cursorAtStartOfLine = node.cursorAtStartOfLine ?? (stepLineIndex >= 0 ? stepLineIndex + 2 : undefined);
@@ -179,7 +177,6 @@ export default function createINPACTEngine(config) {
             <CodeEditor key={node?.id} value={answer} onChange={setAnswer} height="240px" cursorAtEndOfLine={cursorAtStartOfLine == null ? node.cursorLine : undefined} cursorAtStartOfLine={cursorAtStartOfLine} language={language || node.language || "javascript"} />
           )}
           {showHint && <div style={s.hintBox}>💡 {node.hint}</div>}
-          {fbMsg && <div style={s.feedback(result)}>{fbMsg}</div>}
           {showExpected && (
             <div style={{ marginTop: "16px" }}>
               {node.example_code ? (
@@ -196,24 +193,32 @@ export default function createINPACTEngine(config) {
       );
     }
 
-    function renderEditorBlockButtons() {
+    function renderEditorBlockButtons(fbMsg) {
       const canSubmit = answerShape === "css-tabs" ? (parsedCssTabs?.css?.trim()) : answer.trim();
       return (
-        <div style={s.btnRow}>
-          {result !== "correct" ? (
-            <>
-              <button style={s.btn("primary")} onClick={submit} disabled={!canSubmit}>CHECK MY CODE</button>
-              {!showExpected && <button style={s.btn("secondary")} onClick={() => setShowExpected(true)}>SHOW ME EXAMPLE</button>}
-              {attempts > 0 && !showHint && <button style={s.btn("secondary")} onClick={() => setShowHint(true)}>SHOW HINT</button>}
-            </>
-          ) : (
-            <button style={s.btn("primary")} onClick={next}>NEXT STEP →</button>
+        <>
+          {/* Feedback shown here so it's always visible without scrolling */}
+          {fbMsg && (
+            <div style={{ ...s.feedback(result), marginBottom: "12px", marginTop: 0 }}>{fbMsg}</div>
           )}
-        </div>
+          <div style={s.btnRow}>
+            {result !== "correct" ? (
+              <>
+                <button style={s.btn("primary")} onClick={submit} disabled={!canSubmit}>CHECK MY CODE</button>
+                {!showExpected && <button style={s.btn("secondary")} onClick={() => setShowExpected(true)}>SHOW ME EXAMPLE</button>}
+                {attempts > 0 && !showHint && <button style={s.btn("secondary")} onClick={() => setShowHint(true)}>SHOW HINT</button>}
+              </>
+            ) : (
+              <button style={s.btn("primary")} onClick={next}>NEXT STEP →</button>
+            )}
+          </div>
+        </>
       );
     }
 
     function renderEditorContent() {
+      const rawFb = result === "correct" ? node.feedback_correct : result === "partial" ? node.feedback_partial : result === "wrong" ? node.feedback_wrong : null;
+      const fbMsg = typeof rawFb === "function" ? rawFb(answer) : rawFb;
       return (
         <div style={{ display: "flex", flexDirection: "column", flex: 1, minHeight: 0, width: "100%" }}>
           <div style={{ flex: 1, minHeight: 0, overflowY: "auto" }}>
@@ -221,7 +226,7 @@ export default function createINPACTEngine(config) {
             {renderEditorBlockScrollable()}
           </div>
           <div style={{ flexShrink: 0, paddingTop: "16px", borderTop: "1px solid #1e2733" }}>
-            {renderEditorBlockButtons()}
+            {renderEditorBlockButtons(fbMsg)}
           </div>
         </div>
       );
