@@ -2,14 +2,118 @@ import { useRef, useEffect } from "react";
 
 /**
  * Shared Lesson | Editor | Output tabs + YOUR TASK callout.
- * Use in any custom engine (Angular, React P01, etc.) for uniform UX.
  * - Lesson: parses node.paal for "Your task:" / "Your turn:" and shows callout.
  * - Editor: task block (same as EditorTaskBlock) + children.
- * - Output: getOutputPreview(answer) if provided, else placeholder.
- *
- * EditorTaskBlock is exported so engines without tabs (P02–P11) can show
- * the same task-above-editor UI for consistency app-wide.
+ * - Output: getOutputPreview(answer) if provided; auto React live preview via
+ *   Babel Standalone when code looks like a React component; formatted code
+ *   preview for Angular/other templates.
  */
+
+/** Inject reset + background into any HTML string returned by getOutputPreview */
+function injectBaseStyles(html) {
+  if (typeof html !== "string" || !html) return html;
+  const base = `<style>
+    *, *::before, *::after { box-sizing: border-box; }
+    body { margin: 0; padding: 20px; background: #f0f4f8; font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif; font-size: 14px; color: #1a202c; line-height: 1.5; }
+  </style>`;
+  return html.includes("</head>")
+    ? html.replace("</head>", base + "</head>")
+    : base + html;
+}
+
+/** Detect if code looks like a React component */
+function isReactCode(code) {
+  return (
+    /\breturn\s*\(?\s*</.test(code) ||
+    /React\.createElement/.test(code) ||
+    /useState|useEffect|useRef|useMemo|useCallback|useReducer/.test(code)
+  );
+}
+
+/** Detect if code looks like an Angular/HTML template */
+function isAngularTemplate(code) {
+  return (
+    /\*ngFor|\*ngIf|\[\(ngModel\)\]|\[ngClass\]|\(click\)/.test(code) ||
+    (/<[a-z][\s\S]*>/i.test(code) && !isReactCode(code))
+  );
+}
+
+/** Generate a live React preview iframe HTML using Babel Standalone CDN */
+function generateReactPreview(code) {
+  if (!code || !code.trim()) {
+    return `<!DOCTYPE html><html><body style="background:#f0f4f8;padding:24px;font-family:system-ui,sans-serif;color:#64748b;font-size:14px">Write your React component in the Editor tab to see a live preview here.</body></html>`;
+  }
+
+  // Find the main component name from the source code
+  const nameMatch =
+    code.match(/(?:export\s+default\s+)?function\s+([A-Z][a-zA-Z0-9]*)\s*[({]/) ||
+    code.match(/(?:const|let|var)\s+([A-Z][a-zA-Z0-9]*)\s*=/);
+  const componentName = nameMatch ? nameMatch[1] : "App";
+
+  // Strip import lines and convert `export default function X` → `function X`
+  const safeCode = code
+    .split("\n")
+    .filter((l) => !l.trim().startsWith("import "))
+    .join("\n")
+    .replace(/export\s+default\s+function\s+/g, "function ")
+    .replace(/export\s+default\s+/g, "")
+    .replace(/export\s+/g, "")
+    .replace(/<\/script>/gi, "<\\/script>");
+
+  return `<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+    body { margin: 0; padding: 20px; background: #f0f4f8; font-family: system-ui, -apple-system, sans-serif; font-size: 14px; color: #1a202c; }
+    .error-box { background: #fff1f0; border: 1px solid #ffa39e; color: #c0392b; padding: 12px 16px; border-radius: 6px; font-family: monospace; font-size: 12px; white-space: pre-wrap; margin-top: 8px; }
+    .loading { color: #94a3b8; font-size: 13px; }
+  </style>
+</head>
+<body>
+  <div id="root"><span class="loading">Loading preview…</span></div>
+  <script type="text/babel">
+    const { useState, useEffect, useRef, useMemo, useCallback, useReducer, useContext } = React;
+    try {
+      ${safeCode}
+      ReactDOM.createRoot(document.getElementById('root')).render(React.createElement(${componentName}));
+    } catch(e) {
+      document.getElementById('root').innerHTML = '<div class="error-box">Error: ' + e.message + '</div>';
+    }
+  </script>
+</body>
+</html>`;
+}
+
+/** Generate a formatted Angular/HTML template preview */
+function generateTemplatePreview(code) {
+  if (!code || !code.trim()) {
+    return `<!DOCTYPE html><html><body style="background:#f0f4f8;padding:24px;font-family:system-ui,sans-serif;color:#64748b;font-size:14px">Write your template code in the Editor tab to see a preview here.</body></html>`;
+  }
+  const escaped = code.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  return `<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <style>
+    body { margin: 0; padding: 20px; background: #1a1d2e; font-family: monospace; font-size: 13px; }
+    pre { color: #a5f3fc; white-space: pre-wrap; word-break: break-word; line-height: 1.7; margin: 0; }
+    .note { font-family: system-ui, sans-serif; font-size: 12px; color: #64748b; margin-bottom: 14px; padding: 10px 14px; background: rgba(100,116,139,0.1); border-left: 3px solid #475569; border-radius: 4px; }
+    .tag { color: #7dd3fc; }
+    .attr { color: #86efac; }
+    .val { color: #fde68a; }
+  </style>
+</head>
+<body>
+  <div class="note">📋 Angular template — code preview (runtime execution requires a full Angular environment)</div>
+  <pre>${escaped}</pre>
+</body>
+</html>`;
+}
 const lessonStyles = {
   wrap: { maxWidth: "640px" },
   lessonScroll: { maxHeight: "calc(100vh - 220px)", overflowY: "auto", overflowX: "hidden" },
@@ -29,7 +133,7 @@ const lessonStyles = {
   tabBar: { display: "flex", gap: "4px", marginBottom: "16px", borderBottom: "1px solid #1e2733", paddingBottom: "12px" },
   tab: (active) => ({ padding: "8px 16px", fontSize: "12px", fontWeight: 600, background: active ? "#1a2332" : "transparent", border: active ? "1px solid #00d4ff" : "1px solid #2d3748", color: active ? "#00d4ff" : "#64748b", borderRadius: "6px", cursor: "pointer" }),
   outputPlaceholder: { height: "calc(100vh - 180px)", minHeight: "320px", background: "#0d1117", borderRadius: "8px", border: "1px solid #1e2733", padding: "32px", display: "flex", alignItems: "center", justifyContent: "center", flexDirection: "column", gap: "16px", textAlign: "center", fontSize: "14px", color: "#64748b", lineHeight: 1.6, maxWidth: "420px", margin: "0 auto" },
-  outputIframe: { height: "calc(100vh - 180px)", minHeight: "400px", background: "#0d1117", borderRadius: "8px", border: "1px solid #1e2733", overflow: "hidden" },
+  outputIframe: { width: "100%", height: "calc(100vh - 180px)", minHeight: "400px", background: "#0d1117", borderRadius: "8px", border: "1px solid #1e2733", overflow: "hidden" },
 };
 
 /** Same task block shown above the editor everywhere (tabs and non-tabs). Parses "Your task:" / "Your turn:" for callout. */
@@ -69,8 +173,11 @@ export default function LessonEditorOutputTabs({
   showTaskInEditor = true,
   children,
 }) {
-  const lessonScrollRef = useRef(null);
+  const code = typeof answer === "string" ? answer : "";
   const hasOutput = typeof getOutputPreview === "function";
+  const isReact = !hasOutput && isReactCode(code);
+  const isAngular = !hasOutput && !isReact && isAngularTemplate(code);
+  const lessonScrollRef = useRef(null);
   const introNode = introNodeFromNodes(nodes);
   const objectivesNode = objectivesNodeFromNodes(nodes);
   const problemContent = introNode?.content || {};
@@ -133,28 +240,64 @@ export default function LessonEditorOutputTabs({
             )}
             <div style={lessonStyles.cta}>
               <span style={{ fontSize: "18px" }}>👉</span>
-              <span>Switch to the <strong style={{ color: "#00d4ff" }}>Editor</strong> tab to write your code{hasOutput ? ", then " : ""}{hasOutput ? <><strong style={{ color: "#00d4ff" }}>Output</strong> to see the result</> : null}.</span>
+              <span>Switch to the <strong style={{ color: "#00d4ff" }}>Editor</strong> tab to write your code, then <strong style={{ color: "#00d4ff" }}>Output</strong> to see the result.</span>
             </div>
           </div>
         </div>
       )}
       {mainTab === "editor" && (
-        <>
+        <div style={{ display: "flex", flexDirection: "column", flex: 1, minHeight: 0, width: "100%" }}>
           {showTaskInEditor && <EditorTaskBlock node={node} />}
-          {children}
-        </>
-      )}
-      {mainTab === "output" && (
-        hasOutput ? (
-          <div style={lessonStyles.outputIframe}>
-            <iframe title="Preview" srcDoc={getOutputPreview(answer)} style={{ width: "100%", height: "100%", border: "none" }} />
+          <div style={{ flex: 1, minHeight: 0, display: "flex", flexDirection: "column" }}>
+            {children}
           </div>
-        ) : (
+        </div>
+      )}
+      {mainTab === "output" && (() => {
+        if (hasOutput) {
+          return (
+            <div style={lessonStyles.outputIframe}>
+              <iframe
+                title="Preview"
+                srcDoc={injectBaseStyles(getOutputPreview(answer))}
+                style={{ width: "100%", height: "100%", border: "none" }}
+                sandbox="allow-scripts"
+              />
+            </div>
+          );
+        }
+        if (isReact) {
+          return (
+            <div style={lessonStyles.outputIframe}>
+              <iframe
+                title="React Preview"
+                srcDoc={generateReactPreview(code)}
+                style={{ width: "100%", height: "100%", border: "none" }}
+                sandbox="allow-scripts"
+              />
+            </div>
+          );
+        }
+        if (isAngular) {
+          return (
+            <div style={lessonStyles.outputIframe}>
+              <iframe
+                title="Template Preview"
+                srcDoc={generateTemplatePreview(code)}
+                style={{ width: "100%", height: "100%", border: "none" }}
+                sandbox="allow-scripts"
+              />
+            </div>
+          );
+        }
+        return (
           <div style={lessonStyles.outputPlaceholder}>
-            No live preview for this problem. Run your code in your local environment, CodeSandbox, or your app to see the result.
+            <span style={{ fontSize: "32px" }}>🖥️</span>
+            <div>Write your code in the <strong style={{ color: "#00d4ff" }}>Editor</strong> tab, then come back here to see the output.</div>
+            <div style={{ fontSize: "12px", color: "#4a5568", marginTop: "4px" }}>You can also paste your code into <a href="https://codesandbox.io" target="_blank" rel="noreferrer" style={{ color: "#00d4ff" }}>CodeSandbox</a> for a full live environment.</div>
           </div>
-        )
-      )}
+        );
+      })()}
     </>
   );
 }

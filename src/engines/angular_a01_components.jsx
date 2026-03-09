@@ -1173,7 +1173,7 @@ export default function AngularA01Components({ onNextProblem }) {
               <CodeEditor
                 value={currentAnswer}
                 onChange={setCurrentAnswer}
-                height="240px"
+                height="140px"
               />
             )}
             {feedback && <div style={s.feedback(result)}>{feedback}</div>}

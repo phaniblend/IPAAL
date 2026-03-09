@@ -103,19 +103,16 @@ export default function createINPACTEngine(config) {
     }, [answer, answerShape, defaultHtml]);
 
     const s = {
-      wrap: { minHeight: "100vh", background: "#080c14", color: "#e2e8f0", fontFamily: "'DM Sans', sans-serif", display: "flex", flexDirection: "column" },
-      topbar: { background: "#0d1117", borderBottom: "1px solid #1e2733", padding: "12px 24px", display: "flex", alignItems: "center", gap: "16px" },
+      wrap: { height: "100vh", overflow: "hidden", background: "#080c14", color: "#e2e8f0", fontFamily: "'DM Sans', sans-serif", display: "flex", flexDirection: "column" },
+      topbar: { background: "#0d1117", borderBottom: "1px solid #1e2733", padding: "10px 24px", display: "flex", alignItems: "center" },
       logo: { fontSize: "13px", fontWeight: "700", letterSpacing: "3px", color: "#00d4ff" },
-      progressTrack: { flex: 1, height: "3px", background: "#1e2733", borderRadius: "2px", overflow: "hidden" },
-      progressFill: { height: "100%", width: `${progress}%`, background: "linear-gradient(90deg,#00d4ff,#7c3aed)", transition: "width 0.5s ease" },
-      progressLabel: { fontSize: "11px", color: "#4a5568", letterSpacing: "1px" },
-      body: { display: "flex", flex: 1 },
+      body: { display: "flex", flex: 1, minHeight: 0 },
       sidebar: { width: "220px", background: "#0d1117", borderRight: "1px solid #1e2733", padding: "24px 0", flexShrink: 0 },
       sidebarLabel: { fontSize: "10px", color: "#4a5568", letterSpacing: "2px", padding: "0 20px 12px" },
       sideItem: (a, d) => ({ padding: "10px 20px", display: "flex", alignItems: "center", gap: "10px", cursor: "pointer", background: a ? "#1a2332" : "transparent", borderLeft: a ? "2px solid #00d4ff" : "2px solid transparent" }),
       sideItemDot: (a, d) => ({ width: "8px", height: "8px", borderRadius: "50%", background: d ? "#10b981" : a ? "#00d4ff" : "#2d3748", flexShrink: 0 }),
       sideItemText: (a, d) => ({ fontSize: "11px", color: d ? "#10b981" : a ? "#e2e8f0" : "#4a5568" }),
-      main: { flex: 1, padding: "48px", maxWidth: "760px", margin: "0 auto", width: "100%", overflowY: "auto", minHeight: 0 },
+      main: { flex: 1, padding: "48px", maxWidth: "760px", margin: "0 auto", width: "100%", minHeight: 0, display: "flex", flexDirection: "column" },
       phase: { fontSize: "10px", letterSpacing: "3px", color: "#00d4ff", marginBottom: "16px" },
       tag: { fontSize: "11px", color: "#a78bfa", fontWeight: "600", letterSpacing: "0.15em", marginBottom: "12px" },
       h1: { fontSize: "28px", fontWeight: "400", color: "#f8fafc", marginBottom: "32px", lineHeight: "1.2" },
@@ -161,25 +158,25 @@ export default function createINPACTEngine(config) {
       );
     }
 
-    function renderEditorBlock() {
+    function renderEditorBlockScrollable() {
       const rawFb = result === "correct" ? node.feedback_correct : result === "partial" ? node.feedback_partial : result === "wrong" ? node.feedback_wrong : null;
       const fbMsg = typeof rawFb === "function" ? rawFb(answer) : rawFb;
       const codeForCursor = answerShape === "css-tabs" ? (parsedCssTabs?.css || "") : (answer || "");
       const stepLineIndex = codeForCursor.split("\n").findIndex((l) => l.includes("// Step"));
       const cursorAtStartOfLine = node.cursorAtStartOfLine ?? (stepLineIndex >= 0 ? stepLineIndex + 2 : undefined);
-      const canSubmit = answerShape === "css-tabs" ? (parsedCssTabs?.css?.trim()) : answer.trim();
       return (
         <>
           <div style={{ fontSize: "11px", color: "#00d4ff", fontWeight: 600, letterSpacing: "0.05em", marginBottom: "8px" }}>CODE BUILT SO FAR — edit below</div>
           {cursorAtStartOfLine != null && answerShape !== "css-tabs" && <div style={{ fontSize: "10px", color: "#64748b", marginBottom: "8px" }}>Type your code below the comment.</div>}
           {answerShape === "css-tabs" ? (
             <CssTabsEditor
+              key={node?.id}
               value={parsedCssTabs || { html: "", css: "" }}
               onChange={(v) => setAnswer(JSON.stringify(v))}
               height="240px"
             />
           ) : (
-            <CodeEditor value={answer} onChange={setAnswer} height="240px" cursorAtEndOfLine={cursorAtStartOfLine == null ? node.cursorLine : undefined} cursorAtStartOfLine={cursorAtStartOfLine} language={language || node.language || "javascript"} />
+            <CodeEditor key={node?.id} value={answer} onChange={setAnswer} height="240px" cursorAtEndOfLine={cursorAtStartOfLine == null ? node.cursorLine : undefined} cursorAtStartOfLine={cursorAtStartOfLine} language={language || node.language || "javascript"} />
           )}
           {showHint && <div style={s.hintBox}>💡 {node.hint}</div>}
           {fbMsg && <div style={s.feedback(result)}>{fbMsg}</div>}
@@ -195,26 +192,37 @@ export default function createINPACTEngine(config) {
               )}
             </div>
           )}
-          <div style={s.btnRow}>
-            {result !== "correct" ? (
-              <>
-                <button style={s.btn("primary")} onClick={submit} disabled={!canSubmit}>CHECK MY CODE</button>
-                {!showExpected && <button style={s.btn("secondary")} onClick={() => setShowExpected(true)}>SHOW ME EXAMPLE</button>}
-                {attempts > 0 && !showHint && <button style={s.btn("secondary")} onClick={() => setShowHint(true)}>SHOW HINT</button>}
-              </>
-            ) : (
-              <button style={s.btn("primary")} onClick={next}>NEXT STEP →</button>
-            )}
-          </div>
         </>
+      );
+    }
+
+    function renderEditorBlockButtons() {
+      const canSubmit = answerShape === "css-tabs" ? (parsedCssTabs?.css?.trim()) : answer.trim();
+      return (
+        <div style={s.btnRow}>
+          {result !== "correct" ? (
+            <>
+              <button style={s.btn("primary")} onClick={submit} disabled={!canSubmit}>CHECK MY CODE</button>
+              {!showExpected && <button style={s.btn("secondary")} onClick={() => setShowExpected(true)}>SHOW ME EXAMPLE</button>}
+              {attempts > 0 && !showHint && <button style={s.btn("secondary")} onClick={() => setShowHint(true)}>SHOW HINT</button>}
+            </>
+          ) : (
+            <button style={s.btn("primary")} onClick={next}>NEXT STEP →</button>
+          )}
+        </div>
       );
     }
 
     function renderEditorContent() {
       return (
-        <div>
-          <div style={s.phase}>{node.phase}</div>
-          {renderEditorBlock()}
+        <div style={{ display: "flex", flexDirection: "column", flex: 1, minHeight: 0, width: "100%" }}>
+          <div style={{ flex: 1, minHeight: 0, overflowY: "auto" }}>
+            <div style={s.phase}>{node.phase}</div>
+            {renderEditorBlockScrollable()}
+          </div>
+          <div style={{ flexShrink: 0, paddingTop: "16px", borderTop: "1px solid #1e2733" }}>
+            {renderEditorBlockButtons()}
+          </div>
         </div>
       );
     }
@@ -244,9 +252,6 @@ export default function createINPACTEngine(config) {
       <div style={s.wrap}>
         <div style={s.topbar}>
           <div style={s.logo}>INPACT</div>
-          <div style={s.progressTrack}><div style={s.progressFill} /></div>
-          <div style={s.progressLabel}>{progress}%</div>
-          <div style={{ ...s.progressLabel, marginLeft: "8px" }}>P{pad} — {shortName}</div>
         </div>
         <div style={s.body}>
           <div style={s.sidebar}>
@@ -262,7 +267,7 @@ export default function createINPACTEngine(config) {
               );
             })}
           </div>
-          <div style={s.main}>
+          <div style={{ ...s.main, overflowY: "auto" }}>
             {node?.type === "question" ? (
               <LessonEditorOutputTabs
                 node={node}

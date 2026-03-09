@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import CodeEditor from "./CodeEditor";
-import { EditorTaskBlock } from "./LessonEditorOutputTabs";
+import LessonEditorOutputTabs, { EditorTaskBlock } from "./LessonEditorOutputTabs";
 
 // ─── TUTORIAL DATA ────────────────────────────────────────────────────────────
 const NODES = [
@@ -102,7 +102,7 @@ export default function Counter() {
     type: "question",
     phase: "Step 3 of 6",
     paal: "Write a useEffect that sets document.title to \"Count: \" + count. Add [count] as the dependency array so it runs every time count changes.",
-    hint: "useEffect takes two arguments — a callback and a dependency array:\nuseEffect(() => {\n  document.title = 'Count: ' + count\n}, [count])",
+    hint: "useEffect takes two arguments — a callback and a dependency array:\n  useEffect(() => {\n  document.title = 'Count: ' + count\n}, [count])",
     analogy: {
       title: "Similar pattern — logging on change",
       code: `useEffect(() => {\n  console.log('Score changed:', score)\n}, [score])`,
@@ -342,12 +342,15 @@ export default function INPACTEngine({ onNextProblem }) {
   const [showHint, setShowHint] = useState(false);
   const [showExpected, setShowExpected] = useState(false);
   const [completedNodes, setCompletedNodes] = useState([]);
+  const [mainTab, setMainTab] = useState("editor");
   const [wfsChecked, setWfsChecked] = useState([]);
   const [showAnalogy, setShowAnalogy] = useState(false);
   const [syntaxMsg, setSyntaxMsg] = useState(null);
   const [userChoices, setUserChoices] = useState({ varName: "count", setterName: "setCount", userJSX: {} });
   const node = NODES[nodeIndex];
   const progress = NODES.length <= 1 ? 0 : Math.min(100, Math.round((nodeIndex / (NODES.length - 1)) * 100));
+
+  useEffect(() => { setMainTab("editor"); }, [nodeIndex]);
 
   function getSeed(n) {
     if (n?.id === "step3" && userChoices.userJSX["step1b"]) {
@@ -628,7 +631,11 @@ export default function INPACTEngine({ onNextProblem }) {
     switch (node.type) {
       case "reveal": return renderReveal();
       case "objectives": return renderObjectives();
-      case "question": return renderQuestion();
+      case "question": return (
+        <LessonEditorOutputTabs node={node} nodes={NODES} mainTab={mainTab} setMainTab={setMainTab} answer={answer || ""} showTaskInEditor={false}>
+          {renderQuestion()}
+        </LessonEditorOutputTabs>
+      );
       default: return renderReveal();
     }
   }

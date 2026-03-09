@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import CodeEditor from "./CodeEditor";
-import { EditorTaskBlock } from "./LessonEditorOutputTabs";
+import LessonEditorOutputTabs, { EditorTaskBlock } from "./LessonEditorOutputTabs";
 
 if (typeof document !== "undefined" && !document.getElementById("dm-sans-font")) {
   const link = document.createElement("link");
@@ -50,8 +50,11 @@ export default function INPACTEngine({ onNextProblem }) {
   const [showExample, setShowExample] = useState(false);
   const [showExpected, setShowExpected] = useState(false);
   const [completedNodes, setCompletedNodes] = useState([]);
+  const [mainTab, setMainTab] = useState("editor");
   const node = NODES[nodeIndex];
   const progress = NODES.length <= 1 ? 0 : Math.min(100, Math.round((nodeIndex / (NODES.length - 1)) * 100));
+
+  useEffect(() => { setMainTab("editor"); }, [nodeIndex]);
 
   useEffect(() => {
     setAnswer(node?.seed_code ?? "");
@@ -185,7 +188,11 @@ export default function INPACTEngine({ onNextProblem }) {
     switch (node.type) {
       case "reveal": return renderReveal();
       case "objectives": return renderObjectives();
-      case "question": return renderQuestion();
+      case "question": return (
+        <LessonEditorOutputTabs node={node} nodes={NODES} mainTab={mainTab} setMainTab={setMainTab} answer={answer || ""} showTaskInEditor={false}>
+          {renderQuestion()}
+        </LessonEditorOutputTabs>
+      );
       default: return renderReveal();
     }
   }

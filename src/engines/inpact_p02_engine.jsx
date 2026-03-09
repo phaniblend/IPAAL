@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import CodeEditor from "./CodeEditor";
-import { EditorTaskBlock } from "./LessonEditorOutputTabs";
+import LessonEditorOutputTabs, { EditorTaskBlock } from "./LessonEditorOutputTabs";
 
 
 // Load DM Sans from Google Fonts
@@ -341,6 +341,7 @@ export default function INPACTEngine({ onNextProblem }) {
   const [showHint, setShowHint] = useState(false);
   const [showExpected, setShowExpected] = useState(false);
   const [completedNodes, setCompletedNodes] = useState(["intro", "objectives"]);
+  const [mainTab, setMainTab] = useState("editor");
   const [objIndex, setObjIndex] = useState(0);
   const [wfsChecked, setWfsChecked] = useState([]);
   const [showAnalogy, setShowAnalogy] = useState(false);
@@ -367,6 +368,8 @@ export default function INPACTEngine({ onNextProblem }) {
     seed = seed.replace(/\btoggle\b/g, userChoices.toggleName);
     return seed;
   }
+
+  useEffect(() => { setMainTab("editor"); }, [nodeIndex]);
 
   useEffect(() => {
     const currentNode = NODES[nodeIndex];
@@ -1241,7 +1244,11 @@ export default function INPACTEngine({ onNextProblem }) {
     switch (node.type) {
       case "reveal": return renderReveal();
       case "objectives": return renderObjectives();
-      case "question": return renderQuestion();
+      case "question": return (
+        <LessonEditorOutputTabs node={node} nodes={NODES} mainTab={mainTab} setMainTab={setMainTab} answer={answer || ""} showTaskInEditor={false}>
+          {renderQuestion()}
+        </LessonEditorOutputTabs>
+      );
       default: return renderReveal();
     }
   }

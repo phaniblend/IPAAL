@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import CodeEditor from "./CodeEditor";
-import { EditorTaskBlock } from "./LessonEditorOutputTabs";
+import LessonEditorOutputTabs, { EditorTaskBlock } from "./LessonEditorOutputTabs";
 
 // ─── TUTORIAL DATA ────────────────────────────────────────────────────────────
 const NODES = [
@@ -310,6 +310,7 @@ export default function INPACTEngine({ onNextProblem }) {
   const [showHint, setShowHint] = useState(false);
   const [showExpected, setShowExpected] = useState(false);
   const [completedNodes, setCompletedNodes] = useState([]);
+  const [mainTab, setMainTab] = useState("editor");
   const [wfsChecked, setWfsChecked] = useState([]);
   const [showAnalogy, setShowAnalogy] = useState(false);
   const [syntaxMsg, setSyntaxMsg] = useState(null);
@@ -334,6 +335,8 @@ export default function INPACTEngine({ onNextProblem }) {
     seed = seed.replace(/\bhandleAuth\b/g, userChoices.toggleName);
     return seed;
   }
+
+  useEffect(() => { setMainTab("editor"); }, [nodeIndex]);
 
   useEffect(() => {
     const seed = getSeed(NODES[nodeIndex]);
@@ -599,7 +602,11 @@ export default function INPACTEngine({ onNextProblem }) {
     switch (node.type) {
       case "reveal": return renderReveal();
       case "objectives": return renderObjectives();
-      case "question": return renderQuestion();
+      case "question": return (
+        <LessonEditorOutputTabs node={node} nodes={NODES} mainTab={mainTab} setMainTab={setMainTab} answer={answer || ""} showTaskInEditor={false}>
+          {renderQuestion()}
+        </LessonEditorOutputTabs>
+      );
       default: return renderReveal();
     }
   }

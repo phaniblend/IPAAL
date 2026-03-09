@@ -1,87 +1,171 @@
-import CodeMirror from '@uiw/react-codemirror'
-import { javascript } from '@codemirror/lang-javascript'
-import { oneDark } from '@codemirror/theme-one-dark'
-import { EditorSelection } from '@codemirror/state'
-import { useCallback, useRef, useEffect, useMemo } from 'react'
+import Editor from "@monaco-editor/react";
+import { useRef, useEffect, useCallback } from "react";
 
-// When language === "css" we use javascript() so the app runs without @codemirror/lang-css.
-// For CSS syntax highlighting: npm i @codemirror/lang-css, then use [langCss()] for the css case.
-export default function CodeEditor({ value, onChange, height = "240px", cursorAtEndOfLine, cursorAtStartOfLine, language = "javascript" }) {
-  const extensions = useMemo(() => [javascript({ jsx: true })], [])
-  const viewRef = useRef(null)
-  const handleChange = useCallback((val) => {
-    onChange(val)
-  }, [onChange])
+/**
+ * Auto-insert a closing tag when the user types '>'.
+ * Works for JSX in javascript/typescript mode where Monaco's built-in
+ * auto-closing doesn't apply.
+ *
+ * Returns a disposable so callers can clean up on unmount.
+ */
+function setupAutoCloseTags(editor, monaco) {
+  let applying = false;
 
-  const placeCursor = useCallback((view) => {
-    if (!view) return
-    const doc = view.state.doc
-    const lineNum = cursorAtStartOfLine != null
-      ? Math.min(cursorAtStartOfLine, doc.lines)
-      : cursorAtEndOfLine != null
-        ? Math.min(cursorAtEndOfLine, doc.lines)
-        : null
-    if (lineNum == null) return
-    const line = doc.line(lineNum)
-    const pos = cursorAtStartOfLine != null ? line.from : line.to
-    view.dispatch({ selection: EditorSelection.cursor(pos) })
-    view.focus()
-  }, [cursorAtEndOfLine, cursorAtStartOfLine])
+  return editor.onDidChangeModelContent((event) => {
+    if (applying) return;
+    const model = editor.getModel();
+    if (!model) return;
+
+    for (const change of event.changes) {
+      // Only act on a single '>' being typed (not paste)
+      if (change.text !== ">") continue;
+
+      const line = change.range.startLineNumber;
+      const col = change.range.startColumn; // 1-indexed column where '>' landed
+
+      // Full line after the insert; text BEFORE '>' is substring(0, col-1)
+      const lineText = model.getLineContent(line);
+      const beforeGt = lineText.substring(0, col - 1);
+
+      // Match an opening JSX/HTML tag: <tagName or <tagName attrs...
+      // Reject closing tags (</...) and self-closing (.../)
+      // (?<!\w) ensures we don't match TypeScript generics like useState<string>
+      // where '<' is immediately preceded by a word character.
+      const tagMatch = beforeGt.match(/(?<!\w)<([a-zA-Z][a-zA-Z0-9.-]*)(?:\s[^>]*)?$/);
+      if (!tagMatch) continue;
+      if (beforeGt.trimEnd().endsWith("/")) continue; // already self-closing
+
+      const tagName = tagMatch[1];
+
+      // Void elements never need a closing tag
+      const voidTags = new Set([
+        "area", "base", "br", "col", "embed", "hr", "img", "input",
+        "link", "meta", "param", "source", "track", "wbr",
+      ]);
+      if (voidTags.has(tagName.toLowerCase())) continue;
+
+      // Cursor is now at col+1 (after the '>').  Insert closing tag there.
+      const cursorCol = col + 1;
+      const closeTag = `</${tagName}>`;
+
+      applying = true;
+      editor.executeEdits("auto-close-tag", [
+        {
+          range: new monaco.Range(line, cursorCol, line, cursorCol),
+          text: closeTag,
+        },
+      ]);
+      // Park cursor between the two tags, not at the end of </tag>
+      editor.setPosition({ lineNumber: line, column: cursorCol });
+      applying = false;
+      break;
+    }
+  });
+}
+
+/**
+ * Single-file Monaco-based code editor.
+ *
+ * Props:
+ *   value              — current code string
+ *   onChange           — (newValue: string) => void
+ *   height             — CSS height string, default "240px"
+ *   language           — monaco language id, default "javascript"
+ *   cursorAtStartOfLine — 1-based line number; place cursor at start of that line
+ *   cursorAtEndOfLine   — 1-based line number; place cursor at end of that line
+ */
+export default function CodeEditor({
+  value = "",
+  onChange,
+  height = "240px",
+  language = "javascript",
+  cursorAtStartOfLine,
+  cursorAtEndOfLine,
+}) {
+  const editorRef = useRef(null);
+  const monacoRef = useRef(null);
+  const disposeRef = useRef(null);
+
+  const applyPosition = useCallback(
+    (editor) => {
+      if (!editor) return;
+      const model = editor.getModel();
+      if (!model) return;
+      const totalLines = model.getLineCount();
+
+      let line, column;
+      if (cursorAtStartOfLine != null) {
+        line = Math.min(cursorAtStartOfLine, totalLines);
+        column = 1;
+      } else if (cursorAtEndOfLine != null) {
+        line = Math.min(cursorAtEndOfLine, totalLines);
+        column = model.getLineMaxColumn(line);
+      } else {
+        line = totalLines;
+        column = model.getLineMaxColumn(totalLines);
+      }
+
+      editor.setPosition({ lineNumber: line, column });
+      editor.revealLineInCenter(line);
+      editor.focus();
+    },
+    [cursorAtStartOfLine, cursorAtEndOfLine]
+  );
 
   useEffect(() => {
-    if ((cursorAtEndOfLine == null && cursorAtStartOfLine == null) || !viewRef.current) return
-    const raf = requestAnimationFrame(() => {
-      if (viewRef.current) placeCursor(viewRef.current)
-    })
-    return () => cancelAnimationFrame(raf)
-  }, [cursorAtEndOfLine, cursorAtStartOfLine, placeCursor])
+    if (editorRef.current) applyPosition(editorRef.current);
+  }, [applyPosition]);
 
-  const onCreateEditor = useCallback((view) => {
-    viewRef.current = view
-    if ((cursorAtEndOfLine != null || cursorAtStartOfLine != null) && view) placeCursor(view)
-  }, [cursorAtEndOfLine, cursorAtStartOfLine, placeCursor])
+  const handleMount = useCallback(
+    (editor, monaco) => {
+      editorRef.current = editor;
+      monacoRef.current = monaco;
+
+      // Wire up JSX auto-closing tags
+      disposeRef.current?.dispose();
+      disposeRef.current = setupAutoCloseTags(editor, monaco);
+
+      requestAnimationFrame(() => applyPosition(editor));
+    },
+    [applyPosition]
+  );
+
+  // Cleanup listener on unmount
+  useEffect(() => () => disposeRef.current?.dispose(), []);
 
   return (
-    <CodeMirror
-      value={value}
+    <Editor
       height={height}
-      theme={oneDark}
-      extensions={extensions}
-      onChange={handleChange}
-      onCreateEditor={onCreateEditor}
-      basicSetup={{
-        lineNumbers: true,
-        highlightActiveLineGutter: true,
-        highlightSpecialChars: true,
-        history: true,
-        foldGutter: true,
-        drawSelection: true,
-        dropCursor: true,
-        allowMultipleSelections: true,
-        indentOnInput: true,
-        syntaxHighlighting: true,
-        bracketMatching: true,
-        closeBrackets: true,
-        autocompletion: true,
-        rectangularSelection: true,
-        crosshairCursor: true,
-        highlightActiveLine: true,
-        highlightSelectionMatches: true,
-        closeBracketsKeymap: true,
-        defaultKeymap: true,
-        searchKeymap: true,
-        historyKeymap: true,
-        foldKeymap: true,
-        completionKeymap: true,
-        lintKeymap: true,
+      language={language}
+      value={value}
+      theme="vs-dark"
+      onChange={(val) => onChange(val ?? "")}
+      onMount={handleMount}
+      options={{
+        fontSize: 14,
+        fontFamily: "'JetBrains Mono', 'Fira Code', 'Cascadia Code', Menlo, monospace",
+        fontLigatures: true,
+        lineNumbers: "on",
+        minimap: { enabled: false },
+        scrollBeyondLastLine: false,
+        wordWrap: "on",
+        automaticLayout: true,
         tabSize: 2,
-      }}
-      style={{
-        fontSize: '15px',
-        borderRadius: '8px',
-        border: '1px solid #1e2733',
-        overflow: 'hidden',
+        insertSpaces: true,
+        renderLineHighlight: "line",
+        cursorBlinking: "smooth",
+        cursorSmoothCaretAnimation: "on",
+        smoothScrolling: true,
+        autoClosingBrackets: "always",
+        autoClosingQuotes: "always",
+        autoClosingTags: true,
+        scrollbar: { verticalScrollbarSize: 6, horizontalScrollbarSize: 6 },
+        overviewRulerLanes: 0,
+        hideCursorInOverviewRuler: true,
+        padding: { top: 12, bottom: 12 },
+        bracketPairColorization: { enabled: true },
+        guides: { bracketPairs: true },
       }}
     />
-  )
+  );
 }

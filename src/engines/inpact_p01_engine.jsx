@@ -550,28 +550,10 @@ export default function INPACTEngine({ onNextProblem }) {
       letterSpacing: "3px",
       color: "#00d4ff",
     },
-    progressTrack: {
-      flex: 1,
-      height: "3px",
-      background: "#1e2733",
-      borderRadius: "2px",
-      overflow: "hidden",
-    },
-    progressFill: {
-      height: "100%",
-      width: `${progress}%`,
-      background: "linear-gradient(90deg, #00d4ff, #7c3aed)",
-      transition: "width 0.5s ease",
-    },
-    progressLabel: {
-      fontFamily: "'DM Sans', sans-serif",
-      fontSize: "11px",
-      color: "#4a5568",
-      letterSpacing: "1px",
-    },
     body: {
       display: "flex",
       flex: 1,
+      minHeight: 0,
     },
     sidebar: {
       width: "220px",
@@ -616,6 +598,9 @@ export default function INPACTEngine({ onNextProblem }) {
       maxWidth: "760px",
       margin: "0 auto",
       width: "100%",
+      minHeight: 0,
+      display: "flex",
+      flexDirection: "column",
     },
     phase: {
       fontFamily: "'DM Sans', sans-serif",
@@ -974,48 +959,52 @@ export default function INPACTEngine({ onNextProblem }) {
     const feedbackMsg = typeof rawFeedback === "function" ? rawFeedback(answer) : rawFeedback;
 
     const editorContent = (
-      <div>
-        <div style={s.phase}>{node.phase}</div>
-        {node.seed_code && (
-          <div style={{
-            fontFamily: "'DM Sans', sans-serif",
-            fontSize: "11px",
-            color: "#00d4ff",
-            fontWeight: 600,
-            letterSpacing: "0.05em",
-            marginBottom: "8px",
-            display: "flex",
-            alignItems: "center",
-            gap: "8px",
-          }}>
-            <div style={{ width: "8px", height: "8px", borderRadius: "50%", background: "#10b981" }} />
-            CODE BUILT SO FAR — edit below
-          </div>
-        )}
-        <CodeEditor value={answer} onChange={setAnswer} height="240px" />
-        {showHint && <div style={s.hintBox}>💡 HINT — {node.hint}</div>}
-        {feedbackMsg && <div style={s.feedback(result)}>{feedbackMsg}</div>}
-        {showExpected && (
-          <div>
-            <div style={{ ...s.paalLabel, marginTop: "16px", marginBottom: "8px" }}>EXPECTED ANSWER</div>
-            <div style={s.expectedBox}>{node.expected}</div>
-          </div>
-        )}
-        <div style={s.btnRow}>
-          {result !== "correct" ? (
-            <>
-              <button style={s.btn("primary")} onClick={submit}>SUBMIT</button>
-              {node.analogy && (
-                <button style={{ ...s.btn("secondary"), background: "rgba(124,58,237,0.15)", border: "1px solid #7c3aed", color: "#9f7aea" }} onClick={() => setShowAnalogy(true)}>
-                  💡 SHOW ME AN EXAMPLE
-                </button>
-              )}
-              {attempts > 0 && !showHint && <button style={s.btn("secondary")} onClick={() => setShowHint(true)}>SHOW HINT</button>}
-              {attempts > 1 && !showExpected && <button style={s.btn("ghost")} onClick={() => setShowExpected(true)}>SHOW ANSWER</button>}
-            </>
-          ) : (
-            <button style={s.btn("primary")} onClick={next}>NEXT STEP →</button>
+      <div style={{ display: "flex", flexDirection: "column", flex: 1, minHeight: 0, width: "100%" }}>
+        <div style={{ flex: 1, minHeight: 0, overflowY: "auto" }}>
+          <div style={s.phase}>{node.phase}</div>
+          {node.seed_code && (
+            <div style={{
+              fontFamily: "'DM Sans', sans-serif",
+              fontSize: "11px",
+              color: "#00d4ff",
+              fontWeight: 600,
+              letterSpacing: "0.05em",
+              marginBottom: "8px",
+              display: "flex",
+              alignItems: "center",
+              gap: "8px",
+            }}>
+              <div style={{ width: "8px", height: "8px", borderRadius: "50%", background: "#10b981" }} />
+              CODE BUILT SO FAR — edit below
+            </div>
           )}
+          <CodeEditor value={answer} onChange={setAnswer} height="240px" />
+          {showHint && <div style={s.hintBox}>💡 HINT — {node.hint}</div>}
+          {feedbackMsg && <div style={s.feedback(result)}>{feedbackMsg}</div>}
+          {showExpected && (
+            <div>
+              <div style={{ ...s.paalLabel, marginTop: "16px", marginBottom: "8px" }}>EXPECTED ANSWER</div>
+              <div style={s.expectedBox}>{node.expected}</div>
+            </div>
+          )}
+        </div>
+        <div style={{ flexShrink: 0, paddingTop: "16px", borderTop: "1px solid #1e2733" }}>
+          <div style={s.btnRow}>
+            {result !== "correct" ? (
+              <>
+                <button style={s.btn("primary")} onClick={submit}>SUBMIT</button>
+                {node.analogy && (
+                  <button style={{ ...s.btn("secondary"), background: "rgba(124,58,237,0.15)", border: "1px solid #7c3aed", color: "#9f7aea" }} onClick={() => setShowAnalogy(true)}>
+                    💡 SHOW ME AN EXAMPLE
+                  </button>
+                )}
+                {attempts > 0 && !showHint && <button style={s.btn("secondary")} onClick={() => setShowHint(true)}>SHOW HINT</button>}
+                {attempts > 1 && !showExpected && <button style={s.btn("ghost")} onClick={() => setShowExpected(true)}>SHOW ANSWER</button>}
+              </>
+            ) : (
+              <button style={s.btn("primary")} onClick={next}>NEXT STEP →</button>
+            )}
+          </div>
         </div>
         {showAnalogy && node.analogy && (
           <div
@@ -1156,13 +1145,6 @@ No hints. No looking back.`}</div>
       {/* TOP BAR */}
       <div style={s.topbar}>
         <div style={s.logo}>INPACT</div>
-        <div style={s.progressTrack}>
-          <div style={s.progressFill} />
-        </div>
-        <div style={s.progressLabel}>{progress}%</div>
-        <div style={{ ...s.progressLabel, marginLeft: "8px" }}>
-          P01 — COUNTER APP
-        </div>
       </div>
 
       <div style={s.body}>
