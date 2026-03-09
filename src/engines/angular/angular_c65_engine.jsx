@@ -16,7 +16,7 @@ import { CommonModule } from '@angular/common';
 export class GenericListComponent {
   @Input() items: unknown[] = [];
 }`, feedback_correct: "✅ Generic list with items.", feedback_partial: "*ngFor.", feedback_wrong: "items", expected: "@Input() items and *ngFor" },
-  { id: "step2", type: "question", phase: "Step 2 of 3", paal: "Add generic: GenericListComponent<T> and @Input() items: T[] = []. Use trackBy: trackByIndex (i: number) { return i; } in *ngFor.", answer_keywords: ["T", "generic", "trackBy"], seed_code: `import { Component, Input } from '@angular/core';
+  { id: "step2", type: "question", phase: "Step 2 of 3", paal: "Add generic: GenericListComponent<T> and @Input() items: T[] = []. Use trackBy: trackByIndex (i: number) { return i; } in *ngFor.", answer_keywords: ["T", "trackBy"], seed_code: `import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 @Component({

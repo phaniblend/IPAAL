@@ -42,7 +42,7 @@ experts from people who add : any everywhere.`,
     type: "question",
     phase: "Step 1 of 5",
     paal: "Write a typed fetch wrapper: function get<T>(url: string): Promise<T>. The caller specifies T — your function trusts that the API returns it.",
-    answer_keywords: ["<t>", "promise", "fetch", "generic"],
+    answer_keywords: ["<t>", "promise", "fetch"],
     seed_code: `// Step 1: generic fetch wrapper — caller determines T
 
 async function get<T>(url: string): Promise<T> {
@@ -158,7 +158,7 @@ export type { ElementType }`,
     type: "question",
     phase: "Step 4 of 5",
     paal: "Use overloads to give different return types per input: transform('string input') → string, transform(42) → number.",
-    answer_keywords: ["overload", "string", "number", "different return"],
+    answer_keywords: ["string", "number", "different return"],
     seed_code: `// Step 4: overloads for different return types
 
 // Overload signatures — what callers see:

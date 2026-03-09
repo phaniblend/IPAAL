@@ -219,7 +219,7 @@ export { discounted, merged, CONFIG }`,
   {
     id: "step5", type: "question", phase: "Step 5 of 5",
     paal: "Fix the classic `this` binding problem in class methods used as callbacks. Show three solutions: bind, arrow, and arrow class field.",
-    answer_keywords: ["bind", "this", "arrow", "class field", "callback"],
+    answer_keywords: ["bind", "this", "class field", "callback"],
     seed_code: `// Step 5: this binding in class methods — the classic gotcha
 
 class Timer {

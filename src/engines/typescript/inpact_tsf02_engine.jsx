@@ -62,7 +62,7 @@ export { add, logMessage }`,
     type: "question",
     phase: "Step 2 of 5",
     paal: "Add an optional param (title?: string) and a default param (retries: number = 3). Optional means caller can skip it; default means it has a fallback value.",
-    answer_keywords: ["?", "=", "optional", "default"],
+    answer_keywords: ["?:", "=3", "string", "number"],
     seed_code: `// Step 2: optional and default parameters
 
 function greetUser(name: string, title?: string): string {
@@ -90,7 +90,7 @@ export { greetUser, fetchWithRetry }`,
     type: "question",
     phase: "Step 3 of 5",
     paal: "Type an arrow function two ways: inline as a variable, and as a named type alias. Show both.",
-    answer_keywords: ["=>", "type", "arrow"],
+    answer_keywords: ["=>", "type", "const"],
     seed_code: `// Step 3: typing arrow functions
 
 // Inline — type annotation on the variable
@@ -118,7 +118,7 @@ export { double, toUpper, toLower, applyTransform }`,
     type: "question",
     phase: "Step 4 of 5",
     paal: "Use rest params: function joinStrings(...parts: string[]): string. Rest params are always typed as an array.",
-    answer_keywords: ["...", "string[]", "rest"],
+    answer_keywords: ["...", "string[]"],
     seed_code: `// Step 4: rest parameters — always an array type
 
 function joinStrings(...parts: string[]): string {
@@ -143,7 +143,7 @@ export { joinStrings, sum }`,
     type: "question",
     phase: "Step 5 of 5",
     paal: "Write a function overload: format(value: string): string and format(value: number): string — one implementation handles both cases.",
-    answer_keywords: ["overload", "string", "number", "function format"],
+    answer_keywords: ["functionformat", "|", "string", "number"],
     seed_code: `// Step 5: function overloads — multiple signatures, one implementation
 
 function format(value: string): string

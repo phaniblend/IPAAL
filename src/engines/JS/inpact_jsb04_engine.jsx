@@ -177,7 +177,7 @@ export { Person, Animal }`,
   {
     id: "step4", type: "question", phase: "Step 4 of 5",
     paal: "Show that arrow functions have NO own 'this' — they inherit from the enclosing lexical scope at definition time.",
-    answer_keywords: ["arrow", "lexical", "no own this", "enclosing", "inherit"],
+    answer_keywords: ["lexical", "no own this", "enclosing", "inherit"],
     seed_code: `// Step 4: arrow functions — no own 'this', inherit lexically
 
 const counter = {

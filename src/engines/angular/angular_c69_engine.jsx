@@ -35,7 +35,7 @@ export class UserListComponent {
   private api = inject(UserApiService);
   users = toSignal(this.api.getUsers(), { initialValue: [] as User[] });
 }`, feedback_correct: "✅ toSignal with User[].", feedback_partial: "users().", feedback_wrong: "toSignal", expected: "toSignal(api.getUsers(), { initialValue: [] as User[] })" },
-  { id: "step3", type: "question", phase: "Step 3 of 3", paal: "Add a generic method in service: getById<T>(url: string): Observable<T> { return this.http.get<T>(url); }. Use it in a component with getById<User>('/api/users/1'). Export service and component.", answer_keywords: ["getById", "generic", "export"], seed_code: `import { Injectable, inject } from '@angular/core';
+  { id: "step3", type: "question", phase: "Step 3 of 3", paal: "Add a generic method in service: getById<T>(url: string): Observable<T> { return this.http.get<T>(url); }. Use it in a component with getById<User>('/api/users/1'). Export service and component.", answer_keywords: ["getById", "export"], seed_code: `import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 

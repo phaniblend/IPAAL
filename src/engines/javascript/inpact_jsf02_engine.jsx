@@ -34,7 +34,7 @@ middleware chains, and every callback in the ecosystem.`,
   {
     id: "step1", type: "question", phase: "Step 1 of 5",
     paal: "Write arrow functions: block body, expression body (implicit return), single param (no parens), no params.",
-    answer_keywords: ["=>", "arrow", "implicit", "return"],
+    answer_keywords: ["=>", "implicit", "return"],
     seed_code: `// Step 1: arrow function syntax variants
 
 // Block body — explicit return required:

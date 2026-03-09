@@ -41,7 +41,7 @@ This makes them perfect for library-level contracts.`,
     type: "question",
     phase: "Step 1 of 5",
     paal: "Define a User interface: id (number), name (string), email (optional string), role (readonly string).",
-    answer_keywords: ["interface", "readonly", "optional", "?", "number", "string"],
+    answer_keywords: ["interface", "readonly", "?", "number", "string"],
     seed_code: `// Step 1: define an interface with required, optional, and readonly fields
 
 interface User {

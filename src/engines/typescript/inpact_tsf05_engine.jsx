@@ -40,7 +40,7 @@ the needle: reusable AND typed.`,
     type: "question",
     phase: "Step 1 of 5",
     paal: "Write a generic identity<T>(value: T): T and a generic firstItem<T>(arr: T[]): T | undefined.",
-    answer_keywords: ["<t>", "generic", "identity", "t[]"],
+    answer_keywords: ["<t>", "identity", "t[]"],
     seed_code: `// Step 1: your first generic function
 
 function identity<T>(value: T): T {
