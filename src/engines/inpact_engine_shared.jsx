@@ -121,7 +121,7 @@ export default function createINPACTEngine(config) {
       paalLabel: { fontSize: "10px", color: "#00d4ff", letterSpacing: "2px", marginBottom: "10px" },
       paalText: { fontSize: "16px", color: "#e2e8f0", lineHeight: "1.6", whiteSpace: "pre-wrap" },
       btnRow: { display: "flex", gap: "12px", marginTop: "16px", flexWrap: "wrap" },
-      btn: (v) => ({ padding: "10px 24px", borderRadius: "6px", border: "none", cursor: "pointer", fontSize: "12px", fontWeight: "700", letterSpacing: "0.08em", background: v === "primary" ? "#00d4ff" : v === "ghost" ? "transparent" : "#1a2332", color: v === "primary" ? "#080c14" : v === "ghost" ? "#4a5568" : "#a0aec0", border: v === "ghost" ? "1px solid #2d3748" : "none" }),
+      btn: (v) => ({ padding: "10px 24px", borderRadius: "6px", cursor: "pointer", fontSize: "12px", fontWeight: "700", letterSpacing: "0.08em", background: v === "primary" ? "#00d4ff" : v === "ghost" ? "transparent" : "#1a2332", color: v === "primary" ? "#080c14" : v === "ghost" ? "#4a5568" : "#a0aec0", border: v === "ghost" ? "1px solid #2d3748" : "none" }),
       feedback: (t) => ({ marginTop: "20px", padding: "16px 20px", borderRadius: "8px", fontSize: "12px", lineHeight: "1.8", background: t === "correct" ? "rgba(16,185,129,0.08)" : t === "partial" ? "rgba(245,158,11,0.08)" : "rgba(239,68,68,0.08)", border: `1px solid ${t === "correct" ? "#10b981" : t === "partial" ? "#f59e0b" : "#ef4444"}`, color: t === "correct" ? "#10b981" : t === "partial" ? "#f59e0b" : "#ef4444", whiteSpace: "pre-wrap" }),
       hintBox: { marginTop: "12px", padding: "12px 16px", background: "rgba(124,58,237,0.08)", border: "1px solid #7c3aed", borderRadius: "6px", fontSize: "11px", color: "#9f7aea", lineHeight: "1.7" },
       expectedBox: { marginTop: "12px", padding: "16px", background: "#0d1117", border: "1px solid #2d3748", borderRadius: "6px", fontSize: "12px", color: "#718096", whiteSpace: "pre-wrap", lineHeight: "1.7" },
@@ -182,11 +182,19 @@ export default function createINPACTEngine(config) {
 
     function renderEditorBlockButtons(fbMsg) {
       const canSubmit = answerShape === "css-tabs" ? (parsedCssTabs?.css?.trim()) : answer.trim();
-      const exampleContent = node.example_code
-        ? <><div style={{ ...s.paalLabel, marginBottom: "6px" }}>EXAMPLE (similar pattern — not the exact answer)</div><div style={s.expectedBox}>{node.example_code}</div></>
-        : node.expected
-          ? <><div style={{ ...s.paalLabel, marginBottom: "6px" }}>EXPECTED</div><div style={s.expectedBox}>{node.expected}</div></>
-          : null;
+      // Priority: example_code → multiline expected → seed_code fallback → short expected label
+      const exampleEntry = node.example_code
+        ? { label: "EXAMPLE (similar pattern — not the exact answer)", code: node.example_code }
+        : (node.expected && node.expected.includes("\n"))
+          ? { label: "EXPECTED", code: node.expected }
+          : node.seed_code
+            ? { label: "EXAMPLE", code: node.seed_code }
+            : node.expected
+              ? { label: "EXPECTED", code: node.expected }
+              : null;
+      const exampleContent = exampleEntry
+        ? <><div style={{ ...s.paalLabel, marginBottom: "6px" }}>{exampleEntry.label}</div><div style={s.expectedBox}>{exampleEntry.code}</div></>
+        : null;
       return (
         <>
           {/* Hint, example and feedback are all in the fixed area — always visible without scrolling */}

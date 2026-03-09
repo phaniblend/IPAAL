@@ -72,7 +72,17 @@ export { Status, HttpMethod }`,
     feedback_correct: "✅ String enums show the value in logs/debuggers — always prefer them over numeric enums for clarity.",
     feedback_partial: "Numeric enum: just names. String enum: Name = 'value' for each member.",
     feedback_wrong: "enum HttpMethod { GET = 'GET', POST = 'POST', ... }",
-    expected: "Numeric and string enums",
+    example_code: `// Numeric enum — members auto-increment from 0
+enum Status { Idle, Loading, Success, Error }
+// Status.Idle = 0, Status.Loading = 1, ...
+
+// String enum — each value is an explicit string
+enum HttpMethod {
+  GET    = 'GET',
+  POST   = 'POST',
+  DELETE = 'DELETE',
+}
+// HttpMethod.GET = 'GET' — readable in logs/serialization`,
   },
   {
     id: "step2",
@@ -106,7 +116,13 @@ export type { Dir }`,
     feedback_correct: "✅ const enum is inlined — no runtime object. But string literal unions are safer across toolchains.",
     feedback_partial: "const enum values are replaced at compile time. They emit nothing to the JS bundle.",
     feedback_wrong: "const enum Direction { North = 'NORTH', ... } — values inlined, no runtime object.",
-    expected: "const enum vs string literal union",
+    example_code: `// const enum — compiler replaces every usage with its value
+const enum Direction { North = 'NORTH', South = 'SOUTH' }
+move(Direction.North)  // compiles to: move('NORTH')
+// No Direction object in the JS output — zero bundle cost
+
+// Alternative with same zero-cost benefit that works everywhere:
+type Dir = 'NORTH' | 'SOUTH' | 'EAST' | 'WEST'`,
   },
   {
     id: "step3",
@@ -141,7 +157,14 @@ export { red, green, blend, origin }`,
     feedback_correct: "✅ Tuples enforce both length and per-position type — labeled tuples also document meaning.",
     feedback_partial: "type RGB = [number, number, number] — brackets, not braces.",
     feedback_wrong: "type RGB = [number, number, number]  |  type Point = [x: number, y: number]",
-    expected: "Tuple type with labeled variant",
+    example_code: `// Tuple — fixed length, each position has a specific type
+type RGB = [number, number, number]
+const red: RGB = [255, 0, 0]   // ✅
+// const bad: RGB = [255, 0]   // ❌ too short
+
+// Labeled tuple (TS 4.0+) — same runtime, labels improve IDE hints
+type Point3D = [x: number, y: number, z: number]
+const origin: Point3D = [0, 0, 0]`,
   },
   {
     id: "step4",
@@ -177,7 +200,15 @@ export { useToggle, useCounter }`,
     feedback_correct: "✅ as const on a returned array promotes it to a readonly tuple — essential for custom hook return types.",
     feedback_partial: "return [a, b] as const — without this, TS widens to a union array and loses positional types.",
     feedback_wrong: "return [state, toggle] as const — infers readonly [boolean, () => void]",
-    expected: "as const for tuple return type",
+    example_code: `// Without as const — TS infers (boolean | (() => void))[]
+// Caller loses positional type info
+
+// With as const — infers readonly [boolean, () => void]
+function useToggle(initial = false) {
+  const [state, setState] = useState(initial)
+  return [state, () => setState(s => !s)] as const
+}
+const [isOpen, toggle] = useToggle()  // isOpen: boolean, toggle: () => void`,
   },
   {
     id: "step5",
@@ -219,7 +250,13 @@ export type { Role }`,
     feedback_correct: "✅ The rule: iterate at runtime → enum. Pure type constraint → string literal union.",
     feedback_partial: "Enums generate runtime objects. String literal unions are erased at compile time.",
     feedback_wrong: "Object.values(Permission) only works with enum — string literals have no runtime representation.",
-    expected: "Enum vs string literal union decision",
+    example_code: `// Use ENUM when you need runtime iteration:
+enum Permission { Read = 'READ', Write = 'WRITE', Delete = 'DELETE' }
+const all = Object.values(Permission)  // ['READ', 'WRITE', 'DELETE'] ✅
+
+// Use UNION when it's a pure type constraint (no runtime value needed):
+type Role = 'admin' | 'editor' | 'viewer'
+// → zero JS output, works with all build tools`,
   },
 ];
 
