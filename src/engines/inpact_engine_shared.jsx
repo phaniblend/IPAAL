@@ -176,28 +176,24 @@ export default function createINPACTEngine(config) {
           ) : (
             <CodeEditor key={node?.id} value={answer} onChange={setAnswer} height="240px" cursorAtEndOfLine={cursorAtStartOfLine == null ? node.cursorLine : undefined} cursorAtStartOfLine={cursorAtStartOfLine} language={language || node.language || "javascript"} />
           )}
-          {showHint && <div style={s.hintBox}>💡 {node.hint}</div>}
-          {showExpected && (
-            <div style={{ marginTop: "16px" }}>
-              {node.example_code ? (
-                <div>
-                  <div style={{ ...s.paalLabel, marginBottom: "6px" }}>EXAMPLE (similar pattern — not the exact answer)</div>
-                  <div style={s.expectedBox}>{node.example_code}</div>
-                </div>
-              ) : (
-                node.expected && <div><div style={{ ...s.paalLabel, marginBottom: "6px" }}>EXPECTED</div><div style={s.expectedBox}>{node.expected}</div></div>
-              )}
-            </div>
-          )}
         </>
       );
     }
 
     function renderEditorBlockButtons(fbMsg) {
       const canSubmit = answerShape === "css-tabs" ? (parsedCssTabs?.css?.trim()) : answer.trim();
+      const exampleContent = node.example_code
+        ? <><div style={{ ...s.paalLabel, marginBottom: "6px" }}>EXAMPLE (similar pattern — not the exact answer)</div><div style={s.expectedBox}>{node.example_code}</div></>
+        : node.expected
+          ? <><div style={{ ...s.paalLabel, marginBottom: "6px" }}>EXPECTED</div><div style={s.expectedBox}>{node.expected}</div></>
+          : null;
       return (
         <>
-          {/* Feedback shown here so it's always visible without scrolling */}
+          {/* Hint, example and feedback are all in the fixed area — always visible without scrolling */}
+          {showHint && <div style={{ ...s.hintBox, marginBottom: "8px", marginTop: 0 }}>💡 {node.hint}</div>}
+          {showExpected && exampleContent && (
+            <div style={{ marginBottom: "8px" }}>{exampleContent}</div>
+          )}
           {fbMsg && (
             <div style={{ ...s.feedback(result), marginBottom: "12px", marginTop: 0 }}>{fbMsg}</div>
           )}
