@@ -1,0 +1,1 @@
+{"result":"correct","feedback":"You correctly added a second useState call to initialize the name state variable with an empty string. The syntax is proper and matches the requirement exactly.","hint":"","errors":[]}

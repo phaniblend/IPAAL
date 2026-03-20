@@ -1,0 +1,1 @@
+{"result":"correct","feedback":"You correctly initialized state with useState, passing an object containing name, email, and message properties each set to empty strings. The syntax and behavior match the step's requirements exactly.","hint":"","errors":[]}

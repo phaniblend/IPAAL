@@ -1,6 +1,6 @@
 import createINPACTEngine from "../inpact_engine_shared";
 const NODES = [
-  { id: "intro", type: "reveal", phase: "Problem", content: { tag: "JS — BLOCK D #1", title: "Pure Functions & Immutability", body: `A pure function has two properties:\n1. Same input always produces same output (deterministic)\n2. No side effects (doesn't modify anything outside itself)\n\nImmutability completes the picture: instead of mutating\ndata, return new values. This is why React requires\nimmutable state updates and why Redux reducers must be pure.\n\nThese aren't academic concepts — they're the reason\nyour tests are predictable and your UI doesn't have\nmysterious stale state bugs.`, usecase: "React state, Redux reducers, memoization, concurrent rendering (React 18), unit testing — all require or benefit from pure functions and immutable data." } },
+  { id: "intro", type: "reveal", phase: "Lesson", content: { tag: "JS — BLOCK D #1", title: "Pure Functions & Immutability", body: `A pure function has two properties:\n1. Same input always produces same output (deterministic)\n2. No side effects (doesn't modify anything outside itself)\n\nImmutability completes the picture: instead of mutating\ndata, return new values. This is why React requires\nimmutable state updates and why Redux reducers must be pure.\n\nThese aren't academic concepts — they're the reason\nyour tests are predictable and your UI doesn't have\nmysterious stale state bugs.`, usecase: "React state, Redux reducers, memoization, concurrent rendering (React 18), unit testing — all require or benefit from pure functions and immutable data." } },
   { id: "objectives", type: "objectives", phase: "Objectives", items: ["Identify pure vs impure functions", "Understand referential transparency", "Write immutable array and object update patterns", "Understand why mutation breaks memoization", "Use Immer's produce for ergonomic deep updates", "Detect hidden side effects (Date.now, Math.random, I/O)"] },
   { id: "step1", type: "question", phase: "Step 1 of 5", paal: "Identify pure vs impure. Show the five sources of impurity.", answer_keywords: ["pure", "side effect", "deterministic", "mutation", "impure"], seed_code: `// Step 1: pure vs impure
 
@@ -200,7 +200,7 @@ export { square, formatName, processItem }`,
     feedback_wrong: "RT: square(5) === 25 always → can use 25 wherever square(5) appears. Makes testing and memoization trivial.", expected: "Referential transparency" },
 ];
 const sideItems = [
-  { label: "Problem", id: "intro" }, { label: "Objectives", id: "objectives" },
+  { label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" },
   { label: "Step 1 — Pure vs impure", id: "step1" }, { label: "Step 2 — Immutable arrays", id: "step2" },
   { label: "Step 3 — Immutable objects", id: "step3" }, { label: "Step 4 — Immer", id: "step4" },
   { label: "Step 5 — Referential transparency", id: "step5" },

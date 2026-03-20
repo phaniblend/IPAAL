@@ -2,7 +2,7 @@ import createINPACTEngine from "../inpact_engine_shared";
 
 const TITLE = "Utility Types (Angular)";
 const NODES = [
-  { id: "intro", type: "reveal", phase: "Problem", content: { tag: "PROBLEM #70 (Angular)", title: TITLE, body: "Use TypeScript utility types with Angular: Partial<Config> for optional inputs, Required<Config>, Pick<User, 'id'|'name'>, Omit<User, 'password'>, and Record<string, FormControl> for form groups to type component APIs and forms.", usecase: "Angular component @Input() and FormGroup benefit from Partial, Pick, Record for type safety." } },
+  { id: "intro", type: "reveal", phase: "Lesson", content: { tag: "LESSON #70 (Angular)", title: TITLE, body: "Use TypeScript utility types with Angular: Partial<Config> for optional inputs, Required<Config>, Pick<User, 'id'|'name'>, Omit<User, 'password'>, and Record<string, FormControl> for form groups to type component APIs and forms.", usecase: "Angular component @Input() and FormGroup benefit from Partial, Pick, Record for type safety." } },
   { id: "objectives", type: "objectives", phase: "Objectives", items: ["@Input() options: Partial<Config> so all keys optional", "type FormValues = Record<string, FormControl> or { name: FormControl; age: FormControl }", "Pick<User, 'id'|'name'> for list row type; Omit<User, 'id'> for create payload", "Use in service return types and template context types"] },
   { id: "step1", type: "question", phase: "Step 1 of 3", paal: "Define interface Config { theme: string; size: number }. Create a component with @Input() options: Partial<Config> = {}. So theme and size are optional. Use options.theme and options.size in template with optional chaining.", answer_keywords: ["Partial", "Config", "Input"], seed_code: `import { Component, Input } from '@angular/core';
 
@@ -51,5 +51,5 @@ export class UtilityTypesComponent {
 }`, feedback_correct: "✅ Utility Types (Angular) complete.", feedback_partial: "Record FormGroup.", feedback_wrong: "Export", expected: "FormGroup<Record<string, FormControl>>" },
 ];
 
-const sideItems = [{ label: "Problem", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
+const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
 export default createINPACTEngine({ NODES, sideItems, problemNum: 70, title: TITLE, shortName: "A — UTILITY TYPES" });

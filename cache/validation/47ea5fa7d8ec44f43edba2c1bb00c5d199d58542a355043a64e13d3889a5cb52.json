@@ -1,0 +1,1 @@
+{"result":"correct","feedback":"You correctly imported configureStore from '@reduxjs/toolkit' using a named import. The syntax is valid and meets this step's requirement."}

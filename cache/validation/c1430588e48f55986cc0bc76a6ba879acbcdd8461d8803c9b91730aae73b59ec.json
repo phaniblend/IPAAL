@@ -1,0 +1,1 @@
+{"result":"partial","feedback":"You correctly used the map() method on the fruits array to create <li> elements with proper key props. However, the <li> elements should be rendered inside a <ul> element as shown in the starter code structure.","hint":"Wrap your mapped <li> elements with <ul> tags to create a proper unordered list."}

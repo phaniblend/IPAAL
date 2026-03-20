@@ -1,0 +1,1 @@
+{"result":"correct","feedback":"You correctly added a label element with the htmlFor attribute matching the input's id. The label is properly placed before the color input and associates with it for accessibility."}

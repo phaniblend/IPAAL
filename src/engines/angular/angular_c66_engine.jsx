@@ -2,7 +2,7 @@ import createINPACTEngine from "../inpact_engine_shared";
 
 const TITLE = "Discriminated Union Props (Angular)";
 const NODES = [
-  { id: "intro", type: "reveal", phase: "Problem", content: { tag: "PROBLEM #66 (Angular)", title: TITLE, body: "Type component inputs as a discriminated union so the template and logic can narrow by a common 'type' or 'kind' field: e.g. type Config = { type: 'a'; value: string } | { type: 'b'; count: number }; @Input() config!: Config.", usecase: "Angular + TypeScript discriminated unions give type-safe narrowing in templates and methods." } },
+  { id: "intro", type: "reveal", phase: "Lesson", content: { tag: "LESSON #66 (Angular)", title: TITLE, body: "Type component inputs as a discriminated union so the template and logic can narrow by a common 'type' or 'kind' field: e.g. type Config = { type: 'a'; value: string } | { type: 'b'; count: number }; @Input() config!: Config.", usecase: "Angular + TypeScript discriminated unions give type-safe narrowing in templates and methods." } },
   { id: "objectives", type: "objectives", phase: "Objectives", items: ["Define type VariantA = { type: 'a'; label: string }; VariantB = { type: 'b'; count: number }; type Props = VariantA | VariantB", "@Input() props!: Props; in template use *ngIf=\"props.type === 'a'\" then props.label", "Switch in class: if (this.props.type === 'a') return this.props.label; else return this.props.count", "Use @switch in control flow (Angular 17) for exhaustive check"] },
   { id: "step1", type: "question", phase: "Step 1 of 3", paal: "Define type VariantA = { type: 'a'; label: string }, VariantB = { type: 'b'; count: number }, and type Props = VariantA | VariantB. Create a component with @Input() props!: Props.", answer_keywords: ["type", "VariantA", "VariantB"], seed_code: `import { Component, Input } from '@angular/core';
 
@@ -59,5 +59,5 @@ export class DiscriminatedComponent {
 }`, feedback_correct: "✅ Discriminated Union Props (Angular) complete.", feedback_partial: "getDisplay.", feedback_wrong: "Export", expected: "getDisplay with narrowing and export" },
 ];
 
-const sideItems = [{ label: "Problem", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
+const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
 export default createINPACTEngine({ NODES, sideItems, problemNum: 66, title: TITLE, shortName: "A — DISCRIMINATED UNION" });

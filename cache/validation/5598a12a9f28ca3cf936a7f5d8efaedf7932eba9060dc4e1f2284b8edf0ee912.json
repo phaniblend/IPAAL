@@ -1,0 +1,1 @@
+{"result":"correct","feedback":"You correctly used useState to declare a 'hover' state variable initialized to 0 inside the StarRating component. The syntax and behavior meet this step's requirement.","hint":"","errors":[]}

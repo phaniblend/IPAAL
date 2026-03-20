@@ -4,7 +4,7 @@ const NODES = [
   {
     id: "intro",
     type: "reveal",
-    phase: "Problem",
+    phase: "Lesson",
     content: {
       tag: "TS FUNDAMENTALS #5",
       title: "Generics — Types as Parameters",
@@ -217,7 +217,7 @@ export { useLocalStorage }`,
 ];
 
 const sideItems = [
-  { label: "Problem", id: "intro" },
+  { label: "Lesson", id: "intro" },
   { label: "Objectives", id: "objectives" },
   { label: "Step 1 — identity<T>", id: "step1" },
   { label: "Step 2 — Constraints", id: "step2" },

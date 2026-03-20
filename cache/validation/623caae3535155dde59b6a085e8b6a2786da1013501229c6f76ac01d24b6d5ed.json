@@ -1,0 +1,1 @@
+{"result":"correct","feedback":"You correctly defined an advanceStage function inside the PipelineVisualizer component. The function uses setCurrentStageIndex to increment the current stage index, which simulates moving to the next pipeline stage."}

@@ -1,0 +1,1 @@
+{"result":"correct","feedback":"You correctly created a functional component named App using function declaration syntax. The component properly returns JSX (an empty div element), which satisfies the step's requirements.","hint":"Great start! In the next steps, you'll add content inside the div to build your app.","errors":[]}

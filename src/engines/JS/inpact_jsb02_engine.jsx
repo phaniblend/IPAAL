@@ -2,7 +2,7 @@ import createINPACTEngine from "../inpact_engine_shared";
 
 const NODES = [
   {
-    id: "intro", type: "reveal", phase: "Problem",
+    id: "intro", type: "reveal", phase: "Lesson",
     content: {
       tag: "JS — BLOCK B #2",
       title: "Truthy, Falsy & Short-Circuit Evaluation",
@@ -259,7 +259,7 @@ export { greet }`,
 ];
 
 const sideItems = [
-  { label: "Problem", id: "intro" },
+  { label: "Lesson", id: "intro" },
   { label: "Objectives", id: "objectives" },
   { label: "Step 1 — Falsy values", id: "step1" },
   { label: "Step 2 — && and || return", id: "step2" },

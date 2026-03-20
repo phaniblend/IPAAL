@@ -10,17 +10,17 @@ if (typeof document !== "undefined" && !document.getElementById("dm-sans-font"))
   document.head.appendChild(link);
 }
 
-// ─── ENGINE A07: CHANGE DETECTION & SIGNALS ──────────────────────────────────
+// ─── ENGINE ANG07: CHANGE DETECTION & SIGNALS ─────────────────────────────────
 // Covers: Default vs OnPush change detection, Zone.js, markForCheck vs
 // detectChanges, ChangeDetectorRef, Signals (signal/computed/effect),
 // toSignal/toObservable, zoneless Angular (v17+)
 
 const NODES = [
   {
-    id: "intro", type: "reveal", phase: "Problem",
+    id: "intro", type: "reveal", phase: "Lesson",
     content: {
-      tag: "ENGINE A07 — CHANGE DETECTION & SIGNALS",
-      title: "High-Performance Flight Board",
+      tag: "ANG07 — CHANGE DETECTION & SIGNALS",
+      title: "Change Detection & Performance",
       body: `Optimise a real-time flight board that updates hundreds of rows:
 
   • Currently re-renders the ENTIRE component tree on every WebSocket message
@@ -524,7 +524,7 @@ readonly debouncedFilter$ = this.filter$.pipe(
 ];
 
 const s = {
-  wrap: { fontFamily: "'DM Sans', sans-serif", background: "#0f1117", minHeight: "100vh", color: "#e2e8f0", display: "flex", flexDirection: "column" },
+  wrap: { fontFamily: "'DM Sans', sans-serif", background: "#0f1117", minHeight: "100vh", minWidth: "1000px", overflow: "hidden", color: "#e2e8f0", display: "flex", flexDirection: "column" },
   topbar: { display: "flex", alignItems: "center", gap: "12px", padding: "0 24px", height: "52px", background: "#1a1d2e", borderBottom: "1px solid #2d3748", flexShrink: 0 },
   logo: { fontWeight: 700, fontSize: "13px", letterSpacing: "0.15em", color: "#7c3aed", marginRight: "8px" },
   engineTag: { fontWeight: 700, fontSize: "10px", letterSpacing: "0.12em", color: "#4a5568", textTransform: "uppercase" },
@@ -568,7 +568,7 @@ const s = {
 };
 
 const sideItems = [
-  { id: "intro", label: "Problem" },
+  { id: "intro", label: "Lesson" },
   { id: "objectives", label: "Objectives" },
   { id: "step1", label: "OnPush" },
   { id: "step2", label: "markForCheck" },
@@ -679,7 +679,7 @@ export default function AngularA07ChangeDetection({ onNextProblem }) {
           <>
             <div style={{ fontSize: "11px", color: "#00d4ff", fontWeight: 600, letterSpacing: "0.05em", marginBottom: "8px" }}>CODE BUILT SO FAR — edit below</div>
             <div style={s.hint}>💡 {node.hint}</div>
-            <CodeEditor value={currentAnswer} onChange={setCurrentAnswer} height="240px" />
+            <CodeEditor value={currentAnswer} onChange={setCurrentAnswer} height="320px" />
             {feedback && <div style={s.feedback(result)}>{feedback}</div>}
             {showExpected && node.expected && (
               <div style={{ ...s.pre, borderLeft: "2px solid #10b981", marginBottom: "16px" }}>
@@ -746,7 +746,7 @@ export default function AngularA07ChangeDetection({ onNextProblem }) {
         </div>
         {allChecked && (
           <div>
-            <div style={s.feedback("correct")}>{"✅ Engine A07 Complete — Change Detection & Signals mastered.\nOne engine left: A08 — Module Federation"}</div>
+            <div style={s.feedback("correct")}>{"✅ Engine ANG07 Complete — Change Detection & Signals mastered.\nOne engine left: ANG08 — Module Federation"}</div>
             <div style={s.btnRow}><button style={s.btn("primary")} onClick={onNextProblem ?? next}>NEXT ENGINE →</button></div>
           </div>
         )}
@@ -758,7 +758,7 @@ export default function AngularA07ChangeDetection({ onNextProblem }) {
     return (
       <div style={s.completeBanner}>
         <div style={{ fontSize: "48px", marginBottom: "24px" }}>🎯</div>
-        <h1 style={{ ...s.h1, textAlign: "center" }}>Engine A07 Complete</h1>
+        <h1 style={{ ...s.h1, textAlign: "center" }}>Engine ANG07 Complete</h1>
         <p style={{ color: "#4a5568", fontSize: "13px" }}>Change Detection & Signals — mastered.</p>
         {onNextProblem && <div style={{ ...s.btnRow, justifyContent: "center", marginTop: "24px" }}><button style={s.btn("primary")} onClick={onNextProblem}>FINAL ENGINE →</button></div>}
       </div>
@@ -781,7 +781,7 @@ export default function AngularA07ChangeDetection({ onNextProblem }) {
     <div style={s.wrap}>
       <div style={s.topbar}>
         <div style={s.logo}>INPACT</div>
-        <div style={s.engineTag}>A07 — CHANGE DETECTION & SIGNALS</div>
+        <div style={s.engineTag}>ANG07 — CHANGE DETECTION & SIGNALS</div>
         <div style={s.progressTrack}><div style={s.progressFill(progress)} /></div>
         <div style={s.progressLabel}>{progress}%</div>
       </div>

@@ -1,7 +1,7 @@
 import createINPACTEngine from "../inpact_engine_shared";
 
 const NODES = [
-  { id: "intro", type: "reveal", phase: "Problem", content: { tag: "PROBLEM #20 (Vue)", title: "Event Handling", body: "Build a form where pressing Enter submits and Escape clears, without using a submit button. Use onKeyDown on the form or inputs and check e.key.", usecase: "Same concept as React — implemented with Vue 3 (Composition API, ref, reactive)." } },
+  { id: "intro", type: "reveal", phase: "Lesson", content: { tag: "LESSON #20 (Vue)", title: "Event Handling", body: "Build a form where pressing Enter submits and Escape clears, without using a submit button. Use onKeyDown on the form or inputs and check e.key.", usecase: "Same concept as React — implemented with Vue 3 (Composition API, ref, reactive)." } },
   { id: "objectives", type: "objectives", phase: "Objectives", items: [
       "Add onKeyDown to form or inputs",
       "If e.key === 'Enter', call submit handler (e.preventDefault first)",
@@ -12,5 +12,5 @@ const NODES = [
   { id: "step3", type: "question", phase: "Step 3 of 3", paal: "Wire everything together, handle edge cases, and export the component.", answer_keywords: ["script", "template"], seed_code: "<script setup>\nimport { ref } from 'vue'\n// Step 1\n</script>\n\n<template>\n  <div><!-- Step 1 --></div>\n</template>", feedback_correct: "✅ Problem #20 (Vue) complete.", feedback_partial: "Export and finish.", feedback_wrong: "Export component", expected: "Complete" },
 ];
 
-const sideItems = [{ label: "Problem", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
+const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
 export default createINPACTEngine({ NODES, sideItems, problemNum: 20, title: "Event Handling", shortName: "EVENT HANDLING" });

@@ -2,7 +2,7 @@ import createINPACTEngine from "../inpact_engine_shared";
 
 const TITLE = "Request Deduplication (Angular)";
 const NODES = [
-  { id: "intro", type: "reveal", phase: "Problem", content: { tag: "PROBLEM #78 (Angular)", title: TITLE, body: "Ensure multiple subscribers to the same HTTP request get one shared result: use shareReplay(1) on the Observable so the request runs once and later subscribers get the cached value.", usecase: "Angular HttpClient plus RxJS shareReplay(1) deduplicates in-flight or repeated requests." } },
+  { id: "intro", type: "reveal", phase: "Lesson", content: { tag: "LESSON #78 (Angular)", title: TITLE, body: "Ensure multiple subscribers to the same HTTP request get one shared result: use shareReplay(1) on the Observable so the request runs once and later subscribers get the cached value.", usecase: "Angular HttpClient plus RxJS shareReplay(1) deduplicates in-flight or repeated requests." } },
   { id: "objectives", type: "objectives", phase: "Objectives", items: ["getUser(id): Observable<User> { return this.http.get<User>(url).pipe(shareReplay(1)); }", "Multiple components calling getUser(1) share the same request/result", "Or cache in a Map and return cached observable if present", "Use shareReplay({ bufferSize: 1, refCount: true }) for cache with ref count"] },
   { id: "step1", type: "question", phase: "Step 1 of 3", paal: "Create a service with getData(): Observable<string> { return this.http.get<string>('/api/data').pipe(shareReplay(1)); }. Inject HttpClient. Two components that call getData() and subscribe should trigger only one HTTP request.", answer_keywords: ["shareReplay", "getData", "Observable"], seed_code: `import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
@@ -46,5 +46,5 @@ export class DataService {
 }`, feedback_correct: "✅ Request Deduplication (Angular) complete.", feedback_partial: "cache Map.", feedback_wrong: "Export", expected: "Map cache and shareReplay per key" },
 ];
 
-const sideItems = [{ label: "Problem", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
+const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
 export default createINPACTEngine({ NODES, sideItems, problemNum: 78, title: TITLE, shortName: "A — REQUEST DEDUP" });

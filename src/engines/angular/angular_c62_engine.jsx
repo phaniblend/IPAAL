@@ -2,7 +2,7 @@ import createINPACTEngine from "../inpact_engine_shared";
 
 const TITLE = "Infinite Scroll (Angular)";
 const NODES = [
-  { id: "intro", type: "reveal", phase: "Problem", content: { tag: "PROBLEM #62 (Angular)", title: TITLE, body: "Load more items when the user scrolls near the bottom: use HostListener or a directive that listens to scroll on a container, detect when scrollTop + clientHeight >= scrollHeight - threshold, then append to a signal list.", usecase: "Angular scroll listener and signal updates implement infinite scroll; CDK also has ScrollDispatcher." } },
+  { id: "intro", type: "reveal", phase: "Lesson", content: { tag: "LESSON #62 (Angular)", title: TITLE, body: "Load more items when the user scrolls near the bottom: use HostListener or a directive that listens to scroll on a container, detect when scrollTop + clientHeight >= scrollHeight - threshold, then append to a signal list.", usecase: "Angular scroll listener and signal updates implement infinite scroll; CDK also has ScrollDispatcher." } },
   { id: "objectives", type: "objectives", phase: "Objectives", items: ["items = signal([]); loadMore() appends next page to items", "On scroll: get scrollTop, scrollHeight, clientHeight; if near bottom call loadMore()", "Use @HostListener('scroll', ['$event']) on the scroll container or use a directive with ElementRef", "Debounce or throttle loadMore to avoid duplicate requests"] },
   { id: "step1", type: "question", phase: "Step 1 of 3", paal: "Create a component with items = signal(Array.from({ length: 20 }, (_, i) => ({ id: i }))) and page = signal(1). Add loadMore() that does items.update(i => [...i, ...Array.from({ length: 20 }, (_, j) => ({ id: i.length + j }))]); page.update(p => p + 1).", answer_keywords: ["loadMore", "items.update", "page"], seed_code: `import { Component, signal } from '@angular/core';
 
@@ -76,5 +76,5 @@ export class InfiniteScrollComponent {
 }`, feedback_correct: "✅ Infinite Scroll (Angular) complete.", feedback_partial: "loading.", feedback_wrong: "Export", expected: "loading signal and guard in loadMore" },
 ];
 
-const sideItems = [{ label: "Problem", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
+const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
 export default createINPACTEngine({ NODES, sideItems, problemNum: 62, title: TITLE, shortName: "A — INFINITE SCROLL" });

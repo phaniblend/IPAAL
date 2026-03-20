@@ -1,7 +1,7 @@
 import createINPACTEngine from "../inpact_engine_shared";
 
 const NODES = [
-  { id: "intro", type: "reveal", phase: "Problem", content: { tag: "PROBLEM #8 (Angular)", title: "Forms & Validation", body: "Build a simple form with validation. Use Angular Reactive Forms: FormBuilder, FormGroup, Validators. Show validation errors when a field is touched and invalid.", usecase: "Reactive forms and Validators are the standard way to handle forms and validation in Angular." } },
+  { id: "intro", type: "reveal", phase: "Lesson", content: { tag: "LESSON #8 (Angular)", title: "Forms & Validation", body: "Build a simple form with validation. Use Angular Reactive Forms: FormBuilder, FormGroup, Validators. Show validation errors when a field is touched and invalid.", usecase: "Reactive forms and Validators are the standard way to handle forms and validation in Angular." } },
   { id: "objectives", type: "objectives", phase: "Objectives", items: ["Use ReactiveFormsModule and FormBuilder", "Create a FormGroup with FormControl and Validators.required", "Bind form with [formGroup] and formControlName", "Display errors when control invalid and touched"] },
   { id: "step1", type: "question", phase: "Step 1 of 3", paal: "Import ReactiveFormsModule, FormBuilder, FormGroup, FormControl, Validators. In constructor inject FormBuilder and create a form with one control (e.g. name) with Validators.required.", answer_keywords: ["FormBuilder", "FormGroup", "Validators"], seed_code: `import { Component, inject } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
@@ -56,5 +56,5 @@ export class FormsValidationComponent {
 }`, feedback_correct: "✅ Forms & Validation (Angular) complete.", feedback_partial: "Error message.", feedback_wrong: "invalid && touched", expected: "*ngIf=\"form.get('name')?.invalid && form.get('name')?.touched\"" },
 ];
 
-const sideItems = [{ label: "Problem", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
+const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
 export default createINPACTEngine({ NODES, sideItems, problemNum: 8, title: "Forms & Validation (Angular)", shortName: "A — FORMS" });

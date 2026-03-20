@@ -1,0 +1,1 @@
+{"result":"correct","feedback":"You correctly created a functional component named Counter that returns JSX using a function declaration. The component returns a valid JSX element (<div></div>), which satisfies the step's requirements.","hint":"Next, you can add content inside the div to make your counter functional.","errors":[]}

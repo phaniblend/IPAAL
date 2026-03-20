@@ -1,0 +1,1 @@
+{"result":"correct","feedback":"You correctly added the key prop to each li element using the index parameter from the map function. The syntax key={index} is exactly what was required for this step."}

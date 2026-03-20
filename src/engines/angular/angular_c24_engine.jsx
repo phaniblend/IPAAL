@@ -2,7 +2,7 @@ import createINPACTEngine from "../inpact_engine_shared";
 
 const TITLE = "Styled Component Pattern (Angular)";
 const NODES = [
-  { id: "intro", type: "reveal", phase: "Problem", content: { tag: "PROBLEM #24 (Angular)", title: TITLE, body: "Encapsulate presentational components with co-located styles using Angular component styles, :host, and optional host bindings for dynamic styling.", usecase: "Angular uses component-scoped styles and host bindings instead of CSS-in-JS; same idea as styled components." } },
+  { id: "intro", type: "reveal", phase: "Lesson", content: { tag: "LESSON #24 (Angular)", title: TITLE, body: "Encapsulate presentational components with co-located styles using Angular component styles, :host, and optional host bindings for dynamic styling.", usecase: "Angular uses component-scoped styles and host bindings instead of CSS-in-JS; same idea as styled components." } },
   { id: "objectives", type: "objectives", phase: "Objectives", items: ["Create a presentational component with its own styles and template", "Use host: { '[class]': \"'btn btn-primary'\" } or host bindings for dynamic classes", "Or [ngClass] / [ngStyle] in template from @Input() props", "Keep styles in the component; reuse via selector in parent"] },
   { id: "step1", type: "question", phase: "Step 1 of 3", paal: "Create a StyledButtonComponent with template `<button class=\"btn\"><ng-content></ng-content></button>` and styles: ['.btn { padding: 8px 16px; }'].", answer_keywords: ["ng-content", "btn", "styles"], seed_code: `import { Component } from '@angular/core';
 
@@ -41,5 +41,5 @@ export class StyledButtonComponent {
 }`, feedback_correct: "✅ Styled Component Pattern (Angular) complete.", feedback_partial: "Export.", feedback_wrong: "Export component", expected: "Export StyledButtonComponent; parent uses variant=\"secondary\"" },
 ];
 
-const sideItems = [{ label: "Problem", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
+const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
 export default createINPACTEngine({ NODES, sideItems, problemNum: 24, title: TITLE, shortName: "A — STYLED BTN" });

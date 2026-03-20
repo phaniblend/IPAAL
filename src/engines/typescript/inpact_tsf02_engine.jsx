@@ -4,7 +4,7 @@ const NODES = [
   {
     id: "intro",
     type: "reveal",
-    phase: "Problem",
+    phase: "Lesson",
     content: {
       tag: "TS FUNDAMENTALS #2",
       title: "Typing Functions",
@@ -166,7 +166,7 @@ export { format }`,
 ];
 
 const sideItems = [
-  { label: "Problem", id: "intro" },
+  { label: "Lesson", id: "intro" },
   { label: "Objectives", id: "objectives" },
   { label: "Step 1 — Return types", id: "step1" },
   { label: "Step 2 — Optional/Default", id: "step2" },

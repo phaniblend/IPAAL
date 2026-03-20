@@ -2,7 +2,7 @@ import createINPACTEngine from "../inpact_engine_shared";
 
 const TITLE = "Controlled vs Uncontrolled (Angular)";
 const NODES = [
-  { id: "intro", type: "reveal", phase: "Problem", content: { tag: "PROBLEM #26 (Angular)", title: TITLE, body: "Controlled: bind input value with [value] and (input) or ngModel so the component owns the value. Uncontrolled: use a template reference #ref and read ref.value in the component.", usecase: "Angular supports both FormsModule/ngModel (controlled) and template refs (uncontrolled) for inputs." } },
+  { id: "intro", type: "reveal", phase: "Lesson", content: { tag: "LESSON #26 (Angular)", title: TITLE, body: "Controlled: bind input value with [value] and (input) or ngModel so the component owns the value. Uncontrolled: use a template reference #ref and read ref.value in the component.", usecase: "Angular supports both FormsModule/ngModel (controlled) and template refs (uncontrolled) for inputs." } },
   { id: "objectives", type: "objectives", phase: "Objectives", items: ["Controlled: signal or property + [value]=\"value()\" and (input)=\"value.set($any($event.target).value)\"", "Or use ngModel with FormsModule: [(ngModel)]=\"value\"", "Uncontrolled: <input #in> and in template or (click)=\"read(in.value)\"", "Choose controlled for validation and single source of truth"] },
   { id: "step1", type: "question", phase: "Step 1 of 3", paal: "Create a controlled input: text = signal(''). Template: <input [value]=\"text()\" (input)=\"text.set($any($event.target).value)\"> and display {{ text() }}.", answer_keywords: ["value", "input", "text.set"], seed_code: `import { Component, signal } from '@angular/core';
 
@@ -50,5 +50,5 @@ export class ControlledComponent {
 }`, feedback_correct: "✅ Controlled vs Uncontrolled (Angular) complete.", feedback_partial: "ngModel.", feedback_wrong: "ngModel", expected: "FormsModule and [(ngModel)]" },
 ];
 
-const sideItems = [{ label: "Problem", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
+const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
 export default createINPACTEngine({ NODES, sideItems, problemNum: 26, title: TITLE, shortName: "A — CONTROLLED" });

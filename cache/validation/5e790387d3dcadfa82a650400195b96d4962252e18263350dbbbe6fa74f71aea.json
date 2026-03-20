@@ -1,0 +1,1 @@
+{"result":"correct","feedback":"You correctly used the map() method on the fruits array to generate <li> elements with proper key props. The syntax is correct and each fruit is properly rendered as a list item.","hint":"Great work! You've successfully implemented array mapping in JSX."}

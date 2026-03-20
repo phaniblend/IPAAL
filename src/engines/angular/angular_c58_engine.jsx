@@ -2,7 +2,7 @@ import createINPACTEngine from "../inpact_engine_shared";
 
 const TITLE = "Portal (Angular)";
 const NODES = [
-  { id: "intro", type: "reveal", phase: "Problem", content: { tag: "PROBLEM #58 (Angular)", title: TITLE, body: "Render component content into a different DOM node (e.g. document.body for modals) using Angular CDK Portal: DomPortalOutlet or CdkPortal and PortalOutlet so content is attached outside the component tree.", usecase: "Angular CDK Portal (DomPortal, ComponentPortal) renders content into an outlet outside the host for modals and overlays." } },
+  { id: "intro", type: "reveal", phase: "Lesson", content: { tag: "LESSON #58 (Angular)", title: TITLE, body: "Render component content into a different DOM node (e.g. document.body for modals) using Angular CDK Portal: DomPortalOutlet or CdkPortal and PortalOutlet so content is attached outside the component tree.", usecase: "Angular CDK Portal (DomPortal, ComponentPortal) renders content into an outlet outside the host for modals and overlays." } },
   { id: "objectives", type: "objectives", phase: "Objectives", items: ["Import PortalModule or CdkPortal, DomPortalOutlet from @angular/cdk/portal", "Create outlet: outlet = new DomPortalOutlet(el, injector, appRef); outlet.attach(componentPortal or templatePortal)", "Or use overlay: Overlay.create() and overlayRef.attach(ComponentPortal)", "Detach and dispose on destroy"] },
   { id: "step1", type: "question", phase: "Step 1 of 3", paal: "Import CdkPortal and PortalModule (or standalone CdkPortal). In template wrap content in <ng-template cdkPortal>. Get reference #portal=\"cdkPortal\".", answer_keywords: ["cdkPortal", "ng-template", "CdkPortal"], seed_code: `import { Component } from '@angular/core';
 import { PortalModule } from '@angular/cdk/portal';
@@ -49,5 +49,5 @@ import { PortalModule } from '@angular/cdk/portal';
 export class PortalDemoComponent {}`, feedback_correct: "✅ Portal (Angular) complete.", feedback_partial: "cdkPortalOutlet.", feedback_wrong: "Export", expected: "cdkPortalOutlet and export" },
 ];
 
-const sideItems = [{ label: "Problem", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
+const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
 export default createINPACTEngine({ NODES, sideItems, problemNum: 58, title: TITLE, shortName: "A — PORTAL" });

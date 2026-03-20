@@ -2,7 +2,7 @@ import createINPACTEngine from "../inpact_engine_shared";
 
 const TITLE = "Lifting State Up (Angular)";
 const NODES = [
-  { id: "intro", type: "reveal", phase: "Problem", content: { tag: "PROBLEM #25 (Angular)", title: TITLE, body: "Keep shared state in a parent component and pass it down via @Input() and receive changes from children via @Output() EventEmitter so siblings stay in sync.", usecase: "Angular lifts state by owning signals in the parent and binding [value] and (valueChange) or custom events." } },
+  { id: "intro", type: "reveal", phase: "Lesson", content: { tag: "LESSON #25 (Angular)", title: TITLE, body: "Keep shared state in a parent component and pass it down via @Input() and receive changes from children via @Output() EventEmitter so siblings stay in sync.", usecase: "Angular lifts state by owning signals in the parent and binding [value] and (valueChange) or custom events." } },
   { id: "objectives", type: "objectives", phase: "Objectives", items: ["Parent holds signal or property; pass to child with [value]=\"state()\"", "Child @Input() value; @Output() valueChange = new EventEmitter()", "On child change call valueChange.emit(newValue); parent updates state", "Two-way binding option: [(value)]=\"state\" with model() or EventEmitter pattern"] },
   { id: "step1", type: "question", phase: "Step 1 of 3", paal: "Create a parent with count = signal(0). Create a child with @Input() count = 0 and @Output() countChange = new EventEmitter<number>(). Parent template: <app-child [count]=\"count()\" (countChange)=\"count.set($event)\"></app-child>.", answer_keywords: ["count", "countChange", "EventEmitter"], seed_code: `import { Component, signal } from '@angular/core';
 import { ChildCounterComponent } from './child-counter.component';
@@ -39,5 +39,5 @@ export class ChildCounterComponent {
 }`, feedback_correct: "✅ Lifting State Up (Angular) complete.", feedback_partial: "model().", feedback_wrong: "model two-way", expected: "model(0) for two-way binding" },
 ];
 
-const sideItems = [{ label: "Problem", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
+const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
 export default createINPACTEngine({ NODES, sideItems, problemNum: 25, title: TITLE, shortName: "A — LIFT STATE" });

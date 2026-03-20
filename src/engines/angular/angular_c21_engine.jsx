@@ -2,7 +2,7 @@ import createINPACTEngine from "../inpact_engine_shared";
 
 const TITLE = "Conditional Classes (Angular)";
 const NODES = [
-  { id: "intro", type: "reveal", phase: "Problem", content: { tag: "PROBLEM #21 (Angular)", title: TITLE, body: "Apply CSS classes conditionally using Angular's ngClass directive with an object, array, or string expression based on component state.", usecase: "ngClass is the Angular way to toggle classes from component signals or properties." } },
+  { id: "intro", type: "reveal", phase: "Lesson", content: { tag: "LESSON #21 (Angular)", title: TITLE, body: "Apply CSS classes conditionally using Angular's ngClass directive with an object, array, or string expression based on component state.", usecase: "ngClass is the Angular way to toggle classes from component signals or properties." } },
   { id: "objectives", type: "objectives", phase: "Objectives", items: ["Use [ngClass]=\"{ 'active': isActive(), 'disabled': disabled() }\" for object syntax", "Or [ngClass]=\"['base', isActive() ? 'on' : 'off']\" for array", "CommonModule provides NgClass; or use class binding [class.active]=\"isActive()\"", "Combine with signals for reactive class toggling"] },
   { id: "step1", type: "question", phase: "Step 1 of 3", paal: "Create a component with isActive = signal(false). Add a div with [ngClass]=\"{ 'active': isActive() }\". Import CommonModule.", answer_keywords: ["ngClass", "isActive", "signal"], seed_code: `import { Component, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -48,5 +48,5 @@ export class ConditionalClassesComponent {
 }`, feedback_correct: "✅ Conditional Classes (Angular) complete.", feedback_partial: "Array ngClass.", feedback_wrong: "ngClass array", expected: "[ngClass]=\"['card', isActive() ? 'highlight' : '']\"" },
 ];
 
-const sideItems = [{ label: "Problem", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
+const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
 export default createINPACTEngine({ NODES, sideItems, problemNum: 21, title: TITLE, shortName: "A — NG CLASS" });

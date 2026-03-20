@@ -2,7 +2,7 @@ import createINPACTEngine from "../inpact_engine_shared";
 
 const TITLE = "WebSocket Hook (Angular)";
 const NODES = [
-  { id: "intro", type: "reveal", phase: "Problem", content: { tag: "PROBLEM #80 (Angular)", title: TITLE, body: "Connect to a WebSocket in Angular: create a service that opens new WebSocket(url), exposes messages as Observable (fromEvent(ws, 'message').pipe(map(e => e.data))), and closes the socket in ngOnDestroy or takeUntilDestroyed.", usecase: "Angular uses RxJS fromEvent and WebSocket for reactive socket streams with cleanup." } },
+  { id: "intro", type: "reveal", phase: "Lesson", content: { tag: "LESSON #80 (Angular)", title: TITLE, body: "Connect to a WebSocket in Angular: create a service that opens new WebSocket(url), exposes messages as Observable (fromEvent(ws, 'message').pipe(map(e => e.data))), and closes the socket in ngOnDestroy or takeUntilDestroyed.", usecase: "Angular uses RxJS fromEvent and WebSocket for reactive socket streams with cleanup." } },
   { id: "objectives", type: "objectives", phase: "Objectives", items: ["ws = new WebSocket(url); messages$ = fromEvent(ws, 'message').pipe(map(e => (e as MessageEvent).data))", "send(data) { this.ws.readyState === WebSocket.OPEN && this.ws.send(JSON.stringify(data)); }", "On destroy: ws.close(); or use takeUntilDestroyed in pipe", "Optional: reconnect logic with Subject"] },
   { id: "step1", type: "question", phase: "Step 1 of 3", paal: "Create a service that opens ws = new WebSocket('wss://echo.websocket.org'). messages$ = fromEvent(this.ws, 'message').pipe(map((e: MessageEvent) => e.data)). Inject DestroyRef and in pipe use takeUntilDestroyed so subscription ends on destroy.", answer_keywords: ["WebSocket", "fromEvent", "message"], seed_code: `import { Injectable, inject, DestroyRef } from '@angular/core';
 import { fromEvent } from 'rxjs';
@@ -52,5 +52,5 @@ export class WebSocketService {
 }`, feedback_correct: "✅ WebSocket Hook (Angular) complete.", feedback_partial: "onDestroy close.", feedback_wrong: "Export", expected: "onDestroy and ws.close()" },
 ];
 
-const sideItems = [{ label: "Problem", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
+const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
 export default createINPACTEngine({ NODES, sideItems, problemNum: 80, title: TITLE, shortName: "A — WEBSOCKET" });

@@ -1,0 +1,1 @@
+{"result":"correct","feedback":"You correctly created the handleInputChange function that accepts an event parameter and uses event.target.name and event.target.value to update the form state. The function properly uses the spread operator and computed property names to update the specific field in the state object."}

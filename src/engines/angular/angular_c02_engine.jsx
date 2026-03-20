@@ -1,7 +1,7 @@
 import createINPACTEngine from "../inpact_engine_shared";
 
 const NODES = [
-  { id: "intro", type: "reveal", phase: "Problem", content: { tag: "PROBLEM #2 (Angular)", title: "Toggle Visibility", body: "A page with a button and a paragraph. Clicking the button hides the paragraph if visible, shows it if hidden. The button label switches between 'Hide' and 'Show'. Use a signal<boolean> for visibility.", usecase: "Same pattern as React — with Angular signals and *ngIf or @if in the template." } },
+  { id: "intro", type: "reveal", phase: "Lesson", content: { tag: "LESSON #2 (Angular)", title: "Toggle Visibility", body: "A page with a button and a paragraph. Clicking the button hides the paragraph if visible, shows it if hidden. The button label switches between 'Hide' and 'Show'. Use a signal<boolean> for visibility.", usecase: "Same pattern as React — with Angular signals and *ngIf or @if in the template." } },
   { id: "objectives", type: "objectives", phase: "Objectives", items: ["Use signal(true) or signal(false) for visible state", "Template: *ngIf or @if (Angular 17+) for conditional paragraph", "Button (click) handler that toggles the signal", "Dynamic button label with ternary in template"] },
   { id: "step1", type: "question", phase: "Step 1 of 3", paal: "Create a standalone component with visible = signal(true). Import Component, signal, and CommonModule (for *ngIf).", answer_keywords: ["signal", "visible", "true", "component"], seed_code: `import { Component, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -49,5 +49,5 @@ export class ToggleVisibilityComponent {
 }`, feedback_correct: "✅ Toggle Visibility (Angular) complete.", feedback_partial: "*ngIf and export.", feedback_wrong: "*ngIf=\"visible()\"", expected: "Template: button (click)=toggle(), label {{ visible() ? 'Hide' : 'Show' }}, p *ngIf=\"visible()\"." },
 ];
 
-const sideItems = [{ label: "Problem", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
+const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
 export default createINPACTEngine({ NODES, sideItems, problemNum: 2, title: "Toggle Visibility (Angular)", shortName: "A — TOGGLE" });

@@ -2,7 +2,7 @@ import createINPACTEngine from "../inpact_engine_shared";
 
 const TITLE = "useToggle (Angular)";
 const NODES = [
-  { id: "intro", type: "reveal", phase: "Problem", content: { tag: "PROBLEM #34 (Angular)", title: TITLE, body: "Implement a boolean toggle with a signal and a method or inline (click) that flips the value using signal.update(b => !b); optionally accept an optional forced value.", usecase: "Angular signals with update(b => !b) replicate React's useToggle pattern." } },
+  { id: "intro", type: "reveal", phase: "Lesson", content: { tag: "LESSON #34 (Angular)", title: TITLE, body: "Implement a boolean toggle with a signal and a method or inline (click) that flips the value using signal.update(b => !b); optionally accept an optional forced value.", usecase: "Angular signals with update(b => !b) replicate React's useToggle pattern." } },
   { id: "objectives", type: "objectives", phase: "Objectives", items: ["on = signal(false); toggle() { this.on.update(v => !v); }", "Optional: set(value?: boolean) { if (value !== undefined) this.on.set(value); else this.on.update(v => !v); }", "Template: (click)=\"toggle()\" or (click)=\"on.set(!on())\"", "Use in *ngIf or [class.open]=\"on()\""] },
   { id: "step1", type: "question", phase: "Step 1 of 3", paal: "Create a component with on = signal(false). Add a button (click)=\"on.set(!on())\" and display {{ on() ? 'On' : 'Off' }}.", answer_keywords: ["signal", "on.set", "click"], seed_code: `import { Component, signal } from '@angular/core';
 
@@ -50,5 +50,5 @@ export class ToggleComponent {
 }`, feedback_correct: "✅ useToggle (Angular) complete.", feedback_partial: "*ngIf.", feedback_wrong: "Export", expected: "*ngIf=\"on()\" and export" },
 ];
 
-const sideItems = [{ label: "Problem", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
+const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
 export default createINPACTEngine({ NODES, sideItems, problemNum: 34, title: TITLE, shortName: "A — TOGGLE" });

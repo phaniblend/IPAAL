@@ -2,7 +2,7 @@ import createINPACTEngine from "../inpact_engine_shared";
 
 const TITLE = "List Rendering (Angular)";
 const NODES = [
-  { id: "intro", type: "reveal", phase: "Problem", content: { tag: "PROBLEM #17 (Angular)", title: TITLE, body: "Render a list of items with *ngFor. Use trackBy when the list can be reordered or items have stable ids to improve performance.", usecase: " *ngFor and trackBy are the standard way to render lists in Angular." } },
+  { id: "intro", type: "reveal", phase: "Lesson", content: { tag: "LESSON #17 (Angular)", title: TITLE, body: "Render a list of items with *ngFor. Use trackBy when the list can be reordered or items have stable ids to improve performance.", usecase: " *ngFor and trackBy are the standard way to render lists in Angular." } },
   { id: "objectives", type: "objectives", phase: "Objectives", items: ["*ngFor=\"let item of items()\" on the repeated element", "Optional: trackBy function for stable identity", "Display {{ item }} or {{ item.name }} per row", "Use signal or array for the list source"] },
   { id: "step1", type: "question", phase: "Step 1 of 3", paal: "Create a component with items = signal([{ id: 1, name: 'A' }, { id: 2, name: 'B' }]). Template: *ngFor=\"let item of items()\" on a div, show {{ item.name }}.", answer_keywords: ["ngFor", "items()", "item"], seed_code: `import { Component, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -50,5 +50,5 @@ export class ListRenderingComponent {
 }`, feedback_correct: "✅ List Rendering (Angular) complete.", feedback_partial: "Export.", feedback_wrong: "Export component", expected: "Export ListRenderingComponent." },
 ];
 
-const sideItems = [{ label: "Problem", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
+const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
 export default createINPACTEngine({ NODES, sideItems, problemNum: 17, title: TITLE, shortName: "A — LIST RENDER" });

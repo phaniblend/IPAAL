@@ -4,7 +4,7 @@ const NODES = [
   {
     id: "intro",
     type: "reveal",
-    phase: "Problem",
+    phase: "Lesson",
     content: {
       tag: "TS FUNDAMENTALS #8",
       title: "Type Assertions, Non-null & satisfies",
@@ -216,7 +216,7 @@ export { mockUser, isUser }`,
 ];
 
 const sideItems = [
-  { label: "Problem", id: "intro" },
+  { label: "Lesson", id: "intro" },
   { label: "Objectives", id: "objectives" },
   { label: "Step 1 — as assertion", id: "step1" },
   { label: "Step 2 — Non-null !", id: "step2" },

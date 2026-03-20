@@ -1,0 +1,1 @@
+{"result":"correct","feedback":"You correctly initialized a state variable using useState with an empty object as the initial value. The syntax and behavior meet this step's requirements.","hint":"","errors":[]}

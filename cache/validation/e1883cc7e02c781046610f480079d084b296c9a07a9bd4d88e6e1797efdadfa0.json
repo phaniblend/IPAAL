@@ -1,0 +1,1 @@
+{"result":"correct","feedback":"You correctly wrote a function signature that accepts an array of numbers (nums) and a target number (target), and returns a value. This matches the step's requirement to start with the function signature.","hint":"In the next step, you'll need to implement the logic inside the function to find and return the two indices."}

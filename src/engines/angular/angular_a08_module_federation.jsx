@@ -10,16 +10,16 @@ if (typeof document !== "undefined" && !document.getElementById("dm-sans-font"))
   document.head.appendChild(link);
 }
 
-// ─── ENGINE A08: MODULE FEDERATION ───────────────────────────────────────────
+// ─── ENGINE ANG08: MODULE FEDERATION ──────────────────────────────────────────
 
 const NODES = [
   {
     id: "intro",
     type: "reveal",
-    phase: "Problem",
+    phase: "Lesson",
     content: {
-      tag: "ENGINE A08 — MODULE FEDERATION",
-      title: "United Portal Micro-Frontend Architecture",
+      tag: "ANG08 — MODULE FEDERATION",
+      title: "Micro-Frontend Architecture",
       body: `Design the Module Federation setup for a multi-team flight portal:
 
   • Shell app (Host): loads the navbar and orchestrates remote modules
@@ -127,7 +127,7 @@ const NODES = [
 ];
 
 const sideItems = [
-  { id: "intro", label: "Problem" },
+  { id: "intro", label: "Lesson" },
   { id: "objectives", label: "Objectives" },
   { id: "step1", label: "Explain MF" },
   { id: "step2", label: "Remote config" },
@@ -140,6 +140,8 @@ const s = {
     fontFamily: "'DM Sans', sans-serif",
     background: "#0f1117",
     minHeight: "100vh",
+    minWidth: "1000px",
+    overflow: "hidden",
     color: "#e2e8f0",
     display: "flex",
     flexDirection: "column",
@@ -481,7 +483,7 @@ export default function AngularA08ModuleFederation({ onNextProblem }) {
         <div style={s.phase}>{node.phase}</div>
         <div style={{ fontSize: "11px", color: "#00d4ff", fontWeight: 600, letterSpacing: "0.05em", marginBottom: "8px" }}>CODE BUILT SO FAR — edit below</div>
         <div style={s.hint}>💡 {node.hint}</div>
-        <CodeEditor value={currentAnswer} onChange={setCurrentAnswer} height="240px" />
+        <CodeEditor value={currentAnswer} onChange={setCurrentAnswer} height="320px" />
         {feedback && <div style={s.feedback(result)}>{feedback}</div>}
         {showExpected && node.expected && (
           <div style={{ ...s.pre, borderLeft: "2px solid #10b981", marginBottom: "16px" }}>
@@ -514,7 +516,7 @@ export default function AngularA08ModuleFederation({ onNextProblem }) {
     <div style={s.wrap}>
       <header style={s.topbar}>
         <div style={s.logo}>INPACT · ANGULAR</div>
-        <div style={s.engineTag}>ENGINE A08 — MODULE FEDERATION</div>
+        <div style={s.engineTag}>ANG08 — MODULE FEDERATION</div>
       </header>
       <div style={s.body}>
         <aside style={s.sidebar}>

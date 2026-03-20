@@ -1,0 +1,1 @@
+{"result":"correct","feedback":"You correctly added the key prop to each li element using the index parameter from the map function. Your syntax key={idx} properly assigns the index value to satisfy React's requirement for list item keys."}

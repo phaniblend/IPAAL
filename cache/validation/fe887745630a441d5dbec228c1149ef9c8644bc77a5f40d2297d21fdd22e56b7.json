@@ -1,0 +1,1 @@
+{"result":"correct","feedback":"You correctly defined a handleSubmit function that accepts a React.FormEvent<HTMLFormElement> parameter and calls event.preventDefault(). This meets all the step's requirements.","hint":"","errors":[]}

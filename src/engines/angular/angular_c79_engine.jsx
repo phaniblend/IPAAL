@@ -2,7 +2,7 @@ import createINPACTEngine from "../inpact_engine_shared";
 
 const TITLE = "Polling Hook (Angular)";
 const NODES = [
-  { id: "intro", type: "reveal", phase: "Problem", content: { tag: "PROBLEM #79 (Angular)", title: TITLE, body: "Poll an API at an interval in Angular: use interval(ms).pipe(switchMap(() => this.http.get(url))), takeUntilDestroyed(), and toSignal so the component gets fresh data every N seconds and cleans up on destroy.", usecase: "Angular interval + switchMap + HttpClient and takeUntilDestroyed implement polling." } },
+  { id: "intro", type: "reveal", phase: "Lesson", content: { tag: "LESSON #79 (Angular)", title: TITLE, body: "Poll an API at an interval in Angular: use interval(ms).pipe(switchMap(() => this.http.get(url))), takeUntilDestroyed(), and toSignal so the component gets fresh data every N seconds and cleans up on destroy.", usecase: "Angular interval + switchMap + HttpClient and takeUntilDestroyed implement polling." } },
   { id: "objectives", type: "objectives", phase: "Objectives", items: ["interval(5000).pipe(switchMap(() => this.http.get(url)), takeUntilDestroyed(this.destroyRef))", "toSignal(obs, { initialValue: null }) so component has signal with latest data", "Start polling in constructor or ngOnInit; stop when component destroyed", "Optional: pause/resume with a subject or signal"] },
   { id: "step1", type: "question", phase: "Step 1 of 3", paal: "Create a component that injects HttpClient and DestroyRef. Use interval(3000).pipe(switchMap(() => this.http.get('/api/status')), takeUntilDestroyed(this.destroyRef)). Subscribe and set a signal data = signal(null).", answer_keywords: ["interval", "switchMap", "takeUntilDestroyed"], seed_code: `import { Component, signal, inject, DestroyRef } from '@angular/core';
 import { interval } from 'rxjs';
@@ -69,5 +69,5 @@ export class PollingComponent {
 }`, feedback_correct: "✅ Polling Hook (Angular) complete.", feedback_partial: "polling signal.", feedback_wrong: "Export", expected: "polling flag and EMPTY when paused" },
 ];
 
-const sideItems = [{ label: "Problem", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
+const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
 export default createINPACTEngine({ NODES, sideItems, problemNum: 79, title: TITLE, shortName: "A — POLLING" });

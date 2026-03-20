@@ -1,0 +1,1 @@
+{"result":"correct","feedback":"You correctly added a button element with an onClick handler that calls toggleVisibility and uses a ternary operator to display 'Show Content' when isVisible is false and 'Hide Content' when isVisible is true. The implementation meets all the requirements for this step."}

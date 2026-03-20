@@ -2,7 +2,7 @@ import createINPACTEngine from "../inpact_engine_shared";
 
 const TITLE = "React.memo (Angular)";
 const NODES = [
-  { id: "intro", type: "reveal", phase: "Problem", content: { tag: "PROBLEM #51 (Angular)", title: TITLE, body: "Prevent a child component from re-rendering when parent updates but the child's inputs haven't changed: use ChangeDetectionStrategy.OnPush and signal or immutable @Input() so Angular skips the child when inputs are unchanged.", usecase: "Angular OnPush plus signal/input comparison gives React.memo-like behavior; components only update when inputs change." } },
+  { id: "intro", type: "reveal", phase: "Lesson", content: { tag: "LESSON #51 (Angular)", title: TITLE, body: "Prevent a child component from re-rendering when parent updates but the child's inputs haven't changed: use ChangeDetectionStrategy.OnPush and signal or immutable @Input() so Angular skips the child when inputs are unchanged.", usecase: "Angular OnPush plus signal/input comparison gives React.memo-like behavior; components only update when inputs change." } },
   { id: "objectives", type: "objectives", phase: "Objectives", items: ["Set changeDetection: ChangeDetectionStrategy.OnPush on the child", "Pass primitive or signal inputs; for objects ensure parent doesn't create new reference every render", "Use signals for inputs: child reads inputSignal() so change detection is signal-based", "Or use @Input() and ensure parent passes same reference when value unchanged"] },
   { id: "step1", type: "question", phase: "Step 1 of 3", paal: "Create a child component with ChangeDetectionStrategy.OnPush and @Input() value = 0. Template: {{ value }}. Parent has count = signal(0) and passes [value]=\"count()\".", answer_keywords: ["OnPush", "Input", "value"], seed_code: `import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 
@@ -45,5 +45,5 @@ export class MemoChildComponent {
 }`, feedback_correct: "✅ React.memo (Angular) complete.", feedback_partial: "input().", feedback_wrong: "Export", expected: "input(0) and value() in template" },
 ];
 
-const sideItems = [{ label: "Problem", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
+const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
 export default createINPACTEngine({ NODES, sideItems, problemNum: 51, title: TITLE, shortName: "A — MEMO" });

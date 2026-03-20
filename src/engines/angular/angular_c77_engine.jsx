@@ -2,7 +2,7 @@ import createINPACTEngine from "../inpact_engine_shared";
 
 const TITLE = "Optimistic UI (Angular)";
 const NODES = [
-  { id: "intro", type: "reveal", phase: "Problem", content: { tag: "PROBLEM #77 (Angular)", title: TITLE, body: "Update the UI immediately before the server responds: set a signal with the new state, call HttpClient, and on error revert the signal to the previous value; optionally show a toast on rollback.", usecase: "Angular signals and HttpClient allow optimistic updates with rollback on error." } },
+  { id: "intro", type: "reveal", phase: "Lesson", content: { tag: "LESSON #77 (Angular)", title: TITLE, body: "Update the UI immediately before the server responds: set a signal with the new state, call HttpClient, and on error revert the signal to the previous value; optionally show a toast on rollback.", usecase: "Angular signals and HttpClient allow optimistic updates with rollback on error." } },
   { id: "objectives", type: "objectives", phase: "Objectives", items: ["items = signal([...]); onAdd(item) { const prev = items(); items.set([...prev, item]); this.http.post(...).subscribe({ error: () => items.set(prev) }); }", "Or use a 'pending' item with id: 'temp' and replace with server id on success", "Show error state and revert; optionally retry"] },
   { id: "step1", type: "question", phase: "Step 1 of 3", paal: "Create a component with items = signal([{ id: 1, name: 'A' }]). Add addItem(name: string) { const prev = this.items(); this.items.set([...prev, { id: Date.now(), name }]); }. Then call this.http.post('/api/items', { name }).subscribe({ error: () => this.items.set(prev) }); (inject HttpClient).", answer_keywords: ["items.set", "prev", "error"], seed_code: `import { Component, signal, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
@@ -86,5 +86,5 @@ export class OptimisticUIComponent {
 }`, feedback_correct: "✅ Optimistic UI (Angular) complete.", feedback_partial: "next clear.", feedback_wrong: "Export", expected: "next/error handling and export" },
 ];
 
-const sideItems = [{ label: "Problem", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
+const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
 export default createINPACTEngine({ NODES, sideItems, problemNum: 77, title: TITLE, shortName: "A — OPTIMISTIC UI" });

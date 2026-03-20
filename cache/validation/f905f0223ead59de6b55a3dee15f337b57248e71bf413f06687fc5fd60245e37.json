@@ -1,0 +1,1 @@
+{"result":"correct","feedback":"You correctly created an increment function that uses setCount to increase the count by 1. The arrow function syntax and the functional update pattern (p => p + 1) are both excellent choices for this implementation."}

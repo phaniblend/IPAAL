@@ -4,7 +4,7 @@ const NODES = [
   {
     id: "intro",
     type: "reveal",
-    phase: "Problem",
+    phase: "Lesson",
     content: {
       tag: "TS FUNDAMENTALS #7",
       title: "Enums & Tuples — Structured Constants",
@@ -261,7 +261,7 @@ type Role = 'admin' | 'editor' | 'viewer'
 ];
 
 const sideItems = [
-  { label: "Problem", id: "intro" },
+  { label: "Lesson", id: "intro" },
   { label: "Objectives", id: "objectives" },
   { label: "Step 1 — Numeric/String enum", id: "step1" },
   { label: "Step 2 — const enum", id: "step2" },

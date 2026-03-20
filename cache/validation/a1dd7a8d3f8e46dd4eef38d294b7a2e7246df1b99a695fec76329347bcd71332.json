@@ -1,0 +1,1 @@
+{"result":"correct","feedback":"You correctly defined a toggleVisibility function inside the ToggleVisibility component that toggles the isVisible state value using setIsVisible. The function uses the functional update pattern (prev => !prev) which properly toggles the boolean state.","hint":"Ready for the next step where you'll use this function in your JSX.","errors":[]}

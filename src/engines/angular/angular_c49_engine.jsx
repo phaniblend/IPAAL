@@ -2,7 +2,7 @@ import createINPACTEngine from "../inpact_engine_shared";
 
 const TITLE = "useMemo for Expensive Computation (Angular)";
 const NODES = [
-  { id: "intro", type: "reveal", phase: "Problem", content: { tag: "PROBLEM #49 (Angular)", title: TITLE, body: "Cache expensive derived values in Angular using computed(): the computation runs only when its signal dependencies change and the result is memoized.", usecase: "Angular computed() is the equivalent of React useMemo for signal-based derived state." } },
+  { id: "intro", type: "reveal", phase: "Lesson", content: { tag: "LESSON #49 (Angular)", title: TITLE, body: "Cache expensive derived values in Angular using computed(): the computation runs only when its signal dependencies change and the result is memoized.", usecase: "Angular computed() is the equivalent of React useMemo for signal-based derived state." } },
   { id: "objectives", type: "objectives", phase: "Objectives", items: ["expensive = computed(() => { ... heavy work using this.someSignal(); return result; })", "Use expensive() in template; recomputes only when someSignal changes", "Don't put side effects in computed; keep it pure", "For async or external data use toSignal or resource()"] },
   { id: "step1", type: "question", phase: "Step 1 of 3", paal: "Create a component with list = signal([1,2,3,4,5]). Add sorted = computed(() => [...this.list()].sort((a,b) => b - a)). Display sorted() in template.", answer_keywords: ["computed", "sorted", "list"], seed_code: `import { Component, signal, computed } from '@angular/core';
 
@@ -44,5 +44,5 @@ export class MemoComponent {
 }`, feedback_correct: "✅ useMemo for Expensive Computation (Angular) complete.", feedback_partial: "list.update.", feedback_wrong: "Export", expected: "list.update and export" },
 ];
 
-const sideItems = [{ label: "Problem", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
+const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
 export default createINPACTEngine({ NODES, sideItems, problemNum: 49, title: TITLE, shortName: "A — COMPUTED" });

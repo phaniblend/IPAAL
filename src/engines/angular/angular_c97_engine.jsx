@@ -2,7 +2,7 @@ import createINPACTEngine from "../inpact_engine_shared";
 
 const TITLE = "Design Auth Flow (Angular)";
 const NODES = [
-  { id: "intro", type: "reveal", phase: "Problem", content: { tag: "PROBLEM #97 (Angular)", title: TITLE, body: "Design an auth flow in Angular: AuthService with login/logout and user signal; route guard that redirects to /login when unauthenticated; login component that calls service and navigates to return URL; optional HTTP interceptor for token.", usecase: "Angular auth uses AuthService, CanActivateFn guard, Router.navigateByUrl, and optional interceptors." } },
+  { id: "intro", type: "reveal", phase: "Lesson", content: { tag: "LESSON #97 (Angular)", title: TITLE, body: "Design an auth flow in Angular: AuthService with login/logout and user signal; route guard that redirects to /login when unauthenticated; login component that calls service and navigates to return URL; optional HTTP interceptor for token.", usecase: "Angular auth uses AuthService, CanActivateFn guard, Router.navigateByUrl, and optional interceptors." } },
   { id: "objectives", type: "objectives", phase: "Objectives", items: ["AuthService: user = signal<User|null>(null); login(creds); logout(); token in memory or storage", "authGuard: CanActivateFn = () => inject(AuthService).user() ? true : inject(Router).createUrlTree(['/login'])", "LoginComponent: form submit -> auth.login() -> router.navigateByUrl(returnUrl)", "Optional: HTTP_INTERCEPTORS that add Authorization header"] },
   { id: "step1", type: "question", phase: "Step 1 of 3", paal: "Define AuthService with user = signal<User|null>(null), login(username: string, password: string) that sets user.set({ name: username }), and logout() that sets user.set(null). providedIn: 'root'.", answer_keywords: ["AuthService", "user", "login", "logout"], seed_code: `import { Injectable, signal } from '@angular/core';
 
@@ -56,5 +56,5 @@ export class LoginComponent {
 }`, feedback_correct: "✅ Design Auth Flow (Angular) complete.", feedback_partial: "navigateByUrl.", feedback_wrong: "Export", expected: "Login submit and navigateByUrl(returnUrl)" },
 ];
 
-const sideItems = [{ label: "Problem", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
+const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
 export default createINPACTEngine({ NODES, sideItems, problemNum: 97, title: TITLE, shortName: "A — AUTH FLOW" });

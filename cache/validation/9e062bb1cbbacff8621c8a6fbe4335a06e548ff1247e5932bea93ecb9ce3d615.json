@@ -1,0 +1,1 @@
+{"result":"correct","feedback":"You correctly exported the ToggleVisibility component as the default export using 'export default ToggleVisibility'. This satisfies the step's requirement to make the component available for import in other files."}

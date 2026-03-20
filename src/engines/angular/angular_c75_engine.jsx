@@ -2,7 +2,7 @@ import createINPACTEngine from "../inpact_engine_shared";
 
 const TITLE = "useLayoutEffect vs useEffect (Angular)";
 const NODES = [
-  { id: "intro", type: "reveal", phase: "Problem", content: { tag: "PROBLEM #75 (Angular)", title: TITLE, body: "In Angular, effect() runs after view updates (like useEffect). For DOM measurements or synchronous layout work use AfterViewChecked, or run the logic in a microtask (queueMicrotask) or in the same tick; NgZone.runOutsideAngular + requestAnimationFrame can approximate layout timing.", usecase: "Angular effect timing and AfterViewChecked/AfterViewInit map to React useEffect vs useLayoutEffect." } },
+  { id: "intro", type: "reveal", phase: "Lesson", content: { tag: "LESSON #75 (Angular)", title: TITLE, body: "In Angular, effect() runs after view updates (like useEffect). For DOM measurements or synchronous layout work use AfterViewChecked, or run the logic in a microtask (queueMicrotask) or in the same tick; NgZone.runOutsideAngular + requestAnimationFrame can approximate layout timing.", usecase: "Angular effect timing and AfterViewChecked/AfterViewInit map to React useEffect vs useLayoutEffect." } },
   { id: "objectives", type: "objectives", phase: "Objectives", items: ["effect() runs after change detection; for 'layout' run in afterNextRender or AfterViewChecked", "afterNextRender(() => { measure DOM }) runs after view is painted", "Use runOutsideAngular for non-Angular tasks; requestAnimationFrame for before paint", "Documentation: effect = async after render; afterNextRender = sync after render"] },
   { id: "step1", type: "question", phase: "Step 1 of 3", paal: "Create a component with an effect that reads offsetHeight of a div: use ViewChild to get the element and in effect() or ngAfterViewInit read this.divRef.nativeElement.offsetHeight and store in a signal.", answer_keywords: ["effect", "offsetHeight", "ViewChild"], seed_code: `import { Component, signal, effect, ViewChild, ElementRef } from '@angular/core';
 
@@ -55,5 +55,5 @@ export class LayoutEffectComponent {
 }`, feedback_correct: "✅ useLayoutEffect vs useEffect (Angular) complete.", feedback_partial: "comparison.", feedback_wrong: "Export", expected: "afterNextRender for layout and export" },
 ];
 
-const sideItems = [{ label: "Problem", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
+const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
 export default createINPACTEngine({ NODES, sideItems, problemNum: 75, title: TITLE, shortName: "A — LAYOUT EFFECT" });

@@ -1,7 +1,7 @@
 import createINPACTEngine from "../inpact_engine_shared";
 
 const NODES = [
-  { id: "intro", type: "reveal", phase: "Problem", content: { tag: "PROBLEM #28 (Vue)", title: "Star Rating Component", body: "Build a clickable 5-star rating component. State holds the current rating (1–5). Clicking a star sets the rating to that star's index. Show filled vs empty stars.", usecase: "Same concept as React — implemented with Vue 3 (Composition API, ref, reactive)." } },
+  { id: "intro", type: "reveal", phase: "Lesson", content: { tag: "LESSON #28 (Vue)", title: "Star Rating Component", body: "Build a clickable 5-star rating component. State holds the current rating (1–5). Clicking a star sets the rating to that star's index. Show filled vs empty stars.", usecase: "Same concept as React — implemented with Vue 3 (Composition API, ref, reactive)." } },
   { id: "objectives", type: "objectives", phase: "Objectives", items: [
       "Use useState for rating (number 0–5 or 1–5)",
       "Render 5 clickable elements (stars or buttons)",
@@ -13,5 +13,5 @@ const NODES = [
   { id: "step3", type: "question", phase: "Step 3 of 3", paal: "Wire everything together, handle edge cases, and export the component.", answer_keywords: ["script", "template"], seed_code: "<script setup>\nimport { ref } from 'vue'\n// Step 1\n</script>\n\n<template>\n  <div><!-- Step 1 --></div>\n</template>", feedback_correct: "✅ Problem #28 (Vue) complete.", feedback_partial: "Export and finish.", feedback_wrong: "Export component", expected: "Complete" },
 ];
 
-const sideItems = [{ label: "Problem", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
+const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
 export default createINPACTEngine({ NODES, sideItems, problemNum: 28, title: "Star Rating Component", shortName: "STAR RATING COMPONENT" });

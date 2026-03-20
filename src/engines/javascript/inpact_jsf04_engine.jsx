@@ -2,7 +2,7 @@ import createINPACTEngine from "../inpact_engine_shared";
 
 const NODES = [
   {
-    id: "intro", type: "reveal", phase: "Problem",
+    id: "intro", type: "reveal", phase: "Lesson",
     content: {
       tag: "JS FUNDAMENTALS #4",
       title: "Arrays & Iterators — The Data Pipeline Toolkit",
@@ -235,7 +235,7 @@ export { words, range }`,
 ];
 
 const sideItems = [
-  { label: "Problem", id: "intro" },
+  { label: "Lesson", id: "intro" },
   { label: "Objectives", id: "objectives" },
   { label: "Step 1 — map/filter/reduce", id: "step1" },
   { label: "Step 2 — find/some/every", id: "step2" },

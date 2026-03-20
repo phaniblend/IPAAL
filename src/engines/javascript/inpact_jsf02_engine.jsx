@@ -2,7 +2,7 @@ import createINPACTEngine from "../inpact_engine_shared";
 
 const NODES = [
   {
-    id: "intro", type: "reveal", phase: "Problem",
+    id: "intro", type: "reveal", phase: "Lesson",
     content: {
       tag: "JS FUNDAMENTALS #2",
       title: "Functions — Arrow, Closures & Higher-Order",
@@ -236,7 +236,7 @@ export { add, curry, multiply, handleChange }`,
 ];
 
 const sideItems = [
-  { label: "Problem", id: "intro" },
+  { label: "Lesson", id: "intro" },
   { label: "Objectives", id: "objectives" },
   { label: "Step 1 — Arrow functions", id: "step1" },
   { label: "Step 2 — Closures", id: "step2" },

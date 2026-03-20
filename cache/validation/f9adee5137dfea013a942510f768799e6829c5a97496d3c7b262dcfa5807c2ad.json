@@ -1,0 +1,1 @@
+{"result":"correct","feedback":"You correctly added a paragraph element with 'Content is visible!' as the true branch of the ternary operator. The paragraph displays properly when isVisible is true, which satisfies the step requirement."}

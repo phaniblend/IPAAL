@@ -2,7 +2,7 @@ import createINPACTEngine from "../inpact_engine_shared";
 
 const TITLE = "Simple Todo List (Angular)";
 const NODES = [
-  { id: "intro", type: "reveal", phase: "Problem", content: { tag: "PROBLEM #27 (Angular)", title: TITLE, body: "Build a small todo list with a signal array of items, *ngFor to render them, and methods to add and toggle completion using Angular signals and template syntax.", usecase: "Angular signals and *ngFor are the core for list state and rendering." } },
+  { id: "intro", type: "reveal", phase: "Lesson", content: { tag: "LESSON #27 (Angular)", title: TITLE, body: "Build a small todo list with a signal array of items, *ngFor to render them, and methods to add and toggle completion using Angular signals and template syntax.", usecase: "Angular signals and *ngFor are the core for list state and rendering." } },
   { id: "objectives", type: "objectives", phase: "Objectives", items: ["todos = signal([{ id: 1, text: '...', done: false }])", "*ngFor=\"let todo of todos()\" and trackBy or track todo.id", "Add: input + button; push new item and todos.set([...todos(), newItem]) or update with mutate", "Toggle: (click) calling a method that updates the signal"] },
   { id: "step1", type: "question", phase: "Step 1 of 3", paal: "Create a component with todos = signal([{ id: 1, text: 'First', done: false }]). Template: <ul><li *ngFor=\"let todo of todos()\">{{ todo.text }}</li></ul>. Import CommonModule.", answer_keywords: ["ngFor", "todos", "signal"], seed_code: `import { Component, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -73,5 +73,5 @@ export class TodoComponent {
 }`, feedback_correct: "✅ Simple Todo List (Angular) complete.", feedback_partial: "toggle and done.", feedback_wrong: "toggle", expected: "toggle(id) and todos.update with map" },
 ];
 
-const sideItems = [{ label: "Problem", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
+const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
 export default createINPACTEngine({ NODES, sideItems, problemNum: 27, title: TITLE, shortName: "A — TODO LIST" });

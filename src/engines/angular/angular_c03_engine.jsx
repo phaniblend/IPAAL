@@ -1,7 +1,7 @@
 import createINPACTEngine from "../inpact_engine_shared";
 
 const NODES = [
-  { id: "intro", type: "reveal", phase: "Problem", content: { tag: "PROBLEM #3 (Angular)", title: "Controlled Input", body: "A text input and a paragraph below. As the user types, the paragraph updates in real time. Use a signal for the text value and two-way binding or [value] + (input) to keep it controlled.", usecase: "Every search box and live preview in Angular uses signals or NgModel with reactive updates." } },
+  { id: "intro", type: "reveal", phase: "Lesson", content: { tag: "LESSON #3 (Angular)", title: "Controlled Input", body: "A text input and a paragraph below. As the user types, the paragraph updates in real time. Use a signal for the text value and two-way binding or [value] + (input) to keep it controlled.", usecase: "Every search box and live preview in Angular uses signals or NgModel with reactive updates." } },
   { id: "objectives", type: "objectives", phase: "Objectives", items: ["Use signal('') for text state", "Template: [value]=\"text()\" and (input) handler", "Handler: text.set($event.target.value)", "Paragraph showing {{ text() }}"] },
   { id: "step1", type: "question", phase: "Step 1 of 3", paal: "Create a standalone component with text = signal(''). Import Component, signal, CommonModule.", answer_keywords: ["signal", "text", "empty", "component"], seed_code: `import { Component, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -49,5 +49,5 @@ export class ControlledInputComponent {
 }`, feedback_correct: "✅ Controlled Input (Angular) complete.", feedback_partial: "Paragraph and export.", feedback_wrong: "{{ text() }}", expected: "<p>You typed: {{ text() }}</p>" },
 ];
 
-const sideItems = [{ label: "Problem", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
+const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
 export default createINPACTEngine({ NODES, sideItems, problemNum: 3, title: "Controlled Input (Angular)", shortName: "A — CONTROLLED INPUT" });

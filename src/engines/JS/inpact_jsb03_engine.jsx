@@ -2,7 +2,7 @@ import createINPACTEngine from "../inpact_engine_shared";
 
 const NODES = [
   {
-    id: "intro", type: "reveal", phase: "Problem",
+    id: "intro", type: "reveal", phase: "Lesson",
     content: {
       tag: "JS — BLOCK B #3",
       title: "Scope, Hoisting & the Temporal Dead Zone",
@@ -271,7 +271,7 @@ export {}`,
 ];
 
 const sideItems = [
-  { label: "Problem", id: "intro" },
+  { label: "Lesson", id: "intro" },
   { label: "Objectives", id: "objectives" },
   { label: "Step 1 — var hoisting", id: "step1" },
   { label: "Step 2 — fn hoisting", id: "step2" },

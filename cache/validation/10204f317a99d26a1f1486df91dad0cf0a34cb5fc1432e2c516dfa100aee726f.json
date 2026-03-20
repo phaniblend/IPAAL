@@ -1,0 +1,1 @@
+{"result":"correct","feedback":"You correctly added the key prop to each li element using the index parameter from the map function. The syntax `key={index}` provides React with unique identifiers for each list item, which is exactly what this step required."}

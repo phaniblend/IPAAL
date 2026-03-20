@@ -2,7 +2,7 @@ import createINPACTEngine from "../inpact_engine_shared";
 
 const TITLE = "Cart Context (Angular)";
 const NODES = [
-  { id: "intro", type: "reveal", phase: "Problem", content: { tag: "PROBLEM #43 (Angular)", title: TITLE, body: "Manage shopping cart state with an injectable CartService: items signal, addItem, removeItem, total; inject the service in header and product components.", usecase: "Angular uses a single CartService (providedIn: 'root') instead of React Context for cart state." } },
+  { id: "intro", type: "reveal", phase: "Lesson", content: { tag: "LESSON #43 (Angular)", title: TITLE, body: "Manage shopping cart state with an injectable CartService: items signal, addItem, removeItem, total; inject the service in header and product components.", usecase: "Angular uses a single CartService (providedIn: 'root') instead of React Context for cart state." } },
   { id: "objectives", type: "objectives", phase: "Objectives", items: ["CartService: items = signal<CartItem[]>([]); addItem(item); removeItem(id); total = computed(() => ...)", "Inject in CartBadgeComponent and ProductComponent", "Template: *ngFor=\"item of cart.items()\" and (click)=\"cart.addItem(product)\"", "Optional: use model() for two-way in child"] },
   { id: "step1", type: "question", phase: "Step 1 of 3", paal: "Create CartService with items = signal<{ id: number; name: string; price: number }[]>([]). addItem(item) { this.items.update(i => [...i, item]); }. removeItem(id) { this.items.update(i => i.filter(x => x.id !== id)); }. providedIn: 'root'.", answer_keywords: ["CartService", "items", "addItem", "removeItem"], seed_code: `import { Injectable, signal } from '@angular/core';
 
@@ -51,5 +51,5 @@ export class CartComponent {
 }`, feedback_correct: "✅ Cart Context (Angular) complete.", feedback_partial: "cart.items().", feedback_wrong: "Export", expected: "*ngFor cart.items() and cart.total()" },
 ];
 
-const sideItems = [{ label: "Problem", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
+const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
 export default createINPACTEngine({ NODES, sideItems, problemNum: 43, title: TITLE, shortName: "A — CART CONTEXT" });

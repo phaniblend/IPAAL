@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import CodeEditor from "../CodeEditor";
 import AngularTabbedEditor from "./AngularTabbedEditor";
 import LessonEditorOutputTabs from "../LessonEditorOutputTabs";
+import { mergeAngularTsWithHtml, mergeAngularCssIntoTS } from "./angularTabMerge.js";
 
 if (typeof document !== "undefined" && !document.getElementById("dm-sans-font")) {
   const link = document.createElement("link");
@@ -11,7 +12,7 @@ if (typeof document !== "undefined" && !document.getElementById("dm-sans-font"))
   document.head.appendChild(link);
 }
 
-// ─── ENGINE A02: DATA BINDING ─────────────────────────────────────────────────
+// ─── ENGINE ANG02: DATA BINDING ───────────────────────────────────────────────
 // Covers: interpolation vs property binding, event binding, two-way [(ngModel)],
 // *ngIf vs [hidden], *ngFor + trackBy, async pipe, pure vs impure pipes
 
@@ -19,10 +20,10 @@ const NODES = [
   {
     id: "intro",
     type: "reveal",
-    phase: "Problem",
+    phase: "Lesson",
     content: {
-      tag: "ENGINE A02 — DATA BINDING",
-      title: "Flight Search Form",
+      tag: "ANG02 — DATA BINDING",
+      title: "Search Form",
       body: `Build the template for a FlightSearchComponent that:
 
   • Displays the title using interpolation
@@ -523,7 +524,7 @@ export class FlightSearchComponent {
 ];
 
 const s = {
-  wrap: { fontFamily: "'DM Sans', sans-serif", background: "#0f1117", minHeight: "100vh", color: "#e2e8f0", display: "flex", flexDirection: "column" },
+  wrap: { fontFamily: "'DM Sans', sans-serif", background: "#0f1117", minHeight: "100vh", minWidth: "1000px", overflow: "hidden", color: "#e2e8f0", display: "flex", flexDirection: "column" },
   topbar: { display: "flex", alignItems: "center", gap: "12px", padding: "0 24px", height: "52px", background: "#1a1d2e", borderBottom: "1px solid #2d3748", flexShrink: 0 },
   logo: { fontWeight: 700, fontSize: "13px", letterSpacing: "0.15em", color: "#7c3aed", marginRight: "8px" },
   engineTag: { fontWeight: 700, fontSize: "10px", letterSpacing: "0.12em", color: "#4a5568", textTransform: "uppercase" },
@@ -536,7 +537,8 @@ const s = {
   sideItem: (active, done) => ({ display: "flex", alignItems: "center", gap: "8px", padding: "7px 8px", borderRadius: "6px", marginBottom: "2px", cursor: "pointer", background: active ? "rgba(124,58,237,0.15)" : "transparent", border: active ? "1px solid rgba(124,58,237,0.3)" : "1px solid transparent" }),
   sideItemDot: (active, done) => ({ width: "6px", height: "6px", borderRadius: "50%", flexShrink: 0, background: done ? "#10b981" : active ? "#7c3aed" : "#2d3748" }),
   sideItemText: (active, done) => ({ fontSize: "11px", color: done ? "#10b981" : active ? "#c4b5fd" : "#4a5568", fontWeight: active ? 600 : 400, flex: 1, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }),
-  main: { flex: 1, overflowY: "auto", padding: "32px 40px", maxWidth: "720px" },
+  main: { flex: 1, minHeight: 0, display: "flex", flexDirection: "column", overflow: "hidden", padding: "24px 40px 24px 40px", maxWidth: "720px" },
+  mainScroll: { flex: 1, minHeight: 0, overflow: "auto", display: "flex", flexDirection: "column" },
   phase: { fontSize: "10px", fontWeight: 700, letterSpacing: "0.2em", textTransform: "uppercase", color: "#7c3aed", marginBottom: "10px" },
   h1: { fontSize: "26px", fontWeight: 700, color: "#f1f5f9", marginBottom: "20px", lineHeight: 1.3 },
   tag: (color) => ({ display: "inline-block", padding: "2px 10px", borderRadius: "4px", fontSize: "10px", fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", background: color === "purple" ? "rgba(124,58,237,0.2)" : "rgba(6,182,212,0.2)", color: color === "purple" ? "#c4b5fd" : "#67e8f9", border: `1px solid ${color === "purple" ? "rgba(124,58,237,0.4)" : "rgba(6,182,212,0.4)"}`, marginBottom: "14px" }),
@@ -567,7 +569,7 @@ const s = {
 };
 
 const sideItems = [
-  { id: "intro", label: "Problem" },
+  { id: "intro", label: "Lesson" },
   { id: "objectives", label: "Objectives" },
   { id: "step1", label: "Interpolation vs []" },
   { id: "step2", label: "Event Binding ()" },
@@ -588,6 +590,7 @@ export default function AngularA02DataBinding({ onNextProblem }) {
   const [result, setResult] = useState(null);
   const [showAnalogy, setShowAnalogy] = useState(false);
   const [showExpected, setShowExpected] = useState(false);
+  const [showFeedbackModal, setShowFeedbackModal] = useState(false);
   const [completedNodes, setCompletedNodes] = useState([]);
   const [wfsChecked, setWfsChecked] = useState([]);
 
@@ -631,25 +634,37 @@ export default function AngularA02DataBinding({ onNextProblem }) {
   }
 
   function evaluate() {
+    let toEval;
     if (isTabbedStep) {
       if (!tabbedHasContent) return;
-    } else if (!(typeof currentAnswer === "string" && currentAnswer.trim())) return;
+      const ts = (currentAnswer?.ts ?? "").trim();
+      const html = (currentAnswer?.html ?? "").trim();
+      const css = (currentAnswer?.css ?? "").trim();
+      toEval = mergeAngularCssIntoTS(mergeAngularTsWithHtml(ts, html), css);
+    } else {
+      if (!(typeof currentAnswer === "string" && currentAnswer.trim())) return;
+      toEval = currentAnswer;
+    }
     let res;
     if (node.evaluate) {
-      res = node.evaluate(currentAnswer);
+      res = node.evaluate(toEval);
     } else {
-      const a = typeof currentAnswer === "string" ? currentAnswer.toLowerCase() : "";
+      const a = typeof toEval === "string" ? toEval.toLowerCase() : "";
       const hits = (node.answer_keywords || []).filter((k) => a.includes(k.toLowerCase())).length;
       res = hits === node.answer_keywords.length ? "correct" : hits >= node.answer_keywords.length * 0.6 ? "partial" : "wrong";
     }
     setResult(res);
+    if (node.hint || node[`feedback_${res}`]) setShowFeedbackModal(true);
     if (res === "correct" && !completedNodes.includes(node.id)) setCompletedNodes((p) => [...p, node.id]);
   }
 
   function getFeedback() {
     if (!result) return null;
     const fb = node[`feedback_${result}`];
-    return typeof fb === "function" ? fb(currentAnswer) : fb;
+    const toEval = isTabbedStep
+      ? mergeAngularCssIntoTS(mergeAngularTsWithHtml((currentAnswer?.ts ?? "").trim(), (currentAnswer?.html ?? "").trim()), (currentAnswer?.css ?? "").trim())
+      : currentAnswer;
+    return typeof fb === "function" ? fb(toEval) : fb;
   }
 
   function renderReveal() {
@@ -682,7 +697,7 @@ export default function AngularA02DataBinding({ onNextProblem }) {
   function renderQuestion() {
     const feedback = getFeedback();
     const editorContent = (
-      <div>
+      <div style={{ display: "flex", flexDirection: "column", flex: 1, minHeight: 0, overflow: "hidden", width: "100%" }}>
         <div style={s.phase}>{node.phase}</div>
         {showAnalogy && node.analogy ? (
           <div style={s.analogyCard}>
@@ -693,53 +708,81 @@ export default function AngularA02DataBinding({ onNextProblem }) {
           </div>
         ) : (
           <>
-            <div style={{ fontSize: "11px", color: "#00d4ff", fontWeight: 600, letterSpacing: "0.05em", marginBottom: "8px" }}>CODE BUILT SO FAR — edit below</div>
-            <div style={s.hint}>💡 {node.hint}</div>
-            {isTabbedStep ? (
-              <AngularTabbedEditor value={currentAnswer} onChange={setCurrentAnswer} height="240px" />
-            ) : (
-              <CodeEditor value={currentAnswer} onChange={setCurrentAnswer} height="240px" />
-            )}
-            {feedback && <div style={s.feedback(result)}>{feedback}</div>}
-            {showExpected && node.expected && (
-              <div style={{ ...s.pre, borderLeft: "2px solid #10b981", marginBottom: "16px" }}>
-                <div style={{ fontSize: "9px", fontWeight: 700, letterSpacing: "0.15em", color: "#10b981", marginBottom: "8px" }}>MODEL ANSWER</div>
-                {typeof node.expected === "object" && node.expected !== null ? (
-                  <>
-                    <div style={{ fontSize: "10px", fontWeight: 700, color: "#94a3b8", marginBottom: "6px" }}>TypeScript</div>
-                    <pre style={{ margin: "0 0 12px 0", whiteSpace: "pre-wrap" }}>{node.expected.ts}</pre>
-                    <div style={{ fontSize: "10px", fontWeight: 700, color: "#94a3b8", marginBottom: "6px" }}>HTML</div>
-                    <pre style={{ margin: "0 0 12px 0", whiteSpace: "pre-wrap" }}>{node.expected.html}</pre>
-                    <div style={{ fontSize: "10px", fontWeight: 700, color: "#94a3b8", marginBottom: "6px" }}>CSS</div>
-                    <pre style={{ margin: 0, whiteSpace: "pre-wrap" }}>{node.expected.css}</pre>
-                  </>
-                ) : (
-                  node.expected
-                )}
+            <div style={{ flexShrink: 0, fontSize: "11px", color: "#00d4ff", fontWeight: 600, letterSpacing: "0.05em", marginBottom: "4px" }}>CODE BUILT SO FAR — edit below</div>
+            <div style={{ flex: 1, minHeight: 280, overflow: "hidden", display: "flex", flexDirection: "column" }}>
+              {isTabbedStep ? (
+                <AngularTabbedEditor value={currentAnswer} onChange={setCurrentAnswer} height="100%" />
+              ) : (
+                <CodeEditor value={currentAnswer} onChange={setCurrentAnswer} height="100%" />
+              )}
+            </div>
+            <div style={{ flexShrink: 0, paddingTop: "12px", borderTop: "1px solid #e2e8f0", marginTop: "8px" }}>
+              {(node.hint || feedback) && (
+                <button type="button" style={{ ...s.btn("secondary"), marginBottom: "12px" }} onClick={() => setShowFeedbackModal(true)}>💡 VIEW HINT & FEEDBACK</button>
+              )}
+              {showExpected && node.expected && (
+                <div style={{ ...s.pre, borderLeft: "2px solid #10b981", marginBottom: "16px" }}>
+                  <div style={{ fontSize: "9px", fontWeight: 700, letterSpacing: "0.15em", color: "#10b981", marginBottom: "8px" }}>MODEL ANSWER</div>
+                  {typeof node.expected === "object" && node.expected !== null ? (
+                    <>
+                      <div style={{ fontSize: "10px", fontWeight: 700, color: "#94a3b8", marginBottom: "6px" }}>TypeScript</div>
+                      <pre style={{ margin: "0 0 12px 0", whiteSpace: "pre-wrap" }}>{node.expected.ts}</pre>
+                      <div style={{ fontSize: "10px", fontWeight: 700, color: "#94a3b8", marginBottom: "6px" }}>HTML</div>
+                      <pre style={{ margin: "0 0 12px 0", whiteSpace: "pre-wrap" }}>{node.expected.html}</pre>
+                      <div style={{ fontSize: "10px", fontWeight: 700, color: "#94a3b8", marginBottom: "6px" }}>CSS</div>
+                      <pre style={{ margin: 0, whiteSpace: "pre-wrap" }}>{node.expected.css}</pre>
+                    </>
+                  ) : (
+                    node.expected
+                  )}
+                </div>
+              )}
+              <div style={s.btnRow}>
+                <button style={s.btn("primary")} onClick={evaluate} disabled={isTabbedStep ? !tabbedHasContent : !currentAnswer.trim()}>CHECK →</button>
+                {node.analogy && <button style={s.btn("secondary")} onClick={() => setShowAnalogy(true)}>SEE ANALOGY</button>}
+                {result && result !== "correct" && <button style={s.btn("secondary")} onClick={() => setShowExpected(true)}>SHOW ANSWER</button>}
+                {result === "correct" && <button style={s.btn("primary")} onClick={next}>NEXT →</button>}
+                {result && result !== "correct" && <button style={{ ...s.btn("secondary"), marginLeft: "auto" }} onClick={next}>SKIP →</button>}
+              </div>
+            </div>
+            {showFeedbackModal && (node.hint || feedback) && (
+              <div
+                style={{ position: "fixed", inset: 0, zIndex: 10000, display: "flex", alignItems: "center", justifyContent: "center", background: "rgba(15,23,42,0.5)", padding: "24px", boxSizing: "border-box" }}
+                onClick={() => setShowFeedbackModal(false)}
+                role="dialog"
+                aria-modal="true"
+                aria-labelledby="feedback-modal-title"
+              >
+                <div
+                  style={{ background: "#ffffff", borderRadius: "12px", padding: "24px", maxWidth: "520px", width: "100%", maxHeight: "80vh", overflowY: "auto", boxShadow: "0 20px 60px rgba(0,0,0,0.2)", border: "1px solid #e2e8f0" }}
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <div id="feedback-modal-title" style={{ fontSize: "12px", fontWeight: 700, letterSpacing: "0.05em", color: "#64748b", marginBottom: "16px" }}>HINT & FEEDBACK</div>
+                  {node.hint && <div style={{ ...s.hint, marginBottom: feedback ? "16px" : 0 }}>💡 {node.hint}</div>}
+                  {feedback && <div style={s.feedback(result)}>{feedback}</div>}
+                  <div style={{ marginTop: "20px", display: "flex", justifyContent: "flex-end" }}>
+                    <button type="button" style={s.btn("primary")} onClick={() => setShowFeedbackModal(false)}>Close</button>
+                  </div>
+                </div>
               </div>
             )}
-            <div style={s.btnRow}>
-              <button style={s.btn("primary")} onClick={evaluate} disabled={isTabbedStep ? !tabbedHasContent : !currentAnswer.trim()}>CHECK →</button>
-              {node.analogy && <button style={s.btn("secondary")} onClick={() => setShowAnalogy(true)}>SEE ANALOGY</button>}
-              {result && result !== "correct" && <button style={s.btn("secondary")} onClick={() => setShowExpected(true)}>SHOW ANSWER</button>}
-              {result === "correct" && <button style={s.btn("primary")} onClick={next}>NEXT →</button>}
-              {result && result !== "correct" && <button style={{ ...s.btn("secondary"), marginLeft: "auto" }} onClick={next}>SKIP →</button>}
-            </div>
           </>
         )}
       </div>
     );
     return (
-      <LessonEditorOutputTabs
-        node={node}
-        nodes={NODES}
-        mainTab={mainTab}
-        setMainTab={setMainTab}
-        answer={isTabbedStep ? (currentAnswer && typeof currentAnswer === "object" ? JSON.stringify(currentAnswer) : "") : (currentAnswer || "")}
-        getOutputPreview={isTabbedStep ? getOutputPreview : undefined}
-      >
-        {editorContent}
-      </LessonEditorOutputTabs>
+      <div style={{ flex: 1, minHeight: 0, display: "flex", flexDirection: "column", overflow: "hidden" }}>
+        <LessonEditorOutputTabs
+          node={node}
+          nodes={NODES}
+          mainTab={mainTab}
+          setMainTab={setMainTab}
+          answer={isTabbedStep ? (currentAnswer && typeof currentAnswer === "object" ? JSON.stringify(currentAnswer) : "") : (currentAnswer || "")}
+          getOutputPreview={isTabbedStep ? getOutputPreview : undefined}
+        >
+          {editorContent}
+        </LessonEditorOutputTabs>
+      </div>
     );
   }
 
@@ -784,7 +827,7 @@ export default function AngularA02DataBinding({ onNextProblem }) {
         </div>
         {allChecked && (
           <div>
-            <div style={s.feedback("correct")}>{`✅ Engine A02 Complete — Data Binding mastered.\nNext: Engine A03 — Services & Dependency Injection`}</div>
+            <div style={s.feedback("correct")}>{`✅ Engine ANG02 Complete — Data Binding mastered.\nNext: ANG03 — Services & Dependency Injection`}</div>
             <div style={s.btnRow}><button style={s.btn("primary")} onClick={onNextProblem ?? next}>NEXT ENGINE →</button></div>
           </div>
         )}
@@ -796,7 +839,7 @@ export default function AngularA02DataBinding({ onNextProblem }) {
     return (
       <div style={s.completeBanner}>
         <div style={{ fontSize: "48px", marginBottom: "24px" }}>🎯</div>
-        <h1 style={{ ...s.h1, textAlign: "center" }}>Engine A02 Complete</h1>
+        <h1 style={{ ...s.h1, textAlign: "center" }}>Engine ANG02 Complete</h1>
         <p style={{ color: "#4a5568", fontSize: "13px" }}>Data Binding — mastered.</p>
         {onNextProblem && <div style={{ ...s.btnRow, justifyContent: "center", marginTop: "24px" }}><button style={s.btn("primary")} onClick={onNextProblem}>NEXT ENGINE →</button></div>}
       </div>
@@ -819,7 +862,7 @@ export default function AngularA02DataBinding({ onNextProblem }) {
     <div style={s.wrap}>
       <div style={s.topbar}>
         <div style={s.logo}>INPACT</div>
-        <div style={s.engineTag}>A02 — DATA BINDING</div>
+        <div style={s.engineTag}>ANG02 — DATA BINDING</div>
         <div style={s.progressTrack}><div style={s.progressFill(progress)} /></div>
         <div style={s.progressLabel}>{progress}%</div>
       </div>
@@ -838,7 +881,9 @@ export default function AngularA02DataBinding({ onNextProblem }) {
             );
           })}
         </div>
-        <div style={s.main}>{renderNode()}</div>
+        <div style={s.main}>
+          <div style={s.mainScroll}>{renderNode()}</div>
+        </div>
       </div>
     </div>
   );

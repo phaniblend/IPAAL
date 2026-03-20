@@ -1,0 +1,1 @@
+{"result":"correct","feedback":"You correctly used the useState hook to initialize a count state variable with value 0 and properly destructured it into count and setCount variables. The syntax is correct and meets the step requirements."}

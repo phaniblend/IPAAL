@@ -1,0 +1,1 @@
+{"result":"partial","feedback":"You correctly imported useState from 'react', but React should be capitalized with an uppercase 'R'. In JavaScript/TypeScript, imports are case-sensitive, so 'react' should be 'React'.","errors":["React import should be capitalized: 'React' not 'react'"]}

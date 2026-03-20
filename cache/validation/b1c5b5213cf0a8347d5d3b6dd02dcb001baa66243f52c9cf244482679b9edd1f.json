@@ -1,0 +1,1 @@
+{"result":"correct","feedback":"You correctly created a functional component named ContactForm that returns JSX. The component is defined with a function declaration and returns a valid JSX element (<div></div>).","hint":"Great! Now you can add form elements inside the returned div.","errors":[]}

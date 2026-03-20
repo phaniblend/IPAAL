@@ -2,7 +2,7 @@ import createINPACTEngine from "../inpact_engine_shared";
 
 const TITLE = "useImperativeHandle (Angular)";
 const NODES = [
-  { id: "intro", type: "reveal", phase: "Problem", content: { tag: "PROBLEM #71 (Angular)", title: TITLE, body: "Expose a child component's methods or state to the parent via a template ref: use @ViewChild to get the child instance and call its public methods, or use a custom export (exportAs) so the parent can get a reference and call focus() or other APIs.", usecase: "Angular ViewChild and child's public API replicate React useImperativeHandle for parent-callable child methods." } },
+  { id: "intro", type: "reveal", phase: "Lesson", content: { tag: "LESSON #71 (Angular)", title: TITLE, body: "Expose a child component's methods or state to the parent via a template ref: use @ViewChild to get the child instance and call its public methods, or use a custom export (exportAs) so the parent can get a reference and call focus() or other APIs.", usecase: "Angular ViewChild and child's public API replicate React useImperativeHandle for parent-callable child methods." } },
   { id: "objectives", type: "objectives", phase: "Objectives", items: ["Child defines public focus() or submit() method", "Parent: @ViewChild(ChildComp) child!: ChildComp; then this.child.focus()", "Or use exportAs: 'inputRef' and #ref=\"inputRef\"; parent gets ref and calls ref.focus()", "Signal query: child = viewChild.required(ChildComp); child()?.focus()"] },
   { id: "step1", type: "question", phase: "Step 1 of 3", paal: "Create InputComponent with a template <input #input> and public focus() { this.inputRef.nativeElement.focus(); }. Use @ViewChild('input') inputRef!: ElementRef<HTMLInputElement>.", answer_keywords: ["focus", "ViewChild", "ElementRef"], seed_code: `import { Component, ViewChild, ElementRef } from '@angular/core';
 
@@ -48,5 +48,5 @@ export class InputComponent {
 }`, feedback_correct: "✅ useImperativeHandle (Angular) complete.", feedback_partial: "exportAs.", feedback_wrong: "Export", expected: "exportAs: 'inputRef' and export" },
 ];
 
-const sideItems = [{ label: "Problem", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
+const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
 export default createINPACTEngine({ NODES, sideItems, problemNum: 71, title: TITLE, shortName: "A — IMPERATIVE HANDLE" });

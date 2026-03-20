@@ -2,7 +2,7 @@ import createINPACTEngine from "../inpact_engine_shared";
 
 const TITLE = "Pagination (Angular)";
 const NODES = [
-  { id: "intro", type: "reveal", phase: "Problem", content: { tag: "PROBLEM #61 (Angular)", title: TITLE, body: "Display a paginated list in Angular: keep currentPage and pageSize as signals, slice the data array for the current page, and render prev/next or page number buttons that update currentPage.", usecase: "Angular signals and computed slice for pagination; Router can also drive page via query params." } },
+  { id: "intro", type: "reveal", phase: "Lesson", content: { tag: "LESSON #61 (Angular)", title: TITLE, body: "Display a paginated list in Angular: keep currentPage and pageSize as signals, slice the data array for the current page, and render prev/next or page number buttons that update currentPage.", usecase: "Angular signals and computed slice for pagination; Router can also drive page via query params." } },
   { id: "objectives", type: "objectives", phase: "Objectives", items: ["items = signal([...]); currentPage = signal(1); pageSize = signal(10)", "pageItems = computed(() => { const i = items(); const p = currentPage(); return i.slice((p-1)*pageSize(), p*pageSize()); })", "totalPages = computed(() => Math.ceil(items().length / pageSize()))", "Buttons: (click)=\"currentPage.update(p => p - 1)\" and similar for next; disable when page <= 1 or >= totalPages"] },
   { id: "step1", type: "question", phase: "Step 1 of 3", paal: "Create a component with items = signal(Array.from({ length: 50 }, (_, i) => ({ id: i }))), currentPage = signal(1), pageSize = signal(10). Add computed pageItems = computed(() => this.items().slice((this.currentPage() - 1) * this.pageSize(), this.currentPage() * this.pageSize())).", answer_keywords: ["computed", "slice", "currentPage"], seed_code: `import { Component, signal, computed } from '@angular/core';
 
@@ -65,5 +65,5 @@ export class PaginationComponent {
 }`, feedback_correct: "✅ Pagination (Angular) complete.", feedback_partial: "disabled.", feedback_wrong: "Export", expected: "[disabled] and Page of totalPages" },
 ];
 
-const sideItems = [{ label: "Problem", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
+const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
 export default createINPACTEngine({ NODES, sideItems, problemNum: 61, title: TITLE, shortName: "A — PAGINATION" });

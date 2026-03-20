@@ -1,0 +1,1 @@
+{"result":"correct","feedback":"You correctly used useState to initialize a data state variable to null. The useState hook is properly imported and called with null as the initial value, creating both the data state variable and its setter function."}

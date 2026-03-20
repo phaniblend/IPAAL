@@ -1,0 +1,1 @@
+{"result":"correct","feedback":"You correctly created a function that increases the count value by 1 using setCount. Your function uses the functional update pattern (p => p+1) which is a best practice for updating state based on the previous value."}

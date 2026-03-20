@@ -1,5 +1,7 @@
-import { useState } from 'react'
-import LandingPage from './LandingPage'
+import { useState, useEffect } from 'react'
+import LandingPage, { PROBLEM_LIST, buildAngularLessonList } from './LandingPage'
+import { getLessonCount } from './trackLessonCounts.js'
+import { MOBILE_ANGULAR_LESSONS } from './mobileAngularLessons.js'
 import { TS_FUNDAMENTALS_CURRICULUM } from './engines/typescript/inpact_tsf_index'
 import { JS_FUNDAMENTALS_CURRICULUM } from './engines/javascript/inpact_jsf_index'
 import { NODE_FUNDAMENTALS_CURRICULUM } from './engines/node/inpact_nodef_index'
@@ -36,6 +38,104 @@ import INPACTEngineJSF13 from './engines/javascript/inpact_jsf13_engine'
 import INPACTEngineJSF14 from './engines/javascript/inpact_jsf14_engine'
 import INPACTEngineJSF15 from './engines/javascript/inpact_jsf15_engine'
 import INPACTEngineNODEF01 from './engines/node/inpact_nodef01_engine'
+import INPACTEngineNODEF02 from './engines/node/inpact_nodef02_engine'
+import INPACTEngineNODEF03 from './engines/node/inpact_nodef03_engine'
+import INPACTEngineNODEF04 from './engines/node/inpact_nodef04_engine'
+import INPACTEngineNODEF05 from './engines/node/inpact_nodef05_engine'
+import INPACTEngineNODEF06 from './engines/node/inpact_nodef06_engine'
+import INPACTEngineNODEF07 from './engines/node/inpact_nodef07_engine'
+import INPACTEngineNODEF08 from './engines/node/inpact_nodef08_engine'
+import INPACTEngineNODEF09 from './engines/node/inpact_nodef09_engine'
+import INPACTEngineNODEF10 from './engines/node/inpact_nodef10_engine'
+import INPACTEngineNODEF11 from './engines/node/inpact_nodef11_engine'
+import INPACTEngineNODEF12 from './engines/node/inpact_nodef12_engine'
+import INPACTEngineNODEF13 from './engines/node/inpact_nodef13_engine'
+import INPACTEngineNODEF14 from './engines/node/inpact_nodef14_engine'
+import INPACTEngineNODEF15 from './engines/node/inpact_nodef15_engine'
+import { EXPRESS_FUNDAMENTALS_CURRICULUM } from './engines/express/inpact_expf_index'
+import INPACTEngineEXPF01 from './engines/express/inpact_expf01_engine'
+import INPACTEngineEXPF02 from './engines/express/inpact_expf02_engine'
+import INPACTEngineEXPF03 from './engines/express/inpact_expf03_engine'
+import INPACTEngineEXPF04 from './engines/express/inpact_expf04_engine'
+import INPACTEngineEXPF05 from './engines/express/inpact_expf05_engine'
+import INPACTEngineEXPF06 from './engines/express/inpact_expf06_engine'
+import INPACTEngineEXPF07 from './engines/express/inpact_expf07_engine'
+import INPACTEngineEXPF08 from './engines/express/inpact_expf08_engine'
+import INPACTEngineEXPF09 from './engines/express/inpact_expf09_engine'
+import INPACTEngineEXPF10 from './engines/express/inpact_expf10_engine'
+import INPACTEngineEXPF11 from './engines/express/inpact_expf11_engine'
+import INPACTEngineEXPF12 from './engines/express/inpact_expf12_engine'
+import { PYTHON_FUNDAMENTALS_CURRICULUM } from './engines/python/inpact_pyf_index'
+import INPACTEnginePYF01 from './engines/python/inpact_pyf01_engine'
+import INPACTEnginePYF02 from './engines/python/inpact_pyf02_engine'
+import INPACTEnginePYF03 from './engines/python/inpact_pyf03_engine'
+import INPACTEnginePYF04 from './engines/python/inpact_pyf04_engine'
+import INPACTEnginePYF05 from './engines/python/inpact_pyf05_engine'
+import INPACTEnginePYF06 from './engines/python/inpact_pyf06_engine'
+import INPACTEnginePYF07 from './engines/python/inpact_pyf07_engine'
+import INPACTEnginePYF08 from './engines/python/inpact_pyf08_engine'
+import INPACTEnginePYF09 from './engines/python/inpact_pyf09_engine'
+import INPACTEnginePYF10 from './engines/python/inpact_pyf10_engine'
+import INPACTEnginePYF11 from './engines/python/inpact_pyf11_engine'
+import INPACTEnginePYF12 from './engines/python/inpact_pyf12_engine'
+import { SD_CURRICULUM } from './engines/sd/inpact_sd_index'
+import { PE_CURRICULUM } from './engines/pe/inpact_pe_index'
+import { SEC_CURRICULUM } from './engines/sec/inpact_sec_index'
+import { EL_CURRICULUM } from './engines/el/inpact_el_index'
+import { FE_CURRICULUM } from './engines/fe/inpact_fe_index'
+import INPACTEngineSD01 from './engines/sd/inpact_sd01_engine'
+import INPACTEngineSD02 from './engines/sd/inpact_sd02_engine'
+import INPACTEngineSD03 from './engines/sd/inpact_sd03_engine'
+import INPACTEngineSD04 from './engines/sd/inpact_sd04_engine'
+import INPACTEngineSD05 from './engines/sd/inpact_sd05_engine'
+import INPACTEngineSD06 from './engines/sd/inpact_sd06_engine'
+import INPACTEngineSD07 from './engines/sd/inpact_sd07_engine'
+import INPACTEngineSD08 from './engines/sd/inpact_sd08_engine'
+import INPACTEngineSD09 from './engines/sd/inpact_sd09_engine'
+import INPACTEngineSD10 from './engines/sd/inpact_sd10_engine'
+import INPACTEngineSD11 from './engines/sd/inpact_sd11_engine'
+import INPACTEngineSD12 from './engines/sd/inpact_sd12_engine'
+import INPACTEngineSD13 from './engines/sd/inpact_sd13_engine'
+import INPACTEngineSD14 from './engines/sd/inpact_sd14_engine'
+import INPACTEngineSD15 from './engines/sd/inpact_sd15_engine'
+import INPACTEnginePE01 from './engines/pe/inpact_pe01_engine'
+import INPACTEnginePE02 from './engines/pe/inpact_pe02_engine'
+import INPACTEnginePE03 from './engines/pe/inpact_pe03_engine'
+import INPACTEnginePE04 from './engines/pe/inpact_pe04_engine'
+import INPACTEnginePE05 from './engines/pe/inpact_pe05_engine'
+import INPACTEnginePE06 from './engines/pe/inpact_pe06_engine'
+import INPACTEnginePE07 from './engines/pe/inpact_pe07_engine'
+import INPACTEnginePE08 from './engines/pe/inpact_pe08_engine'
+import INPACTEnginePE09 from './engines/pe/inpact_pe09_engine'
+import INPACTEnginePE10 from './engines/pe/inpact_pe10_engine'
+import INPACTEnginePE11 from './engines/pe/inpact_pe11_engine'
+import INPACTEnginePE12 from './engines/pe/inpact_pe12_engine'
+import INPACTEngineSEC01 from './engines/sec/inpact_sec01_engine'
+import INPACTEngineSEC02 from './engines/sec/inpact_sec02_engine'
+import INPACTEngineSEC03 from './engines/sec/inpact_sec03_engine'
+import INPACTEngineSEC04 from './engines/sec/inpact_sec04_engine'
+import INPACTEngineSEC05 from './engines/sec/inpact_sec05_engine'
+import INPACTEngineSEC06 from './engines/sec/inpact_sec06_engine'
+import INPACTEngineEL01 from './engines/el/inpact_el01_engine'
+import INPACTEngineEL02 from './engines/el/inpact_el02_engine'
+import INPACTEngineEL03 from './engines/el/inpact_el03_engine'
+import INPACTEngineEL04 from './engines/el/inpact_el04_engine'
+import INPACTEngineEL05 from './engines/el/inpact_el05_engine'
+import INPACTEngineEL06 from './engines/el/inpact_el06_engine'
+import INPACTEngineEL07 from './engines/el/inpact_el07_engine'
+import INPACTEngineEL08 from './engines/el/inpact_el08_engine'
+import INPACTEngineEL09 from './engines/el/inpact_el09_engine'
+import INPACTEngineEL10 from './engines/el/inpact_el10_engine'
+import INPACTEngineFE01 from './engines/fe/inpact_fe01_engine'
+import INPACTEngineFE02 from './engines/fe/inpact_fe02_engine'
+import INPACTEngineFE03 from './engines/fe/inpact_fe03_engine'
+import INPACTEngineFE04 from './engines/fe/inpact_fe04_engine'
+import INPACTEngineFE05 from './engines/fe/inpact_fe05_engine'
+import INPACTEngineFE06 from './engines/fe/inpact_fe06_engine'
+import INPACTEngineFE07 from './engines/fe/inpact_fe07_engine'
+import INPACTEngineFE08 from './engines/fe/inpact_fe08_engine'
+import INPACTEngineFE09 from './engines/fe/inpact_fe09_engine'
+import INPACTEngineFE10 from './engines/fe/inpact_fe10_engine'
 import INPACTEngineJSF11 from './engines/JS/inpact_jsf11_engine'
 import INPACTEngineJSB01 from './engines/JS/inpact_jsb01_engine'
 import INPACTEngineJSB02 from './engines/JS/inpact_jsb02_engine'
@@ -49,208 +149,227 @@ import INPACTEngineJSC03 from './engines/JS/inpact_jsc03_engine'
 import INPACTEngineJSC04 from './engines/JS/inpact_jsc04_engine'
 import INPACTEngineJSC05 from './engines/JS/inpact_jsc05_engine'
 import INPACTEngineJSD01 from './engines/JS/inpact_jsd01_engine'
-import INPACTEngineP01 from './engines/inpact_p01_engine'
-import INPACTEngineP02 from './engines/inpact_p02_engine'
-import INPACTEngineP03 from './engines/inpact_p03_engine'
-import INPACTEngineP04 from './engines/inpact_p04_engine'
-import INPACTEngineP05 from './engines/inpact_p05_engine'
-import INPACTEngineP06 from './engines/inpact_p06_engine'
-import INPACTEngineP07 from './engines/inpact_p07_engine'
-import INPACTEngineP08 from './engines/inpact_p08_engine'
-import INPACTEngineP09 from './engines/inpact_p09_engine'
-import INPACTEngineP10 from './engines/inpact_p10_engine'
-import INPACTEngineP11 from './engines/inpact_p11_engine'
-import INPACTEngineP12 from './engines/inpact_p12_engine'
-import INPACTEngineP13 from './engines/inpact_p13_engine'
-import INPACTEngineP14 from './engines/inpact_p14_engine'
-import INPACTEngineP15 from './engines/inpact_p15_engine'
-import INPACTEngineP16 from './engines/inpact_p16_engine'
-import INPACTEngineP17 from './engines/inpact_p17_engine'
-import INPACTEngineP18 from './engines/inpact_p18_engine'
-import INPACTEngineP19 from './engines/inpact_p19_engine'
-import INPACTEngineP20 from './engines/inpact_p20_engine'
-import INPACTEngineP21 from './engines/inpact_p21_engine'
-import INPACTEngineP22 from './engines/inpact_p22_engine'
-import INPACTEngineP23 from './engines/inpact_p23_engine'
-import INPACTEngineP24 from './engines/inpact_p24_engine'
-import INPACTEngineP25 from './engines/inpact_p25_engine'
-import INPACTEngineP26 from './engines/inpact_p26_engine'
-import INPACTEngineP27 from './engines/inpact_p27_engine'
-import INPACTEngineP28 from './engines/inpact_p28_engine'
-import INPACTEngineP29 from './engines/inpact_p29_engine'
-import INPACTEngineP30 from './engines/inpact_p30_engine'
-import INPACTEngineTS01 from './engines/inpact_ts01_engine'
-import INPACTEngineTS02 from './engines/inpact_ts02_engine'
-import INPACTEngineTS03 from './engines/inpact_ts03_engine'
-import INPACTEngineTS04 from './engines/inpact_ts04_engine'
-import INPACTEngineTS05 from './engines/inpact_ts05_engine'
-import INPACTEngineTS06 from './engines/inpact_ts06_engine'
-import INPACTEngineTS07 from './engines/inpact_ts07_engine'
-import INPACTEngineTS08 from './engines/inpact_ts08_engine'
-import INPACTEngineTS09 from './engines/inpact_ts09_engine'
-import INPACTEngineTS10 from './engines/inpact_ts10_engine'
-import INPACTEngineTS11 from './engines/inpact_ts11_engine'
-import INPACTEngineTS12 from './engines/inpact_ts12_engine'
-import INPACTEngineTS13 from './engines/inpact_ts13_engine'
-import INPACTEngineTS14 from './engines/inpact_ts14_engine'
-import INPACTEngineTS15 from './engines/inpact_ts15_engine'
-import INPACTEngineTS16 from './engines/inpact_ts16_engine'
-import INPACTEngineTS17 from './engines/inpact_ts17_engine'
-import INPACTEngineTS18 from './engines/inpact_ts18_engine'
-import INPACTEngineTS19 from './engines/inpact_ts19_engine'
-import INPACTEngineTS20 from './engines/inpact_ts20_engine'
-import INPACTEngineTS21 from './engines/inpact_ts21_engine'
-import INPACTEngineTS22 from './engines/inpact_ts22_engine'
-import INPACTEngineTS23 from './engines/inpact_ts23_engine'
-import INPACTEngineTS24 from './engines/inpact_ts24_engine'
-import INPACTEngineTS25 from './engines/inpact_ts25_engine'
-import INPACTEngineTS26 from './engines/inpact_ts26_engine'
-import INPACTEngineTS27 from './engines/inpact_ts27_engine'
-import INPACTEngineTS28 from './engines/inpact_ts28_engine'
-import INPACTEngineTS29 from './engines/inpact_ts29_engine'
-import INPACTEngineTS30 from './engines/inpact_ts30_engine'
-import INPACTEngineP31 from './engines/inpact_p31_engine'
-import INPACTEngineP32 from './engines/inpact_p32_engine'
-import INPACTEngineP33 from './engines/inpact_p33_engine'
-import INPACTEngineP34 from './engines/inpact_p34_engine'
-import INPACTEngineP35 from './engines/inpact_p35_engine'
-import INPACTEngineP36 from './engines/inpact_p36_engine'
-import INPACTEngineP37 from './engines/inpact_p37_engine'
-import INPACTEngineP38 from './engines/inpact_p38_engine'
-import INPACTEngineP39 from './engines/inpact_p39_engine'
-import INPACTEngineP40 from './engines/inpact_p40_engine'
-import INPACTEngineP41 from './engines/inpact_p41_engine'
-import INPACTEngineP42 from './engines/inpact_p42_engine'
-import INPACTEngineP43 from './engines/inpact_p43_engine'
-import INPACTEngineP44 from './engines/inpact_p44_engine'
-import INPACTEngineP45 from './engines/inpact_p45_engine'
-import INPACTEngineP46 from './engines/inpact_p46_engine'
-import INPACTEngineP47 from './engines/inpact_p47_engine'
-import INPACTEngineP48 from './engines/inpact_p48_engine'
-import INPACTEngineP49 from './engines/inpact_p49_engine'
-import INPACTEngineP50 from './engines/inpact_p50_engine'
-import INPACTEngineP51 from './engines/inpact_p51_engine'
-import INPACTEngineP52 from './engines/inpact_p52_engine'
-import INPACTEngineP53 from './engines/inpact_p53_engine'
-import INPACTEngineP54 from './engines/inpact_p54_engine'
-import INPACTEngineP55 from './engines/inpact_p55_engine'
-import INPACTEngineP56 from './engines/inpact_p56_engine'
-import INPACTEngineP57 from './engines/inpact_p57_engine'
-import INPACTEngineP58 from './engines/inpact_p58_engine'
-import INPACTEngineP59 from './engines/inpact_p59_engine'
-import INPACTEngineP60 from './engines/inpact_p60_engine'
-import INPACTEngineP61 from './engines/inpact_p61_engine'
-import INPACTEngineP62 from './engines/inpact_p62_engine'
-import INPACTEngineP63 from './engines/inpact_p63_engine'
-import INPACTEngineP64 from './engines/inpact_p64_engine'
-import INPACTEngineP65 from './engines/inpact_p65_engine'
-import INPACTEngineP66 from './engines/inpact_p66_engine'
-import INPACTEngineP67 from './engines/inpact_p67_engine'
-import INPACTEngineP68 from './engines/inpact_p68_engine'
-import INPACTEngineP69 from './engines/inpact_p69_engine'
-import INPACTEngineP70 from './engines/inpact_p70_engine'
-import INPACTEngineP71 from './engines/inpact_p71_engine'
-import INPACTEngineP72 from './engines/inpact_p72_engine'
-import INPACTEngineP73 from './engines/inpact_p73_engine'
-import INPACTEngineP74 from './engines/inpact_p74_engine'
-import INPACTEngineP75 from './engines/inpact_p75_engine'
-import INPACTEngineP76 from './engines/inpact_p76_engine'
-import INPACTEngineP77 from './engines/inpact_p77_engine'
-import INPACTEngineP78 from './engines/inpact_p78_engine'
-import INPACTEngineP79 from './engines/inpact_p79_engine'
-import INPACTEngineP80 from './engines/inpact_p80_engine'
-import INPACTEngineP81 from './engines/inpact_p81_engine'
-import INPACTEngineP82 from './engines/inpact_p82_engine'
-import INPACTEngineP83 from './engines/inpact_p83_engine'
-import INPACTEngineP84 from './engines/inpact_p84_engine'
-import INPACTEngineP85 from './engines/inpact_p85_engine'
-import INPACTEngineP86 from './engines/inpact_p86_engine'
-import INPACTEngineP87 from './engines/inpact_p87_engine'
-import INPACTEngineP88 from './engines/inpact_p88_engine'
-import INPACTEngineP89 from './engines/inpact_p89_engine'
-import INPACTEngineP90 from './engines/inpact_p90_engine'
-import INPACTEngineP91 from './engines/inpact_p91_engine'
-import INPACTEngineP92 from './engines/inpact_p92_engine'
-import INPACTEngineP93 from './engines/inpact_p93_engine'
-import INPACTEngineP94 from './engines/inpact_p94_engine'
-import INPACTEngineP95 from './engines/inpact_p95_engine'
-import INPACTEngineP96 from './engines/inpact_p96_engine'
-import INPACTEngineP97 from './engines/inpact_p97_engine'
-import INPACTEngineP98 from './engines/inpact_p98_engine'
-import INPACTEngineP99 from './engines/inpact_p99_engine'
-import INPACTEngineP100 from './engines/inpact_p100_engine'
-import INPACTEngineTS31 from './engines/inpact_ts31_engine'
-import INPACTEngineTS32 from './engines/inpact_ts32_engine'
-import INPACTEngineTS33 from './engines/inpact_ts33_engine'
-import INPACTEngineTS34 from './engines/inpact_ts34_engine'
-import INPACTEngineTS35 from './engines/inpact_ts35_engine'
-import INPACTEngineTS36 from './engines/inpact_ts36_engine'
-import INPACTEngineTS37 from './engines/inpact_ts37_engine'
-import INPACTEngineTS38 from './engines/inpact_ts38_engine'
-import INPACTEngineTS39 from './engines/inpact_ts39_engine'
-import INPACTEngineTS40 from './engines/inpact_ts40_engine'
-import INPACTEngineTS41 from './engines/inpact_ts41_engine'
-import INPACTEngineTS42 from './engines/inpact_ts42_engine'
-import INPACTEngineTS43 from './engines/inpact_ts43_engine'
-import INPACTEngineTS44 from './engines/inpact_ts44_engine'
-import INPACTEngineTS45 from './engines/inpact_ts45_engine'
-import INPACTEngineTS46 from './engines/inpact_ts46_engine'
-import INPACTEngineTS47 from './engines/inpact_ts47_engine'
-import INPACTEngineTS48 from './engines/inpact_ts48_engine'
-import INPACTEngineTS49 from './engines/inpact_ts49_engine'
-import INPACTEngineTS50 from './engines/inpact_ts50_engine'
-import INPACTEngineTS51 from './engines/inpact_ts51_engine'
-import INPACTEngineTS52 from './engines/inpact_ts52_engine'
-import INPACTEngineTS53 from './engines/inpact_ts53_engine'
-import INPACTEngineTS54 from './engines/inpact_ts54_engine'
-import INPACTEngineTS55 from './engines/inpact_ts55_engine'
-import INPACTEngineTS56 from './engines/inpact_ts56_engine'
-import INPACTEngineTS57 from './engines/inpact_ts57_engine'
-import INPACTEngineTS58 from './engines/inpact_ts58_engine'
-import INPACTEngineTS59 from './engines/inpact_ts59_engine'
-import INPACTEngineTS60 from './engines/inpact_ts60_engine'
-import INPACTEngineTS61 from './engines/inpact_ts61_engine'
-import INPACTEngineTS62 from './engines/inpact_ts62_engine'
-import INPACTEngineTS63 from './engines/inpact_ts63_engine'
-import INPACTEngineTS64 from './engines/inpact_ts64_engine'
-import INPACTEngineTS65 from './engines/inpact_ts65_engine'
-import INPACTEngineTS66 from './engines/inpact_ts66_engine'
-import INPACTEngineTS67 from './engines/inpact_ts67_engine'
-import INPACTEngineTS68 from './engines/inpact_ts68_engine'
-import INPACTEngineTS69 from './engines/inpact_ts69_engine'
-import INPACTEngineTS70 from './engines/inpact_ts70_engine'
-import INPACTEngineTS71 from './engines/inpact_ts71_engine'
-import INPACTEngineTS72 from './engines/inpact_ts72_engine'
-import INPACTEngineTS73 from './engines/inpact_ts73_engine'
-import INPACTEngineTS74 from './engines/inpact_ts74_engine'
-import INPACTEngineTS75 from './engines/inpact_ts75_engine'
-import INPACTEngineTS76 from './engines/inpact_ts76_engine'
-import INPACTEngineTS77 from './engines/inpact_ts77_engine'
-import INPACTEngineTS78 from './engines/inpact_ts78_engine'
-import INPACTEngineTS79 from './engines/inpact_ts79_engine'
-import INPACTEngineTS80 from './engines/inpact_ts80_engine'
-import INPACTEngineTS81 from './engines/inpact_ts81_engine'
-import INPACTEngineTS82 from './engines/inpact_ts82_engine'
-import INPACTEngineTS83 from './engines/inpact_ts83_engine'
-import INPACTEngineTS84 from './engines/inpact_ts84_engine'
-import INPACTEngineTS85 from './engines/inpact_ts85_engine'
-import INPACTEngineTS86 from './engines/inpact_ts86_engine'
-import INPACTEngineTS87 from './engines/inpact_ts87_engine'
-import INPACTEngineTS88 from './engines/inpact_ts88_engine'
-import INPACTEngineTS89 from './engines/inpact_ts89_engine'
-import INPACTEngineTS90 from './engines/inpact_ts90_engine'
-import INPACTEngineTS91 from './engines/inpact_ts91_engine'
-import INPACTEngineTS92 from './engines/inpact_ts92_engine'
-import INPACTEngineTS93 from './engines/inpact_ts93_engine'
-import INPACTEngineTS94 from './engines/inpact_ts94_engine'
-import INPACTEngineTS95 from './engines/inpact_ts95_engine'
-import INPACTEngineTS96 from './engines/inpact_ts96_engine'
-import INPACTEngineTS97 from './engines/inpact_ts97_engine'
-import INPACTEngineTS98 from './engines/inpact_ts98_engine'
-import INPACTEngineTS99 from './engines/inpact_ts99_engine'
-import INPACTEngineTS100 from './engines/inpact_ts100_engine'
+import INPACTEngineP01 from './engines/react-js/inpact_p01_engine'
+import INPACTEngineP02 from './engines/react-js/inpact_p02_engine'
+import INPACTEngineP03 from './engines/react-js/inpact_p03_engine'
+import INPACTEngineP04 from './engines/react-js/inpact_p04_engine'
+import INPACTEngineP05 from './engines/react-js/inpact_p05_engine'
+import INPACTEngineP06 from './engines/react-js/inpact_p06_engine'
+import INPACTEngineP07 from './engines/react-js/inpact_p07_engine'
+import INPACTEngineP08 from './engines/react-js/inpact_p08_engine'
+import INPACTEngineP09 from './engines/react-js/inpact_p09_engine'
+import INPACTEngineP11 from './engines/react-js/inpact_p11_engine'
+import INPACTEngineP12 from './engines/react-js/inpact_p12_engine'
+import INPACTEngineP13 from './engines/react-js/inpact_p13_engine'
+import INPACTEngineP14 from './engines/react-js/inpact_p14_engine'
+import INPACTEngineP15 from './engines/react-js/inpact_p15_engine'
+import INPACTEngineP18 from './engines/react-js/inpact_p18_engine'
+import INPACTEngineP19 from './engines/react-js/inpact_p19_engine'
+import INPACTEngineP20 from './engines/react-js/inpact_p20_engine'
+import INPACTEngineP21 from './engines/react-js/inpact_p21_engine'
+import INPACTEngineP22 from './engines/react-js/inpact_p22_engine'
+import INPACTEngineP23 from './engines/react-js/inpact_p23_engine'
+import INPACTEngineP24 from './engines/react-js/inpact_p24_engine'
+import INPACTEngineP25 from './engines/react-js/inpact_p25_engine'
+import INPACTEngineP26 from './engines/react-js/inpact_p26_engine'
+import INPACTEngineP27 from './engines/react-js/inpact_p27_engine'
+import INPACTEngineP28 from './engines/react-js/inpact_p28_engine'
+import INPACTEngineP29 from './engines/react-js/inpact_p29_engine'
+import INPACTEngineP30 from './engines/react-js/inpact_p30_engine'
+import INPACTEngineTS01 from './engines/react-ts/inpact_ts01_engine'
+import INPACTEngineTS02 from './engines/react-ts/inpact_ts02_engine'
+import INPACTEngineTS03 from './engines/react-ts/inpact_ts03_engine'
+import INPACTEngineTS04 from './engines/react-ts/inpact_ts04_engine'
+import INPACTEngineTS05 from './engines/react-ts/inpact_ts05_engine'
+import INPACTEngineTS06 from './engines/react-ts/inpact_ts06_engine'
+import INPACTEngineTS07 from './engines/react-ts/inpact_ts07_engine'
+import INPACTEngineTS08 from './engines/react-ts/inpact_ts08_engine'
+import INPACTEngineTS09 from './engines/react-ts/inpact_ts09_engine'
+import INPACTEngineTS10 from './engines/react-ts/inpact_ts10_engine'
+import INPACTEngineTS11 from './engines/react-ts/inpact_ts11_engine'
+import INPACTEngineTS12 from './engines/react-ts/inpact_ts12_engine'
+import INPACTEngineTS13 from './engines/react-ts/inpact_ts13_engine'
+import INPACTEngineTS14 from './engines/react-ts/inpact_ts14_engine'
+import INPACTEngineTS15 from './engines/react-ts/inpact_ts15_engine'
+import INPACTEngineTS16 from './engines/react-ts/inpact_ts16_engine'
+import INPACTEngineTS17 from './engines/react-ts/inpact_ts17_engine'
+import INPACTEngineTS18 from './engines/react-ts/inpact_ts18_engine'
+import INPACTEngineTS19 from './engines/react-ts/inpact_ts19_engine'
+import INPACTEngineTS20 from './engines/react-ts/inpact_ts20_engine'
+import INPACTEngineTS21 from './engines/react-ts/inpact_ts21_engine'
+import INPACTEngineTS22 from './engines/react-ts/inpact_ts22_engine'
+import INPACTEngineTS23 from './engines/react-ts/inpact_ts23_engine'
+import INPACTEngineTS24 from './engines/react-ts/inpact_ts24_engine'
+import INPACTEngineTS25 from './engines/react-ts/inpact_ts25_engine'
+import INPACTEngineTS26 from './engines/react-ts/inpact_ts26_engine'
+import INPACTEngineTS27 from './engines/react-ts/inpact_ts27_engine'
+import INPACTEngineTS28 from './engines/react-ts/inpact_ts28_engine'
+import INPACTEngineTS29 from './engines/react-ts/inpact_ts29_engine'
+import INPACTEngineTS30 from './engines/react-ts/inpact_ts30_engine'
+import INPACTEngineP31 from './engines/react-js/inpact_p31_engine'
+import INPACTEngineP32 from './engines/react-js/inpact_p32_engine'
+import INPACTEngineP33 from './engines/react-js/inpact_p33_engine'
+import INPACTEngineP34 from './engines/react-js/inpact_p34_engine'
+import INPACTEngineP35 from './engines/react-js/inpact_p35_engine'
+import INPACTEngineP36 from './engines/react-js/inpact_p36_engine'
+import INPACTEngineP37 from './engines/react-js/inpact_p37_engine'
+import INPACTEngineP38 from './engines/react-js/inpact_p38_engine'
+import INPACTEngineP39 from './engines/react-js/inpact_p39_engine'
+import INPACTEngineP40 from './engines/react-js/inpact_p40_engine'
+import INPACTEngineP41 from './engines/react-js/inpact_p41_engine'
+import INPACTEngineP42 from './engines/react-js/inpact_p42_engine'
+import INPACTEngineP43 from './engines/react-js/inpact_p43_engine'
+import INPACTEngineP44 from './engines/react-js/inpact_p44_engine'
+import INPACTEngineP45 from './engines/react-js/inpact_p45_engine'
+import INPACTEngineP46 from './engines/react-js/inpact_p46_engine'
+import INPACTEngineP47 from './engines/react-js/inpact_p47_engine'
+import INPACTEngineP48 from './engines/react-js/inpact_p48_engine'
+import INPACTEngineP49 from './engines/react-js/inpact_p49_engine'
+import INPACTEngineP50 from './engines/react-js/inpact_p50_engine'
+import INPACTEngineP51 from './engines/react-js/inpact_p51_engine'
+import INPACTEngineP52 from './engines/react-js/inpact_p52_engine'
+import INPACTEngineP53 from './engines/react-js/inpact_p53_engine'
+import INPACTEngineP54 from './engines/react-js/inpact_p54_engine'
+import INPACTEngineP55 from './engines/react-js/inpact_p55_engine'
+import INPACTEngineP56 from './engines/react-js/inpact_p56_engine'
+import INPACTEngineP57 from './engines/react-js/inpact_p57_engine'
+import INPACTEngineP58 from './engines/react-js/inpact_p58_engine'
+import INPACTEngineP59 from './engines/react-js/inpact_p59_engine'
+import INPACTEngineP60 from './engines/react-js/inpact_p60_engine'
+import INPACTEngineP61 from './engines/react-js/inpact_p61_engine'
+import INPACTEngineP62 from './engines/react-js/inpact_p62_engine'
+import INPACTEngineP63 from './engines/react-js/inpact_p63_engine'
+import INPACTEngineP64 from './engines/react-js/inpact_p64_engine'
+import INPACTEngineP65 from './engines/react-js/inpact_p65_engine'
+import INPACTEngineP66 from './engines/react-js/inpact_p66_engine'
+import INPACTEngineP67 from './engines/react-js/inpact_p67_engine'
+import INPACTEngineP68 from './engines/react-js/inpact_p68_engine'
+import INPACTEngineP69 from './engines/react-js/inpact_p69_engine'
+import INPACTEngineP70 from './engines/react-js/inpact_p70_engine'
+import INPACTEngineP71 from './engines/react-js/inpact_p71_engine'
+import INPACTEngineP72 from './engines/react-js/inpact_p72_engine'
+import INPACTEngineP73 from './engines/react-js/inpact_p73_engine'
+import INPACTEngineP74 from './engines/react-js/inpact_p74_engine'
+import INPACTEngineP75 from './engines/react-js/inpact_p75_engine'
+import INPACTEngineP76 from './engines/react-js/inpact_p76_engine'
+import INPACTEngineP77 from './engines/react-js/inpact_p77_engine'
+import INPACTEngineP78 from './engines/react-js/inpact_p78_engine'
+import INPACTEngineP79 from './engines/react-js/inpact_p79_engine'
+import INPACTEngineP80 from './engines/react-js/inpact_p80_engine'
+import INPACTEngineP81 from './engines/react-js/inpact_p81_engine'
+import INPACTEngineP82 from './engines/react-js/inpact_p82_engine'
+import INPACTEngineP83 from './engines/react-js/inpact_p83_engine'
+import INPACTEngineP84 from './engines/react-js/inpact_p84_engine'
+import INPACTEngineP85 from './engines/react-js/inpact_p85_engine'
+import INPACTEngineP86 from './engines/react-js/inpact_p86_engine'
+import INPACTEngineP87 from './engines/react-js/inpact_p87_engine'
+import INPACTEngineP89 from './engines/react-js/inpact_p89_engine'
+import INPACTEngineP90 from './engines/react-js/inpact_p90_engine'
+import INPACTEngineP91 from './engines/react-js/inpact_p91_engine'
+import INPACTEngineP92 from './engines/react-js/inpact_p92_engine'
+import INPACTEngineP93 from './engines/react-js/inpact_p93_engine'
+import INPACTEngineP94 from './engines/react-js/inpact_p94_engine'
+import INPACTEngineP95 from './engines/react-js/inpact_p95_engine'
+import INPACTEngineP96 from './engines/react-js/inpact_p96_engine'
+import INPACTEngineP97 from './engines/react-js/inpact_p97_engine'
+import INPACTEngineP98 from './engines/react-js/inpact_p98_engine'
+import INPACTEngineP99 from './engines/react-js/inpact_p99_engine'
+import INPACTEngineP100 from './engines/react-js/inpact_p100_engine'
+import INPACTEngineP101 from './engines/react-js/inpact_p101_engine'
+import INPACTEngineP102 from './engines/react-js/inpact_p102_engine'
+import INPACTEngineP103 from './engines/react-js/inpact_p103_engine'
+import INPACTEngineP104 from './engines/react-js/inpact_p104_engine'
+import INPACTEngineP105 from './engines/react-js/inpact_p105_engine'
+import INPACTEngineP106 from './engines/react-js/inpact_p106_engine'
+import INPACTEngineP107 from './engines/react-js/inpact_p107_engine'
+import INPACTEngineP108 from './engines/react-js/inpact_p108_engine'
+import INPACTEngineP109 from './engines/react-js/inpact_p109_engine'
+import INPACTEngineP110 from './engines/react-js/inpact_p110_engine'
+import INPACTEngineP113 from './engines/react-js/inpact_p113_engine'
+import INPACTEngineP114 from './engines/react-js/inpact_p114_engine'
+import INPACTEngineP115 from './engines/react-js/inpact_p115_engine'
+import INPACTEngineP116 from './engines/react-js/inpact_p116_engine'
+import INPACTEngineP117 from './engines/react-js/inpact_p117_engine'
+import INPACTEngineP118 from './engines/react-js/inpact_p118_engine'
+import INPACTEngineP119 from './engines/react-js/inpact_p119_engine'
+import INPACTEngineP120 from './engines/react-js/inpact_p120_engine'
+import INPACTEngineP121 from './engines/react-js/inpact_p121_engine'
+import INPACTEngineP122 from './engines/react-js/inpact_p122_engine'
+import INPACTEngineP123 from './engines/react-js/inpact_p123_engine'
+import INPACTEngineP124 from './engines/react-js/inpact_p124_engine'
+import INPACTEngineP125 from './engines/react-js/inpact_p125_engine'
+import INPACTEngineTS31 from './engines/react-ts/inpact_ts31_engine'
+import INPACTEngineTS32 from './engines/react-ts/inpact_ts32_engine'
+import INPACTEngineTS33 from './engines/react-ts/inpact_ts33_engine'
+import INPACTEngineTS34 from './engines/react-ts/inpact_ts34_engine'
+import INPACTEngineTS35 from './engines/react-ts/inpact_ts35_engine'
+import INPACTEngineTS36 from './engines/react-ts/inpact_ts36_engine'
+import INPACTEngineTS37 from './engines/react-ts/inpact_ts37_engine'
+import INPACTEngineTS38 from './engines/react-ts/inpact_ts38_engine'
+import INPACTEngineTS39 from './engines/react-ts/inpact_ts39_engine'
+import INPACTEngineTS40 from './engines/react-ts/inpact_ts40_engine'
+import INPACTEngineTS41 from './engines/react-ts/inpact_ts41_engine'
+import INPACTEngineTS42 from './engines/react-ts/inpact_ts42_engine'
+import INPACTEngineTS43 from './engines/react-ts/inpact_ts43_engine'
+import INPACTEngineTS44 from './engines/react-ts/inpact_ts44_engine'
+import INPACTEngineTS45 from './engines/react-ts/inpact_ts45_engine'
+import INPACTEngineTS46 from './engines/react-ts/inpact_ts46_engine'
+import INPACTEngineTS47 from './engines/react-ts/inpact_ts47_engine'
+import INPACTEngineTS48 from './engines/react-ts/inpact_ts48_engine'
+import INPACTEngineTS49 from './engines/react-ts/inpact_ts49_engine'
+import INPACTEngineTS50 from './engines/react-ts/inpact_ts50_engine'
+import INPACTEngineTS51 from './engines/react-ts/inpact_ts51_engine'
+import INPACTEngineTS52 from './engines/react-ts/inpact_ts52_engine'
+import INPACTEngineTS53 from './engines/react-ts/inpact_ts53_engine'
+import INPACTEngineTS54 from './engines/react-ts/inpact_ts54_engine'
+import INPACTEngineTS55 from './engines/react-ts/inpact_ts55_engine'
+import INPACTEngineTS56 from './engines/react-ts/inpact_ts56_engine'
+import INPACTEngineTS57 from './engines/react-ts/inpact_ts57_engine'
+import INPACTEngineTS58 from './engines/react-ts/inpact_ts58_engine'
+import INPACTEngineTS59 from './engines/react-ts/inpact_ts59_engine'
+import INPACTEngineTS60 from './engines/react-ts/inpact_ts60_engine'
+import INPACTEngineTS61 from './engines/react-ts/inpact_ts61_engine'
+import INPACTEngineTS62 from './engines/react-ts/inpact_ts62_engine'
+import INPACTEngineTS63 from './engines/react-ts/inpact_ts63_engine'
+import INPACTEngineTS64 from './engines/react-ts/inpact_ts64_engine'
+import INPACTEngineTS65 from './engines/react-ts/inpact_ts65_engine'
+import INPACTEngineTS66 from './engines/react-ts/inpact_ts66_engine'
+import INPACTEngineTS67 from './engines/react-ts/inpact_ts67_engine'
+import INPACTEngineTS68 from './engines/react-ts/inpact_ts68_engine'
+import INPACTEngineTS69 from './engines/react-ts/inpact_ts69_engine'
+import INPACTEngineTS70 from './engines/react-ts/inpact_ts70_engine'
+import INPACTEngineTS71 from './engines/react-ts/inpact_ts71_engine'
+import INPACTEngineTS72 from './engines/react-ts/inpact_ts72_engine'
+import INPACTEngineTS73 from './engines/react-ts/inpact_ts73_engine'
+import INPACTEngineTS74 from './engines/react-ts/inpact_ts74_engine'
+import INPACTEngineTS75 from './engines/react-ts/inpact_ts75_engine'
+import INPACTEngineTS76 from './engines/react-ts/inpact_ts76_engine'
+import INPACTEngineTS77 from './engines/react-ts/inpact_ts77_engine'
+import INPACTEngineTS78 from './engines/react-ts/inpact_ts78_engine'
+import INPACTEngineTS79 from './engines/react-ts/inpact_ts79_engine'
+import INPACTEngineTS80 from './engines/react-ts/inpact_ts80_engine'
+import INPACTEngineTS81 from './engines/react-ts/inpact_ts81_engine'
+import INPACTEngineTS82 from './engines/react-ts/inpact_ts82_engine'
+import INPACTEngineTS83 from './engines/react-ts/inpact_ts83_engine'
+import INPACTEngineTS84 from './engines/react-ts/inpact_ts84_engine'
+import INPACTEngineTS85 from './engines/react-ts/inpact_ts85_engine'
+import INPACTEngineTS86 from './engines/react-ts/inpact_ts86_engine'
+import INPACTEngineTS87 from './engines/react-ts/inpact_ts87_engine'
+import INPACTEngineTS88 from './engines/react-ts/inpact_ts88_engine'
+import INPACTEngineTS89 from './engines/react-ts/inpact_ts89_engine'
+import INPACTEngineTS90 from './engines/react-ts/inpact_ts90_engine'
+import INPACTEngineTS91 from './engines/react-ts/inpact_ts91_engine'
+import INPACTEngineTS92 from './engines/react-ts/inpact_ts92_engine'
+import INPACTEngineTS93 from './engines/react-ts/inpact_ts93_engine'
+import INPACTEngineTS94 from './engines/react-ts/inpact_ts94_engine'
+import INPACTEngineTS95 from './engines/react-ts/inpact_ts95_engine'
+import INPACTEngineTS96 from './engines/react-ts/inpact_ts96_engine'
+import INPACTEngineTS97 from './engines/react-ts/inpact_ts97_engine'
+import INPACTEngineTS98 from './engines/react-ts/inpact_ts98_engine'
+import INPACTEngineTS99 from './engines/react-ts/inpact_ts99_engine'
+import INPACTEngineTS100 from './engines/react-ts/inpact_ts100_engine'
 import { ENGINES_VUE } from './engines/vue/inpact_vue_index'
-import INPACTEngineAngularA01 from './engines/angular_a01_components'
+import INPACTEngineAngularA01 from './engines/angular/angular_a01_components'
 import INPACTEngineAngularA02 from './engines/angular/angular_a02_data_binding'
 import INPACTEngineAngularA03 from './engines/angular/angular_a03_services_di'
 import INPACTEngineAngularA04 from './engines/angular/angular_a04_rxjs'
@@ -259,6 +378,11 @@ import INPACTEngineAngularA06 from './engines/angular/angular_a06_routing'
 import INPACTEngineAngularA07 from './engines/angular/angular_a07_change_detection'
 import INPACTEngineAngularA08 from './engines/angular/angular_a08_module_federation'
 import INPACTEngineAngularA09 from './engines/angular/angular_a09_pipes'
+import INPACTEngineAngularQB01 from './engines/angular/angular_qb01_project_scaffold'
+import INPACTEngineAngularQB02 from './engines/angular/angular_qb02_app_shell_navigation'
+import INPACTEngineAngularQB03 from './engines/angular/angular_qb03_orders_list_page'
+import INPACTEngineAngularQB04 from './engines/angular/angular_qb04_capacitor_gps'
+import INPACTEngineAngularQB05 from './engines/angular/angular_qb05_push_notifications'
 import { ENGINES_ANGULAR_CURRICULUM } from './engines/angular/angular_curriculum_index'
 import INPACTEngineC01 from './engines/css/inpact_c01_engine'
 import INPACTEngineC02 from './engines/css/inpact_c02_engine'
@@ -372,14 +496,11 @@ const ENGINES = [
   INPACTEngineP07,
   INPACTEngineP08,
   INPACTEngineP09,
-  INPACTEngineP10,
   INPACTEngineP11,
   INPACTEngineP12,
   INPACTEngineP13,
   INPACTEngineP14,
   INPACTEngineP15,
-  INPACTEngineP16,
-  INPACTEngineP17,
   INPACTEngineP18,
   INPACTEngineP19,
   INPACTEngineP20,
@@ -450,7 +571,6 @@ const ENGINES = [
   INPACTEngineP85,
   INPACTEngineP86,
   INPACTEngineP87,
-  INPACTEngineP88,
   INPACTEngineP89,
   INPACTEngineP90,
   INPACTEngineP91,
@@ -463,9 +583,32 @@ const ENGINES = [
   INPACTEngineP98,
   INPACTEngineP99,
   INPACTEngineP100,
+  INPACTEngineP101,
+  INPACTEngineP102,
+  INPACTEngineP103,
+  INPACTEngineP104,
+  INPACTEngineP105,
+  INPACTEngineP106,
+  INPACTEngineP107,
+  INPACTEngineP108,
+  INPACTEngineP109,
+  INPACTEngineP110,
+  INPACTEngineP113,
+  INPACTEngineP114,
+  INPACTEngineP115,
+  INPACTEngineP116,
+  INPACTEngineP117,
+  INPACTEngineP118,
+  INPACTEngineP119,
+  INPACTEngineP120,
+  INPACTEngineP121,
+  INPACTEngineP122,
+  INPACTEngineP123,
+  INPACTEngineP124,
+  INPACTEngineP125,
 ]
 
-// TypeScript track: all 100 problems (ts01–ts100)
+// TypeScript track: same 119 lessons as React JS (ts01–ts09, ts11–ts15, ts18–ts87, ts89–ts100, then P101–P110/P113–P125)
 const ENGINES_TS = [
   INPACTEngineTS01,
   INPACTEngineTS02,
@@ -476,14 +619,11 @@ const ENGINES_TS = [
   INPACTEngineTS07,
   INPACTEngineTS08,
   INPACTEngineTS09,
-  INPACTEngineTS10,
   INPACTEngineTS11,
   INPACTEngineTS12,
   INPACTEngineTS13,
   INPACTEngineTS14,
   INPACTEngineTS15,
-  INPACTEngineTS16,
-  INPACTEngineTS17,
   INPACTEngineTS18,
   INPACTEngineTS19,
   INPACTEngineTS20,
@@ -554,7 +694,6 @@ const ENGINES_TS = [
   INPACTEngineTS85,
   INPACTEngineTS86,
   INPACTEngineTS87,
-  INPACTEngineTS88,
   INPACTEngineTS89,
   INPACTEngineTS90,
   INPACTEngineTS91,
@@ -567,6 +706,29 @@ const ENGINES_TS = [
   INPACTEngineTS98,
   INPACTEngineTS99,
   INPACTEngineTS100,
+  INPACTEngineP101,
+  INPACTEngineP102,
+  INPACTEngineP103,
+  INPACTEngineP104,
+  INPACTEngineP105,
+  INPACTEngineP106,
+  INPACTEngineP107,
+  INPACTEngineP108,
+  INPACTEngineP109,
+  INPACTEngineP110,
+  INPACTEngineP113,
+  INPACTEngineP114,
+  INPACTEngineP115,
+  INPACTEngineP116,
+  INPACTEngineP117,
+  INPACTEngineP118,
+  INPACTEngineP119,
+  INPACTEngineP120,
+  INPACTEngineP121,
+  INPACTEngineP122,
+  INPACTEngineP123,
+  INPACTEngineP124,
+  INPACTEngineP125,
 ]
 
 // TypeScript Fundamentals: 10 language-first problems (no React)
@@ -601,10 +763,45 @@ const ENGINES_JSF = [
   INPACTEngineJSF15,
 ]
 
-// Node.js Fundamentals: 1 problem (nodef01)
+// Node.js Fundamentals: 15 problems (nodef01–nodef15)
 const ENGINES_NODE = [
   INPACTEngineNODEF01,
+  INPACTEngineNODEF02,
+  INPACTEngineNODEF03,
+  INPACTEngineNODEF04,
+  INPACTEngineNODEF05,
+  INPACTEngineNODEF06,
+  INPACTEngineNODEF07,
+  INPACTEngineNODEF08,
+  INPACTEngineNODEF09,
+  INPACTEngineNODEF10,
+  INPACTEngineNODEF11,
+  INPACTEngineNODEF12,
+  INPACTEngineNODEF13,
+  INPACTEngineNODEF14,
+  INPACTEngineNODEF15,
 ]
+
+// Express.js: 12 problems
+const ENGINES_EXPRESS = [
+  INPACTEngineEXPF01, INPACTEngineEXPF02, INPACTEngineEXPF03, INPACTEngineEXPF04,
+  INPACTEngineEXPF05, INPACTEngineEXPF06, INPACTEngineEXPF07, INPACTEngineEXPF08,
+  INPACTEngineEXPF09, INPACTEngineEXPF10, INPACTEngineEXPF11, INPACTEngineEXPF12,
+]
+
+// Python: 12 problems
+const ENGINES_PYTHON = [
+  INPACTEnginePYF01, INPACTEnginePYF02, INPACTEnginePYF03, INPACTEnginePYF04,
+  INPACTEnginePYF05, INPACTEnginePYF06, INPACTEnginePYF07, INPACTEnginePYF08,
+  INPACTEnginePYF09, INPACTEnginePYF10, INPACTEnginePYF11, INPACTEnginePYF12,
+]
+
+// New-set: SD (15), PE (12), SEC (6), EL (10), FE (10)
+const ENGINES_SD = [ INPACTEngineSD01, INPACTEngineSD02, INPACTEngineSD03, INPACTEngineSD04, INPACTEngineSD05, INPACTEngineSD06, INPACTEngineSD07, INPACTEngineSD08, INPACTEngineSD09, INPACTEngineSD10, INPACTEngineSD11, INPACTEngineSD12, INPACTEngineSD13, INPACTEngineSD14, INPACTEngineSD15 ]
+const ENGINES_PE = [ INPACTEnginePE01, INPACTEnginePE02, INPACTEnginePE03, INPACTEnginePE04, INPACTEnginePE05, INPACTEnginePE06, INPACTEnginePE07, INPACTEnginePE08, INPACTEnginePE09, INPACTEnginePE10, INPACTEnginePE11, INPACTEnginePE12 ]
+const ENGINES_SEC = [ INPACTEngineSEC01, INPACTEngineSEC02, INPACTEngineSEC03, INPACTEngineSEC04, INPACTEngineSEC05, INPACTEngineSEC06 ]
+const ENGINES_EL = [ INPACTEngineEL01, INPACTEngineEL02, INPACTEngineEL03, INPACTEngineEL04, INPACTEngineEL05, INPACTEngineEL06, INPACTEngineEL07, INPACTEngineEL08, INPACTEngineEL09, INPACTEngineEL10 ]
+const ENGINES_FE = [ INPACTEngineFE01, INPACTEngineFE02, INPACTEngineFE03, INPACTEngineFE04, INPACTEngineFE05, INPACTEngineFE06, INPACTEngineFE07, INPACTEngineFE08, INPACTEngineFE09, INPACTEngineFE10 ]
 
 // JS Deep Dive: 13 problems (jsf11, jsb01–06, jsc01–05, jsd01)
 const ENGINES_JS = [
@@ -727,13 +924,37 @@ const ENGINES_CSS = [
   INPACTEngineC100,
 ]
 
-function getEngines(track) {
+const ALGO_AI_TRACKS = ['algo-js', 'algo-ts', 'algo-python', 'algo-java']
+
+function getEngines(track, lessonListLength = 0) {
+  // Algorithms: use content/generate flow (content/algorithms/*.json) so INPACT engine renders the lesson
+  if ((track === 'algorithms' || track === 'mobile-angular') && lessonListLength > 0) {
+    return Array(lessonListLength).fill(null)
+  }
+  if (ALGO_AI_TRACKS.includes(track)) {
+    return Array(ALGO_AI_NAMES.length).fill(null)
+  }
   if (track === 'js') return [...ENGINES_JSF, ...ENGINES_JS_INTERVIEW]
   if (track === 'ts') return [...ENGINES_TSF, ...ENGINES_TS_INTERVIEW]
   if (track === 'node') return [...ENGINES_NODE, ...ENGINES_NODE_INTERVIEW]
+  if (track === 'express') return ENGINES_EXPRESS
+  if (track === 'python') return ENGINES_PYTHON
+  if (track === 'sd') return ENGINES_SD
+  if (track === 'pe') return ENGINES_PE
+  if (track === 'sec') return ENGINES_SEC
+  if (track === 'el') return ENGINES_EL
+  if (track === 'fe') return ENGINES_FE
   if (track === 'react-ts') return ENGINES_TS
-  if (track === 'angular')
+  if (track === 'angular') {
+    const angularTotal = getLessonCount('angular', { reactListLength: PROBLEM_LIST.length })
+    const staticAngularEngines = 14 + ENGINES_ANGULAR_CURRICULUM.length
+    const pad = Math.max(0, angularTotal - staticAngularEngines)
     return [
+      INPACTEngineAngularQB01,
+      INPACTEngineAngularQB02,
+      INPACTEngineAngularQB03,
+      INPACTEngineAngularQB04,
+      INPACTEngineAngularQB05,
       INPACTEngineAngularA01,
       INPACTEngineAngularA02,
       INPACTEngineAngularA03,
@@ -744,13 +965,15 @@ function getEngines(track) {
       INPACTEngineAngularA08,
       INPACTEngineAngularA09,
       ...ENGINES_ANGULAR_CURRICULUM,
+      ...Array(pad).fill(null),
     ]
+  }
   if (track === 'vue') return ENGINES_VUE
   if (track === 'css') return ENGINES_CSS
   return ENGINES
 }
 
-function getProblemList(track) {
+function getProblemList(track, algoLessonList = []) {
   if (track === 'js') {
     const jsFund = JS_FUNDAMENTALS_CURRICULUM.map((c) => ({ title: c.title, shortName: c.shortName, why: c.why }))
     return [...jsFund, ...JS_INTERVIEW_CURRICULUM]
@@ -763,34 +986,344 @@ function getProblemList(track) {
     const nodeFund = NODE_FUNDAMENTALS_CURRICULUM.map((c) => ({ title: c.title, shortName: c.shortName, why: c.why }))
     return [...nodeFund, ...NODE_INTERVIEW_CURRICULUM]
   }
+  if (track === 'express') {
+    return EXPRESS_FUNDAMENTALS_CURRICULUM.map((c) => ({ title: c.title, shortName: c.shortName, why: c.why }))
+  }
+  if (track === 'python') {
+    return PYTHON_FUNDAMENTALS_CURRICULUM.map((c) => ({ title: c.title, shortName: c.shortName, why: c.why }))
+  }
+  if (track === 'sd') return SD_CURRICULUM.map((c) => ({ title: c.title, shortName: c.shortName, why: c.why }))
+  if (track === 'pe') return PE_CURRICULUM.map((c) => ({ title: c.title, shortName: c.shortName, why: c.why }))
+  if (track === 'sec') return SEC_CURRICULUM.map((c) => ({ title: c.title, shortName: c.shortName, why: c.why }))
+  if (track === 'el') return EL_CURRICULUM.map((c) => ({ title: c.title, shortName: c.shortName, why: c.why }))
+  if (track === 'fe') return FE_CURRICULUM.map((c) => ({ title: c.title, shortName: c.shortName, why: c.why }))
   if (track === 'css') {
     return CSS_CURRICULUM.map((c) => ({ title: c.title, shortName: c.shortName }))
   }
   if (track === 'angular' || track === 'vue') {
     return null // same 100 problem titles as React (PROBLEM_LIST in LandingPage)
   }
+  if (track === 'mobile-angular') {
+    return MOBILE_ANGULAR_LESSONS.map((c) => ({ title: c.title, shortName: c.shortName }))
+  }
+  if (track === 'algorithms') {
+    return ALGO_FULL_LIST.map((item, i) => ({ id: `algo-${i}`, title: item.title, ...item }))
+  }
+  if (ALGO_AI_TRACKS.includes(track)) {
+    return ALGO_AI_NAMES.map((title) => ({ title }))
+  }
   return null // react-js and react-ts use PROBLEM_LIST from LandingPage (100 items)
 }
 
+import { AI_LESSONS_CONFIG } from './ai-lessons/config.js'
+import { ALGO_AI_NAMES } from './ai-lessons/algoAiNames.js'
+import { ALGO_FULL_LIST } from './ai-lessons/algoCurriculumFull.js'
+import DynamicLessonPage from './ai-lessons/DynamicLessonPage.jsx'
+import { LessonValidationContext } from './ai-lessons/lessonValidationContext.jsx'
+import AlgoEngine from './learn-algo/AlgoEngine.jsx'
+import {
+  mustRegisterToAccess,
+  mustPayToAccess,
+  recordLessonAccess,
+  deductLessonPayment,
+  getBalanceCents,
+  PRICE_PER_LESSON_CENTS,
+  getStoredUser,
+  logout,
+} from './auth/lessonAccess.js'
+import RegisterModal from './auth/RegisterModal.jsx'
+import AddFundsModal from './auth/AddFundsModal.jsx'
+
 export default function App() {
   const [track, setTrack] = useState('react-js') // 'react-js' | 'react-ts' | 'angular' | 'vue' | 'js' | 'ts' | 'node' | 'css'
+  const [lessonTrack, setLessonTrack] = useState(null) // track locked when lesson is opened (so React TS lesson never uses react-js)
   const [problemIndex, setProblemIndex] = useState(null) // null = landing, 0-based index = problem
-  const onBackToProblems = () => setProblemIndex(null)
+  const [selectedLessonItem, setSelectedLessonItem] = useState(null) // { title, shortName?, why? } when a card is clicked
+  const [algoLessonList, setAlgoLessonList] = useState([]) // algorithms track: list from GET /api/mentor/lessons
+  const [useAILessonFailed, setUseAILessonFailed] = useState(false) // fallback to local engine when AI path fails
+  const [showRegisterModal, setShowRegisterModal] = useState(false)
+  const [showAddFundsModal, setShowAddFundsModal] = useState(false)
+  const [pendingLesson, setPendingLesson] = useState(null) // { track, index, item } when gated
+  const [user, setUser] = useState(() => getStoredUser())
+
+  useEffect(() => {
+    fetch('/api/mentor/lessons')
+      .then((r) => r.ok ? r.json() : { lessons: [] })
+      .then((data) => setAlgoLessonList(data.lessons || []))
+      .catch(() => setAlgoLessonList([]))
+  }, [])
+
+  const onBackToProblems = () => {
+    setProblemIndex(null)
+    setSelectedLessonItem(null)
+    setLessonTrack(null)
+    setUseAILessonFailed(false)
+    setPendingLesson(null)
+  }
+
+  const openLesson = (idx, item, trackOverride) => {
+    const t = trackOverride ?? track
+    setLessonTrack(t) // lock track so generate/validate use the track that was selected when opening (e.g. react-ts not react-js)
+    recordLessonAccess(t, idx)
+    setProblemIndex(idx)
+    setSelectedLessonItem(item ?? null)
+    setUseAILessonFailed(false)
+    setPendingLesson(null)
+  }
+
+  const handleSelectAlgoWithLanguage = (problemIndex, problemTitle, algoTrack) => {
+    setTrack(algoTrack)
+    openLesson(problemIndex, { title: problemTitle }, algoTrack)
+  }
+
+  const handleSelectProblem = (i, item, fullList) => {
+    if (track === 'algorithms') {
+      openLesson(i, item)
+      return
+    }
+    if (mustRegisterToAccess(track, i)) {
+      setPendingLesson({ track, index: i, item })
+      setShowRegisterModal(true)
+      return
+    }
+    if (mustPayToAccess(track, i)) {
+      if (getBalanceCents() >= PRICE_PER_LESSON_CENTS) {
+        deductLessonPayment()
+        openLesson(i, item)
+        return
+      }
+      setPendingLesson({ track, index: i, item })
+      setShowAddFundsModal(true)
+      return
+    }
+    openLesson(i, item)
+  }
+
+  const registerSuccess = () => {
+    setUser(getStoredUser())
+    setShowRegisterModal(false)
+    if (pendingLesson) openLesson(pendingLesson.index, pendingLesson.item, pendingLesson.track)
+  }
+
+  const handleLogout = () => {
+    logout()
+    setUser(null)
+  }
+
+  const authBarStyle = {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '10px',
+    fontSize: '12px',
+    fontWeight: 600,
+    color: '#0f172a',
+  }
+  const authBtnStyle = {
+    background: '#ffffff',
+    border: '1px solid #334155',
+    borderRadius: '8px',
+    color: '#0f172a',
+    cursor: 'pointer',
+    fontSize: '12px',
+    fontWeight: 600,
+    padding: '6px 14px',
+  }
+
+  const addFundsDone = () => {
+    setShowAddFundsModal(false)
+    if (pendingLesson && getBalanceCents() >= PRICE_PER_LESSON_CENTS) {
+      deductLessonPayment()
+      openLesson(pendingLesson.index, pendingLesson.item, pendingLesson.track)
+    }
+    setPendingLesson(null)
+  }
 
   if (problemIndex === null) {
     return (
-      <LandingPage
-        track={track}
-        onTrackChange={setTrack}
-        onSelectProblem={setProblemIndex}
-        problemList={getProblemList(track)}
-      />
+      <>
+        <div
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            zIndex: 9998,
+            padding: '10px 16px',
+            background: '#ffffff',
+            borderBottom: '1px solid #e2e8f0',
+            display: 'flex',
+            justifyContent: 'flex-end',
+            alignItems: 'center',
+            fontFamily: "'DM Sans', sans-serif",
+          }}
+        >
+          <div style={authBarStyle}>
+            {user ? (
+              <>
+                <span>Hi, {user.name || user.emailOrPhone || 'User'}</span>
+                <button type="button" style={authBtnStyle} onClick={handleLogout}>
+                  Log out
+                </button>
+              </>
+            ) : (
+              <button type="button" style={{ ...authBtnStyle, borderColor: '#00d4ff', color: '#052545', background: '#00d4ff' }} onClick={() => setShowRegisterModal(true)}>
+                Log in
+              </button>
+            )}
+          </div>
+        </div>
+        <div style={{ paddingTop: '52px' }}>
+          <LandingPage
+            track={track}
+            onTrackChange={setTrack}
+            onSelectProblem={handleSelectProblem}
+            problemList={getProblemList(track, algoLessonList)}
+          />
+        </div>
+        {showRegisterModal && (
+          <RegisterModal forceRegister onSuccess={registerSuccess} onClose={() => setShowRegisterModal(false)} />
+        )}
+        {showAddFundsModal && <AddFundsModal onDone={addFundsDone} />}
+      </>
     )
   }
 
-  const engines = getEngines(track)
+  // When viewing a lesson, use the track that was selected when they opened it (lessonTrack) so React TS never gets react-js content.
+  const effectiveTrack = (problemIndex != null && lessonTrack != null) ? lessonTrack : track
+  const lessonList =
+    effectiveTrack === 'angular'
+      ? buildAngularLessonList()
+      : (getProblemList(effectiveTrack, algoLessonList) ?? PROBLEM_LIST.map((title) => ({ title })))
+  const engines = getEngines(effectiveTrack, lessonList?.length)
   const Engine = engines[problemIndex]
-  const onNextProblem = () => setProblemIndex((i) => Math.min(i + 1, engines.length - 1))
+
+  const onNextProblem = () => {
+    const next = Math.min(problemIndex + 1, engines.length - 1)
+    if (next === problemIndex) return
+    if (mustRegisterToAccess(effectiveTrack, next)) {
+      setPendingLesson({ track: effectiveTrack, index: next, item: lessonList[next] ?? null })
+      setShowRegisterModal(true)
+      return
+    }
+    if (mustPayToAccess(effectiveTrack, next)) {
+      if (getBalanceCents() >= PRICE_PER_LESSON_CENTS) {
+        deductLessonPayment()
+        openLesson(next, lessonList[next] ?? null)
+        return
+      }
+      setPendingLesson({ track: effectiveTrack, index: next, item: lessonList[next] ?? null })
+      setShowAddFundsModal(true)
+      return
+    }
+    openLesson(next, lessonList[next] ?? null)
+  }
+  const useAILessons = AI_LESSONS_CONFIG.useAILessons && !useAILessonFailed
+  const lessonTitle = selectedLessonItem?.title ?? lessonList[problemIndex]?.title ?? `Lesson ${problemIndex + 1}`
+  const hasStaticEngine = Boolean(engines[problemIndex])
+  // Algorithms: use content flow (content/algorithms/*.json) → DynamicLessonPage. Other tracks: use dynamic when AI enabled or no static engine.
+  const useDynamicLesson = effectiveTrack === 'algorithms' || effectiveTrack === 'mobile-angular' || ALGO_AI_TRACKS.includes(effectiveTrack) || (useAILessons || !hasStaticEngine)
+
+  if (useDynamicLesson) {
+    return (
+      <>
+        {/* Top bar: left/center transparent so Lesson/Editor/Output tabs are visible; header (bg + border) only behind name + login */}
+        <div
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            zIndex: 9999,
+            padding: '10px 16px',
+            fontFamily: "'DM Sans', sans-serif",
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            pointerEvents: 'none',
+          }}
+        >
+          <div style={{ pointerEvents: 'auto', display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <button
+              type="button"
+              onClick={onBackToProblems}
+              style={{
+                background: 'rgb(5, 37, 67)',
+                border: 'none',
+                borderRadius: '6px',
+                color: '#00d4ff',
+                cursor: 'pointer',
+                fontSize: '12px',
+                fontWeight: '600',
+                letterSpacing: '0.05em',
+                padding: '6px 12px',
+              }}
+            >
+              ← All Lessons
+            </button>
+            {effectiveTrack && (
+              <span style={{ fontSize: '12px', color: '#64748b', fontWeight: 500 }}>
+                {({ 'react-js': 'React · JS', 'react-ts': 'React · TS', angular: 'Angular', 'mobile-angular': 'Mobile Angular', vue: 'Vue', js: 'JavaScript', ts: 'TypeScript', node: 'Node', express: 'Express', python: 'Python', css: 'CSS', sd: 'System Design', pe: 'Production Eng', sec: 'Security', el: 'Eng Leadership', fe: 'Frontend Eng', 'algo-js': 'Algo · JS', 'algo-ts': 'Algo · TS', 'algo-python': 'Algo · Python', 'algo-java': 'Algo · Java' })[effectiveTrack] ?? effectiveTrack}
+              </span>
+            )}
+          </div>
+          <div
+            style={{
+              pointerEvents: 'auto',
+              background: '#ffffff',
+              borderBottom: '1px solid #0f172a',
+              borderLeft: '1px solid #0f172a',
+              borderBottomLeftRadius: '8px',
+              padding: '8px 16px',
+              margin: '-10px -16px -10px 0',
+            }}
+          >
+            <div style={authBarStyle}>
+              {user ? (
+                <>
+                  <span>Hi, {user.name || user.emailOrPhone || 'User'}</span>
+                  <button type="button" style={authBtnStyle} onClick={handleLogout}>
+                    Log out
+                  </button>
+                </>
+              ) : (
+                <button type="button" style={{ ...authBtnStyle, borderColor: '#00d4ff', color: '#052545', background: '#00d4ff' }} onClick={() => setShowRegisterModal(true)}>
+                  Log in
+                </button>
+              )}
+            </div>
+          </div>
+        </div>
+        <div style={{ paddingTop: '52px' }}>
+        <DynamicLessonPage
+          track={lessonTrack ?? track}
+          lessonTitle={lessonTitle}
+          lessonIndex={problemIndex}
+          onBackToProblems={onBackToProblems}
+          onNextProblem={onNextProblem}
+          onFallbackToLocal={AI_LESSONS_CONFIG.fallbackToLocalOnError ? () => setUseAILessonFailed(true) : undefined}
+        />
+        </div>
+        {showRegisterModal && (
+          <RegisterModal forceRegister onSuccess={registerSuccess} onClose={() => setShowRegisterModal(false)} />
+        )}
+        {showAddFundsModal && <AddFundsModal onDone={addFundsDone} />}
+      </>
+    )
+  }
+
+  if (!Engine) {
+    return (
+      <>
+        <div style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 9999, padding: '12px 24px', background: '#ffffff', borderBottom: '1px solid #e2e8f0', fontFamily: "'DM Sans', sans-serif", display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <button type="button" onClick={onBackToProblems} style={{ background: '#0f172a', border: 'none', borderRadius: '8px', color: '#ffffff', cursor: 'pointer', fontSize: '12px', fontWeight: '600', padding: '8px 14px' }}>← All Lessons</button>
+          <div style={authBarStyle}>{user ? <><span>Hi, {user.name || user.emailOrPhone || 'User'}</span><button type="button" style={authBtnStyle} onClick={handleLogout}>Log out</button></> : <button type="button" style={{ ...authBtnStyle, borderColor: '#00d4ff', color: '#052545', background: '#00d4ff' }} onClick={() => setShowRegisterModal(true)}>Log in</button>}</div>
+        </div>
+        <div style={{ paddingTop: '52px', textAlign: 'center', padding: '48px' }}>Select a lesson from the list.</div>
+        {showRegisterModal && <RegisterModal forceRegister onSuccess={registerSuccess} onClose={() => setShowRegisterModal(false)} />}
+        {showAddFundsModal && <AddFundsModal onDone={addFundsDone} />}
+      </>
+    )
+  }
 
   return (
     <>
@@ -799,35 +1332,77 @@ export default function App() {
           position: 'fixed',
           top: 0,
           left: 0,
+          right: 0,
           zIndex: 9999,
-          padding: '10px 16px',
-          background: 'rgba(13,17,23,0.95)',
-          borderBottom: '1px solid #1e2733',
-          borderRight: '1px solid #1e2733',
-          borderBottomRightRadius: '8px',
+          padding: '12px 24px',
+          background: '#ffffff',
+          borderBottom: '1px solid #e2e8f0',
           fontFamily: "'DM Sans', sans-serif",
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
         }}
       >
-        <button
-          type="button"
-          onClick={onBackToProblems}
-          style={{
-            background: 'none',
-            border: 'none',
-            color: '#00d4ff',
-            cursor: 'pointer',
-            fontSize: '12px',
-            fontWeight: '600',
-            letterSpacing: '0.05em',
-          }}
-        >
-          ← All Problems
-        </button>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+          <button
+            type="button"
+            onClick={onBackToProblems}
+            style={{
+              background: '#0f172a',
+              border: 'none',
+              borderRadius: '8px',
+              color: '#ffffff',
+              cursor: 'pointer',
+              fontSize: '12px',
+              fontWeight: '600',
+              letterSpacing: '0.05em',
+              padding: '8px 14px',
+            }}
+          >
+            ← All Lessons
+          </button>
+          {effectiveTrack && (
+            <span style={{ fontSize: '12px', color: '#64748b', fontWeight: 500 }}>
+              {({ 'react-js': 'React · JS', 'react-ts': 'React · TS', angular: 'Angular', 'mobile-angular': 'Mobile Angular', vue: 'Vue', js: 'JavaScript', ts: 'TypeScript', node: 'Node', express: 'Express', python: 'Python', css: 'CSS', sd: 'System Design', pe: 'Production Eng', sec: 'Security', el: 'Eng Leadership', fe: 'Frontend Eng', 'algo-js': 'Algo · JS', 'algo-ts': 'Algo · TS', 'algo-python': 'Algo · Python', 'algo-java': 'Algo · Java' })[effectiveTrack] ?? effectiveTrack}
+            </span>
+          )}
+        </div>
+        <div style={authBarStyle}>
+          {user ? (
+            <>
+              <span>Hi, {user.name || user.emailOrPhone || 'User'}</span>
+              <button type="button" style={authBtnStyle} onClick={handleLogout}>
+                Log out
+              </button>
+            </>
+          ) : (
+            <button type="button" style={{ ...authBtnStyle, borderColor: '#00d4ff', color: '#052545', background: '#00d4ff' }} onClick={() => setShowRegisterModal(true)}>
+              Log in
+            </button>
+          )}
+        </div>
       </div>
-      <Engine
-        onNextProblem={problemIndex < engines.length - 1 ? onNextProblem : undefined}
-        onBackToProblems={onBackToProblems}
-      />
+      <LessonValidationContext.Provider
+        value={{
+          track: effectiveTrack,
+          lessonIndex: problemIndex,
+          lessonTitle: lessonTitle ?? '',
+          lessonKey: `${effectiveTrack}:${problemIndex}:${lessonTitle ?? ''}`,
+        }}
+      >
+        <Engine
+          onNextProblem={problemIndex < engines.length - 1 ? onNextProblem : undefined}
+          onBackToProblems={onBackToProblems}
+          {...(effectiveTrack === 'algorithms' && {
+            lessonId: lessonList[problemIndex]?.id,
+            lessonTitle: lessonList[problemIndex]?.title,
+          })}
+        />
+      </LessonValidationContext.Provider>
+      {showRegisterModal && (
+        <RegisterModal forceRegister onSuccess={registerSuccess} onClose={() => setShowRegisterModal(false)} />
+      )}
+      {showAddFundsModal && <AddFundsModal onDone={addFundsDone} />}
     </>
   )
 }

@@ -2,7 +2,7 @@ import createINPACTEngine from "../inpact_engine_shared";
 
 const NODES = [
   {
-    id: "intro", type: "reveal", phase: "Problem",
+    id: "intro", type: "reveal", phase: "Lesson",
     content: {
       tag: "JS — BLOCK B #6",
       title: "Property Descriptors & Object Internals",
@@ -275,7 +275,7 @@ export { Animal, ManualClass }`,
 ];
 
 const sideItems = [
-  { label: "Problem", id: "intro" },
+  { label: "Lesson", id: "intro" },
   { label: "Objectives", id: "objectives" },
   { label: "Step 1 — defineProperty", id: "step1" },
   { label: "Step 2 — Flag effects", id: "step2" },

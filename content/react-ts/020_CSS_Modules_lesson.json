@@ -1,0 +1,331 @@
+{
+  "success": true,
+  "config": {
+    "lessonId": "ai-react-ts-20",
+    "track": "react-ts",
+    "problemNum": 20,
+    "title": "CSS Modules",
+    "shortName": "P20",
+    "intro": {
+      "tag": "LESSON #20",
+      "title": "CSS Modules",
+      "body": "In this lesson, you will build a simple React component with TypeScript that uses CSS Modules to style a button and a heading. You will learn how CSS Modules scope styles locally to a component to prevent naming conflicts, a core concept for managing CSS in React applications. The main technologies involved are React functional components, TypeScript for type safety, and CSS Modules with .module.css files. By the end, you'll understand how to import and apply scoped CSS classes in your TSX components.",
+      "usecase": "CSS Modules are essential in large-scale React applications like e-commerce platforms (Amazon's product grids), social media dashboards (Twitter's feed components), and SaaS tools (Slack's message panels). Developers use them to create scoped, reusable UI components such as navigation menus, filter controls, data tables, and modal dialogs without style conflicts. This pattern ensures maintainable styling in complex interfaces where multiple teams work on independent components, preventing global CSS collisions. For example, a dashboard with interactive charts, user profile cards, and notification badges can have each component styled independently yet consistently."
+    },
+    "objectives": [
+      "Configure a React TypeScript project to support CSS Modules with proper type definitions",
+      "Construct a component that imports and applies CSS Module classes to its elements",
+      "Implement dynamic class binding using CSS Modules with conditional logic",
+      "Manipulate CSS Module classes through computed property names for responsive styling",
+      "Integrate CSS Modules with TypeScript interfaces for type-safe className props",
+      "Apply CSS Module composition to reuse and extend styles across components",
+      "Update existing React components to replace global CSS with scoped CSS Modules"
+    ],
+    "steps": [
+      {
+        "id": "step1",
+        "type": "question",
+        "phase": "Step 1 of 9",
+        "title": "Import React and CSS Modules",
+        "instruction": "Import React and a CSS module file named 'App.module.css' for styling.",
+        "hint": "Use the import statement to bring in React and your CSS module file. The CSS module will be imported as a named import.",
+        "analogousExample": "// Importing React and a CSS module\nimport React from 'react';\nimport styles from './Component.module.css';",
+        "seedCode": "// Import React and the CSS module file here\n\n",
+        "expectedOutcome": "You'll have the necessary imports to start building a React component with CSS Modules.",
+        "successCriteria": [
+          "React is imported from 'react' and the CSS module file 'App.module.css' is imported as a named import."
+        ],
+        "feedbackCorrect": "Nice! Proceed to the next step.",
+        "feedbackPartial": "You're close! Make sure you're importing both React from 'react' and the CSS module file 'App.module.css' as a named import.",
+        "feedbackWrong": "import React from 'react' and import the CSS module file 'App.module.css' using a named import syntax.",
+        "evaluation": {
+          "mode": "keyword_match",
+          "required": [
+            "import",
+            "React",
+            "'react'",
+            "from",
+            "App.module.css"
+          ],
+          "partialThreshold": 0.5,
+          "correctThreshold": 0.8
+        }
+      },
+      {
+        "id": "step2",
+        "type": "question",
+        "phase": "Step 2 of 9",
+        "title": "Create main component with TypeScript",
+        "instruction": "Create a functional component named 'CSSModulesDemo' that returns null for now. Use proper TypeScript typing.",
+        "hint": "Define a function or arrow function with the name 'CSSModulesDemo' and specify its return type as JSX.Element or React.ReactElement.",
+        "analogousExample": "// Similar: a typed functional component\nfunction MyComponent(): JSX.Element {\n  return null;\n}",
+        "seedCode": "import React from 'react';\nimport styles from './App.module.css';\n\n// Create a functional component named 'CSSModulesDemo' that returns null for now\n",
+        "expectedOutcome": "A typed functional component named CSSModulesDemo is defined, returning null.",
+        "successCriteria": [
+          "The component is named 'CSSModulesDemo', has proper TypeScript typing, and returns null."
+        ],
+        "feedbackCorrect": "Nice! Proceed to the next step.",
+        "feedbackPartial": "You're close. Make sure the component is named exactly 'CSSModulesDemo' and includes TypeScript typing for the return value.",
+        "feedbackWrong": "The component definition is missing or incorrect. Create a functional component named 'CSSModulesDemo' with TypeScript typing that returns null.",
+        "evaluation": {
+          "mode": "keyword_match",
+          "required": [
+            "CSSModulesDemo",
+            "return",
+            "null",
+            ":",
+            "JSX",
+            "Element"
+          ],
+          "partialThreshold": 0.5,
+          "correctThreshold": 0.8
+        }
+      },
+      {
+        "id": "step3",
+        "type": "question",
+        "phase": "Step 3 of 9",
+        "title": "Import CSS module styles",
+        "instruction": "Inside the CSSModulesDemo component, import the CSS module styles as a TypeScript object named 'styles' from './App.module.css'.",
+        "hint": "Use the import statement you already wrote at the top of the file, but now assign it to a variable inside the component to access the CSS class names.",
+        "analogousExample": "// Importing a CSS module object inside a component\nconst styles = require('./MyComponent.module.css');",
+        "seedCode": "import React from 'react';\nimport styles from './App.module.css';\n\n// Create a functional component named 'CSSModulesDemo' that returns null for now\nconst CSSModulesDemo = () => {\n  // Import CSS module styles as a TypeScript object here\n  \n  return null;\n};",
+        "expectedOutcome": "The CSS module styles are imported as a TypeScript object inside the component, allowing you to reference CSS class names like styles.className.",
+        "successCriteria": [
+          "The 'styles' object is imported from './App.module.css' inside the CSSModulesDemo component."
+        ],
+        "feedbackCorrect": "Nice! Proceed to the next step.",
+        "feedbackPartial": "You're on the right track, but make sure you're importing the styles inside the component using the correct import statement.",
+        "feedbackWrong": "The CSS module styles need to be imported as a TypeScript object inside the component. Try using 'import styles from './App.module.css';' within the component body.",
+        "evaluation": {
+          "mode": "keyword_match",
+          "required": [
+            "import",
+            "styles",
+            "from",
+            "./App.module.css"
+          ],
+          "partialThreshold": 0.5,
+          "correctThreshold": 0.8
+        }
+      },
+      {
+        "id": "step4",
+        "type": "question",
+        "phase": "Step 4 of 9",
+        "title": "Initialize component state",
+        "instruction": "Inside the CSSModulesDemo component, declare a state variable named 'isActive' with an initial value of false, using useState with proper TypeScript type annotation.",
+        "hint": "Use useState<boolean>(false) to create a boolean state variable. Remember to import useState if you haven't already (though it should be imported from step 1).",
+        "analogousExample": "// Example: initializing boolean state\nconst [isVisible, setIsVisible] = useState<boolean>(false);",
+        "seedCode": "import React from 'react';\nimport styles from './App.module.css';\n\n// Create a functional component named 'CSSModulesDemo' that returns null for now\nconst CSSModulesDemo = () => {\n  // Import CSS module styles as a TypeScript object here\n  \n  // Initialize state here\n  \n  return null;\n};",
+        "expectedOutcome": "The component now has a state variable 'isActive' initialized to false with proper TypeScript typing.",
+        "successCriteria": [
+          "The component contains a useState hook call with <boolean> type annotation, variable name 'isActive', and initial value false."
+        ],
+        "feedbackCorrect": "Nice! Proceed to the next step.",
+        "feedbackPartial": "You're on the right track, but check that you've: 1) Used useState with <boolean> type annotation, 2) Named the variable 'isActive', and 3) Set initial value to false.",
+        "feedbackWrong": "The state initialization is missing or incorrect. You need to declare a state variable named 'isActive' with boolean type and initial value false using useState.",
+        "evaluation": {
+          "mode": "keyword_match",
+          "required": [
+            "useState",
+            "isActive",
+            "boolean",
+            "false"
+          ],
+          "partialThreshold": 0.5,
+          "correctThreshold": 0.8
+        }
+      },
+      {
+        "id": "step5",
+        "type": "question",
+        "phase": "Step 5 of 9",
+        "title": "Define toggle handler function",
+        "instruction": "Inside your CSSModulesDemo component, define a function named 'toggleTheme' that toggles the isDarkMode state between true and false.",
+        "hint": "Create a function that uses the setter function from useState to update the state to the opposite of its current value.",
+        "analogousExample": "// Example: a toggle handler function\nfunction toggleVisibility() {\n    setIsVisible(prev => !prev);\n}",
+        "seedCode": "import React from 'react';\nimport styles from './App.module.css';\n\nconst CSSModulesDemo = () => {\n    const [isDarkMode, setIsDarkMode] = React.useState(false);\n    \n    // Define toggleTheme function here\n    \n    return null;\n};",
+        "expectedOutcome": "A toggleTheme function is defined that toggles the isDarkMode state.",
+        "successCriteria": [
+          "The toggleTheme function is defined and uses setIsDarkMode to toggle the boolean state."
+        ],
+        "feedbackCorrect": "Nice! Proceed to the next step.",
+        "feedbackPartial": "You've defined a function, but make sure it toggles the isDarkMode state correctly using setIsDarkMode.",
+        "feedbackWrong": "The toggle handler function isn't defined correctly. Check that you're using setIsDarkMode to toggle the boolean value.",
+        "evaluation": {
+          "mode": "keyword_match",
+          "required": [
+            "toggleTheme",
+            "setIsDarkMode",
+            "=>",
+            "!",
+            "prev"
+          ],
+          "partialThreshold": 0.5,
+          "correctThreshold": 0.8
+        }
+      },
+      {
+        "id": "step6",
+        "type": "question",
+        "phase": "Step 6 of 9",
+        "title": "Create main container with CSS module class",
+        "instruction": "In the return statement of your CSSModulesDemo component, replace the null with a div element that uses the CSS module class 'container' from your imported styles object.",
+        "hint": "Use JSX syntax to create a div element and apply the class using styles.container.",
+        "analogousExample": "// Example: applying a CSS module class to a div\n<div className={styles.container}></div>",
+        "seedCode": "import React from 'react';\nimport styles from './App.module.css';\n\nconst CSSModulesDemo = () => {\n    const [isDarkMode, setIsDarkMode] = React.useState(false);\n    \n    // Define toggleTheme function here\n    \n    return null;\n};",
+        "expectedOutcome": "The component returns a div element with the CSS module class 'container' applied.",
+        "successCriteria": [
+          "The return statement contains a div element with className={styles.container}."
+        ],
+        "feedbackCorrect": "Nice! Proceed to the next step.",
+        "feedbackPartial": "You're on the right track, but make sure you're using the correct syntax for applying CSS module classes. Check that you're using className={styles.container}.",
+        "feedbackWrong": "The container div with the CSS module class wasn't added correctly. Review how to apply CSS module classes to JSX elements.",
+        "evaluation": {
+          "mode": "keyword_match",
+          "required": [
+            "<div",
+            "className={styles.container}",
+            "return"
+          ],
+          "partialThreshold": 0.5,
+          "correctThreshold": 0.8
+        }
+      },
+      {
+        "id": "step7",
+        "type": "question",
+        "phase": "Step 7 of 9",
+        "title": "Add heading with CSS module styling",
+        "instruction": "Inside the return statement of your CSSModulesDemo component, add an <h1> heading element with the text 'CSS Modules Demo' and apply the CSS module class 'styles.heading' to it.",
+        "hint": "Use JSX syntax for the heading element and apply the class using the imported styles object: className={styles.heading}",
+        "analogousExample": "// Adding a styled heading\n<h1 className={styles.title}>Welcome to My App</h1>",
+        "seedCode": "import React from 'react';\nimport styles from './App.module.css';\n\nconst CSSModulesDemo = () => {\n    const [isDarkMode, setIsDarkMode] = React.useState(false);\n    \n    // Define toggleTheme function here\n    \n    return (\n        <div className={styles.container}>\n            {/* Add your heading here */}\n        </div>\n    );\n};",
+        "expectedOutcome": "The component will render a heading with 'CSS Modules Demo' text that has CSS module styling applied.",
+        "successCriteria": [
+          "An <h1> element with text 'CSS Modules Demo' and className={styles.heading} is added inside the container div"
+        ],
+        "feedbackCorrect": "Nice! Proceed to the next step.",
+        "feedbackPartial": "You've added a heading, but make sure it has the exact text 'CSS Modules Demo' and uses className={styles.heading} to apply the CSS module class.",
+        "feedbackWrong": "The heading wasn't added correctly. You need to add an <h1> element with the text 'CSS Modules Demo' inside the container div, using className={styles.heading} to apply the CSS module styling.",
+        "evaluation": {
+          "mode": "keyword_match",
+          "required": [
+            "<h1>",
+            "CSS Modules Demo",
+            "className={styles.heading}"
+          ],
+          "partialThreshold": 0.5,
+          "correctThreshold": 0.8
+        }
+      },
+      {
+        "id": "step8",
+        "type": "question",
+        "phase": "Step 8 of 9",
+        "title": "Display state with conditional CSS module class",
+        "instruction": "Inside the component's return statement, add a paragraph element that displays the current isDarkMode state value and conditionally applies a CSS module class based on that state.",
+        "hint": "Use the styles object to access your CSS module class names. Apply one class when isDarkMode is true and another when false.",
+        "analogousExample": "// Conditional CSS class example\n<p className={isActive ? styles.activeText : styles.inactiveText}>\n  Status: {isActive ? 'Active' : 'Inactive'}\n</p>",
+        "seedCode": "import React from 'react';\nimport styles from './App.module.css';\n\nconst CSSModulesDemo = () => {\n    const [isDarkMode, setIsDarkMode] = React.useState(false);\n    \n    // Define toggleTheme function here\n    \n    return (\n        <div className={styles.container}>\n            {/* Add your heading here */}\n            \n        </div>\n    );\n};",
+        "expectedOutcome": "A paragraph element will be added that shows the current isDarkMode value and changes its styling based on the state.",
+        "successCriteria": [
+          "The paragraph element displays the isDarkMode value and uses a ternary operator to conditionally apply CSS module classes from the styles object."
+        ],
+        "feedbackCorrect": "Nice! Proceed to the next step.",
+        "feedbackPartial": "You've added a paragraph, but make sure it displays the isDarkMode value and uses a ternary operator with styles from the CSS module.",
+        "feedbackWrong": "The paragraph element is missing or doesn't properly display the state value with conditional CSS module classes.",
+        "evaluation": {
+          "mode": "keyword_match",
+          "required": [
+            "<p",
+            "className={",
+            "isDarkMode",
+            "styles.",
+            "?",
+            ":",
+            "}"
+          ],
+          "partialThreshold": 0.5,
+          "correctThreshold": 0.8
+        }
+      },
+      {
+        "id": "step9",
+        "type": "question",
+        "phase": "Step 9 of 9",
+        "title": "Add explanation paragraph with CSS module class",
+        "instruction": "Add a paragraph element below the heading that explains CSS modules, using the CSS module class 'explanation' from your imported styles.",
+        "hint": "Use the <p> tag with className={styles.explanation} and include some text about CSS modules.",
+        "analogousExample": "// Adding a styled paragraph\n<p className={styles.info}>This is an informational paragraph.</p>",
+        "seedCode": "import React from 'react';\nimport styles from './App.module.css';\n\nconst CSSModulesDemo = () => {\n    const [isDarkMode, setIsDarkMode] = React.useState(false);\n    \n    // Define toggleTheme function here\n    \n    return (\n        <div className={styles.container}>\n            {/* Add your heading here */}\n            \n        </div>\n    );\n};",
+        "expectedOutcome": "A paragraph element with CSS module styling appears in the component output.",
+        "successCriteria": [
+          "The paragraph uses the CSS module class 'explanation' and contains explanatory text about CSS modules."
+        ],
+        "feedbackCorrect": "Nice! Proceed to the next step.",
+        "feedbackPartial": "You added a paragraph, but make sure to use the CSS module class 'explanation' from your imported styles object.",
+        "feedbackWrong": "The paragraph element is missing or doesn't use CSS module styling correctly.",
+        "evaluation": {
+          "mode": "keyword_match",
+          "required": [
+            "<p",
+            "className={styles.explanation}",
+            ">",
+            "</p>"
+          ],
+          "partialThreshold": 0.5,
+          "correctThreshold": 0.8
+        }
+      }
+    ],
+    "sideItems": [
+      {
+        "label": "Intro",
+        "id": "intro"
+      },
+      {
+        "label": "Objectives",
+        "id": "objectives"
+      },
+      {
+        "label": "Import React and CSS Modules",
+        "id": "step1"
+      },
+      {
+        "label": "Create main component with TypeScript",
+        "id": "step2"
+      },
+      {
+        "label": "Import CSS module styles",
+        "id": "step3"
+      },
+      {
+        "label": "Initialize component state",
+        "id": "step4"
+      },
+      {
+        "label": "Define toggle handler function",
+        "id": "step5"
+      },
+      {
+        "label": "Create main container with CSS module class",
+        "id": "step6"
+      },
+      {
+        "label": "Add heading with CSS module styling",
+        "id": "step7"
+      },
+      {
+        "label": "Display state with conditional CSS module class",
+        "id": "step8"
+      },
+      {
+        "label": "Add explanation paragraph with CSS module class",
+        "id": "step9"
+      }
+    ]
+  },
+  "source": "content"
+}

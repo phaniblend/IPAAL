@@ -1,0 +1,1 @@
+{"result":"correct","feedback":"You correctly added a loading state using useState and initialized it to false. The state is properly declared with const [loading, setLoading] = useState(false) inside the DataFetcher component, which meets the step requirements perfectly."}

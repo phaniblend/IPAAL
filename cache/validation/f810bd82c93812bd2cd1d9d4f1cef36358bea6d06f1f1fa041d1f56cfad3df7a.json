@@ -1,0 +1,1 @@
+{"result":"correct","feedback":"You correctly added a reset method that sets the counter property to 0. The method uses the correct syntax with this.counter assignment and follows the same arrow function pattern as the other methods in the class.","hint":"Ready to move on to the next step.","errors":[]}

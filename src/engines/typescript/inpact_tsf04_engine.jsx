@@ -4,7 +4,7 @@ const NODES = [
   {
     id: "intro",
     type: "reveal",
-    phase: "Problem",
+    phase: "Lesson",
     content: {
       tag: "TS FUNDAMENTALS #4",
       title: "Union Types, Intersections & Type Guards",
@@ -216,7 +216,7 @@ export { renderState, assertNever }`,
 ];
 
 const sideItems = [
-  { label: "Problem", id: "intro" },
+  { label: "Lesson", id: "intro" },
   { label: "Objectives", id: "objectives" },
   { label: "Step 1 — Union + typeof", id: "step1" },
   { label: "Step 2 — Intersection &", id: "step2" },

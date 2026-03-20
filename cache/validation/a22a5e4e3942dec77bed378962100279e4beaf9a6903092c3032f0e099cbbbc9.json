@@ -1,0 +1,1 @@
+{"result":"correct","feedback":"You correctly added a password input field inside the form element with the required attributes: name='password', type='password', value={form.password}, and onChange={handleChange}. The input will update the form state when typed into, meeting this step's requirement."}

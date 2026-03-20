@@ -4,7 +4,7 @@ const NODES = [
   {
     id: "intro",
     type: "reveal",
-    phase: "Problem",
+    phase: "Lesson",
     content: {
       tag: "TS FUNDAMENTALS #9",
       title: "Typing Uncertain Output",
@@ -237,7 +237,7 @@ export { ok, err, fetchUser }`,
 ];
 
 const sideItems = [
-  { label: "Problem", id: "intro" },
+  { label: "Lesson", id: "intro" },
   { label: "Objectives", id: "objectives" },
   { label: "Step 1 — Generic fetch", id: "step1" },
   { label: "Step 2 — unknown return", id: "step2" },

@@ -153,7 +153,7 @@ Classic use: a nav bar with a flex container, inline (or inline-block) links, an
 ];
 
 const sideItems = [
-  { id: "intro", label: "Problem" },
+  { id: "intro", label: "Lesson" },
   { id: "objectives", label: "Objectives" },
   { id: "step1", label: "Nav flex" },
   { id: "step2", label: "Inline links" },

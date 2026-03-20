@@ -2,7 +2,7 @@ import createINPACTEngine from "../inpact_engine_shared";
 
 const TITLE = "Test useFetch (Angular)";
 const NODES = [
-  { id: "intro", type: "reveal", phase: "Problem", content: { tag: "PROBLEM #91 (Angular)", title: TITLE, body: "Test components that use HttpClient in Angular: use TestBed and provide HttpClientTestingModule (or provideHttpClientTesting); flush or expectOne to control when the request resolves and assert on the rendered state.", usecase: "Angular HttpClientTestingModule and fakeAsync/flush let you test fetch-based components synchronously." } },
+  { id: "intro", type: "reveal", phase: "Lesson", content: { tag: "LESSON #91 (Angular)", title: TITLE, body: "Test components that use HttpClient in Angular: use TestBed and provide HttpClientTestingModule (or provideHttpClientTesting); flush or expectOne to control when the request resolves and assert on the rendered state.", usecase: "Angular HttpClientTestingModule and fakeAsync/flush let you test fetch-based components synchronously." } },
   { id: "objectives", type: "objectives", phase: "Objectives", items: ["TestBed.configureTestingModule({ imports: [HttpClientTestingModule], ... })", "const http = TestBed.inject(HttpTestingController); fixture.detectChanges(); const req = http.expectOne('/api/data'); req.flush({ name: 'Test' }); fixture.detectChanges();", "Assert fixture.nativeElement.textContent to include expected data", "http.verify() to ensure no outstanding requests"] },
   { id: "step1", type: "question", phase: "Step 1 of 3", paal: "Write a test that configures TestBed with HttpClientTestingModule and the component under test. Inject HttpTestingController. After fixture.detectChanges(), call http.expectOne('/api/data') to get the request.", answer_keywords: ["HttpClientTestingModule", "HttpTestingController", "expectOne"], seed_code: `import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
@@ -43,5 +43,5 @@ it('should show error on fail', () => {
 });`, feedback_correct: "✅ Test useFetch (Angular) complete.", feedback_partial: "http.verify.", feedback_wrong: "Export", expected: "http.verify() and error test" },
 ];
 
-const sideItems = [{ label: "Problem", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
+const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
 export default createINPACTEngine({ NODES, sideItems, problemNum: 91, title: TITLE, shortName: "A — TEST FETCH" });

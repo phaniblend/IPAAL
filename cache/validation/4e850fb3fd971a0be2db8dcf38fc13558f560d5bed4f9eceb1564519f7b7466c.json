@@ -1,0 +1,1 @@
+{"result":"correct","feedback":"You correctly imported both React and useState from the 'react' module using the proper TypeScript/React syntax. This satisfies the step's requirement to import React and useState from 'react'."}

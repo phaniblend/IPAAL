@@ -1,0 +1,1 @@
+{"result":"correct","feedback":"You correctly defined a handleColorChange function inside the ColorPicker component with proper TypeScript typing for the event parameter and updated the color state using setColor with event.target.value.","hint":"Great! Now you have a handler ready to connect to an input element.","errors":[]}

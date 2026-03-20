@@ -2,7 +2,7 @@ import createINPACTEngine from "../inpact_engine_shared";
 
 const TITLE = "Concurrent Mode Gotchas (Angular)";
 const NODES = [
-  { id: "intro", type: "reveal", phase: "Problem", content: { tag: "PROBLEM #89 (Angular)", title: TITLE, body: "Avoid pitfalls when using deferred or async updates in Angular: effects run asynchronously; avoid reading DOM in effect without afterNextRender; use runOutsideAngular for non-Angular tasks; and be aware of change detection timing with signals.", usecase: "Angular effects and change detection have timing rules; understand when views update and when to use afterNextRender or runOutsideAngular." } },
+  { id: "intro", type: "reveal", phase: "Lesson", content: { tag: "LESSON #89 (Angular)", title: TITLE, body: "Avoid pitfalls when using deferred or async updates in Angular: effects run asynchronously; avoid reading DOM in effect without afterNextRender; use runOutsideAngular for non-Angular tasks; and be aware of change detection timing with signals.", usecase: "Angular effects and change detection have timing rules; understand when views update and when to use afterNextRender or runOutsideAngular." } },
   { id: "objectives", type: "objectives", phase: "Objectives", items: ["effect() runs after change detection; don't assume DOM is updated inside effect", "For DOM read after paint use afterNextRender()", "Heavy or non-Angular work: inject NgZone and runOutsideAngular(() => { ... })", "Signals trigger CD when read in template; avoid writing to signals in effect that other effects read (circular)"] },
   { id: "step1", type: "question", phase: "Step 1 of 3", paal: "Create a component with count = signal(0) and an effect that does count(). If you update count inside the effect based on something else, avoid infinite loops: don't update the same signal you read without a guard.", answer_keywords: ["effect", "signal", "guard"], seed_code: `import { Component, signal, effect } from '@angular/core';
 
@@ -54,5 +54,5 @@ export class ConcurrentGotchasComponent {
 }`, feedback_correct: "✅ Concurrent Mode Gotchas (Angular) complete.", feedback_partial: "runOutsideAngular.", feedback_wrong: "Export", expected: "runOutsideAngular and ngZone.run for updates" },
 ];
 
-const sideItems = [{ label: "Problem", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
+const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
 export default createINPACTEngine({ NODES, sideItems, problemNum: 89, title: TITLE, shortName: "A — CONCURRENT GOTCHAS" });

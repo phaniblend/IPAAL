@@ -1,0 +1,1 @@
+{"result":"correct","feedback":"You correctly created four variables inside the main function representing the required data types: a string ('JavaScript'), a number (42), an array (['apple', 'banana']), and an object ({ id: 1, active: true }). The syntax and placement are correct.","hint":"Great! Now you have variables ready for use in the main function.","errors":[]}

@@ -2,7 +2,7 @@ import createINPACTEngine from "../inpact_engine_shared";
 
 const NODES = [
   {
-    id: "intro", type: "reveal", phase: "Problem",
+    id: "intro", type: "reveal", phase: "Lesson",
     content: {
       tag: "JS FUNDAMENTALS #9",
       title: "Generators, Iterators & Proxy",
@@ -272,7 +272,7 @@ export { reactive }`,
 ];
 
 const sideItems = [
-  { label: "Problem", id: "intro" },
+  { label: "Lesson", id: "intro" },
   { label: "Objectives", id: "objectives" },
   { label: "Step 1 — Generators", id: "step1" },
   { label: "Step 2 — Lazy pipeline", id: "step2" },

@@ -143,7 +143,7 @@ Your turn: Keep the global reset and .card. You can remove box-sizing from .card
 ];
 
 const sideItems = [
-  { id: "intro", label: "Problem" },
+  { id: "intro", label: "Lesson" },
   { id: "objectives", label: "Objectives" },
   { id: "step1", label: "Broken layout" },
   { id: "step2", label: "Fix" },

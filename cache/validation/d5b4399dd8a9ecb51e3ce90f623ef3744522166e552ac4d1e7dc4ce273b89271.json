@@ -1,0 +1,1 @@
+{"result":"correct","feedback":"You correctly created an empty object inside the function using 'const notebook = {}'. This satisfies the step's requirement to create an empty object as a 'notebook' for remembering numbers."}

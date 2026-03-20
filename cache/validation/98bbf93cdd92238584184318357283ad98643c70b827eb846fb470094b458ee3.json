@@ -1,0 +1,1 @@
+{"result":"correct","feedback":"You correctly called createApi to create an API service with a baseQuery and endpoints configuration. This satisfies the step's requirement to create an API service using createApi.","hint":"","errors":[]}

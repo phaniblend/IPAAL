@@ -2,7 +2,7 @@ import createINPACTEngine from "../inpact_engine_shared";
 
 const TITLE = "Auth Context (Angular)";
 const NODES = [
-  { id: "intro", type: "reveal", phase: "Problem", content: { tag: "PROBLEM #42 (Angular)", title: TITLE, body: "Provide authentication state (user, isAuthenticated, login, logout) via an injectable AuthService; use signals or BehaviorSubject and inject the service where needed.", usecase: "Angular uses a root-level AuthService instead of React Context for auth state." } },
+  { id: "intro", type: "reveal", phase: "Lesson", content: { tag: "LESSON #42 (Angular)", title: TITLE, body: "Provide authentication state (user, isAuthenticated, login, logout) via an injectable AuthService; use signals or BehaviorSubject and inject the service where needed.", usecase: "Angular uses a root-level AuthService instead of React Context for auth state." } },
   { id: "objectives", type: "objectives", phase: "Objectives", items: ["AuthService: user = signal<User | null>(null); login(u); logout()", "providedIn: 'root' so same instance app-wide", "Guards: inject(AuthService); canActivate = () => authService.user() !== null", "Components: inject(AuthService) and *ngIf=\"authService.user()\" for protected UI"] },
   { id: "step1", type: "question", phase: "Step 1 of 3", paal: "Create AuthService with user = signal<{ name: string } | null>(null), login(name: string) { this.user.set({ name }); }, logout() { this.user.set(null); }. providedIn: 'root'.", answer_keywords: ["AuthService", "user", "login", "logout"], seed_code: `import { Injectable, signal } from '@angular/core';
 
@@ -42,5 +42,5 @@ import { AuthService } from './auth.service';
 export const authGuard: CanActivateFn = () => inject(AuthService).user() !== null;`, feedback_correct: "✅ Auth Context (Angular) complete.", feedback_partial: "canActivate.", feedback_wrong: "Export", expected: "Guard using inject(AuthService).user()" },
 ];
 
-const sideItems = [{ label: "Problem", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
+const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
 export default createINPACTEngine({ NODES, sideItems, problemNum: 42, title: TITLE, shortName: "A — AUTH CONTEXT" });

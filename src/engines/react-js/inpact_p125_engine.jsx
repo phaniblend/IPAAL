@@ -1,0 +1,12 @@
+import createINPACTEngine from "../inpact_engine_shared";
+
+const NODES = [
+  { id: "intro", type: "reveal", phase: "Lesson", content: { tag: "LESSON #125", title: "RTK Query — Data Fetching & Cache", body: "RTK Query is Redux Toolkit's data fetching and caching layer. Teaches createApi, endpoint definition, auto-generated hooks, cache tag invalidation, and when to choose RTK Query over TanStack Query.", usecase: "RTK Query in Redux apps." } },
+  { id: "objectives", type: "objectives", phase: "Objectives", items: ["Create API with createApi", "Define query and mutation endpoints", "Use auto-generated hooks", "Invalidate cache with tags"] },
+  { id: "step1", type: "question", phase: "Step 1 of 3", paal: "Create API slice with createApi, baseQuery, and at least one query endpoint.", answer_keywords: ["createApi", "baseQuery", "endpoints"], seed_code: "import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'\n\nexport default function App() {\n  // Step 1\n}", feedback_correct: "✅ Step 1 done.", feedback_partial: "Create API.", feedback_wrong: "Set up RTK Query", expected: "createApi + endpoint" },
+  { id: "step2", type: "question", phase: "Step 2 of 3", paal: "Use the generated useGetXQuery hook in a component and add a mutation with invalidatesTags.", answer_keywords: ["useGetXQuery", "useXMutation", "invalidatesTags"], seed_code: "import { useGetXQuery } from './api'\n\nexport default function App() {\n  // Step 2\n}", feedback_correct: "✅ Step 2 done.", feedback_partial: "Hooks + invalidation.", feedback_wrong: "Use hooks", expected: "Query hook + mutation invalidation" },
+  { id: "step3", type: "question", phase: "Step 3 of 3", paal: "Wire store with reducerPath and middleware; export.", answer_keywords: ["reducerPath", "middleware", "export"], seed_code: "import { configureStore } from '@reduxjs/toolkit'\n\nexport default function App() {\n  // Step 3\n}", feedback_correct: "✅ Lesson #125 complete.", feedback_partial: "Export and finish.", feedback_wrong: "Export component", expected: "Complete" },
+];
+
+const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
+export default createINPACTEngine({ NODES, sideItems, problemNum: 125, title: "RTK Query — Data Fetching & Cache", shortName: "RTK QUERY DATA & CACHE" });

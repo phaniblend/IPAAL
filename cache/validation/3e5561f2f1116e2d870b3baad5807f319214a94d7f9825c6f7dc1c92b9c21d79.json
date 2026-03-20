@@ -1,0 +1,1 @@
+{"result":"correct","feedback":"You correctly added a second useState call to initialize a name state variable with an empty string. The useState hook is properly used with the initial value of an empty string, and you've destructured both the state variable and its setter function."}

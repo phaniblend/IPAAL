@@ -4,7 +4,7 @@ const NODES = [
   {
     id: "intro",
     type: "reveal",
-    phase: "Problem",
+    phase: "Lesson",
     content: {
       tag: "TS FUNDAMENTALS #10",
       title: "Advanced Patterns — The Senior-Level Toolkit",
@@ -246,7 +246,7 @@ export type { DeepReadonly, ImmutableConfig }`,
 ];
 
 const sideItems = [
-  { label: "Problem", id: "intro" },
+  { label: "Lesson", id: "intro" },
   { label: "Objectives", id: "objectives" },
   { label: "Step 1 — Mapped types", id: "step1" },
   { label: "Step 2 — Template literals", id: "step2" },

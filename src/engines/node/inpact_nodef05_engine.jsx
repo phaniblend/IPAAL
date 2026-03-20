@@ -2,7 +2,7 @@ import createINPACTEngine from "../inpact_engine_shared";
 
 const NODES = [
   {
-    id: "intro", type: "reveal", phase: "Problem",
+    id: "intro", type: "reveal", phase: "Lesson",
     content: {
       tag: "NODE.JS #5",
       title: "Cluster module — multi-core scaling",
@@ -26,5 +26,5 @@ const numCPUs = require('os').cpus().length
   },
 ];
 
-const sideItems = [{ label: "Problem", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }];
+const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }];
 export default createINPACTEngine({ NODES, sideItems, problemNum: "NODE-F05", title: "Cluster module", shortName: "NODE — CLUSTER" });

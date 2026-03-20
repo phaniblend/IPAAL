@@ -2,7 +2,7 @@ import createINPACTEngine from "../inpact_engine_shared";
 
 const TITLE = "Memoization Strategy (Angular)";
 const NODES = [
-  { id: "intro", type: "reveal", phase: "Problem", content: { tag: "PROBLEM #87 (Angular)", title: TITLE, body: "Choose when to memoize in Angular: use computed() for derived state from signals (auto-memoized); avoid putting expensive work in template getters—move to computed(); use trackBy in *ngFor; and consider pure pipes for formatting.", usecase: "Angular computed(), trackBy, and pure pipes are the main memoization strategies." } },
+  { id: "intro", type: "reveal", phase: "Lesson", content: { tag: "LESSON #87 (Angular)", title: TITLE, body: "Choose when to memoize in Angular: use computed() for derived state from signals (auto-memoized); avoid putting expensive work in template getters—move to computed(); use trackBy in *ngFor; and consider pure pipes for formatting.", usecase: "Angular computed(), trackBy, and pure pipes are the main memoization strategies." } },
   { id: "objectives", type: "objectives", phase: "Objectives", items: ["Derived from signals => computed() so it only recomputes when dependencies change", "Expensive filter/sort in template => move to computed() or method called from computed", " *ngFor with trackBy: trackById to avoid re-creating DOM when list identity changes", "Pure pipe for date/currency so result is cached per input"] },
   { id: "step1", type: "question", phase: "Step 1 of 3", paal: "Create a component with items = signal([...]) and filter = signal(''). Add filteredItems = computed(() => this.items().filter(x => x.includes(this.filter()))). Use filteredItems() in *ngFor, not a getter.", answer_keywords: ["computed", "filteredItems", "filter"], seed_code: `import { Component, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -49,5 +49,5 @@ export class SortPipe implements PipeTransform {
 }`, feedback_correct: "✅ Memoization Strategy (Angular) complete.", feedback_partial: "SortPipe.", feedback_wrong: "Export", expected: "computed + trackBy and pure pipe" },
 ];
 
-const sideItems = [{ label: "Problem", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
+const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
 export default createINPACTEngine({ NODES, sideItems, problemNum: 87, title: TITLE, shortName: "A — MEMO STRATEGY" });

@@ -2,7 +2,7 @@ import createINPACTEngine from "../inpact_engine_shared";
 
 const TITLE = "Test Async Component (Angular)";
 const NODES = [
-  { id: "intro", type: "reveal", phase: "Problem", content: { tag: "PROBLEM #92 (Angular)", title: TITLE, body: "Test components with async behavior in Angular: use fakeAsync and tick() to advance time, or waitForAsync (async/await) and fixture.whenStable(); for Observables use done or return Promise; trigger change detection after async updates.", usecase: "Angular fakeAsync, tick, and fixture.whenStable() test async components reliably." } },
+  { id: "intro", type: "reveal", phase: "Lesson", content: { tag: "LESSON #92 (Angular)", title: TITLE, body: "Test components with async behavior in Angular: use fakeAsync and tick() to advance time, or waitForAsync (async/await) and fixture.whenStable(); for Observables use done or return Promise; trigger change detection after async updates.", usecase: "Angular fakeAsync, tick, and fixture.whenStable() test async components reliably." } },
   { id: "objectives", type: "objectives", phase: "Objectives", items: ["fakeAsync(() => { ... tick(1000); fixture.detectChanges(); expect(...).toContain('Done'); })", "Or async/await: fixture.whenStable() after triggering async action", "For Observables: flush or trigger subscribe in test; then fixture.detectChanges()", "Test loading state: assert before flush; assert result after flush"] },
   { id: "step1", type: "question", phase: "Step 1 of 3", paal: "Write a test with fakeAsync. Inside it create the component, call a method that uses setTimeout(..., 100), then tick(100), fixture.detectChanges(), and assert the result.", answer_keywords: ["fakeAsync", "tick", "detectChanges"], seed_code: `import { TestBed } from '@angular/core/testing';
 import { fakeAsync, tick } from '@angular/core/testing';
@@ -34,5 +34,5 @@ it('should update after delay', fakeAsync(() => {
 }));`, feedback_correct: "✅ Test Async Component (Angular) complete.", feedback_partial: "Loading then OK.", feedback_wrong: "Export", expected: "Assert loading state then data after flush" },
 ];
 
-const sideItems = [{ label: "Problem", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
+const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
 export default createINPACTEngine({ NODES, sideItems, problemNum: 92, title: TITLE, shortName: "A — TEST ASYNC" });

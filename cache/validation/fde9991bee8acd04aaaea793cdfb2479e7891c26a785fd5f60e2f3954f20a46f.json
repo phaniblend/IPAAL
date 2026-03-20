@@ -1,0 +1,1 @@
+{"result":"correct","feedback":"You correctly declared a state variable named 'count' with useState, initialized it to 0, and added an explicit TypeScript type annotation for number using useState<number>(0). This satisfies all requirements for this step.","hint":"Ready to move on to using this state variable in your component.","errors":[]}

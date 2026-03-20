@@ -1,0 +1,1 @@
+{"result":"correct","feedback":"You correctly initialized a typed state variable 'count' using useState<number>(0) inside your Counter component. This satisfies all requirements for this step: the state is typed as number, initialized to 0, and stored in a variable named 'count'.","hint":"Great work! Your state is ready to be displayed and updated in the next steps.","errors":[]}

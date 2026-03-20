@@ -2,7 +2,7 @@ import createINPACTEngine from "../inpact_engine_shared";
 
 const NODES = [
   {
-    id: "intro", type: "reveal", phase: "Problem",
+    id: "intro", type: "reveal", phase: "Lesson",
     content: {
       tag: "JS FUNDAMENTALS #5",
       title: "Objects, Prototypes & Classes",
@@ -267,7 +267,7 @@ export { Timer }`,
 ];
 
 const sideItems = [
-  { label: "Problem", id: "intro" },
+  { label: "Lesson", id: "intro" },
   { label: "Objectives", id: "objectives" },
   { label: "Step 1 — Prototype chain", id: "step1" },
   { label: "Step 2 — Full class", id: "step2" },

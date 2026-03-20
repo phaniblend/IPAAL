@@ -1,0 +1,357 @@
+{
+  "success": true,
+  "config": {
+    "lessonId": "ai-react-ts-06",
+    "track": "react-ts",
+    "problemNum": 6,
+    "title": "List Rendering with map()",
+    "shortName": "P06",
+    "intro": {
+      "tag": "LESSON #6",
+      "title": "List Rendering with map()",
+      "body": "In this lesson, you will build a simple React component that displays a list of items, such as a to-do list or a list of favorite foods. You will learn how to use the JavaScript `map()` method to transform an array of data into an array of React elements for rendering. The core concept is list rendering, which involves dynamically generating UI components based on data arrays using TypeScript for type safety. By the end, you'll understand how to efficiently render multiple items without manually writing each one, a fundamental skill in React development.",
+      "usecase": "List rendering with `map()` is a foundational pattern for building dynamic user interfaces in React. You'll use it to display data collections in real products, such as rendering rows in a dashboard table, generating menu items from a navigation config, or populating a list of search results. As a developer, you'll apply this pattern whenever you need to transform an array of data into a series of UI elements, ensuring your interface stays in sync with changing data."
+    },
+    "objectives": [
+      "Implement the map() method to transform an array of data into React elements",
+      "Apply key props to list items for efficient DOM updates and reconciliation",
+      "Construct a reusable component that accepts an array prop and renders a list",
+      "Configure TypeScript interfaces to define the shape of list item data",
+      "Update component state to dynamically add or remove items from a rendered list",
+      "Bind event handlers to list items for interactive user interactions",
+      "Manipulate array data structures to filter or sort rendered lists"
+    ],
+    "steps": [
+      {
+        "id": "step1",
+        "type": "question",
+        "phase": "Step 1 of 10",
+        "title": "Import React and useState",
+        "instruction": "Import React and useState from 'react'.",
+        "hint": "Use the import statement to bring in the necessary modules. For example: import React, { useState } from 'react';",
+        "analogousExample": "// Importing modules for a different project\nimport React, { useState } from 'react';",
+        "seedCode": "// Import React and useState from 'react' here\n\n",
+        "expectedOutcome": "You will have the React library and useState hook available for use in your component.",
+        "successCriteria": [
+          "React and useState are imported from 'react'."
+        ],
+        "feedbackCorrect": "Nice! Proceed to the next step.",
+        "feedbackPartial": "You're on the right track, but make sure to import both React and useState from 'react'. Check your import statement syntax.",
+        "feedbackWrong": "That doesn't look correct. Remember to import both React and useState from the 'react' package using the import statement.",
+        "evaluation": {
+          "mode": "keyword_match",
+          "required": [
+            "import",
+            "React",
+            "useState",
+            "'react'"
+          ],
+          "partialThreshold": 0.5,
+          "correctThreshold": 0.8
+        }
+      },
+      {
+        "id": "step2",
+        "type": "question",
+        "phase": "Step 2 of 10",
+        "title": "Create the main App component",
+        "instruction": "Create a functional component named App that returns JSX. You can use either a function declaration or arrow function syntax.",
+        "hint": "Define a component that returns a JSX element. For now, you can return a simple placeholder like a div or null.",
+        "analogousExample": "// Example of a functional component\nfunction App() {\n  return <div>Hello World</div>;\n}",
+        "seedCode": "import React, { useState } from 'react';\n\n// Create the App component here\n",
+        "expectedOutcome": "The App component is defined and returns JSX.",
+        "successCriteria": [
+          "A functional component named App is created and returns JSX."
+        ],
+        "feedbackCorrect": "Great! You've successfully created the App component.",
+        "feedbackPartial": "You're close. Make sure you've defined a component named App that returns JSX.",
+        "feedbackWrong": "The App component isn't defined correctly. Check that you've created a functional component named App that returns JSX.",
+        "evaluation": {
+          "mode": "keyword_match",
+          "required": [
+            "App",
+            "return",
+            "JSX"
+          ],
+          "partialThreshold": 0.5,
+          "correctThreshold": 0.8
+        }
+      },
+      {
+        "id": "step3",
+        "type": "question",
+        "phase": "Step 3 of 10",
+        "title": "Define an interface for list items",
+        "instruction": "Define a TypeScript interface named 'ListItem' with two properties: 'id' (type number) and 'text' (type string). Add this interface above your App component.",
+        "hint": "In TypeScript, you can define an interface using the 'interface' keyword followed by the interface name and property definitions inside curly braces.",
+        "analogousExample": "// Example: defining an interface for a user\ninterface User {\n  id: number;\n  name: string;\n}",
+        "seedCode": "import React, { useState } from 'react';\n\n// Define your ListItem interface here\n\n// Create the App component here",
+        "expectedOutcome": "You should have a properly typed ListItem interface that will be used to define the structure of items in your list.",
+        "successCriteria": [
+          "A ListItem interface is defined with both id (number) and text (string) properties."
+        ],
+        "feedbackCorrect": "Nice! Proceed to the next step.",
+        "feedbackPartial": "You're on the right track, but make sure your interface has both required properties with correct types.",
+        "feedbackWrong": "The interface definition is missing or incorrect. Remember to use the 'interface' keyword and include both id (number) and text (string) properties.",
+        "evaluation": {
+          "mode": "keyword_match",
+          "required": [
+            "interface",
+            "ListItem",
+            "id:",
+            "number",
+            "text:",
+            "string"
+          ],
+          "partialThreshold": 0.5,
+          "correctThreshold": 0.8
+        }
+      },
+      {
+        "id": "step4",
+        "type": "question",
+        "phase": "Step 4 of 10",
+        "title": "Initialize state with an array of ListItem objects",
+        "instruction": "Inside your App component, use the useState hook to initialize a state variable named 'items' with an array containing at least three ListItem objects.",
+        "hint": "Call useState with an array of objects that match your ListItem interface. Each object should have 'id' and 'text' properties.",
+        "analogousExample": "// Example: initializing state with typed data\nconst [tasks, setTasks] = useState<Task[]>([\n  { id: 1, name: 'Task 1' },\n  { id: 2, name: 'Task 2' }\n]);",
+        "seedCode": "import React, { useState } from 'react';\n\ninterface ListItem {\n  id: number;\n  text: string;\n}\n\nconst App = () => {\n  // Initialize items state here\n\n  return null;\n};\n\nexport default App;",
+        "expectedOutcome": "The component now has a typed state variable 'items' initialized with sample data.",
+        "successCriteria": [
+          "State variable 'items' is declared using useState with an array of ListItem objects as initial value."
+        ],
+        "feedbackCorrect": "Nice! Proceed to the next step.",
+        "feedbackPartial": "You're close. Make sure you're using the useState hook and providing an array of objects that match the ListItem interface.",
+        "feedbackWrong": "declare a state variable named 'items' using useState, initialized with an array of ListItem objects.",
+        "evaluation": {
+          "mode": "keyword_match",
+          "required": [
+            "useState",
+            "items",
+            "ListItem",
+            "id",
+            "text"
+          ],
+          "partialThreshold": 0.5,
+          "correctThreshold": 0.8
+        }
+      },
+      {
+        "id": "step5",
+        "type": "question",
+        "phase": "Step 5 of 10",
+        "title": "Add a basic unordered list structure",
+        "instruction": "Inside your App component's return statement, replace the current return value with a <ul> element.",
+        "hint": "Replace 'return null;' with 'return <ul></ul>;' to create an empty unordered list container.",
+        "analogousExample": "// Returning a basic container element\nfunction RecipeList() {\n  return <div></div>;\n}",
+        "seedCode": "import React, { useState } from 'react';\n\ninterface ListItem {\n  id: number;\n  text: string;\n}\n\nconst App = () => {\n  // Initialize items state here\n\n  return null;\n};\n\nexport default App;",
+        "expectedOutcome": "Your component will now return an empty <ul> element, creating the container structure for your list items.",
+        "successCriteria": [
+          "The App component returns a <ul> element instead of null."
+        ],
+        "feedbackCorrect": "Nice! Proceed to the next step.",
+        "feedbackPartial": "You're close! Make sure you're replacing 'return null;' with 'return <ul></ul>;'.",
+        "feedbackWrong": "Check that you've replaced the return statement with a <ul> element.",
+        "evaluation": {
+          "mode": "keyword_match",
+          "required": [
+            "<ul>",
+            "</ul>",
+            "return"
+          ],
+          "partialThreshold": 0.5,
+          "correctThreshold": 0.8
+        }
+      },
+      {
+        "id": "step6",
+        "type": "question",
+        "phase": "Step 6 of 10",
+        "title": "Map over the items array to render list items",
+        "instruction": "Inside the <ul> element, use the map() method on the items array to return <li> elements for each item. Display the item's text inside each <li>.",
+        "hint": "Remember to use curly braces {} to embed JavaScript expressions in JSX. The map() method should be called on items and return JSX for each element.",
+        "analogousExample": "// Example: mapping an array to list items\nconst numbers = [1, 2, 3];\nconst listItems = numbers.map(num => <li key={num}>{num}</li>);",
+        "seedCode": "import React, { useState } from 'react';\n\ninterface ListItem {\n  id: number;\n  text: string;\n}\n\nconst App = () => {\n  // Initialize items state here\n\n  return (\n    <ul>\n      {/* Map over items array here */}\n    </ul>\n  );\n};\n\nexport default App;",
+        "expectedOutcome": "The <ul> element will contain multiple <li> elements generated from the items array, each displaying the corresponding item text.",
+        "successCriteria": [
+          "The map() method is used inside the <ul> to iterate over items and return <li> elements with the item's text content."
+        ],
+        "feedbackCorrect": "Nice! Proceed to the next step.",
+        "feedbackPartial": "You're on the right track, but make sure you're calling map() on the items array and returning <li> elements with the item's text inside.",
+        "feedbackWrong": "Inside the <ul>, you need to use items.map() to create <li> elements for each item in the array.",
+        "evaluation": {
+          "mode": "keyword_match",
+          "required": [
+            "items.map",
+            "<li>",
+            "{item.text}"
+          ],
+          "partialThreshold": 0.5,
+          "correctThreshold": 0.8
+        }
+      },
+      {
+        "id": "step7",
+        "type": "question",
+        "phase": "Step 7 of 10",
+        "title": "Display the text content from each item",
+        "instruction": "Inside each <li> element, display the text property from the current item object.",
+        "hint": "Use curly braces {} inside the <li> to access the item's text property.",
+        "analogousExample": "// Accessing object property in JSX\nconst item = { id: 1, name: 'Apple' };\n<li>{item.name}</li>",
+        "seedCode": "import React, { useState } from 'react';\n\ninterface ListItem {\n  id: number;\n  text: string;\n}\n\nconst App = () => {\n  // Initialize items state here\n\n  return (\n    <ul>\n      {/* Map over items array here */}\n    </ul>\n  );\n};\n\nexport default App;",
+        "expectedOutcome": "The map function should render each item's text content inside its corresponding <li> element.",
+        "successCriteria": [
+          "Each <li> element displays the text property from its corresponding ListItem object."
+        ],
+        "feedbackCorrect": "Nice! Proceed to the next step.",
+        "feedbackPartial": "You're on the right track, but make sure you're displaying the text property from the current item object inside each <li>.",
+        "feedbackWrong": "Try accessing the text property from the item object using curly braces inside the <li> element.",
+        "evaluation": {
+          "mode": "keyword_match",
+          "required": [
+            "<li>",
+            "{",
+            "item.text",
+            "}"
+          ],
+          "partialThreshold": 0.5,
+          "correctThreshold": 0.8
+        }
+      },
+      {
+        "id": "step8",
+        "type": "question",
+        "phase": "Step 8 of 10",
+        "title": "Add a key prop to each list item",
+        "instruction": "In your map() callback, add a key prop to each <li> element using the item's id property.",
+        "hint": "Remember that React needs a unique key for each list item. Use the item's id field as the key value.",
+        "analogousExample": "// Adding key prop to list items\nconst items = [{ id: 1, name: 'Apple' }, { id: 2, name: 'Banana' }];\nconst list = items.map(item => (\n  <li key={item.id}>{item.name}</li>\n));",
+        "seedCode": "import React, { useState } from 'react';\n\ninterface ListItem {\n  id: number;\n  text: string;\n}\n\nconst App = () => {\n  // Initialize items state here\n\n  return (\n    <ul>\n      {/* Map over items array here */}\n    </ul>\n  );\n};\n\nexport default App;",
+        "expectedOutcome": "Each <li> element in the rendered list will have a unique key prop based on the item's id.",
+        "successCriteria": [
+          "The map() callback returns <li> elements with key={item.id} prop."
+        ],
+        "feedbackCorrect": "Nice! Proceed to the next step.",
+        "feedbackPartial": "You're on the right track, but make sure each <li> has a key prop using item.id.",
+        "feedbackWrong": "The key prop is missing or incorrect. Each list item needs a unique key, typically using the item's id property.",
+        "evaluation": {
+          "mode": "keyword_match",
+          "required": [
+            "key={item.id}",
+            "key={item",
+            "key="
+          ],
+          "partialThreshold": 0.5,
+          "correctThreshold": 0.8
+        }
+      },
+      {
+        "id": "step9",
+        "type": "question",
+        "phase": "Step 9 of 10",
+        "title": "Add a button to add new items to the list",
+        "instruction": "Inside your component, add a button element above the unordered list with an onClick handler that will add a new ListItem to the items state array.",
+        "hint": "Use the <button> tag and create an inline arrow function for onClick that updates the state using setItems.",
+        "analogousExample": "// Adding a button with click handler\n<button onClick={() => setItems([...items, newItem])}>\n  Add Item\n</button>",
+        "seedCode": "import React, { useState } from 'react';\n\ninterface ListItem {\n  id: number;\n  text: string;\n}\n\nconst App = () => {\n  const [items, setItems] = useState<ListItem[]>([\n    { id: 1, text: 'First item' },\n    { id: 2, text: 'Second item' },\n    { id: 3, text: 'Third item' }\n  ]);\n\n  return (\n    <>\n      {/* Add button here */}\n      <ul>\n        {items.map(item => (\n          <li key={item.id}>\n            {item.text}\n          </li>\n        ))}\n      </ul>\n    </>\n  );\n};\n\nexport default App;",
+        "expectedOutcome": "A button appears above the list that, when clicked, will add a new item to the state array (though the handler logic will be completed in the next step).",
+        "successCriteria": [
+          "A button element is added with an onClick handler that updates the items state by adding a new ListItem object."
+        ],
+        "feedbackCorrect": "Nice! Proceed to the next step.",
+        "feedbackPartial": "You added a button, but make sure it has an onClick handler that will eventually add a new item to the state.",
+        "feedbackWrong": "Check that you've added a button element with an onClick handler above the unordered list.",
+        "evaluation": {
+          "mode": "keyword_match",
+          "required": [
+            "<button",
+            "onClick",
+            "setItems"
+          ],
+          "partialThreshold": 0.5,
+          "correctThreshold": 0.8
+        }
+      },
+      {
+        "id": "step10",
+        "type": "question",
+        "phase": "Step 10 of 10",
+        "title": "Add a button to remove items from the list",
+        "instruction": "Inside each list item, add a button with the text 'Remove' and an onClick handler that calls a function to remove that specific item from the items state.",
+        "hint": "You'll need to create a removeItem function that takes an item id, then use setItems with filter to remove the matching item.",
+        "analogousExample": "// Example: remove function and button\nconst removeItem = (id: number) => {\n  setItems(prevItems => prevItems.filter(item => item.id !== id));\n};\n\n// In JSX:\n<button onClick={() => removeItem(item.id)}>Remove</button>",
+        "seedCode": "import React, { useState } from 'react';\n\ninterface ListItem {\n  id: number;\n  text: string;\n}\n\nconst App = () => {\n  const [items, setItems] = useState<ListItem[]>([\n    { id: 1, text: 'First item' },\n    { id: 2, text: 'Second item' },\n    { id: 3, text: 'Third item' }\n  ]);\n\n  return (\n    <>\n      {/* Add button here */}\n      <ul>\n        {items.map(item => (\n          <li key={item.id}>\n            {item.text}\n          </li>\n        ))}\n      </ul>\n    </>\n  );\n};\n\nexport default App;",
+        "expectedOutcome": "Each list item will have a 'Remove' button that, when clicked, removes only that item from the list.",
+        "successCriteria": [
+          "A removeItem function is defined, each list item contains a button with onClick that calls removeItem with the item's id, and setItems is used with filter to update state."
+        ],
+        "feedbackCorrect": "Nice! Proceed to the next step.",
+        "feedbackPartial": "You're on the right track. Make sure you have a removeItem function that uses setItems with filter, and each button's onClick calls this function with the correct item id.",
+        "feedbackWrong": "The removal functionality isn't working yet. You need to create a removeItem function and add a button inside each list item that calls it with the item's id.",
+        "evaluation": {
+          "mode": "keyword_match",
+          "required": [
+            "removeItem",
+            "setItems",
+            "filter",
+            "onClick",
+            "button"
+          ],
+          "partialThreshold": 0.5,
+          "correctThreshold": 0.8
+        }
+      }
+    ],
+    "sideItems": [
+      {
+        "label": "Intro",
+        "id": "intro"
+      },
+      {
+        "label": "Objectives",
+        "id": "objectives"
+      },
+      {
+        "label": "Import React and useState",
+        "id": "step1"
+      },
+      {
+        "label": "Create the main App component",
+        "id": "step2"
+      },
+      {
+        "label": "Define an interface for list items",
+        "id": "step3"
+      },
+      {
+        "label": "Initialize state with an array of ListItem objects",
+        "id": "step4"
+      },
+      {
+        "label": "Add a basic unordered list structure",
+        "id": "step5"
+      },
+      {
+        "label": "Map over the items array to render list items",
+        "id": "step6"
+      },
+      {
+        "label": "Display the text content from each item",
+        "id": "step7"
+      },
+      {
+        "label": "Add a key prop to each list item",
+        "id": "step8"
+      },
+      {
+        "label": "Add a button to add new items to the list",
+        "id": "step9"
+      },
+      {
+        "label": "Add a button to remove items from the list",
+        "id": "step10"
+      }
+    ]
+  },
+  "source": "content"
+}

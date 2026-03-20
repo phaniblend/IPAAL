@@ -1,0 +1,1 @@
+{"result":"partial","feedback":"You correctly added an input element with value={name} and onChange={handleNameChange}, which handles user input properly. However, the input is missing the required type='text' attribute that was specified in the success criteria.","hint":"Add type='text' to your input element to fully meet the requirements."}

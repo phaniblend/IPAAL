@@ -1,5 +1,6 @@
 import Editor from "@monaco-editor/react";
 import { useRef, useEffect, useCallback } from "react";
+import { configureMonacoDiagnosticsOff, MONACO_SHARED_OPTIONS } from "./monacoEditorConfig.js";
 
 /**
  * Auto-insert a closing tag when the user types '>'.
@@ -77,7 +78,7 @@ function setupAutoCloseTags(editor, monaco) {
 export default function CodeEditor({
   value = "",
   onChange,
-  height = "240px",
+  height = "480px",
   language = "javascript",
   cursorAtStartOfLine,
   cursorAtEndOfLine,
@@ -138,10 +139,12 @@ export default function CodeEditor({
       height={height}
       language={language}
       value={value}
-      theme="vs-dark"
+      theme="vs"
       onChange={(val) => onChange(val ?? "")}
+      beforeMount={configureMonacoDiagnosticsOff}
       onMount={handleMount}
       options={{
+        ...MONACO_SHARED_OPTIONS,
         fontSize: 14,
         fontFamily: "'JetBrains Mono', 'Fira Code', 'Cascadia Code', Menlo, monospace",
         fontLigatures: true,

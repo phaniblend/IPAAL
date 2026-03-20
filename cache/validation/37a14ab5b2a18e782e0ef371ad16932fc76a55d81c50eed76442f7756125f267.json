@@ -1,0 +1,1 @@
+{"result":"correct","feedback":"You correctly used the ternary operator to conditionally render a paragraph element based on the isVisible state. The paragraph displays 'Content is visible!' when isVisible is true and renders null when false, which satisfies the step requirements perfectly.","hint":"","errors":[]}

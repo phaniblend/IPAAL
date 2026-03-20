@@ -2,7 +2,7 @@ import createINPACTEngine from "../inpact_engine_shared";
 
 const TITLE = "Test Context (Angular)";
 const NODES = [
-  { id: "intro", type: "reveal", phase: "Problem", content: { tag: "PROBLEM #94 (Angular)", title: TITLE, body: "Test components that inject a context service (e.g. ThemeService, AuthService) in Angular: override the provider in TestBed with a stub or mock so the component gets a controllable context; assert behavior for different context values.", usecase: "Angular TestBed overrideProvider or custom mock services test context-dependent components." } },
+  { id: "intro", type: "reveal", phase: "Lesson", content: { tag: "LESSON #94 (Angular)", title: TITLE, body: "Test components that inject a context service (e.g. ThemeService, AuthService) in Angular: override the provider in TestBed with a stub or mock so the component gets a controllable context; assert behavior for different context values.", usecase: "Angular TestBed overrideProvider or custom mock services test context-dependent components." } },
   { id: "objectives", type: "objectives", phase: "Objectives", items: ["TestBed.configureTestingModule({ providers: [{ provide: ThemeService, useValue: { theme: signal('dark') } }] })", "Or create a spy: const themeService = jasmine.createSpyObj('ThemeService', ['getTheme']); themeService.getTheme.and.returnValue('dark');", "Assert component shows dark UI when theme is dark", "Test both branches: provide light and dark and assert each"] },
   { id: "step1", type: "question", phase: "Step 1 of 3", paal: "Create a mock ThemeService: const mockTheme = { theme: signal('light'), setTheme: jasmine.createSpy() }. Provide it: TestBed.configureTestingModule({ providers: [{ provide: ThemeService, useValue: mockTheme }], imports: [ConsumerComponent] }).", answer_keywords: ["useValue", "mock", "ThemeService"], seed_code: `import { TestBed } from '@angular/core/testing';
 import { signal } from '@angular/core';
@@ -41,5 +41,5 @@ it('should show dark theme', () => {
 });`, feedback_correct: "✅ Test Context (Angular) complete.", feedback_partial: "toHaveBeenCalled.", feedback_wrong: "Export", expected: "Assert setTheme was called" },
 ];
 
-const sideItems = [{ label: "Problem", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
+const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
 export default createINPACTEngine({ NODES, sideItems, problemNum: 94, title: TITLE, shortName: "A — TEST CONTEXT" });

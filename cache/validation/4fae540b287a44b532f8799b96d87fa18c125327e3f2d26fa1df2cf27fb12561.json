@@ -1,0 +1,1 @@
+{"result":"correct","feedback":"You correctly updated the ternary operator to display a paragraph with 'Content is hidden' text when isVisible is false instead of null. The conditional rendering now shows different content for both true and false states as required."}

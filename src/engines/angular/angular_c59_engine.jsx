@@ -2,7 +2,7 @@ import createINPACTEngine from "../inpact_engine_shared";
 
 const TITLE = "Error Boundary (Angular)";
 const NODES = [
-  { id: "intro", type: "reveal", phase: "Problem", content: { tag: "PROBLEM #59 (Angular)", title: TITLE, body: "Catch errors in child components and show a fallback UI using Angular's ErrorHandler or a wrapper that uses ViewContainerRef and catches errors in the child's lifecycle; for template errors use *ngIf and try/catch in effect.", usecase: "Angular provides ErrorHandler and custom strategies to catch errors and show fallback UI like React error boundaries." } },
+  { id: "intro", type: "reveal", phase: "Lesson", content: { tag: "LESSON #59 (Angular)", title: TITLE, body: "Catch errors in child components and show a fallback UI using Angular's ErrorHandler or a wrapper that uses ViewContainerRef and catches errors in the child's lifecycle; for template errors use *ngIf and try/catch in effect.", usecase: "Angular provides ErrorHandler and custom strategies to catch errors and show fallback UI like React error boundaries." } },
   { id: "objectives", type: "objectives", phase: "Objectives", items: ["Implement custom ErrorHandler: handleError(error) { log; show fallback state }", "Or create a wrapper component that uses *ngIf and catches by not letting child throw into parent", "Use runInInjectionContext and effect with try/catch to set hasError signal", "provide ErrorHandler in app config for global handler"] },
   { id: "step1", type: "question", phase: "Step 1 of 3", paal: "Create a custom ErrorHandler class that extends ErrorHandler and overrides handleError(error): log the error and optionally set a global error signal. Provide it: provide(ErrorHandler, { useClass: MyErrorHandler }).", answer_keywords: ["ErrorHandler", "handleError", "provide"], seed_code: `import { ErrorHandler, inject } from '@angular/core';
 
@@ -38,5 +38,5 @@ export const appConfig = {
 };`, feedback_correct: "✅ Error Boundary (Angular) complete.", feedback_partial: "provide ErrorHandler.", feedback_wrong: "Export", expected: "provide ErrorHandler and export" },
 ];
 
-const sideItems = [{ label: "Problem", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
+const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
 export default createINPACTEngine({ NODES, sideItems, problemNum: 59, title: TITLE, shortName: "A — ERROR BOUNDARY" });

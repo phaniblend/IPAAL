@@ -1,0 +1,1 @@
+{"result":"correct","feedback":"You correctly added a paragraph that uses the ternary operator to conditionally display 'Content is visible!' when isVisible is true and null when false. The ternary operator syntax is implemented properly within the JSX expression."}

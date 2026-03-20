@@ -1,0 +1,1 @@
+{"result":"correct","feedback":"You correctly created a count state variable initialized to 0 using the useState hook. The array is properly destructured into count and setCount variables, which satisfies this step's requirements.","hint":"Next, you'll likely add JSX elements that use the count state variable.","errors":[]}

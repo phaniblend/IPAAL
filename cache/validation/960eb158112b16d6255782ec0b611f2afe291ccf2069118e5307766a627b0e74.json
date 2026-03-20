@@ -1,0 +1,1 @@
+{"result":"correct","feedback":"You correctly added the @Component decorator above the CounterApp class with a template property containing a div wrapper and an h1 heading. The decorator is properly configured with a selector and template as required by Angular.","hint":"Ready to move on to the next step where you'll work with the counter property and methods.","errors":[]}

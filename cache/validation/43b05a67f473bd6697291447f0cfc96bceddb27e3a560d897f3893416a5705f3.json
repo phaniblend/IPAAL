@@ -1,0 +1,1 @@
+{"result":"correct","feedback":"You correctly added a second useEffect with the dependency array [count] that logs the count value when it changes. The useEffect will now run only when the count state updates, which is exactly what the step required."}

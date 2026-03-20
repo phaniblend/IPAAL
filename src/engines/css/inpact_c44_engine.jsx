@@ -51,7 +51,7 @@ const NODES = [
 ];
 
 const sideItems = [
-  { id: "intro", label: "Problem" },
+  { id: "intro", label: "Lesson" },
   { id: "objectives", label: "Objectives" },
   { id: "step1", label: "Step 1" },
   { id: "step2", label: "Step 2" },

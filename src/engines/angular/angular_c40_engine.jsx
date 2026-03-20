@@ -2,7 +2,7 @@ import createINPACTEngine from "../inpact_engine_shared";
 
 const TITLE = "useMediaQuery (Angular)";
 const NODES = [
-  { id: "intro", type: "reveal", phase: "Problem", content: { tag: "PROBLEM #40 (Angular)", title: TITLE, body: "React to media query matches in Angular using matchMedia(query).matches and a MediaQueryListListener to update a signal when the match state changes.", usecase: "Angular uses window.matchMedia and addEventListener('change') to expose media queries as signals for responsive UI." } },
+  { id: "intro", type: "reveal", phase: "Lesson", content: { tag: "LESSON #40 (Angular)", title: TITLE, body: "React to media query matches in Angular using matchMedia(query).matches and a MediaQueryListListener to update a signal when the match state changes.", usecase: "Angular uses window.matchMedia and addEventListener('change') to expose media queries as signals for responsive UI." } },
   { id: "objectives", type: "objectives", phase: "Objectives", items: ["const mq = window.matchMedia('(min-width: 768px)'); isMatch = signal(mq.matches)", "mq.addEventListener('change', (e) => isMatch.set(e.matches)); remove in ngOnDestroy", "Or inject BreakpointObserver (Angular CDK) and use isMatched() with toSignal", "Use isMatch() in template for *ngIf or [class.mobile]"] },
   { id: "step1", type: "question", phase: "Step 1 of 3", paal: "Create a component with query = '(min-width: 768px)' and mq = window.matchMedia(query). isMatch = signal(mq.matches). Display {{ isMatch() ? 'Desktop' : 'Mobile' }}.", answer_keywords: ["matchMedia", "matches", "signal"], seed_code: `import { Component, signal } from '@angular/core';
 
@@ -50,5 +50,5 @@ export class MediaQueryComponent implements OnInit, OnDestroy {
 }`, feedback_correct: "✅ useMediaQuery (Angular) complete.", feedback_partial: "*ngIf layouts.", feedback_wrong: "Export", expected: "*ngIf for desktop/mobile and export" },
 ];
 
-const sideItems = [{ label: "Problem", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
+const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
 export default createINPACTEngine({ NODES, sideItems, problemNum: 40, title: TITLE, shortName: "A — MEDIA QUERY" });

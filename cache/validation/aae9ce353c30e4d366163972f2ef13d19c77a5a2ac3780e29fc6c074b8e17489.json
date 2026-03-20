@@ -1,0 +1,1 @@
+{"result":"correct","feedback":"You correctly imported both React and the useState hook from the 'react' package using the proper ES6 import syntax. This satisfies the step's requirement to import React and useState.","hint":"","errors":[]}

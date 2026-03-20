@@ -151,7 +151,7 @@ Your turn: Write a comment above .box with the formula and the numeric total (e.
 ];
 
 const sideItems = [
-  { id: "intro", label: "Problem" },
+  { id: "intro", label: "Lesson" },
   { id: "objectives", label: "Objectives" },
   { id: "step1", label: "Content" },
   { id: "step2", label: "Padding" },

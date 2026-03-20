@@ -1,0 +1,1 @@
+{"result":"correct","feedback":"You correctly replaced the return value with a <form> element and wired its onSubmit attribute to your handleSubmit function. This satisfies both success criteria for this step.","hint":"Next, you'll likely add form fields inside the form element.","errors":[]}

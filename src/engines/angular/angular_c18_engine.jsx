@@ -2,7 +2,7 @@ import createINPACTEngine from "../inpact_engine_shared";
 
 const TITLE = "PropTypes / TypeScript Interface (Angular)";
 const NODES = [
-  { id: "intro", type: "reveal", phase: "Problem", content: { tag: "PROBLEM #18 (Angular)", title: TITLE, body: "Type your @Input() and @Output() with TypeScript interfaces. Define an interface for the component's props and use it on @Input() propName!: IProps.", usecase: "Angular + TypeScript: interfaces for inputs and events improve safety and docs." } },
+  { id: "intro", type: "reveal", phase: "Lesson", content: { tag: "LESSON #18 (Angular)", title: TITLE, body: "Type your @Input() and @Output() with TypeScript interfaces. Define an interface for the component's props and use it on @Input() propName!: IProps.", usecase: "Angular + TypeScript: interfaces for inputs and events improve safety and docs." } },
   { id: "objectives", type: "objectives", phase: "Objectives", items: ["Define interface User { id: number; name: string }", "@Input() user!: User or @Input() user: User | null = null", "Use user in template with {{ user.name }} (optional chaining if nullable)", "Type @Output() with EventEmitter<User> when emitting objects"] },
   { id: "step1", type: "question", phase: "Step 1 of 3", paal: "Define an interface, e.g. export interface User { id: number; name: string }. Create a component with @Input() user!: User.", answer_keywords: ["interface", "User", "Input"], seed_code: `import { Component, Input } from '@angular/core';
 
@@ -51,5 +51,5 @@ export class UserComponent {
 }`, feedback_correct: "✅ TypeScript Interface (Angular) complete.", feedback_partial: "Export.", feedback_wrong: "Export component and interface", expected: "Export UserComponent and User interface." },
 ];
 
-const sideItems = [{ label: "Problem", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
+const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
 export default createINPACTEngine({ NODES, sideItems, problemNum: 18, title: TITLE, shortName: "A — INTERFACE" });

@@ -2,7 +2,7 @@ import createINPACTEngine from "../inpact_engine_shared";
 
 const TITLE = "Component Composition (Angular)";
 const NODES = [
-  { id: "intro", type: "reveal", phase: "Problem", content: { tag: "PROBLEM #19 (Angular)", title: TITLE, body: "Compose a UI from smaller components: a parent template that uses multiple child components (e.g. app-header, app-sidebar, app-content). Each child is a standalone component.", usecase: "Angular apps are built by composing standalone or module-declared components." } },
+  { id: "intro", type: "reveal", phase: "Lesson", content: { tag: "LESSON #19 (Angular)", title: TITLE, body: "Compose a UI from smaller components: a parent template that uses multiple child components (e.g. app-header, app-sidebar, app-content). Each child is a standalone component.", usecase: "Angular apps are built by composing standalone or module-declared components." } },
   { id: "objectives", type: "objectives", phase: "Objectives", items: ["Create 2–3 small components (Header, Sidebar, Content)", "Parent template: place them in a layout with selectors", "Pass inputs and handle outputs as needed", "Import child components in parent's imports array"] },
   { id: "step1", type: "question", phase: "Step 1 of 3", paal: "Create a HeaderComponent with selector 'app-header' and template <header>Header</header>. Create a ContentComponent with selector 'app-content' and template <main>Content</main>.", answer_keywords: ["selector", "template", "component"], seed_code: `import { Component } from '@angular/core';
 
@@ -52,5 +52,5 @@ export class LayoutComponent {}
 `, feedback_correct: "✅ Component Composition (Angular) complete.", feedback_partial: "Export.", feedback_wrong: "Export LayoutComponent", expected: "Export LayoutComponent and child components." },
 ];
 
-const sideItems = [{ label: "Problem", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
+const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
 export default createINPACTEngine({ NODES, sideItems, problemNum: 19, title: TITLE, shortName: "A — COMPOSITION" });

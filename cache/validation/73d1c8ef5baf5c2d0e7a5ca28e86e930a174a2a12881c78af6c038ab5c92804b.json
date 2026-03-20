@@ -1,0 +1,1 @@
+{"result":"correct","feedback":"You correctly added the key prop to each li element using the array index. The syntax `key={idx}` properly provides a unique identifier for each list item, which is exactly what this step required."}

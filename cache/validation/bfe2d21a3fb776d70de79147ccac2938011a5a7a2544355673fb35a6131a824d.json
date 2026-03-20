@@ -1,0 +1,1 @@
+{"result":"correct","feedback":"You correctly defined a function that takes a star number parameter and calls setHover with that parameter inside your StarRating component. The arrow function syntax is valid and meets the step's requirements.","hint":"","errors":[]}

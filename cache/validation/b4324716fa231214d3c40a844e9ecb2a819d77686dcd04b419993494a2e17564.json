@@ -1,0 +1,1 @@
+{"result":"correct","feedback":"You correctly created a variable named 'fruits' as an array containing three fruit names as strings. The array satisfies the step requirements with valid fruit name strings.","hint":"Note that you're using useState which suggests you're thinking ahead to state management, but for this step a simple variable declaration would also work."}

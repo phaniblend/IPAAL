@@ -2,7 +2,7 @@ import createINPACTEngine from "../inpact_engine_shared";
 
 const TITLE = "useOnlineStatus (Angular)";
 const NODES = [
-  { id: "intro", type: "reveal", phase: "Problem", content: { tag: "PROBLEM #39 (Angular)", title: TITLE, body: "Track navigator.onLine in Angular with a signal updated from window 'online' and 'offline' events; use addEventListener in ngOnInit and cleanup in ngOnDestroy.", usecase: "Angular listens to window online/offline events to expose connectivity as a signal." } },
+  { id: "intro", type: "reveal", phase: "Lesson", content: { tag: "LESSON #39 (Angular)", title: TITLE, body: "Track navigator.onLine in Angular with a signal updated from window 'online' and 'offline' events; use addEventListener in ngOnInit and cleanup in ngOnDestroy.", usecase: "Angular listens to window online/offline events to expose connectivity as a signal." } },
   { id: "objectives", type: "objectives", phase: "Objectives", items: ["isOnline = signal(navigator.onLine)", "window.addEventListener('online', () => isOnline.set(true)); addEventListener('offline', () => isOnline.set(false))", "Remove listeners in ngOnDestroy", "Optional: use fromEvent(window, 'online').pipe(map(() => true)) and merge with offline for toSignal"] },
   { id: "step1", type: "question", phase: "Step 1 of 3", paal: "Create a component with isOnline = signal(typeof navigator !== 'undefined' ? navigator.onLine : true). Template: {{ isOnline() ? 'Online' : 'Offline' }}.", answer_keywords: ["navigator.onLine", "signal"], seed_code: `import { Component, signal } from '@angular/core';
 
@@ -61,5 +61,5 @@ export class OnlineStatusComponent implements OnInit, OnDestroy {
 }`, feedback_correct: "✅ useOnlineStatus (Angular) complete.", feedback_partial: "*ngIf.", feedback_wrong: "Export", expected: "*ngIf=\"!isOnline()\" and export" },
 ];
 
-const sideItems = [{ label: "Problem", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
+const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
 export default createINPACTEngine({ NODES, sideItems, problemNum: 39, title: TITLE, shortName: "A — ONLINE STATUS" });

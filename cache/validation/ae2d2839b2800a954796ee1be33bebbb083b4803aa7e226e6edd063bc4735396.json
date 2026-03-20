@@ -1,0 +1,1 @@
+{"result":"correct","feedback":"You correctly added an email input field with type='email', name='email', value bound to the form's email state, and onChange wired to the handleChange function. This satisfies all requirements for this step.","hint":"Ready to continue with the next step.","errors":[]}

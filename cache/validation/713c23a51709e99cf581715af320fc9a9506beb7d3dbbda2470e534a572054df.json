@@ -1,0 +1,1 @@
+{"result":"correct","feedback":"You correctly added a Routes component as the direct child inside the BrowserRouter wrapper. The App component returns a Router element containing a Routes element, meeting this step's requirements.","hint":"In the next steps, you'll add Route components inside the Routes wrapper to define your application's pages.","errors":[]}

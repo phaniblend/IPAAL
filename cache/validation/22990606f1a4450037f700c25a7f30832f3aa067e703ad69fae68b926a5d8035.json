@@ -1,0 +1,1 @@
+{"result":"correct","feedback":"You correctly imported the Component decorator from '@angular/core' using the proper import syntax. This satisfies the step's requirement to make Component available for creating Angular components.","hint":"Now you can use @Component() decorator to define your component metadata.","errors":[]}

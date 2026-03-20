@@ -1,0 +1,1 @@
+{"result":"correct","feedback":"You correctly called useState with false as the initial value and named the state variable isVisible. The syntax and behavior fully satisfy this step's requirements."}

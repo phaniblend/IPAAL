@@ -2,7 +2,7 @@ import createINPACTEngine from "../inpact_engine_shared";
 
 const TITLE = "useFetch (Angular)";
 const NODES = [
-  { id: "intro", type: "reveal", phase: "Problem", content: { tag: "PROBLEM #31 (Angular)", title: TITLE, body: "Fetch data in Angular using HttpClient: inject(HttpClient), get<T>(url) returning Observable, and subscribe or async pipe in the template; manage loading and error with signals.", usecase: "Angular's HttpClient and async pipe (or toSignal) replace React useFetch-style data fetching." } },
+  { id: "intro", type: "reveal", phase: "Lesson", content: { tag: "LESSON #31 (Angular)", title: TITLE, body: "Fetch data in Angular using HttpClient: inject(HttpClient), get<T>(url) returning Observable, and subscribe or async pipe in the template; manage loading and error with signals.", usecase: "Angular's HttpClient and async pipe (or toSignal) replace React useFetch-style data fetching." } },
   { id: "objectives", type: "objectives", phase: "Objectives", items: ["Inject HttpClient; in ngOnInit or effect call this.http.get<T>(url).subscribe(...)", "Store result in signal: data = signal<T | null>(null); loading = signal(true); error = signal<Error | null>(null)", "Or use toSignal(this.http.get<T>(url)) for reactive stream-to-signal", "Provide HttpClient via provideHttpClient() in app config"] },
   { id: "step1", type: "question", phase: "Step 1 of 3", paal: "Create a component that injects HttpClient. Add data = signal<any>(null), loading = signal(true). In ngOnInit call this.http.get('https://api.example.com/data').subscribe({ next: (res) => { this.data.set(res); this.loading.set(false); }, error: (e) => { this.loading.set(false); } }).", answer_keywords: ["HttpClient", "get", "subscribe"], seed_code: `import { Component, signal, OnInit, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
@@ -66,5 +66,5 @@ export class FetchComponent {
 }`, feedback_correct: "✅ useFetch (Angular) complete.", feedback_partial: "toSignal.", feedback_wrong: "toSignal", expected: "toSignal(this.http.get(...), { initialValue: null })" },
 ];
 
-const sideItems = [{ label: "Problem", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
+const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
 export default createINPACTEngine({ NODES, sideItems, problemNum: 31, title: TITLE, shortName: "A — HTTP FETCH" });

@@ -2,7 +2,7 @@ import createINPACTEngine from "../inpact_engine_shared";
 
 const TITLE = "Default Props (Angular)";
 const NODES = [
-  { id: "intro", type: "reveal", phase: "Problem", content: { tag: "PROBLEM #14 (Angular)", title: TITLE, body: "Give @Input() properties default values so the component works without the parent passing them. Example: @Input() title = 'Untitled'.", usecase: "Angular @Input() defaults are the equivalent of React defaultProps." } },
+  { id: "intro", type: "reveal", phase: "Lesson", content: { tag: "LESSON #14 (Angular)", title: TITLE, body: "Give @Input() properties default values so the component works without the parent passing them. Example: @Input() title = 'Untitled'.", usecase: "Angular @Input() defaults are the equivalent of React defaultProps." } },
   { id: "objectives", type: "objectives", phase: "Objectives", items: ["@Input() prop = defaultValue for each optional prop", "Use sensible defaults (e.g. title = 'Untitled', count = 0)", "Parent can override with [title]=\"'My Title'\" or omit to use default", "Type the @Input() when needed: @Input() count = 0"] },
   { id: "step1", type: "question", phase: "Step 1 of 3", paal: "Create a component with @Input() title = 'Untitled' and @Input() count = 0. Display both in the template.", answer_keywords: ["Input", "title", "count", "default"], seed_code: `import { Component, Input } from '@angular/core';
 
@@ -39,5 +39,5 @@ export class DefaultPropsComponent {
 }`, feedback_correct: "✅ Default Props (Angular) complete.", feedback_partial: "Export.", feedback_wrong: "Export component", expected: "Export DefaultPropsComponent." },
 ];
 
-const sideItems = [{ label: "Problem", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
+const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
 export default createINPACTEngine({ NODES, sideItems, problemNum: 14, title: TITLE, shortName: "A — DEFAULT PROPS" });

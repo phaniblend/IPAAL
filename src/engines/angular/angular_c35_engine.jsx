@@ -2,7 +2,7 @@ import createINPACTEngine from "../inpact_engine_shared";
 
 const TITLE = "useWindowSize (Angular)";
 const NODES = [
-  { id: "intro", type: "reveal", phase: "Problem", content: { tag: "PROBLEM #35 (Angular)", title: TITLE, body: "Track window innerWidth and innerHeight in Angular using a signal updated from a resize event listener on window; use NgZone or fromEvent and toSignal for a reactive approach.", usecase: "Angular uses fromEvent(window, 'resize') and toSignal or manual listener to expose window size as signals." } },
+  { id: "intro", type: "reveal", phase: "Lesson", content: { tag: "LESSON #35 (Angular)", title: TITLE, body: "Track window innerWidth and innerHeight in Angular using a signal updated from a resize event listener on window; use NgZone or fromEvent and toSignal for a reactive approach.", usecase: "Angular uses fromEvent(window, 'resize') and toSignal or manual listener to expose window size as signals." } },
   { id: "objectives", type: "objectives", phase: "Objectives", items: ["width = signal(window.innerWidth); height = signal(window.innerHeight)", "Listen: window.addEventListener('resize', () => { width.set(window.innerWidth); height.set(window.innerHeight); })", "Clean up in ngOnDestroy or use fromEvent(window, 'resize').pipe(map(() => ({ w: window.innerWidth, h: window.innerHeight })), toSignal())", "Inject PLATFORM_ID and check isPlatformBrowser before using window"] },
   { id: "step1", type: "question", phase: "Step 1 of 3", paal: "Create a component with width = signal(window.innerWidth) and height = signal(window.innerHeight). Template: {{ width() }} x {{ height() }}.", answer_keywords: ["signal", "innerWidth", "innerHeight"], seed_code: `import { Component, signal } from '@angular/core';
 
@@ -52,5 +52,5 @@ export class WindowSizeComponent {
 }`, feedback_correct: "✅ useWindowSize (Angular) complete.", feedback_partial: "fromEvent.", feedback_wrong: "toSignal", expected: "fromEvent and toSignal or resize listener" },
 ];
 
-const sideItems = [{ label: "Problem", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
+const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
 export default createINPACTEngine({ NODES, sideItems, problemNum: 35, title: TITLE, shortName: "A — WINDOW SIZE" });

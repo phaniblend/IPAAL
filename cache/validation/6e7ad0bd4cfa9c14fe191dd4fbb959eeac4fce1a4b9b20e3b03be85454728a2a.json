@@ -1,0 +1,1 @@
+{"result":"partial","feedback":"You correctly created the handleInputChange function that accepts an event parameter and uses the right approach with setUser and spread operator. However, there's a typo in 'even.target.name' which should be 'event.target.name' to properly access the input's name attribute.","errors":["Typo: 'even.target.name' should be 'event.target.name'"]}

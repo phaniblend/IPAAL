@@ -1,0 +1,1 @@
+{"result":"correct","feedback":"You correctly added the useEffect hook with a function that logs 'Component rendered' to the console. The hook is properly placed after the count state initialization as required.","hint":"Great! Your useEffect will run after every render. In the next steps, you'll learn how to control when effects run using dependency arrays."}

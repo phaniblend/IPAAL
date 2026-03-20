@@ -10,17 +10,17 @@ if (typeof document !== "undefined" && !document.getElementById("dm-sans-font"))
   document.head.appendChild(link);
 }
 
-// ─── ENGINE A09: PIPES — STEP-BY-STEP (same pattern as React engines) ──────────
+// ─── ENGINE ANG09: PIPES — STEP-BY-STEP (same pattern as React engines) ─────────
 // One small task per step: create the pipe file piece by piece, then use it in template.
 
 const NODES = [
   {
     id: "intro",
     type: "reveal",
-    phase: "Problem",
+    phase: "Lesson",
     content: {
-      tag: "ENGINE A09 — PIPES",
-      title: "Flight Status Label Pipe",
+      tag: "ANG09 — PIPES",
+      title: "Pipes — Creation & Usage",
       body: `We'll build a pipe called statusLabel that turns status codes into readable labels:
 
   ON_TIME   → "✅ On Time"
@@ -253,7 +253,7 @@ export class StatusLabelPipe implements PipeTransform {
 ];
 
 const sideItems = [
-  { id: "intro", label: "Problem" },
+  { id: "intro", label: "Lesson" },
   { id: "objectives", label: "Objectives" },
   { id: "step1", label: "Step 1" },
   { id: "step2", label: "Step 2" },
@@ -265,7 +265,7 @@ const sideItems = [
 ];
 
 const s = {
-  wrap: { fontFamily: "'DM Sans', sans-serif", background: "#0f1117", minHeight: "100vh", color: "#e2e8f0", display: "flex", flexDirection: "column" },
+  wrap: { fontFamily: "'DM Sans', sans-serif", background: "#0f1117", minHeight: "100vh", minWidth: "1000px", overflow: "hidden", color: "#e2e8f0", display: "flex", flexDirection: "column" },
   topbar: { display: "flex", alignItems: "center", gap: "12px", padding: "0 24px", height: "52px", background: "#1a1d2e", borderBottom: "1px solid #2d3748", flexShrink: 0 },
   logo: { fontWeight: 700, fontSize: "13px", letterSpacing: "0.15em", color: "#7c3aed", marginRight: "8px" },
   engineTag: { fontWeight: 700, fontSize: "10px", letterSpacing: "0.12em", color: "#4a5568", textTransform: "uppercase" },
@@ -402,7 +402,7 @@ export default function AngularA09Pipes({ onNextProblem }) {
             <pre style={{ margin: 0, whiteSpace: "pre-wrap" }}>{node.expected}</pre>
           </div>
         )}
-        <CodeEditor value={currentAnswer} onChange={setCurrentAnswer} height="240px" />
+        <CodeEditor value={currentAnswer} onChange={setCurrentAnswer} height="320px" />
         {feedback && <div style={s.feedback(result)}>{feedback}</div>}
         {showExpected && node.expected && (
           <div style={{ ...s.pre, borderLeft: "2px solid #10b981", marginBottom: "16px" }}>
@@ -436,7 +436,7 @@ export default function AngularA09Pipes({ onNextProblem }) {
     <div style={s.wrap}>
       <header style={s.topbar}>
         <div style={s.logo}>INPACT · ANGULAR</div>
-        <div style={s.engineTag}>ENGINE A09 — PIPES</div>
+        <div style={s.engineTag}>ANG09 — PIPES</div>
       </header>
       <div style={s.body}>
         <aside style={s.sidebar}>

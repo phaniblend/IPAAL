@@ -2,7 +2,7 @@ import createINPACTEngine from "../inpact_engine_shared";
 
 const TITLE = "Debounced Search (Angular)";
 const NODES = [
-  { id: "intro", type: "reveal", phase: "Problem", content: { tag: "PROBLEM #63 (Angular)", title: TITLE, body: "Build a search input that triggers an API or filter after the user stops typing: use a Subject and pipe(debounceTime(300)), then toSignal or subscribe to update results signal; bind input to the Subject.", usecase: "Angular RxJS debounceTime and Subject (or form valueChanges) implement debounced search." } },
+  { id: "intro", type: "reveal", phase: "Lesson", content: { tag: "LESSON #63 (Angular)", title: TITLE, body: "Build a search input that triggers an API or filter after the user stops typing: use a Subject and pipe(debounceTime(300)), then toSignal or subscribe to update results signal; bind input to the Subject.", usecase: "Angular RxJS debounceTime and Subject (or form valueChanges) implement debounced search." } },
   { id: "objectives", type: "objectives", phase: "Objectives", items: ["searchSubject = new Subject<string>(); (input)=\"searchSubject.next($event.target.value)\"", "debouncedSearch = toSignal(searchSubject.pipe(debounceTime(300)), { initialValue: '' })", "effect(() => { const q = debouncedSearch(); if (q) fetch or filter and set results.set(...) })", "Or use FormsModule and control.valueChanges.pipe(debounceTime(300))"] },
   { id: "step1", type: "question", phase: "Step 1 of 3", paal: "Create a component with searchSubject = new Subject<string>() and (input)=\"searchSubject.next($any($event.target).value)\". Add debouncedSearch = toSignal(this.searchSubject.pipe(debounceTime(300)), { initialValue: '' }). Display {{ debouncedSearch() }}.", answer_keywords: ["Subject", "debounceTime", "toSignal"], seed_code: `import { Component } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
@@ -69,5 +69,5 @@ export class DebouncedSearchComponent {
 }`, feedback_correct: "✅ Debounced Search (Angular) complete.", feedback_partial: "switchMap.", feedback_wrong: "Export", expected: "debounceTime and optional switchMap" },
 ];
 
-const sideItems = [{ label: "Problem", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
+const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
 export default createINPACTEngine({ NODES, sideItems, problemNum: 63, title: TITLE, shortName: "A — DEBOUNCED SEARCH" });

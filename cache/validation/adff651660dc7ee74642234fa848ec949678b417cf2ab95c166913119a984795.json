@@ -1,0 +1,1 @@
+{"result":"correct","feedback":"You correctly initialized the isVisible state variable using useState with an initial value of true. The destructuring syntax to get both the state variable and setter function is properly implemented."}

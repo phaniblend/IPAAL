@@ -2,7 +2,7 @@ import createINPACTEngine from "../inpact_engine_shared";
 
 const TITLE = "Image Gallery (Angular)";
 const NODES = [
-  { id: "intro", type: "reveal", phase: "Problem", content: { tag: "PROBLEM #30 (Angular)", title: TITLE, body: "Display a list of images with *ngFor; track selected index with a signal; show a large preview when one is clicked using *ngIf or a detail view.", usecase: "Angular *ngFor, signals, and *ngIf build image galleries with selection state." } },
+  { id: "intro", type: "reveal", phase: "Lesson", content: { tag: "LESSON #30 (Angular)", title: TITLE, body: "Display a list of images with *ngFor; track selected index with a signal; show a large preview when one is clicked using *ngIf or a detail view.", usecase: "Angular *ngFor, signals, and *ngIf build image galleries with selection state." } },
   { id: "objectives", type: "objectives", phase: "Objectives", items: ["images = signal([{ src, alt }, ...]); selectedIndex = signal(0)", "*ngFor=\"let img of images(); let i = index\" with <img [src]=\"img.src\" (click)=\"selectedIndex.set(i)\">", "Preview: *ngIf=\"selectedIndex() >= 0\" and bind images()[selectedIndex()].src", "Optional: use NgOptimizedImage for loading"] },
   { id: "step1", type: "question", phase: "Step 1 of 3", paal: "Create a component with images = signal([{ src: '/a.jpg', alt: 'A' }, { src: '/b.jpg', alt: 'B' }]). Template: *ngFor with <img [src]=\"img.src\" [alt]=\"img.alt\">.", answer_keywords: ["ngFor", "images", "src"], seed_code: `import { Component, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -60,5 +60,5 @@ export class GalleryComponent {
 }`, feedback_correct: "✅ Image Gallery (Angular) complete.", feedback_partial: "class.selected.", feedback_wrong: "Export", expected: "[class.selected] and export" },
 ];
 
-const sideItems = [{ label: "Problem", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
+const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
 export default createINPACTEngine({ NODES, sideItems, problemNum: 30, title: TITLE, shortName: "A — IMAGE GALLERY" });

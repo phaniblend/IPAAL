@@ -1,0 +1,1 @@
+{"result":"correct","feedback":"You correctly declared a second state variable named 'text' using useState, initialized it to the string 'Hello', and added the appropriate TypeScript type annotation <string>. This satisfies all requirements for this step.","hint":"Ready to move on to using both state variables in your component.","errors":[]}

@@ -2,7 +2,7 @@ import createINPACTEngine from "../inpact_engine_shared";
 
 const TITLE = "Props Drilling (Angular)";
 const NODES = [
-  { id: "intro", type: "reveal", phase: "Problem", content: { tag: "PROBLEM #13 (Angular)", title: TITLE, body: "Pass data from a parent component down through a child to a grandchild using @Input() at each level. Parent has a signal; child and grandchild receive it via @Input().", usecase: "Angular passes data down with @Input(); drilling is the same pattern across multiple layers." } },
+  { id: "intro", type: "reveal", phase: "Lesson", content: { tag: "LESSON #13 (Angular)", title: TITLE, body: "Pass data from a parent component down through a child to a grandchild using @Input() at each level. Parent has a signal; child and grandchild receive it via @Input().", usecase: "Angular passes data down with @Input(); drilling is the same pattern across multiple layers." } },
   { id: "objectives", type: "objectives", phase: "Objectives", items: ["Parent: signal or property passed to child with [prop]=\"value\"", "Child: @Input() prop and pass to grandchild with [prop]=\"prop\"", "Grandchild: @Input() prop and display {{ prop }}", "Avoid drilling with services or signals in a shared context later"] },
   { id: "step1", type: "question", phase: "Step 1 of 3", paal: "Create a parent component with message = signal('Hello'). In template use <app-child [message]=\"message()\"></app-child>.", answer_keywords: ["signal", "message", "app-child"], seed_code: `import { Component, signal } from '@angular/core';
 import { ChildComponent } from './child.component';
@@ -40,5 +40,5 @@ export class GrandchildComponent {
 }`, feedback_correct: "✅ Props Drilling (Angular) complete.", feedback_partial: "Grandchild displays message.", feedback_wrong: "{{ message }}", expected: "@Input() message; template {{ message }}" },
 ];
 
-const sideItems = [{ label: "Problem", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
+const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
 export default createINPACTEngine({ NODES, sideItems, problemNum: 13, title: TITLE, shortName: "A — PROPS DRILLING" });

@@ -1,0 +1,1 @@
+{"result":"correct","feedback":"You correctly added three string properties (status, type, and icon) to the StatusCard component class. The syntax follows TypeScript conventions with explicit type annotations, satisfying this step's requirement.","hint":"In the next step, you'll likely assign initial values to these properties.","errors":[]}

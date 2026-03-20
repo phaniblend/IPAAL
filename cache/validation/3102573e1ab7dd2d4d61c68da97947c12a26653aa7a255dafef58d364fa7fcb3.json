@@ -1,0 +1,1 @@
+{"result":"correct","feedback":"You correctly declared a state variable named 'isLoggedIn' with an initial value of false using useState. The TypeScript type inference correctly handles the boolean value, and the syntax follows React conventions.","hint":"Ready to use this state variable for conditional rendering in the next steps."}

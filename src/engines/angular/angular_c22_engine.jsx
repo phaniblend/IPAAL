@@ -2,7 +2,7 @@ import createINPACTEngine from "../inpact_engine_shared";
 
 const TITLE = "Inline Styles (Angular)";
 const NODES = [
-  { id: "intro", type: "reveal", phase: "Problem", content: { tag: "PROBLEM #22 (Angular)", title: TITLE, body: "Apply inline styles dynamically using Angular's ngStyle directive or [style.property] bindings driven by component state or signals.", usecase: "ngStyle and [style.x] are the Angular equivalents of React's style object." } },
+  { id: "intro", type: "reveal", phase: "Lesson", content: { tag: "LESSON #22 (Angular)", title: TITLE, body: "Apply inline styles dynamically using Angular's ngStyle directive or [style.property] bindings driven by component state or signals.", usecase: "ngStyle and [style.x] are the Angular equivalents of React's style object." } },
   { id: "objectives", type: "objectives", phase: "Objectives", items: ["Use [ngStyle]=\"{ color: color(), fontSize: size() + 'px' }\" for object syntax", "Or [style.color]=\"color()\" and [style.font-size.px]=\"size()\" for single properties", "CommonModule provides NgStyle; use camelCase in object", "Units: [style.width.px], [style.opacity] for numbers"] },
   { id: "step1", type: "question", phase: "Step 1 of 3", paal: "Create a component with color = signal('red') and size = signal(16). Add a paragraph with [ngStyle]=\"{ color: color(), fontSize: size() + 'px' }\".", answer_keywords: ["ngStyle", "color", "fontSize"], seed_code: `import { Component, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -45,5 +45,5 @@ export class InlineStylesComponent {
 }`, feedback_correct: "✅ Inline Styles (Angular) complete.", feedback_partial: "Buttons to set.", feedback_wrong: "color.set size.set", expected: "Buttons (click) with color.set / size.set" },
 ];
 
-const sideItems = [{ label: "Problem", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
+const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
 export default createINPACTEngine({ NODES, sideItems, problemNum: 22, title: TITLE, shortName: "A — NG STYLE" });

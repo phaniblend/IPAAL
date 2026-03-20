@@ -1,0 +1,1 @@
+{"result":"correct","feedback":"You correctly created the StatusCard component class and decorated it with the @Component decorator, including both the selector and template properties as required. The syntax follows Angular conventions and meets all success criteria for this step.","hint":"","errors":[]}

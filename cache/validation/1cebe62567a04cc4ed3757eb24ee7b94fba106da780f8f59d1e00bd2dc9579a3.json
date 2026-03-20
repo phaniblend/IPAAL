@@ -1,0 +1,1 @@
+{"result":"correct","feedback":"You correctly defined the FormState interface at module level with name, email, and password properties, all typed as strings. This satisfies the step's requirement exactly.","hint":"","errors":[]}

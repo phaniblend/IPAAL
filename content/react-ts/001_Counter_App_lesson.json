@@ -1,0 +1,290 @@
+{
+  "success": true,
+  "config": {
+    "lessonId": "ai-react-ts-01",
+    "track": "react-ts",
+    "problemNum": 1,
+    "title": "Counter App",
+    "shortName": "P01",
+    "intro": {
+      "tag": "LESSON #1",
+      "title": "Counter App",
+      "body": "In this lesson, you will build a simple Counter App using React and TypeScript. You will learn how to manage state within a React component to track and update a numerical value. The core concepts include using the useState hook for state management and handling user events with onClick handlers. By the end, you will have a functional app that increments and decrements a counter displayed on the screen.",
+      "usecase": "The counter pattern is a foundational building block for interactive UI across countless real-world applications. You'll see it in e-commerce product quantity selectors, social media like/dislike buttons, and dashboard widgets that track metrics like unread messages or pending tasks. As a developer, implementing this pattern teaches you how to manage component state, handle user events, and update the UI reactively—skills essential for creating any dynamic interface, from a simple voting mechanism to complex inventory controls."
+    },
+    "objectives": [
+      "Initialize and manage component state using the useState hook",
+      "Implement event handlers to update state based on user interactions",
+      "Render dynamic content by binding state values to JSX elements",
+      "Configure button components with onClick event listeners",
+      "Construct a functional counter component with increment and decrement logic",
+      "Apply TypeScript type annotations to state variables for type safety",
+      "Manipulate state values through arithmetic operations within handlers"
+    ],
+    "steps": [
+      {
+        "id": "step1",
+        "type": "question",
+        "phase": "Step 1 of 8",
+        "title": "Import React and useState",
+        "instruction": "Import React and the useState hook from the 'react' package.",
+        "hint": "Use the import statement to bring in both React and useState from 'react'.",
+        "analogousExample": "// Importing React and a hook\nimport React, { useState } from 'react';",
+        "seedCode": "// Import React and useState here",
+        "expectedOutcome": "The imports are added at the top of the file, making React and useState available for use.",
+        "successCriteria": [
+          "React and useState are imported from 'react'."
+        ],
+        "feedbackCorrect": "Nice! Proceed to the next step.",
+        "feedbackPartial": "You're on the right track, but make sure to import both React and useState from 'react'.",
+        "feedbackWrong": "Check the import statement. You need to import both React and useState from 'react'.",
+        "evaluation": {
+          "mode": "keyword_match",
+          "required": [
+            "import",
+            "React",
+            "useState",
+            "'react'"
+          ],
+          "partialThreshold": 0.5,
+          "correctThreshold": 0.8
+        }
+      },
+      {
+        "id": "step2",
+        "type": "question",
+        "phase": "Step 2 of 8",
+        "title": "Create the Counter component",
+        "instruction": "Create a functional component named Counter that returns JSX. You can use either a function declaration or an arrow function.",
+        "hint": "Define a component that returns some JSX content, like a div with a heading.",
+        "analogousExample": "// Similar: a functional component returning JSX\nfunction Welcome() {\n  return <h1>Hello!</h1>;\n}",
+        "seedCode": "import React, { useState } from 'react';\n\n// Create the Counter component here",
+        "expectedOutcome": "A Counter component is defined and ready to be used.",
+        "successCriteria": [
+          "A functional component named Counter is defined and returns JSX."
+        ],
+        "feedbackCorrect": "Great! You've successfully created the Counter component.",
+        "feedbackPartial": "You're on the right track, but make sure the component is named Counter and returns JSX.",
+        "feedbackWrong": "The component isn't defined correctly. Check that it's named Counter and returns JSX.",
+        "evaluation": {
+          "mode": "keyword_match",
+          "required": [
+            "Counter",
+            "return",
+            "<"
+          ],
+          "partialThreshold": 0.5,
+          "correctThreshold": 0.8
+        }
+      },
+      {
+        "id": "step3",
+        "type": "question",
+        "phase": "Step 3 of 8",
+        "title": "Initialize counter state with TypeScript",
+        "instruction": "Inside your Counter component, initialize a state variable named 'count' using useState, typed as number with an initial value of 0.",
+        "hint": "Use the useState hook you imported earlier. Remember to provide the type annotation for the state variable.",
+        "analogousExample": "// Example: typed state initialization\nconst [value, setValue] = useState<number>(0);",
+        "seedCode": "import React, { useState } from 'react';\n\n// Create the Counter component here\nconst Counter = () => {\n  // Initialize count state here\n  \n  return null;\n};",
+        "expectedOutcome": "The Counter component will have a typed state variable 'count' initialized to 0, ready to be displayed and updated.",
+        "successCriteria": [
+          "The component contains a useState call with type annotation <number> and initial value 0, storing the state in a variable named 'count'."
+        ],
+        "feedbackCorrect": "Nice! Proceed to the next step.",
+        "feedbackPartial": "You're close. Make sure you're using useState with the type annotation <number> and initial value 0.",
+        "feedbackWrong": "The state initialization is missing or incorrect. Use useState<number>(0) to create a typed state variable named 'count'.",
+        "evaluation": {
+          "mode": "keyword_match",
+          "required": [
+            "useState",
+            "<number>",
+            "0",
+            "count"
+          ],
+          "partialThreshold": 0.5,
+          "correctThreshold": 0.8
+        }
+      },
+      {
+        "id": "step4",
+        "type": "question",
+        "phase": "Step 4 of 8",
+        "title": "Define increment handler function",
+        "instruction": "Inside your Counter component, define a function named handleIncrement that increases the count state by 1.",
+        "hint": "Create a function that calls setCount with the updated value. You can use the current count value to calculate the new value.",
+        "analogousExample": "// Example: a function that updates state\nfunction handleIncrement() {\n  setCount(count + 1);\n}",
+        "seedCode": "import React, { useState } from 'react';\n\n// Create the Counter component here\nconst Counter = () => {\n  // Initialize count state here\n  const [count, setCount] = useState<number>(0);\n  \n  // Define increment handler function here\n  \n  return null;\n};",
+        "expectedOutcome": "A handleIncrement function is defined inside the Counter component that increments the count state by 1 when called.",
+        "successCriteria": [
+          "The handleIncrement function is defined and calls setCount with count + 1."
+        ],
+        "feedbackCorrect": "Nice! Proceed to the next step.",
+        "feedbackPartial": "You've defined a function, but make sure it properly updates the count state by calling setCount with count + 1.",
+        "feedbackWrong": "The increment handler function isn't defined correctly. Remember to create a function named handleIncrement that calls setCount to increase the count by 1.",
+        "evaluation": {
+          "mode": "keyword_match",
+          "required": [
+            "handleIncrement",
+            "setCount",
+            "count + 1"
+          ],
+          "partialThreshold": 0.5,
+          "correctThreshold": 0.8
+        }
+      },
+      {
+        "id": "step5",
+        "type": "question",
+        "phase": "Step 5 of 8",
+        "title": "Add main container structure",
+        "instruction": "In the Counter component's return statement, replace 'null' with a div container that will hold the counter UI.",
+        "hint": "Return a JSX div element as the root container for your counter interface.",
+        "analogousExample": "// Returning a container div\nfunction MyComponent() {\n  return (\n    <div>\n      {/* Content goes here */}\n    </div>\n  );\n}",
+        "seedCode": "import React, { useState } from 'react';\n\n// Create the Counter component here\nconst Counter = () => {\n  // Initialize count state here\n  const [count, setCount] = useState<number>(0);\n  \n  // Define increment handler function here\n  \n  // Define decrement handler function here\n  \n  // Define reset handler function here\n  \n  return null;\n};",
+        "expectedOutcome": "The Counter component now returns a div container instead of null, providing a structure to hold the counter UI elements.",
+        "successCriteria": [
+          "The Counter component returns a JSX div element",
+          "The return statement no longer returns null"
+        ],
+        "feedbackCorrect": "Nice! Proceed to the next step.",
+        "feedbackPartial": "You're on the right track, but make sure you're returning a div element from the Counter component.",
+        "feedbackWrong": "The Counter component should return a div container instead of null.",
+        "evaluation": {
+          "mode": "keyword_match",
+          "required": [
+            "return",
+            "<div>",
+            "</div>"
+          ],
+          "partialThreshold": 0.5,
+          "correctThreshold": 0.8
+        }
+      },
+      {
+        "id": "step6",
+        "type": "question",
+        "phase": "Step 6 of 8",
+        "title": "Display the current count value",
+        "instruction": "Inside your Counter component's return statement, add a paragraph element that displays the current count value using JSX curly braces.",
+        "hint": "Use the <p> tag and embed the count state variable inside curly braces to display its current value.",
+        "analogousExample": "// Displaying a state value in JSX\n<p>Current value: {someState}</p>",
+        "seedCode": "import React, { useState } from 'react';\n\n// Create the Counter component here\nconst Counter = () => {\n  // Initialize count state here\n  const [count, setCount] = useState<number>(0);\n  \n  // Define increment handler function here\n  \n  // Define decrement handler function here\n  \n  // Define reset handler function here\n  \n  return (\n    <div>\n      {/* Add paragraph displaying count here */}\n    </div>\n  );\n};",
+        "expectedOutcome": "The UI will show the current count value inside a paragraph element when the component renders.",
+        "successCriteria": [
+          "A paragraph element exists in the return statement that displays the count state variable using JSX curly braces."
+        ],
+        "feedbackCorrect": "Nice! Proceed to the next step.",
+        "feedbackPartial": "You're close. Make sure you're using the <p> tag and embedding the count variable inside curly braces to display its value.",
+        "feedbackWrong": "The paragraph element displaying the count value is missing or incorrect. Check that you're using the correct JSX syntax.",
+        "evaluation": {
+          "mode": "keyword_match",
+          "required": [
+            "<p>",
+            "{count}",
+            "</p>"
+          ],
+          "partialThreshold": 0.5,
+          "correctThreshold": 0.8
+        }
+      },
+      {
+        "id": "step7",
+        "type": "question",
+        "phase": "Step 7 of 8",
+        "title": "Add increment button with click handler",
+        "instruction": "Inside the Counter component's return statement, add a button element with the text 'Increment' and wire its onClick event to the handleIncrement function.",
+        "hint": "Place the button inside the div container. Use onClick={handleIncrement} to connect the click event to your handler function.",
+        "analogousExample": "// Adding a button with click handler\n<button onClick={handleClick}>Click me</button>",
+        "seedCode": "import React, { useState } from 'react';\n\n// Create the Counter component here\nconst Counter = () => {\n  // Initialize count state here\n  const [count, setCount] = useState<number>(0);\n  \n  // Define increment handler function here\n  const handleIncrement = () => {\n    setCount(count + 1);\n  };\n  \n  // Define decrement handler function here\n  const handleDecrement = () => {\n    setCount(count - 1);\n  };\n  \n  // Define reset handler function here\n  const handleReset = () => {\n    setCount(0);\n  };\n  \n  return (\n    <div>\n      {/* Add paragraph displaying count here */}\n      <p>Current count: {count}</p>\n      {/* Add increment button with click handler here */}\n    </div>\n  );\n};",
+        "expectedOutcome": "The Counter component now includes a button labeled 'Increment' that, when clicked, will increase the count state by 1.",
+        "successCriteria": [
+          "A button element with text 'Increment' is added inside the div container, and its onClick prop is set to handleIncrement."
+        ],
+        "feedbackCorrect": "Nice! Proceed to the next step.",
+        "feedbackPartial": "You've added a button, but make sure it has the correct text 'Increment' and the onClick prop is set to handleIncrement.",
+        "feedbackWrong": "The increment button is missing or not properly connected. Add a button with text 'Increment' and onClick={handleIncrement} inside the div.",
+        "evaluation": {
+          "mode": "keyword_match",
+          "required": [
+            "<button",
+            "onClick={handleIncrement}",
+            "Increment"
+          ],
+          "partialThreshold": 0.5,
+          "correctThreshold": 0.8
+        }
+      },
+      {
+        "id": "step8",
+        "type": "question",
+        "phase": "Step 8 of 8",
+        "title": "Add decrement and reset buttons with handlers",
+        "instruction": "Add two buttons inside the div after the increment button: one with text 'Decrement' that calls handleDecrement when clicked, and another with text 'Reset' that calls handleReset when clicked.",
+        "hint": "Use the onClick prop on each button to wire them to their respective handler functions.",
+        "analogousExample": "// Adding multiple interactive buttons\n<button onClick={handleAction1}>Action 1</button>\n<button onClick={handleAction2}>Action 2</button>",
+        "seedCode": "import React, { useState } from 'react';\n\n// Create the Counter component here\nconst Counter = () => {\n  // Initialize count state here\n  const [count, setCount] = useState<number>(0);\n  \n  // Define increment handler function here\n  const handleIncrement = () => {\n    setCount(count + 1);\n  };\n  \n  // Define decrement handler function here\n  const handleDecrement = () => {\n    setCount(count - 1);\n  };\n  \n  // Define reset handler function here\n  const handleReset = () => {\n    setCount(0);\n  };\n  \n  return (\n    <div>\n      {/* Add paragraph displaying count here */}\n      <p>Current count: {count}</p>\n      {/* Add increment button with click handler here */}\n      <button onClick={handleIncrement}>Increment</button>\n      {/* Add decrement and reset buttons with handlers here */}\n    </div>\n  );\n};",
+        "expectedOutcome": "The UI will have three buttons: Increment, Decrement, and Reset, each wired to their respective handler functions.",
+        "successCriteria": [
+          "Two new buttons are added: one with text 'Decrement' and onClick={handleDecrement}, and another with text 'Reset' and onClick={handleReset}."
+        ],
+        "feedbackCorrect": "Nice! Proceed to the next step.",
+        "feedbackPartial": "You added some buttons, but check that both buttons have the correct text and onClick handlers.",
+        "feedbackWrong": "The buttons are missing or not correctly wired. Make sure to add both buttons with the specified text and onClick handlers.",
+        "evaluation": {
+          "mode": "keyword_match",
+          "required": [
+            "Decrement",
+            "Reset",
+            "onClick={handleDecrement}",
+            "onClick={handleReset}"
+          ],
+          "partialThreshold": 0.5,
+          "correctThreshold": 0.8
+        }
+      }
+    ],
+    "sideItems": [
+      {
+        "label": "Intro",
+        "id": "intro"
+      },
+      {
+        "label": "Objectives",
+        "id": "objectives"
+      },
+      {
+        "label": "Import React and useState",
+        "id": "step1"
+      },
+      {
+        "label": "Create the Counter component",
+        "id": "step2"
+      },
+      {
+        "label": "Initialize counter state with TypeScript",
+        "id": "step3"
+      },
+      {
+        "label": "Define increment handler function",
+        "id": "step4"
+      },
+      {
+        "label": "Add main container structure",
+        "id": "step5"
+      },
+      {
+        "label": "Display the current count value",
+        "id": "step6"
+      },
+      {
+        "label": "Add increment button with click handler",
+        "id": "step7"
+      },
+      {
+        "label": "Add decrement and reset buttons with handlers",
+        "id": "step8"
+      }
+    ]
+  },
+  "source": "content"
+}

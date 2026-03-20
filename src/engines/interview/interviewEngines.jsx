@@ -336,7 +336,7 @@ function makeInterviewConfig(problemNum, title, prefix, trackName) {
     title,
     shortName,
     sideItems: [
-      { label: "Problem", id: "intro" },
+      { label: "Lesson", id: "intro" },
       { label: "Objectives", id: "objectives" },
       { label: "Build", id: "build" },
     ],
@@ -344,7 +344,7 @@ function makeInterviewConfig(problemNum, title, prefix, trackName) {
       {
         id: "intro",
         type: "reveal",
-        phase: "Problem",
+        phase: "Lesson",
         content: {
           tag: `${trackName} #${problemNum}`,
           title,

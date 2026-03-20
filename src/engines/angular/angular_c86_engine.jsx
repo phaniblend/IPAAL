@@ -2,7 +2,7 @@ import createINPACTEngine from "../inpact_engine_shared";
 
 const TITLE = "Race Condition Fix (Angular)";
 const NODES = [
-  { id: "intro", type: "reveal", phase: "Problem", content: { tag: "PROBLEM #86 (Angular)", title: TITLE, body: "Avoid race conditions when fetching data in Angular: use switchMap so that when the user changes the query (or id) the previous request is cancelled and only the latest one updates the signal; or track request id and ignore stale responses.", usecase: "Angular RxJS switchMap cancels in-flight HTTP requests when the source emits a new value." } },
+  { id: "intro", type: "reveal", phase: "Lesson", content: { tag: "LESSON #86 (Angular)", title: TITLE, body: "Avoid race conditions when fetching data in Angular: use switchMap so that when the user changes the query (or id) the previous request is cancelled and only the latest one updates the signal; or track request id and ignore stale responses.", usecase: "Angular RxJS switchMap cancels in-flight HTTP requests when the source emits a new value." } },
   { id: "objectives", type: "objectives", phase: "Objectives", items: ["searchTerm$.pipe(switchMap(q => this.http.get('/api?q='+q))).subscribe(...) so new search cancels old", "Or toSignal(searchTerm$.pipe(debounceTime(300), switchMap(...)))", "Never assign result of request N to state if a request N+1 has started; use switchMap to enforce", "takeUntilDestroyed to clean up"] },
   { id: "step1", type: "question", phase: "Step 1 of 3", paal: "Create a component with searchSubject = new Subject<string>(). Use searchSubject.pipe(switchMap(q => this.http.get('/api/search?q='+q))).subscribe(res => this.results.set(res)). So typing a new query cancels the previous request.", answer_keywords: ["switchMap", "Subject", "http.get"], seed_code: `import { Component, signal, inject } from '@angular/core';
 import { Subject } from 'rxjs';
@@ -77,5 +77,5 @@ export class RaceFixComponent {
 }`, feedback_correct: "✅ Race Condition Fix (Angular) complete.", feedback_partial: "distinctUntilChanged.", feedback_wrong: "Export", expected: "distinctUntilChanged and export" },
 ];
 
-const sideItems = [{ label: "Problem", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
+const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
 export default createINPACTEngine({ NODES, sideItems, problemNum: 86, title: TITLE, shortName: "A — RACE FIX" });

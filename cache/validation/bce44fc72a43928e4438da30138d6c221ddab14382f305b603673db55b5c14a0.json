@@ -1,0 +1,1 @@
+{"result":"correct","feedback":"You correctly used useState to create a count state variable initialized to 0, with proper destructuring into count and setCount variables. The syntax is exactly what was required for this step."}

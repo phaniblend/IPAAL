@@ -2,7 +2,7 @@ import createINPACTEngine from "../inpact_engine_shared";
 
 const TITLE = "CSS Modules (Angular)";
 const NODES = [
-  { id: "intro", type: "reveal", phase: "Problem", content: { tag: "PROBLEM #23 (Angular)", title: TITLE, body: "Scope component styles with Angular's component styleUrls and encapsulation (ViewEncapsulation.Emulated) so class names don't leak globally.", usecase: "Angular component styles are scoped by default; use :host and :host-context for component-level CSS." } },
+  { id: "intro", type: "reveal", phase: "Lesson", content: { tag: "LESSON #23 (Angular)", title: TITLE, body: "Scope component styles with Angular's component styleUrls and encapsulation (ViewEncapsulation.Emulated) so class names don't leak globally.", usecase: "Angular component styles are scoped by default; use :host and :host-context for component-level CSS." } },
   { id: "objectives", type: "objectives", phase: "Objectives", items: ["Add styleUrls: ['./my.component.css'] or styles: [`...`] in @Component", "Use :host { } for the component host element", "Class names in the template get attribute selectors; no global clash", "ViewEncapsulation.Emulated (default) or .None for global styles"] },
   { id: "step1", type: "question", phase: "Step 1 of 3", paal: "Create a component with a styles array: styles: ['.card { padding: 1rem; }']. Add a div with class=\"card\" in the template.", answer_keywords: ["styles", "card", "Component"], seed_code: `import { Component } from '@angular/core';
 
@@ -36,5 +36,5 @@ export class CssModulesComponent {}`, feedback_correct: "✅ :host styles.", fee
 export class CssModulesComponent {}`, feedback_correct: "✅ CSS Modules (Angular) complete.", feedback_partial: "styleUrls.", feedback_wrong: "styleUrls external file", expected: "styleUrls: ['./css-modules.component.css']" },
 ];
 
-const sideItems = [{ label: "Problem", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
+const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
 export default createINPACTEngine({ NODES, sideItems, problemNum: 23, title: TITLE, shortName: "A — SCOPED CSS" });

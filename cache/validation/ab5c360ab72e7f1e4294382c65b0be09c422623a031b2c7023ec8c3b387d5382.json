@@ -1,0 +1,1 @@
+{"result":"correct","feedback":"You correctly defined the handleRatingClick function inside the StarRating component. It takes a starNumber parameter and calls setRating(starNumber) to update the rating state, which satisfies this step's requirements.","hint":"","errors":[]}

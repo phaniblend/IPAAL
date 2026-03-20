@@ -1,0 +1,1 @@
+{"result":"correct","feedback":"You correctly defined a function that increments the count state by 1 using setCount. The function uses the functional update pattern (p => p + 1), which is a valid way to increment the state value.","hint":"Ready for the next step where you'll use this handler in your JSX.","errors":[]}

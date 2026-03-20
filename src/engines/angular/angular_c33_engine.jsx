@@ -2,7 +2,7 @@ import createINPACTEngine from "../inpact_engine_shared";
 
 const TITLE = "useLocalStorage (Angular)";
 const NODES = [
-  { id: "intro", type: "reveal", phase: "Problem", content: { tag: "PROBLEM #33 (Angular)", title: TITLE, body: "Persist and read state from localStorage in Angular: use a signal that reads from localStorage on init and writes on change; optionally wrap in a reusable service or injection token.", usecase: "Angular components or services sync signals with localStorage for persistence." } },
+  { id: "intro", type: "reveal", phase: "Lesson", content: { tag: "LESSON #33 (Angular)", title: TITLE, body: "Persist and read state from localStorage in Angular: use a signal that reads from localStorage on init and writes on change; optionally wrap in a reusable service or injection token.", usecase: "Angular components or services sync signals with localStorage for persistence." } },
   { id: "objectives", type: "objectives", phase: "Objectives", items: ["Read on init: signal(JSON.parse(localStorage.getItem(key) ?? 'null'))", "effect(() => { localStorage.setItem(key, JSON.stringify(signal())); }) to persist on change", "Or create a LocalStorageService with get/set and inject it", "Handle SSR: check typeof localStorage !== 'undefined'"] },
   { id: "step1", type: "question", phase: "Step 1 of 3", paal: "Create a component with key = 'myKey' and value = signal(localStorage.getItem(key) ?? ''). Display {{ value() }} and an input that updates value with (input)=\"value.set($any($event.target).value)\".", answer_keywords: ["localStorage", "getItem", "signal"], seed_code: `import { Component, signal } from '@angular/core';
 
@@ -55,5 +55,5 @@ export class LocalStorageComponent {
 }`, feedback_correct: "✅ useLocalStorage (Angular) complete.", feedback_partial: "JSON.", feedback_wrong: "Export", expected: "JSON.parse/stringify and export" },
 ];
 
-const sideItems = [{ label: "Problem", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
+const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
 export default createINPACTEngine({ NODES, sideItems, problemNum: 33, title: TITLE, shortName: "A — LOCAL STORAGE" });

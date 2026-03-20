@@ -2,7 +2,7 @@ import createINPACTEngine from "../inpact_engine_shared";
 
 const TITLE = "useTransition (Angular)";
 const NODES = [
-  { id: "intro", type: "reveal", phase: "Problem", content: { tag: "PROBLEM #73 (Angular)", title: TITLE, body: "Defer non-urgent UI updates in Angular: use a signal for 'pending' state and update it inside requestAnimationFrame or setTimeout(0), or use Angular's experimental support so heavy updates don't block the main thread; show isPending in the template.", usecase: "Angular uses signals and deferred updates (setTimeout, queueMicrotask) to keep UI responsive like React useTransition." } },
+  { id: "intro", type: "reveal", phase: "Lesson", content: { tag: "LESSON #73 (Angular)", title: TITLE, body: "Defer non-urgent UI updates in Angular: use a signal for 'pending' state and update it inside requestAnimationFrame or setTimeout(0), or use Angular's experimental support so heavy updates don't block the main thread; show isPending in the template.", usecase: "Angular uses signals and deferred updates (setTimeout, queueMicrotask) to keep UI responsive like React useTransition." } },
   { id: "objectives", type: "objectives", phase: "Objectives", items: ["isPending = signal(false); startTransition(fn) { this.isPending.set(true); queueMicrotask(() => { fn(); this.isPending.set(false); }); }", "Or use setTimeout(0) to defer state update so input stays responsive", "Template: *ngIf=\"!isPending()\" show result; show spinner when isPending()", "Heavy computation: run in worker or chunk with requestAnimationFrame"] },
   { id: "step1", type: "question", phase: "Step 1 of 3", paal: "Create a component with isPending = signal(false) and list = signal<number[]>([]). Add startTransition() { this.isPending.set(true); setTimeout(() => { this.list.set(Array.from({ length: 1000 }, (_, i) => i)); this.isPending.set(false); }, 0); }.", answer_keywords: ["isPending", "startTransition", "setTimeout"], seed_code: `import { Component, signal } from '@angular/core';
 
@@ -71,5 +71,5 @@ export class TransitionComponent {
 }`, feedback_correct: "✅ useTransition (Angular) complete.", feedback_partial: "query signal.", feedback_wrong: "Export", expected: "Separate query signal and export" },
 ];
 
-const sideItems = [{ label: "Problem", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
+const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
 export default createINPACTEngine({ NODES, sideItems, problemNum: 73, title: TITLE, shortName: "A — TRANSITION" });

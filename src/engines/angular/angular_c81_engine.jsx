@@ -2,7 +2,7 @@ import createINPACTEngine from "../inpact_engine_shared";
 
 const TITLE = "Feature Flag Hook (Angular)";
 const NODES = [
-  { id: "intro", type: "reveal", phase: "Problem", content: { tag: "PROBLEM #81 (Angular)", title: TITLE, body: "Expose feature flags in Angular via an injectable FeatureFlagService: flags = signal<Record<string, boolean>>({}); isOn(name: string) { return this.flags()[name] ?? false; }. Load flags from API or config and inject the service in components.", usecase: "Angular service with signals provides feature flags for *ngIf and conditional logic." } },
+  { id: "intro", type: "reveal", phase: "Lesson", content: { tag: "LESSON #81 (Angular)", title: TITLE, body: "Expose feature flags in Angular via an injectable FeatureFlagService: flags = signal<Record<string, boolean>>({}); isOn(name: string) { return this.flags()[name] ?? false; }. Load flags from API or config and inject the service in components.", usecase: "Angular service with signals provides feature flags for *ngIf and conditional logic." } },
   { id: "objectives", type: "objectives", phase: "Objectives", items: ["FeatureFlagService: flags = signal<Record<string, boolean>>({}); isOn(name) { return !!this.flags()[name]; }", "Load from http.get and flags.set(response) in ngOnInit or constructor", "Component: *ngIf=\"featureFlags.isOn('newUI')\"", "Optional: environment-based defaults before API load"] },
   { id: "step1", type: "question", phase: "Step 1 of 3", paal: "Create FeatureFlagService with flags = signal<Record<string, boolean>>({ newUI: false }). isOn(name: string): boolean { return !!this.flags()[name]; }. providedIn: 'root'.", answer_keywords: ["flags", "signal", "isOn"], seed_code: `import { Injectable, signal } from '@angular/core';
 
@@ -43,5 +43,5 @@ export class FeatureFlagService {
 }`, feedback_correct: "✅ Feature Flag Hook (Angular) complete.", feedback_partial: "http.get flags.", feedback_wrong: "Export", expected: "http.get and flags.set" },
 ];
 
-const sideItems = [{ label: "Problem", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
+const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
 export default createINPACTEngine({ NODES, sideItems, problemNum: 81, title: TITLE, shortName: "A — FEATURE FLAG" });

@@ -1,0 +1,1 @@
+{"result":"correct","feedback":"You correctly used the useState hook to initialize the pipelineStages state variable with an array containing three stage objects, each with name and status properties. The syntax and behavior match the step's requirements exactly.","hint":"","errors":[]}

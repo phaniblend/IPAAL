@@ -1,7 +1,7 @@
 import createINPACTEngine from "../inpact_engine_shared";
 
 const NODES = [
-  { id: "intro", type: "reveal", phase: "Problem", content: { tag: "PROBLEM #30 (Angular)", title: "Image Gallery", body: "Build a grid of images with a click-to-enlarge modal. Clicking an image opens a modal (or overlay) showing the full-size image; clicking outside or a close button closes it.", usecase: "Same concept as React — implemented with Angular (signals, standalone components)." } },
+  { id: "intro", type: "reveal", phase: "Lesson", content: { tag: "LESSON #30 (Angular)", title: "Image Gallery", body: "Build a grid of images with a click-to-enlarge modal. Clicking an image opens a modal (or overlay) showing the full-size image; clicking outside or a close button closes it.", usecase: "Same concept as React — implemented with Angular (signals, standalone components)." } },
   { id: "objectives", type: "objectives", phase: "Objectives", items: [
       "State: selectedImage (URL or null) for which image is enlarged",
       "Render a grid of thumbnails (e.g. 3–6 images)",
@@ -13,5 +13,5 @@ const NODES = [
   { id: "step3", type: "question", phase: "Step 3 of 3", paal: "Wire everything together, handle edge cases, and export the component.", answer_keywords: ["export", "class"], seed_code: "import { Component, signal } from '@angular/core';\nimport { CommonModule } from '@angular/common';\n\n@Component({\n  selector: 'app-root',\n  standalone: true,\n  imports: [CommonModule],\n  template: `<!-- Step 1: add template -->`,\n})\nexport class AppComponent {\n  // Step 1\n}", feedback_correct: "✅ Problem #30 (Angular) complete.", feedback_partial: "Export and finish.", feedback_wrong: "Export component", expected: "Complete" },
 ];
 
-const sideItems = [{ label: "Problem", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
+const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
 export default createINPACTEngine({ NODES, sideItems, problemNum: 30, title: "Image Gallery", shortName: "IMAGE GALLERY" });

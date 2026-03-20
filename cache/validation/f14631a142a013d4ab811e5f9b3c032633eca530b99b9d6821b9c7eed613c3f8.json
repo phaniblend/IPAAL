@@ -1,0 +1,1 @@
+{"result":"correct","feedback":"You correctly imported React, useState, and useEffect from 'react' using the proper ES6 import syntax. The destructuring approach with curly braces for the hooks is the standard way to import these React utilities."}

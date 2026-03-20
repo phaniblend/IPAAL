@@ -2,7 +2,7 @@ import createINPACTEngine from "../inpact_engine_shared";
 
 const TITLE = "useRef Typing (Angular)";
 const NODES = [
-  { id: "intro", type: "reveal", phase: "Problem", content: { tag: "PROBLEM #67 (Angular)", title: TITLE, body: "Type template references and ElementRef in Angular: use #inputRef and ElementRef<HTMLInputElement>, or ViewChild query with read: ElementRef and type the result so you get correct nativeElement typings.", usecase: "Angular ElementRef<T> and ViewChild with read: ElementRef give typed refs like React useRef." } },
+  { id: "intro", type: "reveal", phase: "Lesson", content: { tag: "LESSON #67 (Angular)", title: TITLE, body: "Type template references and ElementRef in Angular: use #inputRef and ElementRef<HTMLInputElement>, or ViewChild query with read: ElementRef and type the result so you get correct nativeElement typings.", usecase: "Angular ElementRef<T> and ViewChild with read: ElementRef give typed refs like React useRef." } },
   { id: "objectives", type: "objectives", phase: "Objectives", items: ["Template: <input #inputRef>; in class @ViewChild('inputRef') inputRef!: ElementRef<HTMLInputElement>", "Use this.inputRef.nativeElement.value or .focus() with full type safety", "For components: @ViewChild(MyComp) comp!: MyComp", "Signal query: inputRef = viewChild.required<ElementRef<HTMLInputElement>>('inputRef')"] },
   { id: "step1", type: "question", phase: "Step 1 of 3", paal: "Create a component with template <input #inputRef placeholder=\"Type\">. Use @ViewChild('inputRef') inputRef!: ElementRef<HTMLInputElement> and in a method call this.inputRef.nativeElement.focus().", answer_keywords: ["ViewChild", "ElementRef", "nativeElement"], seed_code: `import { Component, ViewChild, ElementRef } from '@angular/core';
 
@@ -54,5 +54,5 @@ export class RefTypingComponent {
 }`, feedback_correct: "✅ useRef Typing (Angular) complete.", feedback_partial: "viewChild.required.", feedback_wrong: "Export", expected: "viewChild.required<ElementRef<HTMLInputElement>>" },
 ];
 
-const sideItems = [{ label: "Problem", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
+const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
 export default createINPACTEngine({ NODES, sideItems, problemNum: 67, title: TITLE, shortName: "A — REF TYPING" });

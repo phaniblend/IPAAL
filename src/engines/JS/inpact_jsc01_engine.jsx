@@ -1,7 +1,7 @@
 import createINPACTEngine from "../inpact_engine_shared";
 
 const NODES = [
-  { id: "intro", type: "reveal", phase: "Problem", content: { tag: "JS — BLOCK C #1", title: "String Methods — The Complete Toolkit", body: `Strings are immutable in JavaScript — every method returns a NEW string.
+  { id: "intro", type: "reveal", phase: "Lesson", content: { tag: "JS — BLOCK C #1", title: "String Methods — The Complete Toolkit", body: `Strings are immutable in JavaScript — every method returns a NEW string.
 This matters for performance and for understanding why reassignment is always needed.
 
 The 30+ string methods fall into four categories:
@@ -226,7 +226,7 @@ export {}`,
 ];
 
 const sideItems = [
-  { label: "Problem", id: "intro" }, { label: "Objectives", id: "objectives" },
+  { label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" },
   { label: "Step 1 — slice/search", id: "step1" }, { label: "Step 2 — replace/match", id: "step2" },
   { label: "Step 3 — pad/trim/at", id: "step3" }, { label: "Step 4 — Pipeline", id: "step4" },
   { label: "Step 5 — Unicode", id: "step5" },

@@ -1,0 +1,102 @@
+---
+description: Canonical INPACT engine pattern for overhaul and new lessons
+globs: src/engines/**/*.jsx, src/engines/**/*.js
+alwaysApply: false
+---
+
+# INPACT Engine Overhaul — Canonical Pattern
+
+Use this pattern for every engine file and curriculum index. It is the single source of truth so the same structure is applied across all tracks and remaining lessons.
+
+## 1. File layout (per track)
+
+- One folder per track: `src/engines/<track>/` (e.g. `el/`, `typescript/`, `express/`, `fe/`).
+- Engine files: `inpact_<track><flavor><num>_engine.jsx` (e.g. `inpact_el01_engine.jsx`, `inpact_tsf01_engine.jsx`, `inpact_expf03_engine.jsx`).
+- Index file: `inpact_<track>_index.js` or `inpact_<track>f_index.js` (e.g. `inpact_el_index.js`, `inpact_tsf_index.js`).
+- Shared factory: `src/engines/inpact_engine_shared.jsx` — all engines use `createINPACTEngine(config)`.
+
+## 2. Engine file template
+
+Every engine file must:
+
+1. Import the shared factory (path relative to track folder):
+   ```js
+   import createINPACTEngine from "../inpact_engine_shared";
+   ```
+
+2. Define `NODES` — array of steps. Node types and shapes:
+   - **reveal** (intro): `{ id, type: "reveal", phase, content: { tag, title, body, usecase } }`
+     - **body**: Describe only what the learner has to build and what the user will see in the UI (e.g. "A number, three buttons: +, -, Reset. Clicking + increases the number…"). Do not put implementation details, language names, or technical concepts here (no "use TypeScript", "use useState", "type-safe", etc.).
+     - **usecase** (shown as "💡 WHY THIS MATTERS"): Describe practical, real-world usage in apps (e.g. "Counter widget used to add/remove item quantity in a shopping cart; Reset clears the cart"). Do not use educational rationale (e.g. avoid "Typing useState and handlers is the foundation for type-safe React").
+   - **objectives**: `{ id, type: "objectives", phase, items: string[] }`
+     - **Learning objectives must be measurable** — they describe what the learner is taking home and can do or explain after the lesson. Use action verbs (Use, Define, Explain, Assign, Distinguish, Structure, Export, etc.). Each item should be a concrete, demonstrable skill or understanding, not vague (e.g. prefer "Explain why calling the setter triggers a re-render but reassigning a variable does not" over "Understand re-renders"). Benchmark: `src/engines/react-js/inpact_p01_engine.jsx` objectives (use that style for all engines/problems).
+   - **question** (code step): `{ id, type: "question", phase, paal, answer_keywords, seed_code, feedback_correct, feedback_partial, feedback_wrong, expected }`
+   - **paal (task instruction)**: Describe **what** the learner should achieve, not **how** to implement it. Use **active voice** with a leading action verb (Create, Add, Update, Show, Wire, etc.). Avoid implementation details like "setter: setText", "to hold a string". Example: "Create a state variable called text to store what the user types in the input" not "Store what the user types in the input in a state variable called text" or "Declare a state variable called text (setter: setText) to hold a string".
+   - Optional on question: `starter_code` (alias for seed_code), `hint`, `example_code`, `cursorAtStartOfLine`, `cursorLine`, `language`, or custom `evaluate(node, answer)` for custom grading.
+
+3. Define `sideItems`: `{ label: string, id: string }[]` — one entry per node; `id` must match `node.id`.
+
+4. Export the engine:
+   ```js
+   export default createINPACTEngine({
+     NODES,
+     sideItems,
+     problemNum: "XX-NN",   // e.g. "EL-01", "F01", "EXP-F03"
+     title: "Full Lesson Title",
+     shortName: "TRACK — SHORT LABEL",
+   });
+   ```
+   Add only when needed: `language`, `getOutputPreview`, `answerShape: "css-tabs"`, `defaultHtml` (see shared factory).
+
+## 3. Curriculum index file
+
+- Export a named constant: `export const <TRACK>_CURRICULUM = [ ... ]` (or `*_FUNDAMENTALS_CURRICULUM`).
+- Each item: `{ id, shortName, title, why }`. Optional: `file`, `topics`.
+- Order of the array must match the order of engines in App.jsx for that track (problemIndex selects `engines[problemIndex]`).
+
+Example (minimal):
+```js
+export const EL_CURRICULUM = [
+  { id: "el01", shortName: "EL — DECISIONS", title: "ADRs, Technical Debt & Estimation", why: "..." },
+  // ...
+];
+```
+
+Example (with topics, for fundamentals):
+```js
+export const TS_FUNDAMENTALS_CURRICULUM = [
+  { id: "tsf01", file: "inpact_tsf01_engine", shortName: "TS — PRIMITIVES", title: "Primitive Types & Variable Annotations", topics: [...], why: "..." },
+  // ...
+];
+```
+
+## 4. App.jsx wiring
+
+- Import curriculum: `import { EL_CURRICULUM } from './engines/el/inpact_el_index'`
+- Import each engine: `import INPACTEngineEL01 from './engines/el/inpact_el01_engine'` (etc.).
+- Add engines to the track array in the same order as curriculum: `const ENGINES_EL = [ INPACTEngineEL01, ... ]`
+- In `getEngines(track)` return the correct array for that track.
+- In `getProblemList(track)` return curriculum mapped to `{ title, shortName, why }` (same order).
+
+## 5. Locked lessons — do not edit
+
+- **React JS p01** (`src/engines/react-js/inpact_p01_engine.jsx`) is **locked**. It is done in all respects (content, LOs, layout, code persistence, feedback modal, tabs, editor height, min-width). Do **not** change it. Use it only as the immutable benchmark for objectives, content rules (body/usecase), and UX patterns when building or overhauling other engines.
+- **React JS p02** (`src/engines/react-js/inpact_p02_engine.jsx`) is **locked**. Same canonical pattern as p01; do not edit.
+
+## 6. Reference engines (copy structure from these)
+
+- **Content-rich lesson**: `src/engines/el/inpact_el01_engine.jsx` (reveal → objectives → 5 question steps, full feedback, seed_code).
+- **Concise fundamentals**: `src/engines/typescript/inpact_tsf01_engine.jsx` (same node types, shorter copy).
+- **Objectives benchmark**: `src/engines/react-js/inpact_p01_engine.jsx` (locked — reference only) — learning objectives are measurable (action verbs, concrete take-home skills). Use this style for LOs across all engines.
+- **Index (simple)**: `src/engines/el/inpact_el_index.js`.
+- **Index (with topics)**: `src/engines/typescript/inpact_tsf_index.js`.
+
+## 7. When adding or overhauling an engine
+
+1. Place file in the correct track folder with naming `inpact_<track><flavor><num>_engine.jsx`.
+2. Use only the node types and config keys above; avoid ad-hoc fields that the shared UI doesn’t use.
+3. Keep `problemNum` and `shortName` consistent with the curriculum entry and sidebar.
+4. After adding a new engine, add the import and push the component to the correct `ENGINES_*` array in App.jsx; add the lesson to the track’s curriculum index in the same order.
+5. For CSS/special runs: use `language`, `answerShape: "css-tabs"`, `getOutputPreview`, `defaultHtml` only when the lesson requires it (see existing css engines).
+
+Refer to `docs/ENGINE_OVERHAUL_STATUS.md` for which tracks are finalized and which lessons remain to be migrated to this pattern.

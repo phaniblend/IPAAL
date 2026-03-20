@@ -2,7 +2,7 @@ import createINPACTEngine from "../inpact_engine_shared";
 
 const TITLE = "useDebounce (Angular)";
 const NODES = [
-  { id: "intro", type: "reveal", phase: "Problem", content: { tag: "PROBLEM #32 (Angular)", title: TITLE, body: "Debounce user input or search using RxJS Subject and pipe(debounceTime(300)) so API or heavy work runs only after the user pauses typing.", usecase: "Angular uses RxJS debounceTime and Subject or form valueChanges for debounced values." } },
+  { id: "intro", type: "reveal", phase: "Lesson", content: { tag: "LESSON #32 (Angular)", title: TITLE, body: "Debounce user input or search using RxJS Subject and pipe(debounceTime(300)) so API or heavy work runs only after the user pauses typing.", usecase: "Angular uses RxJS debounceTime and Subject or form valueChanges for debounced values." } },
   { id: "objectives", type: "objectives", phase: "Objectives", items: ["Create a Subject or use FormControl valueChanges; pipe(debounceTime(ms))", "Subscribe and update a signal, or use toSignal(obs.pipe(debounceTime(300)))", "Emit on input: subject.next(value) or bind form control", "Unsubscribe in ngOnDestroy or use takeUntilDestroyed()"] },
   { id: "step1", type: "question", phase: "Step 1 of 3", paal: "Create a component with searchTerm = signal(''). Add an input (input)=\"onInput($event)\". In onInput use a private Subject: searchSubject.next($any($event.target).value).", answer_keywords: ["Subject", "next", "input"], seed_code: `import { Component, signal, inject } from '@angular/core';
 import { Subject } from 'rxjs';
@@ -55,5 +55,5 @@ export class DebounceComponent {
 }`, feedback_correct: "✅ useDebounce (Angular) complete.", feedback_partial: "toSignal.", feedback_wrong: "Export", expected: "toSignal(pipe(debounceTime(300)))" },
 ];
 
-const sideItems = [{ label: "Problem", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
+const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
 export default createINPACTEngine({ NODES, sideItems, problemNum: 32, title: TITLE, shortName: "A — DEBOUNCE" });

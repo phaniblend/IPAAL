@@ -1,7 +1,7 @@
 import createINPACTEngine from "../inpact_engine_shared";
 
 const NODES = [
-  { id: "intro", type: "reveal", phase: "Problem", content: { tag: "PROBLEM #4 (Angular)", title: "Multiple State Variables", body: "A profile form with two inputs — name and age. Each has its own signal. Changing one does not affect the other. Display: Hello, {{ name() }}! You are {{ age() }} years old.", usecase: "Angular components often use multiple signals for form fields — each independent." } },
+  { id: "intro", type: "reveal", phase: "Lesson", content: { tag: "LESSON #4 (Angular)", title: "Multiple State Variables", body: "A profile form with two inputs — name and age. Each has its own signal. Changing one does not affect the other. Display: Hello, {{ name() }}! You are {{ age() }} years old.", usecase: "Angular components often use multiple signals for form fields — each independent." } },
   { id: "objectives", type: "objectives", phase: "Objectives", items: ["Use two signals: name = signal(''), age = signal('')", "Two inputs with [value] and (input) handlers", "Two handler methods that call name.set() and age.set()", "Live paragraph with both {{ name() }} and {{ age() }}"] },
   { id: "step1", type: "question", phase: "Step 1 of 3", paal: "Declare name = signal('') and age = signal(''). Both inputs start empty.", answer_keywords: ["name", "age", "signal", "empty"], seed_code: `import { Component, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -57,5 +57,5 @@ export class ProfileCardComponent {
 }`, feedback_correct: "✅ Multiple State (Angular) complete.", feedback_partial: "Paragraph and export.", feedback_wrong: "{{ name() }} and {{ age() }}", expected: "<p>Hello, {{ name() }}! You are {{ age() }} years old.</p>" },
 ];
 
-const sideItems = [{ label: "Problem", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
+const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
 export default createINPACTEngine({ NODES, sideItems, problemNum: 4, title: "Multiple State Variables (Angular)", shortName: "A — MULTIPLE STATE" });

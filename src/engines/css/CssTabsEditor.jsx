@@ -1,5 +1,6 @@
 import { useState, useRef, useCallback, useEffect } from "react";
 import Editor from "@monaco-editor/react";
+import { configureMonacoDiagnosticsOff, MONACO_SHARED_OPTIONS } from "../monacoEditorConfig.js";
 
 /** Shared auto-close-tag logic — same as CodeEditor, works for HTML tab too */
 function setupAutoCloseTags(editor, monaco) {
@@ -48,6 +49,7 @@ function setupAutoCloseTags(editor, monaco) {
  */
 
 const MONACO_OPTIONS = {
+  ...MONACO_SHARED_OPTIONS,
   fontSize: 14,
   fontFamily: "'JetBrains Mono', 'Fira Code', 'Cascadia Code', Menlo, monospace",
   fontLigatures: true,
@@ -71,6 +73,10 @@ const MONACO_OPTIONS = {
   padding: { top: 12, bottom: 12 },
   bracketPairColorization: { enabled: true },
   guides: { bracketPairs: true },
+  quickSuggestions: false,
+  suggestOnTriggerCharacters: false,
+  parameterHints: { enabled: false },
+  wordBasedSuggestions: "off",
 };
 
 function scrollToEnd(editor) {
@@ -148,6 +154,7 @@ export default function CssTabsEditor({ value = {}, onChange, height = "240px" }
           value={currentValue}
           theme="vs-dark"
           onChange={handleChange}
+          beforeMount={configureMonacoDiagnosticsOff}
           onMount={handleMount}
           options={MONACO_OPTIONS}
         />

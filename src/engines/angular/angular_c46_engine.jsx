@@ -2,7 +2,7 @@ import createINPACTEngine from "../inpact_engine_shared";
 
 const TITLE = "useReducer vs useState (Angular)";
 const NODES = [
-  { id: "intro", type: "reveal", phase: "Problem", content: { tag: "PROBLEM #46 (Angular)", title: TITLE, body: "Model complex state with a reducer pattern in Angular: use a signal holding an object and a dispatch method that applies actions (e.g. INCREMENT, ADD) and updates the signal with the new state.", usecase: "Angular signals plus a reducer function replicate React useReducer for predictable state updates." } },
+  { id: "intro", type: "reveal", phase: "Lesson", content: { tag: "LESSON #46 (Angular)", title: TITLE, body: "Model complex state with a reducer pattern in Angular: use a signal holding an object and a dispatch method that applies actions (e.g. INCREMENT, ADD) and updates the signal with the new state.", usecase: "Angular signals plus a reducer function replicate React useReducer for predictable state updates." } },
   { id: "objectives", type: "objectives", phase: "Objectives", items: ["state = signal(initialState); dispatch(action) { this.state.update(s => reducer(s, action)); }", "Reducer: (state, action) => { switch (action.type) { case 'INC': return { ...state, count: state.count + 1 }; ... } }", "Use typed actions: type Action = { type: 'INC' } | { type: 'ADD'; payload: number }", "Template reads state().count and calls dispatch({ type: 'INC' })"] },
   { id: "step1", type: "question", phase: "Step 1 of 3", paal: "Create a reducer: function counterReducer(s: { count: number }, a: { type: string; payload?: number }) { switch (a.type) { case 'INC': return { count: s.count + 1 }; case 'ADD': return { count: s.count + (a.payload ?? 0) }; default: return s; } }. Create state = signal({ count: 0 }).", answer_keywords: ["reducer", "signal", "count"], seed_code: `import { Component, signal } from '@angular/core';
 
@@ -70,5 +70,5 @@ export class ReducerComponent {
 }`, feedback_correct: "✅ useReducer vs useState (Angular) complete.", feedback_partial: "ADD payload.", feedback_wrong: "Export", expected: "dispatch({ type: 'ADD', payload: 10 })" },
 ];
 
-const sideItems = [{ label: "Problem", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
+const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
 export default createINPACTEngine({ NODES, sideItems, problemNum: 46, title: TITLE, shortName: "A — REDUCER" });

@@ -1,0 +1,1 @@
+{"result":"correct","feedback":"You correctly created the toggleVisibility function that uses setIsVisible to toggle the boolean state. The function properly uses the previous state callback pattern (p => !p) to toggle between true and false values."}

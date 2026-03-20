@@ -1,0 +1,1 @@
+{"result":"correct","feedback":"You correctly used useState to create a state variable named currentStageIndex and initialized it to 0 inside the PipelineVisualizer component. The syntax and behavior match the step's requirements exactly."}

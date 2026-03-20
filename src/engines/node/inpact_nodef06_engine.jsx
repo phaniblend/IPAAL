@@ -2,7 +2,7 @@ import createINPACTEngine from "../inpact_engine_shared";
 
 const NODES = [
   {
-    id: "intro", type: "reveal", phase: "Problem",
+    id: "intro", type: "reveal", phase: "Lesson",
     content: {
       tag: "NODE.JS #6",
       title: "fs module mastery",
@@ -24,5 +24,5 @@ const NODES = [
   },
 ];
 
-const sideItems = [{ label: "Problem", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }];
+const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }];
 export default createINPACTEngine({ NODES, sideItems, problemNum: "NODE-F06", title: "fs module mastery", shortName: "NODE — FS" });

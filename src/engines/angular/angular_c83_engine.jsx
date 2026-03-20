@@ -2,7 +2,7 @@ import createINPACTEngine from "../inpact_engine_shared";
 
 const TITLE = "Form Library from Scratch (Angular)";
 const NODES = [
-  { id: "intro", type: "reveal", phase: "Problem", content: { tag: "PROBLEM #83 (Angular)", title: TITLE, body: "Build a minimal form abstraction in Angular: a FormGroup or a custom class that holds signals for value, touched, errors and methods setValue, validate; wrap inputs with a directive that binds to the field.", usecase: "Angular ReactiveFormsModule or custom signal-based form state replicates a minimal form library." } },
+  { id: "intro", type: "reveal", phase: "Lesson", content: { tag: "LESSON #83 (Angular)", title: TITLE, body: "Build a minimal form abstraction in Angular: a FormGroup or a custom class that holds signals for value, touched, errors and methods setValue, validate; wrap inputs with a directive that binds to the field.", usecase: "Angular ReactiveFormsModule or custom signal-based form state replicates a minimal form library." } },
   { id: "objectives", type: "objectives", phase: "Objectives", items: ["FormField: value = signal(''); touched = signal(false); errors = signal<string[]>([]); setValue(v); markTouched()", "Directive formField that injects the field and binds [value] and (blur) to markTouched", "Or use FormGroup/FormControl and custom wrapper component", "Submit: read form value and validate"] },
   { id: "step1", type: "question", phase: "Step 1 of 3", paal: "Create a simple FormField class or object: value = signal(''); touched = signal(false); setValue(v: string) { this.value.set(v); }; markTouched() { this.touched.set(true); }. Use it in a component.", answer_keywords: ["FormField", "value", "setValue", "markTouched"], seed_code: `import { signal } from '@angular/core';
 
@@ -62,5 +62,5 @@ export class FormDemoComponent {
 }`, feedback_correct: "✅ Form Library from Scratch (Angular) complete.", feedback_partial: "onSubmit.", feedback_wrong: "Export", expected: "errors in template and onSubmit" },
 ];
 
-const sideItems = [{ label: "Problem", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
+const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
 export default createINPACTEngine({ NODES, sideItems, problemNum: 83, title: TITLE, shortName: "A — FORM LIBRARY" });

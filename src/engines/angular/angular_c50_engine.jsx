@@ -2,7 +2,7 @@ import createINPACTEngine from "../inpact_engine_shared";
 
 const TITLE = "useCallback for Stable References (Angular)";
 const NODES = [
-  { id: "intro", type: "reveal", phase: "Problem", content: { tag: "PROBLEM #50 (Angular)", title: TITLE, body: "In Angular, callback references are stable when defined as class methods; for passing to child components use the same method reference. For signals, use computed or methods that read signals so children don't re-render unnecessarily.", usecase: "Angular class methods are stable; use OnPush and signal inputs to avoid unnecessary child updates." } },
+  { id: "intro", type: "reveal", phase: "Lesson", content: { tag: "LESSON #50 (Angular)", title: TITLE, body: "In Angular, callback references are stable when defined as class methods; for passing to child components use the same method reference. For signals, use computed or methods that read signals so children don't re-render unnecessarily.", usecase: "Angular class methods are stable; use OnPush and signal inputs to avoid unnecessary child updates." } },
   { id: "objectives", type: "objectives", phase: "Objectives", items: ["Define handler as a class method: onClick = () => { ... } or onClick() { ... } so reference is stable", "Child with @Input() callback: use it in (click)=\"callback()\"; parent passes [callback]=\"parentHandler\"", "If handler needs latest signal value, read inside the method; avoid creating new function in template", "OnPush on child so it only updates when @Input() or events change"] },
   { id: "step1", type: "question", phase: "Step 1 of 3", paal: "Create a parent with count = signal(0) and a stable method increment() { this.count.update(c => c + 1); }. Template: <button (click)=\"increment()\">+1</button> {{ count() }}.", answer_keywords: ["increment", "method", "count"], seed_code: `import { Component, signal } from '@angular/core';
 
@@ -38,5 +38,5 @@ export class ChildComponent {
 }`, feedback_correct: "✅ useCallback for Stable References (Angular) complete.", feedback_partial: "OnPush.", feedback_wrong: "Export", expected: "OnPush on child and export" },
 ];
 
-const sideItems = [{ label: "Problem", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
+const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
 export default createINPACTEngine({ NODES, sideItems, problemNum: 50, title: TITLE, shortName: "A — STABLE REFS" });

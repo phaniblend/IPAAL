@@ -1,0 +1,1 @@
+{"result":"partial","feedback":"You correctly created a function that calls setCount to increment the count value by 1. However, the function name should be 'incrementCount' as specified in the step requirements, not 'increment'.","hint":"Rename your function from 'increment' to 'incrementCount'","errors":["Function name should be 'incrementCount', not 'increment'"]}

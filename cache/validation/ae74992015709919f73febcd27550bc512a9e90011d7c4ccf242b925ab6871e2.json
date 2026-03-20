@@ -1,0 +1,1 @@
+{"result":"correct","feedback":"You correctly defined a handleMouseLeave function inside the StarRating component that calls setHover(0) to reset the hover state. The arrow function syntax and implementation match the step's requirements.","hint":"Ready to use this handler in your JSX in the next step.","errors":[]}

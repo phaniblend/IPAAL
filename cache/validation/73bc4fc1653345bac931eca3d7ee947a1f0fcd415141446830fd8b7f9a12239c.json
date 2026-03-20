@@ -1,0 +1,1 @@
+{"result":"correct","feedback":"You correctly created a function named mergeIntervals that accepts a parameter for the intervals array. This satisfies the step's requirement to define the function with the proper parameter.","hint":"In the next steps, you'll need to implement the logic to merge overlapping intervals inside this function body."}

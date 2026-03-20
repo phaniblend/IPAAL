@@ -1,0 +1,1 @@
+{"result":"correct","feedback":"You correctly added the default export statement for the App component at the end of the file using 'export default App'. This makes the component available for import in other files."}

@@ -1,0 +1,1 @@
+{"result":"correct","feedback":"You correctly imported React and useState from the 'react' module using proper ES6 import syntax. The destructuring syntax for useState is exactly what's needed for React components. Ready for the next step."}

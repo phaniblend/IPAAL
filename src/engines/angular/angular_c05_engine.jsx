@@ -1,7 +1,7 @@
 import createINPACTEngine from "../inpact_engine_shared";
 
 const NODES = [
-  { id: "intro", type: "reveal", phase: "Problem", content: { tag: "PROBLEM #5 (Angular)", title: "Conditional Rendering with Ternary", body: "Show one message when a boolean is true and another when false, using a ternary in the template. Use a signal<boolean> and render either 'Welcome back' or 'Please sign in' in the template.", usecase: "Angular templates use ternary (condition ? a : b) or *ngIf/else for conditional UI." } },
+  { id: "intro", type: "reveal", phase: "Lesson", content: { tag: "LESSON #5 (Angular)", title: "Conditional Rendering with Ternary", body: "Show one message when a boolean is true and another when false, using a ternary in the template. Use a signal<boolean> and render either 'Welcome back' or 'Please sign in' in the template.", usecase: "Angular templates use ternary (condition ? a : b) or *ngIf/else for conditional UI." } },
   { id: "objectives", type: "objectives", phase: "Objectives", items: ["Use signal(true) or signal(false) for the condition", "Template: {{ isLoggedIn() ? 'Welcome back' : 'Please sign in' }}", "Optional: toggle button that flips the signal", "Standalone component with CommonModule"] },
   { id: "step1", type: "question", phase: "Step 1 of 3", paal: "Create a component with isLoggedIn = signal(false). Add a minimal template that shows the value for now.", answer_keywords: ["signal", "isLoggedIn", "template"], seed_code: `import { Component, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -44,5 +44,5 @@ export class ConditionalTernaryComponent {
 }`, feedback_correct: "✅ Conditional Ternary (Angular) complete.", feedback_partial: "Toggle button.", feedback_wrong: "(click) and isLoggedIn.set()", expected: "button (click)=\"isLoggedIn.set(!isLoggedIn())\"" },
 ];
 
-const sideItems = [{ label: "Problem", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
+const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
 export default createINPACTEngine({ NODES, sideItems, problemNum: 5, title: "Conditional Rendering with Ternary (Angular)", shortName: "A — TERNARY" });

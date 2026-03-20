@@ -1,0 +1,1 @@
+{"result":"correct","feedback":"You correctly added an onClick handler to the button that calls the toggleVisibility function. The handler uses the correct syntax and will toggle the visibility state when clicked."}

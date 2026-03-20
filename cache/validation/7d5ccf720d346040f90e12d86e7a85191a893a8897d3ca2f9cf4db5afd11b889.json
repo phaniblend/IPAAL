@@ -1,0 +1,1 @@
+{"result":"correct","feedback":"You correctly added an increment method to the CounterApp class that increases the counter property by 1. The method uses proper TypeScript syntax and correctly updates the state.","hint":"Ready to move on to the next step where you can use this increment method in your template.","errors":[]}

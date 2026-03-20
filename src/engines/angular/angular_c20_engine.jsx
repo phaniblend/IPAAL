@@ -2,7 +2,7 @@ import createINPACTEngine from "../inpact_engine_shared";
 
 const TITLE = "Event Handling (Angular)";
 const NODES = [
-  { id: "intro", type: "reveal", phase: "Problem", content: { tag: "PROBLEM #20 (Angular)", title: TITLE, body: "Handle user events in the template with (click), (keyup), (input), etc. Call component methods or inline expressions. For custom events use @Output() and EventEmitter.", usecase: "Angular event binding (event)=\"handler()\" and EventEmitter for child-to-parent." } },
+  { id: "intro", type: "reveal", phase: "Lesson", content: { tag: "LESSON #20 (Angular)", title: TITLE, body: "Handle user events in the template with (click), (keyup), (input), etc. Call component methods or inline expressions. For custom events use @Output() and EventEmitter.", usecase: "Angular event binding (event)=\"handler()\" and EventEmitter for child-to-parent." } },
   { id: "objectives", type: "objectives", phase: "Objectives", items: ["(click)=\"onClick()\" or (click)=\"count.set(count() + 1)\"", "(keyup.enter)=\"submit()\" for Enter key", "@Output() submit = new EventEmitter() and submit.emit() in child", "Pass event: (click)=\"onClick($event)\" when you need the DOM event"] },
   { id: "step1", type: "question", phase: "Step 1 of 3", paal: "Create a component with count = signal(0). Add a button with (click)=\"count.set(count() + 1)\" and display {{ count() }}.", answer_keywords: ["click", "count", "set"], seed_code: `import { Component, signal } from '@angular/core';
 
@@ -49,5 +49,5 @@ export class EventHandlingComponent {
 }`, feedback_correct: "✅ Event Handling (Angular) complete.", feedback_partial: "keyup.enter.", feedback_wrong: "(keyup.enter)=\"submit()\"", expected: "(keyup.enter)=\"submit()\"" },
 ];
 
-const sideItems = [{ label: "Problem", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
+const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
 export default createINPACTEngine({ NODES, sideItems, problemNum: 20, title: TITLE, shortName: "A — EVENTS" });

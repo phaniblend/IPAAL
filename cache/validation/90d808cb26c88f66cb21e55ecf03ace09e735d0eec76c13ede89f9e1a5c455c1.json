@@ -1,0 +1,1 @@
+{"result":"correct","feedback":"You correctly added a text input inside the form element with the required attributes: type='text', name='name', value bound to the form state, and onChange wired to the handleChange function. The input will update the state when typed into.","hint":"Next, you might add similar inputs for email and password fields.","errors":[]}

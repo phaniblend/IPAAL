@@ -1,0 +1,1 @@
+{"result":"correct","feedback":"You correctly used the useState hook with false as the initial value and destructured it into isVisible and setIsVisible variables. The syntax is proper and meets the step requirements perfectly."}

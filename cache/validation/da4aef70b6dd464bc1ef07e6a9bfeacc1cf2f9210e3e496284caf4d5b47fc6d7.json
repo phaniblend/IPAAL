@@ -1,0 +1,1 @@
+{"result":"correct","feedback":"You correctly created a toggleVisibility function that calls setIsVisible with the opposite of the current isVisible value using the functional update pattern (!p). The arrow function syntax and use of the previous state parameter work perfectly for this toggle functionality."}

@@ -1,18 +1,19 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useCallback } from "react";
 import CodeMirror from "@uiw/react-codemirror";
+import { EditorView } from "@codemirror/view";
 import { javascript } from "@codemirror/lang-javascript";
+import { html as htmlLang } from "@codemirror/lang-html";
+import { css as cssLang } from "@codemirror/lang-css";
 import { oneDark } from "@codemirror/theme-one-dark";
+import { htmlAutoCloseTags } from "../codemirrorHtmlAutoClose.js";
 
 const TAB_ORDER = ["ts", "html", "css"];
 const TAB_LABELS = { ts: "TypeScript", html: "HTML", css: "CSS" };
 
-// Use TypeScript for TS tab; JS for HTML/CSS (good enough without extra deps).
-// For HTML/CSS syntax highlighting, install: npm i @codemirror/lang-html @codemirror/lang-css
-// then use: html: [langHtml()], css: [langCss()] in extensionsByTab.
 const extensionsByTab = {
   ts: [javascript({ typescript: true })],
-  html: [javascript()],
-  css: [javascript()],
+  html: [htmlLang(), htmlAutoCloseTags()],
+  css: [cssLang()],
 };
 
 const basicSetup = {
@@ -47,12 +48,14 @@ const basicSetup = {
  * Three-tab code editor for Angular: TypeScript, HTML, CSS.
  * value: { ts: string, html: string, css: string }
  * onChange: (value: { ts, html, css }) => void
+ * placeholder: { ts?: string, html?: string, css?: string } — cleared on first focus when content matches
  */
 export default function AngularTabbedEditor({
   value = {},
   onChange,
   height = "240px",
   tabs = ["ts", "html", "css"],
+  placeholder: placeholderByTab = {},
 }) {
   const [activeTab, setActiveTab] = useState(tabs[0] || "ts");
   const ts = value.ts ?? "";
@@ -65,13 +68,36 @@ export default function AngularTabbedEditor({
     return cssVal;
   }, [activeTab, ts, htmlVal, cssVal]);
 
-  const handleEditorChange = (newVal) => {
-    if (activeTab === "ts") onChange({ ...value, ts: newVal });
-    else if (activeTab === "html") onChange({ ...value, html: newVal });
-    else onChange({ ...value, css: newVal });
-  };
+  const handleEditorChange = useCallback(
+    (newVal) => {
+      if (activeTab === "ts") onChange({ ...value, ts: newVal });
+      else if (activeTab === "html") onChange({ ...value, html: newVal });
+      else onChange({ ...value, css: newVal });
+    },
+    [activeTab, value, onChange]
+  );
 
-  const extensions = extensionsByTab[activeTab] ?? extensionsByTab.ts;
+  const activePlaceholder = (placeholderByTab && placeholderByTab[activeTab]) ?? "";
+  const clearOnFocusExtension = useMemo(() => {
+    if (!activePlaceholder) return [];
+    const ph = activePlaceholder;
+    return [
+      EditorView.domEventHandlers({
+        focus(_event, view) {
+          const cur = view.state.doc.toString();
+          if (cur.trim() === String(ph).trim()) {
+            view.dispatch({ changes: { from: 0, to: cur.length, insert: "" } });
+            handleEditorChange("");
+          }
+        },
+      }),
+    ];
+  }, [activePlaceholder, handleEditorChange]);
+
+  const extensions = useMemo(
+    () => [...(extensionsByTab[activeTab] ?? extensionsByTab.ts), ...clearOnFocusExtension],
+    [activeTab, clearOnFocusExtension]
+  );
 
   const visibleTabs = Array.isArray(tabs) && tabs.length ? tabs : TAB_ORDER;
 
@@ -138,6 +164,8 @@ const styles = {
   tabActive: {
     color: "#c4b5fd",
     background: "#1a1d2e",
+    marginBottom: "-1px",
+    borderBottom: "1px solid #1a1d2e",
   },
   editor: {
     minHeight: 0,

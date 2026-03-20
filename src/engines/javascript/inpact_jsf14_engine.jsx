@@ -2,7 +2,7 @@ import createINPACTEngine from "../inpact_engine_shared";
 
 const NODES = [
   {
-    id: "intro", type: "reveal", phase: "Problem",
+    id: "intro", type: "reveal", phase: "Lesson",
     content: {
       tag: "JS FUNDAMENTALS #14",
       title: "Type Coercion, Equality & Truthy/Falsy",
@@ -268,7 +268,7 @@ export { isAdminSafe, hasItemsSafe, createServerSafe, calcTotalSafe, isValidNumb
 ];
 
 const sideItems = [
-  { label: "Problem", id: "intro" },
+  { label: "Lesson", id: "intro" },
   { label: "Objectives", id: "objectives" },
   { label: "Step 1 — Falsy values", id: "step1" },
   { label: "Step 2 — == coercion", id: "step2" },

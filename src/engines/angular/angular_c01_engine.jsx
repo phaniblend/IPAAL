@@ -1,7 +1,7 @@
 import createINPACTEngine from "../inpact_engine_shared";
 
 const NODES = [
-  { id: "intro", type: "reveal", phase: "Problem", content: { tag: "PROBLEM #1 (Angular)", title: "Counter App", body: "Build a simple Angular component that displays a number starting at 0 and lets the user change it using buttons: [ + ] increases by 1, [ - ] decreases by 1, [ Reset ] brings it back to 0. Use signal() for state.", usecase: "Same pattern as React — with Angular signals and template syntax." } },
+  { id: "intro", type: "reveal", phase: "Lesson", content: { tag: "LESSON #1 (Angular)", title: "Counter App", body: "Build a simple Angular component that displays a number starting at 0 and lets the user change it using buttons: [ + ] increases by 1, [ - ] decreases by 1, [ Reset ] brings it back to 0. Use signal() for state.", usecase: "Same pattern as React — with Angular signals and template syntax." } },
   { id: "objectives", type: "objectives", phase: "Objectives", items: ["Use signal(0) for the counter value", "Use computed or direct signal() for reactive state", "Template: {{ count() }} and (click) handlers", "Export a standalone component"] },
   { id: "step1", type: "question", phase: "Step 1 of 3", paal: "Create a standalone component with count = signal(0). Import Component and signal from @angular/core.", answer_keywords: ["signal", "component", "import", "0"], seed_code: `import { Component, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -57,5 +57,5 @@ export class CounterComponent {
 }`, feedback_correct: "✅ Counter App (Angular) complete.", feedback_partial: "Handlers and export.", feedback_wrong: "increment/decrement/reset", expected: "increment: count.update(c => c + 1); decrement: count.update(c => c - 1); reset: count.set(0). Export the component." },
 ];
 
-const sideItems = [{ label: "Problem", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
+const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
 export default createINPACTEngine({ NODES, sideItems, problemNum: 1, title: "Counter App (Angular)", shortName: "A — COUNTER" });

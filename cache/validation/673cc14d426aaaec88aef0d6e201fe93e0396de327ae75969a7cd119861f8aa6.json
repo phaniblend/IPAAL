@@ -1,0 +1,1 @@
+{"result":"correct","feedback":"You correctly imported configureStore from '@reduxjs/toolkit' and used it to create a store variable with an empty reducer object. This satisfies the step's requirements.","hint":"In the next step, you'll likely need to add your API service's reducer to the store configuration.","errors":[]}

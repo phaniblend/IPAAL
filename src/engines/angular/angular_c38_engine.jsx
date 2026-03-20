@@ -2,7 +2,7 @@ import createINPACTEngine from "../inpact_engine_shared";
 
 const TITLE = "useKeyPress (Angular)";
 const NODES = [
-  { id: "intro", type: "reveal", phase: "Problem", content: { tag: "PROBLEM #38 (Angular)", title: TITLE, body: "React to specific key presses using HostListener('document:keydown', ['$event']) or (keydown) on an element; read event.key and update a signal or call a method.", usecase: "Angular HostListener or template (keydown) with event.key provides keypress handling for shortcuts and accessibility." } },
+  { id: "intro", type: "reveal", phase: "Lesson", content: { tag: "LESSON #38 (Angular)", title: TITLE, body: "React to specific key presses using HostListener('document:keydown', ['$event']) or (keydown) on an element; read event.key and update a signal or call a method.", usecase: "Angular HostListener or template (keydown) with event.key provides keypress handling for shortcuts and accessibility." } },
   { id: "objectives", type: "objectives", phase: "Objectives", items: ["HostListener('document:keydown', ['$event']) and check e.key === 'Escape' or e.key === 'Enter'", "Or (keydown)=\"onKey($event)\" on input and handle in component", "lastKey = signal<string | null>(null); set lastKey.set(e.key)", "Use keydown.key.enter or keydown.key.escape in template (Angular 17+)"] },
   { id: "step1", type: "question", phase: "Step 1 of 3", paal: "Create a component with lastKey = signal<string>(''). Add HostListener('document:keydown', ['$event']) method that sets lastKey.set(e.key). Display {{ lastKey() }}.", answer_keywords: ["HostListener", "keydown", "key"], seed_code: `import { Component, signal, HostListener } from '@angular/core';
 
@@ -56,5 +56,5 @@ export class KeyPressComponent {
 }`, feedback_correct: "✅ useKeyPress (Angular) complete.", feedback_partial: "keydown.enter.", feedback_wrong: "Export", expected: "(keydown.enter)=\"onEnter()\" and export" },
 ];
 
-const sideItems = [{ label: "Problem", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
+const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
 export default createINPACTEngine({ NODES, sideItems, problemNum: 38, title: TITLE, shortName: "A — KEY PRESS" });

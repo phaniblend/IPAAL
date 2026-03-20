@@ -1,0 +1,1 @@
+{"result":"correct","feedback":"You correctly initialized the form state using useState with an object containing name, email, and message properties, each set to an empty string. The state structure matches the requirement perfectly."}

@@ -2,7 +2,7 @@ import createINPACTEngine from "../inpact_engine_shared";
 
 const NODES = [
   {
-    id: "intro", type: "reveal", phase: "Problem",
+    id: "intro", type: "reveal", phase: "Lesson",
     content: {
       tag: "NODE.JS #10",
       title: "Path, URL & OS modules",
@@ -25,5 +25,5 @@ path.join(__dirname, 'public', 'index.html')`,
   },
 ];
 
-const sideItems = [{ label: "Problem", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }];
+const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }];
 export default createINPACTEngine({ NODES, sideItems, problemNum: "NODE-F10", title: "Path, URL & OS", shortName: "NODE — PATH" });

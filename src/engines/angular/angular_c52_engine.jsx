@@ -2,7 +2,7 @@ import createINPACTEngine from "../inpact_engine_shared";
 
 const TITLE = "List Virtualization (Angular)";
 const NODES = [
-  { id: "intro", type: "reveal", phase: "Problem", content: { tag: "PROBLEM #52 (Angular)", title: TITLE, body: "Render only visible list items using Angular CDK ScrollingModule: cdk-virtual-scroll-viewport with *cdkVirtualFor so large lists don't render all DOM nodes.", usecase: "Angular CDK virtual scroll viewport and cdkVirtualFor provide list virtualization for performance." } },
+  { id: "intro", type: "reveal", phase: "Lesson", content: { tag: "LESSON #52 (Angular)", title: TITLE, body: "Render only visible list items using Angular CDK ScrollingModule: cdk-virtual-scroll-viewport with *cdkVirtualFor so large lists don't render all DOM nodes.", usecase: "Angular CDK virtual scroll viewport and cdkVirtualFor provide list virtualization for performance." } },
   { id: "objectives", type: "objectives", phase: "Objectives", items: ["Import ScrollingModule; use <cdk-virtual-scroll-viewport itemSize=\"50\">", "Inside viewport: *cdkVirtualFor=\"let item of items()\"", "items() should be the data array; viewport height in px so scroll works", "Optional: use trackBy with cdkVirtualFor for stability"] },
   { id: "step1", type: "question", phase: "Step 1 of 3", paal: "Create a component with items = signal(Array.from({ length: 100 }, (_, i) => ({ id: i, name: 'Item ' + i }))). Import ScrollingModule from @angular/cdk/scrolling.", answer_keywords: ["ScrollingModule", "signal", "items"], seed_code: `import { Component, signal } from '@angular/core';
 import { ScrollingModule } from '@angular/cdk/scrolling';
@@ -53,5 +53,5 @@ export class VirtualListComponent {
 }`, feedback_correct: "✅ List Virtualization (Angular) complete.", feedback_partial: "trackBy.", feedback_wrong: "Export", expected: "trackBy and export" },
 ];
 
-const sideItems = [{ label: "Problem", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
+const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
 export default createINPACTEngine({ NODES, sideItems, problemNum: 52, title: TITLE, shortName: "A — VIRTUAL LIST" });

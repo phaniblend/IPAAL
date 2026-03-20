@@ -2,7 +2,7 @@ import createINPACTEngine from "../inpact_engine_shared";
 
 const TITLE = "Children Prop (Angular)";
 const NODES = [
-  { id: "intro", type: "reveal", phase: "Problem", content: { tag: "PROBLEM #15 (Angular)", title: TITLE, body: "Render content that the parent puts between your component's tags. In Angular use <ng-content> (single slot) or <ng-content select=\"...\"> for multiple slots.", usecase: "ng-content is Angular's content projection — the equivalent of React's children." } },
+  { id: "intro", type: "reveal", phase: "Lesson", content: { tag: "LESSON #15 (Angular)", title: TITLE, body: "Render content that the parent puts between your component's tags. In Angular use <ng-content> (single slot) or <ng-content select=\"...\"> for multiple slots.", usecase: "ng-content is Angular's content projection — the equivalent of React's children." } },
   { id: "objectives", type: "objectives", phase: "Objectives", items: ["Add <ng-content></ng-content> where child content should appear", "Parent: <app-wrapper><p>Child content</p></app-wrapper>", "Optional: multiple slots with select (e.g. select=\"[header]\")", "Single slot projects all content into one ng-content"] },
   { id: "step1", type: "question", phase: "Step 1 of 3", paal: "Create a component with a template that has a wrapper div and <ng-content></ng-content> inside it.", answer_keywords: ["ng-content", "template"], seed_code: `import { Component } from '@angular/core';
 
@@ -49,5 +49,5 @@ export class ChildrenPropComponent {}
 `, feedback_correct: "✅ Children Prop (Angular) complete.", feedback_partial: "Export and optional slots.", feedback_wrong: "ng-content select", expected: "ng-content or ng-content select for slots." },
 ];
 
-const sideItems = [{ label: "Problem", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
+const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
 export default createINPACTEngine({ NODES, sideItems, problemNum: 15, title: TITLE, shortName: "A — CHILDREN" });

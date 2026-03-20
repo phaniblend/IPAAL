@@ -2,7 +2,7 @@ import createINPACTEngine from "../inpact_engine_shared";
 
 const TITLE = "Undo/Redo (Angular)";
 const NODES = [
-  { id: "intro", type: "reveal", phase: "Problem", content: { tag: "PROBLEM #82 (Angular)", title: TITLE, body: "Implement undo/redo in Angular: keep a history array of states (signals or snapshots), current index, and methods undo() (decrement index, set state from history) and redo() (increment index).", usecase: "Angular signals and a history array with index provide undo/redo for form or list state." } },
+  { id: "intro", type: "reveal", phase: "Lesson", content: { tag: "LESSON #82 (Angular)", title: TITLE, body: "Implement undo/redo in Angular: keep a history array of states (signals or snapshots), current index, and methods undo() (decrement index, set state from history) and redo() (increment index).", usecase: "Angular signals and a history array with index provide undo/redo for form or list state." } },
   { id: "objectives", type: "objectives", phase: "Objectives", items: ["history = signal<State[]>([]); index = signal(0); state = computed(() => history()[index()] ?? initial)", "On change: push new state to history (slice(0, index()+1) then push), index.set(history().length - 1)", "undo(): if index() > 0 index.update(i => i - 1); redo(): if index() < history().length - 1 index.update(i => i + 1)", "Can use signal for current state and sync from history[index()]"] },
   { id: "step1", type: "question", phase: "Step 1 of 3", paal: "Create a component with history = signal<string[]>(['']); index = signal(0). current = computed(() => this.history()[this.index()] ?? ''). Add undo() { if (this.index() > 0) this.index.update(i => i - 1); } and redo() { if (this.index() < this.history().length - 1) this.index.update(i => i + 1); }.", answer_keywords: ["history", "index", "undo", "redo"], seed_code: `import { Component, signal, computed } from '@angular/core';
 
@@ -60,5 +60,5 @@ export class UndoRedoComponent {
 }`, feedback_correct: "✅ Undo/Redo (Angular) complete.", feedback_partial: "disabled.", feedback_wrong: "Export", expected: "input, Undo/Redo buttons and disabled" },
 ];
 
-const sideItems = [{ label: "Problem", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
+const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
 export default createINPACTEngine({ NODES, sideItems, problemNum: 82, title: TITLE, shortName: "A — UNDO REDO" });

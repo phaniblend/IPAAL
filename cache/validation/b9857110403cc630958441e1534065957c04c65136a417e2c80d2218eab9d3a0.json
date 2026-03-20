@@ -1,0 +1,1 @@
+{"result":"correct","feedback":"You correctly defined a TypeScript interface named FormState with the required name, email, and password properties, all typed as strings. The interface syntax is valid and meets all the step's criteria.","hint":"Great! You can now use this interface to type your form state in the next steps.","errors":[]}

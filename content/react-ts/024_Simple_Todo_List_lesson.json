@@ -1,0 +1,365 @@
+{
+  "success": true,
+  "config": {
+    "lessonId": "ai-react-ts-24",
+    "track": "react-ts",
+    "problemNum": 24,
+    "title": "Simple Todo List",
+    "shortName": "P24",
+    "intro": {
+      "tag": "LESSON #24",
+      "title": "Simple Todo List",
+      "body": "In this lesson, you will build a simple todo list application where you can add, view, and remove tasks. You will learn how to manage state in React using the useState hook to store and update the list of todos. The lesson involves key TypeScript constructs like defining types for your data and writing event handlers for user interactions. By the end, you'll have a functional todo list that demonstrates fundamental React and TypeScript concepts in a practical way.",
+      "usecase": "The simple todo list pattern is a foundational UI component used across countless real-world applications. You'll see it in task management tools like Asana or Trello, in e-commerce shopping carts where items are added and removed, and in content management dashboards for listing and editing entries. As a developer, mastering this pattern teaches you how to manage dynamic lists, handle user input, and update the UI reactively—skills essential for building interactive features like admin panels, data tables, and any interface that requires users to curate or manage a collection of items."
+    },
+    "objectives": [
+      "Initialize and manage state for a list of todo items using the useState hook.",
+      "Implement a form component to capture and submit new todo text input.",
+      "Construct a handler function to add new items to the todo list state.",
+      "Render the list of todo items dynamically using the map method.",
+      "Bind a delete handler to remove specific items from the todo list.",
+      "Apply TypeScript interfaces to define the structure of a todo item.",
+      "Control user input by resetting the form field after submission."
+    ],
+    "steps": [
+      {
+        "id": "step1",
+        "type": "question",
+        "phase": "Step 1 of 10",
+        "title": "Import React and useState",
+        "instruction": "Import React and the useState hook from the 'react' package.",
+        "hint": "Use the import statement to bring in both React and useState from 'react'.",
+        "analogousExample": "// Example: importing React and a hook\nimport React, { useState } from 'react';",
+        "seedCode": "// Import React and useState here\n",
+        "expectedOutcome": "The imports for React and useState are added at the top of the file.",
+        "successCriteria": [
+          "React and useState are imported from 'react'."
+        ],
+        "feedbackCorrect": "Nice! Proceed to the next step.",
+        "feedbackPartial": "You're on the right track, but make sure you're importing both React and useState from 'react'.",
+        "feedbackWrong": "The imports are missing or incorrect. You need to import React and useState from 'react'.",
+        "evaluation": {
+          "mode": "keyword_match",
+          "required": [
+            "import",
+            "React",
+            "useState",
+            "'react'"
+          ],
+          "partialThreshold": 0.5,
+          "correctThreshold": 0.8
+        }
+      },
+      {
+        "id": "step2",
+        "type": "question",
+        "phase": "Step 2 of 10",
+        "title": "Define Todo interface",
+        "instruction": "Define a TypeScript interface named 'Todo' with three properties: 'id' of type number, 'text' of type string, and 'completed' of type boolean.",
+        "hint": "Use the 'interface' keyword followed by the interface name and property definitions inside curly braces.",
+        "analogousExample": "// Example: defining an interface for a user\ninterface User {\n  id: number;\n  name: string;\n  isActive: boolean;\n}",
+        "seedCode": "import React, { useState } from 'react';\n\n// Define Todo interface here\n",
+        "expectedOutcome": "A Todo interface is defined with the correct property types, enabling type-safe todo items throughout the application.",
+        "successCriteria": [
+          "Todo interface is defined with id: number, text: string, and completed: boolean properties."
+        ],
+        "feedbackCorrect": "Nice! Proceed to the next step.",
+        "feedbackPartial": "You're on the right track, but check that all three properties (id, text, completed) are included with the correct TypeScript types (number, string, boolean).",
+        "feedbackWrong": "The Todo interface definition is missing or incorrect. Make sure to use the 'interface' keyword, name it 'Todo', and include all three properties with their proper types.",
+        "evaluation": {
+          "mode": "keyword_match",
+          "required": [
+            "interface",
+            "Todo",
+            "id:",
+            "number",
+            "text:",
+            "string",
+            "completed:",
+            "boolean"
+          ],
+          "partialThreshold": 0.5,
+          "correctThreshold": 0.8
+        }
+      },
+      {
+        "id": "step3",
+        "type": "question",
+        "phase": "Step 3 of 10",
+        "title": "Create main TodoList component",
+        "instruction": "Create a functional component named TodoList that returns JSX. The component should return a simple <div> wrapper for now.",
+        "hint": "Define the component using either a function declaration or arrow function syntax. Make sure it returns a JSX element like <div>.</div>",
+        "analogousExample": "// Similar: a functional component returning a wrapper\nexport default function App() {\n  return (\n    <div>\n      {/* Content will go here */}\n    </div>\n  );\n}",
+        "seedCode": "import React, { useState } from 'react';\n\n// Define Todo interface here\n\n// Create the TodoList component here\n",
+        "expectedOutcome": "A functional component named TodoList is created that returns a JSX wrapper element.",
+        "successCriteria": [
+          "The code includes a TodoList component that returns JSX (like a <div>)."
+        ],
+        "feedbackCorrect": "Nice! Proceed to the next step.",
+        "feedbackPartial": "You're on the right track, but make sure you've created a component named TodoList that returns JSX. Check that you're using proper TypeScript syntax.",
+        "feedbackWrong": "The TodoList component isn't properly defined. Remember to create a functional component named TodoList that returns JSX (like a <div> element).",
+        "evaluation": {
+          "mode": "keyword_match",
+          "required": [
+            "TodoList",
+            "return",
+            "<div>"
+          ],
+          "partialThreshold": 0.5,
+          "correctThreshold": 0.8
+        }
+      },
+      {
+        "id": "step4",
+        "type": "question",
+        "phase": "Step 4 of 10",
+        "title": "Initialize todos state",
+        "instruction": "Inside your TodoList component, initialize a state variable named 'todos' using useState. Set its initial value to an empty array typed as Todo[].",
+        "hint": "Use the useState hook you imported earlier. Remember to provide the correct TypeScript type annotation for the state.",
+        "analogousExample": "// Example: initializing typed state\nconst [items, setItems] = useState<Item[]>([]);",
+        "seedCode": "import React, { useState } from 'react';\n\n// Define Todo interface here\n\n// Create the TodoList component here\nconst TodoList = () => {\n  // Initialize todos state here\n  \n  return null;\n};",
+        "expectedOutcome": "The todos state is properly initialized with an empty array of Todo items, ready to store todo data.",
+        "successCriteria": [
+          "The todos state variable is declared using useState with the correct Todo[] type and empty array initial value."
+        ],
+        "feedbackCorrect": "Nice! Proceed to the next step.",
+        "feedbackPartial": "You're close. Make sure you're using useState with the Todo[] type annotation and an empty array initial value.",
+        "feedbackWrong": "Check that you're using useState inside the component, providing the Todo[] type and empty array initial value.",
+        "evaluation": {
+          "mode": "keyword_match",
+          "required": [
+            "todos",
+            "useState",
+            "Todo[]",
+            "[]"
+          ],
+          "partialThreshold": 0.5,
+          "correctThreshold": 0.8
+        }
+      },
+      {
+        "id": "step5",
+        "type": "question",
+        "phase": "Step 5 of 10",
+        "title": "Create addTodo handler",
+        "instruction": "Inside your TodoList component, create a function named addTodo that takes a string parameter (the new todo text) and adds a new todo object to the todos state array.",
+        "hint": "Use the setTodos function from useState to update the state. Create a new todo object with an id (you can use Date.now() for a simple unique ID), the provided text, and a completed property set to false.",
+        "analogousExample": "// Example: function that adds an item to a state array\nfunction addItem(newText: string) {\n  setItems(prevItems => [\n    ...prevItems,\n    { id: Date.now(), text: newText, done: false }\n  ]);\n}",
+        "seedCode": "import React, { useState } from 'react';\n\n// Define Todo interface here\n\n// Create the TodoList component here\nconst TodoList = () => {\n  // Initialize todos state here\n  \n  // Create addTodo handler here\n  \n  return null;\n};",
+        "expectedOutcome": "You will have an addTodo function that can add new todos to the state when called.",
+        "successCriteria": [
+          "The addTodo function is defined, takes a string parameter, and updates the todos state with a new todo object containing id, text, and completed properties."
+        ],
+        "feedbackCorrect": "Nice! Proceed to the next step.",
+        "feedbackPartial": "You're on the right track. Make sure your addTodo function takes a string parameter and properly updates the todos state using setTodos.",
+        "feedbackWrong": "The addTodo function isn't quite right. It should take a string parameter and add a new todo object to the todos state array.",
+        "evaluation": {
+          "mode": "keyword_match",
+          "required": [
+            "addTodo",
+            "string",
+            "setTodos",
+            "id",
+            "text",
+            "completed"
+          ],
+          "partialThreshold": 0.5,
+          "correctThreshold": 0.8
+        }
+      },
+      {
+        "id": "step6",
+        "type": "question",
+        "phase": "Step 6 of 10",
+        "title": "Create toggleTodo handler",
+        "instruction": "Inside the TodoList component, create a function named toggleTodo that takes a todo id (string) as a parameter and toggles the completed status of the todo with that id.",
+        "hint": "Use setTodos to update the state. Map over the current todos array and toggle the completed property when the id matches.",
+        "analogousExample": "// Similar: a function that toggles a boolean property\nfunction toggleItem(id: string) {\n  setItems(prev => prev.map(item => \n    item.id === id ? { ...item, isActive: !item.isActive } : item\n  ));\n}",
+        "seedCode": "import React, { useState } from 'react';\n\ninterface Todo {\n  id: string;\n  text: string;\n  completed: boolean;\n}\n\nconst TodoList = () => {\n  const [todos, setTodos] = useState<Todo[]>([\n    { id: '1', text: 'Learn React', completed: false },\n    { id: '2', text: 'Build a todo app', completed: false }\n  ]);\n\n  const addTodo = (text: string) => {\n    const newTodo: Todo = {\n      id: Date.now().toString(),\n      text,\n      completed: false\n    };\n    setTodos([...todos, newTodo]);\n  };\n\n  // Create toggleTodo handler here\n\n  return null;\n};",
+        "expectedOutcome": "A toggleTodo function is defined that updates the todos state by toggling the completed property of the todo with the matching id.",
+        "successCriteria": [
+          "The toggleTodo function is defined, takes a string id parameter, and uses setTodos with a map to toggle the completed property of the matching todo."
+        ],
+        "feedbackCorrect": "Nice! Proceed to the next step.",
+        "feedbackPartial": "You're on the right track. Make sure your toggleTodo function takes an id parameter and updates the state by mapping over todos and toggling the completed property for the matching todo.",
+        "feedbackWrong": "The toggleTodo function isn't quite right. It should take a todo id as a parameter and update the todos state by toggling the completed status of the matching todo.",
+        "evaluation": {
+          "mode": "keyword_match",
+          "required": [
+            "toggleTodo",
+            "id",
+            "setTodos",
+            "map",
+            "completed"
+          ],
+          "partialThreshold": 0.5,
+          "correctThreshold": 0.8
+        }
+      },
+      {
+        "id": "step7",
+        "type": "question",
+        "phase": "Step 7 of 10",
+        "title": "Create deleteTodo handler",
+        "instruction": "In your TodoList component, create a function named deleteTodo that takes a todo id (string) and removes that todo from the todos state.",
+        "hint": "Use the setTodos function with the current todos array filtered to exclude the todo with the matching id.",
+        "analogousExample": "// Example: removing an item from an array\nfunction removeItem(id: string) {\n  setItems(prevItems => prevItems.filter(item => item.id !== id));\n}",
+        "seedCode": "import React, { useState } from 'react';\n\ninterface Todo {\n  id: string;\n  text: string;\n  completed: boolean;\n}\n\nconst TodoList = () => {\n  const [todos, setTodos] = useState<Todo[]>([\n    { id: '1', text: 'Learn React', completed: false },\n    { id: '2', text: 'Build a todo app', completed: false }\n  ]);\n\n  const addTodo = (text: string) => {\n    const newTodo: Todo = {\n      id: Date.now().toString(),\n      text,\n      completed: false\n    };\n    setTodos([...todos, newTodo]);\n  };\n\n  // Create toggleTodo handler here\n\n  // Create deleteTodo handler here\n\n  return null;\n};",
+        "expectedOutcome": "A deleteTodo function is defined that filters out a todo by its id and updates the state.",
+        "successCriteria": [
+          "The deleteTodo function is defined, takes a string id parameter, and uses setTodos with todos.filter to remove the matching todo."
+        ],
+        "feedbackCorrect": "Nice! Proceed to the next step.",
+        "feedbackPartial": "You're on the right track, but make sure your deleteTodo function properly filters the todos array and updates the state with setTodos.",
+        "feedbackWrong": "The deleteTodo function isn't defined correctly. It should take a string id and remove the matching todo from the state using setTodos and filter.",
+        "evaluation": {
+          "mode": "keyword_match",
+          "required": [
+            "deleteTodo",
+            "id",
+            "setTodos",
+            "filter"
+          ],
+          "partialThreshold": 0.5,
+          "correctThreshold": 0.8
+        }
+      },
+      {
+        "id": "step8",
+        "type": "question",
+        "phase": "Step 8 of 10",
+        "title": "Add input and button for adding todos",
+        "instruction": "Inside the TodoList component's return statement, add an input field and a button that will allow users to add new todos. The input should have a placeholder text like 'Enter a new todo' and the button should say 'Add Todo'.",
+        "hint": "Use JSX to add an <input> element and a <button> element. Remember to give the input a placeholder attribute and the button appropriate text content.",
+        "analogousExample": "// Adding UI controls in JSX\nreturn (\n  <div>\n    <input placeholder=\"Enter text here\" />\n    <button>Click me</button>\n  </div>\n);",
+        "seedCode": "import React, { useState } from 'react';\n\ninterface Todo {\n  id: string;\n  text: string;\n  completed: boolean;\n}\n\nconst TodoList = () => {\n  const [todos, setTodos] = useState<Todo[]>([\n    { id: '1', text: 'Learn React', completed: false },\n    { id: '2', text: 'Build a todo app', completed: false }\n  ]);\n\n  const addTodo = (text: string) => {\n    const newTodo: Todo = {\n      id: Date.now().toString(),\n      text,\n      completed: false\n    };\n    setTodos([...todos, newTodo]);\n  };\n\n  // Create toggleTodo handler here\n\n  // Create deleteTodo handler here\n\n  return (\n    <div>\n      {/* Add input and button here */}\n    </div>\n  );\n};",
+        "expectedOutcome": "The component will render an input field and a button, providing the UI controls needed for users to add new todo items.",
+        "successCriteria": [
+          "The JSX includes an <input> element with a placeholder attribute and a <button> element with the text 'Add Todo'."
+        ],
+        "feedbackCorrect": "Nice! Proceed to the next step.",
+        "feedbackPartial": "You've added some UI elements, but make sure you have both an input field with a placeholder and a button with the text 'Add Todo'.",
+        "feedbackWrong": "The UI controls for adding todos are missing. Add an input field and a button inside the return statement's JSX.",
+        "evaluation": {
+          "mode": "keyword_match",
+          "required": [
+            "<input",
+            "placeholder",
+            "<button",
+            "Add Todo"
+          ],
+          "partialThreshold": 0.5,
+          "correctThreshold": 0.8
+        }
+      },
+      {
+        "id": "step9",
+        "type": "question",
+        "phase": "Step 9 of 10",
+        "title": "Render todos list",
+        "instruction": "Inside the return statement of your TodoList component, map through the todos state to render each todo's text, a checkbox to toggle completion, and a delete button.",
+        "hint": "Use the map method on the todos array. For each todo, return JSX that displays the todo text, a checkbox input, and a button. Remember to add a unique key prop.",
+        "analogousExample": "// Similar: rendering a list of items\nconst items = ['apple', 'banana', 'cherry'];\nreturn (\n  <ul>\n    {items.map((item, index) => (\n      <li key={index}>{item}</li>\n    ))}\n  </ul>\n);",
+        "seedCode": "import React, { useState } from 'react';\n\ninterface Todo {\n  id: string;\n  text: string;\n  completed: boolean;\n}\n\nconst TodoList = () => {\n  const [todos, setTodos] = useState<Todo[]>([\n    { id: '1', text: 'Learn React', completed: false },\n    { id: '2', text: 'Build a todo app', completed: false }\n  ]);\n\n  const addTodo = (text: string) => {\n    const newTodo: Todo = {\n      id: Date.now().toString(),\n      text,\n      completed: false\n    };\n    setTodos([...todos, newTodo]);\n  };\n\n  // Create toggleTodo handler here\n\n  // Create deleteTodo handler here\n\n  return (\n    <div>\n      {/* Add input and button here */}\n      {/* Map through todos here */}\n    </div>\n  );\n};",
+        "expectedOutcome": "The todos array is rendered as a list in the UI, with each todo displaying its text, a checkbox, and a delete button.",
+        "successCriteria": [
+          "The todos state is mapped to JSX elements, each with a unique key, displaying todo text, a checkbox input, and a button."
+        ],
+        "feedbackCorrect": "Nice! Proceed to the next step.",
+        "feedbackPartial": "You're on the right track. Make sure each todo item includes a checkbox input and a delete button, and that you've added a unique key prop.",
+        "feedbackWrong": "The todos list isn't rendered correctly. Check that you're using the map method on the todos array and returning JSX for each todo.",
+        "evaluation": {
+          "mode": "keyword_match",
+          "required": [
+            "todos.map",
+            "key",
+            "checkbox",
+            "button"
+          ],
+          "partialThreshold": 0.5,
+          "correctThreshold": 0.8
+        }
+      },
+      {
+        "id": "step10",
+        "type": "question",
+        "phase": "Step 10 of 10",
+        "title": "Wire handlers to todo items",
+        "instruction": "Inside the map function in your JSX, add an onChange handler to the checkbox that calls toggleTodo with the todo's id, and add an onClick handler to the delete button that calls deleteTodo with the todo's id.",
+        "hint": "Use onChange={() => toggleTodo(todo.id)} on the checkbox and onClick={() => deleteTodo(todo.id)} on the delete button.",
+        "analogousExample": "// Wiring event handlers to elements\n<button onClick={() => handleClick(item.id)}>Delete</button>\n<input type=\"checkbox\" onChange={() => toggleItem(item.id)} />",
+        "seedCode": "import React, { useState } from 'react';\n\ninterface Todo {\n  id: string;\n  text: string;\n  completed: boolean;\n}\n\nconst TodoList = () => {\n  const [todos, setTodos] = useState<Todo[]>([\n    { id: '1', text: 'Learn React', completed: false },\n    { id: '2', text: 'Build a todo app', completed: false }\n  ]);\n\n  const addTodo = (text: string) => {\n    const newTodo: Todo = {\n      id: Date.now().toString(),\n      text,\n      completed: false\n    };\n    setTodos([...todos, newTodo]);\n  };\n\n  const toggleTodo = (id: string) => {\n    setTodos(todos.map(todo => \n      todo.id === id ? { ...todo, completed: !todo.completed } : todo\n    ));\n  };\n\n  const deleteTodo = (id: string) => {\n    setTodos(todos.filter(todo => todo.id !== id));\n  };\n\n  return (\n    <div>\n      <input type=\"text\" placeholder=\"Add a new todo\" />\n      <button onClick={() => addTodo('New todo')}>Add</button>\n      <ul>\n        {todos.map(todo => (\n          <li key={todo.id}>\n            <input type=\"checkbox\" checked={todo.completed} />\n            <span style={{ textDecoration: todo.completed ? 'line-through' : 'none' }}>\n              {todo.text}\n            </span>\n            <button>Delete</button>\n          </li>\n        ))}\n      </ul>\n    </div>\n  );\n};",
+        "expectedOutcome": "The checkbox toggles the todo's completed status when clicked, and the delete button removes the todo from the list.",
+        "successCriteria": [
+          "The checkbox has an onChange handler that calls toggleTodo with todo.id, and the delete button has an onClick handler that calls deleteTodo with todo.id."
+        ],
+        "feedbackCorrect": "Nice! Proceed to the next step.",
+        "feedbackPartial": "You've added some event handlers, but check that both the checkbox and delete button have the correct handlers wired to them.",
+        "feedbackWrong": "The event handlers aren't properly connected. Make sure to add onChange to the checkbox and onClick to the delete button, both calling their respective handlers with todo.id.",
+        "evaluation": {
+          "mode": "keyword_match",
+          "required": [
+            "onChange",
+            "toggleTodo",
+            "todo.id",
+            "onClick",
+            "deleteTodo"
+          ],
+          "partialThreshold": 0.5,
+          "correctThreshold": 0.8
+        }
+      }
+    ],
+    "sideItems": [
+      {
+        "label": "Intro",
+        "id": "intro"
+      },
+      {
+        "label": "Objectives",
+        "id": "objectives"
+      },
+      {
+        "label": "Import React and useState",
+        "id": "step1"
+      },
+      {
+        "label": "Define Todo interface",
+        "id": "step2"
+      },
+      {
+        "label": "Create main TodoList component",
+        "id": "step3"
+      },
+      {
+        "label": "Initialize todos state",
+        "id": "step4"
+      },
+      {
+        "label": "Create addTodo handler",
+        "id": "step5"
+      },
+      {
+        "label": "Create toggleTodo handler",
+        "id": "step6"
+      },
+      {
+        "label": "Create deleteTodo handler",
+        "id": "step7"
+      },
+      {
+        "label": "Add input and button for adding todos",
+        "id": "step8"
+      },
+      {
+        "label": "Render todos list",
+        "id": "step9"
+      },
+      {
+        "label": "Wire handlers to todo items",
+        "id": "step10"
+      }
+    ]
+  },
+  "source": "content"
+}

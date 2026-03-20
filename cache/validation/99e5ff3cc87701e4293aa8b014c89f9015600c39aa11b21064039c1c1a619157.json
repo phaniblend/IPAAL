@@ -1,0 +1,1 @@
+{"result":"correct","feedback":"You correctly initialized a state variable called 'count' with an initial value of 0 using the useState hook. The state is properly destructured into count and setCount variables, which satisfies all requirements for this step.","hint":"Great! Now you can use count and setCount to build your counter UI in the next steps.","errors":[]}

@@ -1,0 +1,1 @@
+{"result":"correct","feedback":"You correctly imported React and useState from 'react' using the proper ES6 import syntax. The import statement is properly structured with React as the default import and useState as a named import in curly braces."}

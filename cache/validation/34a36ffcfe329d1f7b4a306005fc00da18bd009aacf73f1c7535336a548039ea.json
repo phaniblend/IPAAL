@@ -1,0 +1,1 @@
+{"result":"correct","feedback":"You correctly created the fetchData function with a new AbortController and made a fetch request to the specified URL using the abort signal. The function properly instantiates the controller and passes the signal to the fetch options."}

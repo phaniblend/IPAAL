@@ -1,0 +1,1 @@
+{"result":"correct","feedback":"You correctly created a functional component named Form that returns JSX. The component uses TypeScript and returns a valid JSX element (<div></div>), satisfying this step's requirements.","hint":"In the next steps, you'll likely add form elements and state to this component.","errors":[]}

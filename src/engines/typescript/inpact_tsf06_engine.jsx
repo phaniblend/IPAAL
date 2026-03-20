@@ -4,7 +4,7 @@ const NODES = [
   {
     id: "intro",
     type: "reveal",
-    phase: "Problem",
+    phase: "Lesson",
     content: {
       tag: "TS FUNDAMENTALS #6",
       title: "Utility Types — TypeScript's Built-in Transformers",
@@ -241,7 +241,7 @@ export type { EditableProduct, ProductFormState, ProductFormErrors, ProductFormV
 ];
 
 const sideItems = [
-  { label: "Problem", id: "intro" },
+  { label: "Lesson", id: "intro" },
   { label: "Objectives", id: "objectives" },
   { label: "Step 1 — Partial/Required", id: "step1" },
   { label: "Step 2 — Pick/Omit", id: "step2" },

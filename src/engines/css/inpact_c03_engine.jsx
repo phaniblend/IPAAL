@@ -153,7 +153,7 @@ Your turn: Add a comment at the top of your file: "Vertical adjacent margins col
 ];
 
 const sideItems = [
-  { id: "intro", label: "Problem" },
+  { id: "intro", label: "Lesson" },
   { id: "objectives", label: "Objectives" },
   { id: "step1", label: "Siblings" },
   { id: "step2", label: "Parent-child" },

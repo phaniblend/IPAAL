@@ -2,7 +2,7 @@ import createINPACTEngine from "../inpact_engine_shared";
 
 const TITLE = "Star Rating Component (Angular)";
 const NODES = [
-  { id: "intro", type: "reveal", phase: "Problem", content: { tag: "PROBLEM #28 (Angular)", title: TITLE, body: "Build a star rating component with @Input() max and @Input() value (or model), *ngFor for stars, and (click) to set rating; use @Output() or model() to emit changes.", usecase: "Angular components use @Input/@Output or model() for reusable UI like star ratings." } },
+  { id: "intro", type: "reveal", phase: "Lesson", content: { tag: "LESSON #28 (Angular)", title: TITLE, body: "Build a star rating component with @Input() max and @Input() value (or model), *ngFor for stars, and (click) to set rating; use @Output() or model() to emit changes.", usecase: "Angular components use @Input/@Output or model() for reusable UI like star ratings." } },
   { id: "objectives", type: "objectives", phase: "Objectives", items: ["@Input() max = 5; value as @Input() + @Output() valueChange or model()", "*ngFor with range 1..max; show filled/empty based on value", "(click) on star sets value and emits valueChange.emit(rating)", "Parent binds [(value)] or [value] and (valueChange)"] },
   { id: "step1", type: "question", phase: "Step 1 of 3", paal: "Create StarRatingComponent with @Input() max = 5 and @Input() value = 0. Template: *ngFor over 1..max (use array from 1 to max) and show a span or icon per star.", answer_keywords: ["Input", "max", "ngFor"], seed_code: `import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -56,5 +56,5 @@ export class StarRatingComponent {
 }`, feedback_correct: "✅ Star Rating Component (Angular) complete.", feedback_partial: "Export.", feedback_wrong: "Export", expected: "Export and parent [value] (valueChange)" },
 ];
 
-const sideItems = [{ label: "Problem", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
+const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
 export default createINPACTEngine({ NODES, sideItems, problemNum: 28, title: TITLE, shortName: "A — STAR RATING" });

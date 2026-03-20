@@ -2,7 +2,7 @@ import createINPACTEngine from "../inpact_engine_shared";
 
 const TITLE = "Unnecessary Re-renders (Angular)";
 const NODES = [
-  { id: "intro", type: "reveal", phase: "Problem", content: { tag: "PROBLEM #48 (Angular)", title: TITLE, body: "Reduce unnecessary re-renders in Angular: use ChangeDetectionStrategy.OnPush, avoid creating new objects/arrays in template expressions, and use computed() for derived values so only dependents update.", usecase: "Angular OnPush, signals, and computed limit when components and templates re-run." } },
+  { id: "intro", type: "reveal", phase: "Lesson", content: { tag: "LESSON #48 (Angular)", title: TITLE, body: "Reduce unnecessary re-renders in Angular: use ChangeDetectionStrategy.OnPush, avoid creating new objects/arrays in template expressions, and use computed() for derived values so only dependents update.", usecase: "Angular OnPush, signals, and computed limit when components and templates re-run." } },
   { id: "objectives", type: "objectives", phase: "Objectives", items: ["Set changeDetection: ChangeDetectionStrategy.OnPush on components", "Don't use getters that return new {} or [] in template; use computed() or signals", "Bind to primitive or signal so change detection sees same reference or signal read", "Use trackBy in *ngFor to avoid list thrashing"] },
   { id: "step1", type: "question", phase: "Step 1 of 3", paal: "Create a component with ChangeDetectionStrategy.OnPush. Use count = signal(0) and display {{ count() }}. Add a child that receives count as @Input() and only re-renders when count reference changes.", answer_keywords: ["OnPush", "signal", "Input"], seed_code: `import { Component, signal, ChangeDetectionStrategy } from '@angular/core';
 
@@ -44,5 +44,5 @@ export class ParentComponent {
 }`, feedback_correct: "✅ Unnecessary Re-renders (Angular) complete.", feedback_partial: "trackBy.", feedback_wrong: "Export", expected: "trackBy in *ngFor and export" },
 ];
 
-const sideItems = [{ label: "Problem", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
+const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
 export default createINPACTEngine({ NODES, sideItems, problemNum: 48, title: TITLE, shortName: "A — RE-RENDERS" });

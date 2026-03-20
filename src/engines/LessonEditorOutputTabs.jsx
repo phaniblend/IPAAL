@@ -1,4 +1,4 @@
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
 
 /**
  * Shared Lesson | Editor | Output tabs + YOUR TASK callout.
@@ -47,7 +47,8 @@ function generateReactPreview(code) {
   // Find the main component name from the source code
   const nameMatch =
     code.match(/(?:export\s+default\s+)?function\s+([A-Z][a-zA-Z0-9]*)\s*[({]/) ||
-    code.match(/(?:const|let|var)\s+([A-Z][a-zA-Z0-9]*)\s*=/);
+    code.match(/(?:const|let|var)\s+([A-Z][a-zA-Z0-9]*)\s*=/) ||
+    code.match(/export\s+default\s+([A-Z][a-zA-Z0-9]*)/);
   const componentName = nameMatch ? nameMatch[1] : "App";
 
   // Strip import lines and convert `export default function X` → `function X`
@@ -76,7 +77,7 @@ function generateReactPreview(code) {
 </head>
 <body>
   <div id="root"><span class="loading">Loading preview…</span></div>
-  <script type="text/babel">
+  <script type="text/babel" data-presets="typescript,react">
     const { useState, useEffect, useRef, useMemo, useCallback, useReducer, useContext } = React;
     try {
       ${safeCode}
@@ -100,8 +101,8 @@ function generateTemplatePreview(code) {
 <head>
   <meta charset="utf-8">
   <style>
-    body { margin: 0; padding: 20px; background: #1a1d2e; font-family: monospace; font-size: 13px; }
-    pre { color: #a5f3fc; white-space: pre-wrap; word-break: break-word; line-height: 1.7; margin: 0; }
+    body { margin: 0; padding: 20px; background: #f8fafc; font-family: monospace; font-size: 13px; color: #334155; }
+    pre { color: #0f172a; white-space: pre-wrap; word-break: break-word; line-height: 1.7; margin: 0; }
     .note { font-family: system-ui, sans-serif; font-size: 12px; color: #64748b; margin-bottom: 14px; padding: 10px 14px; background: rgba(100,116,139,0.1); border-left: 3px solid #475569; border-radius: 4px; }
     .tag { color: #7dd3fc; }
     .attr { color: #86efac; }
@@ -117,23 +118,23 @@ function generateTemplatePreview(code) {
 const lessonStyles = {
   wrap: { maxWidth: "640px" },
   lessonScroll: { maxHeight: "calc(100vh - 220px)", overflowY: "auto", overflowX: "hidden" },
-  phase: { fontSize: "10px", letterSpacing: "3px", color: "#00d4ff", marginBottom: "16px" },
-  badge: { display: "inline-block", fontSize: "10px", fontWeight: 700, letterSpacing: "0.2em", color: "#f59e0b", marginBottom: "12px", background: "rgba(245,158,11,0.12)", padding: "6px 12px", borderRadius: "6px", border: "1px solid rgba(245,158,11,0.4)" },
-  card: { background: "linear-gradient(135deg, rgba(0,212,255,0.06) 0%, rgba(124,58,237,0.06) 100%)", border: "1px solid rgba(0,212,255,0.25)", borderLeft: "4px solid #00d4ff", borderRadius: "12px", padding: "24px 28px", marginBottom: "24px", boxShadow: "0 4px 24px rgba(0,0,0,0.2)" },
-  paalLabel: { fontSize: "10px", color: "#00d4ff", letterSpacing: "2px", marginBottom: "10px", fontWeight: 600 },
-  paalText: { fontSize: "16px", color: "#e2e8f0", lineHeight: "1.75", whiteSpace: "pre-wrap" },
-  taskCard: { background: "rgba(245,158,11,0.08)", border: "1px solid rgba(245,158,11,0.35)", borderLeft: "4px solid #f59e0b", borderRadius: "10px", padding: "18px 22px", marginTop: "20px", marginBottom: "24px" },
-  taskLabel: { fontSize: "10px", fontWeight: 700, letterSpacing: "0.15em", color: "#f59e0b", marginBottom: "8px" },
-  taskText: { fontSize: "15px", color: "#fef3c7", lineHeight: "1.65", whiteSpace: "pre-wrap" },
-  editorTaskWrap: { maxWidth: "760px", marginBottom: "14px" },
-  editorTaskBox: { background: "#0d1117", border: "1px solid #1e2733", borderLeft: "3px solid #00d4ff", borderRadius: "8px", padding: "14px 16px" },
-  editorTaskLabel: { fontSize: "10px", color: "#00d4ff", letterSpacing: "2px", marginBottom: "8px", fontWeight: 700 },
-  editorTaskText: { fontSize: "14px", color: "#cbd5e0", lineHeight: "1.6", whiteSpace: "pre-wrap" },
-  cta: { marginTop: "28px", padding: "14px 20px", background: "rgba(0,212,255,0.1)", border: "1px solid rgba(0,212,255,0.3)", borderRadius: "8px", fontSize: "13px", color: "#a5f3fc", lineHeight: "1.6", display: "flex", alignItems: "center", gap: "10px", flexWrap: "wrap" },
-  tabBar: { display: "flex", gap: "4px", marginBottom: "16px", borderBottom: "1px solid #1e2733", paddingBottom: "12px" },
-  tab: (active) => ({ padding: "8px 16px", fontSize: "12px", fontWeight: 600, background: active ? "#1a2332" : "transparent", border: active ? "1px solid #00d4ff" : "1px solid #2d3748", color: active ? "#00d4ff" : "#64748b", borderRadius: "6px", cursor: "pointer" }),
-  outputPlaceholder: { height: "calc(100vh - 180px)", minHeight: "320px", background: "#0d1117", borderRadius: "8px", border: "1px solid #1e2733", padding: "32px", display: "flex", alignItems: "center", justifyContent: "center", flexDirection: "column", gap: "16px", textAlign: "center", fontSize: "14px", color: "#64748b", lineHeight: 1.6, maxWidth: "420px", margin: "0 auto" },
-  outputIframe: { width: "100%", height: "calc(100vh - 180px)", minHeight: "400px", background: "#0d1117", borderRadius: "8px", border: "1px solid #1e2733", overflow: "hidden" },
+  phase: { fontSize: "10px", letterSpacing: "3px", color: "#0891b2", marginBottom: "16px" },
+  badge: { display: "inline-block", fontSize: "10px", fontWeight: 700, letterSpacing: "0.2em", color: "#b45309", marginBottom: "12px", background: "rgba(245,158,11,0.15)", padding: "6px 12px", borderRadius: "6px", border: "1px solid rgba(245,158,11,0.4)" },
+  card: { background: "#ffffff", border: "1px solid #e2e8f0", borderLeft: "4px solid #0891b2", borderRadius: "12px", padding: "24px 28px", marginBottom: "24px", boxShadow: "0 1px 3px rgba(0,0,0,0.06)" },
+  paalLabel: { fontSize: "10px", color: "#0891b2", letterSpacing: "2px", marginBottom: "10px", fontWeight: 600 },
+  paalText: { fontSize: "16px", color: "#334155", lineHeight: "1.75", whiteSpace: "pre-wrap" },
+  taskCard: { background: "rgba(245,158,11,0.1)", border: "1px solid rgba(245,158,11,0.35)", borderLeft: "4px solid #f59e0b", borderRadius: "10px", padding: "18px 22px", marginTop: "20px", marginBottom: "24px" },
+  taskLabel: { fontSize: "10px", fontWeight: 700, letterSpacing: "0.15em", color: "#b45309", marginBottom: "8px" },
+  taskText: { fontSize: "15px", color: "#422006", lineHeight: "1.65", whiteSpace: "pre-wrap" },
+  editorTaskWrap: { width: "100%", marginBottom: "4px", flexShrink: 0 },
+  editorTaskBox: { background: "#ffffff", border: "1px solid #e2e8f0", borderLeft: "4px solid #0891b2", borderRadius: "8px", padding: "8px 12px", boxShadow: "0 1px 2px rgba(0,0,0,0.04)" },
+  editorTaskLabel: { fontSize: "9px", color: "#0891b2", letterSpacing: "0.12em", marginBottom: "2px", fontWeight: 700 },
+  editorTaskText: { fontSize: "13px", color: "#334155", lineHeight: "1.45", whiteSpace: "pre-wrap" },
+  cta: { marginTop: "28px", padding: "14px 20px", background: "rgba(8,145,178,0.08)", border: "1px solid rgba(8,145,178,0.25)", borderRadius: "8px", fontSize: "13px", color: "#0e7490", lineHeight: "1.6", display: "flex", alignItems: "center", gap: "10px", flexWrap: "wrap" },
+  tabBar: { display: "flex", gap: "6px", marginBottom: "4px", borderBottom: "none", paddingBottom: "0", flexShrink: 0 },
+  tab: (active) => ({ padding: "10px 18px", fontSize: "12px", fontWeight: 600, background: "#ffffff", border: active ? "1px solid #0891b2" : "1px solid #e2e8f0", color: active ? "#0891b2" : "#64748b", borderRadius: "8px", cursor: "pointer" }),
+  outputPlaceholder: { height: "calc(100vh - 180px)", minHeight: "320px", background: "#f8fafc", borderRadius: "8px", border: "1px solid #e2e8f0", padding: "32px", display: "flex", alignItems: "center", justifyContent: "center", flexDirection: "column", gap: "16px", textAlign: "center", fontSize: "14px", color: "#64748b", lineHeight: 1.6, maxWidth: "420px", margin: "0 auto" },
+  outputIframe: { width: "100%", height: "calc(100vh - 180px)", minHeight: "400px", background: "#f8fafc", borderRadius: "8px", border: "1px solid #e2e8f0", overflow: "hidden" },
 };
 
 /** Same task block shown above the editor everywhere (tabs and non-tabs). Parses "Your task:" / "Your turn:" for callout. */
@@ -169,40 +170,59 @@ export default function LessonEditorOutputTabs({
   mainTab,
   setMainTab,
   answer = "",
+  previewCode = "",
   getOutputPreview,
   showTaskInEditor = true,
+  tabsInSidebar = false,
+  lessonIntro = null,
+  lessonObjectives = null,
   children,
 }) {
-  const code = typeof answer === "string" ? answer : "";
+  const code = typeof previewCode === "string" && previewCode.trim() ? previewCode : (typeof answer === "string" ? answer : "");
   const hasOutput = typeof getOutputPreview === "function";
   const isReact = !hasOutput && isReactCode(code);
   const isAngular = !hasOutput && !isReact && isAngularTemplate(code);
+  const [showOutputModal, setShowOutputModal] = useState(false);
   const lessonScrollRef = useRef(null);
   const introNode = introNodeFromNodes(nodes);
   const objectivesNode = objectivesNodeFromNodes(nodes);
-  const problemContent = introNode?.content || {};
-  const objectives = objectivesNode?.items || [];
-  const paal = node?.paal || "";
-  const markerMatch = paal.match(/your\s+(?:task|turn)\s*:/i);
-  const markerIdx = markerMatch ? markerMatch.index : -1;
-  const mainText = markerIdx >= 0 ? paal.slice(0, markerIdx).trim() : paal;
-  const taskText = markerIdx >= 0 ? paal.slice(markerIdx).trim() : "";
+  const problemContent = introNode?.content || (lessonIntro && { tag: lessonIntro.tag, title: lessonIntro.title, body: lessonIntro.body, usecase: lessonIntro.usecase }) || {};
+  const objectives = objectivesNode?.items || (Array.isArray(lessonObjectives) ? lessonObjectives : []);
+
+  /** Same content as former Output tab: HTML for iframe or placeholder */
+  const outputContent = hasOutput
+    ? injectBaseStyles(getOutputPreview(answer))
+    : isReact
+      ? generateReactPreview(code)
+      : isAngular
+        ? generateTemplatePreview(code)
+        : null;
 
   useEffect(() => {
     if (mainTab !== "lesson") return;
     const el = lessonScrollRef.current;
     if (!el) return;
-    const id = requestAnimationFrame(() => { el.scrollTop = el.scrollHeight; });
+    const id = requestAnimationFrame(() => { el.scrollTop = 0; });
     return () => cancelAnimationFrame(id);
   }, [mainTab]);
 
   return (
     <>
-      <div style={lessonStyles.tabBar}>
-        <button type="button" style={lessonStyles.tab(mainTab === "lesson")} onClick={() => setMainTab("lesson")}>Lesson</button>
-        <button type="button" style={lessonStyles.tab(mainTab === "editor")} onClick={() => setMainTab("editor")}>Editor</button>
-        <button type="button" style={lessonStyles.tab(mainTab === "output")} onClick={() => setMainTab("output")}>Output</button>
-      </div>
+      {!tabsInSidebar && (
+        <div style={{ ...lessonStyles.tabBar, alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: "8px" }}>
+          <div style={{ display: "flex", gap: "6px" }}>
+            <button type="button" style={lessonStyles.tab(mainTab === "lesson")} onClick={() => setMainTab("lesson")}>Lesson</button>
+            <button type="button" style={lessonStyles.tab(mainTab === "editor")} onClick={() => setMainTab("editor")}>Editor</button>
+          </div>
+          <button
+            type="button"
+            style={{ ...lessonStyles.tab(false), borderColor: "#0891b2", color: "#0891b2", fontSize: "11px" }}
+            onClick={() => setShowOutputModal(true)}
+          >
+            🖥️ Preview
+          </button>
+        </div>
+      )}
       {mainTab === "lesson" && (
         <div ref={lessonScrollRef} style={lessonStyles.lessonScroll}>
           <div style={lessonStyles.wrap}>
@@ -210,8 +230,8 @@ export default function LessonEditorOutputTabs({
             {(problemContent.title || problemContent.body || problemContent.usecase) && (
               <div style={lessonStyles.card}>
                 <div style={lessonStyles.paalLabel}>TOPICS & CONCEPTS</div>
-                {problemContent.tag && <div style={{ fontSize: "11px", color: "#a78bfa", marginBottom: "8px" }}>{problemContent.tag}</div>}
-                {problemContent.title && <div style={{ fontSize: "18px", fontWeight: 600, color: "#e2e8f0", marginBottom: "12px" }}>{problemContent.title}</div>}
+                {problemContent.tag && <div style={{ fontSize: "11px", color: "#7c3aed", marginBottom: "8px" }}>{problemContent.tag}</div>}
+                {problemContent.title && <div style={{ fontSize: "18px", fontWeight: 600, color: "#0f172a", marginBottom: "12px" }}>{problemContent.title}</div>}
                 {problemContent.body && <div style={lessonStyles.paalText}>{problemContent.body}</div>}
                 {problemContent.usecase && <div style={{ marginTop: "14px", fontSize: "14px", color: "#94a3b8", fontStyle: "italic" }}>{problemContent.usecase}</div>}
               </div>
@@ -219,85 +239,86 @@ export default function LessonEditorOutputTabs({
             {objectives.length > 0 && (
               <div style={lessonStyles.card}>
                 <div style={lessonStyles.paalLabel}>LEARNING OBJECTIVES</div>
-                <ul style={{ margin: 0, paddingLeft: "20px", color: "#e2e8f0", lineHeight: 1.85, fontSize: "15px" }}>
+                <ul style={{ margin: 0, paddingLeft: "20px", color: "#334155", lineHeight: 1.85, fontSize: "15px" }}>
                   {objectives.map((item, i) => (
                     <li key={i} style={{ marginBottom: "6px" }}>{item}</li>
                   ))}
                 </ul>
               </div>
             )}
-            {node?.phase && (
-              <div style={{ ...lessonStyles.card, borderLeftColor: "rgba(245,158,11,0.6)" }}>
-                <div style={{ ...lessonStyles.paalLabel, color: "#f59e0b" }}>THIS STEP — {node.phase}</div>
-                <div style={lessonStyles.paalText}>{mainText}</div>
-                {taskText ? (
-                  <div style={lessonStyles.taskCard} className="inpact-task-callout">
-                    <div style={lessonStyles.taskLabel} className="inpact-task-badge">YOUR TASK</div>
-                    <div style={lessonStyles.taskText}>{taskText}</div>
-                  </div>
-                ) : null}
-              </div>
-            )}
             <div style={lessonStyles.cta}>
               <span style={{ fontSize: "18px" }}>👉</span>
-              <span>Switch to the <strong style={{ color: "#00d4ff" }}>Editor</strong> tab to write your code, then <strong style={{ color: "#00d4ff" }}>Output</strong> to see the result.</span>
+              <span>Switch to the <strong style={{ color: "#0891b2" }}>Editor</strong> tab to write your code, then click <strong style={{ color: "#0891b2" }}>Preview</strong> to see the output.</span>
             </div>
           </div>
         </div>
       )}
       {mainTab === "editor" && (
-        <div style={{ display: "flex", flexDirection: "column", flex: 1, minHeight: 0, width: "100%" }}>
+        <div style={{ display: "flex", flexDirection: "column", flex: 1, minHeight: 0, width: "100%", maxWidth: "100%", overflow: "hidden" }}>
           {showTaskInEditor && <EditorTaskBlock node={node} />}
-          <div style={{ flex: 1, minHeight: 0, display: "flex", flexDirection: "column" }}>
+          <div style={{ flex: 1, minHeight: 0, display: "flex", flexDirection: "column", minWidth: 0, maxWidth: "100%", overflow: "hidden" }}>
             {children}
           </div>
         </div>
       )}
-      {mainTab === "output" && (() => {
-        if (hasOutput) {
-          return (
-            <div style={lessonStyles.outputIframe}>
-              <iframe
-                title="Preview"
-                srcDoc={injectBaseStyles(getOutputPreview(answer))}
-                style={{ width: "100%", height: "100%", border: "none" }}
-                sandbox="allow-scripts"
-              />
+      {showOutputModal && (
+        <div
+          style={{
+            position: "fixed",
+            inset: 0,
+            zIndex: 10000,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            background: "rgba(15, 23, 42, 0.6)",
+            padding: "24px",
+            boxSizing: "border-box",
+          }}
+          onClick={() => setShowOutputModal(false)}
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="output-modal-title"
+        >
+          <div
+            style={{
+              background: "#ffffff",
+              borderRadius: "12px",
+              overflow: "hidden",
+              width: "100%",
+              maxWidth: "900px",
+              height: "85vh",
+              maxHeight: "720px",
+              boxShadow: "0 20px 60px rgba(0,0,0,0.2)",
+              border: "1px solid #e2e8f0",
+              display: "flex",
+              flexDirection: "column",
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div style={{ flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "space-between", padding: "12px 16px", borderBottom: "1px solid #e2e8f0", background: "#f8fafc" }}>
+              <span id="output-modal-title" style={{ fontSize: "13px", fontWeight: 600, color: "#0f172a" }}>🖥️ Output preview</span>
+              <button type="button" onClick={() => setShowOutputModal(false)} style={{ padding: "6px 14px", fontSize: "12px", fontWeight: 600, background: "#0891b2", color: "#fff", border: "none", borderRadius: "6px", cursor: "pointer" }}>Close</button>
             </div>
-          );
-        }
-        if (isReact) {
-          return (
-            <div style={lessonStyles.outputIframe}>
-              <iframe
-                title="React Preview"
-                srcDoc={generateReactPreview(code)}
-                style={{ width: "100%", height: "100%", border: "none" }}
-                sandbox="allow-scripts"
-              />
+            <div style={{ flex: 1, minHeight: 0, background: "#f8fafc" }}>
+              {outputContent ? (
+                <iframe
+                  title="Preview"
+                  srcDoc={outputContent}
+                  style={{ width: "100%", height: "100%", border: "none", display: "block" }}
+                  sandbox="allow-scripts"
+                />
+              ) : (
+                <div style={{ ...lessonStyles.outputPlaceholder, height: "100%", minHeight: "280px", maxWidth: "none" }}>
+                  <span style={{ fontSize: "32px" }}>🖥️</span>
+                  <div>Write your code in the <strong style={{ color: "#0891b2" }}>Editor</strong> tab, then click Preview to see the output here.</div>
+                  <div style={{ fontSize: "12px", color: "#64748b", marginTop: "4px" }}>You can also paste your code into <a href="https://codesandbox.io" target="_blank" rel="noreferrer" style={{ color: "#0891b2" }}>CodeSandbox</a> for a full live environment.</div>
+                  <button type="button" onClick={() => setShowOutputModal(false)} style={{ marginTop: "12px", padding: "8px 16px", fontSize: "12px", fontWeight: 600, background: "#e2e8f0", color: "#475569", border: "none", borderRadius: "6px", cursor: "pointer" }}>Close</button>
+                </div>
+              )}
             </div>
-          );
-        }
-        if (isAngular) {
-          return (
-            <div style={lessonStyles.outputIframe}>
-              <iframe
-                title="Template Preview"
-                srcDoc={generateTemplatePreview(code)}
-                style={{ width: "100%", height: "100%", border: "none" }}
-                sandbox="allow-scripts"
-              />
-            </div>
-          );
-        }
-        return (
-          <div style={lessonStyles.outputPlaceholder}>
-            <span style={{ fontSize: "32px" }}>🖥️</span>
-            <div>Write your code in the <strong style={{ color: "#00d4ff" }}>Editor</strong> tab, then come back here to see the output.</div>
-            <div style={{ fontSize: "12px", color: "#4a5568", marginTop: "4px" }}>You can also paste your code into <a href="https://codesandbox.io" target="_blank" rel="noreferrer" style={{ color: "#00d4ff" }}>CodeSandbox</a> for a full live environment.</div>
           </div>
-        );
-      })()}
+        </div>
+      )}
     </>
   );
 }

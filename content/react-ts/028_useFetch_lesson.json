@@ -1,0 +1,370 @@
+{
+  "success": true,
+  "config": {
+    "lessonId": "ai-react-ts-28",
+    "track": "react-ts",
+    "problemNum": 28,
+    "title": "useFetch",
+    "shortName": "P28",
+    "intro": {
+      "tag": "LESSON #28",
+      "title": "useFetch",
+      "body": "In this lesson, you will build a custom React hook called `useFetch` to fetch data from an API and manage the loading and error states. You'll learn how to encapsulate data-fetching logic into a reusable hook using React's built-in hooks like `useState` and `useEffect`. The main technologies involved are React, TypeScript for type safety, and the Fetch API for making HTTP requests. By the end, you'll have a functional hook that can be used across components to handle asynchronous data fetching cleanly and efficiently.",
+      "usecase": "The useFetch pattern is essential for any React application that displays dynamic data from an API. You'll use it to populate dashboards with live metrics, load product listings in e-commerce sites, and fetch user profiles in social media apps. This custom hook centralizes data fetching logic, handling loading states and errors, which keeps your components clean and reusable across features like search filters, data tables, and admin panels."
+    },
+    "objectives": [
+      "Implement a custom useFetch hook in TypeScript that manages loading, error, and data states",
+      "Apply TypeScript generics to create a type-safe useFetch hook that returns properly typed data",
+      "Construct a React component that integrates the useFetch hook to display fetched data",
+      "Configure the useFetch hook to accept dynamic URLs and trigger re-fetches when dependencies change",
+      "Initialize the useFetch hook with proper default states and handle cleanup of asynchronous operations",
+      "Render conditional UI elements based on the loading, error, and data states returned by useFetch",
+      "Manipulate component state by binding useFetch results to interactive UI controls"
+    ],
+    "steps": [
+      {
+        "id": "step1",
+        "type": "question",
+        "phase": "Step 1 of 10",
+        "title": "Import React and all hooks needed for this lesson (useState, useEffect)",
+        "instruction": "Import React, useState, and useEffect from 'react'.",
+        "hint": "Use the import statement to bring in the necessary modules. The syntax is: import { React, useState, useEffect } from 'react';",
+        "analogousExample": "// Example of importing multiple hooks\nimport { useState, useEffect } from 'react';",
+        "seedCode": "// Import React, useState, and useEffect from 'react' here\n\n",
+        "expectedOutcome": "The necessary React hooks are imported and available for use in the component.",
+        "successCriteria": [
+          "React, useState, and useEffect are imported from 'react'."
+        ],
+        "feedbackCorrect": "Nice! Proceed to the next step.",
+        "feedbackPartial": "You're on the right track, but make sure to import all three: React, useState, and useEffect from 'react'.",
+        "feedbackWrong": "Check your import statement. You need to import React, useState, and useEffect from 'react'.",
+        "evaluation": {
+          "mode": "keyword_match",
+          "required": [
+            "import",
+            "React",
+            "useState",
+            "useEffect",
+            "'react'"
+          ],
+          "partialThreshold": 0.5,
+          "correctThreshold": 0.8
+        }
+      },
+      {
+        "id": "step2",
+        "type": "question",
+        "phase": "Step 2 of 10",
+        "title": "Define the useFetch custom hook function",
+        "instruction": "Create a custom hook function named 'useFetch' that takes a URL string parameter and returns an object with data, loading, and error states. Use TypeScript to define the function signature.",
+        "hint": "Start with 'function useFetch(url: string)' or 'const useFetch = (url: string) =>'. The function should return an object with properties for data, loading, and error.",
+        "analogousExample": "// Example: a custom hook function signature\nfunction useCounter(initialValue: number) {\n  // Hook implementation would go here\n  return { count: 0, increment: () => {} };\n}",
+        "seedCode": "import React, { useState, useEffect } from 'react';\n\n// Create the useFetch custom hook function here",
+        "expectedOutcome": "A custom hook function named useFetch is defined with proper TypeScript parameter typing and returns an object structure.",
+        "successCriteria": [
+          "The useFetch function is defined with a URL string parameter and returns an object with data, loading, and error properties."
+        ],
+        "feedbackCorrect": "Nice! Proceed to the next step.",
+        "feedbackPartial": "You're on the right track, but make sure the function takes a URL string parameter and returns an object with data, loading, and error properties.",
+        "feedbackWrong": "The useFetch function isn't defined correctly. It should be a function that accepts a URL string and returns an object with data, loading, and error states.",
+        "evaluation": {
+          "mode": "keyword_match",
+          "required": [
+            "useFetch",
+            "url",
+            "string",
+            "return",
+            "{",
+            "data",
+            "loading",
+            "error"
+          ],
+          "partialThreshold": 0.5,
+          "correctThreshold": 0.8
+        }
+      },
+      {
+        "id": "step3",
+        "type": "question",
+        "phase": "Step 3 of 10",
+        "title": "Define TypeScript interfaces for the hook's return type",
+        "instruction": "Create two TypeScript interfaces: one named FetchState with data (any type), loading (boolean), and error (string or null) properties, and another named UseFetchReturn that extends FetchState.",
+        "hint": "Use the 'interface' keyword to define each interface. For error, you can use union type 'string | null'.",
+        "analogousExample": "// Example: defining interfaces for a user\ninterface User {\n  name: string;\n  age: number;\n}\n\ninterface UserWithId extends User {\n  id: number;\n}",
+        "seedCode": "import React, { useState, useEffect } from 'react';\n\n// Create the useFetch custom hook function here\n\n// Define interfaces for FetchState and UseFetchReturn below",
+        "expectedOutcome": "Two TypeScript interfaces are defined: FetchState with data, loading, error properties, and UseFetchReturn that extends FetchState.",
+        "successCriteria": [
+          "Interfaces FetchState and UseFetchReturn are defined with correct property types."
+        ],
+        "feedbackCorrect": "Nice! Proceed to the next step.",
+        "feedbackPartial": "You're on the right track, but check that both interfaces are defined with all required properties and correct types.",
+        "feedbackWrong": "The interfaces aren't defined correctly. Make sure to create both FetchState and UseFetchReturn interfaces with the specified properties.",
+        "evaluation": {
+          "mode": "keyword_match",
+          "required": [
+            "interface FetchState",
+            "data:",
+            "loading:",
+            "error:",
+            "interface UseFetchReturn",
+            "extends FetchState"
+          ],
+          "partialThreshold": 0.5,
+          "correctThreshold": 0.8
+        }
+      },
+      {
+        "id": "step4",
+        "type": "question",
+        "phase": "Step 4 of 10",
+        "title": "Initialize state variables for data, loading, and error",
+        "instruction": "Inside the useFetch function, initialize three state variables using useState: data (with generic type T | null), loading (boolean), and error (string | null).",
+        "hint": "Call useState three times with appropriate initial values: null for data, false for loading, and null for error. Remember to add type annotations for TypeScript.",
+        "analogousExample": "// Example: initializing multiple state variables\nconst [count, setCount] = useState<number>(0);\nconst [name, setName] = useState<string>('');\nconst [isActive, setIsActive] = useState<boolean>(false);",
+        "seedCode": "import React, { useState, useEffect } from 'react';\n\n// Create the useFetch custom hook function here\nfunction useFetch<T>() {\n  // Initialize state variables for data, loading, and error here\n  \n  return { data: null, loading: false, error: null };\n}\n\n// Define interfaces for FetchState and UseFetchReturn below",
+        "expectedOutcome": "The useFetch function should have three useState calls that properly initialize data, loading, and error state variables with TypeScript types.",
+        "successCriteria": [
+          "Three useState calls are present inside useFetch with correct types: data as T | null, loading as boolean, and error as string | null."
+        ],
+        "feedbackCorrect": "Nice! Proceed to the next step.",
+        "feedbackPartial": "You have some state variables initialized, but check that all three are present with the correct types: data (T | null), loading (boolean), and error (string | null).",
+        "feedbackWrong": "The state variables aren't properly initialized. Make sure to use useState three times with the correct types and initial values.",
+        "evaluation": {
+          "mode": "keyword_match",
+          "required": [
+            "useState",
+            "data",
+            "loading",
+            "error",
+            "T | null",
+            "boolean",
+            "string | null"
+          ],
+          "partialThreshold": 0.5,
+          "correctThreshold": 0.8
+        }
+      },
+      {
+        "id": "step5",
+        "type": "question",
+        "phase": "Step 5 of 10",
+        "title": "Create the fetchData async helper function",
+        "instruction": "Inside the useFetch function, create an async helper function named fetchData that takes a URL string as a parameter.",
+        "hint": "Define the function using the async keyword before the function declaration. The function should accept one parameter (the URL) and return a Promise.",
+        "analogousExample": "// Example of an async helper function\nasync function fetchUserData(url: string) {\n  // Fetch logic would go here\n}",
+        "seedCode": "import React, { useState, useEffect } from 'react';\n\n// Create the useFetch custom hook function here\nfunction useFetch<T>() {\n  // Initialize state variables for data, loading, and error here\n  \n  // Create the fetchData async helper function here\n  \n  return { data: null, loading: false, error: null };\n}\n\n// Define interfaces for FetchState and UseFetchReturn below",
+        "expectedOutcome": "The useFetch function now contains an async fetchData helper function that accepts a URL parameter.",
+        "successCriteria": [
+          "An async function named fetchData is defined inside useFetch with a URL string parameter."
+        ],
+        "feedbackCorrect": "Nice! Proceed to the next step.",
+        "feedbackPartial": "You're on the right track, but make sure fetchData is an async function that accepts a URL parameter.",
+        "feedbackWrong": "The fetchData helper function is missing or incorrectly defined. It should be an async function inside useFetch that takes a URL string parameter.",
+        "evaluation": {
+          "mode": "keyword_match",
+          "required": [
+            "async",
+            "fetchData",
+            "url",
+            "string"
+          ],
+          "partialThreshold": 0.5,
+          "correctThreshold": 0.8
+        }
+      },
+      {
+        "id": "step6",
+        "type": "question",
+        "phase": "Step 6 of 10",
+        "title": "Call fetchData inside useEffect",
+        "instruction": "Inside the useFetch hook, add a useEffect hook that calls the fetchData function when the URL changes. The URL should be a parameter of the hook.",
+        "hint": "Use the useEffect hook with fetchData as the callback. You'll need to add a URL parameter to the useFetch function signature first, then use it as a dependency in useEffect.",
+        "analogousExample": "// Example: useEffect with dependency\nuseEffect(() => {\n  fetchData();\n}, [url]);",
+        "seedCode": "import React, { useState, useEffect } from 'react';\n\n// Create the useFetch custom hook function here\nfunction useFetch<T>() {\n  // Initialize state variables for data, loading, and error here\n  \n  // Create the fetchData async helper function here\n  \n  // Add useEffect here\n  \n  return { data: null, loading: false, error: null };\n}\n\n// Define interfaces for FetchState and UseFetchReturn below",
+        "expectedOutcome": "The useEffect hook is implemented to trigger the fetchData function whenever the URL changes.",
+        "successCriteria": [
+          "useEffect is added with fetchData called inside and URL as a dependency."
+        ],
+        "feedbackCorrect": "Nice! Proceed to the next step.",
+        "feedbackPartial": "You added useEffect, but make sure it calls fetchData and has the URL as a dependency.",
+        "feedbackWrong": "The useEffect hook is missing or not properly set up to call fetchData with URL dependency.",
+        "evaluation": {
+          "mode": "keyword_match",
+          "required": [
+            "useEffect",
+            "fetchData",
+            "url"
+          ],
+          "partialThreshold": 0.5,
+          "correctThreshold": 0.8
+        }
+      },
+      {
+        "id": "step7",
+        "type": "question",
+        "phase": "Step 7 of 10",
+        "title": "Return the state object from useFetch",
+        "instruction": "Update the return statement in your useFetch hook to return the actual state variables (data, loading, error) instead of the placeholder values.",
+        "hint": "Replace the placeholder object { data: null, loading: false, error: null } with an object containing your actual state variables.",
+        "analogousExample": "// Example: returning state from a custom hook\nfunction useCounter() {\n  const [count, setCount] = useState(0);\n  return { count, setCount };\n}",
+        "seedCode": "import React, { useState, useEffect } from 'react';\n\n// Create the useFetch custom hook function here\nfunction useFetch<T>() {\n  // Initialize state variables for data, loading, and error here\n  \n  // Create the fetchData async helper function here\n  \n  // Add useEffect here\n  \n  return { data: null, loading: false, error: null };\n}\n\n// Define interfaces for FetchState and UseFetchReturn below",
+        "expectedOutcome": "The useFetch hook now returns the actual state values, making them available to components that use this hook.",
+        "successCriteria": [
+          "The return statement contains references to the actual state variables (data, loading, error) instead of hardcoded values."
+        ],
+        "feedbackCorrect": "Nice! Proceed to the next step.",
+        "feedbackPartial": "You're on the right track, but make sure you're returning the actual state variables (data, loading, error) instead of placeholder values.",
+        "feedbackWrong": "The return statement should reference your actual state variables, not hardcoded values. Check your state variable names.",
+        "evaluation": {
+          "mode": "keyword_match",
+          "required": [
+            "return",
+            "{",
+            "data",
+            "loading",
+            "error",
+            "}"
+          ],
+          "partialThreshold": 0.5,
+          "correctThreshold": 0.8
+        }
+      },
+      {
+        "id": "step8",
+        "type": "question",
+        "phase": "Step 8 of 10",
+        "title": "Create the main App component",
+        "instruction": "Create a functional component named App that returns a JSX structure. The component should be defined after the useFetch hook and interfaces.",
+        "hint": "Define a function called App that returns a JSX element. You can start with a simple div wrapper.",
+        "analogousExample": "// Example of a functional component\nfunction App() {\n  return (\n    <div>\n      <h1>My App</h1>\n    </div>\n  );\n}",
+        "seedCode": "import React, { useState, useEffect } from 'react';\n\n// Create the useFetch custom hook function here\nfunction useFetch<T>() {\n  // Initialize state variables for data, loading, and error here\n  \n  // Create the fetchData async helper function here\n  \n  // Add useEffect here\n  \n  return { data: null, loading: false, error: null };\n}\n\n// Define interfaces for FetchState and UseFetchReturn below\n\n// Create the App component here\n",
+        "expectedOutcome": "The App component is defined and ready to be used to demonstrate the useFetch hook.",
+        "successCriteria": [
+          "A functional component named App is created and returns JSX."
+        ],
+        "feedbackCorrect": "Nice! Proceed to the next step.",
+        "feedbackPartial": "You're on the right track, but make sure the App component is a function that returns JSX. Check that you've defined it correctly.",
+        "feedbackWrong": "The App component is not defined or doesn't return JSX. Please create a functional component named App that returns a JSX element.",
+        "evaluation": {
+          "mode": "keyword_match",
+          "required": [
+            "App",
+            "return",
+            "JSX"
+          ],
+          "partialThreshold": 0.5,
+          "correctThreshold": 0.8
+        }
+      },
+      {
+        "id": "step9",
+        "type": "question",
+        "phase": "Step 9 of 10",
+        "title": "Use the useFetch hook in App component",
+        "instruction": "Inside the App component, call the useFetch hook with the URL 'https://jsonplaceholder.typicode.com/todos/1' and destructure the returned data, loading, and error values.",
+        "hint": "Call the hook at the top of your component and destructure the returned object into variables.",
+        "analogousExample": "// Example: calling a custom hook and destructuring\nconst { value, status } = useCustomHook<number>();",
+        "seedCode": "import React, { useState, useEffect } from 'react';\n\n// Create the useFetch custom hook function here\nfunction useFetch<T>() {\n  // Initialize state variables for data, loading, and error here\n  \n  // Create the fetchData async helper function here\n  \n  // Add useEffect here\n  \n  return { data: null, loading: false, error: null };\n}\n\n// Define interfaces for FetchState and UseFetchReturn below\n\n// Create the App component here\nfunction App() {\n  // Call useFetch here and destructure data, loading, error\n  \n  return (\n    <div>\n      <h1>useFetch Example</h1>\n    </div>\n  );\n}\n\nexport default App;",
+        "expectedOutcome": "The App component will have access to the data, loading, and error states from the useFetch hook for the specified API endpoint.",
+        "successCriteria": [
+          "useFetch is called with the provided URL and the returned values are destructured into data, loading, and error variables."
+        ],
+        "feedbackCorrect": "Nice! Proceed to the next step.",
+        "feedbackPartial": "You're on the right track, but make sure you're calling useFetch with the exact URL and destructuring all three values (data, loading, error).",
+        "feedbackWrong": "The hook call or destructuring isn't quite right. Check that you're calling useFetch with the URL and destructuring the returned object properly.",
+        "evaluation": {
+          "mode": "keyword_match",
+          "required": [
+            "useFetch",
+            "https://jsonplaceholder.typicode.com/todos/1",
+            "data",
+            "loading",
+            "error"
+          ],
+          "partialThreshold": 0.5,
+          "correctThreshold": 0.8
+        }
+      },
+      {
+        "id": "step10",
+        "type": "question",
+        "phase": "Step 10 of 10",
+        "title": "Add conditional rendering for loading state",
+        "instruction": "In the App component's return statement, add a ternary operator that conditionally renders a loading message when the loading state is true. Place it after the existing <h1> element.",
+        "hint": "Use the destructured loading variable from useFetch in a ternary expression: {loading ? <p>Loading...</p> : null}",
+        "analogousExample": "// Conditional rendering with ternary\nfunction Example() {\n  const isLoading = true;\n  return (\n    <div>\n      <h1>Example</h1>\n      {isLoading ? <p>Loading data...</p> : null}\n    </div>\n  );\n}",
+        "seedCode": "import React, { useState, useEffect } from 'react';\n\n// Create the useFetch custom hook function here\nfunction useFetch<T>() {\n  // Initialize state variables for data, loading, and error here\n  \n  // Create the fetchData async helper function here\n  \n  // Add useEffect here\n  \n  return { data: null, loading: false, error: null };\n}\n\n// Define interfaces for FetchState and UseFetchReturn below\n\n// Create the App component here\nfunction App() {\n  // Call useFetch here and destructure data, loading, error\n  \n  return (\n    <div>\n      <h1>useFetch Example</h1>\n      {/* Add conditional rendering for loading state here */}\n    </div>\n  );\n}\n\nexport default App;",
+        "expectedOutcome": "The App component will display a loading message when the loading state is true, showing 'Loading...' text below the heading.",
+        "successCriteria": [
+          "The App component contains a ternary operator that conditionally renders a loading message based on the loading state variable."
+        ],
+        "feedbackCorrect": "Nice! Proceed to the next step.",
+        "feedbackPartial": "You're on the right track, but check that you're using the loading variable in a ternary expression and placing it correctly in the JSX.",
+        "feedbackWrong": "The conditional rendering for loading state isn't implemented correctly. Make sure to use a ternary operator with the loading variable.",
+        "evaluation": {
+          "mode": "keyword_match",
+          "required": [
+            "loading",
+            "?",
+            "<p>",
+            ":",
+            "null"
+          ],
+          "partialThreshold": 0.5,
+          "correctThreshold": 0.8
+        }
+      }
+    ],
+    "sideItems": [
+      {
+        "label": "Intro",
+        "id": "intro"
+      },
+      {
+        "label": "Objectives",
+        "id": "objectives"
+      },
+      {
+        "label": "Import React and all hooks needed for this lesson (useState, useEffect)",
+        "id": "step1"
+      },
+      {
+        "label": "Define the useFetch custom hook function",
+        "id": "step2"
+      },
+      {
+        "label": "Define TypeScript interfaces for the hook's return type",
+        "id": "step3"
+      },
+      {
+        "label": "Initialize state variables for data, loading, and error",
+        "id": "step4"
+      },
+      {
+        "label": "Create the fetchData async helper function",
+        "id": "step5"
+      },
+      {
+        "label": "Call fetchData inside useEffect",
+        "id": "step6"
+      },
+      {
+        "label": "Return the state object from useFetch",
+        "id": "step7"
+      },
+      {
+        "label": "Create the main App component",
+        "id": "step8"
+      },
+      {
+        "label": "Use the useFetch hook in App component",
+        "id": "step9"
+      },
+      {
+        "label": "Add conditional rendering for loading state",
+        "id": "step10"
+      }
+    ]
+  },
+  "source": "content"
+}

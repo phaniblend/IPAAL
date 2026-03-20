@@ -2,7 +2,7 @@ import createINPACTEngine from "../inpact_engine_shared";
 
 const NODES = [
   {
-    id: "intro", type: "reveal", phase: "Problem",
+    id: "intro", type: "reveal", phase: "Lesson",
     content: {
       tag: "JS FUNDAMENTALS #12",
       title: "Regular Expressions — Real-World Depth",
@@ -235,7 +235,7 @@ export { highlight, camelToKebab, interpolate }`,
 ];
 
 const sideItems = [
-  { label: "Problem", id: "intro" },
+  { label: "Lesson", id: "intro" },
   { label: "Objectives", id: "objectives" },
   { label: "Step 1 — Classes & quantifiers", id: "step1" },
   { label: "Step 2 — Capture groups", id: "step2" },

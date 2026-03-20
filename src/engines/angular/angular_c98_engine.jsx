@@ -2,7 +2,7 @@ import createINPACTEngine from "../inpact_engine_shared";
 
 const TITLE = "Design Notification System (Angular)";
 const NODES = [
-  { id: "intro", type: "reveal", phase: "Problem", content: { tag: "PROBLEM #98 (Angular)", title: TITLE, body: "Design a notification system in Angular: a NotificationService with notifications signal and add(msg, type?), remove(id); a toast container component that injects the service and renders *ngFor with auto-dismiss or manual close; optional queue and max visible.", usecase: "Angular NotificationService and a global toast container component define the API for app-wide notifications." } },
+  { id: "intro", type: "reveal", phase: "Lesson", content: { tag: "LESSON #98 (Angular)", title: TITLE, body: "Design a notification system in Angular: a NotificationService with notifications signal and add(msg, type?), remove(id); a toast container component that injects the service and renders *ngFor with auto-dismiss or manual close; optional queue and max visible.", usecase: "Angular NotificationService and a global toast container component define the API for app-wide notifications." } },
   { id: "objectives", type: "objectives", phase: "Objectives", items: ["NotificationService: notifications = signal<Notification[]>([]); add(text, type?: 'info'|'error'); remove(id)", "Notification: { id: number; text: string; type?: string }", "ToastContainerComponent: *ngFor=\"n of notif.notifications()\"; (click) remove or setTimeout remove", "Optional: maxVisible; queue when full"] },
   { id: "step1", type: "question", phase: "Step 1 of 3", paal: "Define interface Notification { id: number; text: string; type?: 'info'|'error' }. NotificationService: notifications = signal<Notification[]>([]); add(text: string, type?: 'info'|'error') { this.notifications.update(n => [...n, { id: Date.now(), text, type }]); }; remove(id: number) { this.notifications.update(n => n.filter(x => x.id !== id)); }.", answer_keywords: ["Notification", "notifications", "add", "remove"], seed_code: `import { Injectable, signal } from '@angular/core';
 
@@ -53,5 +53,5 @@ export class NotificationService {
 }`, feedback_correct: "✅ Design Notification System (Angular) complete.", feedback_partial: "setTimeout.", feedback_wrong: "Export", expected: "Auto-dismiss and export" },
 ];
 
-const sideItems = [{ label: "Problem", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
+const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
 export default createINPACTEngine({ NODES, sideItems, problemNum: 98, title: TITLE, shortName: "A — NOTIFICATION SYSTEM" });

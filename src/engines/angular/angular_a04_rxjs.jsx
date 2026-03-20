@@ -10,7 +10,7 @@ if (typeof document !== "undefined" && !document.getElementById("dm-sans-font"))
   document.head.appendChild(link);
 }
 
-// ─── ENGINE A04: RxJS ESSENTIALS ──────────────────────────────────────────────
+// ─── ENGINE ANG04: RxJS ESSENTIALS ───────────────────────────────────────────
 // Covers: Observable vs Promise, Subject/BehaviorSubject/ReplaySubject,
 // switchMap vs mergeMap vs concatMap vs exhaustMap,
 // debounceTime vs throttleTime, combineLatest vs forkJoin vs zip,
@@ -18,10 +18,10 @@ if (typeof document !== "undefined" && !document.getElementById("dm-sans-font"))
 
 const NODES = [
   {
-    id: "intro", type: "reveal", phase: "Problem",
+    id: "intro", type: "reveal", phase: "Lesson",
     content: {
-      tag: "ENGINE A04 — RxJS ESSENTIALS",
-      title: "Real-Time Flight Board",
+      tag: "ANG04 — RxJS ESSENTIALS",
+      title: "Real-Time Board",
       body: `Build the RxJS layer for a live flight status board that:
 
   • Polls the flight API every 30 seconds using an Observable stream
@@ -526,7 +526,7 @@ ngOnDestroy(): void {
 ];
 
 const s = {
-  wrap: { fontFamily: "'DM Sans', sans-serif", background: "#0f1117", minHeight: "100vh", color: "#e2e8f0", display: "flex", flexDirection: "column" },
+  wrap: { fontFamily: "'DM Sans', sans-serif", background: "#0f1117", minHeight: "100vh", minWidth: "1000px", overflow: "hidden", color: "#e2e8f0", display: "flex", flexDirection: "column" },
   topbar: { display: "flex", alignItems: "center", gap: "12px", padding: "0 24px", height: "52px", background: "#1a1d2e", borderBottom: "1px solid #2d3748", flexShrink: 0 },
   logo: { fontWeight: 700, fontSize: "13px", letterSpacing: "0.15em", color: "#7c3aed", marginRight: "8px" },
   engineTag: { fontWeight: 700, fontSize: "10px", letterSpacing: "0.12em", color: "#4a5568", textTransform: "uppercase" },
@@ -570,7 +570,7 @@ const s = {
 };
 
 const sideItems = [
-  { id: "intro", label: "Problem" },
+  { id: "intro", label: "Lesson" },
   { id: "objectives", label: "Objectives" },
   { id: "step1", label: "Search + switchMap" },
   { id: "step2", label: "4 Flattening Ops" },
@@ -689,7 +689,7 @@ export default function AngularA04RxJS({ onNextProblem }) {
           <>
             <div style={{ fontSize: "11px", color: "#00d4ff", fontWeight: 600, letterSpacing: "0.05em", marginBottom: "8px" }}>CODE BUILT SO FAR — edit below</div>
             <div style={s.hint}>💡 {node.hint}</div>
-            <CodeEditor value={currentAnswer} onChange={setCurrentAnswer} height="240px" />
+            <CodeEditor value={currentAnswer} onChange={setCurrentAnswer} height="320px" />
             {feedback && <div style={s.feedback(result)}>{feedback}</div>}
             {showExpected && node.expected && (
               <div style={{ ...s.pre, borderLeft: "2px solid #10b981", marginBottom: "16px" }}>
@@ -756,7 +756,7 @@ export default function AngularA04RxJS({ onNextProblem }) {
         </div>
         {allChecked && (
           <div>
-            <div style={s.feedback("correct")}>{"✅ Engine A04 Complete — RxJS Essentials mastered.\nNext: Engine A05 — NgRx State Management"}</div>
+            <div style={s.feedback("correct")}>{"✅ Engine ANG04 Complete — RxJS Essentials mastered.\nNext: ANG05 — NgRx State Management"}</div>
             <div style={s.btnRow}><button style={s.btn("primary")} onClick={onNextProblem ?? next}>NEXT ENGINE →</button></div>
           </div>
         )}
@@ -768,7 +768,7 @@ export default function AngularA04RxJS({ onNextProblem }) {
     return (
       <div style={s.completeBanner}>
         <div style={{ fontSize: "48px", marginBottom: "24px" }}>🎯</div>
-        <h1 style={{ ...s.h1, textAlign: "center" }}>Engine A04 Complete</h1>
+        <h1 style={{ ...s.h1, textAlign: "center" }}>Engine ANG04 Complete</h1>
         <p style={{ color: "#4a5568", fontSize: "13px" }}>RxJS Essentials — mastered.</p>
         {onNextProblem && <div style={{ ...s.btnRow, justifyContent: "center", marginTop: "24px" }}><button style={s.btn("primary")} onClick={onNextProblem}>NEXT ENGINE →</button></div>}
       </div>
@@ -791,7 +791,7 @@ export default function AngularA04RxJS({ onNextProblem }) {
     <div style={s.wrap}>
       <div style={s.topbar}>
         <div style={s.logo}>INPACT</div>
-        <div style={s.engineTag}>A04 — RxJS ESSENTIALS</div>
+        <div style={s.engineTag}>ANG04 — RxJS ESSENTIALS</div>
         <div style={s.progressTrack}><div style={s.progressFill(progress)} /></div>
         <div style={s.progressLabel}>{progress}%</div>
       </div>

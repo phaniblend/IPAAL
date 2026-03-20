@@ -2,7 +2,7 @@ import createINPACTEngine from "../inpact_engine_shared";
 
 const TITLE = "Accordion (Angular)";
 const NODES = [
-  { id: "intro", type: "reveal", phase: "Problem", content: { tag: "PROBLEM #29 (Angular)", title: TITLE, body: "Build an accordion with one or multiple panels; each panel has a header (click) to toggle *ngIf for the content; use signals to track which panel(s) are open.", usecase: "Angular *ngIf and signals drive expand/collapse state for accordion panels." } },
+  { id: "intro", type: "reveal", phase: "Lesson", content: { tag: "LESSON #29 (Angular)", title: TITLE, body: "Build an accordion with one or multiple panels; each panel has a header (click) to toggle *ngIf for the content; use signals to track which panel(s) are open.", usecase: "Angular *ngIf and signals drive expand/collapse state for accordion panels." } },
   { id: "objectives", type: "objectives", phase: "Objectives", items: ["Panels array or list; each has title and content; open state as signal or index", "Header (click) toggles open state; *ngIf=\"open()\" or *ngIf=\"expanded === index\" for content", "Optional: single open (only one expanded at a time) by storing expandedIndex", "Use *ngFor for multiple panels"] },
   { id: "step1", type: "question", phase: "Step 1 of 3", paal: "Create a component with panels = signal([{ title: 'A', content: 'Content A' }, { title: 'B', content: 'Content B' }]) and expandedIndex = signal(0). Template: *ngFor with index; show panel title and *ngIf=\"expandedIndex() === i\" for content.", answer_keywords: ["ngFor", "ngIf", "expandedIndex"], seed_code: `import { Component, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -60,5 +60,5 @@ export class AccordionComponent {
 }`, feedback_correct: "✅ Accordion (Angular) complete.", feedback_partial: "class.expanded.", feedback_wrong: "Export", expected: "[class.expanded] and export" },
 ];
 
-const sideItems = [{ label: "Problem", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
+const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
 export default createINPACTEngine({ NODES, sideItems, problemNum: 29, title: TITLE, shortName: "A — ACCORDION" });

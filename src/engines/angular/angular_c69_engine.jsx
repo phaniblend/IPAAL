@@ -2,7 +2,7 @@ import createINPACTEngine from "../inpact_engine_shared";
 
 const TITLE = "Generic useFetch<T> (Angular)";
 const NODES = [
-  { id: "intro", type: "reveal", phase: "Problem", content: { tag: "PROBLEM #69 (Angular)", title: TITLE, body: "Type HttpClient.get<T>(url) so the response is typed; use toSignal(http.get<User[]>(url)) for a typed signal, or a generic service method get<T>(url): Observable<T> that components use with their type.", usecase: "Angular HttpClient.get<T> and toSignal return typed data for type-safe fetch patterns." } },
+  { id: "intro", type: "reveal", phase: "Lesson", content: { tag: "LESSON #69 (Angular)", title: TITLE, body: "Type HttpClient.get<T>(url) so the response is typed; use toSignal(http.get<User[]>(url)) for a typed signal, or a generic service method get<T>(url): Observable<T> that components use with their type.", usecase: "Angular HttpClient.get<T> and toSignal return typed data for type-safe fetch patterns." } },
   { id: "objectives", type: "objectives", phase: "Objectives", items: ["this.http.get<T>(url) returns Observable<T>; toSignal(obs, { initialValue: null }) gives Signal<T | null>", "Define interface User { id: number; name: string }; getUsers(): Observable<User[]>", "Component: users = toSignal(this.api.getUsers(), { initialValue: [] as User[] })", "Type the component's data signal as signal<User[] | null>"] },
   { id: "step1", type: "question", phase: "Step 1 of 3", paal: "Create an interface User { id: number; name: string }. In a service inject HttpClient and add getUsers(): Observable<User[]> { return this.http.get<User[]>('/api/users'); }.", answer_keywords: ["Observable", "get", "User"], seed_code: `import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
@@ -48,5 +48,5 @@ export class UserApiService {
 }`, feedback_correct: "✅ Generic useFetch<T> (Angular) complete.", feedback_partial: "getById<T>.", feedback_wrong: "Export", expected: "getById<T>(url): Observable<T>" },
 ];
 
-const sideItems = [{ label: "Problem", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
+const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
 export default createINPACTEngine({ NODES, sideItems, problemNum: 69, title: TITLE, shortName: "A — GENERIC FETCH" });

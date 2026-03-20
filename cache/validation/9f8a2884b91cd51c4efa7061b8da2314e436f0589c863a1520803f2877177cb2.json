@@ -1,0 +1,1 @@
+{"result":"correct","feedback":"You correctly added a div element after the heading with inline style backgroundColor set to the color state variable. The div will display the current color as a visual preview when the component renders."}

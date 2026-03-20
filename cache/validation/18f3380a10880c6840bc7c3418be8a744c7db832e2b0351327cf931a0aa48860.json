@@ -1,0 +1,1 @@
+{"result":"correct","feedback":"You correctly defined the handleNameChange function that takes an event parameter and updates the name state using setName(e.target.value). The function properly accesses the input value from the event target and updates the state as required."}

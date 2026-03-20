@@ -1,0 +1,1 @@
+{"result":"correct","feedback":"You correctly created the toggleVisibility function that updates the isVisible state to its opposite value using setIsVisible with the functional update pattern (!p). The function is properly defined and will flip the boolean state as required."}

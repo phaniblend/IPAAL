@@ -1,7 +1,7 @@
 import createINPACTEngine from "../inpact_engine_shared";
 
 const NODES = [
-  { id: "intro", type: "reveal", phase: "Problem", content: { tag: "PROBLEM #9 (Angular)", title: "Color Picker", body: "Change the background color of a div based on a dropdown selection. Build a <select> with options (e.g. Red, Green, Blue) and a div. When the user picks a color from the dropdown, the div's background updates to that color.", usecase: "Same concept as React — implemented with Angular (signals, standalone components)." } },
+  { id: "intro", type: "reveal", phase: "Lesson", content: { tag: "LESSON #9 (Angular)", title: "Color Picker", body: "Change the background color of a div based on a dropdown selection. Build a <select> with options (e.g. Red, Green, Blue) and a div. When the user picks a color from the dropdown, the div's background updates to that color.", usecase: "Same concept as React — implemented with Angular (signals, standalone components)." } },
   { id: "objectives", type: "objectives", phase: "Objectives", items: [
       "Use useState with a string to hold the selected color value",
       "Render a <select> with <option> elements",
@@ -13,5 +13,5 @@ const NODES = [
   { id: "step3", type: "question", phase: "Step 3 of 3", paal: "Wire everything together, handle edge cases, and export the component.", answer_keywords: ["export", "class"], seed_code: "import { Component, signal } from '@angular/core';\nimport { CommonModule } from '@angular/common';\n\n@Component({\n  selector: 'app-root',\n  standalone: true,\n  imports: [CommonModule],\n  template: `<!-- Step 1: add template -->`,\n})\nexport class AppComponent {\n  // Step 1\n}", feedback_correct: "✅ Problem #9 (Angular) complete.", feedback_partial: "Export and finish.", feedback_wrong: "Export component", expected: "Complete" },
 ];
 
-const sideItems = [{ label: "Problem", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
+const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
 export default createINPACTEngine({ NODES, sideItems, problemNum: 9, title: "Color Picker", shortName: "COLOR PICKER" });

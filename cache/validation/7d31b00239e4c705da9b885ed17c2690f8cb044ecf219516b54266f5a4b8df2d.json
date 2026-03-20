@@ -1,0 +1,1 @@
+{"result":"correct","feedback":"You correctly added a text input field inside the form element with type='text', name='name', value bound to the form state's name property, and onChange wired to the handleChange function. This satisfies all the step's success criteria.","hint":"Great! Now you can move on to the next step.","errors":[]}

@@ -2,7 +2,7 @@ import createINPACTEngine from "../inpact_engine_shared";
 
 const TITLE = "Render Props (MouseTracker) (Angular)";
 const NODES = [
-  { id: "intro", type: "reveal", phase: "Problem", content: { tag: "PROBLEM #56 (Angular)", title: TITLE, body: "Expose component state (e.g. mouse x, y) to the template via a template slot: use ng-template with a template reference and pass data as context (e.g. $implicit or named) so the parent can render with that data.", usecase: "Angular content projection with ng-template and NgTemplateOutlet or custom template input replicates render props." } },
+  { id: "intro", type: "reveal", phase: "Lesson", content: { tag: "LESSON #56 (Angular)", title: TITLE, body: "Expose component state (e.g. mouse x, y) to the template via a template slot: use ng-template with a template reference and pass data as context (e.g. $implicit or named) so the parent can render with that data.", usecase: "Angular content projection with ng-template and NgTemplateOutlet or custom template input replicates render props." } },
   { id: "objectives", type: "objectives", phase: "Objectives", items: ["Component has @ContentChild(TemplateRef) or @Input() templateRef", "Or @Input() template: TemplateRef<{ $implicit: { x: number; y: number } }>", "Track mouse: HostListener('mousemove', ['$event']) and set position = signal({ x: e.clientX, y: e.clientY })", "Template: <ng-container *ngTemplateOutlet=\"template; context: { $implicit: position() }\"></ng-container>"] },
   { id: "step1", type: "question", phase: "Step 1 of 3", paal: "Create MouseTrackerComponent with position = signal({ x: 0, y: 0 }). Add @HostListener('document:mousemove', ['$event']) onMove(e: MouseEvent) { this.position.set({ x: e.clientX, y: e.clientY }); }.", answer_keywords: ["HostListener", "mousemove", "position"], seed_code: `import { Component, signal, HostListener } from '@angular/core';
 
@@ -54,5 +54,5 @@ export class MouseTrackerComponent {
 }`, feedback_correct: "✅ Render Props (MouseTracker) (Angular) complete.", feedback_partial: "let-pos.", feedback_wrong: "Export", expected: "Template with let-pos and export" },
 ];
 
-const sideItems = [{ label: "Problem", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
+const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
 export default createINPACTEngine({ NODES, sideItems, problemNum: 56, title: TITLE, shortName: "A — MOUSE TRACKER" });

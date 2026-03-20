@@ -1,0 +1,1 @@
+{"result":"correct","feedback":"You correctly defined a function named handleTextUpdate that takes a string parameter and updates the text state using setText. The TypeScript typing is properly included with the parameter. This satisfies the step's requirements.","hint":"Ready to move on to the next step.","errors":[]}

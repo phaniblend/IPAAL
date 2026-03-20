@@ -1,0 +1,1 @@
+{"result":"correct","feedback":"You correctly defined a function named measurePerformance that uses console.log and performance.now() without any import statements. The function logs a message with the current performance time, which meets all the step's requirements.","hint":"","errors":[]}

@@ -1,0 +1,1 @@
+{"result":"correct","feedback":"You correctly created a functional component named Counter that returns a div element. The component uses the proper function declaration syntax and returns valid JSX. This satisfies all requirements for this step.","hint":"In the next steps, you'll likely add content inside the div element to build your counter interface.","errors":[]}

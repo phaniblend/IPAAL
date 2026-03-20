@@ -1,0 +1,1 @@
+{"result":"correct","feedback":"You correctly modified the map() callback to access and display both fruit.name and fruit.color properties within each list item. The JSX expression {fruit.name} - {fruit.color} properly renders both properties as required by the step."}

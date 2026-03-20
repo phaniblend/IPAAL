@@ -1,0 +1,1 @@
+{"result":"correct","feedback":"You correctly created an API service using createApi with fetchBaseQuery and an empty endpoints function. The syntax and behavior meet this step's requirements.","hint":"In the next step, you'll add endpoints to this API service.","errors":[]}

@@ -2,7 +2,7 @@ import createINPACTEngine from "../inpact_engine_shared";
 
 const TITLE = "Context Performance (Angular)";
 const NODES = [
-  { id: "intro", type: "reveal", phase: "Problem", content: { tag: "PROBLEM #45 (Angular)", title: TITLE, body: "Avoid unnecessary re-renders when using shared services: use computed() for derived state, runOutsideAngular for heavy work, and OnPush change detection where appropriate.", usecase: "Angular performance with injectable context: computed, OnPush, and signals reduce re-renders." } },
+  { id: "intro", type: "reveal", phase: "Lesson", content: { tag: "LESSON #45 (Angular)", title: TITLE, body: "Avoid unnecessary re-renders when using shared services: use computed() for derived state, runOutsideAngular for heavy work, and OnPush change detection where appropriate.", usecase: "Angular performance with injectable context: computed, OnPush, and signals reduce re-renders." } },
   { id: "objectives", type: "objectives", phase: "Objectives", items: ["Use computed() so derived values don't trigger extra updates", "ChangeDetectionStrategy.OnPush so component checks only when @Input or signals change", "inject(ChangeDetectorRef) and markForCheck() only when needed", "Avoid returning new object/array from getters in templates; use signals/computed"] },
   { id: "step1", type: "question", phase: "Step 1 of 3", paal: "Create a component with changeDetection: ChangeDetectionStrategy.OnPush. Use a signal count = signal(0) and a computed double = computed(() => this.count() * 2). Template: {{ count() }} {{ double() }}.", answer_keywords: ["OnPush", "computed", "double"], seed_code: `import { Component, signal, computed, ChangeDetectionStrategy } from '@angular/core';
 
@@ -43,5 +43,5 @@ export class PerfComponent {
 }`, feedback_correct: "✅ Context Performance (Angular) complete.", feedback_partial: "count.update.", feedback_wrong: "Export", expected: "Template reads signals; button updates count" },
 ];
 
-const sideItems = [{ label: "Problem", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
+const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
 export default createINPACTEngine({ NODES, sideItems, problemNum: 45, title: TITLE, shortName: "A — CONTEXT PERF" });

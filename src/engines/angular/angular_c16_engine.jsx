@@ -2,7 +2,7 @@ import createINPACTEngine from "../inpact_engine_shared";
 
 const TITLE = "Conditional Rendering (Angular)";
 const NODES = [
-  { id: "intro", type: "reveal", phase: "Problem", content: { tag: "PROBLEM #16 (Angular)", title: TITLE, body: "Show or hide elements based on a condition. Use *ngIf=\"condition()\" for if, or *ngIf=\"cond(); else elseBlock\" with ng-template #elseBlock for else.", usecase: "Angular uses *ngIf (or @if in control flow) for conditional rendering." } },
+  { id: "intro", type: "reveal", phase: "Lesson", content: { tag: "LESSON #16 (Angular)", title: TITLE, body: "Show or hide elements based on a condition. Use *ngIf=\"condition()\" for if, or *ngIf=\"cond(); else elseBlock\" with ng-template #elseBlock for else.", usecase: "Angular uses *ngIf (or @if in control flow) for conditional rendering." } },
   { id: "objectives", type: "objectives", phase: "Objectives", items: ["*ngIf=\"isVisible()\" to show/hide an element", "Optional: else with ng-template #elseBlock", "Use a signal or property for the condition", "CommonModule for NgIf"] },
   { id: "step1", type: "question", phase: "Step 1 of 3", paal: "Create a component with isVisible = signal(true). Add a paragraph with *ngIf=\"isVisible()\" showing 'Visible'.", answer_keywords: ["ngIf", "isVisible", "signal"], seed_code: `import { Component, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -49,5 +49,5 @@ export class ConditionalRenderingComponent {
 }`, feedback_correct: "✅ Conditional Rendering (Angular) complete.", feedback_partial: "Toggle button.", feedback_wrong: "isVisible.set(!isVisible())", expected: "button (click)=\"isVisible.set(!isVisible())\"" },
 ];
 
-const sideItems = [{ label: "Problem", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
+const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
 export default createINPACTEngine({ NODES, sideItems, problemNum: 16, title: TITLE, shortName: "A — CONDITIONAL" });

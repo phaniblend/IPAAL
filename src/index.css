@@ -3,9 +3,9 @@
   line-height: 1.5;
   font-weight: 400;
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  color-scheme: light;
+  color: #213547;
+  background-color: #ffffff;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -28,6 +28,7 @@ body {
   place-items: center;
   min-width: 320px;
   min-height: 100vh;
+  background-color: #ffffff;
 }
 
 h1 {
@@ -42,7 +43,8 @@ button {
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
-  background-color: #1a1a1a;
+  background-color: #f1f5f9;
+  color: #0f172a;
   cursor: pointer;
   transition: border-color 0.25s;
 }
@@ -52,6 +54,42 @@ button:hover {
 button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
+}
+
+/* INPACT primary button — subtle self-color pulsating focus (replaces default black ring) */
+.inpact-btn-primary:focus,
+.inpact-btn-primary:focus-visible {
+  outline: none;
+  border: 2px solid rgba(0, 210, 255, 0.5);
+  box-shadow: 0 0 0 3px rgba(0, 210, 255, 0.25);
+  animation: inpact-btn-focus-pulse 1.6s ease-in-out infinite;
+}
+
+@keyframes inpact-btn-focus-pulse {
+  0%, 100% { box-shadow: 0 0 0 3px rgba(0, 210, 255, 0.25); }
+  50%  { box-shadow: 0 0 0 8px rgba(0, 210, 255, 0.08); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .inpact-btn-primary:focus,
+  .inpact-btn-primary:focus-visible {
+    animation: none;
+    box-shadow: 0 0 0 3px rgba(0, 210, 255, 0.25);
+  }
+}
+
+/* INPACT — "Check my code" waiting state */
+.inpact-btn-checking {
+  animation: inpact-checking-pulse 1s ease-in-out infinite;
+}
+@keyframes inpact-checking-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.75; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .inpact-btn-checking {
+    animation: none;
+  }
 }
 
 @media (prefers-color-scheme: light) {
@@ -96,4 +134,14 @@ button:focus-visible {
 
 @media (prefers-reduced-motion: reduce) {
   .inpact-task-callout { animation: none !important; }
+}
+
+/* CodeMirror — hide diagnostic squiggles in lesson editors (validation is via Check) */
+.cm-editor .cm-lintRange,
+.cm-editor .cm-lintRange-error,
+.cm-editor .cm-lintRange-warning,
+.cm-editor .cm-lintRange-info {
+  background: transparent !important;
+  text-decoration: none !important;
+  border-bottom: none !important;
 }

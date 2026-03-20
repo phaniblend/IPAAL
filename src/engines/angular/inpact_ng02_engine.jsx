@@ -1,7 +1,7 @@
 import createINPACTEngine from "../inpact_engine_shared";
 
 const NODES = [
-  { id: "intro", type: "reveal", phase: "Problem", content: { tag: "PROBLEM #2 (Angular)", title: "Toggle Visibility", body: "A page with a button and a paragraph of text. Clicking the button HIDES the paragraph if it's visible. Clicking it again SHOWS it. The button label changes too. Example: Start → [ Hide ] Hello, I am visible! Click button → [ Show ] Click button → [ Hide ] Hello, I am visible!", usecase: "Same concept as React — implemented with Angular (signals, standalone components)." } },
+  { id: "intro", type: "reveal", phase: "Lesson", content: { tag: "LESSON #2 (Angular)", title: "Toggle Visibility", body: "A page with a button and a paragraph of text. Clicking the button HIDES the paragraph if it's visible. Clicking it again SHOWS it. The button label changes too. Example: Start → [ Hide ] Hello, I am visible! Click button → [ Show ] Click button → [ Hide ] Hello, I am visible!", usecase: "Same concept as React — implemented with Angular (signals, standalone components)." } },
   { id: "objectives", type: "objectives", phase: "Objectives", items: [
       "Use useState with a boolean value — not just a number",
       "Initialise state to true or false depending on the starting UI",
@@ -16,5 +16,5 @@ const NODES = [
   { id: "step3", type: "question", phase: "Step 3 of 3", paal: "Wire everything together, handle edge cases, and export the component.", answer_keywords: ["export", "class"], seed_code: "import { Component, signal } from '@angular/core';\nimport { CommonModule } from '@angular/common';\n\n@Component({\n  selector: 'app-root',\n  standalone: true,\n  imports: [CommonModule],\n  template: `<!-- Step 1: add template -->`,\n})\nexport class AppComponent {\n  // Step 1\n}", feedback_correct: "✅ Problem #2 (Angular) complete.", feedback_partial: "Export and finish.", feedback_wrong: "Export component", expected: "Complete" },
 ];
 
-const sideItems = [{ label: "Problem", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
+const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
 export default createINPACTEngine({ NODES, sideItems, problemNum: 2, title: "Toggle Visibility", shortName: "TOGGLE VISIBILITY" });

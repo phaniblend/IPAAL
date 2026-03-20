@@ -1,7 +1,7 @@
 /**
  * File-based cache for AI lesson responses. Persists across server restarts and can be
  * bundled with the app (e.g. commit cache/ or copy into Docker) so live users get fast responses.
- * Keys are hashed for safe filenames; namespaces: intro, objectives, steps, lesson, validation.
+ * Keys are hashed for safe filenames; namespaces: intro, objectives, steps, lesson, validation, mentor.
  */
 
 import fs from "fs";
@@ -59,6 +59,24 @@ export function cacheSet(namespace, key, value) {
   } catch (err) {
     console.error("[cache] write failed:", err?.message);
   }
+}
+
+/**
+ * Delete one cache entry. Used when invalidating by track (e.g. clear react-ts after prompt changes).
+ * @param {string} namespace - One of: intro, objectives, steps, lesson, validation
+ * @param {string} key - Cache key (e.g. genKey "track:lessonTitle:lessonIndex")
+ */
+export function cacheDelete(namespace, key) {
+  try {
+    const fp = filePath(namespace, key);
+    if (fs.existsSync(fp)) {
+      fs.unlinkSync(fp);
+      return true;
+    }
+  } catch (err) {
+    console.error("[cache] delete failed:", err?.message);
+  }
+  return false;
 }
 
 export function getCacheDir() {

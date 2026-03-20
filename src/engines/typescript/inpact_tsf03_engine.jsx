@@ -4,7 +4,7 @@ const NODES = [
   {
     id: "intro",
     type: "reveal",
-    phase: "Problem",
+    phase: "Lesson",
     content: {
       tag: "TS FUNDAMENTALS #3",
       title: "Interfaces — Contracts for Objects",
@@ -208,7 +208,7 @@ export type { ButtonProps, Status, AdminUser, ID }`,
 ];
 
 const sideItems = [
-  { label: "Problem", id: "intro" },
+  { label: "Lesson", id: "intro" },
   { label: "Objectives", id: "objectives" },
   { label: "Step 1 — Basic interface", id: "step1" },
   { label: "Step 2 — extends", id: "step2" },

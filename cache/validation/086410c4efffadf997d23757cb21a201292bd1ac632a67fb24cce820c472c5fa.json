@@ -1,0 +1,1 @@
+{"result":"correct","feedback":"You correctly used useState to declare a state variable named 'rating' initialized to 0 inside the StarRating component. The syntax follows React conventions and meets this step's requirement.","hint":"Next, you'll use this rating state to display stars and handle user interactions.","errors":[]}
