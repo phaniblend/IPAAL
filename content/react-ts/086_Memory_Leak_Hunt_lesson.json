@@ -139,8 +139,8 @@
         "id": "step5",
         "type": "question",
         "phase": "Step 5 of 7",
-        "title": "Add a useEffect to demonstrate a cleanup function",
-        "instruction": "Inside your App component, add a useEffect hook that logs 'Timer started' to the console when the component mounts, and returns a cleanup function that logs 'Timer cleaned up'.",
+        "title": "Define stopTimer and add a useEffect cleanup demo",
+        "instruction": "Inside your App component, define a function named stopTimer that clears the running interval using clearInterval with the current timerId (and resets timerId if you clear it). After that, add a useEffect hook that logs 'Timer started' to the console when the component mounts, and returns a cleanup function that logs 'Timer cleaned up'.",
         "hint": "Place the useEffect inside the component body, after your state declarations and handler functions. Use an empty dependency array [] to run only on mount.",
         "analogousExample": "// Example of useEffect with cleanup\nuseEffect(() => {\n  console.log('Effect ran');\n  return () => {\n    console.log('Cleanup ran');\n  };\n}, []);",
         "seedCode": "import React, { useState, useEffect } from 'react';\n\nconst App = () => {\n  // Initialize count state here\n  \n  // Initialize timerId state here\n  \n  // Define startTimer function here\n  \n  // Define stopTimer function here\n  \n  // Add useEffect with cleanup here\n  \n  return null;\n};",
@@ -254,7 +254,7 @@
         "id": "step4"
       },
       {
-        "label": "Add a useEffect to demonstrate a cleanup function",
+        "label": "Define stopTimer and add a useEffect cleanup demo",
         "id": "step5"
       },
       {

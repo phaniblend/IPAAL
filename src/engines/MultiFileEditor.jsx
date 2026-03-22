@@ -24,18 +24,39 @@ function stringifyAnswer(files, activeFile) {
   return JSON.stringify({ activeFile, files });
 }
 
+/** Monaco language id from filename (default matches parent `language` prop). */
+function languageForFileName(fileName, fallback) {
+  const n = String(fileName || "").toLowerCase();
+  if (n.endsWith(".css")) return "css";
+  if (n.endsWith(".tsx")) return "typescript";
+  if (n.endsWith(".ts")) return "typescript";
+  if (n.endsWith(".jsx")) return "javascript";
+  if (n.endsWith(".js")) return "javascript";
+  if (n.endsWith(".json")) return "json";
+  if (n.endsWith(".html")) return "html";
+  return fallback || "typescript";
+}
+
 export default function MultiFileEditor({
   value = "",
   onChange,
   height = "480px",
   defaultFileName = "App.tsx",
   language = "typescript",
+  /** Per-file seed strings: when the active file still matches (trim), first focus clears the editor (same idea as Angular placeholder). */
+  placeholderByFile,
 }) {
   const parsed = useMemo(() => parseAnswer(value), [value]);
   const files = parsed?.files ?? { [defaultFileName]: "" };
   const fileNames = Object.keys(files);
   const activeFile = parsed?.activeFile ?? fileNames[0];
   const activeCode = files[activeFile] ?? "";
+  const editorLanguage = languageForFileName(activeFile, language);
+  const activePlaceholderRaw =
+    placeholderByFile && typeof placeholderByFile === "object" && activeFile in placeholderByFile
+      ? String(placeholderByFile[activeFile] ?? "")
+      : "";
+  const placeholderClearOnFocus = activePlaceholderRaw.trim() ? activePlaceholderRaw : undefined;
   const [newFileName, setNewFileName] = useState("");
 
   function updateFileCode(code) {
@@ -115,7 +136,15 @@ export default function MultiFileEditor({
         </div>
       </div>
       <div style={{ minWidth: 0 }}>
-        <CodeEditor value={activeCode} onChange={updateFileCode} height={height} language={language} />
+        <CodeEditor
+          key={activeFile}
+          value={activeCode}
+          onChange={updateFileCode}
+          height={height}
+          language={editorLanguage}
+          placeholderClearOnFocus={placeholderClearOnFocus}
+          focusOnMount={!placeholderClearOnFocus}
+        />
       </div>
     </div>
   );

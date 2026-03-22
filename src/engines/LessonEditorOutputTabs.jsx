@@ -138,16 +138,21 @@ const lessonStyles = {
 };
 
 /** Same task block shown above the editor everywhere (tabs and non-tabs). Parses "Your task:" / "Your turn:" for callout. */
-export function EditorTaskBlock({ node }) {
+export function EditorTaskBlock({ node, taskInstructionPulseNonce = 0 }) {
   const paal = node?.paal || "";
   const markerMatch = paal.match(/your\s+(?:task|turn)\s*:/i);
   const markerIdx = markerMatch ? markerMatch.index : -1;
   const mainText = markerIdx >= 0 ? paal.slice(0, markerIdx).trim() : paal;
   const taskText = markerIdx >= 0 ? paal.slice(markerIdx).trim() : "";
   if (!paal) return null;
+  const pulseClass = taskInstructionPulseNonce > 0 ? " inpact-editor-task-box--pulse" : "";
   return (
     <div style={lessonStyles.editorTaskWrap}>
-      <div style={lessonStyles.editorTaskBox}>
+      <div
+        key={taskInstructionPulseNonce}
+        style={lessonStyles.editorTaskBox}
+        className={`inpact-editor-task-box${pulseClass}`}
+      >
         <div style={lessonStyles.editorTaskLabel}>TASK</div>
         {mainText ? <div style={lessonStyles.editorTaskText}>{mainText}</div> : null}
         {taskText ? (
@@ -176,6 +181,8 @@ export default function LessonEditorOutputTabs({
   tabsInSidebar = false,
   lessonIntro = null,
   lessonObjectives = null,
+  /** Increment when learner advances from feedback modal "Next step" — subtle pulse on TASK box */
+  taskInstructionPulseNonce = 0,
   children,
 }) {
   const code = typeof previewCode === "string" && previewCode.trim() ? previewCode : (typeof answer === "string" ? answer : "");
@@ -255,7 +262,7 @@ export default function LessonEditorOutputTabs({
       )}
       {mainTab === "editor" && (
         <div style={{ display: "flex", flexDirection: "column", flex: 1, minHeight: 0, width: "100%", maxWidth: "100%", overflow: "hidden" }}>
-          {showTaskInEditor && <EditorTaskBlock node={node} />}
+          {showTaskInEditor && <EditorTaskBlock node={node} taskInstructionPulseNonce={taskInstructionPulseNonce} />}
           <div style={{ flex: 1, minHeight: 0, display: "flex", flexDirection: "column", minWidth: 0, maxWidth: "100%", overflow: "hidden" }}>
             {children}
           </div>

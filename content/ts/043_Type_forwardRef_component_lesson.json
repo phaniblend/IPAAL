@@ -87,7 +87,7 @@
         "title": "Create the forwardRef component structure",
         "instruction": "Create a forwardRef component named CustomInput that accepts CustomInputProps and a ref parameter. Use the forwardRef function from React.",
         "hint": "Call forwardRef and pass it a function with two parameters: props and ref. The function should return null for now.",
-        "analogousExample": "// Example: forwardRef component structure\nconst MyComponent = forwardRef<HTMLDivElement, MyProps>((props, ref) => {\n  return null;\n});",
+        "analogousExample": "// Same names as this step\nconst CustomInput = forwardRef<HTMLInputElement, CustomInputProps>((props, ref) => {\n  return null;\n});",
         "seedCode": "import React, { forwardRef } from 'react';\n\ninterface CustomInputProps {\n  label: string;\n}\n\n// Create the forwardRef component here",
         "expectedOutcome": "A forwardRef component named CustomInput is created with proper typing for props and ref.",
         "successCriteria": [
@@ -116,7 +116,7 @@
         "title": "Type the component's ref parameter",
         "instruction": "Inside the forwardRef callback, add a type annotation for the ref parameter. Type it as React.Ref<HTMLInputElement>.",
         "hint": "The ref parameter should be typed to match the DOM element you'll eventually return. For an input element, use HTMLInputElement.",
-        "analogousExample": "// Typing a ref parameter in forwardRef\nconst MyComponent = forwardRef<HTMLInputElement, MyProps>((props, ref) => {\n  return <input ref={ref} />;\n});",
+        "analogousExample": "// Same component and ref type as this step\nconst CustomInput = forwardRef<HTMLInputElement, CustomInputProps>((props, ref: React.Ref<HTMLInputElement>) => {\n  return <input ref={ref} />;\n});",
         "seedCode": "import React, { forwardRef } from 'react';\n\ninterface CustomInputProps {\n  label: string;\n}\n\n// Create the forwardRef component here\nconst CustomInput = forwardRef((props: CustomInputProps, ref) => {\n  return null;\n});",
         "expectedOutcome": "The ref parameter will have proper TypeScript typing, enabling type-safe ref forwarding.",
         "successCriteria": [

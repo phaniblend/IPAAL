@@ -19,6 +19,7 @@ const wrapStyle = {
   color: "#0f172a",
   fontFamily: "'DM Sans', sans-serif",
   padding: "48px",
+  paddingTop: "52px",
   boxSizing: "border-box",
 };
 
@@ -142,8 +143,32 @@ export default function DynamicLessonPage({
       intro: config.intro ?? intro ?? null,
       objectives: config.objectives ?? objectives ?? [],
     };
-    if (!base.validateWithAI) return withIntroAndObjectives;
     const lessonKey = `${track ?? ""}:${params.lessonTitle ?? ""}:${params.lessonIndex ?? ""}`;
+    const onAskMentor = async (node, userMessage) => {
+      const res = await fetch("/api/lessons/mentor", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          step: {
+            id: node.id,
+            instruction: node.paal,
+            paal: node.paal,
+          },
+          userMessage: String(userMessage).trim(),
+          track: track ?? undefined,
+          lessonKey,
+        }),
+      });
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        throw new Error(err?.error || res.statusText || "Mentor unavailable");
+      }
+      const data = await res.json();
+      return data.reply ?? "";
+    };
+    if (base.validateWithAI === false) {
+      return { ...withIntroAndObjectives, lessonKey, onAskMentor };
+    }
     return {
       ...withIntroAndObjectives,
       lessonKey,
@@ -154,28 +179,7 @@ export default function DynamicLessonPage({
           userCode,
           language: base.language || "javascript",
         }),
-      onAskMentor: async (node, userMessage) => {
-        const res = await fetch("/api/lessons/mentor", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            step: {
-              id: node.id,
-              instruction: node.paal,
-              paal: node.paal,
-            },
-            userMessage: String(userMessage).trim(),
-            track: track ?? undefined,
-            lessonKey,
-          }),
-        });
-        if (!res.ok) {
-          const err = await res.json().catch(() => ({}));
-          throw new Error(err?.error || res.statusText || "Mentor unavailable");
-        }
-        const data = await res.json();
-        return data.reply ?? "";
-      },
+      onAskMentor,
     };
   }, [config, track, intro, objectives, params.lessonTitle, params.lessonIndex]);
 

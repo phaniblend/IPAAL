@@ -139,7 +139,7 @@
         "instruction": "Inside your component's return statement, add a button element with the text 'Toggle Login' and wire its onClick event to the toggleLogin handler.",
         "hint": "Remember to define the toggleLogin function first if you haven't already, then add the button with onClick={toggleLogin}.",
         "analogousExample": "// Adding a button with an event handler\nfunction Example() {\n  const handleClick = () => console.log('Clicked!');\n  return <button onClick={handleClick}>Click me</button>;\n}",
-        "seedCode": "import React, { useState } from 'react';\n\n// Create the App component here\nconst App = () => {\n  // Initialize isLoggedIn state here\n  const [isLoggedIn, setIsLoggedIn] = useState(false);\n  \n  // Define toggleLogin function here\n  const toggleLogin = () => {\n    setIsLoggedIn(!isLoggedIn);\n  };\n  \n  return (\n    <>\n      {/* Add button here */}\n    </>\n  );\n};",
+        "seedCode": "import React, { useState } from 'react';\n\n// Create the App component here\nconst App = () => {\n  // Initialize isLoggedIn state here\n  const [isLoggedIn, setIsLoggedIn] = useState(false);\n  \n  // Define toggleLogin function here\n  const toggleLogin = () => {\n    setIsLoggedIn(!isLoggedIn);\n  };\n  \n  return (\n    <>\n      {/* Add button here */}\n    </>\n  );\n};\n// Define missing handler or variable here",
         "expectedOutcome": "The component will now have a button that, when clicked, toggles the isLoggedIn state between true and false.",
         "successCriteria": [
           "A button element is present in the return statement",

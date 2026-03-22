@@ -25,7 +25,7 @@
       {
         "id": "step1",
         "type": "question",
-        "phase": "Step 1 of 10",
+        "phase": "Step 1 of 9",
         "title": "Import React and TypeScript utilities",
         "instruction": "Import React and the FC (FunctionComponent) type from 'react'.",
         "hint": "Use the import statement to bring React and FC into your file. FC is a TypeScript utility type for defining functional components.",
@@ -53,11 +53,11 @@
       {
         "id": "step2",
         "type": "question",
-        "phase": "Step 2 of 10",
+        "phase": "Step 2 of 9",
         "title": "Define the component props interface",
         "instruction": "Define a TypeScript interface named GreetingProps with two properties: a required string property 'name' and an optional string property 'greeting'.",
         "hint": "Use the 'interface' keyword followed by the interface name and property definitions inside curly braces.",
-        "analogousExample": "// Example interface definition\ninterface UserProps {\n  username: string;\n  age?: number;\n}",
+        "analogousExample": "// Same names and shape as this step\ninterface GreetingProps {\n  name: string;\n  greeting?: string;\n}",
         "seedCode": "// Import React and FC here\n\n// Define the GreetingProps interface here",
         "expectedOutcome": "An interface named GreetingProps with the specified properties will be created.",
         "successCriteria": [
@@ -83,13 +83,13 @@
       {
         "id": "step3",
         "type": "question",
-        "phase": "Step 3 of 10",
-        "title": "Create the functional component with typed props",
-        "instruction": "Create a functional component named Greeting that uses React.FC<GreetingProps> and returns a simple <h1> element with the text 'Hello, World!'.",
-        "hint": "Use the GreetingProps interface you defined earlier as the generic type for React.FC. The component should return JSX.",
-        "analogousExample": "// Example: creating a typed functional component\nconst MyComponent: React.FC<MyProps> = () => {\n  return <div>Content</div>;\n};",
+        "phase": "Step 3 of 9",
+        "title": "Create Greeting with React.FC<GreetingProps>",
+        "instruction": "Create a functional component named Greeting annotated as React.FC<GreetingProps>. Return a simple <h1> with the text 'Hello, World!'. You may use a parameterless arrow function (() => { ... }) here; using the props in JSX comes in a later step.",
+        "hint": "Use the GreetingProps interface you defined earlier as the generic on React.FC (e.g. React.FC<GreetingProps>). Return the required <h1> JSX; an empty parameter list () => is fine here.",
+        "analogousExample": "// Same component and return as this step\nconst Greeting: React.FC<GreetingProps> = () => {\n  return <h1>Hello, World!</h1>;\n};",
         "seedCode": "// Import React and FC here\n\n// Define the GreetingProps interface here\n\n// Create the Greeting component here",
-        "expectedOutcome": "You will have a Greeting component that accepts typed props and renders a heading.",
+        "expectedOutcome": "You will have a Greeting component typed with React.FC<GreetingProps> that renders an <h1> with 'Hello, World!'.",
         "successCriteria": [
           "The Greeting component is defined using React.FC<GreetingProps> and returns an <h1> element with the text 'Hello, World!'."
         ],
@@ -112,7 +112,7 @@
       {
         "id": "step4",
         "type": "question",
-        "phase": "Step 4 of 10",
+        "phase": "Step 4 of 9",
         "title": "Add component implementation without default props",
         "instruction": "Inside the Greeting component, implement the JSX to display the name and message props directly without any default values.",
         "hint": "Return JSX that uses the props passed to the component. For example, you could display them in a heading and paragraph.",
@@ -145,7 +145,7 @@
       {
         "id": "step5",
         "type": "question",
-        "phase": "Step 5 of 10",
+        "phase": "Step 5 of 9",
         "title": "Use the component with all required props",
         "instruction": "Add the Greeting component to your app's return statement, passing both required props: name and message.",
         "hint": "Use the Greeting component like a regular JSX element, providing both props as attributes.",
@@ -172,10 +172,10 @@
       {
         "id": "step6",
         "type": "question",
-        "phase": "Step 6 of 10",
+        "phase": "Step 6 of 9",
         "title": "Attempt to use component with missing optional props",
-        "instruction": "Add a second Greeting component inside the App component's return statement, but this time omit the message prop entirely.",
-        "hint": "Add another <Greeting /> component below the existing one, but only pass the name prop without the message prop.",
+        "instruction": "Add a second Greeting component inside the App component's return statement, but this time omit the message prop entirely. After you fix defaults in later steps, this same second line will demonstrate the default message—no need to add another Greeting again.",
+        "hint": "Add another <Greeting /> below the first, with only the name prop (e.g. <Greeting name=\"Bob\" />). The Output tab often mounts the first top-level const (Greeting) in isolation, so comparing two instances is mainly visible in your App JSX here.",
         "analogousExample": "// Example: using a component with missing props\n<Button text=\"Click me\" />\n<Button /> // Missing required prop",
         "seedCode": "import React from 'react';\n\ninterface GreetingProps {\n  name: string;\n  message: string;\n}\n\nconst Greeting: React.FC<GreetingProps> = ({ name, message }) => {\n  return (\n    <div>\n      <h1>Hello, {name}!</h1>\n      <p>{message}</p>\n    </div>\n  );\n};\n\nconst App = () => {\n  return (\n    <div>\n      <Greeting name=\"Alice\" message=\"Welcome to the app!\" />\n      {/* Add another Greeting component here without the message prop */}\n    </div>\n  );\n};\n\nexport default App;",
         "expectedOutcome": "You'll see a TypeScript error because the message prop is required but not provided.",
@@ -200,12 +200,12 @@
       {
         "id": "step7",
         "type": "question",
-        "phase": "Step 7 of 10",
+        "phase": "Step 7 of 9",
         "title": "Define default props using destructuring with defaults",
         "instruction": "Modify the Greeting component to use destructuring with default values for the message prop. Set the default message to 'Welcome!'",
         "hint": "In the function parameters, add a default value after the destructured prop: ({ name, message = 'Welcome!' })",
         "analogousExample": "// Similar: destructuring with default values\nfunction Button({ text = 'Click me' }) {\n  return <button>{text}</button>;\n}",
-        "seedCode": "import React from 'react';\n\ninterface GreetingProps {\n  name: string;\n  message: string;\n}\n\nconst Greeting: React.FC<GreetingProps> = ({ name, message = 'Welcome!' }) => {\n  return (\n    <div>\n      <h1>Hello, {name}!</h1>\n      <p>{message}</p>\n    </div>\n  );\n};\n\nconst App = () => {\n  return (\n    <div>\n      <Greeting name=\"Alice\" message=\"Welcome to the app!\" />\n      {/* Add another Greeting component here without the message prop */}\n    </div>\n  );\n};\n\nexport default App;",
+        "seedCode": "import React from 'react';\n\ninterface GreetingProps {\n  name: string;\n  message: string;\n}\n\nconst Greeting: React.FC<GreetingProps> = ({ name, message = 'Welcome!' }) => {\n  return (\n    <div>\n      <h1>Hello, {name}!</h1>\n      <p>{message}</p>\n    </div>\n  );\n};\n\nconst App = () => {\n  return (\n    <div>\n      <Greeting name=\"Alice\" message=\"Welcome to the app!\" />\n      <Greeting name=\"Bob\" />\n    </div>\n  );\n};\n\nexport default App;",
         "expectedOutcome": "The Greeting component now has a default value for the message prop, so it can be used without explicitly providing a message.",
         "successCriteria": [
           "The Greeting component's destructuring includes a default value for the message prop set to 'Welcome!'"
@@ -227,12 +227,12 @@
       {
         "id": "step8",
         "type": "question",
-        "phase": "Step 8 of 10",
+        "phase": "Step 8 of 9",
         "title": "Create a defaultProps object",
         "instruction": "Add a defaultProps static property to the Greeting component, setting message to 'Welcome!'.",
         "hint": "In TypeScript with React.FC, you can assign defaultProps directly to the component after its definition.",
         "analogousExample": "// Example: adding defaultProps to a component\nconst Button: React.FC<ButtonProps> = ({ text }) => <button>{text}</button>;\nButton.defaultProps = { text: 'Click me' };",
-        "seedCode": "import React from 'react';\n\ninterface GreetingProps {\n  name: string;\n  message: string;\n}\n\nconst Greeting: React.FC<GreetingProps> = ({ name, message = 'Welcome!' }) => {\n  return (\n    <div>\n      <h1>Hello, {name}!</h1>\n      <p>{message}</p>\n    </div>\n  );\n};\n\n// Add defaultProps to Greeting here\n\nconst App = () => {\n  return (\n    <div>\n      <Greeting name=\"Alice\" message=\"Welcome to the app!\" />\n      {/* Add another Greeting component here without the message prop */}\n    </div>\n  );\n};\n\nexport default App;",
+        "seedCode": "import React from 'react';\n\ninterface GreetingProps {\n  name: string;\n  message: string;\n}\n\nconst Greeting: React.FC<GreetingProps> = ({ name, message = 'Welcome!' }) => {\n  return (\n    <div>\n      <h1>Hello, {name}!</h1>\n      <p>{message}</p>\n    </div>\n  );\n};\n\n// Add defaultProps to Greeting here\n\nconst App = () => {\n  return (\n    <div>\n      <Greeting name=\"Alice\" message=\"Welcome to the app!\" />\n      <Greeting name=\"Bob\" />\n    </div>\n  );\n};\n\nexport default App;",
         "expectedOutcome": "The Greeting component will have a defaultProps property that provides a default value for the message prop.",
         "successCriteria": [
           "Greeting.defaultProps is defined with message set to 'Welcome!'."
@@ -254,39 +254,12 @@
       {
         "id": "step9",
         "type": "question",
-        "phase": "Step 9 of 10",
-        "title": "Use the component with default props in action",
-        "instruction": "Add a second Greeting component in the App component that only provides the required 'name' prop, omitting the optional 'message' prop to see the default value in action.",
-        "hint": "Add a new <Greeting /> JSX element with only the 'name' prop, like <Greeting name=\"Bob\" />. The 'message' prop will use its default value.",
-        "analogousExample": "// Using a component with default props\n<Button label=\"Submit\" /> // size prop omitted, uses default",
-        "seedCode": "import React from 'react';\n\ninterface GreetingProps {\n  name: string;\n  message: string;\n}\n\nconst Greeting: React.FC<GreetingProps> = ({ name, message = 'Welcome!' }) => {\n  return (\n    <div>\n      <h1>Hello, {name}!</h1>\n      <p>{message}</p>\n    </div>\n  );\n};\n\n// Add defaultProps to Greeting here\n\nconst App = () => {\n  return (\n    <div>\n      <Greeting name=\"Alice\" message=\"Welcome to the app!\" />\n      {/* Add another Greeting component here without the message prop */}\n    </div>\n  );\n};\n\nexport default App;",
-        "expectedOutcome": "The App component will render two Greeting components: one with a custom message and one using the default message.",
-        "successCriteria": [
-          "A second Greeting component is added with only the 'name' prop, demonstrating that the default 'message' prop value is used when omitted."
-        ],
-        "feedbackCorrect": "Nice! Proceed to the next step.",
-        "feedbackPartial": "You added a second Greeting component, but make sure you omitted the 'message' prop to see the default value in action.",
-        "feedbackWrong": "The second Greeting component should only have the 'name' prop (e.g., <Greeting name=\"Bob\" />). Check that you didn't include the 'message' prop.",
-        "evaluation": {
-          "mode": "keyword_match",
-          "required": [
-            "Greeting",
-            "name",
-            "message"
-          ],
-          "partialThreshold": 0.5,
-          "correctThreshold": 0.8
-        }
-      },
-      {
-        "id": "step10",
-        "type": "question",
-        "phase": "Step 10 of 10",
+        "phase": "Step 9 of 9",
         "title": "Compare both default props approaches",
         "instruction": "Add a comment below the Greeting component that explains the difference between destructuring defaults and defaultProps, and when you might choose each approach.",
         "hint": "Write a comment that starts with // and describes the two approaches. Mention that destructuring defaults work at runtime and defaultProps is a static property.",
         "analogousExample": "// Destructuring defaults are applied when the component function runs.\n// defaultProps is a static property that TypeScript can read for type checking.",
-        "seedCode": "import React from 'react';\n\ninterface GreetingProps {\n  name: string;\n  message: string;\n}\n\nconst Greeting: React.FC<GreetingProps> = ({ name, message = 'Welcome!' }) => {\n  return (\n    <div>\n      <h1>Hello, {name}!</h1>\n      <p>{message}</p>\n    </div>\n  );\n};\n\n// Add defaultProps to Greeting here\n\n// Add your comparison comment here\n\nconst App = () => {\n  return (\n    <div>\n      <Greeting name=\"Alice\" message=\"Welcome to the app!\" />\n      {/* Add another Greeting component here without the message prop */}\n    </div>\n  );\n};\n\nexport default App;",
+        "seedCode": "import React from 'react';\n\ninterface GreetingProps {\n  name: string;\n  message: string;\n}\n\nconst Greeting: React.FC<GreetingProps> = ({ name, message = 'Welcome!' }) => {\n  return (\n    <div>\n      <h1>Hello, {name}!</h1>\n      <p>{message}</p>\n    </div>\n  );\n};\n\n// Add defaultProps to Greeting here\n\n// Add your comparison comment here\n\nconst App = () => {\n  return (\n    <div>\n      <Greeting name=\"Alice\" message=\"Welcome to the app!\" />\n      <Greeting name=\"Bob\" />\n    </div>\n  );\n};\n\nexport default App;",
         "expectedOutcome": "You will have a comment that explains the two ways to set default props in React with TypeScript.",
         "successCriteria": [
           "A comment is added that mentions both destructuring defaults and defaultProps, and includes a brief note about when to use each."
@@ -327,7 +300,7 @@
         "id": "step2"
       },
       {
-        "label": "Create the functional component with typed props",
+        "label": "Create Greeting with React.FC<GreetingProps>",
         "id": "step3"
       },
       {
@@ -351,12 +324,8 @@
         "id": "step8"
       },
       {
-        "label": "Use the component with default props in action",
-        "id": "step9"
-      },
-      {
         "label": "Compare both default props approaches",
-        "id": "step10"
+        "id": "step9"
       }
     ]
   },

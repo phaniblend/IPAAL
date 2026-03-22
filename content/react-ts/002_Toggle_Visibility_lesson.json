@@ -194,7 +194,7 @@
         "instruction": "Add an onClick handler to the button that calls the toggleVisibility function when clicked.",
         "hint": "Use the onClick attribute on the button element and set it to the toggleVisibility function reference.",
         "analogousExample": "// Adding an event handler to a button\n<button onClick={handleClick}>Click me</button>",
-        "seedCode": "import React, { useState } from 'react';\n\n// Create the ToggleVisibility component here\nconst ToggleVisibility = () => {\n  // Initialize isVisible state here\n  const [isVisible, setIsVisible] = useState(false);\n\n  // Define toggleVisibility function here\n  const toggleVisibility = () => {\n    setIsVisible(!isVisible);\n  };\n\n  return (\n    <div>\n      {/* Add button here */}\n      <button>Toggle</button>\n    </div>\n  );\n};",
+        "seedCode": "import React, { useState } from 'react';\n\n// Create the ToggleVisibility component here\nconst ToggleVisibility = () => {\n  // Initialize isVisible state here\n  const [isVisible, setIsVisible] = useState(false);\n\n  // Define toggleVisibility function here\n  const toggleVisibility = () => {\n    setIsVisible(!isVisible);\n  };\n\n  return (\n    <div>\n      {/* Add button here */}\n      <button>Toggle</button>\n    </div>\n  );\n};\n// Define missing handler or variable here",
         "expectedOutcome": "The button will have an onClick handler that triggers the toggleVisibility function when clicked.",
         "successCriteria": [
           "The button element includes an onClick attribute set to the toggleVisibility function."

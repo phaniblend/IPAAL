@@ -14,6 +14,9 @@ dist
 dist-ssr
 *.local
 
+# Lesson pedagogy pipeline backups (scripts/lesson-pedagogy-deepseek.mjs --apply)
+*.pedagogy.bak
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

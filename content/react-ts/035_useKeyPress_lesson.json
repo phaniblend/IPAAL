@@ -256,7 +256,7 @@
         "instruction": "Inside your App component, call the useKeyPress custom hook and destructure its returned value into a variable named 'keysPressed'.",
         "hint": "Call the hook at the top of your component, before any other logic. Use destructuring assignment to get the returned array.",
         "analogousExample": "// Similar: calling a custom hook\nconst { data, loading } = useFetchData();",
-        "seedCode": "import React, { useState } from 'react';\n\n// Create the App component here\nconst App = () => {\n  // Call useKeyPress hook here\n  \n  // Initialize keysPressed state here\n  const [keysPressed, setKeysPressed] = useState<string[]>([]);\n\n  // Define handleKeyDown function here\n\n  // Define handleKeyUp function here\n\n  // Add useEffect here to attach event listeners\n\n  return null;\n};\n\n// Create the useKeyPress custom hook here",
+        "seedCode": "// Define missing handler or variable here\nfunction useKeyPress() { /* hook logic */ return []; }\n\nimport React, { useState } from 'react';\n\n// Create the App component here\nconst App = () => {\n  // Call useKeyPress hook here\n  \n  // Initialize keysPressed state here\n  const [keysPressed, setKeysPressed] = useState<string[]>([]);\n\n  // Define handleKeyDown function here\n\n  // Define handleKeyUp function here\n\n  // Add useEffect here to attach event listeners\n\n  return null;\n};\n\n// Create the useKeyPress custom hook here",
         "expectedOutcome": "The App component will now use the custom hook to track key presses instead of the local useState.",
         "successCriteria": [
           "useKeyPress is called in the App component and its return value is destructured into a 'keysPressed' variable."

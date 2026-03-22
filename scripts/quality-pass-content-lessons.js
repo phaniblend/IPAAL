@@ -6,7 +6,8 @@
  * 3. Dependency check: useState/useEffect in seed → ensure import from 'react' appears in that step or an earlier step; prepend import on react-js/react-ts when safe.
  * 4. Phase lines: renumberSteps sets "Step k of n" to match array length (fixes drift).
  * 5. Materialize leading `// Import React…` placeholder comments into real imports from step 2 onward (step 1 stays learner-written).
- * 6. Trim and renumber after any changes.
+ * 6. Instruction prerequisites: flag steps whose instructions reference symbols before imports/seeds or prior-step instructions introduce them (React imports, export destructure, “define function named X”, useState pair in instruction text).
+ * 7. Trim and renumber after any changes.
  *
  * Run: node scripts/quality-pass-content-lessons.js
  * Optional: FROM_TRACK=js FROM_INDEX=0 LIMIT=100 DRY_RUN=1 (no writes)
@@ -34,8 +35,10 @@ const report = {
   consistencyFixes: 0,
   stepsSplit: 0,
   dependencyIssues: [],
+  prerequisiteIssues: [],
   importsPrepended: 0,
   reactImportsMaterialized: 0,
+  prerequisiteAutofixed: 0,
   issues: [],
 };
 
@@ -52,6 +55,45 @@ function defaultImportFor(hooks) {
 }
 
 const REACT_HOOK_NAMES = ["useState", "useEffect", "useRef", "useContext", "useReducer", "useMemo", "useCallback"];
+const RESERVED_WORDS = new Set([
+  "add",
+  "after",
+  "and",
+  "button",
+  "calls",
+  "className",
+  "click",
+  "component",
+  "const",
+  "create",
+  "current",
+  "decrement",
+  "define",
+  "display",
+  "element",
+  "event",
+  "function",
+  "handler",
+  "import",
+  "inside",
+  "jsx",
+  "next",
+  "onClick",
+  "one",
+  "reset",
+  "return",
+  "state",
+  "step",
+  "text",
+  "the",
+  "then",
+  "TypeScript",
+  "two",
+  "use",
+  "using",
+  "value",
+  "with",
+]);
 
 function hooksUsedInSeed(seed) {
   const text = seedText(seed);
@@ -75,6 +117,172 @@ function seedText(seed) {
       .join("\n");
   }
   return "";
+}
+
+function escapeRegex(value) {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+function splitImportSpecifierList(inner) {
+  const parts = [];
+  let depth = 0;
+  let cur = "";
+  for (let i = 0; i < inner.length; i++) {
+    const ch = inner[i];
+    if (ch === "{" || ch === "(") depth++;
+    if (ch === "}" || ch === ")") depth--;
+    if (ch === "," && depth === 0) {
+      if (cur.trim()) parts.push(cur.trim());
+      cur = "";
+    } else cur += ch;
+  }
+  if (cur.trim()) parts.push(cur.trim());
+  return parts;
+}
+
+function collectImportBoundNames(text) {
+  const out = new Set();
+  if (!text) return out;
+  const re = /^\s*import\s+([\s\S]*?)\s+from\s+/gm;
+  let m;
+  while ((m = re.exec(text))) {
+    let clause = m[1].trim();
+    if (clause.startsWith("type ") && !clause.includes("{")) continue;
+    const starAs = clause.match(/\*\s+as\s+([A-Za-z_]\w*)/);
+    if (starAs) out.add(starAs[1]);
+    const named = /\{\s*([\s\S]*?)\s*\}/.exec(clause);
+    if (named) {
+      splitImportSpecifierList(named[1]).forEach((spec) => {
+        let s = spec.trim();
+        if (!s) return;
+        if (s.startsWith("type ")) s = s.slice(5).trim();
+        const bind = s.includes(" as ") ? s.split(" as ").pop().trim() : s;
+        if (/^[A-Za-z_]\w*$/.test(bind)) out.add(bind);
+      });
+    }
+    const withoutNamed = clause.replace(/\{\s*[\s\S]*?\s*\}/, "").trim();
+    if (withoutNamed && !withoutNamed.includes("*")) {
+      withoutNamed.split(",").forEach((piece) => {
+        const first = piece.trim();
+        if (first && /^[A-Za-z_]\w*$/.test(first)) out.add(first);
+      });
+    }
+  }
+  return out;
+}
+
+/** Top-level `const { a, b } =` and `export const { a } =` (shallow keys only). */
+function collectShallowDestructuringNames(text) {
+  const out = new Set();
+  if (!text) return out;
+  const re = /\b(?:export\s+)?(?:const|let|var)\s*\{\s*([^}]{1,800})\s*\}\s*=/g;
+  let m;
+  while ((m = re.exec(text))) {
+    const inner = m[1];
+    if (/{/.test(inner)) continue;
+    inner.split(",").forEach((part) => {
+      const p = part.trim();
+      if (!p) return;
+      const key = p.includes(":") ? p.split(":")[0].trim() : p.split(/\s+as\s+/i)[0].trim();
+      if (/^[A-Za-z_]\w*$/.test(key)) out.add(key);
+    });
+  }
+  return out;
+}
+
+function collectDeclaredSymbolsFromSeed(seed) {
+  const text = seedText(seed);
+  if (!text) return new Set();
+  const out = new Set();
+  const patterns = [
+    /\bfunction\s+([A-Za-z_]\w*)\s*\(/g,
+    /\b(?:const|let|var)\s+([A-Za-z_]\w*)\s*=/g,
+    /\bclass\s+([A-Za-z_]\w*)\b/g,
+    /\binterface\s+([A-Za-z_]\w*)\b/g,
+    /\btype\s+([A-Za-z_]\w*)\b/g,
+    /\b(?:const|let|var)\s*\[\s*([A-Za-z_]\w*)\s*,\s*([A-Za-z_]\w*)\s*\]\s*=\s*useState\b/g,
+  ];
+  for (const re of patterns) {
+    let match;
+    while ((match = re.exec(text))) {
+      if (match[1]) out.add(match[1]);
+      if (match[2]) out.add(match[2]);
+    }
+  }
+  collectImportBoundNames(text).forEach((s) => out.add(s));
+  collectShallowDestructuringNames(text).forEach((s) => out.add(s));
+  return out;
+}
+
+/** Symbols a step's instruction says the learner will create this step (available to following steps). */
+function collectSymbolsAnnouncedInInstruction(instruction) {
+  const out = new Set();
+  if (!instruction || typeof instruction !== "string") return out;
+  const patterns = [
+    /\b(?:define|create)\s+(?:a\s+)?function\s+named\s+([A-Za-z_]\w*)\b/gi,
+    /\bto\s+get\s+([A-Za-z_]\w+)\s+and\s+([A-Za-z_]\w+)\s+variables\b/gi,
+    /\bdestructure\s+the\s+returned\s+array\s+to\s+get\s+([A-Za-z_]\w+)\s+and\s+([A-Za-z_]\w+)\s+variables\b/gi,
+    /\bdestructure\s+[^.\n]{0,160}?\s+into\s+([A-Za-z_]\w+)\s+and\s+([A-Za-z_]\w+)\b/gi,
+    /\bdeclare\s+const\s+\[\s*([A-Za-z_]\w*)\s*,\s*([A-Za-z_]\w*)\s*\]\s*=\s*useState/gi,
+    /\bconst\s+\[\s*([A-Za-z_]\w*)\s*,\s*([A-Za-z_]\w*)\s*\]\s*=\s*useState/gi,
+  ];
+  for (const re of patterns) {
+    let match;
+    while ((match = re.exec(instruction))) {
+      for (let i = 1; i < match.length; i++) {
+        if (match[i] && /^[A-Za-z_]\w+$/.test(match[i])) out.add(match[i]);
+      }
+    }
+  }
+  return out;
+}
+
+function collectInstructionSymbols(instruction) {
+  if (!instruction || typeof instruction !== "string") return new Set();
+  const out = new Set();
+  let match;
+  const explicitRes = [
+    /\bnamed\s+([A-Za-z_]\w*)\b/gi,
+    /\bcall(?:s)?\s+([A-Za-z_]\w*)\b/gi,
+    /\busing\s+([A-Za-z_]\w*)\b/gi,
+    /\bwire(?:\s+\w+){0,6}\s+to\s+([A-Za-z_]\w*)\b/gi,
+    /\bonClick(?:\s+\w+){0,8}\s+call(?:s)?\s+([A-Za-z_]\w*)\b/gi,
+    /\bonClick\s+\w+\s+to\s+([A-Za-z_]\w*)\b/gi,
+  ];
+  explicitRes.forEach((re) => {
+    while ((match = re.exec(instruction))) out.add(match[1]);
+  });
+
+  return new Set(
+    [...out].filter(
+      (s) =>
+        !RESERVED_WORDS.has(s) &&
+        /^[A-Za-z_]\w+$/.test(s) &&
+        (/^(use|set|handle)[A-Z]/.test(s) || /[A-Z]/.test(s) || s.includes("_"))
+    )
+  );
+}
+
+function instructionIntroducesSymbol(instruction, symbol) {
+  if (!instruction || !symbol) return false;
+  const s = escapeRegex(symbol);
+  const reList = [
+    new RegExp(`\\b(create|define|declare|initialize|implement|write|add|import)\\b[^.\\n]{0,80}\\b${s}\\b`, "i"),
+    new RegExp(`\\b${s}\\b[^.\\n]{0,80}\\b(create|define|declare|initialize|implement|write)\\b`, "i"),
+    new RegExp(`\\bnamed\\s+${s}\\b`, "i"),
+  ];
+  return reList.some((re) => re.test(instruction));
+}
+
+function maybeAutofixMissingHandlerInstruction(instruction, symbol) {
+  if (!/^handle[A-Z]\w+/.test(symbol)) return { changed: false, instruction };
+  if (!/\b(call|onClick|wire)\b/i.test(instruction)) return { changed: false, instruction };
+  if (instructionIntroducesSymbol(instruction, symbol)) return { changed: false, instruction };
+  const lower = instruction.charAt(0).toLowerCase() + instruction.slice(1);
+  return {
+    changed: true,
+    instruction: `First define a function named ${symbol}. Then ${lower}`,
+  };
 }
 
 function collectFiles() {
@@ -317,6 +525,37 @@ function checkAndFixDependencies(config, steps, filePath) {
   }
 }
 
+function checkInstructionPrerequisites(steps, filePath) {
+  const known = new Set();
+  for (let i = 0; i < steps.length; i++) {
+    const step = steps[i];
+    const availableNow = new Set(known);
+    collectDeclaredSymbolsFromSeed(step.seedCode).forEach((s) => availableNow.add(s));
+    const referenced = collectInstructionSymbols(step.instruction);
+    for (const symbol of referenced) {
+      if (instructionIntroducesSymbol(step.instruction || "", symbol)) continue;
+      if (availableNow.has(symbol)) continue;
+
+      const fix = maybeAutofixMissingHandlerInstruction(step.instruction || "", symbol);
+      if (fix.changed) {
+        steps[i] = { ...steps[i], instruction: fix.instruction };
+        report.prerequisiteAutofixed++;
+        continue;
+      }
+
+      report.prerequisiteIssues.push({
+        file: path.relative(rootDir, filePath),
+        step: i + 1,
+        stepId: step.id,
+        symbol,
+        instruction: (step.instruction || "").slice(0, 220),
+      });
+    }
+    collectDeclaredSymbolsFromSeed(steps[i].seedCode).forEach((s) => known.add(s));
+    collectSymbolsAnnouncedInInstruction(steps[i].instruction || "").forEach((s) => known.add(s));
+  }
+}
+
 function qualityPassOne(filePath) {
   let raw;
   try {
@@ -342,6 +581,7 @@ function qualityPassOne(filePath) {
   steps = renumberSteps(steps);
   materializeReactPlaceholderImportsAfterStepOne(steps);
   checkAndFixDependencies(config, steps, filePath);
+  checkInstructionPrerequisites(steps, filePath);
 
   config.steps = steps;
   config.sideItems = buildSideItems(steps);
@@ -367,7 +607,7 @@ function main() {
   if (FROM_INDEX > 0 || LIMIT != null)
     files = allFiles.slice(FROM_INDEX, LIMIT != null ? FROM_INDEX + LIMIT : undefined);
 
-  console.log("Quality pass: consistency, split compound steps, dependency check, React seed materialization");
+  console.log("Quality pass: consistency, split compound steps, dependency check, React seed materialization, instruction prerequisites");
   if (DRY_RUN) console.log("DRY_RUN=1 — no files will be written\n");
   console.log(`Files: ${files.length}\n`);
 
@@ -382,8 +622,14 @@ function main() {
   console.log(`\nDone in ${elapsed}s. Processed: ${report.processed}, Modified: ${report.modified}`);
   console.log(`Consistency fixes: ${report.consistencyFixes}, Steps split: ${report.stepsSplit}, Imports prepended: ${report.importsPrepended}, React import materialized (step 2+): ${report.reactImportsMaterialized}`);
   console.log(`Dependency issues (remaining): ${report.dependencyIssues.length}`);
+  console.log(`Instruction prerequisite issues: ${report.prerequisiteIssues.length}, Auto-fixed: ${report.prerequisiteAutofixed}`);
   if (report.dependencyIssues.length > 0 && report.dependencyIssues.length <= 30) {
     report.dependencyIssues.forEach((d) => console.log(`  ${d.file} step ${d.step} missing ${d.hook} import`));
+  }
+  if (report.prerequisiteIssues.length > 0 && report.prerequisiteIssues.length <= 30) {
+    report.prerequisiteIssues.forEach((d) =>
+      console.log(`  ${d.file} step ${d.step} references ${d.symbol} before it is introduced`)
+    );
   }
   if (report.issues.length) {
     console.log(`Errors: ${report.issues.length}`);
@@ -393,9 +639,9 @@ function main() {
   fs.writeFileSync(reportPath, JSON.stringify({ ...report, elapsed: Number(elapsed) }, null, 2), "utf8");
   console.log(`Report: ${reportPath}`);
 
-  if (CI_CHECK && (report.modified > 0 || report.dependencyIssues.length > 0)) {
+  if (CI_CHECK && (report.modified > 0 || report.dependencyIssues.length > 0 || report.prerequisiteIssues.length > 0)) {
     console.error(
-      "\n--ci: content lessons need a quality pass (modified files or hook/import issues). Run: node scripts/quality-pass-content-lessons.js"
+      "\n--ci: content lessons need a quality pass (modified files, hook/import issues, or step prerequisite-order issues). Run: node scripts/quality-pass-content-lessons.js"
     );
     process.exit(1);
   }

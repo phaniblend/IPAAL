@@ -2,7 +2,7 @@
 /**
  * Rename "Problem" to "Lesson" in UI titles only (not in body copy).
  * - Sidebar first item: label: "Problem" -> label: "Lesson"
- * - Button: "NEXT PROBLEM" -> "NEXT LESSON"
+ * - Button: "Next Lesson" -> "NEXT LESSON"
  * - Complete screen: "Problem #N Complete" -> "Lesson #N Complete"
  * - Tag in content: "PROBLEM #N" -> "LESSON #N" (and PROBLEM #N (Vue) etc.)
  * - phase: "Problem" stays or becomes "Lesson" for intro (sidebar shows this)
@@ -32,8 +32,8 @@ walk(srcDir, ".jsx", (file) => {
     changed = true;
   }
   // Button text
-  if (content.includes("NEXT PROBLEM")) {
-    content = content.replace(/NEXT PROBLEM/g, "NEXT LESSON");
+  if (content.includes("Next Lesson")) {
+    content = content.replace(/Next Lesson/g, "NEXT LESSON");
     changed = true;
   }
   // Complete screen title: "Problem #3 Complete" etc.

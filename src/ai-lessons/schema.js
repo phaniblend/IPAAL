@@ -53,7 +53,8 @@ export const lessonStepSchema = z.object({
   instruction: z.string(),
   hint: z.string().optional(),
   analogousExample: z.string().optional(),
-  seedCode: z.string(),
+  // Supports single-file seed (string) and multi-file seed maps ({ "App.tsx": "...", ... }).
+  seedCode: z.union([z.string(), z.record(z.string(), z.string())]),
   expectedOutcome: z.string().optional(),
   successCriteria: z.preprocess(normalizeStringArray, z.array(z.string()).optional()),
   feedbackCorrect: z.string().optional(),
@@ -208,6 +209,8 @@ export const lessonConfigSchema = z.object({
   objectives: z.array(z.string()),
   steps: z.array(lessonStepUnionSchema),
   sideItems: z.array(sideItemSchema).optional(),
+  /** When `"multi-file"`, step seedCode may be a map of filenames → source (e.g. App.tsx + App.module.css). */
+  answerShape: z.string().optional(),
   algorithmFamily: z.string().optional(),
   familyTeachingProfile: familyTeachingProfileSchema,
 });

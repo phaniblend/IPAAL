@@ -3,6 +3,50 @@
  * No executable evaluate() — use declarative evaluation only; shared engine uses answer_keywords.
  */
 
+/** Filenames used as editor tabs in multi-file seedCode (object keys). */
+function seedTabNamesFromStep(seedCode) {
+  if (typeof seedCode !== "object" || seedCode === null || Array.isArray(seedCode)) return [];
+  return Object.keys(seedCode).filter((k) => /\.(tsx?|jsx?|vue|[cm]?js)$/i.test(k));
+}
+
+function learnerTextReferencesAnyTab(text, tabNames) {
+  if (typeof text !== "string" || !text.trim()) return false;
+  const lower = text.toLowerCase();
+  return tabNames.some((n) => lower.includes(n.toLowerCase()));
+}
+
+/** Prefer App.vue / App.tsx / App.jsx / App.ts / App.js, else first tab name. */
+function primaryMultiFileTab(tabNames) {
+  if (!tabNames.length) return null;
+  const rank = (n) => {
+    if (/^app\.vue$/i.test(n)) return 0;
+    if (/^app\.tsx$/i.test(n)) return 1;
+    if (/^app\.jsx$/i.test(n)) return 2;
+    if (/^app\.ts$/i.test(n)) return 3;
+    if (/^app\.js$/i.test(n)) return 4;
+    if (/^app\./i.test(n)) return 5;
+    return 50;
+  };
+  const sorted = [...tabNames].sort((a, b) => rank(a) - rank(b));
+  return sorted.find((n) => /^app\./i.test(n)) ?? sorted[0];
+}
+
+/**
+ * If the learner text does not already name a tab file, prefix with `In **PrimaryTab**,`.
+ * Keeps cached JSON lessons clear in the multi-file editor (import steps, etc.).
+ */
+export function prefixMultiFileLearnerText(text, seedCode) {
+  const tabs = seedTabNamesFromStep(seedCode);
+  if (!tabs.length) return text;
+  if (typeof text !== "string" || !text.trim()) return text;
+  if (learnerTextReferencesAnyTab(text, tabs)) return text;
+  const primary = primaryMultiFileTab(tabs);
+  if (!primary) return text;
+  const trimmed = text.trimStart();
+  if (/^in\s+\*\*/i.test(trimmed)) return text;
+  return `In **${primary}**, ${trimmed}`;
+}
+
 /**
  * Derive answerShape and defaultHtml from track so CSS lessons get HTML+CSS tabs and Angular (+ Mobile Angular) get TS+HTML+CSS tabs.
  */
@@ -17,10 +61,12 @@ function getAnswerShapeForTrack(track) {
 function inferMultiFileLesson(lesson) {
   const title = String(lesson?.title || "").toLowerCase();
   if (/(redux toolkit|rtk query|createSlice|createAsyncThunk)/i.test(title)) return true;
+  if (/\bcss modules\b/.test(title)) return true;
   const text = (lesson?.steps || [])
     .map((s) => `${s.title || ""}\n${s.instruction || ""}\n${s.expectedOutcome || ""}\n${s.seedCode || ""}`)
     .join("\n")
     .toLowerCase();
+  if (/\bmodule\.css\b/.test(text)) return true;
   return /(\bstore\b.*\bselector\b.*\bcomponent\b)|(\bselector\b.*\bstore\b.*\bcomponent\b)|\bstore\.ts\b|\bselectors?\.ts\b/.test(text);
 }
 
@@ -123,13 +169,17 @@ export function aiLessonToEngineConfig(lesson, options = {}) {
     }
     const required = step.evaluation?.required ?? step.answer_keywords ?? [];
     const keywords = Array.isArray(required) ? required.map((k) => (typeof k === "string" ? k : String(k))) : [];
+    const instruction =
+      answerShape === "multi-file" ? prefixMultiFileLearnerText(step.instruction, step.seedCode) : step.instruction;
+    const hint =
+      answerShape === "multi-file" ? prefixMultiFileLearnerText(step.hint, step.seedCode) : step.hint;
     return {
       id: step.id,
       type: "question",
       phase: step.phase,
       title: step.title,
-      paal: step.instruction,
-      hint: step.hint,
+      paal: instruction,
+      hint,
       seed_code: step.seedCode,
       example_code: step.analogousExample,
       expected: step.expectedOutcome,

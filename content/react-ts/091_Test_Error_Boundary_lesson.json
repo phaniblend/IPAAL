@@ -112,7 +112,7 @@
         "type": "question",
         "phase": "Step 4 of 9",
         "title": "Add error state to ErrorBoundary",
-        "instruction": "Inside the ErrorBoundary component, import useState from 'react' and add an error state variable with an initial value of null.",
+        "instruction": "Inside the ErrorBoundary component, import useState from 'react' and declare const [error, setError] = useState<Error | null>(null).",
         "hint": "You'll need to import useState from 'react' and declare a state variable like const [error, setError] = useState<Error | null>(null).",
         "analogousExample": "// Example: adding state to a component\nimport { useState } from 'react';\n\nfunction Counter() {\n  const [count, setCount] = useState<number>(0);\n  return null;\n}",
         "seedCode": "import React from 'react';\nimport { createErrorBoundary } from '@sentry/react';\n\n// Define ErrorComponent here\n\n// Create the ErrorBoundary component here\nfunction ErrorBoundary({ children }: { children: React.ReactNode }) {\n  // Add useState import and error state here\n  return children;\n}",

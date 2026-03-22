@@ -1,6 +1,6 @@
 # INPACT App — Code Flow
 
-High-level flow from landing to lesson complete and next problem, in the format: **user action → file/component that is rendered**.
+High-level flow from landing to lesson complete and Next Lesson, in the format: **user action → file/component that is rendered**.
 
 ---
 
@@ -86,7 +86,7 @@ So at this step: **`inpact_engine_shared.jsx`** (renderEditorContent) + **`Lesso
 
 ---
 
-## 9. User clicks “NEXT LESSON →” (or “Next problem”)
+## 9. User clicks “NEXT LESSON →” (or “Next Lesson”)
 
 **→ `App.jsx`** switches to the next lesson.
 

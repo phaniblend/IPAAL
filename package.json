@@ -17,6 +17,8 @@
     "quality-pass-content-lessons": "node scripts/quality-pass-content-lessons.js",
     "check:lesson-quality": "node scripts/quality-pass-content-lessons.js --ci --dry-run",
     "audit-lesson-quality": "node scripts/audit-lesson-quality.js",
+    "audit:react-lessons-structure": "node scripts/audit-react-lessons-structure.mjs",
+    "lesson-pedagogy:deepseek": "node scripts/lesson-pedagogy-deepseek.mjs",
     "audit:multifile-integrity": "node scripts/audit-multifile-integrity.js",
     "check:multifile-integrity": "node scripts/audit-multifile-integrity.js --strict",
     "set-multifile-answer-shape": "node scripts/set-multifile-answer-shape.js",

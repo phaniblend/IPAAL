@@ -136,6 +136,27 @@ button:focus-visible {
   .inpact-task-callout { animation: none !important; }
 }
 
+/* INPACT — very subtle ring on the Editor TASK box after closing feedback with "Next step" */
+@keyframes inpact-editor-task-ring {
+  0%, 100% {
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04), 0 0 0 0 rgba(8, 145, 178, 0);
+  }
+  50% {
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04), 0 0 0 2px rgba(8, 145, 178, 0.16);
+  }
+}
+
+.inpact-editor-task-box--pulse {
+  animation: inpact-editor-task-ring 1s ease-in-out 2;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .inpact-editor-task-box--pulse {
+    animation: none;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04), 0 0 0 2px rgba(8, 145, 178, 0.2);
+  }
+}
+
 /* CodeMirror — hide diagnostic squiggles in lesson editors (validation is via Check) */
 .cm-editor .cm-lintRange,
 .cm-editor .cm-lintRange-error,

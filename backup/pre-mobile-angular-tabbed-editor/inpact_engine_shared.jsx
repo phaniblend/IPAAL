@@ -401,8 +401,8 @@ export default function createINPACTEngine(config) {
         <div style={s.completeBanner}>
           <div style={{ fontSize: "48px", marginBottom: "24px" }}>🎯</div>
           <h1 style={{ ...s.h1, textAlign: "center" }}>Problem #{problemNum} Complete</h1>
-          <p style={{ color: "#4a5568", fontSize: "13px" }}>{title} done. Ready for the next problem.</p>
-          {onNextProblem && <div style={s.btnRow}><button type="button" className="inpact-btn-primary" style={s.btn("primary")} onClick={onNextProblem}>NEXT PROBLEM →</button></div>}
+          <p style={{ color: "#4a5568", fontSize: "13px" }}>{title} done. Ready for the Next Lesson.</p>
+          {onNextProblem && <div style={s.btnRow}><button type="button" className="inpact-btn-primary" style={s.btn("primary")} onClick={onNextProblem}>Next Lesson →</button></div>}
         </div>
       );
     }

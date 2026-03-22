@@ -74,6 +74,8 @@ function setupAutoCloseTags(editor, monaco) {
  *   language           — monaco language id, default "javascript"
  *   cursorAtStartOfLine — 1-based line number; place cursor at start of that line
  *   cursorAtEndOfLine   — 1-based line number; place cursor at end of that line
+ *   placeholderClearOnFocus — if set, first editor focus while value matches (trim) clears to ""
+ *   focusOnMount — call editor.focus() after positioning (default true; set false when using placeholderClearOnFocus so seed text is not wiped on load)
  */
 export default function CodeEditor({
   value = "",
@@ -82,10 +84,17 @@ export default function CodeEditor({
   language = "javascript",
   cursorAtStartOfLine,
   cursorAtEndOfLine,
+  placeholderClearOnFocus,
+  focusOnMount = true,
 }) {
   const editorRef = useRef(null);
   const monacoRef = useRef(null);
   const disposeRef = useRef(null);
+  const placeholderRef = useRef(placeholderClearOnFocus);
+  const onChangeRef = useRef(onChange);
+
+  placeholderRef.current = placeholderClearOnFocus;
+  onChangeRef.current = onChange;
 
   const applyPosition = useCallback(
     (editor) => {
@@ -108,9 +117,9 @@ export default function CodeEditor({
 
       editor.setPosition({ lineNumber: line, column });
       editor.revealLineInCenter(line);
-      editor.focus();
+      if (focusOnMount) editor.focus();
     },
-    [cursorAtStartOfLine, cursorAtEndOfLine]
+    [cursorAtStartOfLine, cursorAtEndOfLine, focusOnMount]
   );
 
   useEffect(() => {
@@ -122,16 +131,29 @@ export default function CodeEditor({
       editorRef.current = editor;
       monacoRef.current = monaco;
 
-      // Wire up JSX auto-closing tags
       disposeRef.current?.dispose();
-      disposeRef.current = setupAutoCloseTags(editor, monaco);
+      const autoClose = setupAutoCloseTags(editor, monaco);
+      const clearPlaceholder = editor.onDidFocusEditorWidget(() => {
+        const ph = placeholderRef.current;
+        if (ph == null || ph === "") return;
+        const model = editor.getModel();
+        if (!model) return;
+        const cur = model.getValue();
+        if (cur.trim() !== String(ph).trim()) return;
+        onChangeRef.current?.("");
+      });
+      disposeRef.current = {
+        dispose() {
+          autoClose.dispose();
+          clearPlaceholder.dispose();
+        },
+      };
 
       requestAnimationFrame(() => applyPosition(editor));
     },
     [applyPosition]
   );
 
-  // Cleanup listener on unmount
   useEffect(() => () => disposeRef.current?.dispose(), []);
 
   return (

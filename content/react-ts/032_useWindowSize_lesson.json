@@ -173,7 +173,7 @@
         "instruction": "Wrap the existing handleResize function in a useCallback hook with an empty dependency array to memoize it.",
         "hint": "Use useCallback to wrap the function definition. The empty dependency array ensures the function reference stays the same across renders.",
         "analogousExample": "// Memoizing a function with useCallback\nconst memoizedFunction = useCallback(() => {\n  console.log('Function called');\n}, []);",
-        "seedCode": "import React, { useState, useEffect, useCallback } from 'react';\n\ninterface WindowSize {\n  width: number;\n  height: number;\n}\n\nfunction useWindowSize() {\n  const [windowSize, setWindowSize] = useState<WindowSize>({\n    width: window.innerWidth,\n    height: window.innerHeight\n  });\n\n  // Wrap handleResize in useCallback with empty dependency array\n}",
+        "seedCode": "// Define missing handler or variable here\nconst handleResize = () => { /* logic */ };\n\nimport React, { useState, useEffect, useCallback } from 'react';\n\ninterface WindowSize {\n  width: number;\n  height: number;\n}\n\nfunction useWindowSize() {\n  const [windowSize, setWindowSize] = useState<WindowSize>({\n    width: window.innerWidth,\n    height: window.innerHeight\n  });\n\n  // Wrap handleResize in useCallback with empty dependency array\n}",
         "expectedOutcome": "The handleResize function is memoized using useCallback to prevent unnecessary re-creations on every render.",
         "successCriteria": [
           "handleResize is wrapped in useCallback with an empty dependency array."

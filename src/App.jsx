@@ -1293,7 +1293,6 @@ export default function App() {
             </div>
           </div>
         </div>
-        <div style={{ paddingTop: '52px' }}>
         <DynamicLessonPage
           track={lessonTrack ?? track}
           lessonTitle={lessonTitle}
@@ -1302,7 +1301,6 @@ export default function App() {
           onNextProblem={onNextProblem}
           onFallbackToLocal={AI_LESSONS_CONFIG.fallbackToLocalOnError ? () => setUseAILessonFailed(true) : undefined}
         />
-        </div>
         {showRegisterModal && (
           <RegisterModal forceRegister onSuccess={registerSuccess} onClose={() => setShowRegisterModal(false)} />
         )}

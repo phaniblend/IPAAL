@@ -32,7 +32,7 @@ Current step blueprint:
 {{CURRENT_STEP_BLUEPRINT_JSON}}
 
 • Use the SAME function/variable names already in "Code written so far". Do not introduce different names.
-• analogousExample: provide a short, valid {{LANGUAGE}} snippet that illustrates the same pattern (e.g. another function with similar structure, or a similar loop/condition). This helps the learner if stuck. Must be syntactically complete. One short // comment allowed, then the code.
+• analogousExample: illustrate the **same algorithmic / language construct** as this step (same control flow, same API usage, same data-movement pattern). **Function and variable names may differ** from the instruction when the snippet is clearly analogous (like showing another small function that uses the same technique). Literal values may differ. Do not show a different technique that would mislead the learner about what this step requires. Short, valid {{LANGUAGE}} snippet. One short // comment allowed, then the code.
 
 Output: JSON only. Fields: id, phase, title, instruction, hint, analogousExample, seedCode, expectedOutcome, successCriteria, feedbackCorrect, feedbackPartial, feedbackWrong, evaluation (e.g. keyword_match with required terms for this one action).
 Return JSON only.

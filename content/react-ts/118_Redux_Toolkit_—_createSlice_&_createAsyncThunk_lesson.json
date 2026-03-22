@@ -25,30 +25,58 @@
       {
         "id": "step1",
         "type": "question",
-        "phase": "Step 1 of 11",
-        "title": "Import Redux Toolkit and React-Redux",
-        "instruction": "Import createSlice, createAsyncThunk, and configureStore from '@reduxjs/toolkit', and Provider, useSelector, and useDispatch from 'react-redux'.",
-        "hint": "Use named imports from both packages. The imports should be on separate lines or combined in a single import statement.",
-        "analogousExample": "// Example: importing multiple functions from libraries\nimport { useState, useEffect } from 'react';\nimport { createStore } from 'redux';",
+        "phase": "Step 1 of 12",
+        "title": "Import from '@reduxjs/toolkit'",
+        "instruction": "In **App.tsx**, import **createSlice**, **createAsyncThunk**, and **configureStore** from **'@reduxjs/toolkit'**.",
+        "hint": "Use one `import { … } from '@reduxjs/toolkit'` line.",
+        "analogousExample": "// Example: one package per import step\nimport { createSlice, createAsyncThunk, configureStore } from '@reduxjs/toolkit';",
         "seedCode": {
-          "App.tsx": "// Import Redux Toolkit and React-Redux here",
+          "App.tsx": "// Import createSlice, createAsyncThunk, and configureStore from '@reduxjs/toolkit' here",
           "store.ts": "// store setup",
           "slice.ts": "// slice"
         },
-        "expectedOutcome": "The necessary Redux Toolkit and React-Redux functions are imported and ready to use.",
+        "expectedOutcome": "Redux Toolkit core functions are imported from '@reduxjs/toolkit'.",
         "successCriteria": [
-          "createSlice, createAsyncThunk, configureStore are imported from '@reduxjs/toolkit', and Provider, useSelector, useDispatch are imported from 'react-redux'."
+          "createSlice, createAsyncThunk, and configureStore are imported from '@reduxjs/toolkit'."
         ],
         "feedbackCorrect": "Nice! Proceed to the next step.",
-        "feedbackPartial": "You imported some of the required functions, but check if all are present: createSlice, createAsyncThunk, configureStore from '@reduxjs/toolkit', and Provider, useSelector, useDispatch from 'react-redux'.",
-        "feedbackWrong": "The imports are missing or incorrect. Make sure to import createSlice, createAsyncThunk, configureStore from '@reduxjs/toolkit', and Provider, useSelector, useDispatch from 'react-redux'.",
+        "feedbackPartial": "Import createSlice, createAsyncThunk, and configureStore from '@reduxjs/toolkit'.",
+        "feedbackWrong": "Add a single import from '@reduxjs/toolkit' with createSlice, createAsyncThunk, and configureStore.",
         "evaluation": {
           "mode": "keyword_match",
           "required": [
             "createSlice",
             "createAsyncThunk",
             "configureStore",
-            "@reduxjs/toolkit",
+            "@reduxjs/toolkit"
+          ],
+          "partialThreshold": 0.5,
+          "correctThreshold": 0.8
+        }
+      },
+      {
+        "id": "step2",
+        "type": "question",
+        "phase": "Step 2 of 12",
+        "title": "Import from 'react-redux'",
+        "instruction": "Import **Provider**, **useSelector**, and **useDispatch** from **'react-redux'**.",
+        "hint": "Add an import line: `import { Provider, useSelector, useDispatch } from 'react-redux'`.",
+        "analogousExample": "// Example: React-Redux hooks and Provider\nimport { Provider, useSelector, useDispatch } from 'react-redux';",
+        "seedCode": {
+          "App.tsx": "import { createSlice, createAsyncThunk, configureStore } from '@reduxjs/toolkit';\n\n// Import Provider, useSelector, and useDispatch from 'react-redux' here",
+          "store.ts": "// store setup",
+          "slice.ts": "// slice"
+        },
+        "expectedOutcome": "React-Redux bindings are imported.",
+        "successCriteria": [
+          "Provider, useSelector, and useDispatch are imported from 'react-redux'."
+        ],
+        "feedbackCorrect": "Nice! Proceed to the next step.",
+        "feedbackPartial": "Add named imports Provider, useSelector, and useDispatch from 'react-redux'.",
+        "feedbackWrong": "Import Provider, useSelector, and useDispatch from 'react-redux' on a separate line.",
+        "evaluation": {
+          "mode": "keyword_match",
+          "required": [
             "Provider",
             "useSelector",
             "useDispatch",
@@ -59,15 +87,15 @@
         }
       },
       {
-        "id": "step2",
+        "id": "step3",
         "type": "question",
-        "phase": "Step 2 of 11",
+        "phase": "Step 3 of 12",
         "title": "Define the initial state interface",
         "instruction": "Create a TypeScript interface named 'CounterState' with three properties: 'loading' (boolean), 'data' (number), and 'error' (string | null).",
         "hint": "Use the 'interface' keyword followed by the interface name and define each property with its type annotation.",
         "analogousExample": "// Example interface with typed properties\ninterface UserState {\n  isLoading: boolean;\n  username: string;\n  error: string | null;\n}",
         "seedCode": {
-          "App.tsx": "// Import Redux Toolkit and React-Redux here\n\n// Define the CounterState interface here",
+          "App.tsx": "import { createSlice, createAsyncThunk, configureStore } from '@reduxjs/toolkit';\nimport { Provider, useSelector, useDispatch } from 'react-redux';\n\n// Define the CounterState interface here",
           "store.ts": "// store setup",
           "slice.ts": "// slice"
         },
@@ -96,15 +124,15 @@
         }
       },
       {
-        "id": "step3",
+        "id": "step4",
         "type": "question",
-        "phase": "Step 3 of 11",
+        "phase": "Step 4 of 12",
         "title": "Create the initial state object",
         "instruction": "Create a constant named 'initialState' that matches the CounterState interface, with loading set to false, data set to null, and error set to null.",
         "hint": "Use the 'const' keyword to declare a variable named 'initialState' and assign it an object with the three properties from the interface.",
         "analogousExample": "// Example: initial state object\nconst initialState = {\n  isLoading: false,\n  items: [],\n  errorMessage: null\n};",
         "seedCode": {
-          "App.tsx": "// Import Redux Toolkit and React-Redux here\n\n// Define the CounterState interface here\n\n// Create the initial state object here",
+          "App.tsx": "import { createSlice, createAsyncThunk, configureStore } from '@reduxjs/toolkit';\nimport { Provider, useSelector, useDispatch } from 'react-redux';\n\n// Define the CounterState interface here\n\n// Create the initial state object here",
           "store.ts": "// store setup",
           "slice.ts": "// slice"
         },
@@ -130,13 +158,13 @@
         }
       },
       {
-        "id": "step4",
+        "id": "step5",
         "type": "question",
-        "phase": "Step 4 of 11",
+        "phase": "Step 5 of 12",
         "title": "Create an async thunk for data fetching",
         "instruction": "Create an async thunk named 'fetchCount' using createAsyncThunk from Redux Toolkit. This thunk should simulate fetching data by returning a resolved promise with a value of 5 after a 1-second delay.",
-        "hint": "Use createAsyncThunk with a type prefix and an async payload creator that returns a promise.",
-        "analogousExample": "// Example async thunk\nconst fetchUser = createAsyncThunk('users/fetchUser', async (userId: number) => {\n  const response = await fetch(`/api/users/${userId}`);\n  return response.json();\n});",
+        "hint": "Inside the async callback, **return** a `Promise` that **resolves to** `5` after 1000 ms — e.g. `return new Promise<number>((resolve) => { setTimeout(() => resolve(5), 1000); });`. The fulfilled value is what the thunk passes through as the payload.",
+        "analogousExample": "// createAsyncThunk: whatever you return from the async callback becomes the thunk result.\n// Return a Promise; when it fulfills, that fulfilled value (5) is what you \"return\" to RTK.\nexport const fetchCount = createAsyncThunk('counter/fetchCount', async () => {\n  return new Promise<number>((resolve) => {\n    setTimeout(() => resolve(5), 1000); // ← resolve(5) = payload value\n  });\n});",
         "seedCode": {
           "App.tsx": "import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';\nimport { RootState } from './store';\n\ninterface CounterState {\n  value: number;\n  status: 'idle' | 'loading' | 'failed';\n}\n\nconst initialState: CounterState = {\n  value: 0,\n  status: 'idle',\n};\n\n// Create async thunk here\n",
           "store.ts": "// store setup",
@@ -164,9 +192,9 @@
         }
       },
       {
-        "id": "step5",
+        "id": "step6",
         "type": "question",
-        "phase": "Step 5 of 11",
+        "phase": "Step 6 of 12",
         "title": "Create a slice with createSlice",
         "instruction": "Use createSlice to define a slice named 'counterSlice' with name, initialState, reducers (empty), and extraReducers to handle the async thunk states.",
         "hint": "Call createSlice with an object containing name, initialState, reducers (an empty object), and extraReducers (a builder callback).",
@@ -198,9 +226,9 @@
         }
       },
       {
-        "id": "step6",
+        "id": "step7",
         "type": "question",
-        "phase": "Step 6 of 11",
+        "phase": "Step 7 of 12",
         "title": "Export slice actions and reducer",
         "instruction": "Export the slice's actions and reducer from the slice file so they can be imported elsewhere in your application.",
         "hint": "Use named exports for the actions and default export for the reducer from your slice object.",
@@ -229,15 +257,15 @@
         }
       },
       {
-        "id": "step7",
+        "id": "step8",
         "type": "question",
-        "phase": "Step 7 of 11",
+        "phase": "Step 8 of 12",
         "title": "Configure the Redux store",
         "instruction": "Create a Redux store using configureStore from @reduxjs/toolkit, adding your counter slice reducer to the store configuration.",
         "hint": "Import configureStore from @reduxjs/toolkit and use it to create a store object with your slice reducer.",
         "analogousExample": "// Example: creating a store with a reducer\nimport { configureStore } from '@reduxjs/toolkit';\nimport counterReducer from './counterSlice';\n\nexport const store = configureStore({\n  reducer: {\n    counter: counterReducer\n  }\n});",
         "seedCode": {
-          "App.tsx": "import { createSlice, createAsyncThunk, configureStore } from '@reduxjs/toolkit';\nimport { RootState } from './store';\n\ninterface CounterState {\n  value: number;\n  status: 'idle' | 'loading' | 'failed';\n}\n\nconst initialState: CounterState = {\n  value: 0,\n  status: 'idle',\n};\n\nexport const fetchCount = createAsyncThunk(\n  'counter/fetchCount',\n  async (amount: number) => {\n    const response = await fetch('/api/counter');\n    const data = await response.json();\n    return data.value;\n  }\n);\n\nconst counterSlice = createSlice({\n  name: 'counter',\n  initialState,\n  reducers: {\n    increment: (state) => {\n      state.value += 1;\n    },\n    decrement: (state) => {\n      state.value -= 1;\n    },\n    incrementByAmount: (state, action) => {\n      state.value += action.payload;\n    },\n  },\n  extraReducers: (builder) => {\n    builder\n      .addCase(fetchCount.pending, (state) => {\n        state.status = 'loading';\n      })\n      .addCase(fetchCount.fulfilled, (state, action) => {\n        state.status = 'idle';\n        state.value += action.payload;\n      })\n      .addCase(fetchCount.rejected, (state) => {\n        state.status = 'failed';\n      });\n  },\n});\n\nexport const { increment, decrement, incrementByAmount } = counterSlice.actions;\nexport default counterSlice.reducer;\n\n// Create the Redux store here",
+          "App.tsx": "import { createSlice, createAsyncThunk, configureStore } from '@reduxjs/toolkit';\nimport { RootState } from './store';\n\ninterface CounterState {\n  value: number;\n  status: 'idle' | 'loading' | 'failed';\n}\n\nconst initialState: CounterState = {\n  value: 0,\n  status: 'idle',\n};\n\nexport const fetchCount = createAsyncThunk(\n  'counter/fetchCount',\n  async (_amount: number) => {\n    return new Promise<number>((resolve) => {\n      setTimeout(() => resolve(5), 1000);\n    });\n  }\n);\n\nconst counterSlice = createSlice({\n  name: 'counter',\n  initialState,\n  reducers: {\n    increment: (state) => {\n      state.value += 1;\n    },\n    decrement: (state) => {\n      state.value -= 1;\n    },\n    incrementByAmount: (state, action) => {\n      state.value += action.payload;\n    },\n  },\n  extraReducers: (builder) => {\n    builder\n      .addCase(fetchCount.pending, (state) => {\n        state.status = 'loading';\n      })\n      .addCase(fetchCount.fulfilled, (state, action) => {\n        state.status = 'idle';\n        state.value += action.payload;\n      })\n      .addCase(fetchCount.rejected, (state) => {\n        state.status = 'failed';\n      });\n  },\n});\n\nexport const { increment, decrement, incrementByAmount } = counterSlice.actions;\nexport default counterSlice.reducer;\n\n// Create the Redux store here",
           "store.ts": "// store setup",
           "slice.ts": "// slice"
         },
@@ -260,15 +288,15 @@
         }
       },
       {
-        "id": "step8",
+        "id": "step9",
         "type": "question",
-        "phase": "Step 8 of 11",
+        "phase": "Step 9 of 12",
         "title": "Create a component to display data",
         "instruction": "Create a functional component named CounterDisplay that will display the counter value from Redux. The component should return a div element containing an h2 heading with text 'Counter Value:' and a paragraph showing the current value.",
         "hint": "Define a component using either function declaration or arrow function syntax. The component should return JSX with the heading and paragraph elements.",
         "analogousExample": "// Example: A simple display component\nfunction UserDisplay() {\n  return (\n    <div>\n      <h2>User Info</h2>\n      <p>Name: John</p>\n    </div>\n  );\n}",
         "seedCode": {
-          "App.tsx": "import { createSlice, createAsyncThunk, configureStore } from '@reduxjs/toolkit';\nimport { RootState } from './store';\n\ninterface CounterState {\n  value: number;\n  status: 'idle' | 'loading' | 'failed';\n}\n\nconst initialState: CounterState = {\n  value: 0,\n  status: 'idle',\n};\n\nexport const fetchCount = createAsyncThunk(\n  'counter/fetchCount',\n  async (amount: number) => {\n    const response = await fetch('/api/counter');\n    const data = await response.json();\n    return data.value;\n  }\n);\n\nconst counterSlice = createSlice({\n  name: 'counter',\n  initialState,\n  reducers: {\n    increment: (state) => {\n      state.value += 1;\n    },\n    decrement: (state) => {\n      state.value -= 1;\n    },\n    incrementByAmount: (state, action) => {\n      state.value += action.payload;\n    },\n  },\n  extraReducers: (builder) => {\n    builder\n      .addCase(fetchCount.pending, (state) => {\n        state.status = 'loading';\n      })\n      .addCase(fetchCount.fulfilled, (state, action) => {\n        state.status = 'idle';\n        state.value += action.payload;\n      })\n      .addCase(fetchCount.rejected, (state) => {\n        state.status = 'failed';\n      });\n  },\n});\n\nexport const { increment, decrement, incrementByAmount } = counterSlice.actions;\nexport default counterSlice.reducer;\n\n// Create the Redux store here\n\n// Create the CounterDisplay component here",
+          "App.tsx": "import { createSlice, createAsyncThunk, configureStore } from '@reduxjs/toolkit';\nimport { RootState } from './store';\n\ninterface CounterState {\n  value: number;\n  status: 'idle' | 'loading' | 'failed';\n}\n\nconst initialState: CounterState = {\n  value: 0,\n  status: 'idle',\n};\n\nexport const fetchCount = createAsyncThunk(\n  'counter/fetchCount',\n  async (_amount: number) => {\n    return new Promise<number>((resolve) => {\n      setTimeout(() => resolve(5), 1000);\n    });\n  }\n);\n\nconst counterSlice = createSlice({\n  name: 'counter',\n  initialState,\n  reducers: {\n    increment: (state) => {\n      state.value += 1;\n    },\n    decrement: (state) => {\n      state.value -= 1;\n    },\n    incrementByAmount: (state, action) => {\n      state.value += action.payload;\n    },\n  },\n  extraReducers: (builder) => {\n    builder\n      .addCase(fetchCount.pending, (state) => {\n        state.status = 'loading';\n      })\n      .addCase(fetchCount.fulfilled, (state, action) => {\n        state.status = 'idle';\n        state.value += action.payload;\n      })\n      .addCase(fetchCount.rejected, (state) => {\n        state.status = 'failed';\n      });\n  },\n});\n\nexport const { increment, decrement, incrementByAmount } = counterSlice.actions;\nexport default counterSlice.reducer;\n\n// Create the Redux store here\n\n// Create the CounterDisplay component here",
           "store.ts": "// store setup",
           "slice.ts": "// slice"
         },
@@ -294,15 +322,15 @@
         }
       },
       {
-        "id": "step9",
+        "id": "step10",
         "type": "question",
-        "phase": "Step 9 of 11",
+        "phase": "Step 10 of 12",
         "title": "Use useSelector to access state",
         "instruction": "In your CounterDisplay component, use the useSelector hook to extract the 'status' and 'value' properties from the Redux state.",
         "hint": "Import useSelector from 'react-redux' and use it to select the counter slice state. The state has a 'counter' property containing the slice.",
         "analogousExample": "// Example: using useSelector to access state\nimport { useSelector } from 'react-redux';\n\nconst MyComponent = () => {\n  const data = useSelector((state) => state.someSlice.data);\n  return <div>{data}</div>;\n};",
         "seedCode": {
-          "App.tsx": "import { createSlice, createAsyncThunk, configureStore } from '@reduxjs/toolkit';\nimport { RootState } from './store';\n\ninterface CounterState {\n  value: number;\n  status: 'idle' | 'loading' | 'failed';\n}\n\nconst initialState: CounterState = {\n  value: 0,\n  status: 'idle',\n};\n\nexport const fetchCount = createAsyncThunk(\n  'counter/fetchCount',\n  async (amount: number) => {\n    const response = await fetch('/api/counter');\n    const data = await response.json();\n    return data.value;\n  }\n);\n\nconst counterSlice = createSlice({\n  name: 'counter',\n  initialState,\n  reducers: {\n    increment: (state) => {\n      state.value += 1;\n    },\n    decrement: (state) => {\n      state.value -= 1;\n    },\n    incrementByAmount: (state, action) => {\n      state.value += action.payload;\n    },\n  },\n  extraReducers: (builder) => {\n    builder\n      .addCase(fetchCount.pending, (state) => {\n        state.status = 'loading';\n      })\n      .addCase(fetchCount.fulfilled, (state, action) => {\n        state.status = 'idle';\n        state.value += action.payload;\n      })\n      .addCase(fetchCount.rejected, (state) => {\n        state.status = 'failed';\n      });\n  },\n});\n\nexport const { increment, decrement, incrementByAmount } = counterSlice.actions;\nexport default counterSlice.reducer;\n\n// Create the Redux store here\n\n// Create the CounterDisplay component here\nconst CounterDisplay = () => {\n  // Use useSelector here to get status and value\n  return (\n    <div>\n      <h2>Counter Display</h2>\n    </div>\n  );\n};",
+          "App.tsx": "import { createSlice, createAsyncThunk, configureStore } from '@reduxjs/toolkit';\nimport { RootState } from './store';\n\ninterface CounterState {\n  value: number;\n  status: 'idle' | 'loading' | 'failed';\n}\n\nconst initialState: CounterState = {\n  value: 0,\n  status: 'idle',\n};\n\nexport const fetchCount = createAsyncThunk(\n  'counter/fetchCount',\n  async (_amount: number) => {\n    return new Promise<number>((resolve) => {\n      setTimeout(() => resolve(5), 1000);\n    });\n  }\n);\n\nconst counterSlice = createSlice({\n  name: 'counter',\n  initialState,\n  reducers: {\n    increment: (state) => {\n      state.value += 1;\n    },\n    decrement: (state) => {\n      state.value -= 1;\n    },\n    incrementByAmount: (state, action) => {\n      state.value += action.payload;\n    },\n  },\n  extraReducers: (builder) => {\n    builder\n      .addCase(fetchCount.pending, (state) => {\n        state.status = 'loading';\n      })\n      .addCase(fetchCount.fulfilled, (state, action) => {\n        state.status = 'idle';\n        state.value += action.payload;\n      })\n      .addCase(fetchCount.rejected, (state) => {\n        state.status = 'failed';\n      });\n  },\n});\n\nexport const { increment, decrement, incrementByAmount } = counterSlice.actions;\nexport default counterSlice.reducer;\n\n// Create the Redux store here\n\n// Create the CounterDisplay component here\nconst CounterDisplay = () => {\n  // Use useSelector here to get status and value\n  return (\n    <div>\n      <h2>Counter Display</h2>\n    </div>\n  );\n};",
           "store.ts": "// store setup",
           "slice.ts": "// slice"
         },
@@ -325,15 +353,15 @@
         }
       },
       {
-        "id": "step10",
+        "id": "step11",
         "type": "question",
-        "phase": "Step 10 of 11",
+        "phase": "Step 11 of 12",
         "title": "Use useDispatch to get dispatch function",
         "instruction": "Inside the CounterDisplay component, call the useDispatch hook to get the dispatch function and store it in a variable named dispatch.",
         "hint": "Import useDispatch from 'react-redux' if you haven't already, then call it inside the component body.",
         "analogousExample": "// Getting the dispatch function\nimport { useDispatch } from 'react-redux';\nconst MyComponent = () => {\n  const dispatch = useDispatch();\n  return null;\n};",
         "seedCode": {
-          "App.tsx": "import { createSlice, createAsyncThunk, configureStore } from '@reduxjs/toolkit';\nimport { RootState } from './store';\n\ninterface CounterState {\n  value: number;\n  status: 'idle' | 'loading' | 'failed';\n}\n\nconst initialState: CounterState = {\n  value: 0,\n  status: 'idle',\n};\n\nexport const fetchCount = createAsyncThunk(\n  'counter/fetchCount',\n  async (amount: number) => {\n    const response = await fetch('/api/counter');\n    const data = await response.json();\n    return data.value;\n  }\n);\n\nconst counterSlice = createSlice({\n  name: 'counter',\n  initialState,\n  reducers: {\n    increment: (state) => {\n      state.value += 1;\n    },\n    decrement: (state) => {\n      state.value -= 1;\n    },\n    incrementByAmount: (state, action) => {\n      state.value += action.payload;\n    },\n  },\n  extraReducers: (builder) => {\n    builder\n      .addCase(fetchCount.pending, (state) => {\n        state.status = 'loading';\n      })\n      .addCase(fetchCount.fulfilled, (state, action) => {\n        state.status = 'idle';\n        state.value += action.payload;\n      })\n      .addCase(fetchCount.rejected, (state) => {\n        state.status = 'failed';\n      });\n  },\n});\n\nexport const { increment, decrement, incrementByAmount } = counterSlice.actions;\nexport default counterSlice.reducer;\n\n// Create the Redux store here\n\n// Create the CounterDisplay component here\nconst CounterDisplay = () => {\n  // Use useSelector here to get status and value\n  return (\n    <div>\n      <h2>Counter Display</h2>\n    </div>\n  );\n};",
+          "App.tsx": "import { createSlice, createAsyncThunk, configureStore } from '@reduxjs/toolkit';\nimport { RootState } from './store';\n\ninterface CounterState {\n  value: number;\n  status: 'idle' | 'loading' | 'failed';\n}\n\nconst initialState: CounterState = {\n  value: 0,\n  status: 'idle',\n};\n\nexport const fetchCount = createAsyncThunk(\n  'counter/fetchCount',\n  async (_amount: number) => {\n    return new Promise<number>((resolve) => {\n      setTimeout(() => resolve(5), 1000);\n    });\n  }\n);\n\nconst counterSlice = createSlice({\n  name: 'counter',\n  initialState,\n  reducers: {\n    increment: (state) => {\n      state.value += 1;\n    },\n    decrement: (state) => {\n      state.value -= 1;\n    },\n    incrementByAmount: (state, action) => {\n      state.value += action.payload;\n    },\n  },\n  extraReducers: (builder) => {\n    builder\n      .addCase(fetchCount.pending, (state) => {\n        state.status = 'loading';\n      })\n      .addCase(fetchCount.fulfilled, (state, action) => {\n        state.status = 'idle';\n        state.value += action.payload;\n      })\n      .addCase(fetchCount.rejected, (state) => {\n        state.status = 'failed';\n      });\n  },\n});\n\nexport const { increment, decrement, incrementByAmount } = counterSlice.actions;\nexport default counterSlice.reducer;\n\n// Create the Redux store here\n\n// Create the CounterDisplay component here\nconst CounterDisplay = () => {\n  // Use useSelector here to get status and value\n  return (\n    <div>\n      <h2>Counter Display</h2>\n    </div>\n  );\n};",
           "store.ts": "// store setup",
           "slice.ts": "// slice"
         },
@@ -356,15 +384,15 @@
         }
       },
       {
-        "id": "step11",
+        "id": "step12",
         "type": "question",
-        "phase": "Step 11 of 11",
+        "phase": "Step 12 of 12",
         "title": "Add a button to trigger data fetch",
         "instruction": "Inside the CounterDisplay component, add a button element with the text 'Fetch Count' that dispatches the fetchCount async thunk when clicked.",
         "hint": "Use the dispatch function from useDispatch to call fetchCount with an argument (e.g., 1).",
         "analogousExample": "// Example: button that dispatches an action\n<button onClick={() => dispatch(someAction())}>Click me</button>",
         "seedCode": {
-          "App.tsx": "import { createSlice, createAsyncThunk, configureStore } from '@reduxjs/toolkit';\nimport { RootState } from './store';\n\ninterface CounterState {\n  value: number;\n  status: 'idle' | 'loading' | 'failed';\n}\n\nconst initialState: CounterState = {\n  value: 0,\n  status: 'idle',\n};\n\nexport const fetchCount = createAsyncThunk(\n  'counter/fetchCount',\n  async (amount: number) => {\n    const response = await fetch('/api/counter');\n    const data = await response.json();\n    return data.value;\n  }\n);\n\nconst counterSlice = createSlice({\n  name: 'counter',\n  initialState,\n  reducers: {\n    increment: (state) => {\n      state.value += 1;\n    },\n    decrement: (state) => {\n      state.value -= 1;\n    },\n    incrementByAmount: (state, action) => {\n      state.value += action.payload;\n    },\n  },\n  extraReducers: (builder) => {\n    builder\n      .addCase(fetchCount.pending, (state) => {\n        state.status = 'loading';\n      })\n      .addCase(fetchCount.fulfilled, (state, action) => {\n        state.status = 'idle';\n        state.value += action.payload;\n      })\n      .addCase(fetchCount.rejected, (state) => {\n        state.status = 'failed';\n      });\n  },\n});\n\nexport const { increment, decrement, incrementByAmount } = counterSlice.actions;\nexport default counterSlice.reducer;\n\n// Create the Redux store here\n\n// Create the CounterDisplay component here\nconst CounterDisplay = () => {\n  // Use useSelector here to get status and value\n  return (\n    <div>\n      <h2>Counter Display</h2>\n      {/* Add a button to trigger data fetch */}\n    </div>\n  );\n};",
+          "App.tsx": "import { createSlice, createAsyncThunk, configureStore } from '@reduxjs/toolkit';\nimport { RootState } from './store';\n\ninterface CounterState {\n  value: number;\n  status: 'idle' | 'loading' | 'failed';\n}\n\nconst initialState: CounterState = {\n  value: 0,\n  status: 'idle',\n};\n\nexport const fetchCount = createAsyncThunk(\n  'counter/fetchCount',\n  async (_amount: number) => {\n    return new Promise<number>((resolve) => {\n      setTimeout(() => resolve(5), 1000);\n    });\n  }\n);\n\nconst counterSlice = createSlice({\n  name: 'counter',\n  initialState,\n  reducers: {\n    increment: (state) => {\n      state.value += 1;\n    },\n    decrement: (state) => {\n      state.value -= 1;\n    },\n    incrementByAmount: (state, action) => {\n      state.value += action.payload;\n    },\n  },\n  extraReducers: (builder) => {\n    builder\n      .addCase(fetchCount.pending, (state) => {\n        state.status = 'loading';\n      })\n      .addCase(fetchCount.fulfilled, (state, action) => {\n        state.status = 'idle';\n        state.value += action.payload;\n      })\n      .addCase(fetchCount.rejected, (state) => {\n        state.status = 'failed';\n      });\n  },\n});\n\nexport const { increment, decrement, incrementByAmount } = counterSlice.actions;\nexport default counterSlice.reducer;\n\n// Create the Redux store here\n\n// Create the CounterDisplay component here\nconst CounterDisplay = () => {\n  // Use useSelector here to get status and value\n  return (\n    <div>\n      <h2>Counter Display</h2>\n      {/* Add a button to trigger data fetch */}\n    </div>\n  );\n};",
           "store.ts": "// store setup",
           "slice.ts": "// slice"
         },
@@ -398,48 +426,52 @@
         "id": "objectives"
       },
       {
-        "label": "Import Redux Toolkit and React-Redux",
+        "label": "Import from '@reduxjs/toolkit'",
         "id": "step1"
       },
       {
-        "label": "Define the initial state interface",
+        "label": "Import from 'react-redux'",
         "id": "step2"
       },
       {
-        "label": "Create the initial state object",
+        "label": "Define the initial state interface",
         "id": "step3"
       },
       {
-        "label": "Create an async thunk for data fetching",
+        "label": "Create the initial state object",
         "id": "step4"
       },
       {
-        "label": "Create a slice with createSlice",
+        "label": "Create an async thunk for data fetching",
         "id": "step5"
       },
       {
-        "label": "Export slice actions and reducer",
+        "label": "Create a slice with createSlice",
         "id": "step6"
       },
       {
-        "label": "Configure the Redux store",
+        "label": "Export slice actions and reducer",
         "id": "step7"
       },
       {
-        "label": "Create a component to display data",
+        "label": "Configure the Redux store",
         "id": "step8"
       },
       {
-        "label": "Use useSelector to access state",
+        "label": "Create a component to display data",
         "id": "step9"
       },
       {
-        "label": "Use useDispatch to get dispatch function",
+        "label": "Use useSelector to access state",
         "id": "step10"
       },
       {
-        "label": "Add a button to trigger data fetch",
+        "label": "Use useDispatch to get dispatch function",
         "id": "step11"
+      },
+      {
+        "label": "Add a button to trigger data fetch",
+        "id": "step12"
       }
     ],
     "answerShape": "multi-file"

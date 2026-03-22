@@ -9,35 +9,34 @@
     "intro": {
       "tag": "LESSON #6",
       "title": "List Rendering with map()",
-      "body": "In this lesson, you will build a simple React component that displays a list of items, such as a to-do list or a list of favorite foods. You will learn how to use the JavaScript `map()` method to transform an array of data into an array of React elements for rendering. The core concept is list rendering, which involves dynamically generating UI components based on data arrays using TypeScript for type safety. By the end, you'll understand how to efficiently render multiple items without manually writing each one, a fundamental skill in React development.",
-      "usecase": "List rendering with `map()` is a foundational pattern for building dynamic user interfaces in React. You'll use it to display data collections in real products, such as rendering rows in a dashboard table, generating menu items from a navigation config, or populating a list of search results. As a developer, you'll apply this pattern whenever you need to transform an array of data into a series of UI elements, ensuring your interface stays in sync with changing data."
+      "body": "In this lesson, you will learn how to render lists of data in React using the map() function. This is a fundamental skill for displaying dynamic content, such as todo items, product lists, or user comments. You'll practice transforming an array of data into a list of React elements, assigning unique key props for efficient updates, and handling edge cases like empty lists.",
+      "usecase": "List rendering is everywhere in modern web apps. You'll find it in social media feeds (posts, comments), e-commerce sites (product listings, search results), dashboards (notifications, activity logs), and any interface that displays collections of similar items. Mastering this pattern will enable you to create data-driven UIs that update automatically when the underlying data changes."
     },
     "objectives": [
-      "Implement the map() method to transform an array of data into React elements",
-      "Apply key props to list items for efficient DOM updates and reconciliation",
-      "Construct a reusable component that accepts an array prop and renders a list",
-      "Configure TypeScript interfaces to define the shape of list item data",
-      "Update component state to dynamically add or remove items from a rendered list",
-      "Bind event handlers to list items for interactive user interactions",
-      "Manipulate array data structures to filter or sort rendered lists"
+      "Render a list of items using the map() function",
+      "Assign unique key props to list items for React's reconciliation process",
+      "Handle empty lists gracefully with conditional rendering",
+      "Transform array data into JSX elements using map()",
+      "Understand the importance of key props for performance and correctness",
+      "Destructure object properties in map() callbacks for cleaner code"
     ],
     "steps": [
       {
         "id": "step1",
         "type": "question",
-        "phase": "Step 1 of 10",
+        "phase": "Step 1 of 11",
         "title": "Import React and useState",
-        "instruction": "Import React and useState from 'react'.",
-        "hint": "Use the import statement to bring in the necessary modules. For example: import React, { useState } from 'react';",
-        "analogousExample": "// Importing modules for a different project\nimport React, { useState } from 'react';",
-        "seedCode": "// Import React and useState from 'react' here\n\n",
-        "expectedOutcome": "You will have the React library and useState hook available for use in your component.",
+        "instruction": "Import React and the useState hook from the 'react' package.",
+        "hint": "Use the import statement to bring in both React and useState from 'react'.",
+        "analogousExample": "// Importing React and a hook\nimport React, { useState } from 'react';",
+        "seedCode": "// Import React and useState here",
+        "expectedOutcome": "The imports are added at the top of the file, making React and useState available for use.",
         "successCriteria": [
           "React and useState are imported from 'react'."
         ],
         "feedbackCorrect": "Nice! Proceed to the next step.",
-        "feedbackPartial": "You're on the right track, but make sure to import both React and useState from 'react'. Check your import statement syntax.",
-        "feedbackWrong": "That doesn't look correct. Remember to import both React and useState from the 'react' package using the import statement.",
+        "feedbackPartial": "You're on the right track, but make sure to import both React and useState from 'react'.",
+        "feedbackWrong": "Check the import statement. You need to import both React and useState from 'react'.",
         "evaluation": {
           "mode": "keyword_match",
           "required": [
@@ -53,25 +52,25 @@
       {
         "id": "step2",
         "type": "question",
-        "phase": "Step 2 of 10",
-        "title": "Create the main App component",
-        "instruction": "Create a functional component named App that returns JSX. You can use either a function declaration or arrow function syntax.",
-        "hint": "Define a component that returns a JSX element. For now, you can return a simple placeholder like a div or null.",
-        "analogousExample": "// Example of a functional component\nfunction App() {\n  return <div>Hello World</div>;\n}",
-        "seedCode": "import React, { useState } from 'react';\n\n// Create the App component here\n",
-        "expectedOutcome": "The App component is defined and returns JSX.",
+        "phase": "Step 2 of 11",
+        "title": "Create the TodoList component",
+        "instruction": "Create a functional component named TodoList that returns JSX. You can use either a function declaration or an arrow function.",
+        "hint": "Define a component that returns some JSX content, like a div with a heading.",
+        "analogousExample": "// Similar: a functional component returning JSX\nfunction Welcome() {\n  return <h1>Hello!</h1>;\n}",
+        "seedCode": "import React, { useState } from 'react';\n\n// Create the TodoList component here",
+        "expectedOutcome": "A TodoList component is defined and ready to be used.",
         "successCriteria": [
-          "A functional component named App is created and returns JSX."
+          "A functional component named TodoList is defined and returns JSX."
         ],
-        "feedbackCorrect": "Great! You've successfully created the App component.",
-        "feedbackPartial": "You're close. Make sure you've defined a component named App that returns JSX.",
-        "feedbackWrong": "The App component isn't defined correctly. Check that you've created a functional component named App that returns JSX.",
+        "feedbackCorrect": "Great! You've successfully created the TodoList component.",
+        "feedbackPartial": "You're on the right track, but make sure the component is named TodoList and returns JSX.",
+        "feedbackWrong": "The component isn't defined correctly. Check that it's named TodoList and returns JSX.",
         "evaluation": {
           "mode": "keyword_match",
           "required": [
-            "App",
+            "TodoList",
             "return",
-            "JSX"
+            "<"
           ],
           "partialThreshold": 0.5,
           "correctThreshold": 0.8
@@ -80,28 +79,29 @@
       {
         "id": "step3",
         "type": "question",
-        "phase": "Step 3 of 10",
-        "title": "Define an interface for list items",
-        "instruction": "Define a TypeScript interface named 'ListItem' with two properties: 'id' (type number) and 'text' (type string). Add this interface above your App component.",
-        "hint": "In TypeScript, you can define an interface using the 'interface' keyword followed by the interface name and property definitions inside curly braces.",
-        "analogousExample": "// Example: defining an interface for a user\ninterface User {\n  id: number;\n  name: string;\n}",
-        "seedCode": "import React, { useState } from 'react';\n\n// Define your ListItem interface here\n\n// Create the App component here",
-        "expectedOutcome": "You should have a properly typed ListItem interface that will be used to define the structure of items in your list.",
+        "phase": "Step 3 of 11",
+        "title": "Initialize todos state with TypeScript",
+        "instruction": "Inside your TodoList component, initialize a state variable named 'todos' using useState, typed as an array of objects with id (number) and text (string) properties. Set the initial value to an empty array.",
+        "hint": "Use the useState hook you imported earlier. Remember to provide the type annotation for the state variable.",
+        "analogousExample": "// Example: typed state initialization for an array\ntype Todo = {\n  id: number;\n  text: string;\n};\nconst [items, setItems] = useState<Todo[]>([]);",
+        "seedCode": "import React, { useState } from 'react';\n\nconst TodoList = () => {\n  // Initialize todos state here\n  \n  return null;\n};",
+        "expectedOutcome": "The TodoList component will have a typed state variable 'todos' initialized to an empty array, ready to store todo items.",
         "successCriteria": [
-          "A ListItem interface is defined with both id (number) and text (string) properties."
+          "The component contains a useState call with type annotation for an array of objects with id (number) and text (string) properties, storing the state in a variable named 'todos'."
         ],
         "feedbackCorrect": "Nice! Proceed to the next step.",
-        "feedbackPartial": "You're on the right track, but make sure your interface has both required properties with correct types.",
-        "feedbackWrong": "The interface definition is missing or incorrect. Remember to use the 'interface' keyword and include both id (number) and text (string) properties.",
+        "feedbackPartial": "You're close. Make sure you're using useState with the correct type annotation for an array of todo objects.",
+        "feedbackWrong": "The state initialization is missing or incorrect. Use useState with the proper type annotation for an array of todo objects.",
         "evaluation": {
           "mode": "keyword_match",
           "required": [
-            "interface",
-            "ListItem",
-            "id:",
+            "useState",
+            "Todo",
+            "id",
             "number",
-            "text:",
-            "string"
+            "text",
+            "string",
+            "[]"
           ],
           "partialThreshold": 0.5,
           "correctThreshold": 0.8
@@ -110,27 +110,28 @@
       {
         "id": "step4",
         "type": "question",
-        "phase": "Step 4 of 10",
-        "title": "Initialize state with an array of ListItem objects",
-        "instruction": "Inside your App component, use the useState hook to initialize a state variable named 'items' with an array containing at least three ListItem objects.",
-        "hint": "Call useState with an array of objects that match your ListItem interface. Each object should have 'id' and 'text' properties.",
-        "analogousExample": "// Example: initializing state with typed data\nconst [tasks, setTasks] = useState<Task[]>([\n  { id: 1, name: 'Task 1' },\n  { id: 2, name: 'Task 2' }\n]);",
-        "seedCode": "import React, { useState } from 'react';\n\ninterface ListItem {\n  id: number;\n  text: string;\n}\n\nconst App = () => {\n  // Initialize items state here\n\n  return null;\n};\n\nexport default App;",
-        "expectedOutcome": "The component now has a typed state variable 'items' initialized with sample data.",
+        "phase": "Step 4 of 11",
+        "title": "Define Todo type interface",
+        "instruction": "Above your TodoList component, define a TypeScript interface named Todo with id (number) and text (string) properties.",
+        "hint": "Use the interface keyword to define the shape of a todo object.",
+        "analogousExample": "// Example: defining a type interface\ninterface User {\n  id: number;\n  name: string;\n}",
+        "seedCode": "import React, { useState } from 'react';\n\n// Define Todo interface here\n\nconst TodoList = () => {\n  const [todos, setTodos] = useState<{id: number, text: string}[]>([]);\n  \n  return null;\n};",
+        "expectedOutcome": "A Todo interface is defined, providing type safety for todo objects throughout the component.",
         "successCriteria": [
-          "State variable 'items' is declared using useState with an array of ListItem objects as initial value."
+          "An interface named Todo is defined with id (number) and text (string) properties."
         ],
         "feedbackCorrect": "Nice! Proceed to the next step.",
-        "feedbackPartial": "You're close. Make sure you're using the useState hook and providing an array of objects that match the ListItem interface.",
-        "feedbackWrong": "declare a state variable named 'items' using useState, initialized with an array of ListItem objects.",
+        "feedbackPartial": "You've defined an interface, but make sure it's named Todo and has the correct properties with their types.",
+        "feedbackWrong": "The Todo interface isn't defined correctly. Create an interface named Todo with id (number) and text (string) properties.",
         "evaluation": {
           "mode": "keyword_match",
           "required": [
-            "useState",
-            "items",
-            "ListItem",
+            "interface",
+            "Todo",
             "id",
-            "text"
+            "number",
+            "text",
+            "string"
           ],
           "partialThreshold": 0.5,
           "correctThreshold": 0.8
@@ -139,25 +140,28 @@
       {
         "id": "step5",
         "type": "question",
-        "phase": "Step 5 of 10",
-        "title": "Add a basic unordered list structure",
-        "instruction": "Inside your App component's return statement, replace the current return value with a <ul> element.",
-        "hint": "Replace 'return null;' with 'return <ul></ul>;' to create an empty unordered list container.",
-        "analogousExample": "// Returning a basic container element\nfunction RecipeList() {\n  return <div></div>;\n}",
-        "seedCode": "import React, { useState } from 'react';\n\ninterface ListItem {\n  id: number;\n  text: string;\n}\n\nconst App = () => {\n  // Initialize items state here\n\n  return null;\n};\n\nexport default App;",
-        "expectedOutcome": "Your component will now return an empty <ul> element, creating the container structure for your list items.",
+        "phase": "Step 5 of 11",
+        "title": "Add sample todos to state",
+        "instruction": "Inside your TodoList component, add a useEffect hook that sets the todos state to an array of 3 sample todo objects when the component mounts. Use the setTodos function.",
+        "hint": "Import useEffect from react, then use it to update state when the component mounts. Each todo should have a unique id and descriptive text.",
+        "analogousExample": "// Example: setting state in useEffect\nuseEffect(() => {\n  setItems([\n    {id: 1, name: 'First item'},\n    {id: 2, name: 'Second item'}\n  ]);\n}, []);",
+        "seedCode": "import React, { useState, useEffect } from 'react';\n\ninterface Todo {\n  id: number;\n  text: string;\n}\n\nconst TodoList = () => {\n  const [todos, setTodos] = useState<Todo[]>([]);\n  \n  // Add useEffect to set sample todos here\n  \n  return null;\n};",
+        "expectedOutcome": "The component will populate the todos state with sample data when it first renders, providing content to work with during development.",
         "successCriteria": [
-          "The App component returns a <ul> element instead of null."
+          "A useEffect hook is added that calls setTodos with an array of at least 3 todo objects, each with unique ids and text."
         ],
         "feedbackCorrect": "Nice! Proceed to the next step.",
-        "feedbackPartial": "You're close! Make sure you're replacing 'return null;' with 'return <ul></ul>;'.",
-        "feedbackWrong": "Check that you've replaced the return statement with a <ul> element.",
+        "feedbackPartial": "You've added useEffect, but make sure it sets todos to an array of at least 3 sample todo objects with unique ids.",
+        "feedbackWrong": "The useEffect hook is missing or incorrect. Add useEffect that sets todos to an array of sample todo objects when the component mounts.",
         "evaluation": {
           "mode": "keyword_match",
           "required": [
-            "<ul>",
-            "</ul>",
-            "return"
+            "useEffect",
+            "setTodos",
+            "[",
+            "{",
+            "id",
+            "text"
           ],
           "partialThreshold": 0.5,
           "correctThreshold": 0.8
@@ -166,25 +170,26 @@
       {
         "id": "step6",
         "type": "question",
-        "phase": "Step 6 of 10",
-        "title": "Map over the items array to render list items",
-        "instruction": "Inside the <ul> element, use the map() method on the items array to return <li> elements for each item. Display the item's text inside each <li>.",
-        "hint": "Remember to use curly braces {} to embed JavaScript expressions in JSX. The map() method should be called on items and return JSX for each element.",
-        "analogousExample": "// Example: mapping an array to list items\nconst numbers = [1, 2, 3];\nconst listItems = numbers.map(num => <li key={num}>{num}</li>);",
-        "seedCode": "import React, { useState } from 'react';\n\ninterface ListItem {\n  id: number;\n  text: string;\n}\n\nconst App = () => {\n  // Initialize items state here\n\n  return (\n    <ul>\n      {/* Map over items array here */}\n    </ul>\n  );\n};\n\nexport default App;",
-        "expectedOutcome": "The <ul> element will contain multiple <li> elements generated from the items array, each displaying the corresponding item text.",
+        "phase": "Step 6 of 11",
+        "title": "Add main container structure",
+        "instruction": "In the TodoList component's return statement, replace 'null' with a div container that will hold the todo list UI.",
+        "hint": "Return a JSX div element as the root container for your todo list interface.",
+        "analogousExample": "// Returning a container div\nfunction MyComponent() {\n  return (\n    <div>\n      {/* Content goes here */}\n    </div>\n  );\n}",
+        "seedCode": "import React, { useState, useEffect } from 'react';\n\ninterface Todo {\n  id: number;\n  text: string;\n}\n\nconst TodoList = () => {\n  const [todos, setTodos] = useState<Todo[]>([]);\n  \n  useEffect(() => {\n    setTodos([\n      {id: 1, text: 'Learn React'},\n      {id: 2, text: 'Build a project'},\n      {id: 3, text: 'Deploy to production'}\n    ]);\n  }, []);\n  \n  // Define addTodo handler function here\n  \n  // Define toggleTodo handler function here\n  \n  // Define deleteTodo handler function here\n  \n  return null;\n};",
+        "expectedOutcome": "The TodoList component now returns a div container instead of null, providing a structure to hold the todo list elements.",
         "successCriteria": [
-          "The map() method is used inside the <ul> to iterate over items and return <li> elements with the item's text content."
+          "The TodoList component returns a JSX div element",
+          "The return statement no longer returns null"
         ],
         "feedbackCorrect": "Nice! Proceed to the next step.",
-        "feedbackPartial": "You're on the right track, but make sure you're calling map() on the items array and returning <li> elements with the item's text inside.",
-        "feedbackWrong": "Inside the <ul>, you need to use items.map() to create <li> elements for each item in the array.",
+        "feedbackPartial": "You're on the right track, but make sure you're returning a div element from the TodoList component.",
+        "feedbackWrong": "The TodoList component should return a div container instead of null.",
         "evaluation": {
           "mode": "keyword_match",
           "required": [
-            "items.map",
-            "<li>",
-            "{item.text}"
+            "return",
+            "<div>",
+            "</div>"
           ],
           "partialThreshold": 0.5,
           "correctThreshold": 0.8
@@ -193,26 +198,26 @@
       {
         "id": "step7",
         "type": "question",
-        "phase": "Step 7 of 10",
-        "title": "Display the text content from each item",
-        "instruction": "Inside each <li> element, display the text property from the current item object.",
-        "hint": "Use curly braces {} inside the <li> to access the item's text property.",
-        "analogousExample": "// Accessing object property in JSX\nconst item = { id: 1, name: 'Apple' };\n<li>{item.name}</li>",
-        "seedCode": "import React, { useState } from 'react';\n\ninterface ListItem {\n  id: number;\n  text: string;\n}\n\nconst App = () => {\n  // Initialize items state here\n\n  return (\n    <ul>\n      {/* Map over items array here */}\n    </ul>\n  );\n};\n\nexport default App;",
-        "expectedOutcome": "The map function should render each item's text content inside its corresponding <li> element.",
+        "phase": "Step 7 of 11",
+        "title": "Render the todos list using map()",
+        "instruction": "Inside your TodoList component's return statement, use the map() function to render the todos array as a list of div elements. Each div should display the todo text and have a unique key prop set to the todo id.",
+        "hint": "Use curly braces to embed the map() call in your JSX. For each todo, return a div with the text and a key prop.",
+        "analogousExample": "// Rendering a list with map()\n<div>\n  {items.map(item => (\n    <div key={item.id}>{item.name}</div>\n  ))}\n</div>",
+        "seedCode": "import React, { useState, useEffect } from 'react';\n\ninterface Todo {\n  id: number;\n  text: string;\n}\n\nconst TodoList = () => {\n  const [todos, setTodos] = useState<Todo[]>([]);\n  \n  useEffect(() => {\n    setTodos([\n      {id: 1, text: 'Learn React'},\n      {id: 2, text: 'Build a project'},\n      {id: 3, text: 'Deploy to production'}\n    ]);\n  }, []);\n  \n  // Define addTodo handler function here\n  \n  // Define toggleTodo handler function here\n  \n  // Define deleteTodo handler function here\n  \n  return (\n    <div>\n      {/* Render todos list using map() here */}\n    </div>\n  );\n};",
+        "expectedOutcome": "The UI will display each todo's text in its own div element, with the list updating automatically when the todos state changes.",
         "successCriteria": [
-          "Each <li> element displays the text property from its corresponding ListItem object."
+          "The return statement includes a map() call on the todos array, rendering each todo's text in a div with a key prop set to the todo's id."
         ],
         "feedbackCorrect": "Nice! Proceed to the next step.",
-        "feedbackPartial": "You're on the right track, but make sure you're displaying the text property from the current item object inside each <li>.",
-        "feedbackWrong": "Try accessing the text property from the item object using curly braces inside the <li> element.",
+        "feedbackPartial": "You're close. Make sure you're using map() on the todos array, returning a div for each todo with the text and a key prop set to the id.",
+        "feedbackWrong": "The todos list isn't rendered correctly. Use map() to create a div for each todo, displaying its text and setting the key prop to its id.",
         "evaluation": {
           "mode": "keyword_match",
           "required": [
-            "<li>",
-            "{",
-            "item.text",
-            "}"
+            "map",
+            "todo",
+            "key={todo.id}",
+            "{todo.text}"
           ],
           "partialThreshold": 0.5,
           "correctThreshold": 0.8
@@ -221,25 +226,26 @@
       {
         "id": "step8",
         "type": "question",
-        "phase": "Step 8 of 10",
-        "title": "Add a key prop to each list item",
-        "instruction": "In your map() callback, add a key prop to each <li> element using the item's id property.",
-        "hint": "Remember that React needs a unique key for each list item. Use the item's id field as the key value.",
-        "analogousExample": "// Adding key prop to list items\nconst items = [{ id: 1, name: 'Apple' }, { id: 2, name: 'Banana' }];\nconst list = items.map(item => (\n  <li key={item.id}>{item.name}</li>\n));",
-        "seedCode": "import React, { useState } from 'react';\n\ninterface ListItem {\n  id: number;\n  text: string;\n}\n\nconst App = () => {\n  // Initialize items state here\n\n  return (\n    <ul>\n      {/* Map over items array here */}\n    </ul>\n  );\n};\n\nexport default App;",
-        "expectedOutcome": "Each <li> element in the rendered list will have a unique key prop based on the item's id.",
+        "phase": "Step 8 of 11",
+        "title": "Add empty state message",
+        "instruction": "Modify your TodoList component to display a 'No todos yet!' message when the todos array is empty, using a ternary operator for conditional rendering.",
+        "hint": "Use the ternary operator to check todos.length. If 0, render the message; otherwise, render the mapped list.",
+        "analogousExample": "// Conditional rendering with ternary\n<div>\n  {items.length === 0 ? (\n    <p>No items found</p>\n  ) : (\n    items.map(item => <div key={item.id}>{item.name}</div>)\n  )}\n</div>",
+        "seedCode": "import React, { useState, useEffect } from 'react';\n\ninterface Todo {\n  id: number;\n  text: string;\n}\n\nconst TodoList = () => {\n  const [todos, setTodos] = useState<Todo[]>([]);\n  \n  useEffect(() => {\n    setTodos([\n      {id: 1, text: 'Learn React'},\n      {id: 2, text: 'Build a project'},\n      {id: 3, text: 'Deploy to production'}\n    ]);\n  }, []);\n  \n  // Define addTodo handler function here\n  \n  // Define toggleTodo handler function here\n  \n  // Define deleteTodo handler function here\n  \n  return (\n    <div>\n      {todos.map(todo => (\n        <div key={todo.id}>{todo.text}</div>\n      ))}\n    </div>\n  );\n};",
+        "expectedOutcome": "The UI will show a 'No todos yet!' message when the todos array is empty, providing better user feedback.",
         "successCriteria": [
-          "The map() callback returns <li> elements with key={item.id} prop."
+          "The return statement uses a ternary operator to check if todos is empty, rendering a message if true and the mapped list if false."
         ],
         "feedbackCorrect": "Nice! Proceed to the next step.",
-        "feedbackPartial": "You're on the right track, but make sure each <li> has a key prop using item.id.",
-        "feedbackWrong": "The key prop is missing or incorrect. Each list item needs a unique key, typically using the item's id property.",
+        "feedbackPartial": "You've added conditional rendering, but make sure it checks todos.length and displays 'No todos yet!' when empty.",
+        "feedbackWrong": "The empty state isn't handled correctly. Use a ternary operator to show 'No todos yet!' when todos.length is 0.",
         "evaluation": {
           "mode": "keyword_match",
           "required": [
-            "key={item.id}",
-            "key={item",
-            "key="
+            "?",
+            ":",
+            "todos.length",
+            "No todos yet!"
           ],
           "partialThreshold": 0.5,
           "correctThreshold": 0.8
@@ -248,25 +254,26 @@
       {
         "id": "step9",
         "type": "question",
-        "phase": "Step 9 of 10",
-        "title": "Add a button to add new items to the list",
-        "instruction": "Inside your component, add a button element above the unordered list with an onClick handler that will add a new ListItem to the items state array.",
-        "hint": "Use the <button> tag and create an inline arrow function for onClick that updates the state using setItems.",
-        "analogousExample": "// Adding a button with click handler\n<button onClick={() => setItems([...items, newItem])}>\n  Add Item\n</button>",
-        "seedCode": "import React, { useState } from 'react';\n\ninterface ListItem {\n  id: number;\n  text: string;\n}\n\nconst App = () => {\n  const [items, setItems] = useState<ListItem[]>([\n    { id: 1, text: 'First item' },\n    { id: 2, text: 'Second item' },\n    { id: 3, text: 'Third item' }\n  ]);\n\n  return (\n    <>\n      {/* Add button here */}\n      <ul>\n        {items.map(item => (\n          <li key={item.id}>\n            {item.text}\n          </li>\n        ))}\n      </ul>\n    </>\n  );\n};\n\nexport default App;",
-        "expectedOutcome": "A button appears above the list that, when clicked, will add a new item to the state array (though the handler logic will be completed in the next step).",
+        "phase": "Step 9 of 11",
+        "title": "Define addTodo handler function",
+        "instruction": "Inside your TodoList component, define a function named addTodo that takes a text parameter and adds a new todo to the todos state. The new todo should have a unique id (you can use the current length of the array + 1) and the provided text.",
+        "hint": "Create a function that calls setTodos with a new array containing the existing todos plus the new todo object.",
+        "analogousExample": "// Example: adding an item to state\nfunction handleAdd(text) {\n  setItems([...items, {id: items.length + 1, name: text}]);\n}",
+        "seedCode": "import React, { useState, useEffect } from 'react';\n\ninterface Todo {\n  id: number;\n  text: string;\n}\n\nconst TodoList = () => {\n  const [todos, setTodos] = useState<Todo[]>([]);\n  \n  useEffect(() => {\n    setTodos([\n      {id: 1, text: 'Learn React'},\n      {id: 2, text: 'Build a project'},\n      {id: 3, text: 'Deploy to production'}\n    ]);\n  }, []);\n  \n  // Define addTodo handler function here\n// Define missing handler or variable here\n  // Define toggleTodo handler function here\n  \n  // Define deleteTodo handler function here\n  \n  return (\n    <div>\n      {todos.length === 0 ? (\n        <p>No todos yet!</p>\n      ) : (\n        todos.map(todo => (\n          <div key={todo.id}>{todo.text}</div>\n        ))\n      )}\n    </div>\n  );\n};",
+        "expectedOutcome": "The addTodo function will allow new todos to be added to the list, updating the UI automatically.",
         "successCriteria": [
-          "A button element is added with an onClick handler that updates the items state by adding a new ListItem object."
+          "The addTodo function is defined, takes a text parameter, and calls setTodos to add a new todo with a unique id and the provided text."
         ],
         "feedbackCorrect": "Nice! Proceed to the next step.",
-        "feedbackPartial": "You added a button, but make sure it has an onClick handler that will eventually add a new item to the state.",
-        "feedbackWrong": "Check that you've added a button element with an onClick handler above the unordered list.",
+        "feedbackPartial": "You've defined a function, but make sure it's named addTodo, takes a text parameter, and adds a new todo with a unique id to the todos state.",
+        "feedbackWrong": "The addTodo handler function isn't defined correctly. Create a function named addTodo that adds a new todo to the state with a unique id and the provided text.",
         "evaluation": {
           "mode": "keyword_match",
           "required": [
-            "<button",
-            "onClick",
-            "setItems"
+            "addTodo",
+            "setTodos",
+            "...todos",
+            "text"
           ],
           "partialThreshold": 0.5,
           "correctThreshold": 0.8
@@ -275,27 +282,63 @@
       {
         "id": "step10",
         "type": "question",
-        "phase": "Step 10 of 10",
-        "title": "Add a button to remove items from the list",
-        "instruction": "Inside each list item, add a button with the text 'Remove' and an onClick handler that calls a function to remove that specific item from the items state.",
-        "hint": "You'll need to create a removeItem function that takes an item id, then use setItems with filter to remove the matching item.",
-        "analogousExample": "// Example: remove function and button\nconst removeItem = (id: number) => {\n  setItems(prevItems => prevItems.filter(item => item.id !== id));\n};\n\n// In JSX:\n<button onClick={() => removeItem(item.id)}>Remove</button>",
-        "seedCode": "import React, { useState } from 'react';\n\ninterface ListItem {\n  id: number;\n  text: string;\n}\n\nconst App = () => {\n  const [items, setItems] = useState<ListItem[]>([\n    { id: 1, text: 'First item' },\n    { id: 2, text: 'Second item' },\n    { id: 3, text: 'Third item' }\n  ]);\n\n  return (\n    <>\n      {/* Add button here */}\n      <ul>\n        {items.map(item => (\n          <li key={item.id}>\n            {item.text}\n          </li>\n        ))}\n      </ul>\n    </>\n  );\n};\n\nexport default App;",
-        "expectedOutcome": "Each list item will have a 'Remove' button that, when clicked, removes only that item from the list.",
+        "phase": "Step 10 of 11",
+        "title": "Add input field and add button",
+        "instruction": "In your TodoList component's return statement, add an input field and a button. The input should be controlled (its value tied to a new state variable), and the button should call addTodo with the input value when clicked.",
+        "hint": "Create a new state variable for the input value, add an input element with onChange to update this state, and a button with onClick to call addTodo.",
+        "analogousExample": "// Controlled input with add button\nfunction MyComponent() {\n  const [value, setValue] = useState('');\n  return (\n    <div>\n      <input value={value} onChange={(e) => setValue(e.target.value)} />\n      <button onClick={() => handleAdd(value)}>Add</button>\n    </div>\n  );\n}",
+        "seedCode": "import React, { useState, useEffect } from 'react';\n\ninterface Todo {\n  id: number;\n  text: string;\n}\n\nconst TodoList = () => {\n  const [todos, setTodos] = useState<Todo[]>([]);\n  \n  useEffect(() => {\n    setTodos([\n      {id: 1, text: 'Learn React'},\n      {id: 2, text: 'Build a project'},\n      {id: 3, text: 'Deploy to production'}\n    ]);\n  }, []);\n  \n  const addTodo = (text: string) => {\n    setTodos([...todos, {id: todos.length + 1, text}]);\n  };\n  \n  // Define toggleTodo handler function here\n  \n  // Define deleteTodo handler function here\n  \n  return (\n    <div>\n      {todos.length === 0 ? (\n        <p>No todos yet!</p>\n      ) : (\n        todos.map(todo => (\n          <div key={todo.id}>{todo.text}</div>\n        ))\n      )}\n      {/* Add input field and add button here */}\n    </div>\n  );\n};",
+        "expectedOutcome": "The UI will include an input field for entering new todo text and a button to add it to the list.",
         "successCriteria": [
-          "A removeItem function is defined, each list item contains a button with onClick that calls removeItem with the item's id, and setItems is used with filter to update state."
+          "A controlled input field is added with its value tied to a state variable and onChange handler.",
+          "A button is added with onClick calling addTodo with the input value."
         ],
         "feedbackCorrect": "Nice! Proceed to the next step.",
-        "feedbackPartial": "You're on the right track. Make sure you have a removeItem function that uses setItems with filter, and each button's onClick calls this function with the correct item id.",
-        "feedbackWrong": "The removal functionality isn't working yet. You need to create a removeItem function and add a button inside each list item that calls it with the item's id.",
+        "feedbackPartial": "You've added an input and button, but make sure the input is controlled and the button calls addTodo with the input value.",
+        "feedbackWrong": "The input field and add button aren't implemented correctly. Add a controlled input and a button that calls addTodo with the input value.",
         "evaluation": {
           "mode": "keyword_match",
           "required": [
-            "removeItem",
-            "setItems",
-            "filter",
+            "input",
+            "value=",
+            "onChange",
+            "button",
             "onClick",
-            "button"
+            "addTodo"
+          ],
+          "partialThreshold": 0.5,
+          "correctThreshold": 0.8
+        }
+      },
+      {
+        "id": "step11",
+        "type": "question",
+        "phase": "Step 11 of 11",
+        "title": "Define toggleTodo and deleteTodo handlers",
+        "instruction": "Inside your TodoList component, define two functions: toggleTodo (toggles a todo's completed status by adding/removing a completed property) and deleteTodo (removes a todo by its id). Update your todo rendering to include buttons for these actions.",
+        "hint": "For toggleTodo, use map() to create a new array with the updated todo. For deleteTodo, use filter() to remove the todo with the matching id.",
+        "analogousExample": "// Example: updating and deleting items\nfunction handleToggle(id) {\n  setItems(items.map(item => item.id === id ? {...item, completed: !item.completed} : item));\n}\n\nfunction handleDelete(id) {\n  setItems(items.filter(item => item.id !== id));\n}",
+        "seedCode": "import React, { useState, useEffect } from 'react';\n\ninterface Todo {\n  id: number;\n  text: string;\n  completed?: boolean;\n}\n\nconst TodoList = () => {\n  const [todos, setTodos] = useState<Todo[]>([]);\n  const [inputValue, setInputValue] = useState('');\n  \n  useEffect(() => {\n    setTodos([\n      {id: 1, text: 'Learn React'},\n      {id: 2, text: 'Build a project'},\n      {id: 3, text: 'Deploy to production'}\n    ]);\n  }, []);\n  \n  const addTodo = (text: string) => {\n    setTodos([...todos, {id: todos.length + 1, text}]);\n  };\n  \n  // Define toggleTodo handler function here\n// Define missing handler or variable here\n  \n  // Define deleteTodo handler function here\n// Define missing handler or variable here\n  \n  return (\n    <div>\n      <input value={inputValue} onChange={(e) => setInputValue(e.target.value)} />\n      <button onClick={() => addTodo(inputValue)}>Add</button>\n      {todos.length === 0 ? (\n        <p>No todos yet!</p>\n      ) : (\n        todos.map(todo => (\n          <div key={todo.id}>{todo.text}</div>\n        ))\n      )}\n    </div>\n  );\n};",
+        "expectedOutcome": "The UI will include toggle and delete buttons for each todo, allowing users to mark todos as completed or remove them from the list.",
+        "successCriteria": [
+          "The toggleTodo function is defined and updates a todo's completed status.",
+          "The deleteTodo function is defined and removes a todo by its id.",
+          "The rendered todos include buttons for toggling completion and deleting."
+        ],
+        "feedbackCorrect": "Excellent work! You've completed the TodoList component with full CRUD functionality.",
+        "feedbackPartial": "You've defined some functions, but make sure both toggleTodo and deleteTodo are implemented correctly and the UI includes buttons for these actions.",
+        "feedbackWrong": "The toggle and delete functionality is missing or incorrect. Define toggleTodo and deleteTodo handlers and add corresponding buttons to each rendered todo.",
+        "evaluation": {
+          "mode": "keyword_match",
+          "required": [
+            "toggleTodo",
+            "setTodos",
+            "map",
+            "completed",
+            "deleteTodo",
+            "filter",
+            "button",
+            "onClick"
           ],
           "partialThreshold": 0.5,
           "correctThreshold": 0.8
@@ -316,40 +359,44 @@
         "id": "step1"
       },
       {
-        "label": "Create the main App component",
+        "label": "Create the TodoList component",
         "id": "step2"
       },
       {
-        "label": "Define an interface for list items",
+        "label": "Initialize todos state with TypeScript",
         "id": "step3"
       },
       {
-        "label": "Initialize state with an array of ListItem objects",
+        "label": "Define Todo type interface",
         "id": "step4"
       },
       {
-        "label": "Add a basic unordered list structure",
+        "label": "Add sample todos to state",
         "id": "step5"
       },
       {
-        "label": "Map over the items array to render list items",
+        "label": "Add main container structure",
         "id": "step6"
       },
       {
-        "label": "Display the text content from each item",
+        "label": "Render the todos list using map()",
         "id": "step7"
       },
       {
-        "label": "Add a key prop to each list item",
+        "label": "Add empty state message",
         "id": "step8"
       },
       {
-        "label": "Add a button to add new items to the list",
+        "label": "Define addTodo handler function",
         "id": "step9"
       },
       {
-        "label": "Add a button to remove items from the list",
+        "label": "Add input field and add button",
         "id": "step10"
+      },
+      {
+        "label": "Define toggleTodo and deleteTodo handlers",
+        "id": "step11"
       }
     ]
   },

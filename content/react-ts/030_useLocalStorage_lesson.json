@@ -198,7 +198,7 @@
         "instruction": "At the end of your useLocalStorage hook, return an array containing the current value and the setValue function to make the hook's API similar to useState.",
         "hint": "Return the array directly from the hook, just like useState does.",
         "analogousExample": "// Similar: returning value and setter from a custom hook\nfunction useCounter() {\n  const [count, setCount] = useState(0);\n  return [count, setCount];\n}",
-        "seedCode": "import React, { useState } from 'react';\n\n// Create the useLocalStorage function here\nfunction useLocalStorage<T>() {\n  // Add getStoredValue function here\n  \n  // Initialize state with stored value here\n  \n  // Create setValue function here\n  \n  // Return value and setter here\n}",
+        "seedCode": "// Define missing handler or variable here\nconst setValue = () => { /* logic */ };\n\nimport React, { useState } from 'react';\n\n// Create the useLocalStorage function here\nfunction useLocalStorage<T>() {\n  // Add getStoredValue function here\n  \n  // Initialize state with stored value here\n  \n  // Create setValue function here\n  \n  // Return value and setter here\n}",
         "expectedOutcome": "The useLocalStorage hook should return an array with the current value and setter function, making it ready to be used like useState.",
         "successCriteria": [
           "The useLocalStorage hook returns an array containing the current value and the setValue function."

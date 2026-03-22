@@ -25,7 +25,7 @@
       {
         "id": "step1",
         "type": "question",
-        "phase": "Step 1 of 9",
+        "phase": "Step 1 of 8",
         "title": "Import React",
         "instruction": "Import React from the 'react' package.",
         "hint": "Use the import statement to bring React into your file so you can use JSX and create components.",
@@ -53,7 +53,7 @@
       {
         "id": "step2",
         "type": "question",
-        "phase": "Step 2 of 9",
+        "phase": "Step 2 of 8",
         "title": "Create a functional component",
         "instruction": "Create a functional component named Greeting that takes props as a parameter and returns null for now.",
         "hint": "You can use either a function declaration or arrow function syntax. The component should accept props as its parameter and return null.",
@@ -81,7 +81,7 @@
       {
         "id": "step3",
         "type": "question",
-        "phase": "Step 3 of 9",
+        "phase": "Step 3 of 8",
         "title": "Add JSX structure to the component",
         "instruction": "Inside your Greeting component, return a JSX structure: a <div> containing an <h1> element that displays a greeting message using props.name.",
         "hint": "The component should return JSX. Use props.name inside curly braces within the <h1> to display the name passed as a prop.",
@@ -109,7 +109,7 @@
       {
         "id": "step4",
         "type": "question",
-        "phase": "Step 4 of 9",
+        "phase": "Step 4 of 8",
         "title": "Export the component",
         "instruction": "Export the Greeting component as a default export so it can be used in other files.",
         "hint": "Use the 'export default' syntax followed by the component name.",
@@ -136,7 +136,7 @@
       {
         "id": "step5",
         "type": "question",
-        "phase": "Step 5 of 9",
+        "phase": "Step 5 of 8",
         "title": "Create a defaultProps object",
         "instruction": "Add a defaultProps property to the Greeting component and set the name prop to 'Guest'.",
         "hint": "After the component definition, assign an object to Greeting.defaultProps with a name property set to 'Guest'.",
@@ -163,24 +163,27 @@
       {
         "id": "step6",
         "type": "question",
-        "phase": "Step 6 of 9",
-        "title": "Test the component without passing props",
-        "instruction": "Render the Greeting component without passing any props to see the default value in action.",
-        "hint": "Add the component as a self-closing JSX tag inside the return statement of your App component.",
-        "analogousExample": "// Example: rendering a component without props\nfunction App() {\n  return (\n    <div>\n      <Greeting />\n    </div>\n  );\n}",
-        "seedCode": "// Import React here\n\n// Component will go here\n\n// Create your Greeting component below\nconst Greeting = (props) => {\n  // Return JSX here\n};\n\n// Add defaultProps property here\n\n// Export the Greeting component as default export\n\n// Render Greeting component without props here\nfunction App() {\n  return (\n    <div>\n      {/* Render Greeting without props */}\n    </div>\n  );\n}\n\nexport default App;",
-        "expectedOutcome": "The Greeting component will be rendered without any props passed to it, allowing you to see the default prop values in action.",
+        "phase": "Step 6 of 8",
+        "title": "Compose App: default name vs custom name",
+        "instruction": "Add an App component as the default export. In its return, render `<Greeting />` with no props (uses your default name) and a second `<Greeting name=\"Alice\" />` (or another name) so you contrast defaultProps with an explicit prop.",
+        "hint": "First line: bare `<Greeting />`. Second line: same tag with `name=\"...\"`. Use `export default App` only. The Output tab often auto-mounts the first `const` component (`Greeting`), so you may still see a single Guest—that preview quirk doesn't mean the two-instance pattern in App is wrong.",
+        "analogousExample": "// Two instances: one uses defaultProps, one overrides\nfunction App() {\n  return (\n    <div>\n      <Greeting />\n      <Greeting name=\"Alice\" />\n    </div>\n  );\n}",
+        "seedCode": "// Import React here\n\n// Component will go here\n\n// Create your Greeting component below\nconst Greeting = (props) => {\n  // Return JSX here\n};\n\n// Add defaultProps property here\n\nfunction App() {\n  return (\n    <div>\n      <Greeting />\n      {/* Add a second <Greeting /> with a custom name prop (e.g. name=\"Alice\") */}\n    </div>\n  );\n}\n\nexport default App;",
+        "expectedOutcome": "App renders two Greeting elements: one relies on defaultProps for name, the other passes an explicit name.",
         "successCriteria": [
-          "Greeting component is rendered as a self-closing JSX tag without any props passed to it."
+          "App is the default export and its JSX includes `<Greeting />` with no props and a second `<Greeting />` with a name prop set to a custom string."
         ],
         "feedbackCorrect": "Nice! Proceed to the next step.",
-        "feedbackPartial": "You're close! Make sure you're rendering the Greeting component as a self-closing JSX tag without any props.",
-        "feedbackWrong": "That doesn't look right. You need to render the Greeting component without passing any props to see the default values.",
+        "feedbackPartial": "You're close. You need both a bare `<Greeting />` and a second one with `name=\"...\"`, and `export default App`.",
+        "feedbackWrong": "Add App as default export, render `<Greeting />` with no props, then a second `<Greeting name=\"Alice\" />` (or similar) in the same parent div.",
         "evaluation": {
           "mode": "keyword_match",
           "required": [
             "<Greeting",
-            "/>"
+            "name=",
+            "export",
+            "default",
+            "App"
           ],
           "partialThreshold": 0.5,
           "correctThreshold": 0.8
@@ -189,38 +192,12 @@
       {
         "id": "step7",
         "type": "question",
-        "phase": "Step 7 of 9",
-        "title": "Test the component with custom props",
-        "instruction": "In the App component, render the Greeting component a second time, passing a name prop with a custom value like 'Alice'.",
-        "hint": "Add another <Greeting /> JSX element inside the div, but this time include a name attribute with a custom string value.",
-        "analogousExample": "// Similar: rendering a component with custom props\n<Button label=\"Submit\" />",
-        "seedCode": "// Import React here\n\n// Component will go here\n\n// Create your Greeting component below\nconst Greeting = (props) => {\n  // Return JSX here\n};\n\n// Add defaultProps property here\n\n// Export the Greeting component as default export\n\n// Render Greeting component without props here\nfunction App() {\n  return (\n    <div>\n      {/* Render Greeting without props */}\n      {/* Render Greeting with custom name prop */}\n    </div>\n  );\n}\n\nexport default App;",
-        "expectedOutcome": "The App component now renders two Greeting components: one using default props and one with a custom name prop.",
-        "successCriteria": [
-          "A second Greeting component is rendered inside the App's div with a name prop set to a custom string value."
-        ],
-        "feedbackCorrect": "Nice! Proceed to the next step.",
-        "feedbackPartial": "You're close. Make sure you've added a second Greeting component inside the div with a name prop like name=\"Alice\".",
-        "feedbackWrong": "Check that you've added another Greeting component with a custom name prop inside the App's return statement.",
-        "evaluation": {
-          "mode": "keyword_match",
-          "required": [
-            "<Greeting",
-            "name="
-          ],
-          "partialThreshold": 0.5,
-          "correctThreshold": 0.8
-        }
-      },
-      {
-        "id": "step8",
-        "type": "question",
-        "phase": "Step 8 of 9",
+        "phase": "Step 7 of 8",
         "title": "Add a second prop with default value",
         "instruction": "Add a 'message' prop to the Greeting component's parameter list and set a default value for it in the defaultProps object.",
         "hint": "Add 'message' to the props parameter and update the defaultProps object to include a default message string.",
         "analogousExample": "// Adding a second prop with default value\nconst Button = (props) => {\n  return <button>{props.label}</button>;\n};\nButton.defaultProps = {\n  label: 'Click me',\n  color: 'blue'\n};",
-        "seedCode": "// Import React here\n\n// Component will go here\n\n// Create your Greeting component below\nconst Greeting = (props) => {\n  // Return JSX here\n};\n\n// Add defaultProps property here\nGreeting.defaultProps = {\n  name: 'Guest'\n};\n\n// Export the Greeting component as default export\nexport default Greeting;\n\n// Render Greeting component without props here\nfunction App() {\n  return (\n    <div>\n      {/* Render Greeting without props */}\n      {/* Render Greeting with custom name prop */}\n    </div>\n  );\n}\n\nexport default App;",
+        "seedCode": "// Import React here\n\n// Component will go here\n\n// Create your Greeting component below\nconst Greeting = (props) => {\n  // Return JSX here\n};\n\n// Add defaultProps property here\nGreeting.defaultProps = {\n  name: 'Guest'\n};\n\nfunction App() {\n  return (\n    <div>\n      <Greeting />\n      <Greeting name=\"Alice\" />\n    </div>\n  );\n}\n\nexport default App;",
         "expectedOutcome": "The Greeting component now accepts a 'message' prop with a default value defined in defaultProps.",
         "successCriteria": [
           "The Greeting component's props parameter includes 'message' and the defaultProps object contains a 'message' property with a string default value."
@@ -240,14 +217,14 @@
         }
       },
       {
-        "id": "step9",
+        "id": "step8",
         "type": "question",
-        "phase": "Step 9 of 9",
+        "phase": "Step 8 of 8",
         "title": "Update JSX to use the new prop",
         "instruction": "Inside the Greeting component, update the JSX to display both the name and message props.",
         "hint": "Access props.message in your JSX, similar to how you access props.name.",
         "analogousExample": "// Displaying multiple props in JSX\nfunction UserCard(props) {\n  return (\n    <div>\n      <h2>{props.username}</h2>\n      <p>{props.bio}</p>\n    </div>\n  );\n}",
-        "seedCode": "// Import React here\n\n// Component will go here\n\n// Create your Greeting component below\nconst Greeting = (props) => {\n  // Return JSX here\n  return (\n    <div>\n      <h1>Hello, {props.name}!</h1>\n      {/* Display the message prop here */}\n    </div>\n  );\n};\n\n// Add defaultProps property here\nGreeting.defaultProps = {\n  name: 'Guest',\n  message: 'Welcome to our site!'\n};\n\n// Export the Greeting component as default export\nexport default Greeting;\n\n// Render Greeting component without props here\nfunction App() {\n  return (\n    <div>\n      {/* Render Greeting without props */}\n      {/* Render Greeting with custom name prop */}\n    </div>\n  );\n}\n\nexport default App;",
+        "seedCode": "// Import React here\n\n// Component will go here\n\n// Create your Greeting component below\nconst Greeting = (props) => {\n  // Return JSX here\n  return (\n    <div>\n      <h1>Hello, {props.name}!</h1>\n      {/* Display the message prop here */}\n    </div>\n  );\n};\n\n// Add defaultProps property here\nGreeting.defaultProps = {\n  name: 'Guest',\n  message: 'Welcome to our site!'\n};\n\nfunction App() {\n  return (\n    <div>\n      <Greeting />\n      <Greeting name=\"Alice\" />\n    </div>\n  );\n}\n\nexport default App;",
         "expectedOutcome": "The Greeting component will display both the name and message props in its JSX output.",
         "successCriteria": [
           "The JSX includes both props.name and props.message, and the component returns valid JSX."
@@ -298,20 +275,16 @@
         "id": "step5"
       },
       {
-        "label": "Test the component without passing props",
+        "label": "Compose App: default vs custom name",
         "id": "step6"
       },
       {
-        "label": "Test the component with custom props",
+        "label": "Add a second prop with default value",
         "id": "step7"
       },
       {
-        "label": "Add a second prop with default value",
-        "id": "step8"
-      },
-      {
         "label": "Update JSX to use the new prop",
-        "id": "step9"
+        "id": "step8"
       }
     ]
   },

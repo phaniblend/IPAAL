@@ -90,7 +90,7 @@
         "title": "Create the main component structure",
         "instruction": "Define a functional component named AdvancedPatternsComponent that accepts ComponentProps as its props. The component should return null for now.",
         "hint": "Use either a function declaration or arrow function syntax with the correct name and props type annotation.",
-        "analogousExample": "// Example of a typed functional component\nfunction MyComponent(props: MyProps) {\n  return null;\n}",
+        "analogousExample": "// Same names as this step\nfunction AdvancedPatternsComponent(props: ComponentProps) {\n  return null;\n}",
         "seedCode": "// Import Record and Partial from 'typescript', then define Nullable<T>\n\n// Create the ComponentProps interface here\n\n// Define the AdvancedPatternsComponent here",
         "expectedOutcome": "A functional component named AdvancedPatternsComponent is created with proper TypeScript props typing.",
         "successCriteria": [

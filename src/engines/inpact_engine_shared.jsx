@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo, useContext } from "react";
+import { useState, useEffect, useMemo, useContext, useRef } from "react";
 import CodeEditor from "./CodeEditor";
 import MultiFileEditor from "./MultiFileEditor";
 import { LessonValidationContext } from "../ai-lessons/lessonValidationContext.jsx";
@@ -101,6 +101,7 @@ export default function createINPACTEngine(config) {
     intro: configIntro,
     objectives: configObjectives,
     onValidateCode: configOnValidateCode,
+    onAskMentor,
     validateWithAI = true,
   } = config;
   const lessonIntro = configLessonIntro ?? configIntro ?? null;
@@ -115,7 +116,19 @@ export default function createINPACTEngine(config) {
     const [attempts, setAttempts] = useState(0);
     const [showHint, setShowHint] = useState(false);
     const [showExampleModal, setShowExampleModal] = useState(false);
+    const [exampleModalOffset, setExampleModalOffset] = useState({ x: 0, y: 0 });
+    const [exampleModalDragging, setExampleModalDragging] = useState(false);
+    const exampleModalDragRef = useRef(null);
+    const [feedbackModalOffset, setFeedbackModalOffset] = useState({ x: 0, y: 0 });
+    const [feedbackModalDragging, setFeedbackModalDragging] = useState(false);
+    const feedbackModalDragRef = useRef(null);
     const [showFeedbackModal, setShowFeedbackModal] = useState(false);
+    const [taskInstructionPulseNonce, setTaskInstructionPulseNonce] = useState(0);
+    const [showMentorModal, setShowMentorModal] = useState(false);
+    const [mentorDraft, setMentorDraft] = useState("");
+    const [mentorReply, setMentorReply] = useState("");
+    const [mentorLoading, setMentorLoading] = useState(false);
+    const [mentorError, setMentorError] = useState("");
     const [checking, setChecking] = useState(false);
     const [completedNodes, setCompletedNodes] = useState([]);
     const [passedCodeByStepId, setPassedCodeByStepId] = useState({});
@@ -138,12 +151,45 @@ export default function createINPACTEngine(config) {
         });
     }, [configOnValidateCode, validateWithAI, lessonValidationCtx, language]);
 
+    const onAskMentorResolved = useMemo(() => {
+      if (onAskMentor) return onAskMentor;
+      if (!lessonValidationCtx?.track) return undefined;
+      const lessonKey =
+        lessonValidationCtx.lessonKey ??
+        `${lessonValidationCtx.track}:${lessonValidationCtx.lessonIndex ?? ""}:${lessonValidationCtx.lessonTitle ?? ""}`;
+      return async (n, userMessage) => {
+        const res = await fetch("/api/lessons/mentor", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            step: { id: n.id, instruction: n.paal, paal: n.paal },
+            userMessage: String(userMessage).trim(),
+            track: lessonValidationCtx.track,
+            lessonKey,
+          }),
+        });
+        if (!res.ok) {
+          const err = await res.json().catch(() => ({}));
+          throw new Error(err?.error || res.statusText || "Mentor unavailable");
+        }
+        const data = await res.json();
+        return data.reply ?? "";
+      };
+    }, [onAskMentor, lessonValidationCtx]);
+
     useEffect(() => {
       setResult(null);
       setAttempts(0);
       setShowHint(false);
       setShowExampleModal(false);
+      setExampleModalOffset({ x: 0, y: 0 });
+      setFeedbackModalOffset({ x: 0, y: 0 });
       setShowFeedbackModal(false);
+      setShowMentorModal(false);
+      setMentorDraft("");
+      setMentorReply("");
+      setMentorError("");
+      setMentorLoading(false);
       setChecking(false);
       setAiFeedback("");
       setValidationFallbackNote("");
@@ -177,6 +223,76 @@ export default function createINPACTEngine(config) {
         setAnswer(initialCode);
       }
     }, [nodeIndex, passedCodeByStepId]);
+
+    function handleExampleModalPointerDown(e) {
+      if (e.pointerType === "mouse" && e.button !== 0) return;
+      e.preventDefault();
+      setExampleModalDragging(true);
+      exampleModalDragRef.current = {
+        id: e.pointerId,
+        sx: e.clientX,
+        sy: e.clientY,
+        ox: exampleModalOffset.x,
+        oy: exampleModalOffset.y,
+      };
+      e.currentTarget.setPointerCapture(e.pointerId);
+    }
+
+    function handleExampleModalPointerMove(e) {
+      const d = exampleModalDragRef.current;
+      if (!d || e.pointerId !== d.id) return;
+      setExampleModalOffset({
+        x: d.ox + (e.clientX - d.sx),
+        y: d.oy + (e.clientY - d.sy),
+      });
+    }
+
+    function handleExampleModalPointerUp(e) {
+      const d = exampleModalDragRef.current;
+      if (!d || e.pointerId !== d.id) return;
+      setExampleModalDragging(false);
+      try {
+        e.currentTarget.releasePointerCapture(e.pointerId);
+      } catch (_) {
+        /* ignore */
+      }
+      exampleModalDragRef.current = null;
+    }
+
+    function handleFeedbackModalPointerDown(e) {
+      if (e.pointerType === "mouse" && e.button !== 0) return;
+      e.preventDefault();
+      setFeedbackModalDragging(true);
+      feedbackModalDragRef.current = {
+        id: e.pointerId,
+        sx: e.clientX,
+        sy: e.clientY,
+        ox: feedbackModalOffset.x,
+        oy: feedbackModalOffset.y,
+      };
+      e.currentTarget.setPointerCapture(e.pointerId);
+    }
+
+    function handleFeedbackModalPointerMove(e) {
+      const d = feedbackModalDragRef.current;
+      if (!d || e.pointerId !== d.id) return;
+      setFeedbackModalOffset({
+        x: d.ox + (e.clientX - d.sx),
+        y: d.oy + (e.clientY - d.sy),
+      });
+    }
+
+    function handleFeedbackModalPointerUp(e) {
+      const d = feedbackModalDragRef.current;
+      if (!d || e.pointerId !== d.id) return;
+      setFeedbackModalDragging(false);
+      try {
+        e.currentTarget.releasePointerCapture(e.pointerId);
+      } catch (_) {
+        /* ignore */
+      }
+      feedbackModalDragRef.current = null;
+    }
 
     function next() {
       if (node?.type === "question" && node?.id && result === "correct") {
@@ -265,8 +381,27 @@ export default function createINPACTEngine(config) {
       setAttempts((a) => a + 1);
       if (attempts >= 1) setShowHint(true);
       const staticFb = node[`feedback_${res}`];
-      if (node.hint || staticFb || feedbackFromAi) setShowFeedbackModal(true);
+      if (node.hint || staticFb || feedbackFromAi) {
+        setFeedbackModalOffset({ x: 0, y: 0 });
+        setShowFeedbackModal(true);
+      }
       done();
+    }
+
+    async function sendMentor() {
+      if (!onAskMentorResolved || node?.type !== "question") return;
+      const msg = mentorDraft.trim();
+      if (!msg) return;
+      setMentorLoading(true);
+      setMentorError("");
+      try {
+        const reply = await onAskMentorResolved(node, msg);
+        setMentorReply(typeof reply === "string" ? reply : String(reply ?? ""));
+      } catch (e) {
+        setMentorError(e && typeof e.message === "string" ? e.message : "Mentor unavailable");
+      } finally {
+        setMentorLoading(false);
+      }
     }
 
     const parsedCssTabs = useMemo(() => {
@@ -449,14 +584,67 @@ export default function createINPACTEngine(config) {
             {result !== "correct" ? (
               <>
                 <button type="button" className={`inpact-btn-primary ${checking ? "inpact-btn-checking" : ""}`} style={s.btn("primary")} onClick={submit} disabled={!canSubmit || checking}>{checking ? "Checking..." : "CHECK MY CODE"}</button>
-                {exampleContent && <button type="button" style={s.btn("secondary")} onClick={() => setShowExampleModal(true)}>SHOW ME AN EXAMPLE</button>}
-                {attempts > 0 && !showHint && <button type="button" style={s.btn("secondary")} onClick={() => { setShowHint(true); setShowFeedbackModal(true); }}>SHOW HINT</button>}
-                {hasHintOrFeedback && <button type="button" style={s.btn("secondary")} onClick={() => setShowFeedbackModal(true)}>💡 VIEW HINT & FEEDBACK</button>}
+                {exampleContent && (
+                  <button
+                    type="button"
+                    style={s.btn("secondary")}
+                    onClick={() => {
+                      setExampleModalOffset({ x: 0, y: 0 });
+                      setShowExampleModal(true);
+                    }}
+                  >
+                    SHOW ME AN EXAMPLE
+                  </button>
+                )}
+                {attempts > 0 && !showHint && (
+                  <button
+                    type="button"
+                    style={s.btn("secondary")}
+                    onClick={() => {
+                      setShowHint(true);
+                      setFeedbackModalOffset({ x: 0, y: 0 });
+                      setShowFeedbackModal(true);
+                    }}
+                  >
+                    SHOW HINT
+                  </button>
+                )}
+                {hasHintOrFeedback && (
+                  <button
+                    type="button"
+                    style={s.btn("secondary")}
+                    onClick={() => {
+                      setFeedbackModalOffset({ x: 0, y: 0 });
+                      setShowFeedbackModal(true);
+                    }}
+                  >
+                    💡 VIEW HINT & FEEDBACK
+                  </button>
+                )}
+                {onAskMentorResolved && (
+                  <button type="button" style={s.btn("secondary")} onClick={() => { setShowMentorModal(true); setMentorError(""); }}>Ask mentor</button>
+                )}
               </>
             ) : (
               <>
-                <button type="button" className="inpact-btn-primary" style={s.btn("primary")} onClick={next}>NEXT STEP →</button>
-                {hasHintOrFeedback && <button type="button" style={s.btn("secondary")} onClick={() => setShowFeedbackModal(true)}>💡 VIEW HINT & FEEDBACK</button>}
+                {!(showFeedbackModal && hasHintOrFeedback) && (
+                  <button type="button" className="inpact-btn-primary" style={s.btn("primary")} onClick={next}>NEXT STEP →</button>
+                )}
+                {hasHintOrFeedback && !showFeedbackModal && (
+                  <button
+                    type="button"
+                    style={s.btn("secondary")}
+                    onClick={() => {
+                      setFeedbackModalOffset({ x: 0, y: 0 });
+                      setShowFeedbackModal(true);
+                    }}
+                  >
+                    💡 VIEW HINT & FEEDBACK
+                  </button>
+                )}
+                {onAskMentorResolved && (
+                  <button type="button" style={s.btn("secondary")} onClick={() => { setShowMentorModal(true); setMentorError(""); }}>Ask mentor</button>
+                )}
               </>
             )}
           </div>
@@ -489,10 +677,29 @@ export default function createINPACTEngine(config) {
                   overflowY: "auto",
                   boxShadow: "0 20px 60px rgba(0,0,0,0.2)",
                   border: "1px solid #e2e8f0",
+                  transform: `translate(${exampleModalOffset.x}px, ${exampleModalOffset.y}px)`,
+                  touchAction: "none",
                 }}
                 onClick={(e) => e.stopPropagation()}
               >
-                <div id="example-modal-title" style={{ ...s.paalLabel, marginBottom: "8px" }}>{exampleEntry.label}</div>
+                <div
+                  role="presentation"
+                  onPointerDown={handleExampleModalPointerDown}
+                  onPointerMove={handleExampleModalPointerMove}
+                  onPointerUp={handleExampleModalPointerUp}
+                  onPointerCancel={handleExampleModalPointerUp}
+                  style={{
+                    cursor: exampleModalDragging ? "grabbing" : "grab",
+                    margin: "-4px -8px 8px -8px",
+                    padding: "4px 8px",
+                    borderRadius: "8px",
+                    userSelect: "none",
+                    touchAction: "none",
+                  }}
+                  title="Drag to move"
+                >
+                  <div id="example-modal-title" style={{ ...s.paalLabel, marginBottom: 0 }}>{exampleEntry.label}</div>
+                </div>
                 <div style={s.expectedBox}>{exampleEntry.code}</div>
                 <div style={{ marginTop: "20px", display: "flex", justifyContent: "flex-end" }}>
                   <button type="button" className="inpact-btn-primary" style={s.btn("primary")} onClick={() => setShowExampleModal(false)}>Close</button>
@@ -529,14 +736,114 @@ export default function createINPACTEngine(config) {
                   overflowY: "auto",
                   boxShadow: "0 20px 60px rgba(0,0,0,0.2)",
                   border: "1px solid #e2e8f0",
+                  transform: `translate(${feedbackModalOffset.x}px, ${feedbackModalOffset.y}px)`,
+                  touchAction: "none",
                 }}
                 onClick={(e) => e.stopPropagation()}
               >
-                <div id="feedback-modal-title" style={{ fontSize: "12px", fontWeight: 700, letterSpacing: "0.05em", color: "#64748b", marginBottom: "16px" }}>HINT & FEEDBACK</div>
+                <div
+                  role="presentation"
+                  onPointerDown={handleFeedbackModalPointerDown}
+                  onPointerMove={handleFeedbackModalPointerMove}
+                  onPointerUp={handleFeedbackModalPointerUp}
+                  onPointerCancel={handleFeedbackModalPointerUp}
+                  style={{
+                    cursor: feedbackModalDragging ? "grabbing" : "grab",
+                    margin: "-4px -8px 12px -8px",
+                    padding: "4px 8px",
+                    borderRadius: "8px",
+                    userSelect: "none",
+                    touchAction: "none",
+                  }}
+                  title="Drag to move"
+                >
+                  <div id="feedback-modal-title" style={{ fontSize: "12px", fontWeight: 700, letterSpacing: "0.05em", color: "#64748b", marginBottom: 0 }}>HINT & FEEDBACK</div>
+                </div>
                 {node.hint && <div style={{ ...s.hintBox, marginBottom: fbMsg ? "16px" : 0 }}>💡 {node.hint}</div>}
                 {fbMsg && <div style={s.feedback(result)}>{fbMsg}</div>}
                 <div style={{ marginTop: "20px", display: "flex", justifyContent: "flex-end" }}>
-                  <button type="button" className="inpact-btn-primary" style={s.btn("primary")} onClick={() => setShowFeedbackModal(false)}>Close</button>
+                  <button
+                    type="button"
+                    className="inpact-btn-primary"
+                    style={s.btn("primary")}
+                    onClick={() => {
+                      setShowFeedbackModal(false);
+                      if (result === "correct") next();
+                    }}
+                  >
+                    {result === "correct" ? "NEXT STEP →" : "Close"}
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+          {showMentorModal && onAskMentorResolved && (
+            <div
+              style={{
+                position: "fixed",
+                inset: 0,
+                zIndex: 10001,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                background: "rgba(15, 23, 42, 0.5)",
+                padding: "24px",
+                boxSizing: "border-box",
+              }}
+              onClick={() => setShowMentorModal(false)}
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby="mentor-modal-title"
+            >
+              <div
+                style={{
+                  background: "#ffffff",
+                  borderRadius: "12px",
+                  padding: "24px",
+                  maxWidth: "520px",
+                  width: "100%",
+                  maxHeight: "80vh",
+                  overflowY: "auto",
+                  boxShadow: "0 20px 60px rgba(0,0,0,0.2)",
+                  border: "1px solid #e2e8f0",
+                }}
+                onClick={(e) => e.stopPropagation()}
+              >
+                <div id="mentor-modal-title" style={{ fontSize: "12px", fontWeight: 700, letterSpacing: "0.05em", color: "#64748b", marginBottom: "8px" }}>ASK YOUR MENTOR</div>
+                <p style={{ fontSize: "13px", color: "#475569", lineHeight: 1.5, margin: "0 0 16px" }}>Ask about this step in your own words. You will get a short explanation or hint tailored to the instruction above.</p>
+                <textarea
+                  value={mentorDraft}
+                  onChange={(e) => setMentorDraft(e.target.value)}
+                  placeholder="What would you like help with?"
+                  rows={4}
+                  style={{
+                    width: "100%",
+                    boxSizing: "border-box",
+                    padding: "12px 14px",
+                    fontSize: "13px",
+                    fontFamily: "inherit",
+                    lineHeight: 1.5,
+                    borderRadius: "8px",
+                    border: "1px solid #e2e8f0",
+                    resize: "vertical",
+                    marginBottom: "12px",
+                  }}
+                />
+                {mentorError ? <div style={{ fontSize: "12px", color: "#dc2626", marginBottom: "8px" }}>{mentorError}</div> : null}
+                {mentorReply ? (
+                  <div style={{ ...s.expectedBox, marginTop: "4px", whiteSpace: "pre-wrap" }}>{mentorReply}</div>
+                ) : null}
+                <div style={{ marginTop: "16px", display: "flex", justifyContent: "flex-end", gap: "12px", flexWrap: "wrap" }}>
+                  <button type="button" style={s.btn("ghost")} onClick={() => setShowMentorModal(false)}>Close</button>
+                  <button
+                    type="button"
+                    className="inpact-btn-primary"
+                    style={s.btn("primary")}
+                    onClick={sendMentor}
+                    disabled={!mentorDraft.trim() || mentorLoading}
+                  >
+                    {mentorLoading ? "Sending…" : "Send"}
+                  </button>
                 </div>
               </div>
             </div>
@@ -571,8 +878,8 @@ export default function createINPACTEngine(config) {
         <div style={s.completeBanner}>
           <div style={{ fontSize: "48px", marginBottom: "24px" }}>🎯</div>
           <h1 style={{ ...s.h1, textAlign: "center" }}>Problem #{problemNum} Complete</h1>
-          <p style={{ color: "#4a5568", fontSize: "13px" }}>{title} done. Ready for the next problem.</p>
-          {onNextProblem && <div style={s.btnRow}><button type="button" className="inpact-btn-primary" style={s.btn("primary")} onClick={onNextProblem}>NEXT PROBLEM →</button></div>}
+          <p style={{ color: "#4a5568", fontSize: "13px" }}>{title} done. Ready for the Next Lesson.</p>
+          {onNextProblem && <div style={s.btnRow}><button type="button" className="inpact-btn-primary" style={s.btn("primary")} onClick={onNextProblem}>Next Lesson →</button></div>}
         </div>
       );
     }
@@ -609,6 +916,7 @@ export default function createINPACTEngine(config) {
                 nodes={NODES}
                 mainTab={mainTab}
                 setMainTab={setMainTab}
+                taskInstructionPulseNonce={taskInstructionPulseNonce}
                 answer={answer}
                 previewCode={answerShape === "multi-file" ? getMultiFilePreviewCode(answer) : undefined}
                 getOutputPreview={getOutputPreview ?? (answerShape === "angular-tabs" ? (ans) => {
