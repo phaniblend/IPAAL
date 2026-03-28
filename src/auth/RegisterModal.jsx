@@ -1,6 +1,11 @@
 import { useState } from "react";
 import { setRegistered, FREE_LESSONS_AFTER_REGISTER, MAX_FREE_UNREGISTERED } from "./lessonAccess.js";
-import { isSupabaseConfigured, signInWithGoogle as supabaseGoogleSignIn } from "./supabase.js";
+import {
+  isSupabaseConfigured,
+  signInWithGoogle as supabaseGoogleSignIn,
+  signUpWithEmail,
+  signInWithEmail,
+} from "./supabase.js";
 
 const overlay = {
   position: "fixed",
@@ -22,7 +27,7 @@ const card = {
 };
 const titleStyle = { fontSize: "18px", fontWeight: 600, color: "#0f172a", marginBottom: "8px" };
 const sub = { fontSize: "13px", color: "#64748b", marginBottom: "20px", lineHeight: 1.5 };
-const input = {
+const inputStyle = {
   width: "100%",
   boxSizing: "border-box",
   padding: "10px 12px",
@@ -54,27 +59,61 @@ const hardCallout = {
   lineHeight: 1.55,
 };
 const errText = { fontSize: "12px", color: "#dc2626", marginTop: "-8px", marginBottom: "8px" };
+const successBox = {
+  textAlign: "center",
+  padding: "20px 0",
+};
+const successIcon = {
+  fontSize: "48px",
+  marginBottom: "16px",
+};
+const successTitle = {
+  fontSize: "18px",
+  fontWeight: 600,
+  color: "#0f172a",
+  marginBottom: "8px",
+};
+const successSub = {
+  fontSize: "14px",
+  color: "#64748b",
+  lineHeight: 1.6,
+  marginBottom: "20px",
+};
+const tabRow = {
+  display: "flex",
+  gap: "0",
+  marginBottom: "20px",
+  borderBottom: "2px solid #e2e8f0",
+};
+const tab = (active) => ({
+  flex: 1,
+  padding: "10px 0",
+  fontSize: "14px",
+  fontWeight: 600,
+  cursor: "pointer",
+  background: "none",
+  border: "none",
+  borderBottom: active ? "2px solid #00d4ff" : "2px solid transparent",
+  color: active ? "#0f172a" : "#94a3b8",
+  marginBottom: "-2px",
+});
 
 function isValidEmail(s) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test((s || "").trim());
 }
-function isValidPhone(s) {
-  const digits = (s || "").replace(/\D/g, "");
-  return digits.length >= 10 && digits.length <= 15;
-}
-function isValidEmailOrPhone(s) {
-  const t = (s || "").trim();
-  return isValidEmail(t) || isValidPhone(t);
-}
 
 export default function RegisterModal({ onSuccess, onClose, variant = "soft", voluntary = false }) {
   const isHard = variant === "hard";
+  const [mode, setMode] = useState("register");
   const [name, setName] = useState("");
-  const [emailOrPhone, setEmailOrPhone] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [googleError, setGoogleError] = useState("");
   const [googleLoading, setGoogleLoading] = useState(false);
   const [submitError, setSubmitError] = useState("");
+  const [submitLoading, setSubmitLoading] = useState(false);
+  const [confirmationSent, setConfirmationSent] = useState(false);
+  const [confirmationEmail, setConfirmationEmail] = useState("");
 
   const handleGoogleSignIn = async () => {
     if (!isSupabaseConfigured) return;
@@ -88,25 +127,83 @@ export default function RegisterModal({ onSuccess, onClose, variant = "soft", vo
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleRegister = async (e) => {
     e.preventDefault();
     setSubmitError("");
     const n = name.trim();
-    const eop = emailOrPhone.trim();
+    const em = email.trim();
     if (n.length < 2) {
       setSubmitError("Name must be at least 2 characters.");
       return;
     }
-    if (!isValidEmailOrPhone(eop)) {
-      setSubmitError("Enter a valid email (e.g. you@example.com) or phone number (10\u201315 digits).");
+    if (!isValidEmail(em)) {
+      setSubmitError("Enter a valid email address.");
       return;
     }
     if (password.length < 8) {
       setSubmitError("Password must be at least 8 characters.");
       return;
     }
-    setRegistered({ name: n, emailOrPhone: eop });
-    onSuccess?.();
+    if (!isSupabaseConfigured) {
+      setRegistered({ name: n, email: em });
+      onSuccess?.();
+      return;
+    }
+    setSubmitLoading(true);
+    try {
+      const data = await signUpWithEmail(em, password, n);
+      if (data?.user?.identities?.length === 0) {
+        setSubmitError("An account with this email already exists. Try logging in.");
+        setSubmitLoading(false);
+        return;
+      }
+      setConfirmationEmail(em);
+      setConfirmationSent(true);
+    } catch (err) {
+      setSubmitError(err?.message || "Sign-up failed. Please try again.");
+    } finally {
+      setSubmitLoading(false);
+    }
+  };
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    setSubmitError("");
+    const em = email.trim();
+    if (!isValidEmail(em)) {
+      setSubmitError("Enter a valid email address.");
+      return;
+    }
+    if (!password) {
+      setSubmitError("Enter your password.");
+      return;
+    }
+    if (!isSupabaseConfigured) {
+      setRegistered({ email: em });
+      onSuccess?.();
+      return;
+    }
+    setSubmitLoading(true);
+    try {
+      const data = await signInWithEmail(em, password);
+      const user = data?.user;
+      setRegistered({
+        name: user?.user_metadata?.display_name || em.split("@")[0],
+        email: em,
+      });
+      onSuccess?.();
+    } catch (err) {
+      const msg = err?.message || "Login failed.";
+      if (msg.includes("Email not confirmed")) {
+        setSubmitError("Please confirm your email first. Check your inbox for the confirmation link.");
+      } else if (msg.includes("Invalid login credentials")) {
+        setSubmitError("Invalid email or password.");
+      } else {
+        setSubmitError(msg);
+      }
+    } finally {
+      setSubmitLoading(false);
+    }
   };
 
   const handleContinueWithoutRegistering = () => {
@@ -116,6 +213,44 @@ export default function RegisterModal({ onSuccess, onClose, variant = "soft", vo
   const softGateSub = `You're opening one of your last free lessons before we ask for an account (${MAX_FREE_UNREGISTERED} unique lessons in any order, then we need to know you). Register to save progress \u2014 or continue for now. After you register, you get ${FREE_LESSONS_AFTER_REGISTER} more free lessons.`;
   const softVoluntarySub =
     "Sign in with Google or create an account with email. Registered learners unlock more free lessons and saved progress.";
+
+  if (confirmationSent) {
+    return (
+      <div style={overlay}>
+        <div style={card}>
+          <div style={successBox}>
+            <div style={successIcon}>&#9993;</div>
+            <div style={successTitle}>Check your email</div>
+            <div style={successSub}>
+              We sent a confirmation link to <strong>{confirmationEmail}</strong>.
+              <br />
+              Click the link in the email to verify your account, then come back and log in.
+              <br />
+              <span style={{ fontSize: "12px", color: "#94a3b8" }}>
+                Didn&apos;t get it? Check your spam folder.
+              </span>
+            </div>
+            <button
+              type="button"
+              style={btn(true)}
+              onClick={() => {
+                setConfirmationSent(false);
+                setMode("login");
+                setPassword("");
+              }}
+            >
+              Got it &mdash; take me to log in
+            </button>
+            {!isHard && (
+              <button type="button" style={btn(false)} onClick={onClose}>
+                Close
+              </button>
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div
@@ -137,7 +272,6 @@ export default function RegisterModal({ onSuccess, onClose, variant = "soft", vo
           <div style={sub}>{voluntary ? softVoluntarySub : softGateSub}</div>
         )}
 
-        {/* Google sign-in button — prominent at top */}
         <div style={{ marginBottom: "16px" }}>
           {isSupabaseConfigured ? (
             <button
@@ -173,23 +307,48 @@ export default function RegisterModal({ onSuccess, onClose, variant = "soft", vo
         </div>
 
         <div style={{ textAlign: "center", fontSize: "12px", color: "#94a3b8", margin: "8px 0 16px" }}>
-          &mdash; or register with email &mdash;
+          &mdash; or use email &mdash;
         </div>
 
-        <form onSubmit={handleSubmit}>
-          <input type="text" placeholder="Name" value={name} onChange={(e) => setName(e.target.value)} style={input} autoComplete="name" />
-          <input type="text" placeholder="Email or phone" value={emailOrPhone} onChange={(e) => setEmailOrPhone(e.target.value)} style={input} autoComplete="username" />
-          <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} style={input} autoComplete="new-password" />
-          {submitError && <div style={errText} role="alert">{submitError}</div>}
-          <button type="submit" style={btn(true)} disabled={!name.trim() || !emailOrPhone.trim() || !password}>
+        <div style={tabRow}>
+          <button type="button" style={tab(mode === "register")} onClick={() => { setMode("register"); setSubmitError(""); }}>
             Register
           </button>
-          {!isHard && !voluntary && (
-            <button type="button" style={btn(false)} onClick={handleContinueWithoutRegistering}>
-              Continue without registering
+          <button type="button" style={tab(mode === "login")} onClick={() => { setMode("login"); setSubmitError(""); }}>
+            Log in
+          </button>
+        </div>
+
+        {mode === "register" ? (
+          <form onSubmit={handleRegister}>
+            <input type="text" placeholder="Name" value={name} onChange={(e) => setName(e.target.value)} style={inputStyle} autoComplete="name" />
+            <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} style={inputStyle} autoComplete="email" />
+            <input type="password" placeholder="Password (8+ characters)" value={password} onChange={(e) => setPassword(e.target.value)} style={inputStyle} autoComplete="new-password" />
+            {submitError && <div style={errText} role="alert">{submitError}</div>}
+            <button type="submit" style={btn(true)} disabled={submitLoading || !name.trim() || !email.trim() || !password}>
+              {submitLoading ? "Creating account\u2026" : "Register"}
             </button>
-          )}
-        </form>
+            {!isHard && !voluntary && (
+              <button type="button" style={btn(false)} onClick={handleContinueWithoutRegistering}>
+                Continue without registering
+              </button>
+            )}
+          </form>
+        ) : (
+          <form onSubmit={handleLogin}>
+            <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} style={inputStyle} autoComplete="email" />
+            <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} style={inputStyle} autoComplete="current-password" />
+            {submitError && <div style={errText} role="alert">{submitError}</div>}
+            <button type="submit" style={btn(true)} disabled={submitLoading || !email.trim() || !password}>
+              {submitLoading ? "Logging in\u2026" : "Log in"}
+            </button>
+            {!isHard && !voluntary && (
+              <button type="button" style={btn(false)} onClick={handleContinueWithoutRegistering}>
+                Continue without registering
+              </button>
+            )}
+          </form>
+        )}
       </div>
     </div>
   );

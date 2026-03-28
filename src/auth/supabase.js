@@ -22,6 +22,29 @@ export async function signInWithGoogle() {
   return data;
 }
 
+export async function signUpWithEmail(email, password, displayName) {
+  if (!supabase) throw new Error("Supabase not configured");
+  const { data, error } = await supabase.auth.signUp({
+    email,
+    password,
+    options: {
+      data: { display_name: displayName },
+    },
+  });
+  if (error) throw error;
+  return data;
+}
+
+export async function signInWithEmail(email, password) {
+  if (!supabase) throw new Error("Supabase not configured");
+  const { data, error } = await supabase.auth.signInWithPassword({
+    email,
+    password,
+  });
+  if (error) throw error;
+  return data;
+}
+
 export async function signOut() {
   if (!supabase) return;
   await supabase.auth.signOut();
