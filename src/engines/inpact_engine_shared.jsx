@@ -1081,8 +1081,14 @@ export default function createINPACTEngine(config) {
 
     return (
       <div style={s.wrap}>
+        <style>{`
+          @media (max-width: 768px) {
+            .inpact-sidebar { display: none !important; }
+            .inpact-main { min-width: 100vw !important; max-width: 100vw !important; padding-left: 16px !important; padding-right: 16px !important; }
+          }
+        `}</style>
         <div style={s.body}>
-          <div style={s.sidebar}>
+          <div className="inpact-sidebar" style={s.sidebar}>
             <div style={s.sidebarLabel}>PROGRESS</div>
             {sideItems.map((item, i) => {
               const isActive = NODES[nodeIndex]?.id === item.id || (nodeIndex >= NODES.length && i === sideItems.length - 1);
@@ -1094,7 +1100,7 @@ export default function createINPACTEngine(config) {
               );
             })}
           </div>
-          <div style={{ ...s.main, overflowY: "auto" }}>
+          <div className="inpact-main" style={{ ...s.main, overflowY: "auto" }}>
             {node?.type === "question" ? (
               <LessonEditorOutputTabs
                 node={node}

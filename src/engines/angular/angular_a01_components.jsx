@@ -1391,9 +1391,15 @@ No hints. No looking back. Check each item as you write it.`}</div>
         <div style={s.progressLabel}>{progress}%</div>
       </div>
 
+      <style>{`
+        @media (max-width: 768px) {
+          .inpact-sidebar { display: none !important; }
+          .inpact-main { min-width: 100vw !important; max-width: 100vw !important; padding: 16px !important; }
+        }
+      `}</style>
       <div style={s.body}>
         {/* SIDEBAR */}
-        <div style={s.sidebar}>
+        <div className="inpact-sidebar" style={s.sidebar}>
           <div style={s.sidebarLabel}>PROGRESS</div>
           {sideItems.map((item, i) => {
             const isActive = NODES[nodeIndex]?.id === item.id;
@@ -1419,7 +1425,7 @@ No hints. No looking back. Check each item as you write it.`}</div>
         </div>
 
         {/* MAIN */}
-        <div style={s.main}>
+        <div className="inpact-main" style={s.main}>
           <div style={s.mainScroll}>{renderNode()}</div>
         </div>
       </div>

@@ -383,7 +383,22 @@ export default function LandingPage({ track, onSelectProblem, problemList }) {
             z-index: 1;
             white-space: nowrap;
           }
-          @media (max-width: 900px) {
+          @media (max-width: 600px) {
+            .lp-hero-brand {
+              min-height: auto;
+            }
+            .lp-punchline-abs {
+              position: relative;
+              top: auto;
+              left: auto;
+              text-align: center;
+              white-space: normal;
+              margin: 2px auto 0;
+              max-width: 90%;
+              font-size: clamp(12px, 3.2vw, 15px);
+            }
+          }
+          @media (min-width: 601px) and (max-width: 900px) {
             .lp-punchline-abs {
               top: clamp(118px, 38vw, 242px);
               left: clamp(16px, 10vw, 165px);
@@ -404,8 +419,9 @@ export default function LandingPage({ track, onSelectProblem, problemList }) {
           @media (max-width: 720px) {
             .lp-lesson-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
           }
-          @media (max-width: 420px) {
-            .lp-lesson-grid { grid-template-columns: minmax(0, 1fr); }
+          @media (max-width: 600px) {
+            .lp-lesson-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+            .lp-lesson-grid > div { aspect-ratio: 3 / 2 !important; padding: 8px 6px !important; border-radius: 8px !important; }
           }
         `}
       </style>
