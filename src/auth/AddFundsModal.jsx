@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { getBalanceCents, addFundsCents, FUND_BUCKETS_CENTS, PRICE_PER_LESSON_CENTS } from "./lessonAccess.js";
+import { getBalanceCents, addFundsCents, FUND_BUCKETS_CENTS, PRICE_PER_LESSON_CENTS, TOTAL_FREE_LESSONS } from "./lessonAccess.js";
 
 const overlay = {
   position: "fixed",
@@ -48,7 +48,7 @@ export default function AddFundsModal({ onDone }) {
       <div style={card} onClick={(e) => e.stopPropagation()}>
         <div style={title}>Add funds</div>
         <div style={sub}>
-          Lessons after your 10 free ones cost ${(PRICE_PER_LESSON_CENTS / 100).toFixed(0)} each. Load a bucket to continue.
+          Lessons after your {TOTAL_FREE_LESSONS} free ones cost ${(PRICE_PER_LESSON_CENTS / 100).toFixed(0)} each (lifetime access per lesson). Load a bucket to continue — real payments when we wire the processor.
         </div>
         <div style={balance}>Balance: ${(balanceCents / 100).toFixed(2)}</div>
         <div>

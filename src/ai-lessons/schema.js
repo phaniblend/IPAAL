@@ -62,6 +62,8 @@ export const lessonStepSchema = z.object({
   feedbackWrong: z.string().optional(),
   evaluation: evaluationMetadataSchema.optional(),
   answer_keywords: z.array(z.string()).optional(),
+  /** Concept ids with glossary deep-dive copy; merged with track glossary `introductions` for this step. */
+  introducesConcepts: z.array(z.string()).optional(),
 });
 
 // --- Algorithm lesson: flowchart + structured steps (problem → example → flowchart → reasoning → dryRun → code) ---

@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import InpactLogo from "../../components/InpactLogo.jsx";
 import CodeEditor from "../CodeEditor";
 import LessonEditorOutputTabs from "../LessonEditorOutputTabs";
 
@@ -151,7 +152,7 @@ const s = {
     alignItems: "center",
     gap: "12px",
     padding: "0 24px",
-    height: "52px",
+    height: "96px",
     background: "#1a1d2e",
     borderBottom: "1px solid #2d3748",
     flexShrink: 0,
@@ -515,7 +516,10 @@ export default function AngularA08ModuleFederation({ onNextProblem }) {
   return (
     <div style={s.wrap}>
       <header style={s.topbar}>
-        <div style={s.logo}>INPACT · ANGULAR</div>
+        <div style={{ display: "flex", alignItems: "center", gap: "6px", flexShrink: 0 }}>
+          <InpactLogo height={80} />
+          <span style={{ fontWeight: 700, fontSize: "13px", letterSpacing: "0.15em", color: "#7c3aed" }}>· ANGULAR</span>
+        </div>
         <div style={s.engineTag}>ANG08 — MODULE FEDERATION</div>
       </header>
       <div style={s.body}>

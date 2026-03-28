@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { setRegistered } from "./lessonAccess.js";
+import { setRegistered, FREE_LESSONS_AFTER_REGISTER, MAX_FREE_UNREGISTERED } from "./lessonAccess.js";
 import { isFirebaseConfigured, signInWithGoogle } from "./firebase.js";
 
 const overlay = {
@@ -16,7 +16,7 @@ const card = {
   background: "#ffffff",
   borderRadius: "12px",
   padding: "28px 32px",
-  maxWidth: "400px",
+  maxWidth: "420px",
   width: "90%",
   boxShadow: "0 20px 60px rgba(0,0,0,0.3)",
 };
@@ -43,15 +43,15 @@ const btn = (primary) => ({
   border: primary ? "none" : "1px solid #e2e8f0",
   marginTop: "8px",
 });
-const punny = {
-  marginTop: "16px",
-  padding: "12px 16px",
+const hardCallout = {
+  marginBottom: "20px",
+  padding: "14px 16px",
   background: "rgba(0,212,255,0.12)",
   borderLeft: "4px solid #00d4ff",
   borderRadius: "8px",
   fontSize: "14px",
   color: "#0f172a",
-  lineHeight: 1.5,
+  lineHeight: 1.55,
 };
 const errText = { fontSize: "12px", color: "#dc2626", marginTop: "-8px", marginBottom: "8px" };
 
@@ -67,11 +67,11 @@ function isValidEmailOrPhone(s) {
   return isValidEmail(t) || isValidPhone(t);
 }
 
-export default function RegisterModal({ onSuccess, onClose, forceRegister = true }) {
+export default function RegisterModal({ onSuccess, onClose, variant = "soft", voluntary = false }) {
+  const isHard = variant === "hard";
   const [name, setName] = useState("");
   const [emailOrPhone, setEmailOrPhone] = useState("");
   const [password, setPassword] = useState("");
-  const [showLaterMessage, setShowLaterMessage] = useState(false);
   const [googleError, setGoogleError] = useState("");
   const [googleLoading, setGoogleLoading] = useState(false);
   const [submitError, setSubmitError] = useState("");
@@ -111,26 +111,36 @@ export default function RegisterModal({ onSuccess, onClose, forceRegister = true
       setSubmitError("Password must be at least 8 characters.");
       return;
     }
-    // TODO: call backend POST /auth/register with { name, emailOrPhone, password, fingerprintHint }
     setRegistered({ name: n, emailOrPhone: eop });
     onSuccess?.();
   };
 
-  const handleLater = () => {
-    setShowLaterMessage(true);
+  const handleContinueWithoutRegistering = () => {
+    onClose?.();
   };
 
+  const softGateSub = `You’re opening one of your last free lessons before we ask for an account (${MAX_FREE_UNREGISTERED} unique lessons in any order, then we need to know you). Register to save progress — or continue for now. After you register, you get ${FREE_LESSONS_AFTER_REGISTER} more free lessons.`;
+  const softVoluntarySub =
+    "Sign in with Google or create an account with email. Registered learners unlock more free lessons and saved progress.";
+
   return (
-    <div style={overlay} onClick={(e) => e.target === e.currentTarget && !forceRegister && !showLaterMessage && onClose?.()}>
+    <div
+      style={overlay}
+      onClick={(e) => {
+        if (e.target === e.currentTarget && !isHard && onClose) onClose();
+      }}
+    >
       <div style={card} onClick={(e) => e.stopPropagation()}>
-        <div style={title}>Register to continue</div>
-        <div style={sub}>
-          You’ve used your 3 free lessons. Register (name, email or phone, password) to get 7 more free lessons and save your progress.
+        <div style={title}>
+          {isHard ? "Time to register" : voluntary ? "Log in or register" : "Register (optional for now)"}
         </div>
-        {showLaterMessage && (
-          <div style={punny} role="alert">
-            Sorry boss — you say that all the time. We need you to register now. No escape. 😄
+        {isHard ? (
+          <div style={hardCallout} role="alert">
+            Sorry, friend — you say that all the time. Why don&apos;t you register if you like our lessons and get{" "}
+            {FREE_LESSONS_AFTER_REGISTER} more free lessons?
           </div>
+        ) : (
+          <div style={sub}>{voluntary ? softVoluntarySub : softGateSub}</div>
         )}
         <form onSubmit={handleSubmit}>
           <input
@@ -157,13 +167,19 @@ export default function RegisterModal({ onSuccess, onClose, forceRegister = true
             style={input}
             autoComplete="new-password"
           />
-          {submitError && <div style={errText} role="alert">{submitError}</div>}
+          {submitError && (
+            <div style={errText} role="alert">
+              {submitError}
+            </div>
+          )}
           <button type="submit" style={btn(true)} disabled={!name.trim() || !emailOrPhone.trim() || !password}>
             Register
           </button>
-          <button type="button" style={btn(false)} onClick={handleLater}>
-            I’ll do it later
-          </button>
+          {!isHard && !voluntary && (
+            <button type="button" style={btn(false)} onClick={handleContinueWithoutRegistering}>
+              Continue without registering
+            </button>
+          )}
         </form>
         <div style={{ marginTop: "16px", textAlign: "center" }}>
           <span style={{ fontSize: "12px", color: "#94a3b8" }}>Or register with </span>
@@ -181,7 +197,9 @@ export default function RegisterModal({ onSuccess, onClose, forceRegister = true
               Google (set up Firebase)
             </button>
           )}
-          {googleError && <div style={{ fontSize: "12px", color: "#dc2626", marginTop: "8px" }}>{googleError}</div>}
+          {googleError && (
+            <div style={{ fontSize: "12px", color: "#dc2626", marginTop: "8px" }}>{googleError}</div>
+          )}
         </div>
       </div>
     </div>

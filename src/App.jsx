@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import LandingPage, { PROBLEM_LIST, buildAngularLessonList } from './LandingPage'
 import { getLessonCount } from './trackLessonCounts.js'
 import { MOBILE_ANGULAR_LESSONS } from './mobileAngularLessons.js'
@@ -298,6 +298,11 @@ import INPACTEngineP122 from './engines/react-js/inpact_p122_engine'
 import INPACTEngineP123 from './engines/react-js/inpact_p123_engine'
 import INPACTEngineP124 from './engines/react-js/inpact_p124_engine'
 import INPACTEngineP125 from './engines/react-js/inpact_p125_engine'
+import INPACTEngineP126 from './engines/react-js/inpact_p126_engine'
+import INPACTEngineP127 from './engines/react-js/inpact_p127_engine'
+import INPACTEngineTS120 from './engines/react-ts/inpact_ts120_engine'
+import INPACTEngineTS121 from './engines/react-ts/inpact_ts121_engine'
+import INPACTEngineTS122 from './engines/react-ts/inpact_ts122_engine'
 import INPACTEngineTS31 from './engines/react-ts/inpact_ts31_engine'
 import INPACTEngineTS32 from './engines/react-ts/inpact_ts32_engine'
 import INPACTEngineTS33 from './engines/react-ts/inpact_ts33_engine'
@@ -606,9 +611,11 @@ const ENGINES = [
   INPACTEngineP123,
   INPACTEngineP124,
   INPACTEngineP125,
+  INPACTEngineP126,
+  INPACTEngineP127,
 ]
 
-// TypeScript track: same 119 lessons as React JS (ts01–ts09, ts11–ts15, ts18–ts87, ts89–ts100, then P101–P110/P113–P125)
+// TypeScript track: same lesson count as React JS (ts01–ts09, ts11–ts15, ts18–ts87, ts89–ts100, then P101–P110/P113–P125/P127, TS120–TS122)
 const ENGINES_TS = [
   INPACTEngineTS01,
   INPACTEngineTS02,
@@ -729,6 +736,9 @@ const ENGINES_TS = [
   INPACTEngineP123,
   INPACTEngineP124,
   INPACTEngineP125,
+  INPACTEngineTS120,
+  INPACTEngineTS121,
+  INPACTEngineTS122,
 ]
 
 // TypeScript Fundamentals: 10 language-first problems (no React)
@@ -927,8 +937,7 @@ const ENGINES_CSS = [
 const ALGO_AI_TRACKS = ['algo-js', 'algo-ts', 'algo-python', 'algo-java']
 
 function getEngines(track, lessonListLength = 0) {
-  // Algorithms: use content/generate flow (content/algorithms/*.json) so INPACT engine renders the lesson
-  if ((track === 'algorithms' || track === 'mobile-angular') && lessonListLength > 0) {
+  if (track === 'mobile-angular' && lessonListLength > 0) {
     return Array(lessonListLength).fill(null)
   }
   if (ALGO_AI_TRACKS.includes(track)) {
@@ -973,7 +982,7 @@ function getEngines(track, lessonListLength = 0) {
   return ENGINES
 }
 
-function getProblemList(track, algoLessonList = []) {
+function getProblemList(track) {
   if (track === 'js') {
     const jsFund = JS_FUNDAMENTALS_CURRICULUM.map((c) => ({ title: c.title, shortName: c.shortName, why: c.why }))
     return [...jsFund, ...JS_INTERVIEW_CURRICULUM]
@@ -1006,9 +1015,6 @@ function getProblemList(track, algoLessonList = []) {
   if (track === 'mobile-angular') {
     return MOBILE_ANGULAR_LESSONS.map((c) => ({ title: c.title, shortName: c.shortName }))
   }
-  if (track === 'algorithms') {
-    return ALGO_FULL_LIST.map((item, i) => ({ id: `algo-${i}`, title: item.title, ...item }))
-  }
   if (ALGO_AI_TRACKS.includes(track)) {
     return ALGO_AI_NAMES.map((title) => ({ title }))
   }
@@ -1017,12 +1023,11 @@ function getProblemList(track, algoLessonList = []) {
 
 import { AI_LESSONS_CONFIG } from './ai-lessons/config.js'
 import { ALGO_AI_NAMES } from './ai-lessons/algoAiNames.js'
-import { ALGO_FULL_LIST } from './ai-lessons/algoCurriculumFull.js'
 import DynamicLessonPage from './ai-lessons/DynamicLessonPage.jsx'
 import { LessonValidationContext } from './ai-lessons/lessonValidationContext.jsx'
-import AlgoEngine from './learn-algo/AlgoEngine.jsx'
 import {
-  mustRegisterToAccess,
+  mustSoftRegisterToAccess,
+  mustHardRegisterToAccess,
   mustPayToAccess,
   recordLessonAccess,
   deductLessonPayment,
@@ -1033,25 +1038,22 @@ import {
 } from './auth/lessonAccess.js'
 import RegisterModal from './auth/RegisterModal.jsx'
 import AddFundsModal from './auth/AddFundsModal.jsx'
+import CinematicLanding from './CinematicLanding.jsx'
 
 export default function App() {
-  const [track, setTrack] = useState('react-js') // 'react-js' | 'react-ts' | 'angular' | 'vue' | 'js' | 'ts' | 'node' | 'css'
+  const [track, setTrack] = useState('react-ts')
   const [lessonTrack, setLessonTrack] = useState(null) // track locked when lesson is opened (so React TS lesson never uses react-js)
   const [problemIndex, setProblemIndex] = useState(null) // null = landing, 0-based index = problem
   const [selectedLessonItem, setSelectedLessonItem] = useState(null) // { title, shortName?, why? } when a card is clicked
-  const [algoLessonList, setAlgoLessonList] = useState([]) // algorithms track: list from GET /api/mentor/lessons
   const [useAILessonFailed, setUseAILessonFailed] = useState(false) // fallback to local engine when AI path fails
   const [showRegisterModal, setShowRegisterModal] = useState(false)
+  /** 'soft' = dismissible (lessons 6–8); 'hard' = must register (9th lesson). */
+  const [registerModalVariant, setRegisterModalVariant] = useState('soft')
   const [showAddFundsModal, setShowAddFundsModal] = useState(false)
   const [pendingLesson, setPendingLesson] = useState(null) // { track, index, item } when gated
   const [user, setUser] = useState(() => getStoredUser())
-
-  useEffect(() => {
-    fetch('/api/mentor/lessons')
-      .then((r) => r.ok ? r.json() : { lessons: [] })
-      .then((data) => setAlgoLessonList(data.lessons || []))
-      .catch(() => setAlgoLessonList([]))
-  }, [])
+  /** Full page load / refresh always shows the intro; we do not persist “already seen” in sessionStorage (that skipped it on every refresh). */
+  const [showCinematic, setShowCinematic] = useState(true)
 
   const onBackToProblems = () => {
     setProblemIndex(null)
@@ -1071,18 +1073,16 @@ export default function App() {
     setPendingLesson(null)
   }
 
-  const handleSelectAlgoWithLanguage = (problemIndex, problemTitle, algoTrack) => {
-    setTrack(algoTrack)
-    openLesson(problemIndex, { title: problemTitle }, algoTrack)
-  }
-
   const handleSelectProblem = (i, item, fullList) => {
-    if (track === 'algorithms') {
-      openLesson(i, item)
+    if (mustHardRegisterToAccess(track, i)) {
+      setPendingLesson({ track, index: i, item })
+      setRegisterModalVariant('hard')
+      setShowRegisterModal(true)
       return
     }
-    if (mustRegisterToAccess(track, i)) {
+    if (mustSoftRegisterToAccess(track, i)) {
       setPendingLesson({ track, index: i, item })
+      setRegisterModalVariant('soft')
       setShowRegisterModal(true)
       return
     }
@@ -1102,7 +1102,16 @@ export default function App() {
   const registerSuccess = () => {
     setUser(getStoredUser())
     setShowRegisterModal(false)
+    setRegisterModalVariant('soft')
     if (pendingLesson) openLesson(pendingLesson.index, pendingLesson.item, pendingLesson.track)
+  }
+
+  const registerModalDismiss = () => {
+    setShowRegisterModal(false)
+    setRegisterModalVariant('soft')
+    if (pendingLesson) {
+      openLesson(pendingLesson.index, pendingLesson.item, pendingLesson.track)
+    }
   }
 
   const handleLogout = () => {
@@ -1139,6 +1148,17 @@ export default function App() {
   }
 
   if (problemIndex === null) {
+    if (showCinematic) {
+      return (
+        <CinematicLanding
+          onEnterLessons={() => {
+            setTrack('react-ts')
+            setShowCinematic(false)
+          }}
+        />
+      )
+    }
+
     return (
       <>
         <div
@@ -1148,7 +1168,7 @@ export default function App() {
             left: 0,
             right: 0,
             zIndex: 9998,
-            padding: '10px 16px',
+            padding: '6px 14px',
             background: '#ffffff',
             borderBottom: '1px solid #e2e8f0',
             display: 'flex',
@@ -1166,22 +1186,34 @@ export default function App() {
                 </button>
               </>
             ) : (
-              <button type="button" style={{ ...authBtnStyle, borderColor: '#00d4ff', color: '#052545', background: '#00d4ff' }} onClick={() => setShowRegisterModal(true)}>
+              <button
+                type="button"
+                style={{ ...authBtnStyle, borderColor: '#00d4ff', color: '#052545', background: '#00d4ff' }}
+                onClick={() => {
+                  setPendingLesson(null)
+                  setRegisterModalVariant('soft')
+                  setShowRegisterModal(true)
+                }}
+              >
                 Log in
               </button>
             )}
           </div>
         </div>
-        <div style={{ paddingTop: '52px' }}>
+        <div style={{ paddingTop: '38px' }}>
           <LandingPage
             track={track}
-            onTrackChange={setTrack}
             onSelectProblem={handleSelectProblem}
-            problemList={getProblemList(track, algoLessonList)}
+            problemList={getProblemList(track)}
           />
         </div>
         {showRegisterModal && (
-          <RegisterModal forceRegister onSuccess={registerSuccess} onClose={() => setShowRegisterModal(false)} />
+          <RegisterModal
+            variant={registerModalVariant}
+            voluntary={!pendingLesson}
+            onSuccess={registerSuccess}
+            onClose={registerModalVariant === 'soft' ? registerModalDismiss : undefined}
+          />
         )}
         {showAddFundsModal && <AddFundsModal onDone={addFundsDone} />}
       </>
@@ -1193,15 +1225,22 @@ export default function App() {
   const lessonList =
     effectiveTrack === 'angular'
       ? buildAngularLessonList()
-      : (getProblemList(effectiveTrack, algoLessonList) ?? PROBLEM_LIST.map((title) => ({ title })))
+      : (getProblemList(effectiveTrack) ?? PROBLEM_LIST.map((title) => ({ title })))
   const engines = getEngines(effectiveTrack, lessonList?.length)
   const Engine = engines[problemIndex]
 
   const onNextProblem = () => {
     const next = Math.min(problemIndex + 1, engines.length - 1)
     if (next === problemIndex) return
-    if (mustRegisterToAccess(effectiveTrack, next)) {
+    if (mustHardRegisterToAccess(effectiveTrack, next)) {
       setPendingLesson({ track: effectiveTrack, index: next, item: lessonList[next] ?? null })
+      setRegisterModalVariant('hard')
+      setShowRegisterModal(true)
+      return
+    }
+    if (mustSoftRegisterToAccess(effectiveTrack, next)) {
+      setPendingLesson({ track: effectiveTrack, index: next, item: lessonList[next] ?? null })
+      setRegisterModalVariant('soft')
       setShowRegisterModal(true)
       return
     }
@@ -1220,8 +1259,7 @@ export default function App() {
   const useAILessons = AI_LESSONS_CONFIG.useAILessons && !useAILessonFailed
   const lessonTitle = selectedLessonItem?.title ?? lessonList[problemIndex]?.title ?? `Lesson ${problemIndex + 1}`
   const hasStaticEngine = Boolean(engines[problemIndex])
-  // Algorithms: use content flow (content/algorithms/*.json) → DynamicLessonPage. Other tracks: use dynamic when AI enabled or no static engine.
-  const useDynamicLesson = effectiveTrack === 'algorithms' || effectiveTrack === 'mobile-angular' || ALGO_AI_TRACKS.includes(effectiveTrack) || (useAILessons || !hasStaticEngine)
+  const useDynamicLesson = effectiveTrack === 'mobile-angular' || ALGO_AI_TRACKS.includes(effectiveTrack) || (useAILessons || !hasStaticEngine)
 
   if (useDynamicLesson) {
     return (
@@ -1286,23 +1324,45 @@ export default function App() {
                   </button>
                 </>
               ) : (
-                <button type="button" style={{ ...authBtnStyle, borderColor: '#00d4ff', color: '#052545', background: '#00d4ff' }} onClick={() => setShowRegisterModal(true)}>
+                <button
+                  type="button"
+                  style={{ ...authBtnStyle, borderColor: '#00d4ff', color: '#052545', background: '#00d4ff' }}
+                  onClick={() => {
+                    setPendingLesson(null)
+                    setRegisterModalVariant('soft')
+                    setShowRegisterModal(true)
+                  }}
+                >
                   Log in
                 </button>
               )}
             </div>
           </div>
         </div>
-        <DynamicLessonPage
-          track={lessonTrack ?? track}
-          lessonTitle={lessonTitle}
-          lessonIndex={problemIndex}
-          onBackToProblems={onBackToProblems}
-          onNextProblem={onNextProblem}
-          onFallbackToLocal={AI_LESSONS_CONFIG.fallbackToLocalOnError ? () => setUseAILessonFailed(true) : undefined}
-        />
+        <LessonValidationContext.Provider
+          value={{
+            track: effectiveTrack,
+            lessonIndex: problemIndex,
+            lessonTitle: lessonTitle ?? '',
+            lessonKey: `${effectiveTrack}:${problemIndex}:${lessonTitle ?? ''}`,
+          }}
+        >
+          <DynamicLessonPage
+            track={lessonTrack ?? track}
+            lessonTitle={lessonTitle}
+            lessonIndex={problemIndex}
+            onBackToProblems={onBackToProblems}
+            onNextProblem={onNextProblem}
+            onFallbackToLocal={AI_LESSONS_CONFIG.fallbackToLocalOnError ? () => setUseAILessonFailed(true) : undefined}
+          />
+        </LessonValidationContext.Provider>
         {showRegisterModal && (
-          <RegisterModal forceRegister onSuccess={registerSuccess} onClose={() => setShowRegisterModal(false)} />
+          <RegisterModal
+            variant={registerModalVariant}
+            voluntary={!pendingLesson}
+            onSuccess={registerSuccess}
+            onClose={registerModalVariant === 'soft' ? registerModalDismiss : undefined}
+          />
         )}
         {showAddFundsModal && <AddFundsModal onDone={addFundsDone} />}
       </>
@@ -1314,10 +1374,38 @@ export default function App() {
       <>
         <div style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 9999, padding: '12px 24px', background: '#ffffff', borderBottom: '1px solid #e2e8f0', fontFamily: "'DM Sans', sans-serif", display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <button type="button" onClick={onBackToProblems} style={{ background: '#0f172a', border: 'none', borderRadius: '8px', color: '#ffffff', cursor: 'pointer', fontSize: '12px', fontWeight: '600', padding: '8px 14px' }}>← All Lessons</button>
-          <div style={authBarStyle}>{user ? <><span>Hi, {user.name || user.emailOrPhone || 'User'}</span><button type="button" style={authBtnStyle} onClick={handleLogout}>Log out</button></> : <button type="button" style={{ ...authBtnStyle, borderColor: '#00d4ff', color: '#052545', background: '#00d4ff' }} onClick={() => setShowRegisterModal(true)}>Log in</button>}</div>
+          <div style={authBarStyle}>
+            {user ? (
+              <>
+                <span>Hi, {user.name || user.emailOrPhone || 'User'}</span>
+                <button type="button" style={authBtnStyle} onClick={handleLogout}>
+                  Log out
+                </button>
+              </>
+            ) : (
+              <button
+                type="button"
+                style={{ ...authBtnStyle, borderColor: '#00d4ff', color: '#052545', background: '#00d4ff' }}
+                onClick={() => {
+                  setPendingLesson(null)
+                  setRegisterModalVariant('soft')
+                  setShowRegisterModal(true)
+                }}
+              >
+                Log in
+              </button>
+            )}
+          </div>
         </div>
         <div style={{ paddingTop: '52px', textAlign: 'center', padding: '48px' }}>Select a lesson from the list.</div>
-        {showRegisterModal && <RegisterModal forceRegister onSuccess={registerSuccess} onClose={() => setShowRegisterModal(false)} />}
+        {showRegisterModal && (
+          <RegisterModal
+            variant={registerModalVariant}
+            voluntary={!pendingLesson}
+            onSuccess={registerSuccess}
+            onClose={registerModalVariant === 'soft' ? registerModalDismiss : undefined}
+          />
+        )}
         {showAddFundsModal && <AddFundsModal onDone={addFundsDone} />}
       </>
     )
@@ -1374,7 +1462,15 @@ export default function App() {
               </button>
             </>
           ) : (
-            <button type="button" style={{ ...authBtnStyle, borderColor: '#00d4ff', color: '#052545', background: '#00d4ff' }} onClick={() => setShowRegisterModal(true)}>
+            <button
+              type="button"
+              style={{ ...authBtnStyle, borderColor: '#00d4ff', color: '#052545', background: '#00d4ff' }}
+              onClick={() => {
+                setPendingLesson(null)
+                setRegisterModalVariant('soft')
+                setShowRegisterModal(true)
+              }}
+            >
               Log in
             </button>
           )}
@@ -1391,14 +1487,15 @@ export default function App() {
         <Engine
           onNextProblem={problemIndex < engines.length - 1 ? onNextProblem : undefined}
           onBackToProblems={onBackToProblems}
-          {...(effectiveTrack === 'algorithms' && {
-            lessonId: lessonList[problemIndex]?.id,
-            lessonTitle: lessonList[problemIndex]?.title,
-          })}
         />
       </LessonValidationContext.Provider>
       {showRegisterModal && (
-        <RegisterModal forceRegister onSuccess={registerSuccess} onClose={() => setShowRegisterModal(false)} />
+        <RegisterModal
+          variant={registerModalVariant}
+          voluntary={!pendingLesson}
+          onSuccess={registerSuccess}
+          onClose={registerModalVariant === 'soft' ? registerModalDismiss : undefined}
+        />
       )}
       {showAddFundsModal && <AddFundsModal onDone={addFundsDone} />}
     </>

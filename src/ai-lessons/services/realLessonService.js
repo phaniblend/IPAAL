@@ -137,7 +137,7 @@ export async function generateLessonObjectives(params, options = {}) {
   };
 }
 
-const ALGO_TRACKS = ["algo-js", "algo-ts", "algo-python", "algo-java", "algorithms"];
+const ALGO_TRACKS = ["algo-js", "algo-ts", "algo-python", "algo-java"];
 
 function isAlgoTrack(track) {
   return ALGO_TRACKS.includes(String(track));

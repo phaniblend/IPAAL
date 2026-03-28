@@ -1,37 +1,35 @@
 # Google Sign-In (Firebase) — test locally
 
+## Does it work?
+
+- **In code:** Yes. When all `VITE_FIREBASE_*` variables are set (see `.env.example`), `isFirebaseConfigured` is true, the **Google** button is enabled, and `signInWithGoogle()` runs `signInWithPopup` with `GoogleAuthProvider`.
+- **In your workspace:** There is **no committed `.env`** — without it, the UI shows **“Google (set up Firebase)”** disabled. That is expected until you add secrets locally.
+- **Quick check:** Create `.env` from `.env.example`, paste your Firebase web config, restart `npm run dev`, open **Log in** → **Google**. The popup should open; after sign-in the modal closes and your name appears in the header.
+
 ## 1. Create a Firebase project (free)
 
 1. Go to [Firebase Console](https://console.firebase.google.com/).
 2. **Add project** (or use an existing one). No Blaze plan needed.
-3. In the project, go to **Build → Authentication** → **Get started** → **Sign-in method**.
-4. Enable **Google** (toggle on, set support email), save.
+3. **Build → Authentication** → **Get started** → **Sign-in method** → enable **Google** (support email), save.
 
 ## 2. Register your web app
 
 1. Project overview → **</>** (Web).
-2. Register app with a nickname (e.g. `inpact-web`).
-3. Copy the `firebaseConfig` object you get.
+2. Register app (e.g. `inpact-web`).
+3. Copy the `firebaseConfig` values into `.env` as in `.env.example`.
 
-## 3. Add env vars to `.env`
-
-Create or edit `.env` in the project root and add (use your own values from the config):
-
-```env
-VITE_FIREBASE_API_KEY=your-api-key
-VITE_FIREBASE_AUTH_DOMAIN=your-project.firebaseapp.com
-VITE_FIREBASE_PROJECT_ID=your-project-id
-VITE_FIREBASE_STORAGE_BUCKET=your-project.appspot.com
-VITE_FIREBASE_MESSAGING_SENDER_ID=123456789
-VITE_FIREBASE_APP_ID=1:123456789:web:abc123
-```
+## 3. Env vars
 
 Restart the dev server after changing `.env` (`npm run dev`).
 
-## 4. Test
+## 4. Lesson access rules (browser `localStorage`)
 
-1. Use 3 lessons (any track), then open a 4th → Register modal appears.
-2. Click **Google** → popup opens → sign in with a Google account.
-3. On success, modal closes and you continue to the lesson.
+| Milestone | Behavior |
+|-----------|----------|
+| Unique lessons 1–5 | No register prompt |
+| Unique 6–8 | Soft register modal; can **Continue without registering** or use Google / form |
+| Unique 9 (unregistered) | **Must** register — modal cannot be dismissed without signing in |
+| Unique 10–15 (registered) | Free |
+| Unique 16+ | **$1** per new lesson (balance + fund buckets UI; payment integration later) |
 
-**Localhost:** Firebase allows `localhost` by default for Auth. For production, add your domain in **Authentication → Settings → Authorized domains**.
+**Localhost:** Firebase allows `localhost` by default. For production, add your domain under **Authentication → Settings → Authorized domains**.

@@ -60,9 +60,31 @@ Use these directives when authoring or editing `*_lesson.json` under `content/`,
 
 ---
 
+## 6b. Do **not** mandate variable names or verbatim copy (mandatory)
+
+We teach **logic, APIs, and structure**, not matching the author’s preferred identifiers or wording.
+
+- **`instruction` / `hint` / `analogousExample`**: Treat sample names (`jsonPlaceholderApi`, `handleClick`, `todoList`) as **examples**. Prefer neutral phrasing: “export a const assigned to `createApi(…)`”, “a handler that toggles state”, “import your API slice from `./api` using the name **you** exported.”
+- **`successCriteria`**: Require **behavior and structure** (e.g. “`createApi` is called and exported”, “`reducerPath` is a string literal”, “store registers the RTK Query reducer and middleware”). Do **not** require a specific binding name unless the step’s **only** learning goal is that name (rare).
+- **`evaluation.required` (keyword_match)**: Use **structural tokens** (`createApi`, `export`, `reducerPath`, `configureStore`, `./api`) — not learner-chosen identifiers. Never require a specific `const` name for hooks, handlers, slices, or components except the single “create the main component named X” style step.
+- **`feedbackCorrect` / `feedbackPartial` / `feedbackWrong`**, mentor prompts, and AI validation: **Never** tell the learner to rename a symbol when syntax and behavior are correct. Typos in **APIs** (`createApit` vs `createApi`) are fair game; `newApi` vs `jsonPlaceholderApi` is not.
+- **Cross-step consistency**: Later steps may say “use the same API object you exported” / “import from `./api`” — still **do not** require the lesson’s example name; the learner’s name must **match between their own files**, not match the JSON author’s name.
+- **Exceptions (narrow)**: String literals or keys **fixed by the task** (e.g. a required URL, a route path, a `data-testid` the tests assert, or an endpoint key like `getPosts` when the step teaches hook naming from that key). Optional: RTK-generated hook names derived from endpoint keys — those are framework-derived, not arbitrary style.
+- **Runtime grading:** For question steps with **`evaluation.required` / `answer_keywords`**, the app grades with **keyword match only** (not the LLM), so arbitrary binding names never fail the check. Keep `required` limited to structural tokens. The LLM is still available for **Ask mentor** and for steps **without** keyword lists.
+
+---
+
 ## 7. Feedback mechanisms
 
 - Every question step must have **`feedbackCorrect`**, **`feedbackPartial`**, and **`feedbackWrong`** that are **actionable** (what to add, fix, or check)—not vague praise or blame.
+
+---
+
+## 7b. `analogousExample` and placement tasks
+
+- When the task tells the learner to add something **inside**, **after**, **before**, **next to**, or **on** an existing construct (object, endpoint config, JSX, etc.), **`analogousExample` may stay a short fragment** (e.g. one property line). The app **augments** “SHOW ME AN EXAMPLE” with a **focused excerpt from this step’s `seedCode`** for the right file (`api.ts`, `App.tsx`, …) when the instruction implies placement or the example is fragmentary.
+- Still prefer **`instruction`** text that names the **correct file** (`**api.ts**`, …) whenever the edit is not in the primary App tab — do not rely only on automatic prefixing.
+- For steps where the fragment would be ambiguous without structure, you may instead set **`analogousExample`** to a **small enclosing snippet** (parent object with the new lines included) in the JSON; the engine will not double-wrap unnecessarily if the example is already long.
 
 ---
 

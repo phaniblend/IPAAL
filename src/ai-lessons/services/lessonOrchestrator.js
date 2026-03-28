@@ -9,7 +9,6 @@ import { generateLessonReal, generateLessonIntro as generateIntroReal, generateL
 import { generateLessonMock, generateLessonPreviewMock } from "./mockLessonService.js";
 import { validateLessonConfig } from "../schema.js";
 import { logStage } from "../utils/parseJson.js";
-
 const serverOpts = () => ({ baseUrl: AI_LESSONS_CONFIG.serverBaseUrl });
 
 /**

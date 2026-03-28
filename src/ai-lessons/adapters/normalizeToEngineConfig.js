@@ -31,6 +31,20 @@ function primaryMultiFileTab(tabNames) {
   return sorted.find((n) => /^app\./i.test(n)) ?? sorted[0];
 }
 
+/** When the task clearly targets the API slice but the text never names a tab, prefix with api.ts (not App). */
+function apiLikelyTabForInstruction(text, tabNames) {
+  if (typeof text !== "string" || !tabNames.length) return null;
+  const lower = text.toLowerCase();
+  if (
+    !/\b(getposts|getpost|createapi|endpoints|builder\.query|builder\.mutation|reducerpath|fetchbasequery|tagtypes|providestags|invalidatestags|rtk query)\b/.test(
+      lower
+    )
+  ) {
+    return null;
+  }
+  return tabNames.find((n) => /^api\./i.test(n)) || tabNames.find((n) => /api/i.test(n)) || null;
+}
+
 /**
  * If the learner text does not already name a tab file, prefix with `In **PrimaryTab**,`.
  * Keeps cached JSON lessons clear in the multi-file editor (import steps, etc.).
@@ -40,7 +54,7 @@ export function prefixMultiFileLearnerText(text, seedCode) {
   if (!tabs.length) return text;
   if (typeof text !== "string" || !text.trim()) return text;
   if (learnerTextReferencesAnyTab(text, tabs)) return text;
-  const primary = primaryMultiFileTab(tabs);
+  const primary = apiLikelyTabForInstruction(text, tabs) || primaryMultiFileTab(tabs);
   if (!primary) return text;
   const trimmed = text.trimStart();
   if (/^in\s+\*\*/i.test(trimmed)) return text;
@@ -86,7 +100,7 @@ function cssTabsGetOutputPreview(answer) {
 
 /**
  * @param {import("../schema.js").z.infer<typeof import("../schema.js").lessonConfigSchema>} lesson
- * @param {{ track?: string, getOutputPreview?: (code: string) => string, language?: string, answerShape?: string, defaultHtml?: string, defaultSeedCode?: string, skipIntroAndObjectives?: boolean }} options - Pass track to get correct tabs (css-tabs, angular-tabs).
+ * @param {{ track?: string, getOutputPreview?: (code: string) => string, language?: string, answerShape?: string, defaultHtml?: string, defaultSeedCode?: string, skipIntroAndObjectives?: boolean, problemNumFallback?: number }} options - Pass track to get correct tabs (css-tabs, angular-tabs). Use problemNumFallback when lesson JSON omits problemNum (e.g. list index + 1).
  * @returns {{ NODES: object[], sideItems: { id: string, label: string }[], problemNum: number, title: string, shortName: string, language: string, getOutputPreview: (code: string) => string, answerShape: string, defaultHtml?: string, defaultSeedCode?: string }}
  */
 export function aiLessonToEngineConfig(lesson, options = {}) {
@@ -98,6 +112,7 @@ export function aiLessonToEngineConfig(lesson, options = {}) {
     defaultHtml: optionDefaultHtml,
     defaultSeedCode,
     skipIntroAndObjectives = false,
+    problemNumFallback,
   } = options;
   const answerShape = optionAnswerShape ?? lesson.answerShape ?? (inferMultiFileLesson(lesson) ? "multi-file" : trackOpts.answerShape);
   const defaultHtml = optionDefaultHtml ?? trackOpts.defaultHtml;
@@ -190,6 +205,9 @@ export function aiLessonToEngineConfig(lesson, options = {}) {
       answer_keywords: keywords,
       correctThreshold: step.evaluation?.correctThreshold ?? 0.6,
       partialThreshold: step.evaluation?.partialThreshold ?? 0.4,
+      introduces_concepts: Array.isArray(step.introducesConcepts)
+        ? step.introducesConcepts.map((id) => (typeof id === "string" ? id : String(id)))
+        : undefined,
     };
   });
 
@@ -228,7 +246,7 @@ export function aiLessonToEngineConfig(lesson, options = {}) {
   const out = {
     NODES,
     sideItems,
-    problemNum: lesson.problemNum ?? 1,
+    problemNum: lesson.problemNum ?? problemNumFallback ?? 1,
     title: lesson.title,
     shortName: lesson.shortName ?? lesson.title,
     language,

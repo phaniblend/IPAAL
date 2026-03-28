@@ -57,14 +57,14 @@ async function main() {
 
   const problemTitles = getProblemListTitles();
 
-  // react-js, react-ts, vue: 119 each (same PROBLEM_LIST)
+  // react-js, react-ts, vue: 120 each (same PROBLEM_LIST)
   for (const track of ["react-js", "react-ts", "vue"]) {
     problemTitles.forEach((title, i) => {
       list.push({ track, lessonTitle: title, lessonIndex: i });
     });
   }
 
-  // angular: 5 QuickBite + 9 ANG + 119 React (133 total, matches LandingPage)
+  // angular: 5 QuickBite + 9 ANG + 120 React (134 total, matches LandingPage)
   ANGULAR_QUICKBITE_5.forEach((title, i) => {
     list.push({ track: "angular", lessonTitle: title, lessonIndex: i });
   });

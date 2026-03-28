@@ -24,8 +24,6 @@ a:hover {
 
 body {
   margin: 0;
-  display: flex;
-  place-items: center;
   min-width: 320px;
   min-height: 100vh;
   background-color: #ffffff;
@@ -51,7 +49,7 @@ button {
 button:hover {
   border-color: #646cff;
 }
-button:focus,
+/* Keyboard / screen-reader focus only — avoids the default black ring staying after mouse click */
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
@@ -155,6 +153,158 @@ button:focus-visible {
     animation: none;
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04), 0 0 0 2px rgba(8, 145, 178, 0.2);
   }
+}
+
+/* Lesson copy: **bold** and `code` rendered via RichLearnerText (not raw markdown) */
+.inpact-rich-text {
+  white-space: pre-wrap;
+}
+
+.inpact-rich-text .inpact-rich-code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-size: 0.92em;
+  font-weight: 500;
+  background: #f1f5f9;
+  color: #0f172a;
+  padding: 0.12em 0.4em;
+  border-radius: 4px;
+  border: 1px solid #e2e8f0;
+}
+
+.inpact-rich-text .inpact-rich-strong {
+  font-weight: 600;
+  color: #0f172a;
+}
+
+.inpact-rich--task .inpact-rich-code {
+  background: #f8fafc;
+  border-color: #e2e8f0;
+}
+
+.inpact-rich--taskCallout .inpact-rich-code {
+  background: rgba(66, 32, 6, 0.08);
+  border-color: rgba(180, 83, 9, 0.25);
+  color: #422006;
+}
+
+.inpact-rich--taskCallout .inpact-rich-strong {
+  color: #422006;
+}
+
+.inpact-rich--hint .inpact-rich-code {
+  background: rgba(109, 40, 217, 0.1);
+  border-color: rgba(109, 40, 217, 0.2);
+  color: #5b21b6;
+}
+
+.inpact-rich--hint .inpact-rich-strong {
+  color: #5b21b6;
+}
+
+.inpact-rich--feedback .inpact-rich-code {
+  background: rgba(15, 23, 42, 0.06);
+  border-color: rgba(15, 23, 42, 0.1);
+}
+
+.inpact-rich--muted .inpact-rich-strong {
+  color: inherit;
+}
+
+.inpact-rich--muted .inpact-rich-code {
+  background: rgba(148, 163, 184, 0.2);
+  border-color: rgba(148, 163, 184, 0.35);
+  color: #334155;
+}
+
+/* Deep-dive entry control (Lesson tab, Editor task, AI intro) */
+.inpact-deep-dive-img-btn {
+  padding: 0;
+  margin: 0;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  line-height: 0;
+  border-radius: 8px;
+  max-width: 100%;
+  overflow: hidden;
+}
+.inpact-deep-dive-img-btn:hover {
+  opacity: 0.9;
+}
+.inpact-deep-dive-img-btn:focus-visible {
+  outline: 2px solid #5eead4;
+  outline-offset: 2px;
+}
+
+/*
+ * Two-part art: deep.webp (left) + deep-dive.webp (right).
+ * flex-end: bottoms align. Left is ~2× prior caps; never grid `auto` on huge intrinsics.
+ */
+.inpact-deep-dive-img-pair {
+  display: inline-flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: flex-end;
+  gap: 0;
+  line-height: 0;
+  max-height: 96px;
+}
+.inpact-deep-dive-img-left {
+  display: block;
+  max-height: 88px;
+  width: auto;
+  max-width: min(400px, 78vw);
+  object-fit: contain;
+  object-position: right bottom;
+  flex: 0 1 auto;
+}
+.inpact-deep-dive-img-right {
+  display: block;
+  width: 75px;
+  max-width: 75px;
+  max-height: 88px;
+  height: auto;
+  object-fit: contain;
+  object-position: left bottom;
+  flex: 0 0 auto;
+}
+
+/* Editor: tuck deep-dive control under Reading / Preview (flush right) */
+.inpact-editor-deep-dive-toolbar {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  align-items: flex-end;
+  gap: 8px;
+  width: 100%;
+  box-sizing: border-box;
+  margin-top: 8px;
+  padding-right: 2px;
+}
+
+/* Deep-dive / block content: inline SVG illustrations from JSON */
+.inpact-rich-svg-wrap svg {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+/* Fenced code blocks (highlight.js github theme) */
+.inpact-rich-pre.inpact-rich-pre--hljs {
+  margin: 12px 0;
+  padding: 0;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid #e2e8f0;
+}
+
+.inpact-rich-pre.inpact-rich-pre--hljs code.hljs {
+  display: block;
+  padding: 12px 14px;
+  overflow-x: auto;
+  font-size: 12px;
+  line-height: 1.5;
 }
 
 /* CodeMirror — hide diagnostic squiggles in lesson editors (validation is via Check) */

@@ -1,18 +1,31 @@
 /**
- * Access gate: first 3 lessons free, then require register; 7 more free after register; then $1/lesson.
- * Persists to localStorage until backend auth exists.
+ * Access gate (unique lessons per browser, localStorage until backend exists):
+ * - Lessons 1–5: no prompt.
+ * - Lessons 6–8: soft “register” prompt (dismissible — “slide” three times).
+ * - Lesson 9: must register (Google or form) before access.
+ * - Lessons 10–15: free after registration (7 more after account).
+ * - Lesson 16+: $1 per new lesson (balance); lifetime access once unlocked for that lesson.
  */
 
 const STORAGE_KEY_ACCESSED = "inpact_lessons_accessed";
 const STORAGE_KEY_REGISTERED = "inpact_user_registered";
-const STORAGE_KEY_BALANCE = "inpact_balance_cents"; // store in cents to avoid float issues
-const STORAGE_KEY_USER = "inpact_user"; // { name, emailOrPhone } for display
+const STORAGE_KEY_BALANCE = "inpact_balance_cents";
+const STORAGE_KEY_USER = "inpact_user";
 
-export const FREE_LESSONS_BEFORE_REGISTER = 3;
-export const FREE_LESSONS_AFTER_REGISTER = 7;
-export const TOTAL_FREE_LESSONS = FREE_LESSONS_BEFORE_REGISTER + FREE_LESSONS_AFTER_REGISTER;
+/** First N unique lessons with no register prompt. */
+export const FREE_LESSONS_SILENT = 5;
+/** Lessons 6–8: soft register modal (dismissible). */
+export const SOFT_REGISTER_COUNT = 3;
+/** Max unique lessons without an account (after 3 dismissible prompts on 6–8). */
+export const MAX_FREE_UNREGISTERED = FREE_LESSONS_SILENT + SOFT_REGISTER_COUNT; // 8
+/** Total free unique lessons once registered (includes the 8 anonymous tier). */
+export const TOTAL_FREE_LESSONS = 15;
+/** Extra free lessons after registering (for copy): 15 − 8 = 7. */
+export const FREE_LESSONS_AFTER_REGISTER = TOTAL_FREE_LESSONS - MAX_FREE_UNREGISTERED;
+
 export const PRICE_PER_LESSON_CENTS = 100; // $1
-export const FUND_BUCKETS_CENTS = [500, 1000, 1500, 2000, 2500]; // $5, $10, $15, $20, $25
+/** Fund buckets: $5–$25 in steps of $5 (payment integration later). */
+export const FUND_BUCKETS_CENTS = [500, 1000, 1500, 2000, 2500];
 
 function getAccessedKeys() {
   try {
@@ -35,7 +48,7 @@ function lessonKey(track, index) {
   return `${track}:${index}`;
 }
 
-/** Call when user actually enters a lesson (so we count the access). */
+/** Call when user actually enters a lesson (counts toward limits). */
 export function recordLessonAccess(track, index) {
   const keys = getAccessedKeys();
   const key = lessonKey(track, index);
@@ -44,7 +57,6 @@ export function recordLessonAccess(track, index) {
   setAccessedKeys(keys);
 }
 
-/** Number of unique lessons ever accessed. */
 export function getAccessedCount() {
   return getAccessedKeys().length;
 }
@@ -64,7 +76,6 @@ export function setRegistered(user = null) {
   } catch (_) {}
 }
 
-/** Clear registered state and stored user (log out). Does not clear lesson access count or balance. */
 export function logout() {
   try {
     localStorage.removeItem(STORAGE_KEY_REGISTERED);
@@ -100,16 +111,29 @@ export function addFundsCents(cents) {
   setBalanceCents(getBalanceCents() + cents);
 }
 
-/** True if this lesson would be the 4th (first that requires register). */
-export function mustRegisterToAccess(track, index) {
+/**
+ * Soft prompt: unregistered user opening 6th, 7th, or 8th unique lesson (keys length 5, 6, or 7 before add).
+ */
+export function mustSoftRegisterToAccess(track, index) {
   const keys = getAccessedKeys();
   const key = lessonKey(track, index);
-  if (keys.includes(key)) return false; // re-visit allowed
+  if (keys.includes(key)) return false;
   if (isRegistered()) return false;
-  return keys.length >= FREE_LESSONS_BEFORE_REGISTER;
+  return keys.length >= FREE_LESSONS_SILENT && keys.length < MAX_FREE_UNREGISTERED;
 }
 
-/** True if user is registered but this lesson is past the free 10 and they need to pay. */
+/**
+ * Hard gate: unregistered user opening 9th unique lesson.
+ */
+export function mustHardRegisterToAccess(track, index) {
+  const keys = getAccessedKeys();
+  const key = lessonKey(track, index);
+  if (keys.includes(key)) return false;
+  if (isRegistered()) return false;
+  return keys.length >= MAX_FREE_UNREGISTERED;
+}
+
+/** Registered user past free tier opening a new lesson — needs balance (mock until payment). */
 export function mustPayToAccess(track, index) {
   const keys = getAccessedKeys();
   const key = lessonKey(track, index);
@@ -118,17 +142,19 @@ export function mustPayToAccess(track, index) {
   return keys.length >= TOTAL_FREE_LESSONS;
 }
 
-/** True if user can open this lesson without any modal (free or already paid/within free). */
 export function canAccessLesson(track, index) {
   const keys = getAccessedKeys();
   const key = lessonKey(track, index);
   if (keys.includes(key)) return true;
-  if (!isRegistered()) return keys.length < FREE_LESSONS_BEFORE_REGISTER;
+  if (!isRegistered()) {
+    if (keys.length < FREE_LESSONS_SILENT) return true;
+    if (keys.length < MAX_FREE_UNREGISTERED) return true; // soft gate handled in UI
+    return false;
+  }
   if (keys.length < TOTAL_FREE_LESSONS) return true;
   return getBalanceCents() >= PRICE_PER_LESSON_CENTS;
 }
 
-/** Deduct one lesson payment. Call after allowing access to a paid lesson. */
 export function deductLessonPayment() {
   const balance = getBalanceCents();
   if (balance >= PRICE_PER_LESSON_CENTS) {
@@ -136,7 +162,6 @@ export function deductLessonPayment() {
   }
 }
 
-/** Simple fingerprint hint for backend later (browser + screen + tz). */
 export function getFingerprintHint() {
   if (typeof navigator === "undefined") return "";
   const ua = navigator.userAgent || "";

@@ -36,6 +36,7 @@ export async function fetchLessonCodeValidation({ track, node, userCode, languag
         expected,
         seedCode: seed,
         seed_code: seed,
+        answer_keywords: node.answer_keywords,
       },
       userCode,
       language,

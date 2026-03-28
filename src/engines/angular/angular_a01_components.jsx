@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import InpactLogo from "../../components/InpactLogo.jsx";
 import CodeEditor from "../CodeEditor";
 import AngularTabbedEditor from "./AngularTabbedEditor";
 import LessonEditorOutputTabs from "../LessonEditorOutputTabs";
@@ -688,7 +689,7 @@ const s = {
     alignItems: "center",
     gap: "12px",
     padding: "0 24px",
-    height: "52px",
+    height: "96px",
     background: "#ffffff",
     borderBottom: "1px solid #0f172a",
     flexShrink: 0,
@@ -1380,7 +1381,9 @@ No hints. No looking back. Check each item as you write it.`}</div>
     <div style={s.wrap}>
       {/* TOP BAR */}
       <div style={s.topbar}>
-        <div style={s.logo}>INPACT</div>
+        <div style={{ display: "flex", alignItems: "center", flexShrink: 0 }}>
+          <InpactLogo height={80} style={{ marginRight: "8px" }} />
+        </div>
         <div style={s.engineTag}>ANG01 — COMPONENTS</div>
         <div style={s.progressTrack}>
           <div style={s.progressFill(progress)} />

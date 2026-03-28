@@ -5,7 +5,8 @@
 
 /** Injected into every validation user prompt (all tracks). */
 export const UNIVERSAL_VALIDATION_DISCIPLINE = `Universal (all tracks):
-- Success criteria are binding: treat each bullet as required for "correct". If any required criterion is missing or only superficially matched, use "partial" or "wrong", never "correct".
+- Success criteria are binding for **substance** (behavior, structure, required APIs): treat each bullet as required for "correct". If any required criterion is missing or only superficially matched, use "partial" or "wrong", never "correct".
+- **Identifiers:** Example names in the instruction, seed, or success criteria are **illustrative** unless a criterion **explicitly** says the learner must use that exact name (almost never). "createApi assigned to a const and exported" is satisfied by any valid binding name. Do not fail or hint to rename (e.g. \`newApi\` vs \`jsonPlaceholderApi\`) when the code is otherwise correct.
 - Code steps: the submission must be syntactically valid for the language named in this message; invalid or non-compilable code cannot be "correct".
 - Explanation / design / narrative steps: judge technical accuracy and whether every success criterion is actually addressed; generic filler or off-topic answers are "wrong" or "partial".`;
 
@@ -43,7 +44,8 @@ Validate syntax and behavior only — not wording or content inside strings (cri
 - Only fail or hint on actual syntax/behavior: wrong variable, missing expression, broken JSX, or not displaying the value at all. Never add errors or hints about capitalizing letters, fixing spelling, or changing wording inside strings.
 
 We validate syntax and behavior only — not exact names (critical):
-- Do NOT require exact function, handler, or variable names unless the step is solely "Create the main component named X" (the one step that introduces the app component). For everything else (handler functions, state variables, helpers), accept any reasonable name that implements the required behavior.
+- Do NOT require exact function, handler, variable, **export const**, or **module** names unless the step is solely "Create the main component named X" (the one step that introduces the app component). For everything else (handlers, state, RTK \`createApi\` result, Redux slice names, imported symbols from \`./api\`), accept any reasonable name that implements the required behavior.
+- **RTK Query / Redux:** If the learner calls \`createApi\`, exports it, wires \`reducerPath\`, \`baseQuery\`, and store registration consistently with **their** chosen API object name, mark "correct". Do not require the lesson’s sample name (e.g. \`jsonPlaceholderApi\`). Real typos in library names (\`createApit\`) are still "partial"/"wrong".
 - If the step says "Create a function named incrementCount that increases count using setCount", pass the learner when they have any function that correctly calls setCount to add 1 (e.g. \`increment\`, \`handleIncrement\`, \`onIncrement\`). Do NOT fail or hint for "function name should be incrementCount". We care that they wrote correct syntax and logic (setCount with increment behavior), not that the function is named exactly \`incrementCount\`.
 - Same for other handlers (e.g. "define toggleHandler" — accept \`toggle\`, \`handleToggle\`, etc.) and for state variable names when the step is about behavior (e.g. they use \`count\`/setCount correctly; we don't require a specific state variable name unless the step is only about naming). Never add errors or hints like "Rename your function to X" or "Variable should be named Y" when the syntax and behavior are correct.
 
@@ -108,12 +110,22 @@ export function buildCodeValidationUserPrompt(step, userCode, languageOrContext 
 
   const phaseLine = step.phase ? `Step position in this lesson: ${step.phase}` : "";
   const titleLine = step.title ? `Step title: ${step.title}` : "";
+  const answerKeywords = Array.isArray(step.answer_keywords)
+    ? step.answer_keywords.map((k) => (typeof k === "string" ? k : String(k ?? ""))).filter(Boolean)
+    : [];
+  const keywordsBlock =
+    answerKeywords.length > 0
+      ? `Declarative check (identifier-agnostic): these substrings must appear somewhere in the submission: ${answerKeywords.join(", ")}.
+If **all** are present and the code is syntactically valid for this step, you **must** return result **"correct"** — even if export/const names differ from the starter seed (e.g. \`postsApi\` vs \`jsonPlaceholderApi\`). Do not use "partial" or "wrong" for naming-only differences when every keyword is present.
+
+`
+      : "";
 
   return `Step task (what the learner must do):
 ${instruction}
 
 ${phaseLine ? `${phaseLine}\n` : ""}${titleLine ? `${titleLine}\n` : ""}
-Success criteria for this step:
+${keywordsBlock}Success criteria for this step:
 ${criteriaText}
 
 Expected outcome / reference (for context only):

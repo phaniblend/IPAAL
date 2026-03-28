@@ -7,6 +7,7 @@ import CssTabsEditor from "./css/CssTabsEditor";
 import AngularTabbedEditor from "./angular/AngularTabbedEditor";
 import { mergeAngularTsWithHtml, mergeAngularCssIntoTS, splitAngularSeed } from "./angular/angularTabMerge.js";
 import LessonEditorOutputTabs from "./LessonEditorOutputTabs";
+import RichLearnerText from "./RichLearnerText";
 
 if (typeof document !== "undefined" && !document.getElementById("dm-sans-font")) {
   const link = document.createElement("link");
@@ -39,6 +40,16 @@ function seedCodeToMultiFileAnswer(seed) {
   return JSON.stringify({ activeFile: "App.tsx", files: { "App.tsx": typeof seed === "string" ? seed : "" } });
 }
 
+/** Same file keys/content as seedCodeToMultiFileAnswer — used so first focus clears untouched seed (placeholder behavior). */
+function multiFileSeedToPlaceholderByFile(seed) {
+  if (typeof seed === "object" && seed !== null && !Array.isArray(seed)) {
+    return Object.fromEntries(
+      Object.entries(seed).map(([k, v]) => [String(k), typeof v === "string" ? v : String(v ?? "")])
+    );
+  }
+  return { "App.tsx": typeof seed === "string" ? seed : "" };
+}
+
 function parseMultiFileAnswer(answer, fallback = "App.tsx") {
   try {
     const p = JSON.parse(answer || "{}");
@@ -47,7 +58,7 @@ function parseMultiFileAnswer(answer, fallback = "App.tsx") {
       Object.entries(files).map(([k, v]) => [String(k), typeof v === "string" ? v : String(v ?? "")])
     );
     const activeFile =
-      typeof p.activeFile === "string" && normalized[p.activeFile]
+      typeof p.activeFile === "string" && Object.prototype.hasOwnProperty.call(normalized, p.activeFile)
         ? p.activeFile
         : Object.keys(normalized)[0] || fallback;
     return { files: normalized, activeFile };
@@ -72,6 +83,112 @@ function getMultiFilePreviewCode(answer) {
     names.find((n) => /^index\.(t|j)sx?$/i.test(n)) ||
     parsed.activeFile;
   return parsed.files[appFile] || "";
+}
+
+/** Task text suggests inserting relative to existing structure — pair fragment examples with seed context. */
+const PLACEMENT_OR_INSERT_HINT_RE =
+  /\b(inside|after|before|next to|beneath|following|within|under|on both|on each|to both|configs?|options?|add\s+`)/i;
+
+function exampleSnippetLooksFragmentary(exampleCode) {
+  if (typeof exampleCode !== "string") return false;
+  const t = exampleCode.trim();
+  if (!t || t.length > 400) return false;
+  return t.split("\n").length <= 5;
+}
+
+function extractFilenameFromInstruction(text) {
+  if (typeof text !== "string") return null;
+  const m1 = text.match(/\*\*([\w./-]+\.(?:tsx?|jsx?|css))\*\*/i);
+  if (m1) return m1[1];
+  const m2 = text.match(/`([^`]+\.(?:tsx?|jsx?|css))`/i);
+  if (m2) return m2[1];
+  return null;
+}
+
+function inferMultiFileSeedKeyForExample(seedObj, paal) {
+  const keys = Object.keys(seedObj || {});
+  if (!keys.length) return null;
+  const fromInstr = extractFilenameFromInstruction(paal);
+  if (fromInstr && Object.prototype.hasOwnProperty.call(seedObj, fromInstr)) return fromInstr;
+  const lower = (paal || "").toLowerCase();
+  if (
+    /\b(getposts|getpost|createapi|endpoints|builder\.query|builder\.mutation|reducerpath|fetchbasequery|tagtypes|providestags|invalidatestags)\b/.test(
+      lower
+    )
+  ) {
+    const api = keys.find((k) => /^api\./i.test(k));
+    if (api) return api;
+  }
+  return keys.find((k) => /^app\./i.test(k)) || keys[0];
+}
+
+function snippetAroundAnchor(seedText, exampleCode, paal) {
+  const lines = seedText.split("\n");
+  const ex = (exampleCode || "").toLowerCase();
+  const p = (paal || "").toLowerCase();
+  // tagTypes on createApi: instruction says "next to reducerPath" — show only the top of the
+  // config so the analogous example snippet is not separated by the whole endpoints block.
+  if (ex.includes("tagtypes") || p.includes("tagtypes")) {
+    const rp = lines.findIndex((l) => /reducerpath\s*:/i.test(l));
+    if (rp >= 0) {
+      const from = Math.max(0, rp - 1);
+      const to = Math.min(lines.length, rp + 4);
+      return lines.slice(from, to).join("\n");
+    }
+  }
+  let idx = -1;
+  if (ex.includes("providestags") || p.includes("providestags")) {
+    idx = lines.findIndex((l) => /\bgetposts\b|\bgetpost\b|builder\.query/i.test(l));
+  }
+  if (idx < 0 && (ex.includes("invalidatestags") || p.includes("invalidates"))) {
+    idx = lines.findIndex((l) => /builder\.mutation|addpost|\bmutation\b/i.test(l));
+  }
+  if (idx < 0 && (ex.includes("reducerpath") || p.includes("reducerpath"))) {
+    idx = lines.findIndex((l) => /createapi\s*\(/i.test(l));
+  }
+  if (idx < 0 && (ex.includes("basequery") || p.includes("basequery"))) {
+    idx = lines.findIndex((l) => /createapi\s*\(|reducerpath/i.test(l));
+  }
+  if (idx < 0 && /\bendpoints\b/.test(p)) {
+    idx = lines.findIndex((l) => /\bendpoints\s*:\s*\(/i.test(l));
+  }
+  if (idx < 0) idx = lines.findIndex((l) => /\bendpoints\s*:\s*\(/i.test(l));
+  if (idx < 0) return null;
+  const from = Math.max(0, idx - 5);
+  const to = Math.min(lines.length, idx + 30);
+  return lines.slice(from, to).join("\n");
+}
+
+/** Prefix analogousExample / multiline expected with a focused seed excerpt when the step is placement-style or the example is a short fragment. */
+function buildExampleWithStarterContext(answerShape, node, baseCode) {
+  if (!baseCode || typeof baseCode !== "string") return baseCode;
+  const paal = node.paal || "";
+  const hint = node.hint || "";
+  const ctxText = `${paal}\n${hint}`;
+  const wantsContext =
+    PLACEMENT_OR_INSERT_HINT_RE.test(ctxText) || exampleSnippetLooksFragmentary(baseCode);
+  if (!wantsContext) return baseCode;
+  const seed = node.seed_code;
+  if (answerShape === "multi-file" && seed && typeof seed === "object" && !Array.isArray(seed)) {
+    const key = inferMultiFileSeedKeyForExample(seed, paal);
+    const seedText = key ? String(seed[key] ?? "") : "";
+    if (!seedText.trim()) return baseCode;
+    let snippet = snippetAroundAnchor(seedText, baseCode, paal);
+    if (!snippet) {
+      const max = 1600;
+      snippet = (seedText.length > max ? `// …\n${seedText.slice(-max)}` : seedText).trim() || seedText;
+    }
+    return `// File: ${key} — surrounding starter (edit your file to match the task)\n${snippet}\n\n${baseCode.trim()}`;
+  }
+  if (answerShape !== "multi-file" && typeof seed === "string" && seed.trim()) {
+    let snippet = snippetAroundAnchor(seed, baseCode, paal);
+    if (!snippet) {
+      const max = 1600;
+      snippet = seed.length > max ? `// …\n${seed.slice(-max)}` : seed;
+    }
+    return `// Surrounding starter\n${snippet}\n\n${baseCode.trim()}`;
+  }
+  return baseCode;
 }
 
 function evaluate(node, answer) {
@@ -134,8 +251,13 @@ export default function createINPACTEngine(config) {
     const [passedCodeByStepId, setPassedCodeByStepId] = useState({});
     const [aiFeedback, setAiFeedback] = useState("");
     const [validationFallbackNote, setValidationFallbackNote] = useState("");
+    /** Multi-file focus-clear baseline for the first question step only (matches that step's `initialCode`). Later steps never clear on focus. */
+    const [multiFileFocusBaseline, setMultiFileFocusBaseline] = useState(null);
     const lessonValidationCtx = useContext(LessonValidationContext);
     const node = NODES[nodeIndex];
+    const firstQuestionNodeIndex = useMemo(() => NODES.findIndex((n) => n?.type === "question"), [NODES]);
+    const multiFilePlaceholderClearOnFirstStepOnly =
+      answerShape === "multi-file" && firstQuestionNodeIndex >= 0 && nodeIndex === firstQuestionNodeIndex;
     const progress = NODES.length <= 1 ? 0 : Math.min(100, Math.round((nodeIndex / (NODES.length - 1)) * 100));
 
     const onValidateCodeResolved = useMemo(() => {
@@ -221,8 +343,15 @@ export default function createINPACTEngine(config) {
           }
         }
         setAnswer(initialCode);
+        if (answerShape === "multi-file" && multiFilePlaceholderClearOnFirstStepOnly) {
+          setMultiFileFocusBaseline(parseMultiFileAnswer(initialCode).files);
+        } else {
+          setMultiFileFocusBaseline(null);
+        }
+      } else {
+        setMultiFileFocusBaseline(null);
       }
-    }, [nodeIndex, passedCodeByStepId]);
+    }, [nodeIndex, passedCodeByStepId, multiFilePlaceholderClearOnFirstStepOnly]);
 
     function handleExampleModalPointerDown(e) {
       if (e.pointerType === "mouse" && e.button !== 0) return;
@@ -352,27 +481,39 @@ export default function createINPACTEngine(config) {
         setTimeout(() => setChecking(false), Math.max(0, minCheckingMs - elapsed));
       };
 
+      const keywordRes = evaluate(node, toEval);
       let res = "wrong";
       let feedbackFromAi = "";
+      const hasDeclarativeKeywords = Array.isArray(node.answer_keywords) && node.answer_keywords.length > 0;
       try {
-        if (onValidateCodeResolved && node?.type === "question") {
+        if (onValidateCodeResolved && node?.type === "question" && hasDeclarativeKeywords) {
+          // JSON lessons ship evaluation.required → answer_keywords. Grading with AI here
+          // repeatedly produced "rename to match seed" false negatives; keywords are intentionally name-agnostic.
+          res = keywordRes;
+          setAiFeedback("");
+        } else if (onValidateCodeResolved && node?.type === "question") {
           const userCodeForApi = getUserCodeForServerValidation();
           const ai = await onValidateCodeResolved(node, userCodeForApi);
           const r = ai?.result;
           if (r === "correct" || r === "partial" || r === "wrong") {
-            res = r;
-            if (typeof ai.feedback === "string" && ai.feedback.trim()) {
-              feedbackFromAi = ai.feedback.trim();
-              setAiFeedback(feedbackFromAi);
+            if (keywordRes === "correct" && (r === "wrong" || r === "partial")) {
+              res = "correct";
+              setAiFeedback("");
+            } else {
+              res = r;
+              if (typeof ai.feedback === "string" && ai.feedback.trim()) {
+                feedbackFromAi = ai.feedback.trim();
+                setAiFeedback(feedbackFromAi);
+              }
             }
           } else {
             throw new Error("Invalid validation response");
           }
         } else {
-          res = evaluate(node, toEval);
+          res = keywordRes;
         }
       } catch (err) {
-        res = evaluate(node, toEval);
+        res = keywordRes;
         const msg = err && typeof err.message === "string" ? err.message : "Validation unavailable";
         setValidationFallbackNote(`Keyword check used: ${msg}`);
       }
@@ -439,6 +580,14 @@ export default function createINPACTEngine(config) {
       return parseMultiFileAnswer(answer);
     }, [answer, answerShape]);
 
+    const multiFilePlaceholderByFile = useMemo(() => {
+      if (answerShape !== "multi-file" || !node) return undefined;
+      const seed = node.starter_code ?? node.seed_code ?? "";
+      const map = multiFileSeedToPlaceholderByFile(seed);
+      const hasAny = Object.values(map).some((v) => String(v ?? "").trim());
+      return hasAny ? map : undefined;
+    }, [answerShape, node]);
+
     const s = {
       wrap: { height: "100vh", overflow: "hidden", background: "#ffffff", color: "#1e293b", fontFamily: "'DM Sans', sans-serif", display: "flex", flexDirection: "column", paddingTop: "52px", boxSizing: "border-box" },
       body: { display: "flex", flex: 1, minHeight: 0, minWidth: 0, overflowX: "hidden" },
@@ -472,9 +621,9 @@ export default function createINPACTEngine(config) {
             <div style={s.phase}>{node.phase}</div>
             {c.tag && <div style={s.tag}>{c.tag}</div>}
             <h1 style={s.h1}>{c.title}</h1>
-            <div style={s.pre}>{c.body}</div>
+            <RichLearnerText text={c.body} style={s.pre} />
           </div>
-          {c.usecase && <div style={{ ...revealPadding, background: "rgba(8,145,178,0.08)", border: "1px solid rgba(8,145,178,0.25)", borderLeft: "3px solid #0891b2", borderRadius: "8px", padding: "16px 20px", marginBottom: "28px" }}><div style={{ fontSize: "10px", letterSpacing: "2px", color: "#0891b2", marginBottom: "8px" }}>💡 WHY THIS MATTERS</div><div style={{ fontSize: "14px", color: "#475569", lineHeight: "1.7" }}>{c.usecase}</div></div>}
+          {c.usecase && <div style={{ ...revealPadding, background: "rgba(8,145,178,0.08)", border: "1px solid rgba(8,145,178,0.25)", borderLeft: "3px solid #0891b2", borderRadius: "8px", padding: "16px 20px", marginBottom: "28px" }}><div style={{ fontSize: "10px", letterSpacing: "2px", color: "#0891b2", marginBottom: "8px" }}>💡 WHY THIS MATTERS</div><RichLearnerText text={c.usecase} variant="muted" style={{ fontSize: "14px", color: "#475569", lineHeight: "1.7" }} /></div>}
           <div style={s.btnRow}><button type="button" className="inpact-btn-primary" style={s.btn("primary")} onClick={next}>CONTINUE →</button></div>
         </div>
       );
@@ -488,7 +637,7 @@ export default function createINPACTEngine(config) {
           {node.items.map((item, i) => (
             <div key={i} style={{ display: "flex", gap: "16px", padding: "14px 0", borderBottom: "1px solid #e2e8f0" }}>
               <div style={{ fontSize: "11px", color: "#0891b2", flexShrink: 0, minWidth: "20px" }}>{String(i + 1).padStart(2, "0")}</div>
-              <div style={{ fontSize: "15px", color: "#334155", lineHeight: "1.6" }}>{item}</div>
+              <RichLearnerText style={{ fontSize: "15px", color: "#334155", lineHeight: "1.6" }} text={item} />
             </div>
           ))}
           <div style={s.btnRow}><button type="button" className="inpact-btn-primary" style={s.btn("primary")} onClick={next}>LET'S BUILD →</button></div>
@@ -544,6 +693,9 @@ export default function createINPACTEngine(config) {
                 height="480px"
                 defaultFileName={(node?.language || language || "typescript").includes("ts") ? "App.tsx" : "App.jsx"}
                 language={language || node.language || "typescript"}
+                focusBaselineByFile={multiFileFocusBaseline}
+                placeholderByFile={multiFilePlaceholderByFile}
+                clearPlaceholderOnFirstFocus={multiFilePlaceholderClearOnFirstStepOnly}
               />
             ) : (
               <CodeEditor key={node?.id} value={answer} onChange={setAnswer} height="480px" cursorAtEndOfLine={cursorAtStartOfLine == null ? node.cursorLine : undefined} cursorAtStartOfLine={cursorAtStartOfLine} language={language || node.language || "javascript"} />
@@ -561,12 +713,27 @@ export default function createINPACTEngine(config) {
           : answerShape === "multi-file"
             ? Object.values(parsedMultiFile?.files || {}).some((v) => String(v || "").trim())
             : answer.trim();
-      // Priority: example_code → multiline expected → seed_code fallback → short expected label
+      // Priority: example_code → multiline expected → seed_code (string) → short expected
       const exampleEntry = node.example_code
-        ? { label: "EXAMPLE (similar pattern — not the exact answer)", code: node.example_code }
+        ? (() => {
+            const wrapped = buildExampleWithStarterContext(answerShape, node, node.example_code);
+            return {
+              label:
+                wrapped !== node.example_code
+                  ? "EXAMPLE (starter context + pattern — adapt to your code)"
+                  : "EXAMPLE (similar pattern — not the exact answer)",
+              code: wrapped,
+            };
+          })()
         : (node.expected && node.expected.includes("\n"))
-          ? { label: "EXPECTED", code: node.expected }
-          : node.seed_code
+          ? (() => {
+              const wrapped = buildExampleWithStarterContext(answerShape, node, node.expected);
+              return {
+                label: wrapped !== node.expected ? "EXPECTED (with starter context)" : "EXPECTED",
+                code: wrapped,
+              };
+            })()
+          : typeof node.seed_code === "string" && node.seed_code.trim()
             ? { label: "EXAMPLE", code: node.seed_code }
             : node.expected
               ? { label: "EXPECTED", code: node.expected }
@@ -671,7 +838,7 @@ export default function createINPACTEngine(config) {
                   background: "#ffffff",
                   borderRadius: "12px",
                   padding: "24px",
-                  maxWidth: "560px",
+                  maxWidth: "min(92vw, 720px)",
                   width: "100%",
                   maxHeight: "80vh",
                   overflowY: "auto",
@@ -759,8 +926,17 @@ export default function createINPACTEngine(config) {
                 >
                   <div id="feedback-modal-title" style={{ fontSize: "12px", fontWeight: 700, letterSpacing: "0.05em", color: "#64748b", marginBottom: 0 }}>HINT & FEEDBACK</div>
                 </div>
-                {node.hint && <div style={{ ...s.hintBox, marginBottom: fbMsg ? "16px" : 0 }}>💡 {node.hint}</div>}
-                {fbMsg && <div style={s.feedback(result)}>{fbMsg}</div>}
+                {node.hint && (
+                  <div style={{ ...s.hintBox, marginBottom: fbMsg ? "16px" : 0 }}>
+                    <span aria-hidden>💡 </span>
+                    <RichLearnerText as="span" text={node.hint} variant="hint" style={{ display: "inline" }} />
+                  </div>
+                )}
+                {fbMsg && (
+                  <div style={s.feedback(result)}>
+                    <RichLearnerText text={fbMsg} variant="feedback" />
+                  </div>
+                )}
                 <div style={{ marginTop: "20px", display: "flex", justifyContent: "flex-end" }}>
                   <button
                     type="button"
@@ -831,7 +1007,7 @@ export default function createINPACTEngine(config) {
                 />
                 {mentorError ? <div style={{ fontSize: "12px", color: "#dc2626", marginBottom: "8px" }}>{mentorError}</div> : null}
                 {mentorReply ? (
-                  <div style={{ ...s.expectedBox, marginTop: "4px", whiteSpace: "pre-wrap" }}>{mentorReply}</div>
+                  <RichLearnerText text={mentorReply} style={{ ...s.expectedBox, marginTop: "4px" }} />
                 ) : null}
                 <div style={{ marginTop: "16px", display: "flex", justifyContent: "flex-end", gap: "12px", flexWrap: "wrap" }}>
                   <button type="button" style={s.btn("ghost")} onClick={() => setShowMentorModal(false)}>Close</button>
@@ -863,9 +1039,18 @@ export default function createINPACTEngine(config) {
           </div>
           <div style={{ flexShrink: 0, paddingTop: "20px", marginTop: "8px", borderTop: "1px solid #e2e8f0" }}>
             {validationFallbackNote ? (
-              <div style={{ fontSize: "11px", color: "#b45309", marginBottom: "10px", padding: "8px 12px", background: "rgba(245,158,11,0.12)", borderRadius: "6px", lineHeight: 1.5 }}>
-                {validationFallbackNote}
-              </div>
+              <RichLearnerText
+                text={validationFallbackNote}
+                style={{
+                  fontSize: "11px",
+                  color: "#b45309",
+                  marginBottom: "10px",
+                  padding: "8px 12px",
+                  background: "rgba(245,158,11,0.12)",
+                  borderRadius: "6px",
+                  lineHeight: 1.5,
+                }}
+              />
             ) : null}
             {renderEditorBlockButtons(fbMsg)}
           </div>
@@ -916,6 +1101,8 @@ export default function createINPACTEngine(config) {
                 nodes={NODES}
                 mainTab={mainTab}
                 setMainTab={setMainTab}
+                lessonTrack={lessonValidationCtx?.track}
+                problemNum={problemNum}
                 taskInstructionPulseNonce={taskInstructionPulseNonce}
                 answer={answer}
                 previewCode={answerShape === "multi-file" ? getMultiFilePreviewCode(answer) : undefined}

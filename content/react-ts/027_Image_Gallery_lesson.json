@@ -83,25 +83,26 @@
         "type": "question",
         "phase": "Step 3 of 10",
         "title": "Define the image data type",
-        "instruction": "Define a TypeScript interface named 'Image' with three properties: 'id' (type number), 'title' (type string), and 'url' (type string). Add this interface definition above your component.",
-        "hint": "In TypeScript, you can define an interface using the 'interface' keyword followed by the interface name and property definitions inside curly braces.",
-        "analogousExample": "// Example: a simple interface for a user\ninterface User {\n  id: number;\n  name: string;\n  email: string;\n}",
-        "seedCode": "import React, { useState } from 'react';\n\n// Define the Image interface here\n\n// Create the ImageGallery component here",
+        "instruction": "Define a TypeScript interface named `Image` with four properties: `id` (number), `src` (string — the image URL for `<img src={...} />`), `alt` (string — short description for accessibility), and `title` (string — caption or tooltip text). Add this interface above your component so later steps can type the gallery data consistently.",
+        "hint": "Use the `interface` keyword. Match the shape the rest of this lesson uses: `src` and `alt` are what `<img>` needs; do not use `url` here or step 4 will disagree with your interface.",
+        "analogousExample": "// Shape used in this lesson for each gallery item\ninterface Image {\n  id: number;\n  src: string;\n  alt: string;\n  title: string;\n}",
+        "seedCode": "import React, { useState } from 'react';\n\n// Define the Image interface here (id, src, alt, title)\n\n// Create the ImageGallery component here",
         "expectedOutcome": "An Image interface is defined with the correct property types, enabling type-safe handling of image data in the gallery.",
         "successCriteria": [
-          "The code includes an interface named 'Image' with 'id: number', 'title: string', and 'url: string' properties."
+          "The code includes an interface named 'Image' with id (number), src (string), alt (string), and title (string)."
         ],
         "feedbackCorrect": "Nice! Proceed to the next step.",
-        "feedbackPartial": "You're on the right track, but the interface might be missing a property or have incorrect types. Check that 'id' is number, 'title' is string, and 'url' is string.",
-        "feedbackWrong": "The interface definition is missing or incorrect. Make sure to define an interface named 'Image' with the three required properties and their correct TypeScript types.",
+        "feedbackPartial": "You're on the right track, but check all four fields: id (number), src (string), alt (string), title (string). If you used `url` instead of `src`, update it to match the next steps.",
+        "feedbackWrong": "The interface definition is missing or incorrect. Define `Image` with id, src, alt, and title — the same fields you will use in the `images` array and in `<img src={...} alt={...} />`.",
         "evaluation": {
           "mode": "keyword_match",
           "required": [
             "interface",
             "Image",
             "id:",
+            "src:",
+            "alt:",
             "title:",
-            "url:",
             "number",
             "string"
           ],
@@ -114,9 +115,9 @@
         "type": "question",
         "phase": "Step 4 of 10",
         "title": "Initialize the images array",
-        "instruction": "Inside your ImageGallery component, create a constant array named 'images' that contains 3-4 sample image objects, each matching the Image interface you defined.",
+        "instruction": "Inside your ImageGallery component, create a constant array named 'images' that contains 3-4 sample image objects, each matching the `Image` interface from step 3 (id, src, alt, title).",
         "hint": "Define the array with the type Image[] and include objects with id, src, alt, and title properties.",
-        "analogousExample": "// Example: typed array of objects\nconst books: Book[] = [\n  { id: 1, title: 'Book One', author: 'Author A' },\n  { id: 2, title: 'Book Two', author: 'Author B' }\n];",
+        "analogousExample": "// Same shape as your Image interface\nconst images: Image[] = [\n  { id: 1, src: 'photo1.jpg', alt: 'Sunset', title: 'Evening sky' },\n  { id: 2, src: 'photo2.jpg', alt: 'Waves', title: 'Ocean' }\n];",
         "seedCode": "import React, { useState } from 'react';\n\n// Define the Image interface here\ninterface Image {\n  id: number;\n  src: string;\n  alt: string;\n  title: string;\n}\n\n// Create the ImageGallery component here\nconst ImageGallery = () => {\n  // Initialize the images array here\n\n  return null;\n};\n\nexport default ImageGallery;",
         "expectedOutcome": "You will have a typed images array ready to use in your gallery.",
         "successCriteria": [

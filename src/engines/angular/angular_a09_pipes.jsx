@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import InpactLogo from "../../components/InpactLogo.jsx";
 import CodeEditor from "../CodeEditor";
 import LessonEditorOutputTabs from "../LessonEditorOutputTabs";
 
@@ -266,7 +267,7 @@ const sideItems = [
 
 const s = {
   wrap: { fontFamily: "'DM Sans', sans-serif", background: "#0f1117", minHeight: "100vh", minWidth: "1000px", overflow: "hidden", color: "#e2e8f0", display: "flex", flexDirection: "column" },
-  topbar: { display: "flex", alignItems: "center", gap: "12px", padding: "0 24px", height: "52px", background: "#1a1d2e", borderBottom: "1px solid #2d3748", flexShrink: 0 },
+  topbar: { display: "flex", alignItems: "center", gap: "12px", padding: "0 24px", height: "96px", background: "#1a1d2e", borderBottom: "1px solid #2d3748", flexShrink: 0 },
   logo: { fontWeight: 700, fontSize: "13px", letterSpacing: "0.15em", color: "#7c3aed", marginRight: "8px" },
   engineTag: { fontWeight: 700, fontSize: "10px", letterSpacing: "0.12em", color: "#4a5568", textTransform: "uppercase" },
   body: { display: "flex", flex: 1, overflow: "hidden" },
@@ -435,7 +436,10 @@ export default function AngularA09Pipes({ onNextProblem }) {
   return (
     <div style={s.wrap}>
       <header style={s.topbar}>
-        <div style={s.logo}>INPACT · ANGULAR</div>
+        <div style={{ display: "flex", alignItems: "center", gap: "6px", flexShrink: 0 }}>
+          <InpactLogo height={80} />
+          <span style={{ fontWeight: 700, fontSize: "13px", letterSpacing: "0.15em", color: "#7c3aed" }}>· ANGULAR</span>
+        </div>
         <div style={s.engineTag}>ANG09 — PIPES</div>
       </header>
       <div style={s.body}>

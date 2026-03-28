@@ -1,12 +1,11 @@
 /**
  * Global lesson counts per track/category — used for all lessons (language/track and algo/language).
- * Single source of truth so UI shows category-wise counts including algorithms everywhere.
+ * Single source of truth so UI shows category-wise lesson counts.
  *
  * Use getLessonCount(track, options) for one track; use getCategoryCounts(options) for the full list.
  */
 
 import { ALGO_AI_NAMES } from "./ai-lessons/algoAiNames.js";
-import { ALGO_FULL_TITLES } from "./ai-lessons/algoCurriculumFull.js";
 import { JS_FUNDAMENTALS_CURRICULUM } from "./engines/javascript/inpact_jsf_index.js";
 import { TS_FUNDAMENTALS_CURRICULUM } from "./engines/typescript/inpact_tsf_index.js";
 import { NODE_FUNDAMENTALS_CURRICULUM } from "./engines/node/inpact_nodef_index.js";
@@ -22,8 +21,8 @@ import { MOBILE_ANGULAR_LESSON_COUNT } from "./mobileAngularLessons.js";
 
 const ANGULAR_EXTRA_LESSONS = 14; // QB01–QB05 (QuickBite) + ANG01–ANG09 before the shared React list
 
-/** React · JS and React · TS both have 119 lessons (must match PROBLEM_LIST.length in LandingPage). */
-const REACT_TS_LESSON_COUNT = 119;
+/** React · JS and React · TS both have the same count (must match PROBLEM_LIST.length in LandingPage). */
+const REACT_TS_LESSON_COUNT = 122;
 
 /** Fallback when reactListLength not provided (e.g. for category summary). */
 const DEFAULT_REACT_LIST_LENGTH = REACT_TS_LESSON_COUNT;
@@ -47,7 +46,7 @@ export function getLessonCount(track, options = {}) {
     case "mobile-angular":
       return MOBILE_ANGULAR_LESSON_COUNT;
     case "algorithms":
-      return ALGO_FULL_TITLES.length;
+      return 0;
     case "algo-js":
     case "algo-ts":
     case "algo-python":
@@ -87,20 +86,8 @@ export const TRACK_LABELS = {
   css: "CSS",
 };
 
-/** Order of tracks for category-wise summary (main categories only, not algo-js/ts/python/java separately). */
-const CATEGORY_ORDER = [
-  "react-js",
-  "react-ts",
-  "angular",
-  "mobile-angular",
-  "vue",
-  "algorithms",
-  "js",
-  "ts",
-  "node",
-  "express",
-  "css",
-];
+/** Order of tracks for category-wise summary — landing shows React · TS only (algorithms integrated but hidden). */
+const CATEGORY_ORDER = ["react-ts"];
 
 /**
  * Returns category-wise lesson counts for all tracks (including algos).

@@ -7,7 +7,11 @@ import { useState, useEffect, useMemo } from "react";
 import { generateLessonIntro, generateLessonObjectives, generateLesson } from "./services/lessonOrchestrator.js";
 import { aiLessonToEngineConfig } from "./adapters/normalizeToEngineConfig.js";
 import createINPACTEngine from "../engines/inpact_engine_shared.jsx";
+import RichLearnerText from "../engines/RichLearnerText.jsx";
+import DeepDiveModal from "../engines/DeepDiveModal.jsx";
+import DeepDiveImageButton from "../engines/DeepDiveImageButton.jsx";
 import { fetchLessonCodeValidation } from "./clientLessonValidation.js";
+import { getIntroDeepDiveConcept } from "../learn/conceptGlossary.js";
 
 const wrapStyle = {
   minHeight: "100vh",
@@ -47,8 +51,19 @@ export default function DynamicLessonPage({
   const [fullError, setFullError] = useState("");
   const [source, setSource] = useState(/** @type {'real'|'mock'|null} */ (null));
   const [fallbackReason, setFallbackReason] = useState("");
+  const [deepDiveConcept, setDeepDiveConcept] = useState(null);
 
   const params = useMemo(() => ({ track, lessonTitle, lessonIndex }), [track, lessonTitle, lessonIndex]);
+
+  const introDeepDiveConcept = useMemo(
+    () =>
+      getIntroDeepDiveConcept(
+        track,
+        lessonIndex != null ? lessonIndex + 1 : null,
+        lessonTitle || intro?.title
+      ),
+    [track, lessonIndex, lessonTitle, intro?.title]
+  );
 
   // When user navigates to a different lesson (e.g. Next Lesson), reset all state so we don't show the previous lesson's content
   useEffect(() => {
@@ -60,6 +75,7 @@ export default function DynamicLessonPage({
     setIntroError("");
     setObjectivesError("");
     setFullError("");
+    setDeepDiveConcept(null);
   }, [params.track, params.lessonTitle, params.lessonIndex]);
 
   // Call 1: AI intro (lesson overview + why it matters) — first screen
@@ -137,6 +153,8 @@ export default function DynamicLessonPage({
           ? "typescript"
           : "javascript",
       skipIntroAndObjectives: true,
+      problemNumFallback:
+        params.lessonIndex != null && params.lessonIndex >= 0 ? params.lessonIndex + 1 : undefined,
     });
     const withIntroAndObjectives = {
       ...base,
@@ -204,6 +222,7 @@ export default function DynamicLessonPage({
   // ——— Phase: objectives (AI-generated LOs) ———
   if (phase === "objectives") {
     return (
+      <>
       <div style={{ ...wrapStyle, width: "100%", boxSizing: "border-box", display: "block", paddingLeft: CONTENT_LEFT_OFFSET, paddingRight: "48px" }}>
         <div style={{ maxWidth: "840px", marginLeft: 0, marginRight: "auto", position: "relative", textAlign: "left", width: "100%", paddingLeft: "140px", boxSizing: "border-box" }}>
         <h1 style={{ fontSize: "22px", fontWeight: 600, color: "#0f172a", marginBottom: "12px" }}>
@@ -225,7 +244,7 @@ export default function DynamicLessonPage({
             {objectives.map((obj, i) => (
               <li key={i} style={{ padding: "12px 0", borderBottom: "1px solid #f1f5f9", fontSize: "15px", color: "#0f172a", display: "flex", gap: "12px" }}>
                 <span style={{ color: "#00d4ff", fontWeight: 600, flexShrink: 0 }}>{i + 1}.</span>
-                {obj}
+                <RichLearnerText as="span" text={obj} style={{ display: "inline", flex: 1 }} />
               </li>
             ))}
           </ul>
@@ -233,6 +252,15 @@ export default function DynamicLessonPage({
         <p style={{ fontSize: "13px", color: "#94a3b8", marginBottom: "16px" }}>
           {fullLoading ? "Preparing your steps…" : fullError ? "Something went wrong loading steps. You can try starting anyway or go back." : "You're all set. Start when you're ready."}
         </p>
+        {introDeepDiveConcept ? (
+          <div style={{ marginBottom: "16px" }}>
+            <div style={{ fontSize: "10px", letterSpacing: "2px", color: "#00d4ff", marginBottom: "8px", fontWeight: 600 }}>CONCEPT GUIDE</div>
+            <DeepDiveImageButton
+              onClick={() => setDeepDiveConcept(introDeepDiveConcept)}
+              title={`Open concept guide: ${introDeepDiveConcept.label || introDeepDiveConcept.id}`}
+            />
+          </div>
+        ) : null}
         <button
           type="button"
           className="inpact-btn-primary"
@@ -253,6 +281,8 @@ export default function DynamicLessonPage({
         </button>
         </div>
       </div>
+      <DeepDiveModal open={Boolean(deepDiveConcept)} onClose={() => setDeepDiveConcept(null)} concept={deepDiveConcept} />
+      </>
     );
   }
 
@@ -280,6 +310,7 @@ export default function DynamicLessonPage({
   const introLessonTag = `LESSON #${(lessonIndex ?? 0) + 1}`;
   if (phase === "intro" && intro) {
     return (
+      <>
       <div style={{ ...wrapStyle, width: "100%", boxSizing: "border-box", display: "block", paddingLeft: CONTENT_LEFT_OFFSET, paddingRight: "48px" }}>
         <div style={{ maxWidth: "840px", marginLeft: 0, marginRight: "auto", position: "relative", textAlign: "left", width: "100%", paddingLeft: "140px", boxSizing: "border-box" }}>
         <p style={{ fontSize: "12px", color: "#00d4ff", letterSpacing: "0.12em", marginBottom: "12px" }}>
@@ -288,15 +319,25 @@ export default function DynamicLessonPage({
         <h1 style={{ fontSize: "26px", fontWeight: 600, color: "#0f172a", marginBottom: "16px", lineHeight: 1.3 }}>
           {intro.title ?? lessonTitle}
         </h1>
-        {intro.body && (
-          <div style={{ fontSize: "15px", color: "#0f172a", lineHeight: 1.6, marginBottom: "20px", whiteSpace: "pre-wrap" }}>
-            {intro.body}
+        {introDeepDiveConcept ? (
+          <div style={{ marginBottom: "20px" }}>
+            <div style={{ fontSize: "10px", letterSpacing: "2px", color: "#00d4ff", marginBottom: "8px", fontWeight: 600 }}>CONCEPT GUIDE</div>
+            <DeepDiveImageButton
+              onClick={() => setDeepDiveConcept(introDeepDiveConcept)}
+              title={`Open concept guide: ${introDeepDiveConcept.label || introDeepDiveConcept.id}`}
+            />
           </div>
+        ) : null}
+        {intro.body && (
+          <RichLearnerText
+            text={intro.body}
+            style={{ fontSize: "15px", color: "#0f172a", lineHeight: 1.6, marginBottom: "20px" }}
+          />
         )}
         {intro.usecase && (
           <div style={{ fontSize: "14px", color: "#64748b", lineHeight: 1.6, marginBottom: "32px", paddingLeft: "12px", borderLeft: "3px solid #00d4ff" }}>
             <div style={{ fontSize: "10px", letterSpacing: "2px", color: "#00d4ff", marginBottom: "8px" }}>WHY IT MATTERS</div>
-            {intro.usecase}
+            <RichLearnerText as="span" text={intro.usecase} variant="muted" style={{ display: "inline" }} />
           </div>
         )}
         <button
@@ -318,6 +359,8 @@ export default function DynamicLessonPage({
         </button>
         </div>
       </div>
+      <DeepDiveModal open={Boolean(deepDiveConcept)} onClose={() => setDeepDiveConcept(null)} concept={deepDiveConcept} />
+      </>
     );
   }
 

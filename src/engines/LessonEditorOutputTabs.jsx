@@ -1,4 +1,10 @@
-import { useRef, useEffect, useState } from "react";
+import { useRef, useEffect, useState, useContext, useMemo } from "react";
+import RichLearnerText from "./RichLearnerText";
+import ReadingModeModal from "./ReadingModeModal";
+import DeepDiveModal from "./DeepDiveModal";
+import DeepDiveImageButton from "./DeepDiveImageButton";
+import { LessonValidationContext } from "../ai-lessons/lessonValidationContext.jsx";
+import { getDeepDiveConceptsForStep, getIntroDeepDiveConcept } from "../learn/conceptGlossary.js";
 
 /**
  * Shared Lesson | Editor | Output tabs + YOUR TASK callout.
@@ -8,6 +14,27 @@ import { useRef, useEffect, useState } from "react";
  *   Babel Standalone when code looks like a React component; formatted code
  *   preview for Angular/other templates.
  */
+
+/** Map common live-preview errors to a short, actionable markdown line for learners. */
+function learnerPreviewCoachHint(message) {
+  const m = String(message || "").toLowerCase();
+  if ((m.includes("usestate") || m.includes("use state")) && m.includes("not defined")) {
+    return "React hooks are **case-sensitive**. Use **`useState`** with a capital **S** — `usestate` is not defined.";
+  }
+  if (m.includes("useeffect") && m.includes("not defined")) {
+    return "Use **`useEffect`** with a capital **E**.";
+  }
+  if (m.includes("useref") && m.includes("not defined")) {
+    return "Use **`useRef`** with a capital **R**.";
+  }
+  if (m.includes("expected a component")) {
+    return "Name your root component **`App`** (or match the lesson) and use **`export default`** when the step asks for it.";
+  }
+  if (m.includes("is not defined")) {
+    return "Check **spelling**, **imports**, and **capitalization** against the lesson example.";
+  }
+  return "";
+}
 
 /** Inject reset + background into any HTML string returned by getOutputPreview */
 function injectBaseStyles(html) {
@@ -38,6 +65,130 @@ function isAngularTemplate(code) {
   );
 }
 
+/**
+ * Live iframe preview strips all `import` lines and only injects React globals.
+ * Redux / RTK Query apps therefore break at runtime (undefined Provider, store, hooks).
+ * Detect that early and show a clear message instead of a cryptic "Script error."
+ */
+function previewCannotRunInSandbox(code) {
+  if (!code || typeof code !== "string") return false;
+  const c = code;
+  return (
+    /from\s+['"]react-redux['"]/.test(c) ||
+    /from\s+['"]@reduxjs\/toolkit/.test(c) ||
+    /from\s+['"]@reduxjs\/toolkit\/query/.test(c) ||
+    /from\s+['"]\.\/store['"]/.test(c) ||
+    /from\s+['"]\.\/api['"]/.test(c) ||
+    /\buseGetPostsQuery\b|\buseGetPostQuery\b|\buseAddPostMutation\b/.test(c) ||
+    (/\bProvider\b/.test(c) && /\bstore\s*=\s*\{/.test(c)) ||
+    (/\bconfigureStore\b/.test(c) && /\bcreateApi\b/.test(c))
+  );
+}
+
+/** Static HTML when preview cannot execute learner code (Redux / RTK / multi-file imports). */
+function generateSandboxBlockedPreview() {
+  return `<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+    body { margin: 0; padding: 24px; background: #f0f4f8; font-family: system-ui, -apple-system, sans-serif; font-size: 14px; color: #334155; line-height: 1.6; max-width: 520px; }
+    h1 { font-size: 15px; color: #0f172a; margin: 0 0 12px 0; }
+    p { margin: 0 0 10px 0; }
+    .box { background: #fff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 16px 18px; border-left: 4px solid #0891b2; }
+    code { font-size: 12px; background: #f1f5f9; padding: 2px 6px; border-radius: 4px; }
+  </style>
+</head>
+<body>
+  <div class="box">
+    <h1>Preview isn’t available for this setup</h1>
+    <p>This lesson uses <strong>Redux</strong> and/or <strong>RTK Query</strong> with imports from <code>./store</code>, <code>./api</code>, or <code>react-redux</code>. The in-app preview runs a single file in an iframe and removes import lines, so the store and hooks are not defined — the browser then often shows only <code>Script error.</code></p>
+    <p>Use <strong>Check my code</strong> for validation, or run the project in your own dev environment (e.g. Vite) to see the real UI.</p>
+  </div>
+</body>
+</html>`;
+}
+
+/**
+ * Hook / call names whose generic args must be stripped before Babel (TSX).
+ * In `.tsx`, `useFetch<Todo>(url)` is parsed as JSX (`<Todo>` → runtime "X is not defined").
+ * Nested types (`Array<string>`, `{ id: number }`) use balanced < >.
+ */
+const PREVIEW_STRIP_CALL_SITE_GENERICS = [
+  "useState",
+  "useRef",
+  "useMemo",
+  "useCallback",
+  "useReducer",
+  "useContext",
+  "useLayoutEffect",
+  "useImperativeHandle",
+  "useSyncExternalStore",
+  "useDeferredValue",
+  "useFetch",
+];
+
+/**
+ * Remove `<...>` type arguments on call expressions like `useFetch<Todo>(` so the
+ * in-iframe Babel+TSX preview does not treat `<Todo` as a JSX tag.
+ */
+function stripTsxGenericCallSiteArgs(src, fnNames) {
+  let s = src;
+  for (const name of fnNames) {
+    const escaped = name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    let searchStart = 0;
+    let scanning = true;
+    while (scanning) {
+      const re = new RegExp(`\\b${escaped}\\s*<`, "g");
+      re.lastIndex = searchStart;
+      const match = re.exec(s);
+      if (!match) {
+        scanning = false;
+        continue;
+      }
+      const openAngle = match.index + match[0].length - 1;
+      let depth = 0;
+      let j = openAngle;
+      for (; j < s.length; j++) {
+        const c = s[j];
+        if (c === "<") depth++;
+        else if (c === ">") {
+          depth--;
+          if (depth === 0) {
+            j++;
+            break;
+          }
+        }
+      }
+      if (depth !== 0) {
+        searchStart = openAngle + 1;
+        continue;
+      }
+      const before = s.slice(0, openAngle);
+      const after = s.slice(j);
+      s = before + after;
+      searchStart = match.index + name.length;
+    }
+  }
+  return s;
+}
+
+/** Strip common TypeScript-only bits so Babel standalone is less likely to stall on learner code. */
+function stripTsForBabelPreview(src) {
+  let s = stripTsxGenericCallSiteArgs(src, PREVIEW_STRIP_CALL_SITE_GENERICS);
+  s = s
+    // function TodoList(): JSX.Element {
+    .replace(/\)\s*:\s*JSX\.Element\s*\{/g, ") {")
+    .replace(/\)\s*:\s*React\.ReactNode\s*\{/g, ") {")
+    // const X = (): Type => (
+    .replace(/(\)\s*):\s*React\.ChangeEvent<HTMLInputElement>\s*=>/g, "$1 =>");
+  // (param: number) in arrow / function args (single identifier param only, common in lessons)
+  s = s.replace(/\(([a-zA-Z_$][\w$]*)\s*:\s*[a-zA-Z_$][\w$|.<>\s&]*\)\s*=>/g, "($1) =>");
+  s = s.replace(/function\s+(\w+)\s*\(\s*([a-zA-Z_$][\w$]*)\s*:\s*[a-zA-Z_$][\w$|.<>\s&]*\s*\)/g, "function $1($2)");
+  return s;
+}
+
 /** Generate a live React preview iframe HTML using Babel Standalone CDN */
 function generateReactPreview(code) {
   if (!code || !code.trim()) {
@@ -52,38 +203,151 @@ function generateReactPreview(code) {
   const componentName = nameMatch ? nameMatch[1] : "App";
 
   // Strip import lines and convert `export default function X` → `function X`
-  const safeCode = code
-    .split("\n")
-    .filter((l) => !l.trim().startsWith("import "))
-    .join("\n")
-    .replace(/export\s+default\s+function\s+/g, "function ")
-    .replace(/export\s+default\s+/g, "")
-    .replace(/export\s+/g, "")
-    .replace(/<\/script>/gi, "<\\/script>");
+  const safeCode = stripTsForBabelPreview(
+    code
+      .split("\n")
+      .filter((l) => !l.trim().startsWith("import "))
+      .join("\n")
+      .replace(/export\s+default\s+function\s+/g, "function ")
+      .replace(/export\s+default\s+/g, "")
+      .replace(/export\s+/g, "")
+      .replace(/<\/script>/gi, "<\\/script>")
+  );
 
   return `<!DOCTYPE html>
 <html>
 <head>
   <meta charset="utf-8">
-  <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
-  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
-  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; }
     body { margin: 0; padding: 20px; background: #f0f4f8; font-family: system-ui, -apple-system, sans-serif; font-size: 14px; color: #1a202c; }
-    .error-box { background: #fff1f0; border: 1px solid #ffa39e; color: #c0392b; padding: 12px 16px; border-radius: 6px; font-family: monospace; font-size: 12px; white-space: pre-wrap; margin-top: 8px; }
+    .error-box { background: #fff1f0; border: 1px solid #ffa39e; color: #c0392b; padding: 12px 16px; border-radius: 6px; font-family: ui-monospace, monospace; font-size: 12px; white-space: pre-wrap; margin-top: 8px; max-width: 100%; overflow-x: auto; }
     .loading { color: #94a3b8; font-size: 13px; }
   </style>
 </head>
 <body>
   <div id="root"><span class="loading">Loading preview…</span></div>
+  <script>
+    (function () {
+      function reportPreviewProblem(title, detail) {
+        try {
+          if (window.parent && window.parent !== window) {
+            window.parent.postMessage(
+              { type: "inpact-preview-problem", message: title, detail: detail || "" },
+              "*"
+            );
+          }
+        } catch (err) {}
+      }
+      function reportPreviewOk() {
+        try {
+          if (window.parent && window.parent !== window) {
+            window.parent.postMessage({ type: "inpact-preview-ok" }, "*");
+          }
+        } catch (err) {}
+      }
+      window.__inpactReportPreviewProblem = reportPreviewProblem;
+      window.__inpactReportPreviewOk = reportPreviewOk;
+
+      function showPreviewError(title, detail) {
+        var r = document.getElementById("root");
+        if (!r) return;
+        r.innerHTML = "";
+        var d = document.createElement("div");
+        d.className = "error-box";
+        d.appendChild(document.createTextNode(title));
+        if (detail) {
+          d.appendChild(document.createElement("br"));
+          d.appendChild(document.createElement("br"));
+          d.appendChild(document.createTextNode(detail));
+        }
+        r.appendChild(d);
+        reportPreviewProblem(title, detail || "");
+      }
+      window.onerror = function (message, _src, _line, _col, error) {
+        var msg = message == null ? "" : String(message);
+        var detail = error && error.stack ? String(error.stack) : "";
+        if (msg === "Script error." || msg === "Script error") {
+          detail =
+            (detail ? detail + " — " : "") +
+            "Browsers often hide the real line for cross-origin scripts. Missing imports after the preview strips them (Redux / RTK Query) is a common cause — use Check my code or run locally.";
+        }
+        showPreviewError("Preview error: " + msg, detail);
+        return true;
+      };
+      window.addEventListener("unhandledrejection", function (e) {
+        var reason = e.reason;
+        var msg = reason && reason.message ? reason.message : String(reason);
+        showPreviewError("Preview error: " + msg, reason && reason.stack ? String(reason.stack) : "");
+      });
+      setTimeout(function () {
+        var r = document.getElementById("root");
+        if (r && r.querySelector(".loading")) {
+          showPreviewError(
+            "Preview timed out (still loading).",
+            "Common causes: blocked network to unpkg.com (React / Babel CDNs), a TypeScript/Babel compile error, or heavy CPU. Open devtools → select this iframe → Console for details."
+          );
+        }
+      }, 15000);
+      window.__inpactShowPreviewError = showPreviewError;
+    })();
+  </script>
+  <script src="https://unpkg.com/react@18/umd/react.development.js" onerror="window.__inpactShowPreviewError&&window.__inpactShowPreviewError('Failed to load React from unpkg.com.','Check your network, VPN, or ad-blocker.')"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" onerror="window.__inpactShowPreviewError&&window.__inpactShowPreviewError('Failed to load React DOM from unpkg.com.','Check your network, VPN, or ad-blocker.')"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js" onerror="window.__inpactShowPreviewError&&window.__inpactShowPreviewError('Failed to load Babel from unpkg.com.','Preview needs Babel to compile TypeScript/JSX. Check your network.')"></script>
   <script type="text/babel" data-presets="typescript,react">
-    const { useState, useEffect, useRef, useMemo, useCallback, useReducer, useContext } = React;
+    const { useState, useEffect, useRef, useMemo, useCallback, useReducer, useContext, Component } = React;
+    class _InpactPreviewErrorBoundary extends Component {
+      constructor(props) {
+        super(props);
+        this.state = { error: null };
+      }
+      static getDerivedStateFromError(error) {
+        return { error };
+      }
+      render() {
+        if (this.state.error) {
+          var m = this.state.error.message || String(this.state.error);
+          var det = this.state.error.stack ? String(this.state.error.stack) : "";
+          if (window.__inpactReportPreviewProblem) {
+            window.__inpactReportPreviewProblem("Render error: " + m, det);
+          }
+          return React.createElement("div", { className: "error-box" }, "Render error: " + m);
+        }
+        return this.props.children;
+      }
+    }
     try {
       ${safeCode}
-      ReactDOM.createRoot(document.getElementById('root')).render(React.createElement(${componentName}));
-    } catch(e) {
-      document.getElementById('root').innerHTML = '<div class="error-box">Error: ' + e.message + '</div>';
+      var __C = ${componentName};
+      if (typeof __C !== "function") {
+        throw new Error(
+          'Expected a component named "${componentName}" (function or const). If your component uses another name, rename it or add export default YourName.'
+        );
+      }
+      var el = document.getElementById("root");
+      var root = ReactDOM.createRoot(el);
+      root.render(
+        React.createElement(
+          _InpactPreviewErrorBoundary,
+          null,
+          React.createElement(__C)
+        )
+      );
+      if (window.__inpactReportPreviewOk) window.__inpactReportPreviewOk();
+    } catch (e) {
+      var errTitle = "Preview error: " + (e && e.message ? e.message : String(e));
+      var r = document.getElementById("root");
+      if (r) {
+        r.innerHTML = "";
+        var d = document.createElement("div");
+        d.className = "error-box";
+        d.textContent = errTitle;
+        r.appendChild(d);
+      }
+      if (window.__inpactReportPreviewProblem) {
+        window.__inpactReportPreviewProblem(errTitle, e && e.stack ? String(e.stack) : "");
+      }
     }
   </script>
 </body>
@@ -138,7 +402,12 @@ const lessonStyles = {
 };
 
 /** Same task block shown above the editor everywhere (tabs and non-tabs). Parses "Your task:" / "Your turn:" for callout. */
-export function EditorTaskBlock({ node, taskInstructionPulseNonce = 0 }) {
+export function EditorTaskBlock({
+  node,
+  taskInstructionPulseNonce = 0,
+  deepDiveConcepts = [],
+  onOpenDeepDive,
+}) {
   const paal = node?.paal || "";
   const markerMatch = paal.match(/your\s+(?:task|turn)\s*:/i);
   const markerIdx = markerMatch ? markerMatch.index : -1;
@@ -146,6 +415,7 @@ export function EditorTaskBlock({ node, taskInstructionPulseNonce = 0 }) {
   const taskText = markerIdx >= 0 ? paal.slice(markerIdx).trim() : "";
   if (!paal) return null;
   const pulseClass = taskInstructionPulseNonce > 0 ? " inpact-editor-task-box--pulse" : "";
+  const dives = Array.isArray(deepDiveConcepts) ? deepDiveConcepts : [];
   return (
     <div style={lessonStyles.editorTaskWrap}>
       <div
@@ -154,14 +424,27 @@ export function EditorTaskBlock({ node, taskInstructionPulseNonce = 0 }) {
         className={`inpact-editor-task-box${pulseClass}`}
       >
         <div style={lessonStyles.editorTaskLabel}>TASK</div>
-        {mainText ? <div style={lessonStyles.editorTaskText}>{mainText}</div> : null}
+        {mainText ? (
+          <RichLearnerText text={mainText} style={lessonStyles.editorTaskText} variant="task" />
+        ) : null}
         {taskText ? (
           <div style={{ ...lessonStyles.taskCard, marginTop: "12px", marginBottom: 0 }} className="inpact-task-callout">
             <div style={lessonStyles.taskLabel} className="inpact-task-badge">YOUR TASK</div>
-            <div style={lessonStyles.taskText}>{taskText}</div>
+            <RichLearnerText text={taskText} style={lessonStyles.taskText} variant="taskCallout" />
           </div>
         ) : null}
       </div>
+      {dives.length > 0 && typeof onOpenDeepDive === "function" ? (
+        <div className="inpact-editor-deep-dive-toolbar">
+          {dives.map((c) => (
+            <DeepDiveImageButton
+              key={c.id}
+              onClick={() => onOpenDeepDive(c)}
+              title={dives.length > 1 ? `Deep-dive: ${c.label || c.id}` : `Open concept guide: ${c.label || c.id}`}
+            />
+          ))}
+        </div>
+      ) : null}
     </div>
   );
 }
@@ -181,29 +464,50 @@ export default function LessonEditorOutputTabs({
   tabsInSidebar = false,
   lessonIntro = null,
   lessonObjectives = null,
+  lessonTrack,
+  /** Lesson index (matches glossary `problemNum` in track JSON lessons). */
+  problemNum,
   /** Increment when learner advances from feedback modal "Next step" — subtle pulse on TASK box */
   taskInstructionPulseNonce = 0,
   children,
 }) {
+  const lessonValidationCtx = useContext(LessonValidationContext);
+  const track = lessonTrack || lessonValidationCtx?.track;
+  const deepDiveConcepts = useMemo(
+    () =>
+      getDeepDiveConceptsForStep(track, problemNum, node?.id, node?.introduces_concepts),
+    [track, problemNum, node?.id, node?.introduces_concepts]
+  );
+  const [deepDiveConcept, setDeepDiveConcept] = useState(null);
   const code = typeof previewCode === "string" && previewCode.trim() ? previewCode : (typeof answer === "string" ? answer : "");
   const hasOutput = typeof getOutputPreview === "function";
-  const isReact = !hasOutput && isReactCode(code);
-  const isAngular = !hasOutput && !isReact && isAngularTemplate(code);
+  const sandboxBlocked = !hasOutput && previewCannotRunInSandbox(code);
+  const isReact = !hasOutput && !sandboxBlocked && isReactCode(code);
+  const isAngular = !hasOutput && !sandboxBlocked && !isReact && isAngularTemplate(code);
   const [showOutputModal, setShowOutputModal] = useState(false);
+  const [previewCoach, setPreviewCoach] = useState(null);
+  const [showReadingModal, setShowReadingModal] = useState(false);
   const lessonScrollRef = useRef(null);
+  const previewIframeRef = useRef(null);
   const introNode = introNodeFromNodes(nodes);
   const objectivesNode = objectivesNodeFromNodes(nodes);
   const problemContent = introNode?.content || (lessonIntro && { tag: lessonIntro.tag, title: lessonIntro.title, body: lessonIntro.body, usecase: lessonIntro.usecase }) || {};
   const objectives = objectivesNode?.items || (Array.isArray(lessonObjectives) ? lessonObjectives : []);
+  const introDeepDiveConcept = useMemo(
+    () => getIntroDeepDiveConcept(track, problemNum, problemContent.title),
+    [track, problemNum, problemContent.title]
+  );
 
   /** Same content as former Output tab: HTML for iframe or placeholder */
   const outputContent = hasOutput
     ? injectBaseStyles(getOutputPreview(answer))
-    : isReact
-      ? generateReactPreview(code)
-      : isAngular
-        ? generateTemplatePreview(code)
-        : null;
+    : sandboxBlocked
+      ? generateSandboxBlockedPreview()
+      : isReact
+        ? generateReactPreview(code)
+        : isAngular
+          ? generateTemplatePreview(code)
+          : null;
 
   useEffect(() => {
     if (mainTab !== "lesson") return;
@@ -213,6 +517,40 @@ export default function LessonEditorOutputTabs({
     return () => cancelAnimationFrame(id);
   }, [mainTab]);
 
+  useEffect(() => {
+    queueMicrotask(() => {
+      setDeepDiveConcept(null);
+    });
+  }, [node?.id]);
+
+  useEffect(() => {
+    function onMessage(e) {
+      const iframe = previewIframeRef.current;
+      if (!iframe || e.source !== iframe.contentWindow) return;
+      const d = e.data;
+      if (!d || typeof d !== "object") return;
+      if (d.type === "inpact-preview-problem") {
+        setPreviewCoach({
+          message: typeof d.message === "string" ? d.message : String(d.message ?? ""),
+          detail: typeof d.detail === "string" ? d.detail : "",
+        });
+      }
+      if (d.type === "inpact-preview-ok") setPreviewCoach(null);
+    }
+    window.addEventListener("message", onMessage);
+    return () => window.removeEventListener("message", onMessage);
+  }, []);
+
+  function closeOutputModal() {
+    setPreviewCoach(null);
+    setShowOutputModal(false);
+  }
+
+  function openOutputModal() {
+    setPreviewCoach(null);
+    setShowOutputModal(true);
+  }
+
   return (
     <>
       {!tabsInSidebar && (
@@ -221,13 +559,23 @@ export default function LessonEditorOutputTabs({
             <button type="button" style={lessonStyles.tab(mainTab === "lesson")} onClick={() => setMainTab("lesson")}>Lesson</button>
             <button type="button" style={lessonStyles.tab(mainTab === "editor")} onClick={() => setMainTab("editor")}>Editor</button>
           </div>
-          <button
-            type="button"
-            style={{ ...lessonStyles.tab(false), borderColor: "#0891b2", color: "#0891b2", fontSize: "11px" }}
-            onClick={() => setShowOutputModal(true)}
-          >
-            🖥️ Preview
-          </button>
+          <div style={{ display: "flex", gap: "6px", flexWrap: "wrap" }}>
+            <button
+              type="button"
+              style={{ ...lessonStyles.tab(false), borderColor: "#a89880", color: "#6b5c4c", fontSize: "11px" }}
+              onClick={() => setShowReadingModal(true)}
+              title="Skim the lesson like a book — steps, code, and explanations"
+            >
+              📖 Reading
+            </button>
+            <button
+              type="button"
+              style={{ ...lessonStyles.tab(false), borderColor: "#0891b2", color: "#0891b2", fontSize: "11px" }}
+              onClick={openOutputModal}
+            >
+              🖥️ Preview
+            </button>
+          </div>
         </div>
       )}
       {mainTab === "lesson" && (
@@ -239,8 +587,25 @@ export default function LessonEditorOutputTabs({
                 <div style={lessonStyles.paalLabel}>TOPICS & CONCEPTS</div>
                 {problemContent.tag && <div style={{ fontSize: "11px", color: "#7c3aed", marginBottom: "8px" }}>{problemContent.tag}</div>}
                 {problemContent.title && <div style={{ fontSize: "18px", fontWeight: 600, color: "#0f172a", marginBottom: "12px" }}>{problemContent.title}</div>}
-                {problemContent.body && <div style={lessonStyles.paalText}>{problemContent.body}</div>}
-                {problemContent.usecase && <div style={{ marginTop: "14px", fontSize: "14px", color: "#94a3b8", fontStyle: "italic" }}>{problemContent.usecase}</div>}
+                {introDeepDiveConcept ? (
+                  <div style={{ marginBottom: "16px" }}>
+                    <div style={{ ...lessonStyles.paalLabel, marginBottom: "8px" }}>CONCEPT GUIDE</div>
+                    <DeepDiveImageButton
+                      onClick={() => setDeepDiveConcept(introDeepDiveConcept)}
+                      title={`Open concept guide: ${introDeepDiveConcept.label || introDeepDiveConcept.id}`}
+                    />
+                  </div>
+                ) : null}
+                {problemContent.body && (
+                  <RichLearnerText text={problemContent.body} style={lessonStyles.paalText} />
+                )}
+                {problemContent.usecase && (
+                  <RichLearnerText
+                    text={problemContent.usecase}
+                    variant="muted"
+                    style={{ marginTop: "14px", fontSize: "14px", color: "#94a3b8", fontStyle: "italic" }}
+                  />
+                )}
               </div>
             )}
             {objectives.length > 0 && (
@@ -248,7 +613,9 @@ export default function LessonEditorOutputTabs({
                 <div style={lessonStyles.paalLabel}>LEARNING OBJECTIVES</div>
                 <ul style={{ margin: 0, paddingLeft: "20px", color: "#334155", lineHeight: 1.85, fontSize: "15px" }}>
                   {objectives.map((item, i) => (
-                    <li key={i} style={{ marginBottom: "6px" }}>{item}</li>
+                    <li key={i} style={{ marginBottom: "6px" }}>
+                      <RichLearnerText as="span" text={item} style={{ display: "inline" }} />
+                    </li>
                   ))}
                 </ul>
               </div>
@@ -262,12 +629,26 @@ export default function LessonEditorOutputTabs({
       )}
       {mainTab === "editor" && (
         <div style={{ display: "flex", flexDirection: "column", flex: 1, minHeight: 0, width: "100%", maxWidth: "100%", overflow: "hidden" }}>
-          {showTaskInEditor && <EditorTaskBlock node={node} taskInstructionPulseNonce={taskInstructionPulseNonce} />}
+          {showTaskInEditor && (
+            <EditorTaskBlock
+              node={node}
+              taskInstructionPulseNonce={taskInstructionPulseNonce}
+              deepDiveConcepts={deepDiveConcepts}
+              onOpenDeepDive={setDeepDiveConcept}
+            />
+          )}
           <div style={{ flex: 1, minHeight: 0, display: "flex", flexDirection: "column", minWidth: 0, maxWidth: "100%", overflow: "hidden" }}>
             {children}
           </div>
         </div>
       )}
+      <ReadingModeModal
+        open={showReadingModal}
+        onClose={() => setShowReadingModal(false)}
+        nodes={nodes}
+        lessonTitle={problemContent.title || node?.title || ""}
+      />
+      <DeepDiveModal open={Boolean(deepDiveConcept)} onClose={() => setDeepDiveConcept(null)} concept={deepDiveConcept} />
       {showOutputModal && (
         <div
           style={{
@@ -281,7 +662,7 @@ export default function LessonEditorOutputTabs({
             padding: "24px",
             boxSizing: "border-box",
           }}
-          onClick={() => setShowOutputModal(false)}
+          onClick={closeOutputModal}
           role="dialog"
           aria-modal="true"
           aria-labelledby="output-modal-title"
@@ -304,11 +685,37 @@ export default function LessonEditorOutputTabs({
           >
             <div style={{ flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "space-between", padding: "12px 16px", borderBottom: "1px solid #e2e8f0", background: "#f8fafc" }}>
               <span id="output-modal-title" style={{ fontSize: "13px", fontWeight: 600, color: "#0f172a" }}>🖥️ Output preview</span>
-              <button type="button" onClick={() => setShowOutputModal(false)} style={{ padding: "6px 14px", fontSize: "12px", fontWeight: 600, background: "#0891b2", color: "#fff", border: "none", borderRadius: "6px", cursor: "pointer" }}>Close</button>
+              <button type="button" onClick={closeOutputModal} style={{ padding: "6px 14px", fontSize: "12px", fontWeight: 600, background: "#0891b2", color: "#fff", border: "none", borderRadius: "6px", cursor: "pointer" }}>Close</button>
             </div>
+            {previewCoach ? (
+              <div
+                style={{
+                  flexShrink: 0,
+                  padding: "12px 16px",
+                  background: "linear-gradient(180deg, #fffbeb 0%, #fef3c7 100%)",
+                  borderBottom: "1px solid #fcd34d",
+                  fontSize: "13px",
+                  color: "#78350f",
+                  lineHeight: 1.55,
+                }}
+              >
+                <div style={{ fontWeight: 700, fontSize: "10px", letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: "6px", color: "#b45309" }}>
+                  Learner hint
+                </div>
+                {learnerPreviewCoachHint(previewCoach.message) ? (
+                  <div style={{ marginBottom: "8px" }}>
+                    <RichLearnerText text={learnerPreviewCoachHint(previewCoach.message)} variant="task" />
+                  </div>
+                ) : null}
+                <div style={{ fontFamily: "ui-monospace, monospace", fontSize: "11px", opacity: 0.92, wordBreak: "break-word" }}>
+                  {previewCoach.message}
+                </div>
+              </div>
+            ) : null}
             <div style={{ flex: 1, minHeight: 0, background: "#f8fafc" }}>
               {outputContent ? (
                 <iframe
+                  ref={previewIframeRef}
                   title="Preview"
                   srcDoc={outputContent}
                   style={{ width: "100%", height: "100%", border: "none", display: "block" }}
@@ -319,7 +726,7 @@ export default function LessonEditorOutputTabs({
                   <span style={{ fontSize: "32px" }}>🖥️</span>
                   <div>Write your code in the <strong style={{ color: "#0891b2" }}>Editor</strong> tab, then click Preview to see the output here.</div>
                   <div style={{ fontSize: "12px", color: "#64748b", marginTop: "4px" }}>You can also paste your code into <a href="https://codesandbox.io" target="_blank" rel="noreferrer" style={{ color: "#0891b2" }}>CodeSandbox</a> for a full live environment.</div>
-                  <button type="button" onClick={() => setShowOutputModal(false)} style={{ marginTop: "12px", padding: "8px 16px", fontSize: "12px", fontWeight: 600, background: "#e2e8f0", color: "#475569", border: "none", borderRadius: "6px", cursor: "pointer" }}>Close</button>
+                  <button type="button" onClick={closeOutputModal} style={{ marginTop: "12px", padding: "8px 16px", fontSize: "12px", fontWeight: 600, background: "#e2e8f0", color: "#475569", border: "none", borderRadius: "6px", cursor: "pointer" }}>Close</button>
                 </div>
               )}
             </div>

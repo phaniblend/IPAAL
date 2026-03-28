@@ -1,6 +1,10 @@
 import { useMemo, useState } from "react";
 import CodeEditor from "./CodeEditor";
 
+function hasFileKey(files, name) {
+  return typeof name === "string" && name !== "" && Object.prototype.hasOwnProperty.call(files, name);
+}
+
 function parseAnswer(raw) {
   try {
     const parsed = JSON.parse(raw || "{}");
@@ -11,7 +15,7 @@ function parseAnswer(raw) {
     );
     const fileNames = Object.keys(normalized);
     const activeFile =
-      typeof parsed.activeFile === "string" && normalized[parsed.activeFile]
+      typeof parsed.activeFile === "string" && hasFileKey(normalized, parsed.activeFile)
         ? parsed.activeFile
         : fileNames[0] || null;
     return { files: normalized, activeFile };
@@ -43,8 +47,12 @@ export default function MultiFileEditor({
   height = "480px",
   defaultFileName = "App.tsx",
   language = "typescript",
-  /** Per-file seed strings: when the active file still matches (trim), first focus clears the editor (same idea as Angular placeholder). */
+  /** Per-file content when the lesson step loaded (from engine). Takes precedence over seed-based placeholderByFile so carry-forward matches focus-clear. */
+  focusBaselineByFile,
+  /** Per-file seed strings: fallback when focusBaselineByFile is unset (first paint before effect) or missing a tab. */
   placeholderByFile,
+  /** When false (default), never clear editor on focus — avoids wiping carry-forward code on later steps. */
+  clearPlaceholderOnFirstFocus = false,
 }) {
   const parsed = useMemo(() => parseAnswer(value), [value]);
   const files = parsed?.files ?? { [defaultFileName]: "" };
@@ -52,11 +60,20 @@ export default function MultiFileEditor({
   const activeFile = parsed?.activeFile ?? fileNames[0];
   const activeCode = files[activeFile] ?? "";
   const editorLanguage = languageForFileName(activeFile, language);
-  const activePlaceholderRaw =
-    placeholderByFile && typeof placeholderByFile === "object" && activeFile in placeholderByFile
+  const baselineFromStep =
+    focusBaselineByFile &&
+    typeof focusBaselineByFile === "object" &&
+    activeFile &&
+    hasFileKey(focusBaselineByFile, activeFile)
+      ? String(focusBaselineByFile[activeFile] ?? "")
+      : "";
+  const propRaw =
+    placeholderByFile && typeof placeholderByFile === "object" && hasFileKey(placeholderByFile, activeFile)
       ? String(placeholderByFile[activeFile] ?? "")
       : "";
-  const placeholderClearOnFocus = activePlaceholderRaw.trim() ? activePlaceholderRaw : undefined;
+  const candidateBaseline = baselineFromStep.trim() ? baselineFromStep : propRaw;
+  const placeholderClearOnFocus =
+    clearPlaceholderOnFirstFocus && candidateBaseline.trim() ? candidateBaseline : undefined;
   const [newFileName, setNewFileName] = useState("");
 
   function updateFileCode(code) {

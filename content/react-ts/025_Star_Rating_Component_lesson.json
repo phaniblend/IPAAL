@@ -14,6 +14,7 @@
     },
     "objectives": [
       "Implement a reusable StarRating component using TypeScript interfaces",
+      "Define a fixed array of star placeholders and map it to JSX elements",
       "Initialize and manage the rating state with React hooks",
       "Render interactive star icons based on the current rating value",
       "Configure click handlers to update the rating when stars are selected",
@@ -25,7 +26,7 @@
       {
         "id": "step1",
         "type": "question",
-        "phase": "Step 1 of 10",
+        "phase": "Step 1 of 11",
         "title": "Import React and useState",
         "instruction": "Import React and the useState hook from the 'react' module.",
         "hint": "Use the import statement to bring in both React and useState from the 'react' package.",
@@ -53,10 +54,10 @@
       {
         "id": "step2",
         "type": "question",
-        "phase": "Step 2 of 10",
+        "phase": "Step 2 of 11",
         "title": "Define the StarRating component and its props interface",
         "instruction": "Create a functional component named StarRating and define an interface for its props with a maxRating property of type number.",
-        "hint": "Start by declaring an interface for the component's props, then create the component function that accepts those props.",
+        "hint": "Declare the interface first, then add a component named StarRating — either `function StarRating(…) { }` or `const StarRating = (…) => { }`. Type the parameter with `StarRatingProps` when you add the signature (e.g. `(props: StarRatingProps)` or `({ maxRating }: StarRatingProps)`). An empty body is fine for this step.",
         "analogousExample": "// Example: component with typed props\ninterface ButtonProps {\n  label: string;\n}\n\nfunction Button({ label }: ButtonProps) {\n  return <button>{label}</button>;\n}",
         "seedCode": "import React, { useState } from 'react';\n\n// Define StarRating component and props interface here\n",
         "expectedOutcome": "You should have a StarRating component function and a props interface with maxRating: number.",
@@ -70,20 +71,20 @@
           "mode": "keyword_match",
           "required": [
             "interface",
+            "StarRatingProps",
             "maxRating",
             "number",
-            "StarRating",
-            "function",
-            "{"
+            "functionStarRating",
+            "constStarRating"
           ],
           "partialThreshold": 0.5,
-          "correctThreshold": 0.8
+          "correctThreshold": 0.75
         }
       },
       {
         "id": "step3",
         "type": "question",
-        "phase": "Step 3 of 10",
+        "phase": "Step 3 of 11",
         "title": "Initialize rating state with useState",
         "instruction": "Inside your StarRating component, declare a state variable named 'rating' and its setter using useState, initializing it to 0.",
         "hint": "Use the useState hook you imported earlier. Remember to provide the initial value (0) and destructure the returned array.",
@@ -110,7 +111,7 @@
       {
         "id": "step4",
         "type": "question",
-        "phase": "Step 4 of 10",
+        "phase": "Step 4 of 11",
         "title": "Create the handleStarClick handler",
         "instruction": "Inside the StarRating component, define a function named handleStarClick that takes a star index (number) as a parameter and updates the rating state to that index.",
         "hint": "Create a function that receives a star index and calls setRating with that index value.",
@@ -136,7 +137,7 @@
       {
         "id": "step5",
         "type": "question",
-        "phase": "Step 5 of 10",
+        "phase": "Step 5 of 11",
         "title": "Add the main container div",
         "instruction": "In your StarRating component, return a div element with the class name 'star-rating'.",
         "hint": "Replace the current return value (null) with a JSX div element.",
@@ -163,40 +164,72 @@
       {
         "id": "step6",
         "type": "question",
-        "phase": "Step 6 of 10",
-        "title": "Map over stars to create star elements",
-        "instruction": "Inside the container div, use the map method on an array of length maxStars to create a span element for each star.",
-        "hint": "You can create an array of the correct length using Array(maxStars).fill(0) or Array.from({ length: maxStars }).",
-        "analogousExample": "// Similar: mapping to create list items\nconst numbers = [1, 2, 3];\nconst listItems = numbers.map((num) => <li key={num}>{num}</li>);",
-        "seedCode": "import React, { useState } from 'react';\n\ninterface StarRatingProps {\n  maxStars?: number;\n}\n\nconst StarRating = ({ maxStars = 5 }: StarRatingProps) => {\n  const [rating, setRating] = useState(0);\n  \n  // Define handleStarClick here\n  \n  return (\n    <div>\n      {/* Map over stars here */}\n    </div>\n  );\n};\n\nexport default StarRating;",
-        "expectedOutcome": "The component will have a placeholder for star elements that will be generated dynamically based on maxStars.",
+        "phase": "Step 6 of 11",
+        "title": "Define a stars array with five labels",
+        "instruction": "Inside **StarRating**, **above** the `return`, declare **`const stars`** as an array of **five** strings — e.g. **`'star1'`**, **`'star2'`**, **`'star3'`**, **`'star4'`**, and **`'star5'`**. Each entry is a stand-in for one star slot; you will **`.map`** over this array in the next step to render the UI.",
+        "hint": "Use an array literal: `const stars = ['star1', 'star2', 'star3', 'star4', 'star5'];` Place it after your hooks/handlers and before the `return`.",
+        "analogousExample": "// Five placeholder labels for five UI slots:\nconst tabs = ['home', 'profile', 'settings', 'help', 'logout'];",
+        "seedCode": "import React, { useState } from 'react';\n\ninterface StarRatingProps {\n  maxStars?: number;\n}\n\nconst StarRating = ({ maxStars = 5 }: StarRatingProps) => {\n  const [rating, setRating] = useState(0);\n\n  // Define handleStarClick here\n\n  // Step 6: const stars = ['star1', 'star2', 'star3', 'star4', 'star5'];\n\n  // YOUR CODE HERE:\n\n  return (\n    <div className=\"star-rating\">\n      {/* Map over stars in the next step */}\n    </div>\n  );\n};\n\nexport default StarRating;",
+        "expectedOutcome": "A `stars` constant holds exactly five string elements (e.g. star1 … star5), ready to drive rendering in the next step.",
         "successCriteria": [
-          "A map method is used inside the container div to iterate over an array of length maxStars, returning a span element for each iteration."
+          "`const stars` (or equivalent) declares an array of five strings such as 'star1' through 'star5'.",
+          "The array is defined inside the component, before the return."
         ],
-        "feedbackCorrect": "Nice! Proceed to the next step.",
-        "feedbackPartial": "You're on the right track, but make sure you're using the map method correctly on an array of the appropriate length.",
-        "feedbackWrong": "The mapping logic for generating star elements is missing or incorrect. Review how to use map with arrays in React.",
+        "feedbackCorrect": "Good — you have a fixed five-item list to map over next.",
+        "feedbackPartial": "Define `stars` as an array of five strings (star1 … star5) inside the component, above the return.",
+        "feedbackWrong": "Add: `const stars = ['star1', 'star2', 'star3', 'star4', 'star5'];` before the return statement.",
         "evaluation": {
           "mode": "keyword_match",
           "required": [
-            "map",
-            "maxStars",
-            "span",
-            "return"
+            "stars",
+            "star1",
+            "star2",
+            "star3",
+            "star4",
+            "star5"
           ],
           "partialThreshold": 0.5,
-          "correctThreshold": 0.8
+          "correctThreshold": 0.85
         }
       },
       {
         "id": "step7",
         "type": "question",
-        "phase": "Step 7 of 10",
+        "phase": "Step 7 of 11",
+        "title": "Map over the stars array to create star elements",
+        "instruction": "Inside the **`star-rating`** container `div`, use **`.map`** on your **`stars`** array. For each item, return a **`span`** element. Use the **loop index** as React’s **`key`** (e.g. `key={index}`).",
+        "hint": "Pattern: `{stars.map((star, index) => ( <span key={index}>...</span> ))}`. You will fill the span content in the next step.",
+        "analogousExample": "// Map over a fixed array\n{items.map((item, index) => (\n  <span key={index}>{item}</span>\n))}",
+        "seedCode": "import React, { useState } from 'react';\n\ninterface StarRatingProps {\n  maxStars?: number;\n}\n\nconst StarRating = ({ maxStars = 5 }: StarRatingProps) => {\n  const [rating, setRating] = useState(0);\n\n  // Define handleStarClick here\n\n  const stars = ['star1', 'star2', 'star3', 'star4', 'star5'];\n\n  return (\n    <div className=\"star-rating\">\n      {/* Step 7: stars.map → one span per item, key={index} */}\n\n      {/* YOUR CODE HERE: */}\n    </div>\n  );\n};\n\nexport default StarRating;",
+        "expectedOutcome": "Each entry in `stars` produces one `span` in the DOM, keyed by index.",
+        "successCriteria": [
+          "`.map` is called on the `stars` array inside the container div.",
+          "Each mapped element is a `span` with a stable `key` derived from the index."
+        ],
+        "feedbackCorrect": "Nice! Proceed to the next step.",
+        "feedbackPartial": "Use `stars.map((star, index) => ...)` inside the div and return a `<span key={index}>` for each row.",
+        "feedbackWrong": "Inside `<div className=\"star-rating\">`, render `{stars.map((star, index) => ( <span key={index}>...</span> ))}`.",
+        "evaluation": {
+          "mode": "keyword_match",
+          "required": [
+            "stars.map",
+            "span",
+            "key",
+            "return"
+          ],
+          "partialThreshold": 0.5,
+          "correctThreshold": 0.75
+        }
+      },
+      {
+        "id": "step8",
+        "type": "question",
+        "phase": "Step 8 of 11",
         "title": "Display star character and apply conditional styling",
         "instruction": "Inside the map callback, make each span display a star character (★) and conditionally apply an 'active' class if the star index is less than or equal to the current rating.",
         "hint": "Use a ternary operator to conditionally add the 'active' class to the className attribute based on the index and rating comparison.",
         "analogousExample": "// Conditional class example\nconst items = ['A', 'B', 'C'];\nconst selectedIndex = 1;\nconst list = items.map((item, index) => (\n  <span className={index <= selectedIndex ? 'active' : ''} key={index}>\n    {item}\n  </span>\n));",
-        "seedCode": "import React, { useState } from 'react';\n\ninterface StarRatingProps {\n  maxStars?: number;\n}\n\nconst StarRating = ({ maxStars = 5 }: StarRatingProps) => {\n  const [rating, setRating] = useState(0);\n  \n  // Define handleStarClick here\n  \n  return (\n    <div>\n      {Array.from({ length: maxStars }, (_, index) => (\n        <span key={index}>\n          {/* Display star and apply conditional class */}\n        </span>\n      ))}\n    </div>\n  );\n};\n\nexport default StarRating;",
+        "seedCode": "import React, { useState } from 'react';\n\ninterface StarRatingProps {\n  maxStars?: number;\n}\n\nconst StarRating = ({ maxStars = 5 }: StarRatingProps) => {\n  const [rating, setRating] = useState(0);\n\n  // Define handleStarClick here\n\n  const stars = ['star1', 'star2', 'star3', 'star4', 'star5'];\n  \n  return (\n    <div className=\"star-rating\">\n      {stars.map((star, index) => (\n        <span key={index}>\n          {/* Display star and apply conditional class */}\n        </span>\n      ))}\n    </div>\n  );\n};\n\nexport default StarRating;",
         "expectedOutcome": "Each star span will show a filled star character (★) and have an 'active' class when its index is less than or equal to the current rating, enabling visual styling.",
         "successCriteria": [
           "The span displays ★ and conditionally includes className='active' based on index <= rating."
@@ -217,14 +250,14 @@
         }
       },
       {
-        "id": "step8",
+        "id": "step9",
         "type": "question",
-        "phase": "Step 8 of 10",
+        "phase": "Step 9 of 11",
         "title": "Wire onClick to handleStarClick",
         "instruction": "Add an onClick handler to each star span that calls handleStarClick with the appropriate star index.",
         "hint": "The index parameter for each star is available in the map callback. Pass it to handleStarClick when the star is clicked.",
         "analogousExample": "// Example: wiring a click handler\n<button onClick={() => handleClick(index)}>Click me</button>",
-        "seedCode": "import React, { useState } from 'react';\n\ninterface StarRatingProps {\n  maxStars?: number;\n}\n\nconst StarRating = ({ maxStars = 5 }: StarRatingProps) => {\n  const [rating, setRating] = useState(0);\n  \n  const handleStarClick = (selectedRating: number) => {\n    setRating(selectedRating);\n  };\n  \n  return (\n    <div>\n      {Array.from({ length: maxStars }, (_, index) => (\n        <span key={index}>\n          {/* Display star and apply conditional class */}\n        </span>\n      ))}\n    </div>\n  );\n};\n\nexport default StarRating;",
+        "seedCode": "import React, { useState } from 'react';\n\ninterface StarRatingProps {\n  maxStars?: number;\n}\n\nconst StarRating = ({ maxStars = 5 }: StarRatingProps) => {\n  const [rating, setRating] = useState(0);\n\n  const stars = ['star1', 'star2', 'star3', 'star4', 'star5'];\n\n  const handleStarClick = (selectedRating: number) => {\n    setRating(selectedRating);\n  };\n  \n  return (\n    <div className=\"star-rating\">\n      {stars.map((star, index) => (\n        <span key={index}>\n          {/* Display star and apply conditional class */}\n        </span>\n      ))}\n    </div>\n  );\n};\n\nexport default StarRating;",
         "expectedOutcome": "Each star span will have an onClick handler that triggers handleStarClick with the correct star index when clicked.",
         "successCriteria": [
           "The onClick handler is added to each star span and correctly calls handleStarClick with the star's index."
@@ -244,14 +277,14 @@
         }
       },
       {
-        "id": "step9",
+        "id": "step10",
         "type": "question",
-        "phase": "Step 9 of 10",
+        "phase": "Step 10 of 11",
         "title": "Add a reset button",
         "instruction": "After the stars mapping, add a button element with the text 'Reset' and an onClick handler that sets the rating state back to 0.",
-        "hint": "Place the button after the closing brace of the Array.from mapping. Use setRating(0) inside the onClick handler.",
+        "hint": "Place the button after the closing of the `stars.map(...)` expression. Use setRating(0) inside the onClick handler.",
         "analogousExample": "// Adding a reset button\n<button onClick={() => setValue(0)}>Reset</button>",
-        "seedCode": "import React, { useState } from 'react';\n\ninterface StarRatingProps {\n  maxStars?: number;\n}\n\nconst StarRating = ({ maxStars = 5 }: StarRatingProps) => {\n  const [rating, setRating] = useState(0);\n  \n  const handleStarClick = (selectedRating: number) => {\n    setRating(selectedRating);\n  };\n  \n  return (\n    <div>\n      {Array.from({ length: maxStars }, (_, index) => (\n        <span key={index}>\n          {/* Display star and apply conditional class */}\n        </span>\n      ))}\n      {/* Add reset button here */}\n    </div>\n  );\n};\n\nexport default StarRating;",
+        "seedCode": "import React, { useState } from 'react';\n\ninterface StarRatingProps {\n  maxStars?: number;\n}\n\nconst StarRating = ({ maxStars = 5 }: StarRatingProps) => {\n  const [rating, setRating] = useState(0);\n\n  const stars = ['star1', 'star2', 'star3', 'star4', 'star5'];\n\n  const handleStarClick = (selectedRating: number) => {\n    setRating(selectedRating);\n  };\n  \n  return (\n    <div className=\"star-rating\">\n      {stars.map((star, index) => (\n        <span key={index}>\n          {/* Display star and apply conditional class */}\n        </span>\n      ))}\n      {/* Add reset button here */}\n    </div>\n  );\n};\n\nexport default StarRating;",
         "expectedOutcome": "A 'Reset' button appears below the stars. Clicking it resets the rating to 0.",
         "successCriteria": [
           "A button with text 'Reset' is added after the stars, and its onClick handler calls setRating(0)."
@@ -272,14 +305,14 @@
         }
       },
       {
-        "id": "step10",
+        "id": "step11",
         "type": "question",
-        "phase": "Step 10 of 10",
+        "phase": "Step 11 of 11",
         "title": "Display the current rating text",
         "instruction": "Add a paragraph element below the star container that displays the current rating value in the format 'Rating: X/5' where X is the rating state value.",
         "hint": "Place a <p> tag after the star container div and use curly braces to embed the rating state value in the text.",
         "analogousExample": "// Displaying state value in UI\nfunction ScoreDisplay() {\n  const [score, setScore] = useState(0);\n  return (\n    <div>\n      <p>Current score: {score}</p>\n    </div>\n  );\n}",
-        "seedCode": "import React, { useState } from 'react';\n\ninterface StarRatingProps {\n  maxStars?: number;\n}\n\nconst StarRating = ({ maxStars = 5 }: StarRatingProps) => {\n  const [rating, setRating] = useState(0);\n  \n  const handleStarClick = (selectedRating: number) => {\n    setRating(selectedRating);\n  };\n  \n  return (\n    <div>\n      {Array.from({ length: maxStars }, (_, index) => (\n        <span key={index}>\n          {/* Display star and apply conditional class */}\n        </span>\n      ))}\n      {/* Add reset button here */}\n      {/* Add rating display paragraph here */}\n    </div>\n  );\n};\n\nexport default StarRating;",
+        "seedCode": "import React, { useState } from 'react';\n\ninterface StarRatingProps {\n  maxStars?: number;\n}\n\nconst StarRating = ({ maxStars = 5 }: StarRatingProps) => {\n  const [rating, setRating] = useState(0);\n\n  const stars = ['star1', 'star2', 'star3', 'star4', 'star5'];\n\n  const handleStarClick = (selectedRating: number) => {\n    setRating(selectedRating);\n  };\n  \n  return (\n    <div className=\"star-rating\">\n      {stars.map((star, index) => (\n        <span key={index}>\n          {/* Display star and apply conditional class */}\n        </span>\n      ))}\n      {/* Add reset button here */}\n      {/* Add rating display paragraph here */}\n    </div>\n  );\n};\n\nexport default StarRating;",
         "expectedOutcome": "The UI will show a paragraph that updates dynamically as the rating changes, displaying the current rating value out of the maximum stars.",
         "successCriteria": [
           "A paragraph element is added that displays the current rating value in the format 'Rating: X/5' where X is the rating state variable."
@@ -310,44 +343,48 @@
         "id": "objectives"
       },
       {
-        "label": "Import React and useState",
-        "id": "step1"
+        "id": "step1",
+        "label": "Import React and useState"
       },
       {
-        "label": "Define the StarRating component and its props interface",
-        "id": "step2"
+        "id": "step2",
+        "label": "Define the StarRating component and its props interface"
       },
       {
-        "label": "Initialize rating state with useState",
-        "id": "step3"
+        "id": "step3",
+        "label": "Initialize rating state with useState"
       },
       {
-        "label": "Create the handleStarClick handler",
-        "id": "step4"
+        "id": "step4",
+        "label": "Create the handleStarClick handler"
       },
       {
-        "label": "Add the main container div",
-        "id": "step5"
+        "id": "step5",
+        "label": "Add the main container div"
       },
       {
-        "label": "Map over stars to create star elements",
-        "id": "step6"
+        "id": "step6",
+        "label": "Define the stars array (five labels)"
       },
       {
-        "label": "Display star character and apply conditional styling",
-        "id": "step7"
+        "id": "step7",
+        "label": "Map stars array to span elements"
       },
       {
-        "label": "Wire onClick to handleStarClick",
-        "id": "step8"
+        "id": "step8",
+        "label": "Display star character and conditional styling"
       },
       {
-        "label": "Add a reset button",
-        "id": "step9"
+        "id": "step9",
+        "label": "Wire onClick to handleStarClick"
       },
       {
-        "label": "Display the current rating text",
-        "id": "step10"
+        "id": "step10",
+        "label": "Add a reset button"
+      },
+      {
+        "id": "step11",
+        "label": "Display the current rating text"
       }
     ]
   },

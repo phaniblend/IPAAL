@@ -267,9 +267,11 @@ app.post("/api/lessons/validate", async (req, res) => {
   }
   const lang = language || "javascript";
   // Bump v when validation prompt/rules change so old cache entries are bypassed (e.g. interface placement rules)
-  const VALIDATION_CACHE_VERSION = 10;
+  const VALIDATION_CACHE_VERSION = 11;
   const sc = step.successCriteria;
   const criteriaKey = Array.isArray(sc) ? sc.join("|") : String(sc || "");
+  const kw = step.answer_keywords;
+  const keywordsKey = Array.isArray(kw) ? kw.join("|") : "";
   const cacheKey = hashKey(
     JSON.stringify({
       v: VALIDATION_CACHE_VERSION,
@@ -277,6 +279,7 @@ app.post("/api/lessons/validate", async (req, res) => {
       id: step.id || "",
       i: step.instruction || step.paal,
       criteria: criteriaKey,
+      k: keywordsKey,
       s: step.seedCode || step.seed_code,
       c: String(userCode),
       l: lang,
