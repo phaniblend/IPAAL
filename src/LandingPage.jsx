@@ -421,7 +421,7 @@ export default function LandingPage({ track, onSelectProblem, problemList }) {
               style={{ ...LP.punchline, margin: 0 }}
               aria-label="power on your tech growth"
             >
-              ower on your tech growth
+              
             </p>
           </div>
           <h1 style={{ ...LP.h1, marginTop: "10px" }}>The Architecture of Thought</h1>
