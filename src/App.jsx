@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import LandingPage, { PROBLEM_LIST, buildAngularLessonList } from './LandingPage'
 import { getLessonCount } from './trackLessonCounts.js'
 import { MOBILE_ANGULAR_LESSONS } from './mobileAngularLessons.js'
@@ -1039,6 +1039,8 @@ import {
 import RegisterModal from './auth/RegisterModal.jsx'
 import AddFundsModal from './auth/AddFundsModal.jsx'
 import CinematicLanding from './CinematicLanding.jsx'
+import { onAuthStateChange, upsertProfile, signOut as supabaseSignOut, recordLessonStart } from './auth/supabase.js'
+import { setRegistered as setRegisteredLocal } from './auth/lessonAccess.js'
 
 export default function App() {
   const [track, setTrack] = useState('react-ts')
@@ -1054,6 +1056,27 @@ export default function App() {
   const [user, setUser] = useState(() => getStoredUser())
   /** Full page load / refresh always shows the intro; we do not persist “already seen” in sessionStorage (that skipped it on every refresh). */
   const [showCinematic, setShowCinematic] = useState(true)
+
+  // Listen for Supabase auth state (Google OAuth redirect lands here)
+  useEffect(() => {
+    const { data } = onAuthStateChange((_event, session) => {
+      if (session?.user) {
+        const u = session.user
+        const profile = {
+          name: u.user_metadata?.full_name || u.email?.split('@')[0] || 'User',
+          emailOrPhone: u.email || '',
+          id: u.id,
+          avatarUrl: u.user_metadata?.avatar_url || '',
+        }
+        setRegisteredLocal(profile)
+        setUser(profile)
+        upsertProfile(u)
+        setShowRegisterModal(false)
+        setShowCinematic(false)
+      }
+    })
+    return () => data?.subscription?.unsubscribe()
+  }, [])
 
   const onBackToProblems = () => {
     setProblemIndex(null)
@@ -1114,7 +1137,8 @@ export default function App() {
     }
   }
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    await supabaseSignOut()
     logout()
     setUser(null)
   }
