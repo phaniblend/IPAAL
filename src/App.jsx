@@ -1035,6 +1035,8 @@ import {
   PRICE_PER_LESSON_CENTS,
   getStoredUser,
   logout,
+  getRegisterDismissCount,
+  incrementRegisterDismissCount,
 } from './auth/lessonAccess.js'
 import RegisterModal from './auth/RegisterModal.jsx'
 import AddFundsModal from './auth/AddFundsModal.jsx'
@@ -1130,6 +1132,7 @@ export default function App() {
   }
 
   const registerModalDismiss = () => {
+    incrementRegisterDismissCount()
     setShowRegisterModal(false)
     setRegisterModalVariant('soft')
     if (pendingLesson) {
@@ -1235,6 +1238,7 @@ export default function App() {
           <RegisterModal
             variant={registerModalVariant}
             voluntary={!pendingLesson}
+            dismissCount={getRegisterDismissCount()}
             onSuccess={registerSuccess}
             onClose={registerModalVariant === 'soft' ? registerModalDismiss : undefined}
           />
@@ -1384,6 +1388,7 @@ export default function App() {
           <RegisterModal
             variant={registerModalVariant}
             voluntary={!pendingLesson}
+            dismissCount={getRegisterDismissCount()}
             onSuccess={registerSuccess}
             onClose={registerModalVariant === 'soft' ? registerModalDismiss : undefined}
           />
@@ -1426,6 +1431,7 @@ export default function App() {
           <RegisterModal
             variant={registerModalVariant}
             voluntary={!pendingLesson}
+            dismissCount={getRegisterDismissCount()}
             onSuccess={registerSuccess}
             onClose={registerModalVariant === 'soft' ? registerModalDismiss : undefined}
           />
@@ -1517,6 +1523,7 @@ export default function App() {
         <RegisterModal
           variant={registerModalVariant}
           voluntary={!pendingLesson}
+          dismissCount={getRegisterDismissCount()}
           onSuccess={registerSuccess}
           onClose={registerModalVariant === 'soft' ? registerModalDismiss : undefined}
         />

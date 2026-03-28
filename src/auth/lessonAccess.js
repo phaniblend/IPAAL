@@ -11,6 +11,7 @@ const STORAGE_KEY_ACCESSED = "inpact_lessons_accessed";
 const STORAGE_KEY_REGISTERED = "inpact_user_registered";
 const STORAGE_KEY_BALANCE = "inpact_balance_cents";
 const STORAGE_KEY_USER = "inpact_user";
+const STORAGE_KEY_DISMISS_COUNT = "inpact_register_dismiss_count";
 
 /** First N unique lessons with no register prompt. */
 export const FREE_LESSONS_SILENT = 5;
@@ -159,6 +160,24 @@ export function deductLessonPayment() {
   const balance = getBalanceCents();
   if (balance >= PRICE_PER_LESSON_CENTS) {
     setBalanceCents(balance - PRICE_PER_LESSON_CENTS);
+  }
+}
+
+export function getRegisterDismissCount() {
+  try {
+    return parseInt(localStorage.getItem(STORAGE_KEY_DISMISS_COUNT) || "0", 10);
+  } catch {
+    return 0;
+  }
+}
+
+export function incrementRegisterDismissCount() {
+  try {
+    const c = getRegisterDismissCount() + 1;
+    localStorage.setItem(STORAGE_KEY_DISMISS_COUNT, String(c));
+    return c;
+  } catch {
+    return 0;
   }
 }
 

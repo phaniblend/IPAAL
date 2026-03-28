@@ -102,7 +102,12 @@ function isValidEmail(s) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test((s || "").trim());
 }
 
-export default function RegisterModal({ onSuccess, onClose, variant = "soft", voluntary = false }) {
+function getDismissButtonText(dismissCount) {
+  if (dismissCount >= 2) return "I promise, I'll do it for the next lesson";
+  return "I'll do it later";
+}
+
+export default function RegisterModal({ onSuccess, onClose, variant = "soft", voluntary = false, dismissCount = 0 }) {
   const isHard = variant === "hard";
   const [mode, setMode] = useState("register");
   const [name, setName] = useState("");
@@ -206,6 +211,8 @@ export default function RegisterModal({ onSuccess, onClose, variant = "soft", vo
     }
   };
 
+  const dismissText = getDismissButtonText(dismissCount);
+
   const handleContinueWithoutRegistering = () => {
     onClose?.();
   };
@@ -265,8 +272,8 @@ export default function RegisterModal({ onSuccess, onClose, variant = "soft", vo
         </div>
         {isHard ? (
           <div style={hardCallout} role="alert">
-            Sorry, friend &mdash; you say that all the time. Why don&apos;t you register if you like our lessons and get{" "}
-            {FREE_LESSONS_AFTER_REGISTER} more free lessons?
+            You promised you&apos;d do it for the next lesson &mdash; remember? Register now and get{" "}
+            {FREE_LESSONS_AFTER_REGISTER} more free lessons. We know you like them.
           </div>
         ) : (
           <div style={sub}>{voluntary ? softVoluntarySub : softGateSub}</div>
@@ -330,7 +337,7 @@ export default function RegisterModal({ onSuccess, onClose, variant = "soft", vo
             </button>
             {!isHard && !voluntary && (
               <button type="button" style={btn(false)} onClick={handleContinueWithoutRegistering}>
-                Continue without registering
+                {dismissText}
               </button>
             )}
           </form>
@@ -344,7 +351,7 @@ export default function RegisterModal({ onSuccess, onClose, variant = "soft", vo
             </button>
             {!isHard && !voluntary && (
               <button type="button" style={btn(false)} onClick={handleContinueWithoutRegistering}>
-                Continue without registering
+                {dismissText}
               </button>
             )}
           </form>
