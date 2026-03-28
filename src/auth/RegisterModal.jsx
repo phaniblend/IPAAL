@@ -272,7 +272,7 @@ export default function RegisterModal({ onSuccess, onClose, variant = "soft", vo
         </div>
         {isHard ? (
           <div style={hardCallout} role="alert">
-            You promised you&apos;d do it for the next lesson &mdash; remember? Register now and get{" "}
+            You promised you&apos;d do it for the next lesson &mdash; remember? Please register and get{" "}
             {FREE_LESSONS_AFTER_REGISTER} more free lessons. We know you like them.
           </div>
         ) : (
