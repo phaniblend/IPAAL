@@ -1,5 +1,5 @@
 /**
- * Post-OAuth resume + in-app routes (HashRouter): /lessons/<track>/<listIndex>
+ * Post–sign-in resume + in-app routes (HashRouter): /lessons/<track>/<listIndex>
  *
  * listIndex is the zero-based problem index for that track (same as App problemIndex) — the exact
  * lesson the user opened when registration was forced, not “9th free slot” or “lesson 9” as a label.

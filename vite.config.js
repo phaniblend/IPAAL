@@ -7,6 +7,13 @@ const aiServerPort = process.env.VITE_AI_SERVER_PORT || process.env.PORT || 3000
 
 export default defineConfig({
   plugins: [react()],
+  resolve: {
+    // One React instance for the whole app (avoids "Invalid hook call" / useRef on null in HashRouter).
+    dedupe: ['react', 'react-dom'],
+  },
+  optimizeDeps: {
+    include: ['react', 'react-dom', 'react-router', 'react-router-dom'],
+  },
   server: {
     proxy: {
       '/api': { target: `http://localhost:${aiServerPort}`, changeOrigin: true },

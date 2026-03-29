@@ -225,7 +225,7 @@ export default function createINPACTEngine(config) {
   const lessonObjectives = configLessonObjectives ?? (Array.isArray(configObjectives) ? configObjectives : null);
   const pad = String(problemNum).padStart(2, "0");
 
-  return function INPACTEngine({ onNextProblem }) {
+  return function INPACTEngine({ onNextProblem, onLessonComplete }) {
     const [nodeIndex, setNodeIndex] = useState(0);
     const [answer, setAnswer] = useState("");
     const [mainTab, setMainTab] = useState("editor");
@@ -259,6 +259,16 @@ export default function createINPACTEngine(config) {
     const multiFilePlaceholderClearOnFirstStepOnly =
       answerShape === "multi-file" && firstQuestionNodeIndex >= 0 && nodeIndex === firstQuestionNodeIndex;
     const progress = NODES.length <= 1 ? 0 : Math.min(100, Math.round((nodeIndex / (NODES.length - 1)) * 100));
+    const lessonCompleteFiredRef = useRef(false);
+    useEffect(() => {
+      if (nodeIndex < NODES.length) {
+        lessonCompleteFiredRef.current = false;
+        return;
+      }
+      if (!onLessonComplete || lessonCompleteFiredRef.current) return;
+      lessonCompleteFiredRef.current = true;
+      onLessonComplete();
+    }, [nodeIndex, NODES.length, onLessonComplete]);
 
     const onValidateCodeResolved = useMemo(() => {
       if (configOnValidateCode) return configOnValidateCode;

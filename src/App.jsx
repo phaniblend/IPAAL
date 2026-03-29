@@ -1,4 +1,4 @@
-import { useState, useEffect, useLayoutEffect, useMemo, useCallback } from 'react'
+import { useState, useEffect, useLayoutEffect, useMemo, useCallback, useRef } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import LandingPage, { PROBLEM_LIST, buildAngularLessonList } from './LandingPage'
 import { getLessonCount } from './trackLessonCounts.js'
@@ -1052,6 +1052,8 @@ import {
 } from './auth/redirectPath.js'
 import RegisterModal from './auth/RegisterModal.jsx'
 import AddFundsModal from './auth/AddFundsModal.jsx'
+import UserDashboard from './auth/UserDashboard.jsx'
+import { addAppUsageSeconds } from './auth/appUsageTime.js'
 import CinematicLanding from './CinematicLanding.jsx'
 import {
   onAuthStateChange,
@@ -1059,20 +1061,24 @@ import {
   upsertProfile,
   signOut as supabaseSignOut,
   recordLessonStart,
+  recordLessonComplete,
   isSupabaseConfigured,
 } from './auth/supabase.js'
 import { setRegistered as setRegisteredLocal } from './auth/lessonAccess.js'
+import { LEARNER_FOCUS_TRACK } from './auth/learnerFocus.js'
 
 export default function App() {
   const navigate = useNavigate()
   const location = useLocation()
 
-  const [track, setTrack] = useState('react-ts')
+  const [track, setTrack] = useState(LEARNER_FOCUS_TRACK)
   const [lessonTrack, setLessonTrack] = useState(null) // track locked when lesson is opened (so React TS lesson never uses react-js)
   const [problemIndex, setProblemIndex] = useState(null) // null = landing, 0-based index = problem
   const [selectedLessonItem, setSelectedLessonItem] = useState(null) // { title, shortName?, why? } when a card is clicked
   const [useAILessonFailed, setUseAILessonFailed] = useState(false) // fallback to local engine when AI path fails
   const [showRegisterModal, setShowRegisterModal] = useState(false)
+  /** Supabase emailed a recovery link; user must set a new password before normal sync. */
+  const [passwordRecoveryActive, setPasswordRecoveryActive] = useState(false)
   /** 'soft' = dismissible (lessons 6–8); 'hard' = must register (9th lesson). */
   const [registerModalVariant, setRegisterModalVariant] = useState('soft')
   const [showAddFundsModal, setShowAddFundsModal] = useState(false)
@@ -1084,10 +1090,16 @@ export default function App() {
     const p = getHashRoutePathname()
     return !p.startsWith('/lessons/') && p !== '/register'
   })
-  /** false until first Supabase getSession() finishes — avoids lesson gates before localStorage mirrors session (OAuth loop). */
+  /** false until first Supabase getSession() finishes — avoids lesson gates before localStorage mirrors session. */
   const [authSessionReady, setAuthSessionReady] = useState(!isSupabaseConfigured)
 
   const lessonGateOpts = useMemo(() => ({ loggedIn: Boolean(user?.id) }), [user?.id])
+  /** Track + list index for the open lesson (for Supabase progress). */
+  const activeLessonTrack = useMemo(
+    () => (problemIndex != null && lessonTrack != null ? lessonTrack : track),
+    [problemIndex, lessonTrack, track]
+  )
+  const lessonOpenedAtRef = useRef(null)
 
   const openLesson = useCallback(
     (idx, item, trackOverride) => {
@@ -1117,43 +1129,8 @@ export default function App() {
   }, [navigate])
 
   // Supabase: subscribe, await getSession(), mirror to localStorage, then allow lesson clicks.
-  // Resume lesson via useLayoutEffect (peekPendingLesson).
+  // Resume lesson via useLayoutEffect (peekPendingLesson) or redirectPath after email sign-in.
   useEffect(() => {
-    const urlLooksLikeOAuthReturn = () => {
-      if (typeof window === 'undefined') return false
-      const { search, hash } = window.location
-      return (
-        /[?&]code=/.test(search) ||
-        /[?&]error=/.test(search) ||
-        /access_token=/.test(hash) ||
-        /refresh_token=/.test(hash) ||
-        /error=/.test(hash)
-      )
-    }
-
-    const stripSupabaseOAuthFromUrl = () => {
-      if (typeof window === 'undefined') return
-      try {
-        const url = new URL(window.location.href)
-        let changed = false
-        if (url.hash && (url.hash.includes('access_token') || url.hash.includes('error'))) {
-          url.hash = ''
-          changed = true
-        }
-        for (const k of ['code', 'state', 'error', 'error_description', 'error_code']) {
-          if (url.searchParams.has(k)) {
-            url.searchParams.delete(k)
-            changed = true
-          }
-        }
-        if (changed) {
-          const qs = url.searchParams.toString()
-          const next = url.pathname + (qs ? `?${qs}` : '') + (url.hash || '')
-          window.history.replaceState({}, '', next)
-        }
-      } catch (_) {}
-    }
-
     const syncUserFromSession = (session) => {
       if (!session?.user) return
       const u = session.user
@@ -1166,9 +1143,9 @@ export default function App() {
       setRegisteredLocal(profile)
       setUser(profile)
       upsertProfile(u)
+      setPasswordRecoveryActive(false)
       setShowRegisterModal(false)
       setShowCinematic(false)
-      if (urlLooksLikeOAuthReturn()) stripSupabaseOAuthFromUrl()
       const rp = getStoredRedirectPath()
       clearStoredRedirectPath()
       if (rp) navigate(rp, { replace: true })
@@ -1176,37 +1153,43 @@ export default function App() {
 
     if (!isSupabaseConfigured) return undefined
 
+    /** Supabase implicit recovery uses #...type=recovery; PKCE reset links use ?code=... only (no type= in URL). */
+    const recoveryInUrl = () => {
+      if (typeof window === 'undefined') return false
+      const { hash, search } = window.location
+      if (hash.includes('type=recovery') || /[?&]type=recovery/.test(search)) return true
+      if (/[?&]code=/.test(search)) return true
+      return false
+    }
+
     let unsub = () => {}
     const authReadyTimeout = window.setTimeout(() => setAuthSessionReady(true), 10000)
     ;(async () => {
       const { data } = onAuthStateChange((event, session) => {
-        if (session?.user) {
-          syncUserFromSession(session)
-        } else if (event === 'SIGNED_OUT' || event === 'USER_DELETED') {
+        if (event === 'SIGNED_OUT' || event === 'USER_DELETED') {
           logout()
           setUser(null)
           clearStoredRedirectPath()
+          setPasswordRecoveryActive(false)
+          return
+        }
+        if (event === 'PASSWORD_RECOVERY' && session?.user) {
+          setPasswordRecoveryActive(true)
+          setShowRegisterModal(true)
+          setShowCinematic(false)
+          return
+        }
+        if (session?.user) {
+          syncUserFromSession(session)
         }
       })
       unsub = () => data.subscription.unsubscribe()
-      // Yield so Supabase can apply OAuth hash/PKCE to storage before first read (avoids false "logged out").
       await new Promise((r) => setTimeout(r, 0))
       let session = await getSession()
-      if (session?.user) syncUserFromSession(session)
+      if (session?.user && !recoveryInUrl()) syncUserFromSession(session)
       await new Promise((r) => setTimeout(r, 0))
       session = await getSession()
-      if (session?.user) syncUserFromSession(session)
-      // PKCE / hash exchange can lag a few ticks after redirect; polling avoids register→home→lesson→register loop.
-      if (!session?.user && urlLooksLikeOAuthReturn()) {
-        for (let i = 0; i < 30; i++) {
-          await new Promise((r) => setTimeout(r, 100))
-          session = await getSession()
-          if (session?.user) {
-            syncUserFromSession(session)
-            break
-          }
-        }
-      }
+      if (session?.user && !recoveryInUrl()) syncUserFromSession(session)
       window.clearTimeout(authReadyTimeout)
       setAuthSessionReady(true)
     })()
@@ -1229,6 +1212,10 @@ export default function App() {
       return
     }
     if (!p || typeof p.index !== 'number' || !p.track) return
+    if (p.track !== LEARNER_FOCUS_TRACK) {
+      clearPendingLesson()
+      return
+    }
     setLessonTrack(p.track)
     recordLessonAccess(p.track, p.index)
     setProblemIndex(p.index)
@@ -1245,6 +1232,10 @@ export default function App() {
     if (!authSessionReady) return
     const parsed = parseLessonPath(location.pathname)
     if (!parsed) return
+    if (parsed.track !== LEARNER_FOCUS_TRACK) {
+      navigate('/', { replace: true })
+      return
+    }
 
     setShowCinematic(false)
     const { track: t, index: i } = parsed
@@ -1300,47 +1291,93 @@ export default function App() {
     }
   }, [location.pathname])
 
+  useEffect(() => {
+    if (location.pathname !== '/dashboard') return
+    setShowCinematic(false)
+    setProblemIndex(null)
+    setSelectedLessonItem(null)
+    setLessonTrack(null)
+    setTrack(LEARNER_FOCUS_TRACK)
+  }, [location.pathname])
+
+  useEffect(() => {
+    if (problemIndex !== null) return
+    if (parseLessonPath(location.pathname)) return
+    setTrack(LEARNER_FOCUS_TRACK)
+  }, [problemIndex, location.pathname])
+
+  useEffect(() => {
+    if (!user?.id) return undefined
+    const id = setInterval(() => {
+      if (document.visibilityState === 'visible') addAppUsageSeconds(user.id, 15)
+    }, 15000)
+    return () => clearInterval(id)
+  }, [user?.id])
+
+  const handleLessonComplete = useCallback(() => {
+    const uid = user?.id
+    if (!uid || !isSupabaseConfigured || problemIndex == null) return
+    const opened = lessonOpenedAtRef.current
+    const sec = opened ? Math.max(0, Math.round((Date.now() - opened) / 1000)) : 0
+    void recordLessonComplete(uid, activeLessonTrack, problemIndex, sec)
+  }, [user?.id, problemIndex, activeLessonTrack, isSupabaseConfigured])
+
+  useEffect(() => {
+    if (!user?.id || !isSupabaseConfigured || problemIndex == null) return
+    const t = activeLessonTrack
+    const idx = problemIndex
+    const list =
+      t === 'angular'
+        ? buildAngularLessonList()
+        : getProblemList(t) ?? PROBLEM_LIST.map((title) => ({ title }))
+    const title = selectedLessonItem?.title ?? list?.[idx]?.title ?? ''
+    lessonOpenedAtRef.current = Date.now()
+    void recordLessonStart(user.id, t, idx, title)
+  }, [user?.id, problemIndex, activeLessonTrack, selectedLessonItem?.title, isSupabaseConfigured])
+
   const onBackToProblems = () => {
     setProblemIndex(null)
     setSelectedLessonItem(null)
     setLessonTrack(null)
     setUseAILessonFailed(false)
     setPendingLesson(null)
+    setTrack(LEARNER_FOCUS_TRACK)
     navigate('/', { replace: true })
   }
 
   const handleSelectProblem = (i, item, fullList) => {
-    if (mustHardRegisterToAccess(track, i, lessonGateOpts)) {
-      setPendingLesson({ track, index: i, item })
-      savePendingLesson(track, i, item)
-      setStoredRedirectPath(buildLessonPath(track, i))
+    const t = LEARNER_FOCUS_TRACK
+    if (mustHardRegisterToAccess(t, i, lessonGateOpts)) {
+      setPendingLesson({ track: t, index: i, item })
+      savePendingLesson(t, i, item)
+      setStoredRedirectPath(buildLessonPath(t, i))
       setRegisterModalVariant('hard')
       setShowRegisterModal(true)
       navigate('/register', { replace: true })
       return
     }
-    if (mustSoftRegisterToAccess(track, i, lessonGateOpts)) {
-      setPendingLesson({ track, index: i, item })
-      savePendingLesson(track, i, item)
-      setStoredRedirectPath(buildLessonPath(track, i))
+    if (mustSoftRegisterToAccess(t, i, lessonGateOpts)) {
+      setPendingLesson({ track: t, index: i, item })
+      savePendingLesson(t, i, item)
+      setStoredRedirectPath(buildLessonPath(t, i))
       setRegisterModalVariant('soft')
       setShowRegisterModal(true)
       navigate('/register', { replace: true })
       return
     }
-    if (mustPayToAccess(track, i, lessonGateOpts)) {
+    if (mustPayToAccess(t, i, lessonGateOpts)) {
       if (getBalanceCents() >= PRICE_PER_LESSON_CENTS) {
         deductLessonPayment()
-        openLesson(i, item)
+        openLesson(i, item, t)
         return
       }
-      setPendingLesson({ track, index: i, item })
-      savePendingLesson(track, i, item)
-      setStoredRedirectPath(buildLessonPath(track, i))
+      setPendingLesson({ track: t, index: i, item })
+      savePendingLesson(t, i, item)
+      setStoredRedirectPath(buildLessonPath(t, i))
       setShowAddFundsModal(true)
       return
     }
-    openLesson(i, item)
+    openLesson(i, item, t)
   }
 
   const registerSuccess = () => {
@@ -1350,7 +1387,7 @@ export default function App() {
     const pl = pendingLesson
     clearPendingLesson()
     setPendingLesson(null)
-    if (pl) openLesson(pl.index, pl.item, pl.track)
+    if (pl && pl.track === LEARNER_FOCUS_TRACK) openLesson(pl.index, pl.item, pl.track)
   }
 
   const registerModalDismiss = () => {
@@ -1360,7 +1397,7 @@ export default function App() {
     const pl = pendingLesson
     clearPendingLesson()
     if (location.pathname === '/register') navigate('/', { replace: true })
-    if (pl) openLesson(pl.index, pl.item, pl.track)
+    if (pl && pl.track === LEARNER_FOCUS_TRACK) openLesson(pl.index, pl.item, pl.track)
   }
 
   const handleLogout = async () => {
@@ -1417,12 +1454,75 @@ export default function App() {
     )
   }
 
+  if (location.pathname === '/dashboard') {
+    return (
+      <>
+        <div
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            zIndex: 9998,
+            padding: '6px 14px',
+            background: '#ffffff',
+            borderBottom: '1px solid #e2e8f0',
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            fontFamily: "'DM Sans', sans-serif",
+          }}
+        >
+          <button type="button" style={authBtnStyle} onClick={() => navigate('/', { replace: true })}>
+            ← All lessons
+          </button>
+          <div style={authBarStyle}>
+            {user ? (
+              <>
+                <span>Hi, {user.name || user.emailOrPhone || 'User'}</span>
+                <button type="button" style={authBtnStyle} onClick={handleLogout}>
+                  Log out
+                </button>
+              </>
+            ) : (
+              <button
+                type="button"
+                style={{ ...authBtnStyle, borderColor: '#00d4ff', color: '#052545', background: '#00d4ff' }}
+                onClick={goToVoluntaryRegister}
+              >
+                Log in
+              </button>
+            )}
+          </div>
+        </div>
+        <div style={{ paddingTop: '38px' }}>
+          <UserDashboard user={user} />
+        </div>
+        {showRegisterModal && (
+          <RegisterModal
+            variant={registerModalVariant}
+            voluntary={!pendingLesson}
+            dismissCount={getRegisterDismissCount()}
+            onSuccess={registerSuccess}
+            onClose={passwordRecoveryActive ? undefined : registerModalVariant === 'soft' ? registerModalDismiss : undefined}
+            passwordRecovery={passwordRecoveryActive}
+            onPasswordRecoveryComplete={() => {
+              setPasswordRecoveryActive(false)
+              setShowRegisterModal(false)
+            }}
+          />
+        )}
+        {showAddFundsModal && <AddFundsModal onDone={addFundsDone} />}
+      </>
+    )
+  }
+
   if (problemIndex === null) {
     if (showCinematic) {
       return (
         <CinematicLanding
           onEnterLessons={() => {
-            setTrack('react-ts')
+            setTrack(LEARNER_FOCUS_TRACK)
             setShowCinematic(false)
           }}
         />
@@ -1447,30 +1547,39 @@ export default function App() {
             fontFamily: "'DM Sans', sans-serif",
           }}
         >
-          <div style={authBarStyle}>
-            {user ? (
-              <>
-                <span>Hi, {user.name || user.emailOrPhone || 'User'}</span>
-                <button type="button" style={authBtnStyle} onClick={handleLogout}>
-                  Log out
+          <div style={{ ...authBarStyle, width: '100%', justifyContent: 'space-between' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              {user ? (
+                <button type="button" style={authBtnStyle} onClick={() => navigate('/dashboard')}>
+                  Dashboard
                 </button>
-              </>
-            ) : (
-              <button
-                type="button"
-                style={{ ...authBtnStyle, borderColor: '#00d4ff', color: '#052545', background: '#00d4ff' }}
-                onClick={goToVoluntaryRegister}
-              >
-                Log in
-              </button>
-            )}
+              ) : null}
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+              {user ? (
+                <>
+                  <span>Hi, {user.name || user.emailOrPhone || 'User'}</span>
+                  <button type="button" style={authBtnStyle} onClick={handleLogout}>
+                    Log out
+                  </button>
+                </>
+              ) : (
+                <button
+                  type="button"
+                  style={{ ...authBtnStyle, borderColor: '#00d4ff', color: '#052545', background: '#00d4ff' }}
+                  onClick={goToVoluntaryRegister}
+                >
+                  Log in
+                </button>
+              )}
+            </div>
           </div>
         </div>
         <div style={{ paddingTop: '38px' }}>
           <LandingPage
-            track={track}
+            track={LEARNER_FOCUS_TRACK}
             onSelectProblem={handleSelectProblem}
-            problemList={getProblemList(track)}
+            problemList={getProblemList(LEARNER_FOCUS_TRACK)}
           />
         </div>
         {showRegisterModal && (
@@ -1479,7 +1588,12 @@ export default function App() {
             voluntary={!pendingLesson}
             dismissCount={getRegisterDismissCount()}
             onSuccess={registerSuccess}
-            onClose={registerModalVariant === 'soft' ? registerModalDismiss : undefined}
+            onClose={passwordRecoveryActive ? undefined : registerModalVariant === 'soft' ? registerModalDismiss : undefined}
+            passwordRecovery={passwordRecoveryActive}
+            onPasswordRecoveryComplete={() => {
+              setPasswordRecoveryActive(false)
+              setShowRegisterModal(false)
+            }}
           />
         )}
         {showAddFundsModal && <AddFundsModal onDone={addFundsDone} />}
@@ -1588,6 +1702,24 @@ export default function App() {
                 {({ 'react-js': 'React · JS', 'react-ts': 'React · TS', angular: 'Angular', 'mobile-angular': 'Mobile Angular', vue: 'Vue', js: 'JavaScript', ts: 'TypeScript', node: 'Node', express: 'Express', python: 'Python', css: 'CSS', sd: 'System Design', pe: 'Production Eng', sec: 'Security', el: 'Eng Leadership', fe: 'Frontend Eng', 'algo-js': 'Algo · JS', 'algo-ts': 'Algo · TS', 'algo-python': 'Algo · Python', 'algo-java': 'Algo · Java' })[effectiveTrack] ?? effectiveTrack}
               </span>
             )}
+            {user ? (
+              <button
+                type="button"
+                onClick={() => navigate('/dashboard')}
+                style={{
+                  background: 'rgb(5, 37, 67)',
+                  border: '1px solid #00d4ff',
+                  borderRadius: '6px',
+                  color: '#00d4ff',
+                  cursor: 'pointer',
+                  fontSize: '12px',
+                  fontWeight: '600',
+                  padding: '6px 12px',
+                }}
+              >
+                Dashboard
+              </button>
+            ) : null}
           </div>
           <div
             style={{
@@ -1634,6 +1766,7 @@ export default function App() {
             lessonIndex={problemIndex}
             onBackToProblems={onBackToProblems}
             onNextProblem={onNextProblem}
+            onLessonComplete={user?.id ? handleLessonComplete : undefined}
             onFallbackToLocal={AI_LESSONS_CONFIG.fallbackToLocalOnError ? () => setUseAILessonFailed(true) : undefined}
           />
         </LessonValidationContext.Provider>
@@ -1643,7 +1776,12 @@ export default function App() {
             voluntary={!pendingLesson}
             dismissCount={getRegisterDismissCount()}
             onSuccess={registerSuccess}
-            onClose={registerModalVariant === 'soft' ? registerModalDismiss : undefined}
+            onClose={passwordRecoveryActive ? undefined : registerModalVariant === 'soft' ? registerModalDismiss : undefined}
+            passwordRecovery={passwordRecoveryActive}
+            onPasswordRecoveryComplete={() => {
+              setPasswordRecoveryActive(false)
+              setShowRegisterModal(false)
+            }}
           />
         )}
         {showAddFundsModal && <AddFundsModal onDone={addFundsDone} />}
@@ -1655,7 +1793,14 @@ export default function App() {
     return (
       <>
         <div style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 9999, padding: '12px 24px', background: '#ffffff', borderBottom: '1px solid #e2e8f0', fontFamily: "'DM Sans', sans-serif", display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <button type="button" onClick={onBackToProblems} style={{ background: '#0f172a', border: 'none', borderRadius: '8px', color: '#ffffff', cursor: 'pointer', fontSize: '12px', fontWeight: '600', padding: '8px 14px' }}>← All Lessons</button>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <button type="button" onClick={onBackToProblems} style={{ background: '#0f172a', border: 'none', borderRadius: '8px', color: '#ffffff', cursor: 'pointer', fontSize: '12px', fontWeight: '600', padding: '8px 14px' }}>← All Lessons</button>
+            {user ? (
+              <button type="button" style={authBtnStyle} onClick={() => navigate('/dashboard')}>
+                Dashboard
+              </button>
+            ) : null}
+          </div>
           <div style={authBarStyle}>
             {user ? (
               <>
@@ -1682,7 +1827,12 @@ export default function App() {
             voluntary={!pendingLesson}
             dismissCount={getRegisterDismissCount()}
             onSuccess={registerSuccess}
-            onClose={registerModalVariant === 'soft' ? registerModalDismiss : undefined}
+            onClose={passwordRecoveryActive ? undefined : registerModalVariant === 'soft' ? registerModalDismiss : undefined}
+            passwordRecovery={passwordRecoveryActive}
+            onPasswordRecoveryComplete={() => {
+              setPasswordRecoveryActive(false)
+              setShowRegisterModal(false)
+            }}
           />
         )}
         {showAddFundsModal && <AddFundsModal onDone={addFundsDone} />}
@@ -1731,6 +1881,11 @@ export default function App() {
               {({ 'react-js': 'React · JS', 'react-ts': 'React · TS', angular: 'Angular', 'mobile-angular': 'Mobile Angular', vue: 'Vue', js: 'JavaScript', ts: 'TypeScript', node: 'Node', express: 'Express', python: 'Python', css: 'CSS', sd: 'System Design', pe: 'Production Eng', sec: 'Security', el: 'Eng Leadership', fe: 'Frontend Eng', 'algo-js': 'Algo · JS', 'algo-ts': 'Algo · TS', 'algo-python': 'Algo · Python', 'algo-java': 'Algo · Java' })[effectiveTrack] ?? effectiveTrack}
             </span>
           )}
+          {user ? (
+            <button type="button" style={authBtnStyle} onClick={() => navigate('/dashboard')}>
+              Dashboard
+            </button>
+          ) : null}
         </div>
         <div style={authBarStyle}>
           {user ? (
@@ -1762,6 +1917,7 @@ export default function App() {
         <Engine
           onNextProblem={problemIndex < engines.length - 1 ? onNextProblem : undefined}
           onBackToProblems={onBackToProblems}
+          onLessonComplete={user?.id ? handleLessonComplete : undefined}
         />
       </LessonValidationContext.Provider>
       {showRegisterModal && (
@@ -1770,7 +1926,12 @@ export default function App() {
           voluntary={!pendingLesson}
           dismissCount={getRegisterDismissCount()}
           onSuccess={registerSuccess}
-          onClose={registerModalVariant === 'soft' ? registerModalDismiss : undefined}
+          onClose={passwordRecoveryActive ? undefined : registerModalVariant === 'soft' ? registerModalDismiss : undefined}
+          passwordRecovery={passwordRecoveryActive}
+          onPasswordRecoveryComplete={() => {
+            setPasswordRecoveryActive(false)
+            setShowRegisterModal(false)
+          }}
         />
       )}
       {showAddFundsModal && <AddFundsModal onDone={addFundsDone} />}

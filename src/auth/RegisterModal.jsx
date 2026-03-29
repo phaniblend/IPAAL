@@ -2,9 +2,11 @@ import { useState } from "react";
 import { setRegistered, FREE_LESSONS_AFTER_REGISTER, MAX_FREE_UNREGISTERED } from "./lessonAccess.js";
 import {
   isSupabaseConfigured,
-  signInWithGoogle as supabaseGoogleSignIn,
   signUpWithEmail,
   signInWithEmail,
+  sendPasswordResetEmail,
+  updateUserPassword,
+  getUser,
 } from "./supabase.js";
 
 const overlay = {
@@ -97,6 +99,18 @@ const tab = (active) => ({
   color: active ? "#0f172a" : "#94a3b8",
   marginBottom: "-2px",
 });
+const linkBtn = {
+  background: "none",
+  border: "none",
+  color: "#0369a1",
+  cursor: "pointer",
+  fontSize: "12px",
+  fontWeight: 600,
+  marginTop: "10px",
+  padding: 0,
+  textAlign: "left",
+  textDecoration: "underline",
+};
 
 function isValidEmail(s) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test((s || "").trim());
@@ -107,34 +121,53 @@ function getDismissButtonText(dismissCount) {
   return "I'll do it later";
 }
 
-export default function RegisterModal({ onSuccess, onClose, variant = "soft", voluntary = false, dismissCount = 0 }) {
+/** Map Supabase Auth errors to a short line + optional setup hint for operators. */
+function mapSignUpError(err) {
+  const raw = (err?.message || "").trim();
+  const lower = raw.toLowerCase();
+  if (
+    lower.includes("confirmation email") ||
+    lower.includes("error sending") ||
+    (lower.includes("send") && lower.includes("email")) ||
+    lower.includes("smtp") ||
+    lower === "email rate limit exceeded"
+  ) {
+    return {
+      message: "Couldn\u2019t send the confirmation email.",
+      hint:
+        "Your Supabase project must be able to send mail. In the Supabase dashboard: Authentication \u2192 check Providers \u2192 Email; Project Settings \u2192 Auth \u2192 set up SMTP or use the built-in mailer within rate limits; Logs \u2192 Auth for the exact failure. For development only, you can turn off \u201cConfirm email\u201d under Authentication \u2192 Providers \u2192 Email so users can sign in immediately after register.",
+    };
+  }
+  return { message: raw || "Sign-up failed. Please try again.", hint: "" };
+}
+
+export default function RegisterModal({
+  onSuccess,
+  onClose,
+  variant = "soft",
+  voluntary = false,
+  dismissCount = 0,
+  passwordRecovery = false,
+  onPasswordRecoveryComplete,
+}) {
   const isHard = variant === "hard";
   const [mode, setMode] = useState("register");
+  const [loginAux, setLoginAux] = useState("form"); // form | forgot | forgotSent
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [googleError, setGoogleError] = useState("");
-  const [googleLoading, setGoogleLoading] = useState(false);
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmNewPassword, setConfirmNewPassword] = useState("");
   const [submitError, setSubmitError] = useState("");
+  const [submitErrorHint, setSubmitErrorHint] = useState("");
   const [submitLoading, setSubmitLoading] = useState(false);
   const [confirmationSent, setConfirmationSent] = useState(false);
   const [confirmationEmail, setConfirmationEmail] = useState("");
 
-  const handleGoogleSignIn = async () => {
-    if (!isSupabaseConfigured) return;
-    setGoogleError("");
-    setGoogleLoading(true);
-    try {
-      await supabaseGoogleSignIn();
-    } catch (err) {
-      setGoogleError(err?.message || "Google sign-in failed");
-      setGoogleLoading(false);
-    }
-  };
-
   const handleRegister = async (e) => {
     e.preventDefault();
     setSubmitError("");
+    setSubmitErrorHint("");
     const n = name.trim();
     const em = email.trim();
     if (n.length < 2) {
@@ -162,10 +195,24 @@ export default function RegisterModal({ onSuccess, onClose, variant = "soft", vo
         setSubmitLoading(false);
         return;
       }
+      // If "Confirm email" is off in Supabase, you get a session immediately.
+      if (data?.session?.user) {
+        const user = data.session.user;
+        setRegistered({
+          id: user.id,
+          name: user.user_metadata?.display_name || user.user_metadata?.full_name || n,
+          emailOrPhone: user.email || em,
+          avatarUrl: user.user_metadata?.avatar_url || "",
+        });
+        onSuccess?.();
+        return;
+      }
       setConfirmationEmail(em);
       setConfirmationSent(true);
     } catch (err) {
-      setSubmitError(err?.message || "Sign-up failed. Please try again.");
+      const { message, hint } = mapSignUpError(err);
+      setSubmitError(message);
+      setSubmitErrorHint(hint);
     } finally {
       setSubmitLoading(false);
     }
@@ -174,6 +221,7 @@ export default function RegisterModal({ onSuccess, onClose, variant = "soft", vo
   const handleLogin = async (e) => {
     e.preventDefault();
     setSubmitError("");
+    setSubmitErrorHint("");
     const em = email.trim();
     if (!isValidEmail(em)) {
       setSubmitError("Enter a valid email address.");
@@ -202,9 +250,12 @@ export default function RegisterModal({ onSuccess, onClose, variant = "soft", vo
     } catch (err) {
       const msg = err?.message || "Login failed.";
       if (msg.includes("Email not confirmed")) {
-        setSubmitError("Please confirm your email first. Check your inbox for the confirmation link.");
+        setSubmitError("Please confirm your email first. Check your inbox (and spam) for the confirmation link.");
       } else if (msg.includes("Invalid login credentials")) {
         setSubmitError("Invalid email or password.");
+        setSubmitErrorHint(
+          "Passwords are case-sensitive. If you already confirmed your email, try Forgot password. If you have not confirmed yet, use the link in your signup email first."
+        );
       } else {
         setSubmitError(msg);
       }
@@ -219,9 +270,95 @@ export default function RegisterModal({ onSuccess, onClose, variant = "soft", vo
     onClose?.();
   };
 
+  const handleForgotSubmit = async (e) => {
+    e.preventDefault();
+    setSubmitError("");
+    setSubmitErrorHint("");
+    const em = email.trim();
+    if (!isValidEmail(em)) {
+      setSubmitError("Enter a valid email address.");
+      return;
+    }
+    setSubmitLoading(true);
+    try {
+      await sendPasswordResetEmail(em);
+      setLoginAux("forgotSent");
+    } catch (err) {
+      setSubmitError(err?.message || "Could not send reset email.");
+    } finally {
+      setSubmitLoading(false);
+    }
+  };
+
+  const handlePasswordRecoverySubmit = async (e) => {
+    e.preventDefault();
+    setSubmitError("");
+    setSubmitErrorHint("");
+    if (newPassword.length < 8) {
+      setSubmitError("Password must be at least 8 characters.");
+      return;
+    }
+    if (newPassword !== confirmNewPassword) {
+      setSubmitError("Passwords do not match.");
+      return;
+    }
+    setSubmitLoading(true);
+    try {
+      await updateUserPassword(newPassword);
+      const user = await getUser();
+      if (user) {
+        setRegistered({
+          id: user.id,
+          name: user.user_metadata?.display_name || user.user_metadata?.full_name || user.email?.split("@")[0] || "User",
+          emailOrPhone: user.email || "",
+          avatarUrl: user.user_metadata?.avatar_url || "",
+        });
+      }
+      onSuccess?.();
+      onPasswordRecoveryComplete?.();
+    } catch (err) {
+      setSubmitError(err?.message || "Could not update password.");
+    } finally {
+      setSubmitLoading(false);
+    }
+  };
+
   const softGateSub = `You're opening one of your last free lessons before we ask for an account (${MAX_FREE_UNREGISTERED} unique lessons in any order, then we need to know you). Register to save progress \u2014 or continue for now. After you register, you get ${FREE_LESSONS_AFTER_REGISTER} more free lessons.`;
   const softVoluntarySub =
-    "Sign in with Google or create an account with email. Registered learners unlock more free lessons and saved progress.";
+    "Log in or register with your email. Registered learners unlock more free lessons and saved progress.";
+
+  if (passwordRecovery) {
+    return (
+      <div style={overlay} onClick={(e) => e.stopPropagation()}>
+        <div style={card} onClick={(e) => e.stopPropagation()}>
+          <div style={titleStyle}>Set a new password</div>
+          <div style={sub}>Choose a password for your Inpact account, then you&apos;ll be signed in.</div>
+          <form onSubmit={handlePasswordRecoverySubmit}>
+            <input
+              type="password"
+              placeholder="New password (8+ characters)"
+              value={newPassword}
+              onChange={(e) => setNewPassword(e.target.value)}
+              style={inputStyle}
+              autoComplete="new-password"
+            />
+            <input
+              type="password"
+              placeholder="Confirm new password"
+              value={confirmNewPassword}
+              onChange={(e) => setConfirmNewPassword(e.target.value)}
+              style={inputStyle}
+              autoComplete="new-password"
+            />
+            {submitError && <div style={errText} role="alert">{submitError}</div>}
+            <button type="submit" style={btn(true)} disabled={submitLoading || !newPassword || !confirmNewPassword}>
+              {submitLoading ? "Saving\u2026" : "Update password"}
+            </button>
+          </form>
+        </div>
+      </div>
+    );
+  }
 
   if (confirmationSent) {
     return (
@@ -281,49 +418,45 @@ export default function RegisterModal({ onSuccess, onClose, variant = "soft", vo
           <div style={sub}>{voluntary ? softVoluntarySub : softGateSub}</div>
         )}
 
-        <div style={{ marginBottom: "16px" }}>
-          {isSupabaseConfigured ? (
-            <button
-              type="button"
-              style={{
-                ...btn(true),
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                gap: "10px",
-                fontSize: "15px",
-                padding: "14px 16px",
-                borderRadius: "10px",
-                background: "#ffffff",
-                color: "#0f172a",
-                border: "1px solid #e2e8f0",
-                boxShadow: "0 1px 3px rgba(0,0,0,0.08)",
-              }}
-              onClick={handleGoogleSignIn}
-              disabled={googleLoading}
-            >
-              <svg width="18" height="18" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59a14.5 14.5 0 0 1 0-9.18l-7.98-6.19a24.03 24.03 0 0 0 0 21.56l7.98-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
-              {googleLoading ? "Signing in\u2026" : "Continue with Google"}
-            </button>
-          ) : (
-            <button type="button" style={{ ...btn(false), width: "100%" }} disabled title="Set VITE_SUPABASE_* in .env">
-              Google (configure Supabase)
-            </button>
-          )}
-          {googleError && (
-            <div style={{ fontSize: "12px", color: "#dc2626", marginTop: "8px", textAlign: "center" }}>{googleError}</div>
-          )}
-        </div>
-
-        <div style={{ textAlign: "center", fontSize: "12px", color: "#94a3b8", margin: "8px 0 16px" }}>
-          &mdash; or use email &mdash;
-        </div>
+        {!isSupabaseConfigured && (
+          <div
+            style={{
+              fontSize: "12px",
+              color: "#64748b",
+              marginBottom: "16px",
+              padding: "10px 12px",
+              background: "#f8fafc",
+              borderRadius: "8px",
+            }}
+          >
+            Supabase is not configured (set <code style={{ fontSize: "11px" }}>VITE_SUPABASE_*</code> in{" "}
+            <code style={{ fontSize: "11px" }}>.env</code>). You can still register locally for testing.
+          </div>
+        )}
 
         <div style={tabRow}>
-          <button type="button" style={tab(mode === "register")} onClick={() => { setMode("register"); setSubmitError(""); }}>
+          <button
+            type="button"
+            style={tab(mode === "register")}
+            onClick={() => {
+              setMode("register");
+              setLoginAux("form");
+              setSubmitError("");
+              setSubmitErrorHint("");
+            }}
+          >
             Register
           </button>
-          <button type="button" style={tab(mode === "login")} onClick={() => { setMode("login"); setSubmitError(""); }}>
+          <button
+            type="button"
+            style={tab(mode === "login")}
+            onClick={() => {
+              setMode("login");
+              setLoginAux("form");
+              setSubmitError("");
+              setSubmitErrorHint("");
+            }}
+          >
             Log in
           </button>
         </div>
@@ -333,7 +466,14 @@ export default function RegisterModal({ onSuccess, onClose, variant = "soft", vo
             <input type="text" placeholder="Name" value={name} onChange={(e) => setName(e.target.value)} style={inputStyle} autoComplete="name" />
             <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} style={inputStyle} autoComplete="email" />
             <input type="password" placeholder="Password (8+ characters)" value={password} onChange={(e) => setPassword(e.target.value)} style={inputStyle} autoComplete="new-password" />
-            {submitError && <div style={errText} role="alert">{submitError}</div>}
+            {submitError && (
+              <div role="alert">
+                <div style={errText}>{submitError}</div>
+                {submitErrorHint ? (
+                  <div style={{ ...errText, color: "#64748b", marginTop: "4px", lineHeight: 1.5 }}>{submitErrorHint}</div>
+                ) : null}
+              </div>
+            )}
             <button type="submit" style={btn(true)} disabled={submitLoading || !name.trim() || !email.trim() || !password}>
               {submitLoading ? "Creating account\u2026" : "Register"}
             </button>
@@ -343,11 +483,44 @@ export default function RegisterModal({ onSuccess, onClose, variant = "soft", vo
               </button>
             )}
           </form>
+        ) : loginAux === "forgot" ? (
+          <form onSubmit={handleForgotSubmit}>
+            <div style={{ ...sub, marginTop: 0 }}>We&apos;ll email you a link to reset your password.</div>
+            <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} style={inputStyle} autoComplete="email" />
+            {submitError && <div style={errText} role="alert">{submitError}</div>}
+            <button type="submit" style={btn(true)} disabled={submitLoading || !email.trim()}>
+              {submitLoading ? "Sending\u2026" : "Send reset link"}
+            </button>
+            <button type="button" style={linkBtn} onClick={() => { setLoginAux("form"); setSubmitError(""); }}>
+              Back to log in
+            </button>
+          </form>
+        ) : loginAux === "forgotSent" ? (
+          <div>
+            <div style={successSub}>
+              If an account exists for <strong>{email.trim()}</strong>, we sent a reset link. Check inbox and spam, then open the link on this same device/browser.
+            </div>
+            <button type="button" style={btn(true)} onClick={() => { setLoginAux("form"); setSubmitError(""); }}>
+              Back to log in
+            </button>
+          </div>
         ) : (
           <form onSubmit={handleLogin}>
             <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} style={inputStyle} autoComplete="email" />
             <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} style={inputStyle} autoComplete="current-password" />
-            {submitError && <div style={errText} role="alert">{submitError}</div>}
+            {isSupabaseConfigured && (
+              <button type="button" style={linkBtn} onClick={() => { setLoginAux("forgot"); setSubmitError(""); setSubmitErrorHint(""); }}>
+                Forgot password?
+              </button>
+            )}
+            {submitError && (
+              <div role="alert">
+                <div style={errText}>{submitError}</div>
+                {submitErrorHint ? (
+                  <div style={{ ...errText, color: "#64748b", marginTop: "4px", lineHeight: 1.5 }}>{submitErrorHint}</div>
+                ) : null}
+              </div>
+            )}
             <button type="submit" style={btn(true)} disabled={submitLoading || !email.trim() || !password}>
               {submitLoading ? "Logging in\u2026" : "Log in"}
             </button>

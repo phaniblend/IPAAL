@@ -37,6 +37,7 @@ export default function DynamicLessonPage({
   lessonIndex,
   onBackToProblems,
   onNextProblem,
+  onLessonComplete,
   onFallbackToLocal,
 }) {
   const [phase, setPhase] = useState("loading");
@@ -214,7 +215,11 @@ export default function DynamicLessonPage({
             Real AI unavailable{fallbackReason ? `: ${fallbackReason}. ` : " — "}Using backup lesson. Run <code style={{ background: "#e2e8f0", padding: "0 4px" }}>npm run server</code> and restart.
           </div>
         )}
-        <Engine onNextProblem={onNextProblem} onBackToProblems={onBackToProblems} />
+        <Engine
+          onNextProblem={onNextProblem}
+          onBackToProblems={onBackToProblems}
+          onLessonComplete={onLessonComplete}
+        />
       </>
     );
   }

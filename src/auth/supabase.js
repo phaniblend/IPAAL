@@ -15,28 +15,12 @@ export const supabase =
       })
     : null;
 
-/**
- * OAuth redirect: always the site root so static hosts serve index.html and PKCE ?code= lands on a real URL.
- * The actual lesson is in localStorage redirectPath (/lessons/...) — App navigates there after session sync.
- * Add https://www.yoursite.com and https://yoursite.com (and optional /) in Supabase redirect allowlist.
- */
-export function getOAuthRedirectTo() {
-  if (typeof window === "undefined") return undefined;
-  return `${window.location.origin}/`;
-}
-
 export const isSupabaseConfigured = Boolean(supabase);
 
-export async function signInWithGoogle() {
-  if (!supabase) throw new Error("Supabase not configured");
-  const { data, error } = await supabase.auth.signInWithOAuth({
-    provider: "google",
-    options: {
-      redirectTo: getOAuthRedirectTo(),
-    },
-  });
-  if (error) throw error;
-  return data;
+function getEmailRedirectTo() {
+  if (typeof window === "undefined") return undefined;
+  // Site URL in Supabase should match this origin (hash routes load from /).
+  return `${window.location.origin}/`;
 }
 
 export async function signUpWithEmail(email, password, displayName) {
@@ -46,6 +30,7 @@ export async function signUpWithEmail(email, password, displayName) {
     password,
     options: {
       data: { display_name: displayName },
+      emailRedirectTo: getEmailRedirectTo(),
     },
   });
   if (error) throw error;
@@ -58,6 +43,22 @@ export async function signInWithEmail(email, password) {
     email,
     password,
   });
+  if (error) throw error;
+  return data;
+}
+
+/** Sends Supabase “reset password” email; link must match URL allow list + Site URL. */
+export async function sendPasswordResetEmail(email) {
+  if (!supabase) throw new Error("Supabase not configured");
+  const { error } = await supabase.auth.resetPasswordForEmail(email.trim(), {
+    redirectTo: getEmailRedirectTo(),
+  });
+  if (error) throw error;
+}
+
+export async function updateUserPassword(newPassword) {
+  if (!supabase) throw new Error("Supabase not configured");
+  const { data, error } = await supabase.auth.updateUser({ password: newPassword });
   if (error) throw error;
   return data;
 }

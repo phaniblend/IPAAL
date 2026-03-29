@@ -2,7 +2,7 @@
  * Access gate (unique lessons per browser, localStorage until backend exists):
  * - Lessons 1–5: no prompt.
  * - Lessons 6–8: soft “register” prompt (dismissible — “slide” three times).
- * - Lesson 9: must register (Google or form) before access.
+ * - Lesson 9: must register (email) before access.
  * - Lessons 10–15: free after registration (7 more after account).
  * - Lesson 16+: $1 per new lesson (balance); lifetime access once unlocked for that lesson.
  */
@@ -114,7 +114,7 @@ export function addFundsCents(cents) {
 
 /**
  * Optional gate context: pass `loggedIn: true` when React already has a Supabase user id so we do not
- * rely on localStorage `inpact_user_registered` alone (avoids races right after OAuth redirect).
+ * rely on localStorage `inpact_user_registered` alone (avoids races right after sign-in).
  * @typedef {{ loggedIn?: boolean }} LessonGateOpts
  */
 
@@ -188,10 +188,10 @@ export function incrementRegisterDismissCount() {
 }
 
 const STORAGE_KEY_PENDING_LESSON = "inpact_pending_lesson";
-/** Drop stale pending resume payloads (e.g. abandoned OAuth) so we do not hijack a later visit. */
+/** Drop stale pending resume payloads (e.g. abandoned sign-in) so we do not hijack a later visit. */
 const PENDING_LESSON_MAX_AGE_MS = 60 * 60 * 1000; // 1 hour
 
-/** Persist the lesson the user was trying to open when the auth gate triggered (survives OAuth redirects). */
+/** Persist the lesson the user was trying to open when the auth gate triggered (survives full-page reloads). */
 export function savePendingLesson(track, index, item) {
   try {
     const payload = JSON.stringify({ track, index, item, savedAt: Date.now() });
@@ -200,7 +200,7 @@ export function savePendingLesson(track, index, item) {
   } catch (_) {}
 }
 
-/** Read pending lesson without removing (used after OAuth before navigation commits). */
+/** Read pending lesson without removing (used after sign-in before navigation commits). */
 export function peekPendingLesson() {
   try {
     const raw =
