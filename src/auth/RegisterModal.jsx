@@ -1,5 +1,9 @@
 import { useState } from "react";
-import { setRegistered, FREE_LESSONS_AFTER_REGISTER, MAX_FREE_UNREGISTERED } from "./lessonAccess.js";
+import {
+  setRegistered,
+  FREE_LESSONS_AFTER_REGISTER,
+  hasEverRegistered,
+} from "./lessonAccess.js";
 import {
   isSupabaseConfigured,
   signUpWithEmail,
@@ -117,8 +121,8 @@ function isValidEmail(s) {
 }
 
 function getDismissButtonText(dismissCount) {
-  if (dismissCount >= 2) return "I promise, I'll do it for the next lesson";
-  return "I'll do it later";
+  if (dismissCount >= 1) return "I promise, I'll do it for the next lesson";
+  return "I'll register later";
 }
 
 /** Map Supabase Auth errors to a short line + optional setup hint for operators. */
@@ -147,11 +151,13 @@ export default function RegisterModal({
   variant = "soft",
   voluntary = false,
   dismissCount = 0,
+  softGateKind = null,
   passwordRecovery = false,
   onPasswordRecoveryComplete,
 }) {
   const isHard = variant === "hard";
-  const [mode, setMode] = useState("register");
+  const isLoginWall = variant === "loginWall";
+  const [mode, setMode] = useState(() => (isLoginWall ? "login" : "register"));
   const [loginAux, setLoginAux] = useState("form"); // form | forgot | forgotSent
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -184,7 +190,7 @@ export default function RegisterModal({
     }
     if (!isSupabaseConfigured) {
       setRegistered({ name: n, emailOrPhone: em });
-      onSuccess?.();
+      onSuccess?.({ flow: "register" });
       return;
     }
     setSubmitLoading(true);
@@ -204,7 +210,7 @@ export default function RegisterModal({
           emailOrPhone: user.email || em,
           avatarUrl: user.user_metadata?.avatar_url || "",
         });
-        onSuccess?.();
+        onSuccess?.({ flow: "register" });
         return;
       }
       setConfirmationEmail(em);
@@ -233,7 +239,7 @@ export default function RegisterModal({
     }
     if (!isSupabaseConfigured) {
       setRegistered({ name: em.split("@")[0], emailOrPhone: em });
-      onSuccess?.();
+      onSuccess?.({ flow: "login" });
       return;
     }
     setSubmitLoading(true);
@@ -314,7 +320,7 @@ export default function RegisterModal({
           avatarUrl: user.user_metadata?.avatar_url || "",
         });
       }
-      onSuccess?.();
+      onSuccess?.({ flow: "login" });
       onPasswordRecoveryComplete?.();
     } catch (err) {
       setSubmitError(err?.message || "Could not update password.");
@@ -323,9 +329,13 @@ export default function RegisterModal({
     }
   };
 
-  const softGateSub = `You're opening one of your last free lessons before we ask for an account (${MAX_FREE_UNREGISTERED} unique lessons in any order, then we need to know you). Register to save progress \u2014 or continue for now. After you register, you get ${FREE_LESSONS_AFTER_REGISTER} more free lessons.`;
-  const softVoluntarySub =
-    "Log in or register with your email. Registered learners unlock more free lessons and saved progress.";
+  const softGateSixSub = `Register to save your progress and unlock ${FREE_LESSONS_AFTER_REGISTER} more free lessons!`;
+  const softGateEightSub = `Last chance! Register now to unlock ${FREE_LESSONS_AFTER_REGISTER} more free lessons.`;
+  const softVoluntarySub = hasEverRegistered()
+    ? "You've registered! Log in to access your remaining 7 free lessons."
+    : "Log in or register with your email. Registered learners unlock more free lessons and saved progress.";
+  const hardGateCallout = `You've reached the limit for anonymous lessons. Register to access ${FREE_LESSONS_AFTER_REGISTER} more free lessons!`;
+  const loginWallCallout = `You've reached the limit for anonymous lessons. Log in to access your remaining ${FREE_LESSONS_AFTER_REGISTER} free lessons!`;
 
   if (passwordRecovery) {
     return (
@@ -387,7 +397,7 @@ export default function RegisterModal({
             >
               Got it &mdash; take me to log in
             </button>
-            {!isHard && (
+            {!isHard && !isLoginWall && (
               <button type="button" style={btn(false)} onClick={onClose}>
                 Close
               </button>
@@ -398,25 +408,40 @@ export default function RegisterModal({
     );
   }
 
+  const modalTitle = isLoginWall
+    ? "Log in to continue"
+    : isHard
+      ? "Create your account"
+      : voluntary
+        ? "Log in or register"
+        : "Register (optional for now)";
+
+  const modalSub = isLoginWall ? (
+    <div style={hardCallout} role="alert">
+      {loginWallCallout}
+    </div>
+  ) : isHard ? (
+    <div style={hardCallout} role="alert">
+      {hardGateCallout}
+    </div>
+  ) : voluntary ? (
+    <div style={sub}>{softVoluntarySub}</div>
+  ) : softGateKind === "eight" ? (
+    <div style={sub}>{softGateEightSub}</div>
+  ) : (
+    <div style={sub}>{softGateSixSub}</div>
+  );
+
   return (
     <div
       style={overlay}
       onClick={(e) => {
-        if (e.target === e.currentTarget && !isHard && onClose) onClose();
+        if (e.target === e.currentTarget && !isHard && !isLoginWall && onClose) onClose();
       }}
     >
       <div style={card} onClick={(e) => e.stopPropagation()}>
-        <div style={titleStyle}>
-          {isHard ? "Time to register" : voluntary ? "Log in or register" : "Register (optional for now)"}
-        </div>
-        {isHard ? (
-          <div style={hardCallout} role="alert">
-            You promised you&apos;d do it for the next lesson &mdash; remember? Please register and get{" "}
-            {FREE_LESSONS_AFTER_REGISTER} more free lessons. We know you like them.
-          </div>
-        ) : (
-          <div style={sub}>{voluntary ? softVoluntarySub : softGateSub}</div>
-        )}
+        <div style={titleStyle}>{modalTitle}</div>
+        {modalSub}
 
         {!isSupabaseConfigured && (
           <div
@@ -434,34 +459,36 @@ export default function RegisterModal({
           </div>
         )}
 
-        <div style={tabRow}>
-          <button
-            type="button"
-            style={tab(mode === "register")}
-            onClick={() => {
-              setMode("register");
-              setLoginAux("form");
-              setSubmitError("");
-              setSubmitErrorHint("");
-            }}
-          >
-            Register
-          </button>
-          <button
-            type="button"
-            style={tab(mode === "login")}
-            onClick={() => {
-              setMode("login");
-              setLoginAux("form");
-              setSubmitError("");
-              setSubmitErrorHint("");
-            }}
-          >
-            Log in
-          </button>
-        </div>
+        {!isLoginWall ? (
+          <div style={tabRow}>
+            <button
+              type="button"
+              style={tab(mode === "register")}
+              onClick={() => {
+                setMode("register");
+                setLoginAux("form");
+                setSubmitError("");
+                setSubmitErrorHint("");
+              }}
+            >
+              Register
+            </button>
+            <button
+              type="button"
+              style={tab(mode === "login")}
+              onClick={() => {
+                setMode("login");
+                setLoginAux("form");
+                setSubmitError("");
+                setSubmitErrorHint("");
+              }}
+            >
+              Log in
+            </button>
+          </div>
+        ) : null}
 
-        {mode === "register" ? (
+        {mode === "register" && !isLoginWall ? (
           <form onSubmit={handleRegister}>
             <input type="text" placeholder="Name" value={name} onChange={(e) => setName(e.target.value)} style={inputStyle} autoComplete="name" />
             <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} style={inputStyle} autoComplete="email" />
@@ -477,7 +504,7 @@ export default function RegisterModal({
             <button type="submit" style={btn(true)} disabled={submitLoading || !name.trim() || !email.trim() || !password}>
               {submitLoading ? "Creating account\u2026" : "Register"}
             </button>
-            {!isHard && !voluntary && (
+            {!isHard && !isLoginWall && !voluntary && (
               <button type="button" style={btn(false)} onClick={handleContinueWithoutRegistering}>
                 {dismissText}
               </button>
@@ -524,7 +551,7 @@ export default function RegisterModal({
             <button type="submit" style={btn(true)} disabled={submitLoading || !email.trim() || !password}>
               {submitLoading ? "Logging in\u2026" : "Log in"}
             </button>
-            {!isHard && !voluntary && (
+            {!isHard && !isLoginWall && !voluntary && (
               <button type="button" style={btn(false)} onClick={handleContinueWithoutRegistering}>
                 {dismissText}
               </button>

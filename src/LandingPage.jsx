@@ -230,7 +230,7 @@ const LP = {
   },
 };
 
-export default function LandingPage({ track, onSelectProblem, problemList }) {
+export default function LandingPage({ track, onSelectProblem, problemList, freeLessonsHint }) {
   const [hover, setHover] = useState(null);
   const [howItWorksOpen, setHowItWorksOpen] = useState(false);
 
@@ -474,6 +474,19 @@ export default function LandingPage({ track, onSelectProblem, problemList }) {
           <div style={{ ...subtitle, color: "#00d4ff", fontWeight: 600, letterSpacing: "0.04em", marginBottom: 0 }}>
             {TRACK_LABELS[track] ?? track} — {lessonCount} lessons
           </div>
+          {freeLessonsHint ? (
+            <div
+              role="status"
+              style={{
+                fontSize: "13px",
+                color: "#64748b",
+                marginTop: "8px",
+                lineHeight: 1.45,
+              }}
+            >
+              {freeLessonsHint}
+            </div>
+          ) : null}
         </div>
 
         {useBlueprintGroupedGrid ? (

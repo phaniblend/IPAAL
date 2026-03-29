@@ -1029,11 +1029,19 @@ import { LessonValidationContext } from './ai-lessons/lessonValidationContext.js
 import {
   mustSoftRegisterToAccess,
   mustHardRegisterToAccess,
+  mustLoginToUnlockPastAnonymousLimit,
   mustPayToAccess,
+  getSoftGateKind,
+  hasEverRegistered,
+  getFreeLessonsRemaining,
+  getAnonymousFreeSlotsRemaining,
   recordLessonAccess,
   deductLessonPayment,
   getBalanceCents,
   PRICE_PER_LESSON_CENTS,
+  TOTAL_FREE_LESSONS,
+  MAX_FREE_UNREGISTERED,
+  FREE_LESSONS_AFTER_REGISTER,
   getStoredUser,
   logout,
   getRegisterDismissCount,
@@ -1083,6 +1091,7 @@ export default function App() {
   const [registerModalVariant, setRegisterModalVariant] = useState('soft')
   const [showAddFundsModal, setShowAddFundsModal] = useState(false)
   const [pendingLesson, setPendingLesson] = useState(null) // { track, index, item } when gated
+  const [welcomeBonusMessage, setWelcomeBonusMessage] = useState('')
   const [user, setUser] = useState(() => getStoredUser())
   /** Full page load / refresh always shows the intro; we do not persist “already seen” in sessionStorage (that skipped it on every refresh). */
   const [showCinematic, setShowCinematic] = useState(() => {
@@ -1094,6 +1103,23 @@ export default function App() {
   const [authSessionReady, setAuthSessionReady] = useState(!isSupabaseConfigured)
 
   const lessonGateOpts = useMemo(() => ({ loggedIn: Boolean(user?.id) }), [user?.id])
+  const softGateKindForModal = useMemo(() => {
+    if (registerModalVariant !== 'soft' || !pendingLesson) return null
+    return getSoftGateKind(pendingLesson.track, pendingLesson.index, lessonGateOpts)
+  }, [registerModalVariant, pendingLesson, lessonGateOpts])
+  const freeLessonsHint = useMemo(() => {
+    if (user?.id) {
+      const r = getFreeLessonsRemaining({ loggedIn: true })
+      return r != null ? `${r}/${TOTAL_FREE_LESSONS} free lessons left` : null
+    }
+    if (hasEverRegistered()) return null
+    const left = getAnonymousFreeSlotsRemaining()
+    return `${left} of ${MAX_FREE_UNREGISTERED} anonymous free lessons left`
+  }, [user?.id])
+  const showWelcomeBackBanner = hasEverRegistered() && !user?.id
+  const showRegBonusToast = Boolean(user?.id && welcomeBonusMessage)
+  const catalogTopPadding =
+    38 + (showWelcomeBackBanner ? 44 : 0) + (showRegBonusToast ? 44 : 0)
   /** Track + list index for the open lesson (for Supabase progress). */
   const activeLessonTrack = useMemo(
     () => (problemIndex != null && lessonTrack != null ? lessonTrack : track),
@@ -1251,6 +1277,15 @@ export default function App() {
 
     const opts = { loggedIn: Boolean(user?.id) }
 
+    if (mustLoginToUnlockPastAnonymousLimit(t, i, opts)) {
+      setPendingLesson({ track: t, index: i, item })
+      savePendingLesson(t, i, item)
+      setStoredRedirectPath(buildLessonPath(t, i))
+      setRegisterModalVariant('loginWall')
+      setShowRegisterModal(true)
+      if (location.pathname !== '/register') navigate('/register', { replace: true })
+      return
+    }
     if (mustHardRegisterToAccess(t, i, opts)) {
       setPendingLesson({ track: t, index: i, item })
       savePendingLesson(t, i, item)
@@ -1347,6 +1382,15 @@ export default function App() {
 
   const handleSelectProblem = (i, item, fullList) => {
     const t = LEARNER_FOCUS_TRACK
+    if (mustLoginToUnlockPastAnonymousLimit(t, i, lessonGateOpts)) {
+      setPendingLesson({ track: t, index: i, item })
+      savePendingLesson(t, i, item)
+      setStoredRedirectPath(buildLessonPath(t, i))
+      setRegisterModalVariant('loginWall')
+      setShowRegisterModal(true)
+      navigate('/register', { replace: true })
+      return
+    }
     if (mustHardRegisterToAccess(t, i, lessonGateOpts)) {
       setPendingLesson({ track: t, index: i, item })
       savePendingLesson(t, i, item)
@@ -1380,13 +1424,17 @@ export default function App() {
     openLesson(i, item, t)
   }
 
-  const registerSuccess = () => {
+  const registerSuccess = (meta) => {
     setUser(getStoredUser())
     setShowRegisterModal(false)
     setRegisterModalVariant('soft')
     const pl = pendingLesson
     clearPendingLesson()
     setPendingLesson(null)
+    if (meta?.flow === 'register') {
+      setWelcomeBonusMessage(`You have ${FREE_LESSONS_AFTER_REGISTER} free lessons left after registration!`)
+      window.setTimeout(() => setWelcomeBonusMessage(''), 12000)
+    }
     if (pl && pl.track === LEARNER_FOCUS_TRACK) openLesson(pl.index, pl.item, pl.track)
   }
 
@@ -1503,6 +1551,7 @@ export default function App() {
             variant={registerModalVariant}
             voluntary={!pendingLesson}
             dismissCount={getRegisterDismissCount()}
+            softGateKind={softGateKindForModal}
             onSuccess={registerSuccess}
             onClose={passwordRecoveryActive ? undefined : registerModalVariant === 'soft' ? registerModalDismiss : undefined}
             passwordRecovery={passwordRecoveryActive}
@@ -1575,11 +1624,55 @@ export default function App() {
             </div>
           </div>
         </div>
-        <div style={{ paddingTop: '38px' }}>
+        {showWelcomeBackBanner ? (
+          <div
+            role="status"
+            style={{
+              position: 'fixed',
+              top: '38px',
+              left: 0,
+              right: 0,
+              zIndex: 9997,
+              padding: '10px 14px',
+              background: '#ecfeff',
+              borderBottom: '1px solid #67e8f9',
+              fontFamily: "'DM Sans', sans-serif",
+              fontSize: '13px',
+              color: '#0c4a6e',
+              textAlign: 'center',
+              lineHeight: 1.45,
+            }}
+          >
+            Welcome back! Log in to access your remaining {FREE_LESSONS_AFTER_REGISTER} free lessons.
+          </div>
+        ) : null}
+        {showRegBonusToast ? (
+          <div
+            role="status"
+            style={{
+              position: 'fixed',
+              top: showWelcomeBackBanner ? '82px' : '38px',
+              left: 0,
+              right: 0,
+              zIndex: 9997,
+              padding: '10px 14px',
+              background: '#d1fae5',
+              borderBottom: '1px solid #6ee7b7',
+              fontFamily: "'DM Sans', sans-serif",
+              fontSize: '13px',
+              color: '#065f46',
+              textAlign: 'center',
+            }}
+          >
+            {welcomeBonusMessage}
+          </div>
+        ) : null}
+        <div style={{ paddingTop: `${catalogTopPadding}px` }}>
           <LandingPage
             track={LEARNER_FOCUS_TRACK}
             onSelectProblem={handleSelectProblem}
             problemList={getProblemList(LEARNER_FOCUS_TRACK)}
+            freeLessonsHint={freeLessonsHint}
           />
         </div>
         {showRegisterModal && (
@@ -1587,6 +1680,7 @@ export default function App() {
             variant={registerModalVariant}
             voluntary={!pendingLesson}
             dismissCount={getRegisterDismissCount()}
+            softGateKind={softGateKindForModal}
             onSuccess={registerSuccess}
             onClose={passwordRecoveryActive ? undefined : registerModalVariant === 'soft' ? registerModalDismiss : undefined}
             passwordRecovery={passwordRecoveryActive}
@@ -1613,6 +1707,20 @@ export default function App() {
   const onNextProblem = () => {
     const next = Math.min(problemIndex + 1, engines.length - 1)
     if (next === problemIndex) return
+    if (mustLoginToUnlockPastAnonymousLimit(effectiveTrack, next, lessonGateOpts)) {
+      const nextItem = lessonList[next] ?? null
+      setProblemIndex(null)
+      setSelectedLessonItem(null)
+      setLessonTrack(null)
+      setUseAILessonFailed(false)
+      setPendingLesson({ track: effectiveTrack, index: next, item: nextItem })
+      savePendingLesson(effectiveTrack, next, nextItem)
+      setStoredRedirectPath(buildLessonPath(effectiveTrack, next))
+      setRegisterModalVariant('loginWall')
+      setShowRegisterModal(true)
+      navigate('/register', { replace: true })
+      return
+    }
     if (mustHardRegisterToAccess(effectiveTrack, next, lessonGateOpts)) {
       const nextItem = lessonList[next] ?? null
       setProblemIndex(null)
@@ -1775,6 +1883,7 @@ export default function App() {
             variant={registerModalVariant}
             voluntary={!pendingLesson}
             dismissCount={getRegisterDismissCount()}
+            softGateKind={softGateKindForModal}
             onSuccess={registerSuccess}
             onClose={passwordRecoveryActive ? undefined : registerModalVariant === 'soft' ? registerModalDismiss : undefined}
             passwordRecovery={passwordRecoveryActive}
@@ -1826,6 +1935,7 @@ export default function App() {
             variant={registerModalVariant}
             voluntary={!pendingLesson}
             dismissCount={getRegisterDismissCount()}
+            softGateKind={softGateKindForModal}
             onSuccess={registerSuccess}
             onClose={passwordRecoveryActive ? undefined : registerModalVariant === 'soft' ? registerModalDismiss : undefined}
             passwordRecovery={passwordRecoveryActive}
@@ -1925,6 +2035,7 @@ export default function App() {
           variant={registerModalVariant}
           voluntary={!pendingLesson}
           dismissCount={getRegisterDismissCount()}
+          softGateKind={softGateKindForModal}
           onSuccess={registerSuccess}
           onClose={passwordRecoveryActive ? undefined : registerModalVariant === 'soft' ? registerModalDismiss : undefined}
           passwordRecovery={passwordRecoveryActive}

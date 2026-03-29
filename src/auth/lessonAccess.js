@@ -1,27 +1,30 @@
 /**
- * Access gate (unique lessons per browser, localStorage until backend exists):
- * - Lessons 1–5: no prompt.
- * - Lessons 6–8: soft “register” prompt (dismissible — “slide” three times).
- * - Lesson 9: must register (email) before access.
- * - Lessons 10–15: free after registration (7 more after account).
- * - Lesson 16+: $1 per new lesson (balance); lifetime access once unlocked for that lesson.
+ * Free tier & gates (unique lessons per browser, localStorage until backend APIs exist).
+ *
+ * Business rules (summary):
+ * - 1–5: no prompt.
+ * - 6: soft — "Register to save… unlock 7 more" / "I'll register later"
+ * - 7: no prompt (still within 8 anonymous)
+ * - 8: soft — "Last chance!…" / "I promise…"
+ * - 9: hard register — "limit for anonymous… Register to access 7 more"
+ * - 10–15: free after registration (7 more). 16+: $1 per new lesson (balance).
+ * - Logged-out but has registered before (ever_registered): banner; 1–8 allowed; 9+ requires log in (login wall).
  */
 
 const STORAGE_KEY_ACCESSED = "inpact_lessons_accessed";
 const STORAGE_KEY_REGISTERED = "inpact_user_registered";
+const STORAGE_KEY_EVER_REGISTERED = "inpact_ever_registered";
 const STORAGE_KEY_BALANCE = "inpact_balance_cents";
 const STORAGE_KEY_USER = "inpact_user";
 const STORAGE_KEY_DISMISS_COUNT = "inpact_register_dismiss_count";
 
 /** First N unique lessons with no register prompt. */
 export const FREE_LESSONS_SILENT = 5;
-/** Lessons 6–8: soft register modal (dismissible). */
-export const SOFT_REGISTER_COUNT = 3;
-/** Max unique lessons without an account (after 3 dismissible prompts on 6–8). */
-export const MAX_FREE_UNREGISTERED = FREE_LESSONS_SILENT + SOFT_REGISTER_COUNT; // 8
-/** Total free unique lessons once registered (includes the 8 anonymous tier). */
+/** Max unique lessons without an account (anonymous cap before lesson 9 gate). */
+export const MAX_FREE_UNREGISTERED = 8;
+/** Total free unique lessons once logged in with an account (8 anon + 7 after register). */
 export const TOTAL_FREE_LESSONS = 15;
-/** Extra free lessons after registering (for copy): 15 − 8 = 7. */
+/** Extra free lessons after registering (copy / product). */
 export const FREE_LESSONS_AFTER_REGISTER = TOTAL_FREE_LESSONS - MAX_FREE_UNREGISTERED;
 
 export const PRICE_PER_LESSON_CENTS = 100; // $1
@@ -70,15 +73,28 @@ export function isRegistered() {
   }
 }
 
+/** True if this browser has completed registration at least once (persists after logout). */
+export function hasEverRegistered() {
+  try {
+    return localStorage.getItem(STORAGE_KEY_EVER_REGISTERED) === "true";
+  } catch {
+    return false;
+  }
+}
+
 export function setRegistered(user = null) {
   try {
     localStorage.setItem(STORAGE_KEY_REGISTERED, "true");
+    localStorage.setItem(STORAGE_KEY_EVER_REGISTERED, "true");
     if (user) localStorage.setItem(STORAGE_KEY_USER, JSON.stringify(user));
   } catch (_) {}
 }
 
 export function logout() {
   try {
+    if (localStorage.getItem(STORAGE_KEY_REGISTERED) === "true") {
+      localStorage.setItem(STORAGE_KEY_EVER_REGISTERED, "true");
+    }
     localStorage.removeItem(STORAGE_KEY_REGISTERED);
     localStorage.removeItem(STORAGE_KEY_USER);
   } catch (_) {}
@@ -113,30 +129,49 @@ export function addFundsCents(cents) {
 }
 
 /**
- * Optional gate context: pass `loggedIn: true` when React already has a Supabase user id so we do not
- * rely on localStorage `inpact_user_registered` alone (avoids races right after sign-in).
  * @typedef {{ loggedIn?: boolean }} LessonGateOpts
  */
 
 /**
- * Soft prompt: unregistered user opening 6th, 7th, or 8th unique lesson (keys length 5, 6, or 7 before add).
+ * Which soft prompt applies when opening the 6th or 8th unique lesson (never-registered anonymous only).
+ * @returns {"six" | "eight" | null}
  */
-export function mustSoftRegisterToAccess(track, index, opts = {}) {
+export function getSoftGateKind(track, index, opts = {}) {
   const keys = getAccessedKeys();
   const key = lessonKey(track, index);
-  if (keys.includes(key)) return false;
-  if (isRegistered() || opts.loggedIn) return false;
-  return keys.length >= FREE_LESSONS_SILENT && keys.length < MAX_FREE_UNREGISTERED;
+  if (keys.includes(key)) return null;
+  if (isRegistered() || opts.loggedIn) return null;
+  if (hasEverRegistered()) return null;
+  if (keys.length !== FREE_LESSONS_SILENT && keys.length !== MAX_FREE_UNREGISTERED - 1) return null;
+  return keys.length === FREE_LESSONS_SILENT ? "six" : "eight";
+}
+
+/** Soft gate: lesson 6 and lesson 8 only (not lesson 7). */
+export function mustSoftRegisterToAccess(track, index, opts = {}) {
+  return getSoftGateKind(track, index, opts) != null;
 }
 
 /**
- * Hard gate: unregistered user opening 9th unique lesson.
+ * Hard register gate: never-registered anonymous user hitting lesson 9 (9th unique).
  */
 export function mustHardRegisterToAccess(track, index, opts = {}) {
   const keys = getAccessedKeys();
   const key = lessonKey(track, index);
   if (keys.includes(key)) return false;
-  if (isRegistered() || opts.loggedIn) return false;
+  if (opts.loggedIn || isRegistered()) return false;
+  if (hasEverRegistered()) return false;
+  return keys.length >= MAX_FREE_UNREGISTERED;
+}
+
+/**
+ * Returning user: registered before, logged out — must log in to open lesson 9+ (new unique past 8).
+ */
+export function mustLoginToUnlockPastAnonymousLimit(track, index, opts = {}) {
+  const keys = getAccessedKeys();
+  const key = lessonKey(track, index);
+  if (keys.includes(key)) return false;
+  if (opts.loggedIn || isRegistered()) return false;
+  if (!hasEverRegistered()) return false;
   return keys.length >= MAX_FREE_UNREGISTERED;
 }
 
@@ -149,13 +184,17 @@ export function mustPayToAccess(track, index, opts = {}) {
   return keys.length >= TOTAL_FREE_LESSONS;
 }
 
-export function canAccessLesson(track, index) {
+export function canAccessLesson(track, index, opts = {}) {
   const keys = getAccessedKeys();
   const key = lessonKey(track, index);
   if (keys.includes(key)) return true;
-  if (!isRegistered()) {
+  if (mustLoginToUnlockPastAnonymousLimit(track, index, opts)) return false;
+  if (!opts.loggedIn && !isRegistered() && hasEverRegistered()) {
+    return keys.length < MAX_FREE_UNREGISTERED;
+  }
+  if (!isRegistered() && !opts.loggedIn) {
     if (keys.length < FREE_LESSONS_SILENT) return true;
-    if (keys.length < MAX_FREE_UNREGISTERED) return true; // soft gate handled in UI
+    if (keys.length < MAX_FREE_UNREGISTERED) return true;
     return false;
   }
   if (keys.length < TOTAL_FREE_LESSONS) return true;
@@ -185,6 +224,19 @@ export function incrementRegisterDismissCount() {
   } catch {
     return 0;
   }
+}
+
+/** Remaining free slots out of 15 for logged-in / registered local session (UI). */
+export function getFreeLessonsRemaining(opts = {}) {
+  if (!opts.loggedIn && !isRegistered()) return null;
+  const used = getAccessedCount();
+  return Math.max(0, TOTAL_FREE_LESSONS - used);
+}
+
+/** Line for anonymous users: how many of 8 anonymous slots used. */
+export function getAnonymousFreeSlotsRemaining() {
+  const used = getAccessedCount();
+  return Math.max(0, MAX_FREE_UNREGISTERED - used);
 }
 
 const STORAGE_KEY_PENDING_LESSON = "inpact_pending_lesson";
