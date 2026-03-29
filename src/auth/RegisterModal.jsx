@@ -150,7 +150,7 @@ export default function RegisterModal({ onSuccess, onClose, variant = "soft", vo
       return;
     }
     if (!isSupabaseConfigured) {
-      setRegistered({ name: n, email: em });
+      setRegistered({ name: n, emailOrPhone: em });
       onSuccess?.();
       return;
     }
@@ -184,7 +184,7 @@ export default function RegisterModal({ onSuccess, onClose, variant = "soft", vo
       return;
     }
     if (!isSupabaseConfigured) {
-      setRegistered({ email: em });
+      setRegistered({ name: em.split("@")[0], emailOrPhone: em });
       onSuccess?.();
       return;
     }
@@ -193,8 +193,10 @@ export default function RegisterModal({ onSuccess, onClose, variant = "soft", vo
       const data = await signInWithEmail(em, password);
       const user = data?.user;
       setRegistered({
-        name: user?.user_metadata?.display_name || em.split("@")[0],
-        email: em,
+        id: user?.id,
+        name: user?.user_metadata?.display_name || user?.user_metadata?.full_name || em.split("@")[0],
+        emailOrPhone: user?.email || em,
+        avatarUrl: user?.user_metadata?.avatar_url || "",
       });
       onSuccess?.();
     } catch (err) {

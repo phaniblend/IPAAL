@@ -1076,6 +1076,41 @@ export default function App() {
   // Supabase: subscribe, await getSession(), mirror to localStorage, then allow lesson clicks.
   // Resume lesson via useLayoutEffect (peekPendingLesson).
   useEffect(() => {
+    const urlLooksLikeOAuthReturn = () => {
+      if (typeof window === 'undefined') return false
+      const { search, hash } = window.location
+      return (
+        /[?&]code=/.test(search) ||
+        /[?&]error=/.test(search) ||
+        /access_token=/.test(hash) ||
+        /refresh_token=/.test(hash) ||
+        /error=/.test(hash)
+      )
+    }
+
+    const stripSupabaseOAuthFromUrl = () => {
+      if (typeof window === 'undefined') return
+      try {
+        const url = new URL(window.location.href)
+        let changed = false
+        if (url.hash && (url.hash.includes('access_token') || url.hash.includes('error'))) {
+          url.hash = ''
+          changed = true
+        }
+        for (const k of ['code', 'state', 'error', 'error_description', 'error_code']) {
+          if (url.searchParams.has(k)) {
+            url.searchParams.delete(k)
+            changed = true
+          }
+        }
+        if (changed) {
+          const qs = url.searchParams.toString()
+          const next = url.pathname + (qs ? `?${qs}` : '') + (url.hash || '')
+          window.history.replaceState({}, '', next)
+        }
+      } catch (_) {}
+    }
+
     const syncUserFromSession = (session) => {
       if (!session?.user) return
       const u = session.user
@@ -1090,6 +1125,7 @@ export default function App() {
       upsertProfile(u)
       setShowRegisterModal(false)
       setShowCinematic(false)
+      if (urlLooksLikeOAuthReturn()) stripSupabaseOAuthFromUrl()
     }
 
     if (!isSupabaseConfigured) return undefined
@@ -1113,6 +1149,17 @@ export default function App() {
       await new Promise((r) => setTimeout(r, 0))
       session = await getSession()
       if (session?.user) syncUserFromSession(session)
+      // PKCE / hash exchange can lag a few ticks after redirect; polling avoids register→home→lesson→register loop.
+      if (!session?.user && urlLooksLikeOAuthReturn()) {
+        for (let i = 0; i < 30; i++) {
+          await new Promise((r) => setTimeout(r, 100))
+          session = await getSession()
+          if (session?.user) {
+            syncUserFromSession(session)
+            break
+          }
+        }
+      }
       window.clearTimeout(authReadyTimeout)
       setAuthSessionReady(true)
     })()
@@ -1139,6 +1186,7 @@ export default function App() {
     setPendingLesson(null)
     setShowCinematic(false)
     setShowRegisterModal(false)
+    clearPendingLesson()
   }, [user?.id, problemIndex])
 
   const onBackToProblems = () => {
@@ -1192,8 +1240,10 @@ export default function App() {
     setUser(getStoredUser())
     setShowRegisterModal(false)
     setRegisterModalVariant('soft')
+    const pl = pendingLesson
     clearPendingLesson()
-    if (pendingLesson) openLesson(pendingLesson.index, pendingLesson.item, pendingLesson.track)
+    setPendingLesson(null)
+    if (pl) openLesson(pl.index, pl.item, pl.track)
   }
 
   const registerModalDismiss = () => {
