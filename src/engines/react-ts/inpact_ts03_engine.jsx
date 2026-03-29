@@ -2,7 +2,7 @@ import createINPACTEngine from "../inpact_engine_shared";
 
 const NODES = [
   { id: "intro", type: "reveal", phase: "Lesson", content: { tag: "LESSON #3 (TypeScript)", title: "Controlled Input — Typed", body: "Build a controlled text input with character count. Type the state as string and type the change handler's event.", usecase: "Typing form state and React.ChangeEvent is essential for forms." } },
-  { id: "objectives", type: "objectives", phase: "Objectives", items: ["Use useState<string>('') for the input value", "Type onChange as (e: React.ChangeEvent<HTMLInputElement>) => void", "Display value.length for character count"] },
+  { id: "objectives", type: "objectives", phase: "Objectives", items: ["Model a string state variable using useState<string> to hold input value so state, refs, or values keep a predictable shape as the feature evolves, and data shape and updates remain explicit throughout the lesson.","Type a change handler as React.ChangeEventHandler<HTMLInputElement> so invalid interactions are rejected by the compiler instead of leaking into runtime.","Bind state to an input element via value and onChange to create a controlled component so the UI stays connected to the intended source of truth.","Display the live state value in JSX to demonstrate two-way binding so the user-facing result makes the underlying state or validation visible and verify that the screen always mirrors the latest React state."] },
   { id: "step1", type: "question", phase: "Step 1 of 3", paal: "Declare state: const [text, setText] = useState<string>('').", hint: "useState<string>('')", answer_keywords: ["usestate", "string", "text", "settext"], seed_code: `import { useState } from 'react'
 
 export default function ControlledInput() {

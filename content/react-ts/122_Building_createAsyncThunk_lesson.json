@@ -13,17 +13,10 @@
       "usecase": "In real applications, state often depends on data that takes time to arrive — API calls, timers, file reads. createAsyncThunk is Redux Toolkit's built-in solution for describing that waiting period. It automatically dispatches three lifecycle actions (pending, fulfilled, rejected) so your reducers can respond to each phase. Mastering this pattern is essential for any Redux-powered app that talks to a server."
     },
     "objectives": [
-      "Import createAsyncThunk from '@reduxjs/toolkit'",
-      "Understand the two arguments createAsyncThunk requires: an action type string and a payload creator function",
-      "Write a correctly namespaced action type string using the 'slice/actionName' convention",
-      "Declare the payload creator as an async arrow function",
-      "Return a Promise from the payload creator so Redux Toolkit can track its lifecycle",
-      "Supply a TypeScript generic <number> to new Promise to type the resolved value",
-      "Write the Promise executor function that receives the resolve callback",
-      "Use setTimeout inside the executor to simulate an asynchronous delay",
-      "Call resolve(5) inside the setTimeout callback to produce the payload value",
-      "Correctly close all nested function calls and brackets",
-      "Assemble the complete createAsyncThunk expression from memory"
+      "Create a typed async thunk using createAsyncThunk<ReturnType, ArgType>('feature/action', async (arg, thunkAPI) => { ... }) so the design pattern is reusable and its contract is clear to downstream code.",
+      "Use thunkAPI.rejectWithValue typed as (value: ErrorType) => RejectWithValue<ErrorType> to return structured error payloads so the pattern drives visible behavior and can be verified in the UI, runtime, or compiler.",
+      "Read thunkAPI.getState() cast to RootState to access other slices inside the thunk body so the learner can explain what runtime information is driving the next decision.",
+      "Dispatch the typed thunk from a component using the typed AppDispatch hook and handle the returned promise with .unwrap() so state transitions remain explicit, traceable, and type-safe."
     ],
     "steps": [
       {

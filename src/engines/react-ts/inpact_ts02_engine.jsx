@@ -2,7 +2,7 @@ import createINPACTEngine from "../inpact_engine_shared";
 
 const NODES = [
   { id: "intro", type: "reveal", phase: "Lesson", content: { tag: "LESSON #2 (TypeScript)", title: "Toggle Visibility — Typed", body: "Show/hide a paragraph on button click. Use useState<boolean> for the visible state and type the setter.", usecase: "Boolean state is common; typing it prevents mixing with other types." } },
-  { id: "objectives", type: "objectives", phase: "Objectives", items: ["Use useState<boolean>(true) or (false)", "Type the toggle handler", "Conditionally render the paragraph"] },
+  { id: "objectives", type: "objectives", phase: "Objectives", items: ["Model a boolean state variable using useState<boolean> so state, refs, or values keep a predictable shape as the feature evolves, and data shape and updates remain explicit throughout the lesson.","Type a toggle handler as () => void and bind it to an onClick prop so invalid interactions are rejected by the compiler instead of leaking into runtime.","Use a boolean state variable to conditionally return JSX via a ternary expression so the pattern drives visible behavior, and the rendered branch clearly follows the current state.","Establish a VisibilityProps interface and apply it to React.FC<VisibilityProps> so the contract is explicit and incorrect usage is caught early."] },
   { id: "step1", type: "question", phase: "Step 1 of 3", paal: "Declare state: const [visible, setVisible] = useState<boolean>(true).", hint: "useState<boolean>(true)", answer_keywords: ["usestate", "boolean", "visible", "setvisible"], seed_code: `import { useState } from 'react'
 
 export default function ToggleVisibility() {

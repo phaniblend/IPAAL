@@ -13,12 +13,10 @@
       "usecase": "The same pattern appears everywhere: task lists, shopping carts, notification queues, and editable tables. Managing an array in state, deriving UI with `map`, and updating with pure-style setters is core React work."
     },
     "objectives": [
-      "Apply state management to maintain and mutate a dynamic collection of structured data items.",
-      "Implement create, update, and delete operations on a stateful list without side effects.",
-      "Construct event-driven handlers that modify specific items in a collection by unique identity.",
-      "Produce immutable state updates that guarantee UI consistency across add, toggle, and delete operations.",
-      "Render a dynamic data collection as a structured list with stable identity binding per item.",
-      "Wire user interaction events to corresponding state mutation handlers in a component's UI."
+      "Establish a Todo interface with id, text, and completed fields and declare useState<Todo[]> so the contract is explicit, and data shape and updates remain explicit throughout the lesson.",
+      "Implement an addTodo function that uses the array spread operator to append a new typed object to state so the feature works end to end and the resulting behavior can be observed and explained.",
+      "Implement a toggleTodo function that uses .map() to return a new array with one item's completed field flipped so the feature works end to end and the resulting behavior can be observed and explained.",
+      "Implement a deleteTodo function that uses .filter() to return a new array excluding the item matching a given id so the feature works end to end and the resulting behavior can be observed and explained."
     ],
     "steps": [
       {

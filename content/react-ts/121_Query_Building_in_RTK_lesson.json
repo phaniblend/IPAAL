@@ -13,17 +13,10 @@
       "usecase": "RTK Query is the data-fetching and caching layer built into Redux Toolkit. In real applications it replaces dozens of lines of manual action creators, reducers, selectors, and loading-state boilerplate with a single declarative endpoint definition. You will use `builder.query` every time your UI needs to READ data from a server — fetching lists, profiles, catalogues, and more. Mastering this pattern is the gateway to auto-generated React hooks like `useGetPostsQuery()` that handle loading, error, and data states with minimal extra code."
     },
     "objectives": [
-      "Define a TypeScript interface that matches the shape of server-returned data",
-      "Understand the role of the `builder` parameter inside the `endpoints` factory function",
-      "Distinguish `builder.query` (read) from `builder.mutation` (write)",
-      "Supply TypeScript generics to `builder.query<ResultType, ArgType>` correctly",
-      "Choose the correct result type `Post[]` for an array of posts",
-      "Choose the correct argument type `void` when the query requires no runtime parameters",
-      "Write a configuration object as the argument to `builder.query`",
-      "Define the `query` property inside the configuration object",
-      "Write the `query` arrow function that returns the URL path",
-      "Assign the endpoint definition to a named key `getPosts` inside the endpoints object",
-      "Export the generated hook and relate the endpoint name to `useGetPostsQuery`"
+      "Build a query with dynamic parameters by typing the endpoint arg as an object (e.g. { page: number; filter: string }) and constructing the URL with template literals so multiple typed pieces work together as one coherent UI pattern.",
+      "Use the transformResponse option typed as (raw: RawResponse) => TransformedType to normalize API data before it hits the cache so the pattern drives visible behavior and can be verified in the UI, runtime, or compiler.",
+      "Apply the providesTags option typed as (result, error, arg) => TagDescription<TagType>[] to associate cache tags with a query result so the learner sees how a typed pattern changes behavior, reuse, or safety in practice.",
+      "Apply the invalidatesTags option on a mutation to automatically refetch all queries that provide the invalidated tag so the learner sees how a typed pattern changes behavior, reuse, or safety in practice so async data is handled with an explicit and safe data shape."
     ],
     "steps": [
       {

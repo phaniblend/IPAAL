@@ -13,15 +13,10 @@
       "usecase": "Every production app — ecommerce catalog, analytics dashboard, social feed — needs the same four things RTK Query handles for you: typed HTTP calls, automatic caching, cache invalidation after writes, and predictable loading UX. JSONPlaceholder gives you a live API to practice against without keys, billing, or backend setup, so every pattern you apply here transfers directly to real backends on day one."
     },
     "objectives": [
-      "Connect a React app to a public REST API by supplying its base URL to `fetchBaseQuery` and verifying the live response in the browser.",
-      "Write TypeScript interfaces that match a JSON API response shape, and use them to catch type mismatches before the code runs.",
-      "Build an RTK Query API slice by wiring together `reducerPath`, `fetchBaseQuery`, and an `endpoints` builder function inside `createApi`.",
-      "Register typed `builder.query` endpoints for both a collection route (`/posts`) and a single-resource route (`/posts/:id`), and confirm the correct data appears in each case.",
-      "Add a `builder.mutation` endpoint that POSTs JSON to the API, then apply `invalidatesTags` so the cached list automatically refreshes after a successful write.",
-      "Register RTK Query's generated reducer and middleware inside `configureStore` so the Redux store manages all server-cache state.",
-      "Wrap the component tree with `<Provider store={store}>` and call a generated hook inside a component to retrieve live API data without writing any manual fetch logic.",
-      "Use the `isLoading`, `isError`, and `data` flags returned by a query hook to render three distinct UI states — spinner, error message, and populated list — in a single component.",
-      "Call two different query hooks within the same page to power a list view and a detail view, and demonstrate that navigation between them hits the cache instead of the network on repeat visits."
+      "Create an empty API slice using createApi with fetchBaseQuery typed to a base URL and an empty endpoints object so the design pattern is reusable, and async data is handled with an explicit and safe data shape.",
+      "Inject a typed query endpoint into an existing API slice using the injectEndpoints method so the learner can explain both the mechanism and the visible result.",
+      "Establish the endpoint's query function typed as (arg: ArgType) => string | FetchArgs to build the request URL so the contract is explicit and incorrect usage is caught early.",
+      "Export the injected endpoint's auto-generated typed hook and consume it in a feature component so the learner can explain both the mechanism and the visible result."
     ],
     "steps": [
       {
