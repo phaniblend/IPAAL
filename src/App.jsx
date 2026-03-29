@@ -1037,6 +1037,9 @@ import {
   logout,
   getRegisterDismissCount,
   incrementRegisterDismissCount,
+  savePendingLesson,
+  consumePendingLesson,
+  clearPendingLesson,
 } from './auth/lessonAccess.js'
 import RegisterModal from './auth/RegisterModal.jsx'
 import AddFundsModal from './auth/AddFundsModal.jsx'
@@ -1075,6 +1078,11 @@ export default function App() {
         upsertProfile(u)
         setShowRegisterModal(false)
         setShowCinematic(false)
+
+        const stored = consumePendingLesson()
+        if (stored) {
+          openLesson(stored.index, stored.item, stored.track)
+        }
       }
     })
     return () => data?.subscription?.unsubscribe()
@@ -1101,12 +1109,14 @@ export default function App() {
   const handleSelectProblem = (i, item, fullList) => {
     if (mustHardRegisterToAccess(track, i)) {
       setPendingLesson({ track, index: i, item })
+      savePendingLesson(track, i, item)
       setRegisterModalVariant('hard')
       setShowRegisterModal(true)
       return
     }
     if (mustSoftRegisterToAccess(track, i)) {
       setPendingLesson({ track, index: i, item })
+      savePendingLesson(track, i, item)
       setRegisterModalVariant('soft')
       setShowRegisterModal(true)
       return
@@ -1128,6 +1138,7 @@ export default function App() {
     setUser(getStoredUser())
     setShowRegisterModal(false)
     setRegisterModalVariant('soft')
+    clearPendingLesson()
     if (pendingLesson) openLesson(pendingLesson.index, pendingLesson.item, pendingLesson.track)
   }
 
@@ -1135,6 +1146,7 @@ export default function App() {
     incrementRegisterDismissCount()
     setShowRegisterModal(false)
     setRegisterModalVariant('soft')
+    clearPendingLesson()
     if (pendingLesson) {
       openLesson(pendingLesson.index, pendingLesson.item, pendingLesson.track)
     }
@@ -1262,12 +1274,14 @@ export default function App() {
     if (next === problemIndex) return
     if (mustHardRegisterToAccess(effectiveTrack, next)) {
       setPendingLesson({ track: effectiveTrack, index: next, item: lessonList[next] ?? null })
+      savePendingLesson(effectiveTrack, next, lessonList[next] ?? null)
       setRegisterModalVariant('hard')
       setShowRegisterModal(true)
       return
     }
     if (mustSoftRegisterToAccess(effectiveTrack, next)) {
       setPendingLesson({ track: effectiveTrack, index: next, item: lessonList[next] ?? null })
+      savePendingLesson(effectiveTrack, next, lessonList[next] ?? null)
       setRegisterModalVariant('soft')
       setShowRegisterModal(true)
       return

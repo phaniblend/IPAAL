@@ -347,9 +347,7 @@ export default function CinematicLanding({ onEnterLessons }) {
 
       <div className="cin-chrome">
         <InpactLogo className="cin-logo" height={120} />
-        <button type="button" className="cin-skip" onClick={doSkip}>
-          SKIP ›
-        </button>
+        
         <div ref={hintRef} className="cin-hint">
           ↑ move cursor · code rain · watch
         </div>

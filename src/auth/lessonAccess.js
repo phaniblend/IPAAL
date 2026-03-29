@@ -181,6 +181,31 @@ export function incrementRegisterDismissCount() {
   }
 }
 
+const STORAGE_KEY_PENDING_LESSON = "inpact_pending_lesson";
+
+/** Persist the lesson the user was trying to open when the auth gate triggered (survives OAuth redirects). */
+export function savePendingLesson(track, index, item) {
+  try {
+    localStorage.setItem(STORAGE_KEY_PENDING_LESSON, JSON.stringify({ track, index, item }));
+  } catch (_) {}
+}
+
+/** Read and clear the stored pending lesson (returns null if none). */
+export function consumePendingLesson() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY_PENDING_LESSON);
+    if (!raw) return null;
+    localStorage.removeItem(STORAGE_KEY_PENDING_LESSON);
+    return JSON.parse(raw);
+  } catch {
+    return null;
+  }
+}
+
+export function clearPendingLesson() {
+  try { localStorage.removeItem(STORAGE_KEY_PENDING_LESSON); } catch (_) {}
+}
+
 export function getFingerprintHint() {
   if (typeof navigator === "undefined") return "";
   const ua = navigator.userAgent || "";
