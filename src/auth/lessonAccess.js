@@ -182,28 +182,47 @@ export function incrementRegisterDismissCount() {
 }
 
 const STORAGE_KEY_PENDING_LESSON = "inpact_pending_lesson";
+/** Drop stale pending resume payloads (e.g. abandoned OAuth) so we do not hijack a later visit. */
+const PENDING_LESSON_MAX_AGE_MS = 60 * 60 * 1000; // 1 hour
 
 /** Persist the lesson the user was trying to open when the auth gate triggered (survives OAuth redirects). */
 export function savePendingLesson(track, index, item) {
   try {
-    localStorage.setItem(STORAGE_KEY_PENDING_LESSON, JSON.stringify({ track, index, item }));
+    const payload = JSON.stringify({ track, index, item, savedAt: Date.now() });
+    localStorage.setItem(STORAGE_KEY_PENDING_LESSON, payload);
+    sessionStorage.setItem(STORAGE_KEY_PENDING_LESSON, payload);
   } catch (_) {}
 }
 
-/** Read and clear the stored pending lesson (returns null if none). */
-export function consumePendingLesson() {
+/** Read pending lesson without removing (used after OAuth before navigation commits). */
+export function peekPendingLesson() {
   try {
-    const raw = localStorage.getItem(STORAGE_KEY_PENDING_LESSON);
+    const raw =
+      localStorage.getItem(STORAGE_KEY_PENDING_LESSON) ?? sessionStorage.getItem(STORAGE_KEY_PENDING_LESSON);
     if (!raw) return null;
-    localStorage.removeItem(STORAGE_KEY_PENDING_LESSON);
-    return JSON.parse(raw);
+    const p = JSON.parse(raw);
+    if (p?.savedAt != null && Date.now() - p.savedAt > PENDING_LESSON_MAX_AGE_MS) {
+      clearPendingLesson();
+      return null;
+    }
+    return p;
   } catch {
     return null;
   }
 }
 
+/** Read and clear the stored pending lesson (returns null if none). */
+export function consumePendingLesson() {
+  const p = peekPendingLesson();
+  clearPendingLesson();
+  return p;
+}
+
 export function clearPendingLesson() {
-  try { localStorage.removeItem(STORAGE_KEY_PENDING_LESSON); } catch (_) {}
+  try {
+    localStorage.removeItem(STORAGE_KEY_PENDING_LESSON);
+    sessionStorage.removeItem(STORAGE_KEY_PENDING_LESSON);
+  } catch (_) {}
 }
 
 export function getFingerprintHint() {

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useLayoutEffect } from 'react'
 import LandingPage, { PROBLEM_LIST, buildAngularLessonList } from './LandingPage'
 import { getLessonCount } from './trackLessonCounts.js'
 import { MOBILE_ANGULAR_LESSONS } from './mobileAngularLessons.js'
@@ -1038,13 +1038,13 @@ import {
   getRegisterDismissCount,
   incrementRegisterDismissCount,
   savePendingLesson,
-  consumePendingLesson,
+  peekPendingLesson,
   clearPendingLesson,
 } from './auth/lessonAccess.js'
 import RegisterModal from './auth/RegisterModal.jsx'
 import AddFundsModal from './auth/AddFundsModal.jsx'
 import CinematicLanding from './CinematicLanding.jsx'
-import { onAuthStateChange, upsertProfile, signOut as supabaseSignOut, recordLessonStart } from './auth/supabase.js'
+import { onAuthStateChange, getSession, upsertProfile, signOut as supabaseSignOut, recordLessonStart } from './auth/supabase.js'
 import { setRegistered as setRegisteredLocal } from './auth/lessonAccess.js'
 
 export default function App() {
@@ -1062,31 +1062,50 @@ export default function App() {
   /** Full page load / refresh always shows the intro; we do not persist “already seen” in sessionStorage (that skipped it on every refresh). */
   const [showCinematic, setShowCinematic] = useState(true)
 
-  // Listen for Supabase auth state (Google OAuth redirect lands here)
+  // Supabase: persist session user to localStorage + UI. Resume lesson via useLayoutEffect (peekPendingLesson)
+  // so OAuth return survives missed INITIAL_SESSION, Strict Mode remounts, and avoids stale openLesson closures.
   useEffect(() => {
-    const { data } = onAuthStateChange((_event, session) => {
-      if (session?.user) {
-        const u = session.user
-        const profile = {
-          name: u.user_metadata?.full_name || u.email?.split('@')[0] || 'User',
-          emailOrPhone: u.email || '',
-          id: u.id,
-          avatarUrl: u.user_metadata?.avatar_url || '',
-        }
-        setRegisteredLocal(profile)
-        setUser(profile)
-        upsertProfile(u)
-        setShowRegisterModal(false)
-        setShowCinematic(false)
-
-        const stored = consumePendingLesson()
-        if (stored) {
-          openLesson(stored.index, stored.item, stored.track)
-        }
+    const syncUserFromSession = (session) => {
+      if (!session?.user) return
+      const u = session.user
+      const profile = {
+        name: u.user_metadata?.full_name || u.email?.split('@')[0] || 'User',
+        emailOrPhone: u.email || '',
+        id: u.id,
+        avatarUrl: u.user_metadata?.avatar_url || '',
       }
+      setRegisteredLocal(profile)
+      setUser(profile)
+      upsertProfile(u)
+      setShowRegisterModal(false)
+      setShowCinematic(false)
+    }
+    const { data } = onAuthStateChange((_event, session) => {
+      syncUserFromSession(session)
+    })
+    getSession().then((session) => {
+      syncUserFromSession(session)
     })
     return () => data?.subscription?.unsubscribe()
   }, [])
+
+  useLayoutEffect(() => {
+    if (!user?.id) return
+    const p = peekPendingLesson()
+    if (problemIndex !== null) {
+      if (p) clearPendingLesson()
+      return
+    }
+    if (!p || typeof p.index !== 'number' || !p.track) return
+    setLessonTrack(p.track)
+    recordLessonAccess(p.track, p.index)
+    setProblemIndex(p.index)
+    setSelectedLessonItem(p.item ?? null)
+    setUseAILessonFailed(false)
+    setPendingLesson(null)
+    setShowCinematic(false)
+    setShowRegisterModal(false)
+  }, [user?.id, problemIndex])
 
   const onBackToProblems = () => {
     setProblemIndex(null)
@@ -1097,6 +1116,7 @@ export default function App() {
   }
 
   const openLesson = (idx, item, trackOverride) => {
+    clearPendingLesson()
     const t = trackOverride ?? track
     setLessonTrack(t) // lock track so generate/validate use the track that was selected when opening (e.g. react-ts not react-js)
     recordLessonAccess(t, idx)
