@@ -113,33 +113,39 @@ export function addFundsCents(cents) {
 }
 
 /**
+ * Optional gate context: pass `loggedIn: true` when React already has a Supabase user id so we do not
+ * rely on localStorage `inpact_user_registered` alone (avoids races right after OAuth redirect).
+ * @typedef {{ loggedIn?: boolean }} LessonGateOpts
+ */
+
+/**
  * Soft prompt: unregistered user opening 6th, 7th, or 8th unique lesson (keys length 5, 6, or 7 before add).
  */
-export function mustSoftRegisterToAccess(track, index) {
+export function mustSoftRegisterToAccess(track, index, opts = {}) {
   const keys = getAccessedKeys();
   const key = lessonKey(track, index);
   if (keys.includes(key)) return false;
-  if (isRegistered()) return false;
+  if (isRegistered() || opts.loggedIn) return false;
   return keys.length >= FREE_LESSONS_SILENT && keys.length < MAX_FREE_UNREGISTERED;
 }
 
 /**
  * Hard gate: unregistered user opening 9th unique lesson.
  */
-export function mustHardRegisterToAccess(track, index) {
+export function mustHardRegisterToAccess(track, index, opts = {}) {
   const keys = getAccessedKeys();
   const key = lessonKey(track, index);
   if (keys.includes(key)) return false;
-  if (isRegistered()) return false;
+  if (isRegistered() || opts.loggedIn) return false;
   return keys.length >= MAX_FREE_UNREGISTERED;
 }
 
 /** Registered user past free tier opening a new lesson — needs balance (mock until payment). */
-export function mustPayToAccess(track, index) {
+export function mustPayToAccess(track, index, opts = {}) {
   const keys = getAccessedKeys();
   const key = lessonKey(track, index);
   if (keys.includes(key)) return false;
-  if (!isRegistered()) return false;
+  if (!isRegistered() && !opts.loggedIn) return false;
   return keys.length >= TOTAL_FREE_LESSONS;
 }
 

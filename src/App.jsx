@@ -1,4 +1,4 @@
-import { useState, useEffect, useLayoutEffect } from 'react'
+import { useState, useEffect, useLayoutEffect, useMemo } from 'react'
 import LandingPage, { PROBLEM_LIST, buildAngularLessonList } from './LandingPage'
 import { getLessonCount } from './trackLessonCounts.js'
 import { MOBILE_ANGULAR_LESSONS } from './mobileAngularLessons.js'
@@ -1044,7 +1044,14 @@ import {
 import RegisterModal from './auth/RegisterModal.jsx'
 import AddFundsModal from './auth/AddFundsModal.jsx'
 import CinematicLanding from './CinematicLanding.jsx'
-import { onAuthStateChange, getSession, upsertProfile, signOut as supabaseSignOut, recordLessonStart } from './auth/supabase.js'
+import {
+  onAuthStateChange,
+  getSession,
+  upsertProfile,
+  signOut as supabaseSignOut,
+  recordLessonStart,
+  isSupabaseConfigured,
+} from './auth/supabase.js'
 import { setRegistered as setRegisteredLocal } from './auth/lessonAccess.js'
 
 export default function App() {
@@ -1061,9 +1068,13 @@ export default function App() {
   const [user, setUser] = useState(() => getStoredUser())
   /** Full page load / refresh always shows the intro; we do not persist “already seen” in sessionStorage (that skipped it on every refresh). */
   const [showCinematic, setShowCinematic] = useState(true)
+  /** false until first Supabase getSession() finishes — avoids lesson gates before localStorage mirrors session (OAuth loop). */
+  const [authSessionReady, setAuthSessionReady] = useState(!isSupabaseConfigured)
 
-  // Supabase: persist session user to localStorage + UI. Resume lesson via useLayoutEffect (peekPendingLesson)
-  // so OAuth return survives missed INITIAL_SESSION, Strict Mode remounts, and avoids stale openLesson closures.
+  const lessonGateOpts = useMemo(() => ({ loggedIn: Boolean(user?.id) }), [user?.id])
+
+  // Supabase: subscribe, await getSession(), mirror to localStorage, then allow lesson clicks.
+  // Resume lesson via useLayoutEffect (peekPendingLesson).
   useEffect(() => {
     const syncUserFromSession = (session) => {
       if (!session?.user) return
@@ -1080,13 +1091,36 @@ export default function App() {
       setShowRegisterModal(false)
       setShowCinematic(false)
     }
-    const { data } = onAuthStateChange((_event, session) => {
-      syncUserFromSession(session)
-    })
-    getSession().then((session) => {
-      syncUserFromSession(session)
-    })
-    return () => data?.subscription?.unsubscribe()
+
+    if (!isSupabaseConfigured) return undefined
+
+    let unsub = () => {}
+    const authReadyTimeout = window.setTimeout(() => setAuthSessionReady(true), 10000)
+    ;(async () => {
+      const { data } = onAuthStateChange((event, session) => {
+        if (session?.user) {
+          syncUserFromSession(session)
+        } else if (event === 'SIGNED_OUT' || event === 'USER_DELETED') {
+          logout()
+          setUser(null)
+        }
+      })
+      unsub = () => data.subscription.unsubscribe()
+      // Yield so Supabase can apply OAuth hash/PKCE to storage before first read (avoids false "logged out").
+      await new Promise((r) => setTimeout(r, 0))
+      let session = await getSession()
+      if (session?.user) syncUserFromSession(session)
+      await new Promise((r) => setTimeout(r, 0))
+      session = await getSession()
+      if (session?.user) syncUserFromSession(session)
+      window.clearTimeout(authReadyTimeout)
+      setAuthSessionReady(true)
+    })()
+
+    return () => {
+      window.clearTimeout(authReadyTimeout)
+      unsub()
+    }
   }, [])
 
   useLayoutEffect(() => {
@@ -1127,21 +1161,21 @@ export default function App() {
   }
 
   const handleSelectProblem = (i, item, fullList) => {
-    if (mustHardRegisterToAccess(track, i)) {
+    if (mustHardRegisterToAccess(track, i, lessonGateOpts)) {
       setPendingLesson({ track, index: i, item })
       savePendingLesson(track, i, item)
       setRegisterModalVariant('hard')
       setShowRegisterModal(true)
       return
     }
-    if (mustSoftRegisterToAccess(track, i)) {
+    if (mustSoftRegisterToAccess(track, i, lessonGateOpts)) {
       setPendingLesson({ track, index: i, item })
       savePendingLesson(track, i, item)
       setRegisterModalVariant('soft')
       setShowRegisterModal(true)
       return
     }
-    if (mustPayToAccess(track, i)) {
+    if (mustPayToAccess(track, i, lessonGateOpts)) {
       if (getBalanceCents() >= PRICE_PER_LESSON_CENTS) {
         deductLessonPayment()
         openLesson(i, item)
@@ -1204,6 +1238,25 @@ export default function App() {
       openLesson(pendingLesson.index, pendingLesson.item, pendingLesson.track)
     }
     setPendingLesson(null)
+  }
+
+  if (!authSessionReady) {
+    return (
+      <div
+        style={{
+          minHeight: '100vh',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          background: '#0f172a',
+          color: '#e2e8f0',
+          fontFamily: "'DM Sans', system-ui, sans-serif",
+          fontSize: '14px',
+        }}
+      >
+        Signing you in…
+      </div>
+    )
   }
 
   if (problemIndex === null) {
@@ -1292,21 +1345,21 @@ export default function App() {
   const onNextProblem = () => {
     const next = Math.min(problemIndex + 1, engines.length - 1)
     if (next === problemIndex) return
-    if (mustHardRegisterToAccess(effectiveTrack, next)) {
+    if (mustHardRegisterToAccess(effectiveTrack, next, lessonGateOpts)) {
       setPendingLesson({ track: effectiveTrack, index: next, item: lessonList[next] ?? null })
       savePendingLesson(effectiveTrack, next, lessonList[next] ?? null)
       setRegisterModalVariant('hard')
       setShowRegisterModal(true)
       return
     }
-    if (mustSoftRegisterToAccess(effectiveTrack, next)) {
+    if (mustSoftRegisterToAccess(effectiveTrack, next, lessonGateOpts)) {
       setPendingLesson({ track: effectiveTrack, index: next, item: lessonList[next] ?? null })
       savePendingLesson(effectiveTrack, next, lessonList[next] ?? null)
       setRegisterModalVariant('soft')
       setShowRegisterModal(true)
       return
     }
-    if (mustPayToAccess(effectiveTrack, next)) {
+    if (mustPayToAccess(effectiveTrack, next, lessonGateOpts)) {
       if (getBalanceCents() >= PRICE_PER_LESSON_CENTS) {
         deductLessonPayment()
         openLesson(next, lessonList[next] ?? null)
