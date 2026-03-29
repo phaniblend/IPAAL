@@ -1,4 +1,5 @@
-import { useState, useEffect, useLayoutEffect, useMemo } from 'react'
+import { useState, useEffect, useLayoutEffect, useMemo, useCallback } from 'react'
+import { useNavigate, useLocation } from 'react-router-dom'
 import LandingPage, { PROBLEM_LIST, buildAngularLessonList } from './LandingPage'
 import { getLessonCount } from './trackLessonCounts.js'
 import { MOBILE_ANGULAR_LESSONS } from './mobileAngularLessons.js'
@@ -1041,6 +1042,14 @@ import {
   peekPendingLesson,
   clearPendingLesson,
 } from './auth/lessonAccess.js'
+import {
+  buildLessonPath,
+  parseLessonPath,
+  setStoredRedirectPath,
+  getStoredRedirectPath,
+  clearStoredRedirectPath,
+  getHashRoutePathname,
+} from './auth/redirectPath.js'
 import RegisterModal from './auth/RegisterModal.jsx'
 import AddFundsModal from './auth/AddFundsModal.jsx'
 import CinematicLanding from './CinematicLanding.jsx'
@@ -1055,6 +1064,9 @@ import {
 import { setRegistered as setRegisteredLocal } from './auth/lessonAccess.js'
 
 export default function App() {
+  const navigate = useNavigate()
+  const location = useLocation()
+
   const [track, setTrack] = useState('react-ts')
   const [lessonTrack, setLessonTrack] = useState(null) // track locked when lesson is opened (so React TS lesson never uses react-js)
   const [problemIndex, setProblemIndex] = useState(null) // null = landing, 0-based index = problem
@@ -1067,11 +1079,42 @@ export default function App() {
   const [pendingLesson, setPendingLesson] = useState(null) // { track, index, item } when gated
   const [user, setUser] = useState(() => getStoredUser())
   /** Full page load / refresh always shows the intro; we do not persist “already seen” in sessionStorage (that skipped it on every refresh). */
-  const [showCinematic, setShowCinematic] = useState(true)
+  const [showCinematic, setShowCinematic] = useState(() => {
+    if (typeof window === 'undefined') return true
+    const p = getHashRoutePathname()
+    return !p.startsWith('/lessons/') && p !== '/register'
+  })
   /** false until first Supabase getSession() finishes — avoids lesson gates before localStorage mirrors session (OAuth loop). */
   const [authSessionReady, setAuthSessionReady] = useState(!isSupabaseConfigured)
 
   const lessonGateOpts = useMemo(() => ({ loggedIn: Boolean(user?.id) }), [user?.id])
+
+  const openLesson = useCallback(
+    (idx, item, trackOverride) => {
+      clearPendingLesson()
+      clearStoredRedirectPath()
+      const t = trackOverride ?? track
+      setLessonTrack(t)
+      recordLessonAccess(t, idx)
+      setProblemIndex(idx)
+      setSelectedLessonItem(item ?? null)
+      setUseAILessonFailed(false)
+      setPendingLesson(null)
+      navigate(buildLessonPath(t, idx), { replace: true })
+    },
+    [track, navigate]
+  )
+
+  const goToVoluntaryRegister = useCallback(() => {
+    setPendingLesson(null)
+    clearStoredRedirectPath()
+    setRegisterModalVariant('soft')
+    setProblemIndex(null)
+    setSelectedLessonItem(null)
+    setLessonTrack(null)
+    setUseAILessonFailed(false)
+    navigate('/register')
+  }, [navigate])
 
   // Supabase: subscribe, await getSession(), mirror to localStorage, then allow lesson clicks.
   // Resume lesson via useLayoutEffect (peekPendingLesson).
@@ -1126,6 +1169,9 @@ export default function App() {
       setShowRegisterModal(false)
       setShowCinematic(false)
       if (urlLooksLikeOAuthReturn()) stripSupabaseOAuthFromUrl()
+      const rp = getStoredRedirectPath()
+      clearStoredRedirectPath()
+      if (rp) navigate(rp, { replace: true })
     }
 
     if (!isSupabaseConfigured) return undefined
@@ -1139,6 +1185,7 @@ export default function App() {
         } else if (event === 'SIGNED_OUT' || event === 'USER_DELETED') {
           logout()
           setUser(null)
+          clearStoredRedirectPath()
         }
       })
       unsub = () => data.subscription.unsubscribe()
@@ -1168,10 +1215,14 @@ export default function App() {
       window.clearTimeout(authReadyTimeout)
       unsub()
     }
-  }, [])
+  }, [navigate])
 
   useLayoutEffect(() => {
     if (!user?.id) return
+    if (parseLessonPath(location.pathname)) {
+      clearPendingLesson()
+      return
+    }
     const p = peekPendingLesson()
     if (problemIndex !== null) {
       if (p) clearPendingLesson()
@@ -1187,7 +1238,67 @@ export default function App() {
     setShowCinematic(false)
     setShowRegisterModal(false)
     clearPendingLesson()
-  }, [user?.id, problemIndex])
+    navigate(buildLessonPath(p.track, p.index), { replace: true })
+  }, [user?.id, problemIndex, location.pathname, navigate])
+
+  useEffect(() => {
+    if (!authSessionReady) return
+    const parsed = parseLessonPath(location.pathname)
+    if (!parsed) return
+
+    setShowCinematic(false)
+    const { track: t, index: i } = parsed
+    setTrack(t)
+    const list = getProblemList(t)
+    const item =
+      list?.[i] ??
+      (t === 'angular' || t === 'vue' || t === 'react-js' || t === 'react-ts'
+        ? PROBLEM_LIST[i] != null
+          ? { title: PROBLEM_LIST[i] }
+          : null
+        : null)
+
+    const opts = { loggedIn: Boolean(user?.id) }
+
+    if (mustHardRegisterToAccess(t, i, opts)) {
+      setPendingLesson({ track: t, index: i, item })
+      savePendingLesson(t, i, item)
+      setStoredRedirectPath(buildLessonPath(t, i))
+      setRegisterModalVariant('hard')
+      setShowRegisterModal(true)
+      if (location.pathname !== '/register') navigate('/register', { replace: true })
+      return
+    }
+    if (mustSoftRegisterToAccess(t, i, opts)) {
+      setPendingLesson({ track: t, index: i, item })
+      savePendingLesson(t, i, item)
+      setStoredRedirectPath(buildLessonPath(t, i))
+      setRegisterModalVariant('soft')
+      setShowRegisterModal(true)
+      if (location.pathname !== '/register') navigate('/register', { replace: true })
+      return
+    }
+    if (mustPayToAccess(t, i, opts)) {
+      if (getBalanceCents() >= PRICE_PER_LESSON_CENTS) {
+        deductLessonPayment()
+        openLesson(i, item, t)
+        return
+      }
+      setPendingLesson({ track: t, index: i, item })
+      savePendingLesson(t, i, item)
+      setStoredRedirectPath(buildLessonPath(t, i))
+      setShowAddFundsModal(true)
+      return
+    }
+    openLesson(i, item, t)
+  }, [location.pathname, authSessionReady, user?.id, openLesson, navigate])
+
+  useEffect(() => {
+    if (location.pathname === '/register') {
+      setShowCinematic(false)
+      setShowRegisterModal(true)
+    }
+  }, [location.pathname])
 
   const onBackToProblems = () => {
     setProblemIndex(null)
@@ -1195,32 +1306,26 @@ export default function App() {
     setLessonTrack(null)
     setUseAILessonFailed(false)
     setPendingLesson(null)
-  }
-
-  const openLesson = (idx, item, trackOverride) => {
-    clearPendingLesson()
-    const t = trackOverride ?? track
-    setLessonTrack(t) // lock track so generate/validate use the track that was selected when opening (e.g. react-ts not react-js)
-    recordLessonAccess(t, idx)
-    setProblemIndex(idx)
-    setSelectedLessonItem(item ?? null)
-    setUseAILessonFailed(false)
-    setPendingLesson(null)
+    navigate('/', { replace: true })
   }
 
   const handleSelectProblem = (i, item, fullList) => {
     if (mustHardRegisterToAccess(track, i, lessonGateOpts)) {
       setPendingLesson({ track, index: i, item })
       savePendingLesson(track, i, item)
+      setStoredRedirectPath(buildLessonPath(track, i))
       setRegisterModalVariant('hard')
       setShowRegisterModal(true)
+      navigate('/register', { replace: true })
       return
     }
     if (mustSoftRegisterToAccess(track, i, lessonGateOpts)) {
       setPendingLesson({ track, index: i, item })
       savePendingLesson(track, i, item)
+      setStoredRedirectPath(buildLessonPath(track, i))
       setRegisterModalVariant('soft')
       setShowRegisterModal(true)
+      navigate('/register', { replace: true })
       return
     }
     if (mustPayToAccess(track, i, lessonGateOpts)) {
@@ -1230,6 +1335,8 @@ export default function App() {
         return
       }
       setPendingLesson({ track, index: i, item })
+      savePendingLesson(track, i, item)
+      setStoredRedirectPath(buildLessonPath(track, i))
       setShowAddFundsModal(true)
       return
     }
@@ -1250,10 +1357,10 @@ export default function App() {
     incrementRegisterDismissCount()
     setShowRegisterModal(false)
     setRegisterModalVariant('soft')
+    const pl = pendingLesson
     clearPendingLesson()
-    if (pendingLesson) {
-      openLesson(pendingLesson.index, pendingLesson.item, pendingLesson.track)
-    }
+    if (location.pathname === '/register') navigate('/', { replace: true })
+    if (pl) openLesson(pl.index, pl.item, pl.track)
   }
 
   const handleLogout = async () => {
@@ -1290,7 +1397,8 @@ export default function App() {
     setPendingLesson(null)
   }
 
-  if (!authSessionReady) {
+  const lessonPathFromUrl = parseLessonPath(location.pathname)
+  if (!authSessionReady && !lessonPathFromUrl) {
     return (
       <div
         style={{
@@ -1351,11 +1459,7 @@ export default function App() {
               <button
                 type="button"
                 style={{ ...authBtnStyle, borderColor: '#00d4ff', color: '#052545', background: '#00d4ff' }}
-                onClick={() => {
-                  setPendingLesson(null)
-                  setRegisterModalVariant('soft')
-                  setShowRegisterModal(true)
-                }}
+                onClick={goToVoluntaryRegister}
               >
                 Log in
               </button>
@@ -1396,17 +1500,31 @@ export default function App() {
     const next = Math.min(problemIndex + 1, engines.length - 1)
     if (next === problemIndex) return
     if (mustHardRegisterToAccess(effectiveTrack, next, lessonGateOpts)) {
-      setPendingLesson({ track: effectiveTrack, index: next, item: lessonList[next] ?? null })
-      savePendingLesson(effectiveTrack, next, lessonList[next] ?? null)
+      const nextItem = lessonList[next] ?? null
+      setProblemIndex(null)
+      setSelectedLessonItem(null)
+      setLessonTrack(null)
+      setUseAILessonFailed(false)
+      setPendingLesson({ track: effectiveTrack, index: next, item: nextItem })
+      savePendingLesson(effectiveTrack, next, nextItem)
+      setStoredRedirectPath(buildLessonPath(effectiveTrack, next))
       setRegisterModalVariant('hard')
       setShowRegisterModal(true)
+      navigate('/register', { replace: true })
       return
     }
     if (mustSoftRegisterToAccess(effectiveTrack, next, lessonGateOpts)) {
-      setPendingLesson({ track: effectiveTrack, index: next, item: lessonList[next] ?? null })
-      savePendingLesson(effectiveTrack, next, lessonList[next] ?? null)
+      const nextItem = lessonList[next] ?? null
+      setProblemIndex(null)
+      setSelectedLessonItem(null)
+      setLessonTrack(null)
+      setUseAILessonFailed(false)
+      setPendingLesson({ track: effectiveTrack, index: next, item: nextItem })
+      savePendingLesson(effectiveTrack, next, nextItem)
+      setStoredRedirectPath(buildLessonPath(effectiveTrack, next))
       setRegisterModalVariant('soft')
       setShowRegisterModal(true)
+      navigate('/register', { replace: true })
       return
     }
     if (mustPayToAccess(effectiveTrack, next, lessonGateOpts)) {
@@ -1416,6 +1534,8 @@ export default function App() {
         return
       }
       setPendingLesson({ track: effectiveTrack, index: next, item: lessonList[next] ?? null })
+      savePendingLesson(effectiveTrack, next, lessonList[next] ?? null)
+      setStoredRedirectPath(buildLessonPath(effectiveTrack, next))
       setShowAddFundsModal(true)
       return
     }
@@ -1492,11 +1612,7 @@ export default function App() {
                 <button
                   type="button"
                   style={{ ...authBtnStyle, borderColor: '#00d4ff', color: '#052545', background: '#00d4ff' }}
-                  onClick={() => {
-                    setPendingLesson(null)
-                    setRegisterModalVariant('soft')
-                    setShowRegisterModal(true)
-                  }}
+                  onClick={goToVoluntaryRegister}
                 >
                   Log in
                 </button>
@@ -1552,11 +1668,7 @@ export default function App() {
               <button
                 type="button"
                 style={{ ...authBtnStyle, borderColor: '#00d4ff', color: '#052545', background: '#00d4ff' }}
-                onClick={() => {
-                  setPendingLesson(null)
-                  setRegisterModalVariant('soft')
-                  setShowRegisterModal(true)
-                }}
+                onClick={goToVoluntaryRegister}
               >
                 Log in
               </button>
@@ -1632,11 +1744,7 @@ export default function App() {
             <button
               type="button"
               style={{ ...authBtnStyle, borderColor: '#00d4ff', color: '#052545', background: '#00d4ff' }}
-              onClick={() => {
-                setPendingLesson(null)
-                setRegisterModalVariant('soft')
-                setShowRegisterModal(true)
-              }}
+              onClick={goToVoluntaryRegister}
             >
               Log in
             </button>

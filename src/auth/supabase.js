@@ -15,10 +15,14 @@ export const supabase =
       })
     : null;
 
-/** Match Supabase dashboard redirect allow-list: full origin + path (not query/hash). */
+/**
+ * OAuth redirect: always the site root so static hosts serve index.html and PKCE ?code= lands on a real URL.
+ * The actual lesson is in localStorage redirectPath (/lessons/...) — App navigates there after session sync.
+ * Add https://www.yoursite.com and https://yoursite.com (and optional /) in Supabase redirect allowlist.
+ */
 export function getOAuthRedirectTo() {
   if (typeof window === "undefined") return undefined;
-  return `${window.location.origin}${window.location.pathname}`;
+  return `${window.location.origin}/`;
 }
 
 export const isSupabaseConfigured = Boolean(supabase);
