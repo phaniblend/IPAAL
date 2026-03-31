@@ -144,7 +144,7 @@ function isAlgoTrack(track) {
 }
 
 const MASTER_ALGO_REVEAL_TYPES = ["discovery", "reflection", "scale-problem", "concept-bridge", "reveal-idea", "flow-explainer", "complete"];
-const ALL_ALGO_REVEAL_TYPES = ["problem", "example", "reasoning", "dryRun", ...MASTER_ALGO_REVEAL_TYPES];
+const ALL_ALGO_REVEAL_TYPES = ["lesson", "example", "reasoning", "dryRun", ...MASTER_ALGO_REVEAL_TYPES];
 
 /**
  * Normalize steps from master algo JSON so they pass lessonConfigSchema (content.body required; type must be allowed).
@@ -237,15 +237,15 @@ function parseMasterAlgoStepsJson(raw) {
  * Generate steps for algorithm lessons. Uses family-aware master prompt first; falls back to Socratic markdown.
  * @param {{ track: string, lessonTitle: string, lessonIndex: number }} params
  * @param {{ apiKey?: string, provider?: string }} options
- * @returns {Promise<{ steps: object[], track: string, lessonTitle: string, lessonIndex: number, problemNum: number, pad: string }>}
+ * @returns {Promise<{ steps: object[], track: string, lessonTitle: string, lessonIndex: number, lessonNum: number, pad: string }>}
  */
 async function generateAlgoLessonStepsOnly(params, options = {}) {
   const { track, lessonTitle, lessonIndex } = params;
   const apiKey = options.apiKey;
   const provider = options.provider ?? "deepseek";
-  const problemNum = lessonIndex + 1;
-  const pad = String(problemNum).padStart(2, "0");
-  const vars = { ...defaultVars(params), ...getAlgorithmFamilyPromptVars(params), ALGO_NAME: params.lessonTitle, LESSON_NUMBER: String(problemNum), LESSON_ID: `algo-${track}-${pad}` };
+  const lessonNum = lessonIndex + 1;
+  const pad = String(lessonNum).padStart(2, "0");
+  const vars = { ...defaultVars(params), ...getAlgorithmFamilyPromptVars(params), ALGO_NAME: params.lessonTitle, LESSON_NUMBER: String(lessonNum), LESSON_ID: `algo-${track}-${pad}` };
 
   const masterRaw = injectVariables(ALGO_MASTER_BEGINNER_PROMPT, vars);
   const raw = await completeWithAI({
@@ -259,20 +259,20 @@ async function generateAlgoLessonStepsOnly(params, options = {}) {
 
   const stepsFromJson = parseMasterAlgoStepsJson(raw);
   if (stepsFromJson && stepsFromJson.length > 0) {
-    return { steps: stepsFromJson, track, lessonTitle, lessonIndex, problemNum, pad };
+    return { steps: stepsFromJson, track, lessonTitle, lessonIndex, lessonNum, pad };
   }
 
   const steps = parseSocraticMarkdownToSteps(raw, {
     lessonTitle,
     language: vars.LANGUAGE,
   });
-  return { steps, track, lessonTitle, lessonIndex, problemNum, pad };
+  return { steps, track, lessonTitle, lessonIndex, lessonNum, pad };
 }
 
 /**
  * Generate only the steps (blueprint + per-step details). No intro/objectives. Cached on server.
  * Server assembles full config from cached intro + cached objectives + this.
- * For algo tracks: uses problem → example → flowchart → reasoning → dryRun → code steps.
+ * For algo tracks: uses lesson → example → flowchart → reasoning → dryRun → code steps.
  * @param {{ track: string, lessonTitle: string, lessonIndex: number }} params
  * @param {{ apiKey?: string }} options
  * @returns {Promise<{ steps: object[], track: string, lessonTitle: string, lessonIndex: number }>}
@@ -285,8 +285,8 @@ export async function generateLessonStepsOnly(params, options = {}) {
   const { track, lessonTitle, lessonIndex } = params;
   const apiKey = options.apiKey;
   const provider = options.provider ?? "deepseek";
-  const problemNum = lessonIndex + 1;
-  const pad = String(problemNum).padStart(2, "0");
+  const lessonNum = lessonIndex + 1;
+  const pad = String(lessonNum).padStart(2, "0");
   const vars = defaultVars(params);
 
   const blueprintRaw = injectVariables(STEP_BLUEPRINT_PROMPT, { ...vars });
@@ -313,7 +313,7 @@ export async function generateLessonStepsOnly(params, options = {}) {
     steps.push(stepValidated.data);
     codeSoFar = stepValidated.data.seedCode ?? codeSoFar;
   }
-  return { steps, track, lessonTitle, lessonIndex, problemNum, pad };
+  return { steps, track, lessonTitle, lessonIndex, lessonNum, pad };
 }
 
 /**
@@ -325,7 +325,7 @@ export async function generateLessonStepsOnly(params, options = {}) {
  */
 function normalizeStepsForAssembly(steps, track) {
   if (!Array.isArray(steps) || steps.length === 0) return steps;
-  const algoTypes = new Set(["problem", "example", "flowchart", "reasoning", "dryRun", "discovery", "reflection", "scale-problem", "concept-bridge", "reveal-idea", "flow-explainer", "complete"]);
+  const algoTypes = new Set(["lesson", "example", "flowchart", "reasoning", "dryRun", "discovery", "reflection", "scale-problem", "concept-bridge", "reveal-idea", "flow-explainer", "complete"]);
 
   return steps.map((s, i) => {
     const rawType = s.type != null ? String(s.type).toLowerCase().replace(/\s+/g, "-") : "";
@@ -366,8 +366,8 @@ function normalizeStepsForAssembly(steps, track) {
  */
 export function assembleLessonConfig(intro, objectives, stepsPayload, params) {
   const { track, lessonTitle, lessonIndex } = params;
-  const problemNum = lessonIndex + 1;
-  const pad = String(problemNum).padStart(2, "0");
+  const lessonNum = lessonIndex + 1;
+  const pad = String(lessonNum).padStart(2, "0");
   const rawSteps = stepsPayload.steps || stepsPayload;
   const steps = normalizeStepsForAssembly(rawSteps, track);
   const sideItems = [
@@ -378,7 +378,7 @@ export function assembleLessonConfig(intro, objectives, stepsPayload, params) {
   const assembled = {
     lessonId: `ai-${track}-${pad}`,
     track,
-    problemNum,
+    lessonNum,
     title: lessonTitle,
     shortName: `P${pad}`,
     intro,
@@ -440,8 +440,8 @@ export async function generateLessonReal(params, options = {}) {
   const apiKey = options.apiKey;
   const provider = options.provider ?? "deepseek";
   const stageOpts = (maxTokens) => ({ maxTokens, provider });
-  const problemNum = lessonIndex + 1;
-  const pad = String(problemNum).padStart(2, "0");
+  const lessonNum = lessonIndex + 1;
+  const pad = String(lessonNum).padStart(2, "0");
   const vars = defaultVars(params);
 
   // 1. Learning Objectives (leadIn + objectives)
@@ -503,7 +503,7 @@ export async function generateLessonReal(params, options = {}) {
   const assembled = {
     lessonId: `ai-${track}-${pad}`,
     track,
-    problemNum,
+    lessonNum,
     title: lessonTitle,
     shortName: `P${pad}`,
     intro,

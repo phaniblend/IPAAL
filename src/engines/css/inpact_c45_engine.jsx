@@ -73,7 +73,7 @@ function getOutputPreview(answer) {
 export default createINPACTEngine({
   NODES,
   sideItems,
-  problemNum: 45,
+  lessonNum: 45,
   title: "object-fit",
   shortName: "C45",
   language: "css",

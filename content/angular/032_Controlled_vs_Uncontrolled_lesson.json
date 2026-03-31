@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-angular-32",
     "track": "angular",
-    "problemNum": 32,
+    "lessonNum": 32,
     "title": "Controlled vs Uncontrolled",
     "shortName": "P32",
     "intro": {

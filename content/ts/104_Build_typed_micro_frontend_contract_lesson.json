@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-ts-104",
     "track": "ts",
-    "problemNum": 104,
+    "lessonNum": 104,
     "title": "Build typed micro frontend contract",
     "shortName": "P104",
     "intro": {

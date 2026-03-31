@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-node-79",
     "track": "node",
-    "problemNum": 79,
+    "lessonNum": 79,
     "title": "Build tenant level data isolation guards",
     "shortName": "P79",
     "intro": {

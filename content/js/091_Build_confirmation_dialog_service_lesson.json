@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-js-91",
     "track": "js",
-    "problemNum": 91,
+    "lessonNum": 91,
     "title": "Build confirmation dialog service",
     "shortName": "P91",
     "intro": {

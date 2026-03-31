@@ -8,4 +8,4 @@ const NODES = [
 // Idle: CloudWatch, tags, scheduled shutdown`, feedback_correct: "✅ Right-size to usage; spot for interruptible; monitor and tag for idle.", feedback_wrong: "Right-sizing; spot instances; idle detection.", expected: "Cost optimisation" },
 ];
 const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }];
-export default createINPACTEngine({ NODES, sideItems, problemNum: "PE-08", title: "Cost optimisation", shortName: "PE — COST" });
+export default createINPACTEngine({ NODES, sideItems, lessonNum: "PE-08", title: "Cost optimisation", shortName: "PE — COST" });

@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-react-js-31",
     "track": "react-js",
-    "problemNum": 31,
+    "lessonNum": 31,
     "title": "useToggle",
     "shortName": "P31",
     "intro": {

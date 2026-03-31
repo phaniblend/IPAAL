@@ -13,7 +13,7 @@ Optional per entry:
 
 ## App wiring
 
-`src/learn/conceptGlossary.js` imports this file and maps key prefix `001_` → lesson / problem number **1**, etc.
+`src/learn/conceptGlossary.js` imports this file and maps key prefix `001_` → lesson / lesson number **1**, etc.
 
 ## Editing
 

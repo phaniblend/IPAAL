@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-js-25",
     "track": "js",
-    "problemNum": 25,
+    "lessonNum": 25,
     "title": "Write a balanced parentheses checker",
     "shortName": "P25",
     "intro": {

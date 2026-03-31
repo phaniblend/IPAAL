@@ -48,4 +48,4 @@ const sideItems = [
   { label: "Step 1 — Streams", id: "step1" },
 ];
 
-export default createINPACTEngine({ NODES, sideItems, problemNum: "NODE-F02", title: "Streams", shortName: "NODE — STREAMS" });
+export default createINPACTEngine({ NODES, sideItems, lessonNum: "NODE-F02", title: "Streams", shortName: "NODE — STREAMS" });

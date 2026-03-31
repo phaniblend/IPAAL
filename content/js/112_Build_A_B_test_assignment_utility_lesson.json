@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-js-112",
     "track": "js",
-    "problemNum": 112,
+    "lessonNum": 112,
     "title": "Build A B test assignment utility",
     "shortName": "P112",
     "intro": {

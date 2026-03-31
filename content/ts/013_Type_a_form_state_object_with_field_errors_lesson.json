@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-ts-13",
     "track": "ts",
-    "problemNum": 13,
+    "lessonNum": 13,
     "title": "Type a form state object with field errors",
     "shortName": "P13",
     "intro": {

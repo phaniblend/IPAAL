@@ -8,4 +8,4 @@ const NODES = [
 // Module: reusable .tf folder; source = "..."`, feedback_correct: "✅ State in remote backend; drift = out-of-band changes; modules encapsulate.", feedback_wrong: "Remote state; drift detection; modules.", expected: "IaC" },
 ];
 const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }];
-export default createINPACTEngine({ NODES, sideItems, problemNum: "PE-05", title: "Infrastructure as Code", shortName: "PE — IAC" });
+export default createINPACTEngine({ NODES, sideItems, lessonNum: "PE-05", title: "Infrastructure as Code", shortName: "PE — IAC" });

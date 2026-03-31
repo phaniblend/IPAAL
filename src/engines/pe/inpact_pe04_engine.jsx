@@ -8,4 +8,4 @@ const NODES = [
 // Limits: prevent one pod from starving node`, feedback_correct: "✅ Liveness=restart; readiness=traffic; HPA on metrics; limits protect node.", feedback_wrong: "Liveness vs readiness; HPA; resource limits.", expected: "K8s orchestration" },
 ];
 const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }];
-export default createINPACTEngine({ NODES, sideItems, problemNum: "PE-04", title: "Container orchestration", shortName: "PE — K8S" });
+export default createINPACTEngine({ NODES, sideItems, lessonNum: "PE-04", title: "Container orchestration", shortName: "PE — K8S" });

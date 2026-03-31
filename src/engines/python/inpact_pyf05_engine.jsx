@@ -8,4 +8,4 @@ class Drawable(Protocol): def draw(self) -> None: ...
 class Config(TypedDict): host: str; port: int`, feedback_correct: "✅ Generic [T]; Protocol for structural; TypedDict for dict shape.", feedback_wrong: "TypeVar/Generic; Protocol; TypedDict for typed dicts.", expected: "Type hints" },
 ];
 const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }];
-export default createINPACTEngine({ NODES, sideItems, problemNum: "PY-F05", title: "Type hints & mypy", shortName: "PY — TYPING" });
+export default createINPACTEngine({ NODES, sideItems, lessonNum: "PY-F05", title: "Type hints & mypy", shortName: "PY — TYPING" });

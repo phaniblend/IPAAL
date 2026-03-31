@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { getLessonActivity, isSupabaseConfigured } from "./supabase.js";
+import { getLessonActivity, isSupabaseConfigured, isSupabaseAuthUserId } from "./supabase.js";
 import { getAppUsageSeconds } from "./appUsageTime.js";
 import { TRACK_LABELS } from "../trackLessonCounts.js";
 import { buildLessonPath } from "./redirectPath.js";
@@ -23,7 +23,7 @@ export default function UserDashboard({ user }) {
   const [appSeconds, setAppSeconds] = useState(0);
 
   const load = useCallback(async () => {
-    if (!user?.id || !isSupabaseConfigured) {
+    if (!user?.id || !isSupabaseConfigured || !isSupabaseAuthUserId(user.id)) {
       setRows([]);
       setLoading(false);
       return;
@@ -129,6 +129,13 @@ export default function UserDashboard({ user }) {
 
       {!isSupabaseConfigured ? (
         <p style={{ color: "#b45309", fontSize: "14px" }}>Progress backup is unavailable (app not connected to Supabase).</p>
+      ) : null}
+      {isSupabaseConfigured && user?.id && !isSupabaseAuthUserId(user.id) ? (
+        <p style={{ color: "#64748b", fontSize: "14px", marginBottom: "16px", lineHeight: 1.55 }}>
+          You’re signed in with Google on this device. Detailed lesson history in this dashboard is tied to Supabase email
+          accounts for now; yours will show here once that link is enabled, or you can add the same email via&nbsp;
+          <strong>Log in</strong> to sync progress in the cloud.
+        </p>
       ) : null}
 
       {error ? (

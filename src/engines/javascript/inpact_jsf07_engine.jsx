@@ -295,4 +295,4 @@ const sideItems = [
   { label: "Step 5 — Error boundary", id: "step5" },
 ];
 
-export default createINPACTEngine({ NODES, sideItems, problemNum: "JS-F07", title: "Error Handling & Debugging", shortName: "JS — ERRORS" });
+export default createINPACTEngine({ NODES, sideItems, lessonNum: "JS-F07", title: "Error Handling & Debugging", shortName: "JS — ERRORS" });

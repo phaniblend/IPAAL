@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-node-94",
     "track": "node",
-    "problemNum": 94,
+    "lessonNum": 94,
     "title": "Build load shedding middleware under pressure",
     "shortName": "P94",
     "intro": {

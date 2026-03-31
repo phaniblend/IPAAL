@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-vue-110",
     "track": "vue",
-    "problemNum": 110,
+    "lessonNum": 110,
     "title": "Role-Based Route Protection",
     "shortName": "P110",
     "intro": {

@@ -8,4 +8,4 @@ const NODES = [
 @pytest.mark.asyncio\nasync def test_async(): ...`, feedback_correct: "✅ fixture with yield; parametrize; @pytest.mark.asyncio for async.", feedback_wrong: "Fixtures with yield; parametrize; pytest-asyncio for async tests.", expected: "pytest" },
 ];
 const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }];
-export default createINPACTEngine({ NODES, sideItems, problemNum: "PY-F09", title: "Testing with pytest", shortName: "PY — PYTEST" });
+export default createINPACTEngine({ NODES, sideItems, lessonNum: "PY-F09", title: "Testing with pytest", shortName: "PY — PYTEST" });

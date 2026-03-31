@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-css-13",
     "track": "css",
-    "problemNum": 13,
+    "lessonNum": 13,
     "title": "flex-grow, shrink, basis",
     "shortName": "P13",
     "intro": {

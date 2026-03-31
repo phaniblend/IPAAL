@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-fe-01",
     "track": "fe",
-    "problemNum": 1,
+    "lessonNum": 1,
     "title": "Frontend Performance & Core Web Vitals",
     "shortName": "P01",
     "intro": {

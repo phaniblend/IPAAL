@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-angular-05",
     "track": "angular",
-    "problemNum": 5,
+    "lessonNum": 5,
     "title": "Board State",
     "shortName": "P05",
     "intro": {

@@ -8,20 +8,20 @@
   "flow": [
     {
       "stepId": "title",
-      "mentorSays": "At the end of this lesson, you will be able to:\n\n1. Understand what the Minimum Size Subarray Sum problem asks for\n2. Use a sliding window to find the minimum length subarray with sum >= target\n3. Expand and shrink the window efficiently\n4. Implement the solution step by step in your chosen language",
+      "mentorSays": "At the end of this lesson, you will be able to:\n\n1. Understand what the Minimum Size Subarray Sum lesson asks for\n2. Use a sliding window to find the minimum length subarray with sum >= target\n3. Expand and shrink the window efficiently\n4. Implement the solution step by step in your chosen language",
       "action": "continue",
-      "next": "problem-illustration"
+      "next": "lesson-illustration"
     },
     {
-      "stepId": "problem-illustration",
-      "mentorSays": "Perfect! Now let's understand what the Minimum Size Subarray Sum problem is asking.\n\n**Problem Definition:**\nGiven an array of positive integers `nums` and a positive integer `target`, return the minimum length of a contiguous subarray whose sum is greater than or equal to `target`. If there is no such subarray, return 0.\n\n**Key Observations:**\n- All numbers are positive (this is crucial!)\n- Subarrays must be contiguous\n- We're finding the minimum length, not maximum\n- Sum increases when we expand the window (since all numbers are positive)\n\n**Example 1:** nums = [2, 3, 1, 2, 4, 3], target = 7\n\nWe need to find the shortest subarray with sum >= 7.\n\nLet's check subarrays:\n- [2, 3, 1, 2] → sum = 8 >= 7 ✓, length = 4\n- [4, 3] → sum = 7 >= 7 ✓, length = 2 ✓\n- [2, 4, 3] → sum = 9 >= 7 ✓, length = 3\n\nMinimum length: 2 (subarray [4, 3])\n\n**Example 2:** nums = [1, 4, 4], target = 4\n\nSubarrays with sum >= 4:\n- [4] → sum = 4 >= 4 ✓, length = 1 ✓\n- [4, 4] → sum = 8 >= 4 ✓, length = 2\n\nMinimum length: 1 (subarray [4])\n\n**Example 3:** nums = [1, 1, 1, 1, 1, 1, 1, 1], target = 11\n\nNo subarray has sum >= 11 (max sum = 8)\nAnswer: 0\n\n**Step-by-step trace for Example 1:**\n\nnums = [2, 3, 1, 2, 4, 3], target = 7\n\nWe'll use a sliding window approach:\n- **right = 0**: [2], sum = 2 < 7, continue\n- **right = 1**: [2, 3], sum = 5 < 7, continue\n- **right = 2**: [2, 3, 1], sum = 6 < 7, continue\n- **right = 3**: [2, 3, 1, 2], sum = 8 >= 7 ✓, shrink: left = 0, minLen = 4\n  - **left = 1**: [3, 1, 2], sum = 6 < 7, stop shrinking\n- **right = 4**: [3, 1, 2, 4], sum = 10 >= 7 ✓, shrink: left = 1, minLen = 4\n  - **left = 2**: [1, 2, 4], sum = 7 >= 7 ✓, minLen = 3\n  - **left = 3**: [2, 4], sum = 6 < 7, stop\n- **right = 5**: [2, 4, 3], sum = 9 >= 7 ✓, shrink: left = 3, minLen = 3\n  - **left = 4**: [4, 3], sum = 7 >= 7 ✓, minLen = 2 ✓\n  - **left = 5**: [3], sum = 3 < 7, stop\n\nAnswer: 2\n\n**What makes this tricky:**\n1. Understanding that we need to shrink when sum >= target to find minimum length\n2. Since all numbers are positive, shrinking from the left will decrease the sum\n3. We need to track the minimum length seen so far\n4. Edge case: if no subarray has sum >= target, return 0\n\n**Common pitfalls:**\n- Not shrinking the window when sum >= target\n- Not tracking the minimum length correctly\n- Off-by-one errors when calculating window length\n- Forgetting to handle the case where no valid subarray exists",
+      "stepId": "lesson-illustration",
+      "mentorSays": "Perfect! Now let's understand what the Minimum Size Subarray Sum lesson is asking.\n\n**Lesson Definition:**\nGiven an array of positive integers `nums` and a positive integer `target`, return the minimum length of a contiguous subarray whose sum is greater than or equal to `target`. If there is no such subarray, return 0.\n\n**Key Observations:**\n- All numbers are positive (this is crucial!)\n- Subarrays must be contiguous\n- We're finding the minimum length, not maximum\n- Sum increases when we expand the window (since all numbers are positive)\n\n**Example 1:** nums = [2, 3, 1, 2, 4, 3], target = 7\n\nWe need to find the shortest subarray with sum >= 7.\n\nLet's check subarrays:\n- [2, 3, 1, 2] → sum = 8 >= 7 ✓, length = 4\n- [4, 3] → sum = 7 >= 7 ✓, length = 2 ✓\n- [2, 4, 3] → sum = 9 >= 7 ✓, length = 3\n\nMinimum length: 2 (subarray [4, 3])\n\n**Example 2:** nums = [1, 4, 4], target = 4\n\nSubarrays with sum >= 4:\n- [4] → sum = 4 >= 4 ✓, length = 1 ✓\n- [4, 4] → sum = 8 >= 4 ✓, length = 2\n\nMinimum length: 1 (subarray [4])\n\n**Example 3:** nums = [1, 1, 1, 1, 1, 1, 1, 1], target = 11\n\nNo subarray has sum >= 11 (max sum = 8)\nAnswer: 0\n\n**Step-by-step trace for Example 1:**\n\nnums = [2, 3, 1, 2, 4, 3], target = 7\n\nWe'll use a sliding window approach:\n- **right = 0**: [2], sum = 2 < 7, continue\n- **right = 1**: [2, 3], sum = 5 < 7, continue\n- **right = 2**: [2, 3, 1], sum = 6 < 7, continue\n- **right = 3**: [2, 3, 1, 2], sum = 8 >= 7 ✓, shrink: left = 0, minLen = 4\n  - **left = 1**: [3, 1, 2], sum = 6 < 7, stop shrinking\n- **right = 4**: [3, 1, 2, 4], sum = 10 >= 7 ✓, shrink: left = 1, minLen = 4\n  - **left = 2**: [1, 2, 4], sum = 7 >= 7 ✓, minLen = 3\n  - **left = 3**: [2, 4], sum = 6 < 7, stop\n- **right = 5**: [2, 4, 3], sum = 9 >= 7 ✓, shrink: left = 3, minLen = 3\n  - **left = 4**: [4, 3], sum = 7 >= 7 ✓, minLen = 2 ✓\n  - **left = 5**: [3], sum = 3 < 7, stop\n\nAnswer: 2\n\n**What makes this tricky:**\n1. Understanding that we need to shrink when sum >= target to find minimum length\n2. Since all numbers are positive, shrinking from the left will decrease the sum\n3. We need to track the minimum length seen so far\n4. Edge case: if no subarray has sum >= target, return 0\n\n**Common pitfalls:**\n- Not shrinking the window when sum >= target\n- Not tracking the minimum length correctly\n- Off-by-one errors when calculating window length\n- Forgetting to handle the case where no valid subarray exists",
       "example": "Example 1:\nnums = [2, 3, 1, 2, 4, 3], target = 7\n\nSubarrays with sum >= 7:\n[2, 3, 1, 2] → sum = 8, length = 4\n[4, 3] → sum = 7, length = 2 ✓\n[2, 4, 3] → sum = 9, length = 3\n\nAnswer: 2\n\nExample 2:\nnums = [1, 4, 4], target = 4\n\nMinimum: [4] → length = 1\n\nExample 3:\nnums = [1, 1, 1, 1, 1, 1, 1, 1], target = 11\n\nNo valid subarray\nAnswer: 0",
       "action": "continue",
       "next": "thinking-challenge"
     },
     {
       "stepId": "thinking-challenge",
-      "mentorSays": "Now that you understand what the problem wants, here's the real question:\n\nHow would YOU find the minimum length subarray with sum >= target?\n\nThink about it for a moment. What approach feels natural to you?",
+      "mentorSays": "Now that you understand what the lesson wants, here's the real question:\n\nHow would YOU find the minimum length subarray with sum >= target?\n\nThink about it for a moment. What approach feels natural to you?",
       "choices": [
         {
           "label": "Use a sliding window - expand until sum >= target, then shrink to find minimum",
@@ -146,7 +146,7 @@
     },
     {
       "stepId": "array-check-js",
-      "mentorSays": "To solve this problem, we'll need to work with arrays. Do you know what an array is in JavaScript?",
+      "mentorSays": "To solve this lesson, we'll need to work with arrays. Do you know what an array is in JavaScript?",
       "choices": [
         {
           "label": "Yes, I know arrays",
@@ -167,7 +167,7 @@
     },
     {
       "stepId": "loop-check-js",
-      "mentorSays": "To solve this problem, we'll need to use loops. Do you know what a loop is in JavaScript?",
+      "mentorSays": "To solve this lesson, we'll need to use loops. Do you know what a loop is in JavaScript?",
       "choices": [
         {
           "label": "Yes, I know loops",
@@ -293,7 +293,7 @@
     },
     {
       "stepId": "array-check-python",
-      "mentorSays": "To solve this problem, we'll need to work with arrays. Do you know what an array is in Python?",
+      "mentorSays": "To solve this lesson, we'll need to work with arrays. Do you know what an array is in Python?",
       "choices": [
         {
           "label": "Yes, I know arrays",
@@ -314,7 +314,7 @@
     },
     {
       "stepId": "loop-check-python",
-      "mentorSays": "To solve this problem, we'll need to use loops. Do you know what a loop is in Python?",
+      "mentorSays": "To solve this lesson, we'll need to use loops. Do you know what a loop is in Python?",
       "choices": [
         {
           "label": "Yes, I know loops",
@@ -440,7 +440,7 @@
     },
     {
       "stepId": "array-check-java",
-      "mentorSays": "To solve this problem, we'll need to work with arrays. Do you know what an array is in Java?",
+      "mentorSays": "To solve this lesson, we'll need to work with arrays. Do you know what an array is in Java?",
       "choices": [
         {
           "label": "Yes, I know arrays",
@@ -461,7 +461,7 @@
     },
     {
       "stepId": "loop-check-java",
-      "mentorSays": "To solve this problem, we'll need to use loops. Do you know what a loop is in Java?",
+      "mentorSays": "To solve this lesson, we'll need to use loops. Do you know what a loop is in Java?",
       "choices": [
         {
           "label": "Yes, I know loops",
@@ -587,7 +587,7 @@
     },
     {
       "stepId": "array-check-cpp",
-      "mentorSays": "To solve this problem, we'll need to work with arrays. Do you know what an array is in C++?",
+      "mentorSays": "To solve this lesson, we'll need to work with arrays. Do you know what an array is in C++?",
       "choices": [
         {
           "label": "Yes, I know arrays",
@@ -608,7 +608,7 @@
     },
     {
       "stepId": "loop-check-cpp",
-      "mentorSays": "To solve this problem, we'll need to use loops. Do you know what a loop is in C++?",
+      "mentorSays": "To solve this lesson, we'll need to use loops. Do you know what a loop is in C++?",
       "choices": [
         {
           "label": "Yes, I know loops",
@@ -734,7 +734,7 @@
     },
     {
       "stepId": "array-check-ts",
-      "mentorSays": "To solve this problem, we'll need to work with arrays. Do you know what an array is in TypeScript?",
+      "mentorSays": "To solve this lesson, we'll need to work with arrays. Do you know what an array is in TypeScript?",
       "choices": [
         {
           "label": "Yes, I know arrays",
@@ -755,7 +755,7 @@
     },
     {
       "stepId": "loop-check-ts",
-      "mentorSays": "To solve this problem, we'll need to use loops. Do you know what a loop is in TypeScript?",
+      "mentorSays": "To solve this lesson, we'll need to use loops. Do you know what a loop is in TypeScript?",
       "choices": [
         {
           "label": "Yes, I know loops",
@@ -818,7 +818,7 @@
     },
     {
       "stepId": "final",
-      "mentorSays": "🎉 Well done! You've successfully implemented the Minimum Size Subarray Sum solution!\n\n**Time Complexity:** O(n)\n- We iterate through the array once with the right pointer\n- Each element is added and removed from the window at most once\n- Even though we have a nested while loop, each element is processed at most twice (once when added, once when removed)\n\n**Space Complexity:** O(1)\n- We only use a constant amount of extra space (left, sum, minLen variables)\n- No additional data structures are needed\n\n**Key Takeaways:**\n1. **Sliding window with shrinking**: Expand the window until sum >= target, then shrink to find minimum length\n2. **Positive numbers guarantee**: Since all numbers are positive, shrinking from the left will decrease the sum\n3. **Track minimum**: Update the minimum length whenever we have a valid window (sum >= target)\n4. **Edge case handling**: Return 0 if no valid subarray exists (minLen is still Infinity)\n5. **Window length formula**: The length of window [left, right] is `right - left + 1`\n\n**Related Practice Problems:**\n- Smallest Subarray with Sum >= S (similar problem)\n- Maximum Size Subarray Sum Equals K (LeetCode #325)\n- Subarray Sum Equals K (LeetCode #560)\n- Minimum Window Substring (LeetCode #76)\n\nKeep practicing sliding window problems - they're a powerful technique for array problems!",
+      "mentorSays": "🎉 Well done! You've successfully implemented the Minimum Size Subarray Sum solution!\n\n**Time Complexity:** O(n)\n- We iterate through the array once with the right pointer\n- Each element is added and removed from the window at most once\n- Even though we have a nested while loop, each element is processed at most twice (once when added, once when removed)\n\n**Space Complexity:** O(1)\n- We only use a constant amount of extra space (left, sum, minLen variables)\n- No additional data structures are needed\n\n**Key Takeaways:**\n1. **Sliding window with shrinking**: Expand the window until sum >= target, then shrink to find minimum length\n2. **Positive numbers guarantee**: Since all numbers are positive, shrinking from the left will decrease the sum\n3. **Track minimum**: Update the minimum length whenever we have a valid window (sum >= target)\n4. **Edge case handling**: Return 0 if no valid subarray exists (minLen is still Infinity)\n5. **Window length formula**: The length of window [left, right] is `right - left + 1`\n\n**Related Practice Lessons:**\n- Smallest Subarray with Sum >= S (similar lesson)\n- Maximum Size Subarray Sum Equals K (LeetCode #325)\n- Subarray Sum Equals K (LeetCode #560)\n- Minimum Window Substring (LeetCode #76)\n\nKeep practicing sliding window lessons - they're a powerful technique for array lessons!",
       "action": "continue"
     }
   ]

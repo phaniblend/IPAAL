@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-algorithms-18",
     "track": "algorithms",
-    "problemNum": 18,
+    "lessonNum": 18,
     "title": "Rotate Array",
     "shortName": "P18",
     "intro": {

@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-js-36",
     "track": "js",
-    "problemNum": 36,
+    "lessonNum": 36,
     "title": "Build a notes app with create edit delete and search",
     "shortName": "P36",
     "intro": {

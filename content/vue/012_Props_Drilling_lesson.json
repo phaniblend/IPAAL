@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-vue-12",
     "track": "vue",
-    "problemNum": 12,
+    "lessonNum": 12,
     "title": "Props Drilling",
     "shortName": "P12",
     "intro": {

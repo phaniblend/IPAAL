@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-css-73",
     "track": "css",
-    "problemNum": 73,
+    "lessonNum": 73,
     "title": "Responsive typography (clamp)",
     "shortName": "P73",
     "intro": {
@@ -163,7 +163,7 @@
         "id": "step6",
         "type": "question",
         "phase": "Step 6 of 10",
-        "title": "Identify the problem with unbounded scaling",
+        "title": "Identify the lesson with unbounded scaling",
         "instruction": "Replace the fixed font-size in the h1 selector with a viewport width unit (vw) to see how text scales at different screen sizes.",
         "hint": "Use a value like 5vw for font-size to make the heading responsive to viewport width.",
         "analogousExample": "/* Example of using vw units for responsive sizing */\nh1 {\n    font-size: 5vw;\n}",
@@ -328,7 +328,7 @@
         "id": "step5"
       },
       {
-        "label": "Identify the problem with unbounded scaling",
+        "label": "Identify the lesson with unbounded scaling",
         "id": "step6"
       },
       {

@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-vue-56",
     "track": "vue",
-    "problemNum": 56,
+    "lessonNum": 56,
     "title": "Error Boundary",
     "shortName": "P56",
     "intro": {

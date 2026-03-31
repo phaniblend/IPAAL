@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-mobile-angular-11",
     "track": "mobile-angular",
-    "problemNum": 11,
+    "lessonNum": 11,
     "title": "Push Notification Handler",
     "shortName": "P11",
     "intro": {

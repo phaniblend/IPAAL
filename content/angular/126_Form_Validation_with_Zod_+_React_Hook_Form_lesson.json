@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-angular-126",
     "track": "angular",
-    "problemNum": 126,
+    "lessonNum": 126,
     "title": "Form Validation with Zod + React Hook Form",
     "shortName": "P126",
     "intro": {

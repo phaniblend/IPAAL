@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-react-ts-03",
     "track": "react-ts",
-    "problemNum": 3,
+    "lessonNum": 3,
     "title": "Controlled Input",
     "shortName": "P03",
     "intro": {

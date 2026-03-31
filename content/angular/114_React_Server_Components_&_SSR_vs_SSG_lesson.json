@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-angular-114",
     "track": "angular",
-    "problemNum": 114,
+    "lessonNum": 114,
     "title": "React Server Components & SSR vs SSG",
     "shortName": "P114",
     "intro": {

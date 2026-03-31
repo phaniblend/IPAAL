@@ -3,13 +3,13 @@
   "config": {
     "lessonId": "ai-algorithms-34",
     "track": "algorithms",
-    "problemNum": 34,
+    "lessonNum": 34,
     "title": "Permutation in String",
     "shortName": "P34",
     "intro": {
       "tag": "LESSON #34",
       "title": "Permutation in String",
-      "body": "In this lesson, you will build a function that checks if one string contains a permutation (rearrangement) of another string as a contiguous substring. You will learn the sliding window technique, a core algorithm pattern for efficiently comparing substrings without recalculating everything from scratch. The main constructs involved are strings, arrays, hash maps (or objects) for character frequency counting, and loops. This beginner-friendly lesson will guide you step-by-step through implementing this pattern in JavaScript to solve the problem.",
+      "body": "In this lesson, you will build a function that checks if one string contains a permutation (rearrangement) of another string as a contiguous substring. You will learn the sliding window technique, a core algorithm pattern for efficiently comparing substrings without recalculating everything from scratch. The main constructs involved are strings, arrays, hash maps (or objects) for character frequency counting, and loops. This beginner-friendly lesson will guide you step-by-step through implementing this pattern in JavaScript to solve the lesson.",
       "usecase": "The permutation in string algorithm is essential for text analysis features in real applications. For example, plagiarism detection tools use this pattern to identify rearranged content by checking if document sections contain permutations of source material. In search engines, it helps implement 'fuzzy search' where users might mistype words but the system still finds relevant results by detecting character rearrangements. Security systems also apply this technique to identify suspicious patterns in log files where malicious actors might rearrange attack signatures to evade detection."
     },
     "objectives": [
@@ -324,7 +324,7 @@
         "phase": "Step 18 of 18",
         "title": "Done",
         "content": {
-          "body": "You've successfully implemented a backtracking algorithm to check for permutation in a string! Remember: backtracking is about exploring choices (try), going deeper (recurse), and undoing to try other options (undo). This pattern is useful for many problems where you need to explore all possibilities, like generating permutations, combinations, or solving puzzles. Keep practicing to recognize when backtracking applies!",
+          "body": "You've successfully implemented a backtracking algorithm to check for permutation in a string! Remember: backtracking is about exploring choices (try), going deeper (recurse), and undoing to try other options (undo). This pattern is useful for many lessons where you need to explore all possibilities, like generating permutations, combinations, or solving puzzles. Keep practicing to recognize when backtracking applies!",
           "title": "Done"
         }
       }

@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-js-74",
     "track": "js",
-    "problemNum": 74,
+    "lessonNum": 74,
     "title": "Build global event bus pub sub",
     "shortName": "P74",
     "intro": {

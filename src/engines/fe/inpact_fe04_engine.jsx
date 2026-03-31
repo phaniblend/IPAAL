@@ -8,4 +8,4 @@ const NODES = [
 // Shared: single version or compatible range`, feedback_correct: "✅ MF = runtime share; iframe = isolation; shared deps strategy.", feedback_wrong: "Module Federation; iframe; shared dependencies.", expected: "Micro-frontends" },
 ];
 const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }];
-export default createINPACTEngine({ NODES, sideItems, problemNum: "FE-04", title: "Micro-frontends", shortName: "FE — MICRO" });
+export default createINPACTEngine({ NODES, sideItems, lessonNum: "FE-04", title: "Micro-frontends", shortName: "FE — MICRO" });

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   setRegistered,
   FREE_LESSONS_AFTER_REGISTER,
@@ -12,6 +12,11 @@ import {
   updateUserPassword,
   getUser,
 } from "./supabase.js";
+import {
+  isFirebaseConfigured,
+  signInWithGoogle,
+  profileFromFirebaseUser,
+} from "./firebase.js";
 
 const overlay = {
   position: "fixed",
@@ -121,8 +126,18 @@ function isValidEmail(s) {
 }
 
 function getDismissButtonText(dismissCount) {
-  if (dismissCount >= 1) return "I promise, I'll do it for the next lesson";
-  return "I'll register later";
+  if (dismissCount >= 1) return "I'll create an account before my next lesson";
+  return "Not now — remind me later";
+}
+
+function mapGoogleSignInError(err) {
+  const code = err?.code || "";
+  const msg = (err?.message || "").trim();
+  if (code === "auth/popup-closed-by-user" || code === "auth/cancelled-popup-request")
+    return "Sign-in was closed before it finished. Try again when you’re ready.";
+  if (code === "auth/popup-blocked") return "Your browser blocked the pop-up. Allow pop-ups for this site and try again.";
+  if (code === "auth/network-request-failed") return "Network error. Check your connection and try again.";
+  return msg || "Google sign-in didn’t complete. Please try again.";
 }
 
 /** Map Supabase Auth errors to a short line + optional setup hint for operators. */
@@ -157,7 +172,18 @@ export default function RegisterModal({
 }) {
   const isHard = variant === "hard";
   const isLoginWall = variant === "loginWall";
-  const [mode, setMode] = useState(() => (isLoginWall ? "login" : "register"));
+  const isStartFree = variant === "startFree";
+  const [startFreeStep, setStartFreeStep] = useState("pick");
+  const [mode, setMode] = useState(() =>
+    isLoginWall || isStartFree ? "login" : "register"
+  );
+
+  useEffect(() => {
+    if (isStartFree) {
+      setStartFreeStep("pick");
+      setMode("login");
+    }
+  }, [isStartFree, variant]);
   const [loginAux, setLoginAux] = useState("form"); // form | forgot | forgotSent
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -169,6 +195,26 @@ export default function RegisterModal({
   const [submitLoading, setSubmitLoading] = useState(false);
   const [confirmationSent, setConfirmationSent] = useState(false);
   const [confirmationEmail, setConfirmationEmail] = useState("");
+
+  const handleGoogleSignIn = async () => {
+    setSubmitError("");
+    setSubmitErrorHint("");
+    if (!isFirebaseConfigured) {
+      setSubmitError("Google sign-in isn’t set up yet. Add your Firebase web config to .env (see VITE_FIREBASE_*).");
+      return;
+    }
+    setSubmitLoading(true);
+    try {
+      const fbUser = await signInWithGoogle();
+      const profile = profileFromFirebaseUser(fbUser);
+      if (profile) setRegistered(profile);
+      onSuccess?.({ flow: "google" });
+    } catch (err) {
+      setSubmitError(mapGoogleSignInError(err));
+    } finally {
+      setSubmitLoading(false);
+    }
+  };
 
   const handleRegister = async (e) => {
     e.preventDefault();
@@ -329,13 +375,20 @@ export default function RegisterModal({
     }
   };
 
-  const softGateSixSub = `Register to save your progress and unlock ${FREE_LESSONS_AFTER_REGISTER} more free lessons!`;
-  const softGateEightSub = `Last chance! Register now to unlock ${FREE_LESSONS_AFTER_REGISTER} more free lessons.`;
+  const softGateFirstSub =
+    "Create a free account to sync progress across devices and unlock the rest of your included lessons — no spam, just fewer interruptions later.";
+  const softGateSecondSub =
+    "You’re on a streak. A free account holds your place and opens everything that comes with registration — a fair trade for under a minute.";
+  const extraFreeLabel =
+    FREE_LESSONS_AFTER_REGISTER === 1 ? "one more included lesson" : `${FREE_LESSONS_AFTER_REGISTER} more included lessons`;
   const softVoluntarySub = hasEverRegistered()
-    ? "You've registered! Log in to access your remaining 7 free lessons."
-    : "Log in or register with your email. Registered learners unlock more free lessons and saved progress.";
-  const hardGateCallout = `You've reached the limit for anonymous lessons. Register to access ${FREE_LESSONS_AFTER_REGISTER} more free lessons!`;
-  const loginWallCallout = `You've reached the limit for anonymous lessons. Log in to access your remaining ${FREE_LESSONS_AFTER_REGISTER} free lessons!`;
+    ? "You already have an account. Log in to pick up any remaining included lessons on this browser."
+    : `Use your email, or sign in with Google. After your guest previews, registering unlocks ${extraFreeLabel} and saved progress.`;
+  const hardGateCallout = `You’ve had two commitment-free previews in this browser. To open the next lesson — and the rest of your free tier — sign in or create an account. We’ve saved a seat for you.`;
+  const loginWallCallout =
+    "You’ve used your guest previews on this browser. Log in with the account you created to continue and use any remaining included lessons.";
+  const startFreeSub =
+    "Sign in with Google for the fastest path, or use your email if you already have an account. Want to look around first? You can continue without signing in.";
 
   if (passwordRecovery) {
     return (
@@ -408,13 +461,80 @@ export default function RegisterModal({
     );
   }
 
+  if (isStartFree && startFreeStep === "pick") {
+    return (
+      <div
+        style={overlay}
+        onClick={(e) => {
+          if (e.target === e.currentTarget && onClose) onClose();
+        }}
+      >
+        <div style={card} onClick={(e) => e.stopPropagation()}>
+          <div style={titleStyle}>Start learning free</div>
+          <div style={sub}>{startFreeSub}</div>
+          {submitError && <div style={errText}>{submitError}</div>}
+          <button
+            type="button"
+            style={{
+              ...btn(true),
+              background: "#ffffff",
+              color: "#1e293b",
+              border: "1px solid #e2e8f0",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: "10px",
+            }}
+            onClick={handleGoogleSignIn}
+            disabled={submitLoading || !isFirebaseConfigured}
+          >
+            {submitLoading ? "\u2026" : (
+              <>
+                <svg width="18" height="18" viewBox="0 0 48 48" aria-hidden>
+                  <path fill="#FFC107" d="M43.611 20.083H42V20H24v8h11.303c-1.649 4.657-6.08 8-11.303 8c-6.627 0-12-5.373-12-12s5.373-12 12-12c3.059 0 5.842 1.154 7.961 3.039l5.657-5.657C34.046 6.053 29.268 4 24 4C12.955 4 4 12.955 4 24s8.955 20 20 20 20-8.955 20-20c0-1.341-.138-2.65-.389-3.917z" />
+                  <path fill="#FF3D00" d="m6.306 14.691l6.571 4.819C14.655 15.108 18.961 12 24 12c3.059 0 5.842 1.154 7.961 3.039l5.657-5.657C34.046 6.053 29.268 4 24 4 16.318 4 9.656 8.337 6.306 14.691z" />
+                  <path fill="#4CAF50" d="M24 44c5.166 0 9.86-1.977 13.409-5.192l-6.19-5.238A11.91 11.91 0 0 1 24 36c-5.202 0-9.619-3.317-11.283-7.946l-6.522 5.025C9.505 39.556 16.227 44 24 44z" />
+                  <path fill="#1976D2" d="M43.611 20.083H42V20H24v8h11.303a12.04 12.04 0 0 1-4.087 5.571l.003-.002l6.19 5.238C36.971 39.205 44 34 44 24c0-1.341-.138-2.65-.389-3.917z" />
+                </svg>
+                Continue with Google
+              </>
+            )}
+          </button>
+          {!isFirebaseConfigured ? (
+            <div style={{ fontSize: "12px", color: "#94a3b8", marginTop: "8px" }}>
+              Add <code style={{ fontSize: "11px" }}>VITE_FIREBASE_*</code> in <code style={{ fontSize: "11px" }}>.env</code> to enable Google.
+            </div>
+          ) : null}
+          <div
+            style={{
+              textAlign: "center",
+              fontSize: "12px",
+              color: "#94a3b8",
+              margin: "14px 0",
+            }}
+          >
+            or
+          </div>
+          <button type="button" style={btn(true)} onClick={() => { setStartFreeStep("email"); setSubmitError(""); }} disabled={submitLoading}>
+            I already use Inpact with email
+          </button>
+          <button type="button" style={btn(false)} onClick={onClose} disabled={submitLoading}>
+            Continue without signing in
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   const modalTitle = isLoginWall
     ? "Log in to continue"
     : isHard
-      ? "Create your account"
+      ? "Unlock your next lesson"
       : voluntary
         ? "Log in or register"
-        : "Register (optional for now)";
+        : softGateKind === "second"
+          ? "Ready whenever you are"
+          : "Save your progress for free";
 
   const modalSub = isLoginWall ? (
     <div style={hardCallout} role="alert">
@@ -426,11 +546,14 @@ export default function RegisterModal({
     </div>
   ) : voluntary ? (
     <div style={sub}>{softVoluntarySub}</div>
-  ) : softGateKind === "eight" ? (
-    <div style={sub}>{softGateEightSub}</div>
+  ) : softGateKind === "second" ? (
+    <div style={sub}>{softGateSecondSub}</div>
   ) : (
-    <div style={sub}>{softGateSixSub}</div>
+    <div style={sub}>{softGateFirstSub}</div>
   );
+
+  const showGoogleOnForm = isFirebaseConfigured && !isLoginWall && !passwordRecovery && !isStartFree;
+  const showGoogleOnStartFreeEmail = isFirebaseConfigured && isStartFree && startFreeStep === "email";
 
   return (
     <div
@@ -440,8 +563,63 @@ export default function RegisterModal({
       }}
     >
       <div style={card} onClick={(e) => e.stopPropagation()}>
-        <div style={titleStyle}>{modalTitle}</div>
-        {modalSub}
+        {isStartFree && startFreeStep === "email" ? (
+          <button
+            type="button"
+            style={{ ...linkBtn, marginBottom: "12px" }}
+            onClick={() => {
+              setStartFreeStep("pick");
+              setSubmitError("");
+              setSubmitErrorHint("");
+            }}
+          >
+            &larr; Other sign-in options
+          </button>
+        ) : null}
+        <div style={titleStyle}>{isStartFree && startFreeStep === "email" ? "Sign in or create an account" : modalTitle}</div>
+        {isStartFree && startFreeStep === "email" ? <div style={sub}>{startFreeSub}</div> : modalSub}
+
+        {showGoogleOnForm || showGoogleOnStartFreeEmail ? (
+          <>
+            <button
+              type="button"
+              style={{
+                ...btn(true),
+                background: "#ffffff",
+                color: "#1e293b",
+                border: "1px solid #e2e8f0",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: "10px",
+              }}
+              onClick={handleGoogleSignIn}
+              disabled={submitLoading}
+            >
+              {submitLoading ? "\u2026" : (
+                <>
+                  <svg width="18" height="18" viewBox="0 0 48 48" aria-hidden>
+                    <path fill="#FFC107" d="M43.611 20.083H42V20H24v8h11.303c-1.649 4.657-6.08 8-11.303 8c-6.627 0-12-5.373-12-12s5.373-12 12-12c3.059 0 5.842 1.154 7.961 3.039l5.657-5.657C34.046 6.053 29.268 4 24 4C12.955 4 4 12.955 4 24s8.955 20 20 20 20-8.955 20-20c0-1.341-.138-2.65-.389-3.917z" />
+                    <path fill="#FF3D00" d="m6.306 14.691l6.571 4.819C14.655 15.108 18.961 12 24 12c3.059 0 5.842 1.154 7.961 3.039l5.657-5.657C34.046 6.053 29.268 4 24 4 16.318 4 9.656 8.337 6.306 14.691z" />
+                    <path fill="#4CAF50" d="M24 44c5.166 0 9.86-1.977 13.409-5.192l-6.19-5.238A11.91 11.91 0 0 1 24 36c-5.202 0-9.619-3.317-11.283-7.946l-6.522 5.025C9.505 39.556 16.227 44 24 44z" />
+                    <path fill="#1976D2" d="M43.611 20.083H42V20H24v8h11.303a12.04 12.04 0 0 1-4.087 5.571l.003-.002l6.19 5.238C36.971 39.205 44 34 44 24c0-1.341-.138-2.65-.389-3.917z" />
+                  </svg>
+                  Continue with Google
+                </>
+              )}
+            </button>
+            <div
+              style={{
+                textAlign: "center",
+                fontSize: "12px",
+                color: "#94a3b8",
+                margin: "14px 0",
+              }}
+            >
+              or use email
+            </div>
+          </>
+        ) : null}
 
         {!isSupabaseConfigured && (
           <div
@@ -504,7 +682,7 @@ export default function RegisterModal({
             <button type="submit" style={btn(true)} disabled={submitLoading || !name.trim() || !email.trim() || !password}>
               {submitLoading ? "Creating account\u2026" : "Register"}
             </button>
-            {!isHard && !isLoginWall && !voluntary && (
+            {!isHard && !isLoginWall && !voluntary && !isStartFree && (
               <button type="button" style={btn(false)} onClick={handleContinueWithoutRegistering}>
                 {dismissText}
               </button>
@@ -551,7 +729,7 @@ export default function RegisterModal({
             <button type="submit" style={btn(true)} disabled={submitLoading || !email.trim() || !password}>
               {submitLoading ? "Logging in\u2026" : "Log in"}
             </button>
-            {!isHard && !isLoginWall && !voluntary && (
+            {!isHard && !isLoginWall && !voluntary && !isStartFree && (
               <button type="button" style={btn(false)} onClick={handleContinueWithoutRegistering}>
                 {dismissText}
               </button>

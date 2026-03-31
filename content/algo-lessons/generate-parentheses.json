@@ -8,20 +8,20 @@
   "flow": [
     {
       "stepId": "title",
-      "mentorSays": "At the end of this lesson, you will be able to:\n\n1. Understand what the Generate Parentheses problem asks for\n2. Use backtracking to generate all valid combinations\n3. Understand when to add '(' and when to add ')'\n4. Track open and close counts during generation\n5. Implement the solution step by step in your chosen language",
+      "mentorSays": "At the end of this lesson, you will be able to:\n\n1. Understand what the Generate Parentheses lesson asks for\n2. Use backtracking to generate all valid combinations\n3. Understand when to add '(' and when to add ')'\n4. Track open and close counts during generation\n5. Implement the solution step by step in your chosen language",
       "action": "continue",
-      "next": "problem-illustration"
+      "next": "lesson-illustration"
     },
     {
-      "stepId": "problem-illustration",
-      "mentorSays": "Perfect! Now let's understand what the Generate Parentheses problem is asking.\n\n**Problem Definition:**\nGiven `n` pairs of parentheses, write a function to generate all combinations of well-formed parentheses.\n\n**Key Observations:**\n- We need to generate all valid combinations of n pairs\n- Each combination must have exactly n '(' and n ')'\n- Parentheses must be well-formed (balanced)\n- We'll use backtracking to explore all possibilities\n\n**Example 1:** n = 1\n\nValid combinations:\n- \"()\"\n\nAnswer: [\"()\"]\n\n**Example 2:** n = 2\n\nValid combinations:\n- \"(())\"\n- \"()()\"\n\nAnswer: [\"(())\", \"()()\"]\n\n**Example 3:** n = 3\n\nValid combinations:\n- \"((()))\"\n- \"(()())\"\n- \"(())()\"\n- \"()(())\"\n- \"()()()\"\n\nAnswer: [\"((()))\", \"(()())\", \"(())()\", \"()(())\", \"()()()\"]\n\n**Step-by-step trace for Example 2 (Backtracking approach):**\n\nn = 2\n\nWe'll use backtracking with open and close counts:\n- Start: current = \"\", open = 0, close = 0\n\n**Decision tree:**\n\n1. **Add '('**: current = \"(\", open = 1, close = 0\n   - Can add '('? open (1) < n (2) ✓\n   - Add '(': current = \"((\", open = 2, close = 0\n     - Can add '('? open (2) < n (2) ✗\n     - Can add ')'? close (0) < open (2) ✓\n     - Add ')': current = \"(()\", open = 2, close = 1\n       - Can add '('? open (2) < n (2) ✗\n       - Can add ')'? close (1) < open (2) ✓\n       - Add ')': current = \"(())\", open = 2, close = 2\n         - Length = 4 = 2*n ✓, add to result: [\"(())\"]\n   - Can add ')'? close (0) < open (1) ✗\n   - Backtrack\n\n2. **Add ')'**: Not allowed (close (0) >= open (0))\n\n3. **Backtrack, try different path**:\n   - current = \"(\", open = 1, close = 0\n   - Add ')': current = \"()\", open = 1, close = 1\n     - Can add '('? open (1) < n (2) ✓\n     - Add '(': current = \"()(\", open = 2, close = 1\n       - Can add '('? open (2) < n (2) ✗\n       - Can add ')'? close (1) < open (2) ✓\n       - Add ')': current = \"()()\", open = 2, close = 2\n         - Length = 4 = 2*n ✓, add to result: [\"(())\", \"()()\"]\n\nResult: [\"(())\", \"()()\"] ✓\n\n**Key Insight:**\nWe can only:\n- Add '(' when open < n (we haven't used all opening parentheses)\n- Add ')' when close < open (we have unmatched opening parentheses)\n- When current.length == 2*n, we have a valid combination!\n\n**What makes this tricky:**\n1. Understanding when to add '(' vs ')'\n2. Tracking open and close counts\n3. Backtracking to explore all possibilities\n4. Ensuring parentheses are well-formed\n\n**Common pitfalls:**\n- Adding ')' when close >= open (creates invalid combination)\n- Not backtracking properly\n- Forgetting to check if combination is complete (length == 2*n)\n- Generating duplicates or invalid combinations",
+      "stepId": "lesson-illustration",
+      "mentorSays": "Perfect! Now let's understand what the Generate Parentheses lesson is asking.\n\n**Lesson Definition:**\nGiven `n` pairs of parentheses, write a function to generate all combinations of well-formed parentheses.\n\n**Key Observations:**\n- We need to generate all valid combinations of n pairs\n- Each combination must have exactly n '(' and n ')'\n- Parentheses must be well-formed (balanced)\n- We'll use backtracking to explore all possibilities\n\n**Example 1:** n = 1\n\nValid combinations:\n- \"()\"\n\nAnswer: [\"()\"]\n\n**Example 2:** n = 2\n\nValid combinations:\n- \"(())\"\n- \"()()\"\n\nAnswer: [\"(())\", \"()()\"]\n\n**Example 3:** n = 3\n\nValid combinations:\n- \"((()))\"\n- \"(()())\"\n- \"(())()\"\n- \"()(())\"\n- \"()()()\"\n\nAnswer: [\"((()))\", \"(()())\", \"(())()\", \"()(())\", \"()()()\"]\n\n**Step-by-step trace for Example 2 (Backtracking approach):**\n\nn = 2\n\nWe'll use backtracking with open and close counts:\n- Start: current = \"\", open = 0, close = 0\n\n**Decision tree:**\n\n1. **Add '('**: current = \"(\", open = 1, close = 0\n   - Can add '('? open (1) < n (2) ✓\n   - Add '(': current = \"((\", open = 2, close = 0\n     - Can add '('? open (2) < n (2) ✗\n     - Can add ')'? close (0) < open (2) ✓\n     - Add ')': current = \"(()\", open = 2, close = 1\n       - Can add '('? open (2) < n (2) ✗\n       - Can add ')'? close (1) < open (2) ✓\n       - Add ')': current = \"(())\", open = 2, close = 2\n         - Length = 4 = 2*n ✓, add to result: [\"(())\"]\n   - Can add ')'? close (0) < open (1) ✗\n   - Backtrack\n\n2. **Add ')'**: Not allowed (close (0) >= open (0))\n\n3. **Backtrack, try different path**:\n   - current = \"(\", open = 1, close = 0\n   - Add ')': current = \"()\", open = 1, close = 1\n     - Can add '('? open (1) < n (2) ✓\n     - Add '(': current = \"()(\", open = 2, close = 1\n       - Can add '('? open (2) < n (2) ✗\n       - Can add ')'? close (1) < open (2) ✓\n       - Add ')': current = \"()()\", open = 2, close = 2\n         - Length = 4 = 2*n ✓, add to result: [\"(())\", \"()()\"]\n\nResult: [\"(())\", \"()()\"] ✓\n\n**Key Insight:**\nWe can only:\n- Add '(' when open < n (we haven't used all opening parentheses)\n- Add ')' when close < open (we have unmatched opening parentheses)\n- When current.length == 2*n, we have a valid combination!\n\n**What makes this tricky:**\n1. Understanding when to add '(' vs ')'\n2. Tracking open and close counts\n3. Backtracking to explore all possibilities\n4. Ensuring parentheses are well-formed\n\n**Common pitfalls:**\n- Adding ')' when close >= open (creates invalid combination)\n- Not backtracking properly\n- Forgetting to check if combination is complete (length == 2*n)\n- Generating duplicates or invalid combinations",
       "example": "Example 1: n = 1 → [\"()\"]\n\nExample 2: n = 2 → [\"(())\", \"()()\"]\n\nExample 3: n = 3 → [\"((()))\", \"(()())\", \"(())()\", \"()(())\", \"()()()\"]",
       "action": "continue",
       "next": "thinking-challenge"
     },
     {
       "stepId": "thinking-challenge",
-      "mentorSays": "Now that you understand what the problem wants, here's the real question:\n\nHow would YOU generate all valid parentheses combinations?\n\nThink about it for a moment. What approach feels natural to you?",
+      "mentorSays": "Now that you understand what the lesson wants, here's the real question:\n\nHow would YOU generate all valid parentheses combinations?\n\nThink about it for a moment. What approach feels natural to you?",
       "choices": [
         {
           "label": "Use backtracking - add '(' when open < n, add ')' when close < open",
@@ -146,7 +146,7 @@
     },
     {
       "stepId": "backtracking-check-js",
-      "mentorSays": "To solve this problem, we'll use backtracking. Do you know what backtracking is?",
+      "mentorSays": "To solve this lesson, we'll use backtracking. Do you know what backtracking is?",
       "choices": [
         {
           "label": "Yes, I know backtracking",
@@ -286,7 +286,7 @@
     },
     {
       "stepId": "backtracking-check-python",
-      "mentorSays": "To solve this problem, we'll use backtracking. Do you know what backtracking is?",
+      "mentorSays": "To solve this lesson, we'll use backtracking. Do you know what backtracking is?",
       "choices": [
         {
           "label": "Yes, I know backtracking",
@@ -426,7 +426,7 @@
     },
     {
       "stepId": "backtracking-check-java",
-      "mentorSays": "To solve this problem, we'll use backtracking. Do you know what backtracking is?",
+      "mentorSays": "To solve this lesson, we'll use backtracking. Do you know what backtracking is?",
       "choices": [
         {
           "label": "Yes, I know backtracking",
@@ -566,7 +566,7 @@
     },
     {
       "stepId": "backtracking-check-cpp",
-      "mentorSays": "To solve this problem, we'll use backtracking. Do you know what backtracking is?",
+      "mentorSays": "To solve this lesson, we'll use backtracking. Do you know what backtracking is?",
       "choices": [
         {
           "label": "Yes, I know backtracking",
@@ -706,7 +706,7 @@
     },
     {
       "stepId": "backtracking-check-ts",
-      "mentorSays": "To solve this problem, we'll use backtracking. Do you know what backtracking is?",
+      "mentorSays": "To solve this lesson, we'll use backtracking. Do you know what backtracking is?",
       "choices": [
         {
           "label": "Yes, I know backtracking",
@@ -783,7 +783,7 @@
     },
     {
       "stepId": "final",
-      "mentorSays": "🎉 Well done! You've successfully implemented the Generate Parentheses solution!\n\n**Time Complexity:** O(4^n / √n)\n- This is the Catalan number C_n = (2n)! / ((n+1)! * n!)\n- For n=3: C_3 = 5 combinations\n- For n=4: C_4 = 14 combinations\n- We generate each valid combination exactly once\n\n**Space Complexity:** O(n)\n- The recursion stack uses O(n) space (depth of recursion)\n- The result array stores O(C_n) strings, each of length 2n\n- Total: O(n) for recursion + O(n * C_n) for output\n\n**Key Takeaways:**\n1. **Backtracking**: Try choices, explore, backtrack, try next\n2. **Constraints**: Only add '(' when open < n, only add ')' when close < open\n3. **Base case**: When length == 2*n, we have a complete combination\n4. **Efficiency**: Pruning invalid paths early makes this much faster than generating all combinations\n5. **Catalan numbers**: The number of valid combinations follows Catalan sequence\n\n**Common Mistakes to Avoid:**\n- Adding ')' when close >= open (creates invalid combination)\n- Not checking if combination is complete (length == 2*n)\n- Forgetting to backtrack properly\n- Generating duplicates\n\n**Related Practice Problems:**\n- Valid Parentheses (LeetCode #20) - check if valid\n- Remove Invalid Parentheses (LeetCode #301) - remove minimum to make valid\n- Different Ways to Add Parentheses (LeetCode #241) - similar backtracking\n\nKeep practicing backtracking problems - they're common in interviews!",
+      "mentorSays": "🎉 Well done! You've successfully implemented the Generate Parentheses solution!\n\n**Time Complexity:** O(4^n / √n)\n- This is the Catalan number C_n = (2n)! / ((n+1)! * n!)\n- For n=3: C_3 = 5 combinations\n- For n=4: C_4 = 14 combinations\n- We generate each valid combination exactly once\n\n**Space Complexity:** O(n)\n- The recursion stack uses O(n) space (depth of recursion)\n- The result array stores O(C_n) strings, each of length 2n\n- Total: O(n) for recursion + O(n * C_n) for output\n\n**Key Takeaways:**\n1. **Backtracking**: Try choices, explore, backtrack, try next\n2. **Constraints**: Only add '(' when open < n, only add ')' when close < open\n3. **Base case**: When length == 2*n, we have a complete combination\n4. **Efficiency**: Pruning invalid paths early makes this much faster than generating all combinations\n5. **Catalan numbers**: The number of valid combinations follows Catalan sequence\n\n**Common Mistakes to Avoid:**\n- Adding ')' when close >= open (creates invalid combination)\n- Not checking if combination is complete (length == 2*n)\n- Forgetting to backtrack properly\n- Generating duplicates\n\n**Related Practice Lessons:**\n- Valid Parentheses (LeetCode #20) - check if valid\n- Remove Invalid Parentheses (LeetCode #301) - remove minimum to make valid\n- Different Ways to Add Parentheses (LeetCode #241) - similar backtracking\n\nKeep practicing backtracking lessons - they're common in interviews!",
       "action": "continue"
     }
   ]

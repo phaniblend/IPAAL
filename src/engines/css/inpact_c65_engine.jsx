@@ -73,7 +73,7 @@ function getOutputPreview(answer) {
 export default createINPACTEngine({
   NODES,
   sideItems,
-  problemNum: 65,
+  lessonNum: 65,
   title: "conic-gradient",
   shortName: "C65",
   language: "css",

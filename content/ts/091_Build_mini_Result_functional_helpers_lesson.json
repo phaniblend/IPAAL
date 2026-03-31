@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-ts-91",
     "track": "ts",
-    "problemNum": 91,
+    "lessonNum": 91,
     "title": "Build mini Result functional helpers",
     "shortName": "P91",
     "intro": {

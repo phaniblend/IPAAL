@@ -73,7 +73,7 @@ function getOutputPreview(answer) {
 export default createINPACTEngine({
   NODES,
   sideItems,
-  problemNum: 82,
+  lessonNum: 82,
   title: "letter-spacing and word-spacing",
   shortName: "C82",
   language: "css",

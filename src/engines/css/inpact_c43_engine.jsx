@@ -73,7 +73,7 @@ function getOutputPreview(answer) {
 export default createINPACTEngine({
   NODES,
   sideItems,
-  problemNum: 43,
+  lessonNum: 43,
   title: "min(), max(), clamp()",
   shortName: "C43",
   language: "css",

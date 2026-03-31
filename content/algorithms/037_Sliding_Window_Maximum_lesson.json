@@ -3,20 +3,20 @@
   "config": {
     "lessonId": "ai-algorithms-37",
     "track": "algorithms",
-    "problemNum": 37,
+    "lessonNum": 37,
     "title": "Sliding Window Maximum",
     "shortName": "P37",
     "intro": {
       "tag": "LESSON #37",
       "title": "Sliding Window Maximum",
-      "body": "In this lesson, you will build a function that finds the maximum value within each sliding window of a fixed size as it moves across an array of numbers. You will learn the core concept of the sliding window algorithm, an efficient technique for processing sequential data. The main technologies involved are JavaScript arrays, loops, and basic conditional logic to track and compare values. By the end, you'll understand how to implement this pattern to solve problems that involve analyzing contiguous subarrays.",
+      "body": "In this lesson, you will build a function that finds the maximum value within each sliding window of a fixed size as it moves across an array of numbers. You will learn the core concept of the sliding window algorithm, an efficient technique for processing sequential data. The main technologies involved are JavaScript arrays, loops, and basic conditional logic to track and compare values. By the end, you'll understand how to implement this pattern to solve lessons that involve analyzing contiguous subarrays.",
       "usecase": "The sliding window maximum algorithm powers real-time data visualization in financial dashboards, where traders need to see the highest stock price over the last N minutes as charts update continuously. It's essential in network monitoring tools that display peak bandwidth usage over rolling time intervals, helping engineers identify traffic spikes. This pattern also optimizes mobile app features like fitness trackers showing your maximum heart rate during the most recent exercise segment, processing streaming sensor data efficiently."
     },
     "objectives": [
       "Implement a brute force solution to find maximum values in sliding windows",
       "Construct a deque data structure to optimize the sliding window algorithm",
       "Manipulate array indices to maintain window boundaries during iteration",
-      "Apply the sliding window maximum algorithm to solve coding problems",
+      "Apply the sliding window maximum algorithm to solve coding lessons",
       "Initialize and update data structures to track candidate maximum values",
       "Integrate edge case handling for window size validation and empty inputs",
       "Control the deque to remove outdated indices as the window slides"
@@ -38,7 +38,7 @@
         "phase": "Step 2 of 20",
         "title": "What you'll learn",
         "content": {
-          "body": "• Explain what a sliding window is in array problems.\n• Apply the expand-and-shrink logic to maintain window boundaries.\n• Implement an algorithm to find maximum values in each window.\n• Recognize when sliding window patterns apply to other problems.",
+          "body": "• Explain what a sliding window is in array lessons.\n• Apply the expand-and-shrink logic to maintain window boundaries.\n• Implement an algorithm to find maximum values in each window.\n• Recognize when sliding window patterns apply to other lessons.",
           "title": "What you'll learn"
         }
       },
@@ -393,7 +393,7 @@
         "phase": "Step 20 of 20",
         "title": "Done",
         "content": {
-          "body": "Congratulations! You've implemented the sliding window maximum algorithm. Remember: the window expands as we include new elements and shrinks as old elements leave. The deque helps us track potential maximums efficiently. This pattern appears in many problems where you need to track something about a contiguous subarray as it moves through the data.",
+          "body": "Congratulations! You've implemented the sliding window maximum algorithm. Remember: the window expands as we include new elements and shrinks as old elements leave. The deque helps us track potential maximums efficiently. This pattern appears in many lessons where you need to track something about a contiguous subarray as it moves through the data.",
           "title": "Done"
         }
       }

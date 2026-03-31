@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-algorithms-17",
     "track": "algorithms",
-    "problemNum": 17,
+    "lessonNum": 17,
     "title": "Merge Sorted Arrays",
     "shortName": "P17",
     "intro": {

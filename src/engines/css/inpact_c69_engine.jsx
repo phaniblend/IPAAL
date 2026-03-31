@@ -73,7 +73,7 @@ function getOutputPreview(answer) {
 export default createINPACTEngine({
   NODES,
   sideItems,
-  problemNum: 69,
+  lessonNum: 69,
   title: "Grid row/column span",
   shortName: "C69",
   language: "css",

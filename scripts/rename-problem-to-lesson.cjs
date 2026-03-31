@@ -1,11 +1,11 @@
 #!/usr/bin/env node
 /**
- * Rename "Problem" to "Lesson" in UI titles only (not in body copy).
- * - Sidebar first item: label: "Problem" -> label: "Lesson"
+ * Rename "Lesson" to "Lesson" in UI titles only (not in body copy).
+ * - Sidebar first item: label: "Lesson" -> label: "Lesson"
  * - Button: "Next Lesson" -> "NEXT LESSON"
- * - Complete screen: "Problem #N Complete" -> "Lesson #N Complete"
+ * - Complete screen: "Lesson #N Complete" -> "Lesson #N Complete"
  * - Tag in content: "PROBLEM #N" -> "LESSON #N" (and PROBLEM #N (Vue) etc.)
- * - phase: "Problem" stays or becomes "Lesson" for intro (sidebar shows this)
+ * - phase: "Lesson" stays or becomes "Lesson" for intro (sidebar shows this)
  */
 const fs = require("fs");
 const path = require("path");
@@ -27,8 +27,8 @@ walk(srcDir, ".jsx", (file) => {
   let changed = false;
 
   // Sidebar label (first item in progress list)
-  if (content.includes('label: "Problem"')) {
-    content = content.replace(/label: "Problem"/g, 'label: "Lesson"');
+  if (content.includes('label: "Lesson"')) {
+    content = content.replace(/label: "Lesson"/g, 'label: "Lesson"');
     changed = true;
   }
   // Button text
@@ -36,9 +36,9 @@ walk(srcDir, ".jsx", (file) => {
     content = content.replace(/Next Lesson/g, "NEXT LESSON");
     changed = true;
   }
-  // Complete screen title: "Problem #3 Complete" etc.
-  if (content.includes("Problem #") && content.includes("Complete")) {
-    content = content.replace(/Problem #(\d+) Complete/g, "Lesson #$1 Complete");
+  // Complete screen title: "Lesson #3 Complete" etc.
+  if (content.includes("Lesson #") && content.includes("Complete")) {
+    content = content.replace(/Lesson #(\d+) Complete/g, "Lesson #$1 Complete");
     changed = true;
   }
   // Tag in intro content: "PROBLEM #3" or "PROBLEM #11" or "PROBLEM #40 (Vue)"
@@ -46,9 +46,9 @@ walk(srcDir, ".jsx", (file) => {
     content = content.replace(/tag: "PROBLEM #/g, 'tag: "LESSON #');
     changed = true;
   }
-  // phase for intro (sidebar shows "Problem" / "Lesson" when this is the first node)
-  if (content.includes('phase: "Problem"') && content.includes("intro")) {
-    content = content.replace(/phase: "Problem"/g, 'phase: "Lesson"');
+  // phase for intro (sidebar shows "Lesson" / "Lesson" when this is the first node)
+  if (content.includes('phase: "Lesson"') && content.includes("intro")) {
+    content = content.replace(/phase: "Lesson"/g, 'phase: "Lesson"');
     changed = true;
   }
 

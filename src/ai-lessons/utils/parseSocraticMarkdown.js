@@ -73,7 +73,7 @@ export function extractCodeBlocks(body) {
 }
 
 /**
- * Map parsed Socratic sections to engine steps (problem, example, reasoning, dryRun, question).
+ * Map parsed Socratic sections to engine steps (lesson, example, reasoning, dryRun, question).
  * BUILD becomes one question step with extracted seed code.
  * @param {{ id: string, title: string, body: string }[]} sections
  * @param {{ lessonTitle: string, language: string }} opts
@@ -116,7 +116,7 @@ export function socraticSectionsToSteps(sections, opts = {}) {
       continue;
     }
 
-    const contentType = sec.id === "dryRun" ? "dryRun" : sec.id === "hook" || sec.id === "challenge" ? "problem" : "reasoning";
+    const contentType = sec.id === "dryRun" ? "dryRun" : sec.id === "hook" || sec.id === "challenge" ? "lesson" : "reasoning";
     steps.push({
       type: contentType,
       id: sec.id,

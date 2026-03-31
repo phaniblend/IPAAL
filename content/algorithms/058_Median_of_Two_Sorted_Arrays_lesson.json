@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-algorithms-58",
     "track": "algorithms",
-    "problemNum": 58,
+    "lessonNum": 58,
     "title": "Median of Two Sorted Arrays",
     "shortName": "P58",
     "intro": {

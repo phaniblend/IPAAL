@@ -228,7 +228,7 @@ const sideItems = [
 export default createINPACTEngine({
   NODES,
   sideItems,
-  problemNum: "F08",
+  lessonNum: "F08",
   title: "Type Assertions & satisfies",
   shortName: "TS — ASSERTIONS",
 });

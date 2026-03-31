@@ -38,9 +38,18 @@ const stepsCache = new Map();
 const lessonCache = new Map();
 const validationCache = new Map();
 const mentorCache = new Map();
+const stepExampleCache = new Map();
 
 function getCached(namespace, key) {
-  const mem = { intro: introCache, objectives: objectivesCache, steps: stepsCache, lesson: lessonCache, validation: validationCache, mentor: mentorCache }[namespace];
+  const mem = {
+    intro: introCache,
+    objectives: objectivesCache,
+    steps: stepsCache,
+    lesson: lessonCache,
+    validation: validationCache,
+    mentor: mentorCache,
+    "step-example": stepExampleCache,
+  }[namespace];
   if (mem?.has(key)) return mem.get(key);
   const fromFile = cacheGet(namespace, key);
   if (fromFile != null && mem) mem.set(key, fromFile);
@@ -48,7 +57,15 @@ function getCached(namespace, key) {
 }
 
 function setCached(namespace, key, value) {
-  const mem = { intro: introCache, objectives: objectivesCache, steps: stepsCache, lesson: lessonCache, validation: validationCache, mentor: mentorCache }[namespace];
+  const mem = {
+    intro: introCache,
+    objectives: objectivesCache,
+    steps: stepsCache,
+    lesson: lessonCache,
+    validation: validationCache,
+    mentor: mentorCache,
+    "step-example": stepExampleCache,
+  }[namespace];
   if (mem) mem.set(key, value);
   cacheSet(namespace, key, value);
 }
@@ -99,6 +116,7 @@ app.options("/api/lessons/intro", (_req, res) => res.sendStatus(204));
 app.options("/api/lessons/objectives", (_req, res) => res.sendStatus(204));
 app.options("/api/lessons/validate", (_req, res) => res.sendStatus(204));
 app.options("/api/lessons/mentor", (_req, res) => res.sendStatus(204));
+app.options("/api/lessons/step-example", (_req, res) => res.sendStatus(204));
 
 app.use("/api/mentor", mentorSessionMiddleware, mentorRouter);
 
@@ -125,6 +143,167 @@ function getLessonParams(req) {
     genKey: `${String(track)}:${String(lessonTitle)}:${Number(lessonIndex)}`,
   };
 }
+
+function stripCodeFences(text) {
+  let s = String(text || "").trim();
+  const m = /^```(?:tsx?|jsx?|typescript|javascript|ts)?\s*\r?\n([\s\S]*?)\r?\n```\s*$/im.exec(s);
+  if (m) s = m[1].trim();
+  return s;
+}
+
+function normalizeLessonText(s) {
+  return String(s || "")
+    .toLowerCase()
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+/** Avoid using content JSON when the same step id refers to a different task (engine vs alternate curriculum). */
+function tasksLikelySameContentStep(contentStep, learnerTask) {
+  const a = normalizeLessonText(learnerTask);
+  const b = normalizeLessonText(contentStep?.instruction || contentStep?.paal || contentStep?.title || "");
+  if (!a || !b) return true;
+  const words = (t) => new Set(t.split(/\W+/).filter((w) => w.length > 3));
+  const wa = words(a);
+  const wb = words(b);
+  let overlap = 0;
+  for (const w of wa) if (wb.has(w)) overlap++;
+  const min = Math.min(wa.size, wb.size);
+  if (min === 0) return true;
+  return overlap / min >= 0.28;
+}
+
+/** Prefer curated step text from content/<track>/*_lesson.json before cache/DeepSeek. */
+function findStepExampleInContentLesson(track, lessonIndex, stepId, learnerTask) {
+  if (track == null || lessonIndex == null || !stepId) return null;
+  const contentLesson = getContentLesson(String(track), Number(lessonIndex));
+  const steps = contentLesson?.config?.steps;
+  if (!Array.isArray(steps)) return null;
+  const step = steps.find((s) => s && (s.id === stepId || s.id === String(stepId)));
+  if (!step) return null;
+  if (learnerTask && !tasksLikelySameContentStep(step, learnerTask)) return null;
+  const raw = step.ai_example_code || step.analogousExample;
+  if (typeof raw !== "string" || !raw.trim()) return null;
+  const meta = step.ai_example_meta && typeof step.ai_example_meta === "object" ? step.ai_example_meta : {};
+  return {
+    code: stripCodeFences(raw),
+    source: "lesson-json",
+    meta: {
+      exampleOrigin: meta.exampleOrigin || "lesson-json",
+      fetchedAfter: meta.fetchedAfter || null,
+      policyNote:
+        "Promote from DeepSeek cache into this step as ai_example_code + ai_example_meta { exampleOrigin: 'deepseek', fetchedAfter } (on or after 2026-03-28).",
+    },
+  };
+}
+
+/**
+ * Show-me example: lesson JSON → disk cache → DeepSeek. Cached for all learners (key includes lessonKey + step + task).
+ */
+app.post("/api/lessons/step-example", async (req, res) => {
+  const body = req.body || {};
+  const {
+    lessonKey,
+    track,
+    lessonIndex,
+    lessonTitle,
+    stepId,
+    paal,
+    instruction,
+    hint,
+    seedCode,
+    language,
+    lessonDisplayTitle,
+  } = body;
+
+  if (!stepId) {
+    res.status(400).json({ error: "Missing stepId" });
+    return;
+  }
+  const task = String(paal || instruction || "").trim();
+  if (!task) {
+    res.status(400).json({ error: "Missing paal or instruction" });
+    return;
+  }
+
+  const fromContent = findStepExampleInContentLesson(track, lessonIndex, stepId, task);
+  if (fromContent) {
+    res.json({
+      success: true,
+      code: fromContent.code,
+      source: fromContent.source,
+      meta: fromContent.meta,
+      cacheHit: false,
+    });
+    return;
+  }
+
+  const cacheKey = [
+    lessonKey || "",
+    track || "",
+    String(lessonIndex ?? ""),
+    String(stepId),
+    task,
+    String(hint || ""),
+  ].join("\n");
+  const cached = getCached("step-example", cacheKey);
+  if (cached && typeof cached.code === "string" && cached.code.trim()) {
+    res.json({
+      success: true,
+      code: cached.code.trim(),
+      source: cached.source || "deepseek",
+      meta: cached.meta || {},
+      cacheHit: true,
+    });
+    return;
+  }
+
+  const { apiKey, provider } = getAIOptions();
+  if (!apiKey) {
+    res.status(500).json({ error: "DEEPSEEK_API_KEY not set on server" });
+    return;
+  }
+
+  const system = `You are a React + TypeScript tutor. Output ONLY TypeScript/TSX source code. No markdown fences. Use brief // comments only if needed.`;
+
+  const user = `Lesson: ${lessonDisplayTitle || lessonTitle || "React TS"}
+Step: ${stepId}
+Task:\n${task}
+Hint: ${hint || "(none)"}
+Editor starter (may be empty shell):\n${typeof seedCode === "string" ? seedCode : "(none)"}
+
+Write ONE analogous example: teach the SAME pattern as the task using DIFFERENT identifiers (not copy-paste of their exact names). If the starter is an empty export default function, output a complete file (imports + component) with the new lines inside the component body.
+
+Language: ${language || "typescript"}.`;
+
+  try {
+    const raw = await completeWithAI({ system, user, maxTokens: 1200, apiKey, provider });
+    const code = stripCodeFences(raw);
+    if (!code) {
+      res.status(500).json({ error: "Model returned empty example" });
+      return;
+    }
+    const payload = {
+      success: true,
+      code,
+      source: "deepseek",
+      cacheHit: false,
+      meta: {
+        exampleOrigin: "deepseek",
+        cachedAt: new Date().toISOString(),
+        fetchedAfter: "2026-03-28",
+        policyNote:
+          "Generated on or after 2026-03-28. Check in as lesson JSON: ai_example_code + ai_example_meta.",
+      },
+    };
+    setCached("step-example", cacheKey, payload);
+    res.json(payload);
+  } catch (err) {
+    const message = err instanceof Error ? err.message : String(err);
+    console.error("[AI server] step-example error:", message);
+    res.status(500).json({ success: false, error: message });
+  }
+});
 
 /** Sequential call 1: intro only (description + why it matters). Content first, then cache, then AI. */
 app.post("/api/lessons/intro", async (req, res) => {
@@ -422,7 +601,9 @@ app.post("/api/lessons/generate", async (req, res) => {
 const server = app.listen(PORT, () => {
   const { apiKey, provider } = getAIOptions();
   const keyName = "DEEPSEEK_API_KEY";
-  console.log(`AI lesson server at http://localhost:${PORT} (POST /api/lessons/intro, /objectives, /generate, /preview, /validate)`);
+  console.log(
+    `AI lesson server at http://localhost:${PORT} (POST /api/lessons/intro, /objectives, /generate, /preview, /validate, /step-example)`
+  );
   console.log(`Content: ${getContentDir()} (checked before cache/API). Cache: ${getCacheDir()}. AI_PROVIDER=${provider}, ${keyName}: ${apiKey ? "set" : "NOT SET"}`);
 });
 

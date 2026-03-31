@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-node-99",
     "track": "node",
-    "problemNum": 99,
+    "lessonNum": 99,
     "title": "Build test data factory and cleanup utilities",
     "shortName": "P99",
     "intro": {

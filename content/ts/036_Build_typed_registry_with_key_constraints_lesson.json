@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-ts-36",
     "track": "ts",
-    "problemNum": 36,
+    "lessonNum": 36,
     "title": "Build typed registry with key constraints",
     "shortName": "P36",
     "intro": {

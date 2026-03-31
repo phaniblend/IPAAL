@@ -7,4 +7,4 @@ const NODES = [
 const sub = new Subject(); sub.next(1); sub.asObservable()`, feedback_correct: "✅ switchMap cancels previous; mergeMap parallel; concatMap ordered. Subject.next().", feedback_wrong: "switchMap for cancel; mergeMap/concatMap for concurrency; Subject for multicasting.", expected: "RxJS operators" },
 ];
 const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }];
-export default createINPACTEngine({ NODES, sideItems, problemNum: "ANG-F04", title: "RxJS & Observables", shortName: "ANG — RXJS" });
+export default createINPACTEngine({ NODES, sideItems, lessonNum: "ANG-F04", title: "RxJS & Observables", shortName: "ANG — RXJS" });

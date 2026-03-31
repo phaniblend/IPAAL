@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-ts-67",
     "track": "ts",
-    "problemNum": 67,
+    "lessonNum": 67,
     "title": "Implement ValueOf type",
     "shortName": "P67",
     "intro": {

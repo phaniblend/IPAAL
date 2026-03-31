@@ -284,4 +284,4 @@ const sideItems = [
   { label: "Step 5 — Class methods", id: "step5" },
 ];
 
-export default createINPACTEngine({ NODES, sideItems, problemNum: "JS-B06", title: "Property Descriptors & Object Internals", shortName: "JS — DESCRIPTORS" });
+export default createINPACTEngine({ NODES, sideItems, lessonNum: "JS-B06", title: "Property Descriptors & Object Internals", shortName: "JS — DESCRIPTORS" });

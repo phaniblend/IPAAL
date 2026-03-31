@@ -73,7 +73,7 @@ function getOutputPreview(answer) {
 export default createINPACTEngine({
   NODES,
   sideItems,
-  problemNum: 57,
+  lessonNum: 57,
   title: "prefers-reduced-motion",
   shortName: "C57",
   language: "css",

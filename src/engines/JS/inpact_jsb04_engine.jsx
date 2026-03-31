@@ -27,7 +27,7 @@ Precedence: new > explicit > implicit > default (arrow ignores all)`,
     id: "objectives", type: "objectives", phase: "Objectives",
     items: [
       "Predict this under default binding (strict vs sloppy mode)",
-      "Predict this under implicit binding and the implicit loss problem",
+      "Predict this under implicit binding and the implicit loss lesson",
       "Use call/apply/bind for explicit binding",
       "Understand new binding and how it creates this",
       "Know that arrow functions have NO own this",
@@ -282,4 +282,4 @@ const sideItems = [
   { label: "Step 5 — Precedence", id: "step5" },
 ];
 
-export default createINPACTEngine({ NODES, sideItems, problemNum: "JS-B04", title: "`this` — All 5 Binding Rules", shortName: "JS — THIS" });
+export default createINPACTEngine({ NODES, sideItems, lessonNum: "JS-B04", title: "`this` — All 5 Binding Rules", shortName: "JS — THIS" });

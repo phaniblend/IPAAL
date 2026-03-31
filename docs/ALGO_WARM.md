@@ -1,6 +1,6 @@
 # Warming the Algorithms Cache (110 lessons, 24 partitions)
 
-The Algorithms tab shows 110 problems (Arrays/HashMap → Two Pointers → … → DP). Lessons are served from **content** (if a file exists), then **cache**, then **AI**. To pre-fill the cache so every click is fast:
+The Algorithms tab shows 110 lessons (Arrays/HashMap → Two Pointers → … → DP). Lessons are served from **content** (if a file exists), then **cache**, then **AI**. To pre-fill the cache so every click is fast:
 
 ## 1. Rebuild the warm list (includes algorithms)
 

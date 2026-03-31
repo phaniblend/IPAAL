@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-ts-17",
     "track": "ts",
-    "problemNum": 17,
+    "lessonNum": 17,
     "title": "Write omit generic with keyof",
     "shortName": "P17",
     "intro": {

@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-vue-22",
     "track": "vue",
-    "problemNum": 22,
+    "lessonNum": 22,
     "title": "Lifting State Up",
     "shortName": "P22",
     "intro": {

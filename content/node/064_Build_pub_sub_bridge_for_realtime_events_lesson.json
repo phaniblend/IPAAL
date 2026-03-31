@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-node-64",
     "track": "node",
-    "problemNum": 64,
+    "lessonNum": 64,
     "title": "Build pub sub bridge for realtime events",
     "shortName": "P64",
     "intro": {

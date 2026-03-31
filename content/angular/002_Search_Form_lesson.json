@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-angular-02",
     "track": "angular",
-    "problemNum": 2,
+    "lessonNum": 2,
     "title": "Search Form",
     "shortName": "P02",
     "intro": {

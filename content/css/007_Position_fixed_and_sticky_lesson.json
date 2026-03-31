@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-css-07",
     "track": "css",
-    "problemNum": 7,
+    "lessonNum": 7,
     "title": "Position: fixed and sticky",
     "shortName": "P07",
     "intro": {

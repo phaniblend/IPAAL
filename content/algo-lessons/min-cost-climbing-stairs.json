@@ -8,12 +8,12 @@
   "flow": [
     {
       "stepId": "title",
-      "mentorSays": "At the end of this lesson, you will be able to:\n\n1. Understand what the Min Cost Climbing Stairs problem asks for\n2. Use dynamic programming to find minimum cost\n3. Build the solution by tracking costs at each step\n4. Implement the solution step by step in your chosen language",
+      "mentorSays": "At the end of this lesson, you will be able to:\n\n1. Understand what the Min Cost Climbing Stairs lesson asks for\n2. Use dynamic programming to find minimum cost\n3. Build the solution by tracking costs at each step\n4. Implement the solution step by step in your chosen language",
       "action": "continue",
-      "next": "problem-illustration"
+      "next": "lesson-illustration"
     },
     {
-      "stepId": "problem-illustration",
+      "stepId": "lesson-illustration",
       "mentorSays": "Min Cost Climbing Stairs is similar to House Robber but with costs.\n\nPROBLEM:\ncost = [10, 15, 20]\nFind minimum cost to reach the top (beyond index 2).\n\nKEY POINTS:\n- Can start from index 0 OR index 1\n- Each step has a cost to step ON it\n- Can climb 1 or 2 steps at a time\n- Goal: reach beyond the last step\n\nPOSSIBLE PATHS:\n\nPATH 1: Start at 0, climb 1, climb 1\n  0 → 1 → 2 → TOP\n  Cost: 10 + 15 + 20 = 45\n\nPATH 2: Start at 0, climb 2\n  0 → 2 → TOP\n  Cost: 10 + 20 = 30\n\nPATH 3: Start at 1, climb 1\n  1 → 2 → TOP\n  Cost: 15 + 20 = 35\n\nPATH 4: Start at 1, climb 2\n  1 → TOP\n  Cost: 15\n\nANSWER: 15 (Path 4 is optimal!)\n\nDP APPROACH:\n\ndp[i] = minimum cost to LEAVE step i (step on it and continue)\n\nBase cases:\ndp[0] = cost[0]  (step on 0)\ndp[1] = cost[1]  (step on 1)\n\nFor i ≥ 2:\n  dp[i] = cost[i] + min(dp[i-1], dp[i-2])\n\nSTEP-BY-STEP:\n\nIndex: 0   1   2\ncost:  10  15  20\ndp:    10  15  35\n\ndp[0] = 10  (step on 0)\ndp[1] = 15  (step on 1)\ndp[2] = 20 + min(dp[1], dp[0])\n      = 20 + min(15, 10)\n      = 20 + 10 = 30\n\nTo reach the TOP (beyond step 2):\n  From step 1: cost = dp[1] = 15\n  From step 2: cost = dp[2] = 30\n\nANSWER: min(dp[1], dp[2]) = min(15, 30) = 15 ✓\n\nANOTHER EXAMPLE:\ncost = [1, 100, 1, 1, 1, 100, 1, 1, 100, 1]\n\nOptimal path: Start at 0, take 2-step jumps\n0 → 2 → 4 → 6 → 8 → TOP\nCost: 1 + 1 + 1 + 1 + 1 = 5\n\nBut let's verify with DP...\n\ndp[0] = 1\ndp[1] = 100\ndp[2] = 1 + min(100, 1) = 2\ndp[3] = 1 + min(2, 100) = 3\ndp[4] = 1 + min(3, 2) = 3\ndp[5] = 100 + min(3, 3) = 103\ndp[6] = 1 + min(103, 3) = 4\ndp[7] = 1 + min(4, 103) = 5\ndp[8] = 100 + min(5, 4) = 104\ndp[9] = 1 + min(104, 5) = 6\n\nTo reach TOP: min(dp[9], dp[8]) = min(6, 104) = 6\n\nActually start at 0 → 2 → 4 → 6 → 8 → 9 → TOP\nCost: 1 + 1 + 1 + 1 + 1 + 1 = 6 ✓\n\nTIME: O(n)\nSPACE: O(n) or O(1) with optimization",
       "example": "cost = [10, 15, 20]\n\nFind minimum cost to reach top:\n- Start at step 1, pay 15, climb 1 step → 15 ✓\n\nAnswer: 15\n\nAnother example:\ncost = [1, 100, 1, 1, 1, 100, 1, 1, 100, 1]\n\nAnswer: 6\n\nAnother example:\ncost = [0, 0, 0, 0]\n\nAnswer: 0",
       "action": "continue",
@@ -21,7 +21,7 @@
     },
     {
       "stepId": "thinking-challenge",
-      "mentorSays": "Now that you understand what the problem wants, here's the real question:\n\nHow would YOU find the minimum cost?\n\nThink about it for a moment. What approach feels natural to you?",
+      "mentorSays": "Now that you understand what the lesson wants, here's the real question:\n\nHow would YOU find the minimum cost?\n\nThink about it for a moment. What approach feels natural to you?",
       "choices": [
         {
           "label": "Use dynamic programming to track minimum cost at each step",
@@ -143,7 +143,7 @@
       "choices": [
         {
           "label": "Yes, I know base-cases",
-          "next": "choice-problem-check-js"
+          "next": "choice-lesson-check-js"
         },
         {
           "label": "No, explain base-cases",
@@ -152,21 +152,21 @@
       ]
     },
     {
-      "stepId": "choice-problem-check-js",
+      "stepId": "choice-lesson-check-js",
       "mentorSays": "Do you understand the 1-step vs 2-step choice?",
       "choices": [
         {
-          "label": "Yes, I know choice-problem",
+          "label": "Yes, I know choice-lesson",
           "next": "coding-start-js"
         },
         {
-          "label": "No, explain choice-problem",
-          "next": "choice-problem-explanation-js"
+          "label": "No, explain choice-lesson",
+          "next": "choice-lesson-explanation-js"
         }
       ]
     },
     {
-      "stepId": "choice-problem-explanation-js",
+      "stepId": "choice-lesson-explanation-js",
       "mentorSays": "At each step, we can climb 1 or 2 steps. To reach step i, we can come from step i-1 (1 step) or step i-2 (2 steps). We choose the minimum cost: dp[i] = cost[i] + min(dp[i-1], dp[i-2]).\n\n// At each house, we have TWO choices:\n// OPTION 1: Rob this house → nums[i] + dp[i-2]\n// OPTION 2: Skip this house → dp[i-1]\n\n// Take the maximum:\ndp[i] = Math.max(\n  dp[i-1],              // Skip house i\n  nums[i] + dp[i-2]     // Rob house i\n);\n\nGot it?",
       "example": "// At each house, we have TWO choices:\n// OPTION 1: Rob this house → nums[i] + dp[i-2]\n// OPTION 2: Skip this house → dp[i-1]\n\n// Take the maximum:\ndp[i] = Math.max(\n  dp[i-1],              // Skip house i\n  nums[i] + dp[i-2]     // Rob house i\n);",
       "action": "continue",
@@ -304,7 +304,7 @@
       "choices": [
         {
           "label": "Yes, I know base-cases",
-          "next": "choice-problem-check-python"
+          "next": "choice-lesson-check-python"
         },
         {
           "label": "No, explain base-cases",
@@ -313,21 +313,21 @@
       ]
     },
     {
-      "stepId": "choice-problem-check-python",
+      "stepId": "choice-lesson-check-python",
       "mentorSays": "Do you understand the 1-step vs 2-step choice?",
       "choices": [
         {
-          "label": "Yes, I know choice-problem",
+          "label": "Yes, I know choice-lesson",
           "next": "coding-start-python"
         },
         {
-          "label": "No, explain choice-problem",
-          "next": "choice-problem-explanation-python"
+          "label": "No, explain choice-lesson",
+          "next": "choice-lesson-explanation-python"
         }
       ]
     },
     {
-      "stepId": "choice-problem-explanation-python",
+      "stepId": "choice-lesson-explanation-python",
       "mentorSays": "At each step, we can climb 1 or 2 steps. To reach step i, we can come from step i-1 (1 step) or step i-2 (2 steps). We choose the minimum cost: dp[i] = cost[i] + min(dp[i-1], dp[i-2]).\n\n# At each house, we have TWO choices:\n# OPTION 1: Rob this house → nums[i] + dp[i-2]\n# OPTION 2: Skip this house → dp[i-1]\n\n# Take the maximum:\ndp[i] = max(\n    dp[i-1],              # Skip house i\n    nums[i] + dp[i-2]     # Rob house i\n)\n\nGot it?",
       "example": "# At each house, we have TWO choices:\n# OPTION 1: Rob this house → nums[i] + dp[i-2]\n# OPTION 2: Skip this house → dp[i-1]\n\n# Take the maximum:\ndp[i] = max(\n    dp[i-1],              # Skip house i\n    nums[i] + dp[i-2]     # Rob house i\n)",
       "action": "continue",
@@ -465,7 +465,7 @@
       "choices": [
         {
           "label": "Yes, I know base-cases",
-          "next": "choice-problem-check-java"
+          "next": "choice-lesson-check-java"
         },
         {
           "label": "No, explain base-cases",
@@ -474,21 +474,21 @@
       ]
     },
     {
-      "stepId": "choice-problem-check-java",
+      "stepId": "choice-lesson-check-java",
       "mentorSays": "Do you understand the 1-step vs 2-step choice?",
       "choices": [
         {
-          "label": "Yes, I know choice-problem",
+          "label": "Yes, I know choice-lesson",
           "next": "coding-start-java"
         },
         {
-          "label": "No, explain choice-problem",
-          "next": "choice-problem-explanation-java"
+          "label": "No, explain choice-lesson",
+          "next": "choice-lesson-explanation-java"
         }
       ]
     },
     {
-      "stepId": "choice-problem-explanation-java",
+      "stepId": "choice-lesson-explanation-java",
       "mentorSays": "At each step, we can climb 1 or 2 steps. To reach step i, we can come from step i-1 (1 step) or step i-2 (2 steps). We choose the minimum cost: dp[i] = cost[i] + min(dp[i-1], dp[i-2]).\n\n// At each house, we have TWO choices:\n// OPTION 1: Rob this house → nums[i] + dp[i-2]\n// OPTION 2: Skip this house → dp[i-1]\n\n// Take the maximum:\ndp[i] = Math.max(\n    dp[i-1],              // Skip house i\n    nums[i] + dp[i-2]     // Rob house i\n);\n\nGot it?",
       "example": "// At each house, we have TWO choices:\n// OPTION 1: Rob this house → nums[i] + dp[i-2]\n// OPTION 2: Skip this house → dp[i-1]\n\n// Take the maximum:\ndp[i] = Math.max(\n    dp[i-1],              // Skip house i\n    nums[i] + dp[i-2]     // Rob house i\n);",
       "action": "continue",
@@ -626,7 +626,7 @@
       "choices": [
         {
           "label": "Yes, I know base-cases",
-          "next": "choice-problem-check-cpp"
+          "next": "choice-lesson-check-cpp"
         },
         {
           "label": "No, explain base-cases",
@@ -635,21 +635,21 @@
       ]
     },
     {
-      "stepId": "choice-problem-check-cpp",
+      "stepId": "choice-lesson-check-cpp",
       "mentorSays": "Do you understand the 1-step vs 2-step choice?",
       "choices": [
         {
-          "label": "Yes, I know choice-problem",
+          "label": "Yes, I know choice-lesson",
           "next": "coding-start-cpp"
         },
         {
-          "label": "No, explain choice-problem",
-          "next": "choice-problem-explanation-cpp"
+          "label": "No, explain choice-lesson",
+          "next": "choice-lesson-explanation-cpp"
         }
       ]
     },
     {
-      "stepId": "choice-problem-explanation-cpp",
+      "stepId": "choice-lesson-explanation-cpp",
       "mentorSays": "At each step, we can climb 1 or 2 steps. To reach step i, we can come from step i-1 (1 step) or step i-2 (2 steps). We choose the minimum cost: dp[i] = cost[i] + min(dp[i-1], dp[i-2]).\n\n// At each house, we have TWO choices:\n// OPTION 1: Rob this house → nums[i] + dp[i-2]\n// OPTION 2: Skip this house → dp[i-1]\n\n// Take the maximum:\ndp[i] = max(\n    dp[i-1],              // Skip house i\n    nums[i] + dp[i-2]     // Rob house i\n);\n\nGot it?",
       "example": "// At each house, we have TWO choices:\n// OPTION 1: Rob this house → nums[i] + dp[i-2]\n// OPTION 2: Skip this house → dp[i-1]\n\n// Take the maximum:\ndp[i] = max(\n    dp[i-1],              // Skip house i\n    nums[i] + dp[i-2]     // Rob house i\n);",
       "action": "continue",
@@ -787,7 +787,7 @@
       "choices": [
         {
           "label": "Yes, I know base-cases",
-          "next": "choice-problem-check-ts"
+          "next": "choice-lesson-check-ts"
         },
         {
           "label": "No, explain base-cases",
@@ -796,21 +796,21 @@
       ]
     },
     {
-      "stepId": "choice-problem-check-ts",
+      "stepId": "choice-lesson-check-ts",
       "mentorSays": "Do you understand the 1-step vs 2-step choice?",
       "choices": [
         {
-          "label": "Yes, I know choice-problem",
+          "label": "Yes, I know choice-lesson",
           "next": "coding-start-ts"
         },
         {
-          "label": "No, explain choice-problem",
-          "next": "choice-problem-explanation-ts"
+          "label": "No, explain choice-lesson",
+          "next": "choice-lesson-explanation-ts"
         }
       ]
     },
     {
-      "stepId": "choice-problem-explanation-ts",
+      "stepId": "choice-lesson-explanation-ts",
       "mentorSays": "At each step, we can climb 1 or 2 steps. To reach step i, we can come from step i-1 (1 step) or step i-2 (2 steps). We choose the minimum cost: dp[i] = cost[i] + min(dp[i-1], dp[i-2]).\n\n// At each house, we have TWO choices:\n// OPTION 1: Rob this house → nums[i] + dp[i-2]\n// OPTION 2: Skip this house → dp[i-1]\n\n// Take the maximum:\ndp[i] = Math.max(\n  dp[i-1],              // Skip house i\n  nums[i] + dp[i-2]     // Rob house i\n);\n\nGot it?",
       "example": "// At each house, we have TWO choices:\n// OPTION 1: Rob this house → nums[i] + dp[i-2]\n// OPTION 2: Skip this house → dp[i-1]\n\n// Take the maximum:\ndp[i] = Math.max(\n  dp[i-1],              // Skip house i\n  nums[i] + dp[i-2]     // Rob house i\n);",
       "action": "continue",
@@ -888,7 +888,7 @@
     },
     {
       "stepId": "final",
-      "mentorSays": "🎉 Well done! You've learned min cost climbing stairs using dynamic programming. You understand how to track minimum costs at each step and choose the optimal path!\n\nThis is O(n) time and O(n) space - excellent for optimization problems! Keep practicing!",
+      "mentorSays": "🎉 Well done! You've learned min cost climbing stairs using dynamic programming. You understand how to track minimum costs at each step and choose the optimal path!\n\nThis is O(n) time and O(n) space - excellent for optimization lessons! Keep practicing!",
       "action": "continue"
     }
   ]

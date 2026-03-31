@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "rtk-thunk-01",
     "track": "react-ts",
-    "problemNum": 122,
+    "lessonNum": 122,
     "title": "Redux Toolkit: Writing Your First createAsyncThunk",
     "shortName": "RTK-T01",
     "intro": {

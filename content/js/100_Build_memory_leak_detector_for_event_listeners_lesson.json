@@ -3,14 +3,14 @@
   "config": {
     "lessonId": "ai-js-100",
     "track": "js",
-    "problemNum": 100,
+    "lessonNum": 100,
     "title": "Build memory leak detector for event listeners",
     "shortName": "P100",
     "intro": {
       "tag": "LESSON #100",
       "title": "Build memory leak detector for event listeners",
       "body": "In this lesson, you will build a simple memory leak detector for event listeners in JavaScript. You will learn how to track event listeners added to DOM elements and detect potential memory leaks by checking if listeners are still attached after they should have been removed. The core programming concept involves using closures and arrays to store listener references and comparing them over time. You will work with native JavaScript constructs like addEventListener, removeEventListener, and custom tracking logic. This hands-on project will help you understand how memory leaks occur with event listeners and how to prevent them in your web applications.",
-      "usecase": "Event listener memory leaks are a critical issue in long-running web applications like dashboards, analytics platforms, and single-page applications. Developers encounter this problem when building interactive UI components such as real-time data filters, dynamic charts with tooltips, or multi-tab interfaces where event listeners accumulate without proper cleanup. For example, a financial dashboard that updates stock prices every second might attach new listeners with each refresh, gradually degrading performance. This lesson's memory leak detector helps identify and prevent these issues before they impact user experience in production applications."
+      "usecase": "Event listener memory leaks are a critical issue in long-running web applications like dashboards, analytics platforms, and single-page applications. Developers encounter this lesson when building interactive UI components such as real-time data filters, dynamic charts with tooltips, or multi-tab interfaces where event listeners accumulate without proper cleanup. For example, a financial dashboard that updates stock prices every second might attach new listeners with each refresh, gradually degrading performance. This lesson's memory leak detector helps identify and prevent these issues before they impact user experience in production applications."
     },
     "objectives": [
       "Implement a function to track event listener registrations",

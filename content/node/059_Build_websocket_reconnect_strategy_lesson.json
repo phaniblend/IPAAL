@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-node-59",
     "track": "node",
-    "problemNum": 59,
+    "lessonNum": 59,
     "title": "Build websocket reconnect strategy",
     "shortName": "P59",
     "intro": {

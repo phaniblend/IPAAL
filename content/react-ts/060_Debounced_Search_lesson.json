@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-react-ts-60",
     "track": "react-ts",
-    "problemNum": 60,
+    "lessonNum": 60,
     "title": "Debounced Search",
     "shortName": "P60",
     "intro": {

@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-algorithms-60",
     "track": "algorithms",
-    "problemNum": 60,
+    "lessonNum": 60,
     "title": "Capacity to Ship Packages",
     "shortName": "P60",
     "intro": {
@@ -18,7 +18,7 @@
       "Apply a validation check to ensure capacity meets daily shipping constraints",
       "Initialize and manipulate variables to track current capacity and days needed",
       "Configure the algorithm to handle edge cases like single packages or maximum weight limits",
-      "Integrate the capacity calculation with the binary search to solve the shipping problem",
+      "Integrate the capacity calculation with the binary search to solve the shipping lesson",
       "Render test cases to verify the algorithm's correctness with different package arrays"
     ],
     "steps": [
@@ -38,7 +38,7 @@
         "phase": "Step 2 of 17",
         "title": "What you'll learn",
         "content": {
-          "body": "By the end of this lesson, you'll be able to:\n1. Explain why checking every possible capacity is inefficient.\n2. Apply binary search to find the minimum valid capacity.\n3. Implement a function that calculates if a given capacity can ship all packages within the days limit.\n4. Combine the validation check with binary search to solve the problem.",
+          "body": "By the end of this lesson, you'll be able to:\n1. Explain why checking every possible capacity is inefficient.\n2. Apply binary search to find the minimum valid capacity.\n3. Implement a function that calculates if a given capacity can ship all packages within the days limit.\n4. Combine the validation check with binary search to solve the lesson.",
           "title": "What you'll learn"
         }
       },
@@ -133,7 +133,7 @@
         "phase": "Step 7 of 17",
         "title": "Why it gets hard",
         "content": {
-          "body": "In real problems, package weights can be large (up to 500) and counts high (up to 5×10^4). The possible capacities range from the heaviest package to the sum of all packages—that could be millions of values! Checking each one is far too slow. We need a smarter method. Can't figure it out? Click Show me on the next step.",
+          "body": "In real lessons, package weights can be large (up to 500) and counts high (up to 5×10^4). The possible capacities range from the heaviest package to the sum of all packages—that could be millions of values! Checking each one is far too slow. We need a smarter method. Can't figure it out? Click Show me on the next step.",
           "title": "Why it gets hard"
         }
       },
@@ -334,7 +334,7 @@
         "phase": "Step 17 of 17",
         "title": "Done",
         "content": {
-          "body": "Congratulations! You've implemented an efficient solution to the ship capacity problem. Key takeaways:\n1. Binary search works when you have a sorted pattern of failures then successes.\n2. The canShip function simulates the shipping process to validate a capacity.\n3. By eliminating half the search space each time, we go from O(n) to O(log n) checks.\n\nRemember: This pattern of 'find minimum valid value using binary search' appears in many optimization problems. The validation function (canShip) is specific to the problem, but the binary search framework remains the same.",
+          "body": "Congratulations! You've implemented an efficient solution to the ship capacity lesson. Key takeaways:\n1. Binary search works when you have a sorted pattern of failures then successes.\n2. The canShip function simulates the shipping process to validate a capacity.\n3. By eliminating half the search space each time, we go from O(n) to O(log n) checks.\n\nRemember: This pattern of 'find minimum valid value using binary search' appears in many optimization lessons. The validation function (canShip) is specific to the lesson, but the binary search framework remains the same.",
           "title": "Done"
         }
       }

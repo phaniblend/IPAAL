@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-js-02",
     "track": "js",
-    "problemNum": 2,
+    "lessonNum": 2,
     "title": "Functions — Arrow, Closures & HOF",
     "shortName": "P02",
     "intro": {

@@ -73,7 +73,7 @@ function getOutputPreview(answer) {
 export default createINPACTEngine({
   NODES,
   sideItems,
-  problemNum: 15,
+  lessonNum: 15,
   title: "Grid: container and template",
   shortName: "C15",
   language: "css",

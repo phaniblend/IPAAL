@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-ts-57",
     "track": "ts",
-    "problemNum": 57,
+    "lessonNum": 57,
     "title": "Build typed route config map",
     "shortName": "P57",
     "intro": {

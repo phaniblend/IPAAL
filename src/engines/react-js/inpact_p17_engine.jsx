@@ -35,4 +35,4 @@ export default function ProductList() {
 
 const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
 
-export default createINPACTEngine({ NODES, sideItems, problemNum: 17, title: "List Rendering", shortName: "LIST RENDERING" });
+export default createINPACTEngine({ NODES, sideItems, lessonNum: 17, title: "List Rendering", shortName: "LIST RENDERING" });

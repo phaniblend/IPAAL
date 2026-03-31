@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-vue-117",
     "track": "vue",
-    "problemNum": 117,
+    "lessonNum": 117,
     "title": "Form Validation with Zod + React Hook Form",
     "shortName": "P117",
     "intro": {

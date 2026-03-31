@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-css-09",
     "track": "css",
-    "problemNum": 9,
+    "lessonNum": 9,
     "title": "Flex: container and direction",
     "shortName": "P09",
     "intro": {

@@ -73,7 +73,7 @@ function getOutputPreview(answer) {
 export default createINPACTEngine({
   NODES,
   sideItems,
-  problemNum: 30,
+  lessonNum: 30,
   title: "transform: translate, scale, rotate",
   shortName: "C30",
   language: "css",

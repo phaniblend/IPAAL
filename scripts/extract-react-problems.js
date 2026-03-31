@@ -36,7 +36,7 @@ function extractItems(raw) {
 }
 
 const out = [];
-out.push("# React (JS) Problems — Title, Description & Learning Objectives");
+out.push("# React (JS) Lessons — Title, Description & Learning Objectives");
 out.push("");
 out.push("---");
 out.push("");
@@ -50,7 +50,7 @@ for (const file of files) {
 
   out.push(`## P${num.padStart(2, "0")} — ${title}`);
   out.push("");
-  out.push("**problem title:** " + title);
+  out.push("**lesson title:** " + title);
   out.push("");
   out.push("**description:** " + (body || "(No description)"));
   out.push("");
@@ -66,4 +66,4 @@ for (const file of files) {
 }
 
 fs.writeFileSync(path.join(__dirname, "../REACT_JS_PROBLEMS.md"), out.join("\n"), "utf8");
-console.log("Wrote REACT_JS_PROBLEMS.md with", files.length, "problems.");
+console.log("Wrote REACT_JS_PROBLEMS.md with", files.length, "lessons.");

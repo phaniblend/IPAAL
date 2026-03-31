@@ -3,13 +3,13 @@
   "config": {
     "lessonId": "ai-algorithms-09",
     "track": "algorithms",
-    "problemNum": 9,
+    "lessonNum": 9,
     "title": "Find All Numbers Disappeared",
     "shortName": "P09",
     "intro": {
       "tag": "LESSON #9",
       "title": "Find All Numbers Disappeared",
-      "body": "In this lesson, you will build a function that finds all numbers missing from a given array of integers, where the array contains numbers from 1 to n but some may be missing. You will learn the core concept of using an array as a hash map to mark visited numbers efficiently. The main technologies involved are JavaScript arrays, loops, and conditional logic. This approach helps solve the problem without extra space, making it optimal for beginners to understand array manipulation and indexing.",
+      "body": "In this lesson, you will build a function that finds all numbers missing from a given array of integers, where the array contains numbers from 1 to n but some may be missing. You will learn the core concept of using an array as a hash map to mark visited numbers efficiently. The main technologies involved are JavaScript arrays, loops, and conditional logic. This approach helps solve the lesson without extra space, making it optimal for beginners to understand array manipulation and indexing.",
       "usecase": "The 'Find All Numbers Disappeared' pattern is essential for data validation and integrity checks in real applications. For example, in inventory management dashboards, it can identify missing product IDs in a shipment sequence, ensuring complete tracking. In user analytics panels, it helps detect gaps in sequential user activity logs or missing timestamps in event streams. This algorithm also powers form validation by finding skipped entries in numbered form submissions or missing steps in multi-step workflows."
     },
     "objectives": [
@@ -298,7 +298,7 @@
         "phase": "Step 16 of 16",
         "title": "Done",
         "content": {
-          "body": "Great work! You've implemented an efficient O(n) solution using a hash map approach. Remember: the key insight is to use a lookup structure to remember what we've seen, avoiding repeated scans. This 'notebook' pattern is powerful for many array problems where you need to track occurrences or check membership quickly.",
+          "body": "Great work! You've implemented an efficient O(n) solution using a hash map approach. Remember: the key insight is to use a lookup structure to remember what we've seen, avoiding repeated scans. This 'notebook' pattern is powerful for many array lessons where you need to track occurrences or check membership quickly.",
           "title": "Done"
         }
       }

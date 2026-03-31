@@ -27,4 +27,4 @@ const numCPUs = require('os').cpus().length
 ];
 
 const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }];
-export default createINPACTEngine({ NODES, sideItems, problemNum: "NODE-F05", title: "Cluster module", shortName: "NODE — CLUSTER" });
+export default createINPACTEngine({ NODES, sideItems, lessonNum: "NODE-F05", title: "Cluster module", shortName: "NODE — CLUSTER" });

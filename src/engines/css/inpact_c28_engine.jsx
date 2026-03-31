@@ -73,7 +73,7 @@ function getOutputPreview(answer) {
 export default createINPACTEngine({
   NODES,
   sideItems,
-  problemNum: 28,
+  lessonNum: 28,
   title: "border-radius and box-shadow",
   shortName: "C28",
   language: "css",

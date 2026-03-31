@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-js-05",
     "track": "js",
-    "problemNum": 5,
+    "lessonNum": 5,
     "title": "Objects, Prototypes & Classes",
     "shortName": "P05",
     "intro": {

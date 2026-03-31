@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-algorithms-67",
     "track": "algorithms",
-    "problemNum": 67,
+    "lessonNum": 67,
     "title": "Palindrome Linked List",
     "shortName": "P67",
     "intro": {
@@ -258,7 +258,7 @@
         "phase": "Step 15 of 15",
         "title": "Done",
         "content": {
-          "body": "You've implemented an efficient palindrome check for linked lists! Remember: we can't use indices, so we walk node-by-node with pointers. The slow/fast technique finds the middle in one pass, and reversing the second half lets us compare without extra space. Keep practicing this pointer mental model—it's essential for linked list problems.",
+          "body": "You've implemented an efficient palindrome check for linked lists! Remember: we can't use indices, so we walk node-by-node with pointers. The slow/fast technique finds the middle in one pass, and reversing the second half lets us compare without extra space. Keep practicing this pointer mental model—it's essential for linked list lessons.",
           "title": "Done"
         }
       }

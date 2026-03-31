@@ -10,18 +10,18 @@
       "stepId": "title",
       "mentorSays": "At the end of this lesson, you will be able to:\n\n1. Understand what it means to move zeros to the end\n2. Use two pointers to rearrange elements in-place\n3. Maintain the relative order of non-zero elements\n4. Implement the solution step by step in your chosen language",
       "action": "continue",
-      "next": "problem-illustration"
+      "next": "lesson-illustration"
     },
     {
-      "stepId": "problem-illustration",
-      "mentorSays": "Perfect! Now let's understand what the Move Zeros to End problem is asking.\n\nImagine you have an array: [0, 1, 0, 3, 12]\n\nYour task: Move all zeros to the end while keeping the relative order of non-zero elements the same.\n\nLooking at the array:\n- Non-zero elements: 1, 3, 12 (in that order)\n- Zeros: 0, 0\n\nAfter moving zeros to the end:\n- [1, 3, 12, 0, 0]\n\nNotice:\n- All non-zero elements (1, 3, 12) are at the front, in the same order\n- All zeros are at the end\n- The array is modified in-place (we don't create a new array)\n\nThat's what the problem wants: rearrange the array so all zeros are at the end, and all non-zero elements maintain their original relative order at the front.",
+      "stepId": "lesson-illustration",
+      "mentorSays": "Perfect! Now let's understand what the Move Zeros to End lesson is asking.\n\nImagine you have an array: [0, 1, 0, 3, 12]\n\nYour task: Move all zeros to the end while keeping the relative order of non-zero elements the same.\n\nLooking at the array:\n- Non-zero elements: 1, 3, 12 (in that order)\n- Zeros: 0, 0\n\nAfter moving zeros to the end:\n- [1, 3, 12, 0, 0]\n\nNotice:\n- All non-zero elements (1, 3, 12) are at the front, in the same order\n- All zeros are at the end\n- The array is modified in-place (we don't create a new array)\n\nThat's what the lesson wants: rearrange the array so all zeros are at the end, and all non-zero elements maintain their original relative order at the front.",
       "example": "nums = [0, 1, 0, 3, 12]\n\nMove zeros to end:\n[1, 3, 12, 0, 0]\n\nAnother example:\nnums = [0, 0, 1]\n\nMove zeros to end:\n[1, 0, 0]\n\nNote: We modify the array in-place, and non-zero elements keep their relative order.",
       "action": "continue",
       "next": "thinking-challenge"
     },
     {
       "stepId": "thinking-challenge",
-      "mentorSays": "Now that you understand what the problem wants, here's the real question:\n\nHow would YOU move zeros to the end?\n\nThink about it for a moment. What approach feels natural to you?",
+      "mentorSays": "Now that you understand what the lesson wants, here's the real question:\n\nHow would YOU move zeros to the end?\n\nThink about it for a moment. What approach feels natural to you?",
       "choices": [
         {
           "label": "Use two pointers: one to track position for non-zeros, one to scan",
@@ -39,7 +39,7 @@
     },
     {
       "stepId": "explore-new-array",
-      "mentorSays": "That's a straightforward approach! You're thinking: \"I'll create a new array, copy all non-zero elements first, then add zeros at the end.\"\n\nFor [0, 1, 0, 3, 12]:\n- Non-zeros: [1, 3, 12]\n- Zeros: [0, 0]\n- Result: [1, 3, 12, 0, 0]\n\nThis works! However, the problem asks us to modify the array in-place (without creating a new array). Also, using extra space makes it less efficient.\n\nWould you like to learn the two pointers approach that works in-place?",
+      "mentorSays": "That's a straightforward approach! You're thinking: \"I'll create a new array, copy all non-zero elements first, then add zeros at the end.\"\n\nFor [0, 1, 0, 3, 12]:\n- Non-zeros: [1, 3, 12]\n- Zeros: [0, 0]\n- Result: [1, 3, 12, 0, 0]\n\nThis works! However, the lesson asks us to modify the array in-place (without creating a new array). Also, using extra space makes it less efficient.\n\nWould you like to learn the two pointers approach that works in-place?",
       "choices": [
         {
           "label": "Yes, teach me the two pointers approach",
@@ -154,7 +154,7 @@
     },
     {
       "stepId": "loop-check-js",
-      "mentorSays": "To solve this problem, we'll need to use loops. Do you know what a loop is in JavaScript?",
+      "mentorSays": "To solve this lesson, we'll need to use loops. Do you know what a loop is in JavaScript?",
       "choices": [
         {
           "label": "Yes, I know loops",
@@ -182,7 +182,7 @@
     },
     {
       "stepId": "two-pointers-explanation-js",
-      "mentorSays": "The two-pointer technique uses two indices to traverse an array efficiently. For this problem, one pointer tracks where to write non-zero elements, and another scans through the array.\n\nlet writeIndex = 0;\nlet readIndex = 0;\n\n// Two pointers: writeIndex writes, readIndex reads\nwhile (readIndex < nums.length) {\n  if (nums[readIndex] !== 0) {\n    nums[writeIndex++] = nums[readIndex];\n  }\n  readIndex++;\n}\n\nGot it?",
+      "mentorSays": "The two-pointer technique uses two indices to traverse an array efficiently. For this lesson, one pointer tracks where to write non-zero elements, and another scans through the array.\n\nlet writeIndex = 0;\nlet readIndex = 0;\n\n// Two pointers: writeIndex writes, readIndex reads\nwhile (readIndex < nums.length) {\n  if (nums[readIndex] !== 0) {\n    nums[writeIndex++] = nums[readIndex];\n  }\n  readIndex++;\n}\n\nGot it?",
       "example": "let writeIndex = 0;\nlet readIndex = 0;\n\n// Two pointers: writeIndex writes, readIndex reads\nwhile (readIndex < nums.length) {\n  if (nums[readIndex] !== 0) {\n    nums[writeIndex++] = nums[readIndex];\n  }\n  readIndex++;\n}",
       "action": "continue",
       "next": "coding-start-js"
@@ -308,7 +308,7 @@
     },
     {
       "stepId": "loop-check-python",
-      "mentorSays": "To solve this problem, we'll need to use loops. Do you know what a loop is in Python?",
+      "mentorSays": "To solve this lesson, we'll need to use loops. Do you know what a loop is in Python?",
       "choices": [
         {
           "label": "Yes, I know loops",
@@ -336,7 +336,7 @@
     },
     {
       "stepId": "two-pointers-explanation-python",
-      "mentorSays": "The two-pointer technique uses two indices to traverse an array efficiently. For this problem, one pointer tracks where to write non-zero elements, and another scans through the array.\n\nlet writeIndex = 0;\nlet readIndex = 0;\n\n// Two pointers: writeIndex writes, readIndex reads\nwhile (readIndex < nums.length) {\n  if (nums[readIndex] !== 0) {\n    nums[writeIndex++] = nums[readIndex];\n  }\n  readIndex++;\n}\n\nGot it?",
+      "mentorSays": "The two-pointer technique uses two indices to traverse an array efficiently. For this lesson, one pointer tracks where to write non-zero elements, and another scans through the array.\n\nlet writeIndex = 0;\nlet readIndex = 0;\n\n// Two pointers: writeIndex writes, readIndex reads\nwhile (readIndex < nums.length) {\n  if (nums[readIndex] !== 0) {\n    nums[writeIndex++] = nums[readIndex];\n  }\n  readIndex++;\n}\n\nGot it?",
       "example": "let writeIndex = 0;\nlet readIndex = 0;\n\n// Two pointers: writeIndex writes, readIndex reads\nwhile (readIndex < nums.length) {\n  if (nums[readIndex] !== 0) {\n    nums[writeIndex++] = nums[readIndex];\n  }\n  readIndex++;\n}",
       "action": "continue",
       "next": "coding-start-python"
@@ -462,7 +462,7 @@
     },
     {
       "stepId": "loop-check-java",
-      "mentorSays": "To solve this problem, we'll need to use loops. Do you know what a loop is in Java?",
+      "mentorSays": "To solve this lesson, we'll need to use loops. Do you know what a loop is in Java?",
       "choices": [
         {
           "label": "Yes, I know loops",
@@ -490,7 +490,7 @@
     },
     {
       "stepId": "two-pointers-explanation-java",
-      "mentorSays": "The two-pointer technique uses two indices to traverse an array efficiently. For this problem, one pointer tracks where to write non-zero elements, and another scans through the array.\n\nlet writeIndex = 0;\nlet readIndex = 0;\n\n// Two pointers: writeIndex writes, readIndex reads\nwhile (readIndex < nums.length) {\n  if (nums[readIndex] !== 0) {\n    nums[writeIndex++] = nums[readIndex];\n  }\n  readIndex++;\n}\n\nGot it?",
+      "mentorSays": "The two-pointer technique uses two indices to traverse an array efficiently. For this lesson, one pointer tracks where to write non-zero elements, and another scans through the array.\n\nlet writeIndex = 0;\nlet readIndex = 0;\n\n// Two pointers: writeIndex writes, readIndex reads\nwhile (readIndex < nums.length) {\n  if (nums[readIndex] !== 0) {\n    nums[writeIndex++] = nums[readIndex];\n  }\n  readIndex++;\n}\n\nGot it?",
       "example": "let writeIndex = 0;\nlet readIndex = 0;\n\n// Two pointers: writeIndex writes, readIndex reads\nwhile (readIndex < nums.length) {\n  if (nums[readIndex] !== 0) {\n    nums[writeIndex++] = nums[readIndex];\n  }\n  readIndex++;\n}",
       "action": "continue",
       "next": "coding-start-java"
@@ -616,7 +616,7 @@
     },
     {
       "stepId": "loop-check-cpp",
-      "mentorSays": "To solve this problem, we'll need to use loops. Do you know what a loop is in C++?",
+      "mentorSays": "To solve this lesson, we'll need to use loops. Do you know what a loop is in C++?",
       "choices": [
         {
           "label": "Yes, I know loops",
@@ -644,7 +644,7 @@
     },
     {
       "stepId": "two-pointers-explanation-cpp",
-      "mentorSays": "The two-pointer technique uses two indices to traverse an array efficiently. For this problem, one pointer tracks where to write non-zero elements, and another scans through the array.\n\nlet writeIndex = 0;\nlet readIndex = 0;\n\n// Two pointers: writeIndex writes, readIndex reads\nwhile (readIndex < nums.length) {\n  if (nums[readIndex] !== 0) {\n    nums[writeIndex++] = nums[readIndex];\n  }\n  readIndex++;\n}\n\nGot it?",
+      "mentorSays": "The two-pointer technique uses two indices to traverse an array efficiently. For this lesson, one pointer tracks where to write non-zero elements, and another scans through the array.\n\nlet writeIndex = 0;\nlet readIndex = 0;\n\n// Two pointers: writeIndex writes, readIndex reads\nwhile (readIndex < nums.length) {\n  if (nums[readIndex] !== 0) {\n    nums[writeIndex++] = nums[readIndex];\n  }\n  readIndex++;\n}\n\nGot it?",
       "example": "let writeIndex = 0;\nlet readIndex = 0;\n\n// Two pointers: writeIndex writes, readIndex reads\nwhile (readIndex < nums.length) {\n  if (nums[readIndex] !== 0) {\n    nums[writeIndex++] = nums[readIndex];\n  }\n  readIndex++;\n}",
       "action": "continue",
       "next": "coding-start-cpp"
@@ -770,7 +770,7 @@
     },
     {
       "stepId": "loop-check-ts",
-      "mentorSays": "To solve this problem, we'll need to use loops. Do you know what a loop is in TypeScript?",
+      "mentorSays": "To solve this lesson, we'll need to use loops. Do you know what a loop is in TypeScript?",
       "choices": [
         {
           "label": "Yes, I know loops",
@@ -798,7 +798,7 @@
     },
     {
       "stepId": "two-pointers-explanation-ts",
-      "mentorSays": "The two-pointer technique uses two indices to traverse an array efficiently. For this problem, one pointer tracks where to write non-zero elements, and another scans through the array.\n\nlet writeIndex = 0;\nlet readIndex = 0;\n\n// Two pointers: writeIndex writes, readIndex reads\nwhile (readIndex < nums.length) {\n  if (nums[readIndex] !== 0) {\n    nums[writeIndex++] = nums[readIndex];\n  }\n  readIndex++;\n}\n\nGot it?",
+      "mentorSays": "The two-pointer technique uses two indices to traverse an array efficiently. For this lesson, one pointer tracks where to write non-zero elements, and another scans through the array.\n\nlet writeIndex = 0;\nlet readIndex = 0;\n\n// Two pointers: writeIndex writes, readIndex reads\nwhile (readIndex < nums.length) {\n  if (nums[readIndex] !== 0) {\n    nums[writeIndex++] = nums[readIndex];\n  }\n  readIndex++;\n}\n\nGot it?",
       "example": "let writeIndex = 0;\nlet readIndex = 0;\n\n// Two pointers: writeIndex writes, readIndex reads\nwhile (readIndex < nums.length) {\n  if (nums[readIndex] !== 0) {\n    nums[writeIndex++] = nums[readIndex];\n  }\n  readIndex++;\n}",
       "action": "continue",
       "next": "coding-start-ts"
@@ -936,7 +936,7 @@
     },
     {
       "stepId": "final",
-      "mentorSays": "🎉 Well done! You've learned to think through the Move Zeros to End problem. You understand what the problem asks for, how to use two pointers to rearrange elements in-place, and you've explored different approaches to solve it.\n\nThis kind of thinking—using two pointers to rearrange elements efficiently—is essential for solving many algorithm problems. Keep practicing!",
+      "mentorSays": "🎉 Well done! You've learned to think through the Move Zeros to End lesson. You understand what the lesson asks for, how to use two pointers to rearrange elements in-place, and you've explored different approaches to solve it.\n\nThis kind of thinking—using two pointers to rearrange elements efficiently—is essential for solving many algorithm lessons. Keep practicing!",
       "action": "continue"
     }
   ]

@@ -11,4 +11,4 @@ const NODES = [
 // * => * with query(':enter', stagger(100, animate(...)))`, feedback_correct: "✅ trigger, state, transition, animate; query :enter stagger.", feedback_wrong: "trigger/state/transition/animate; stagger for list items.", expected: "Animations" },
 ];
 const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }];
-export default createINPACTEngine({ NODES, sideItems, problemNum: "ANG-F11", title: "Animations", shortName: "ANG — ANIMATIONS" });
+export default createINPACTEngine({ NODES, sideItems, lessonNum: "ANG-F11", title: "Animations", shortName: "ANG — ANIMATIONS" });

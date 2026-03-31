@@ -3,20 +3,20 @@
   "config": {
     "lessonId": "ai-algorithms-11",
     "track": "algorithms",
-    "problemNum": 11,
+    "lessonNum": 11,
     "title": "Longest Consecutive Sequence",
     "shortName": "P11",
     "intro": {
       "tag": "LESSON #11",
       "title": "Longest Consecutive Sequence",
-      "body": "In this lesson, you will build a function that finds the length of the longest consecutive sequence of numbers in an unsorted array. You will learn the core concept of using a hash set for efficient lookups to solve this problem without sorting. The main technologies involved are JavaScript arrays, the Set object, and basic loops and conditionals. By the end, you will understand how to implement an O(n) time complexity solution by checking for sequence starts and counting consecutive elements.",
+      "body": "In this lesson, you will build a function that finds the length of the longest consecutive sequence of numbers in an unsorted array. You will learn the core concept of using a hash set for efficient lookups to solve this lesson without sorting. The main technologies involved are JavaScript arrays, the Set object, and basic loops and conditionals. By the end, you will understand how to implement an O(n) time complexity solution by checking for sequence starts and counting consecutive elements.",
       "usecase": "The Longest Consecutive Sequence algorithm is essential for analyzing sequential data patterns in real-world applications. In e-commerce dashboards, it helps identify the longest streak of consecutive daily purchases by a customer to personalize loyalty rewards. Social media platforms use it to find users' longest consecutive login streaks for gamification features. Data analytics tools apply it to detect the longest uninterrupted sequence of sensor readings in IoT monitoring systems, highlighting periods of consistent operation."
     },
     "objectives": [
       "Implement a function that finds the longest consecutive sequence in an array of integers",
       "Apply a hash set data structure to efficiently check for consecutive elements",
       "Construct an algorithm that iterates through array elements to identify sequence starting points",
-      "Manipulate array data by sorting or using alternative approaches to solve the problem",
+      "Manipulate array data by sorting or using alternative approaches to solve the lesson",
       "Initialize and update variables to track the current sequence length and maximum length",
       "Integrate conditional logic to handle edge cases like empty arrays and duplicate values",
       "Configure test cases to validate the function's correctness with various input scenarios"
@@ -297,7 +297,7 @@
         "phase": "Step 16 of 16",
         "title": "Done",
         "content": {
-          "body": "Congratulations! You've implemented the Longest Consecutive Sequence algorithm. Remember the key insights:\n1. Use a Set for O(1) lookups instead of scanning the array repeatedly\n2. Only start counting from numbers that are sequence starters (when num-1 doesn't exist)\n3. Each number is processed at most twice, making this O(n) efficient\n\nThis 'remember what we've seen' pattern with lookup structures is powerful for many array problems!",
+          "body": "Congratulations! You've implemented the Longest Consecutive Sequence algorithm. Remember the key insights:\n1. Use a Set for O(1) lookups instead of scanning the array repeatedly\n2. Only start counting from numbers that are sequence starters (when num-1 doesn't exist)\n3. Each number is processed at most twice, making this O(n) efficient\n\nThis 'remember what we've seen' pattern with lookup structures is powerful for many array lessons!",
           "title": "Done"
         }
       }

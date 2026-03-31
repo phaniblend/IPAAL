@@ -73,7 +73,7 @@ function getOutputPreview(answer) {
 export default createINPACTEngine({
   NODES,
   sideItems,
-  problemNum: 48,
+  lessonNum: 48,
   title: "Logical properties (margin-inline, etc.)",
   shortName: "C48",
   language: "css",

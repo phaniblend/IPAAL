@@ -9,4 +9,4 @@ const NODES = [
 ];
 
 const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
-export default createINPACTEngine({ NODES, sideItems, problemNum: 123, title: "Form Validation with Zod + React Hook Form", shortName: "ZOD + REACT HOOK FORM" });
+export default createINPACTEngine({ NODES, sideItems, lessonNum: 123, title: "Form Validation with Zod + React Hook Form", shortName: "ZOD + REACT HOOK FORM" });

@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-js-52",
     "track": "js",
-    "problemNum": 52,
+    "lessonNum": 52,
     "title": "Build a multi step form with validation",
     "shortName": "P52",
     "intro": {

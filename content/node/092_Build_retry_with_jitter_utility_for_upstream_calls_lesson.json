@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-node-92",
     "track": "node",
-    "problemNum": 92,
+    "lessonNum": 92,
     "title": "Build retry with jitter utility for upstream calls",
     "shortName": "P92",
     "intro": {
@@ -118,7 +118,7 @@
         "hint": "Use Math.random() to generate a random number between 0 and 1, then scale it to the desired range and multiply it with the base delay.",
         "analogousExample": "// Adding jitter to a delay calculation\nfunction calculateDelayWithJitter(baseDelay) {\n    const jitterFactor = 0.5 + Math.random(); // Random between 0.5 and 1.5\n    return baseDelay * jitterFactor;\n}",
         "seedCode": "// Import the 'https' and 'util' modules here\n\n// Define the retryWithJitter function here\nfunction retryWithJitter() {\n    // Add calculateDelay helper function here\n    function calculateDelay(attempt) {\n        const baseDelay = Math.pow(2, attempt) * 100;\n        // Add jitter to the delay calculation here\n    }\n}",
-        "expectedOutcome": "The calculateDelay function now returns a delay with random jitter applied, helping to prevent the thundering herd problem.",
+        "expectedOutcome": "The calculateDelay function now returns a delay with random jitter applied, helping to prevent the thundering herd lesson.",
         "successCriteria": [
           "The calculateDelay function multiplies the baseDelay by a random factor between 0.5 and 1.5."
         ],

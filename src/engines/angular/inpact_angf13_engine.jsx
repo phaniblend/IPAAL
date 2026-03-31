@@ -7,4 +7,4 @@ const NODES = [
 bootstrapApplication(AppComponent, { providers: [importProvidersFrom(RouterModule.forRoot(...))] })`, feedback_correct: "✅ standalone: true; bootstrapApplication; importProvidersFrom for NgModule providers.", feedback_wrong: "standalone: true; bootstrapApplication with providers; importProvidersFrom.", expected: "Standalone" },
 ];
 const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }];
-export default createINPACTEngine({ NODES, sideItems, problemNum: "ANG-F13", title: "Standalone components", shortName: "ANG — STANDALONE" });
+export default createINPACTEngine({ NODES, sideItems, lessonNum: "ANG-F13", title: "Standalone components", shortName: "ANG — STANDALONE" });

@@ -7,4 +7,4 @@ const NODES = [
 *ngIf="cond; else other" <ng-template #other>`, feedback_correct: "✅ *ngFor trackBy; *ngIf else; structural directive changes DOM.", feedback_wrong: "ngFor with trackBy; ngIf/else; structural directives use *.", expected: "Directives" },
 ];
 const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }];
-export default createINPACTEngine({ NODES, sideItems, problemNum: "ANG-F02", title: "Directives", shortName: "ANG — DIRECTIVES" });
+export default createINPACTEngine({ NODES, sideItems, lessonNum: "ANG-F02", title: "Directives", shortName: "ANG — DIRECTIVES" });

@@ -8,20 +8,20 @@
   "flow": [
     {
       "stepId": "title",
-      "mentorSays": "At the end of this lesson, you will be able to:\n\n1. Understand what the Intersection of Two Linked Lists problem asks for\n2. Use two pointers to find the intersection point\n3. Handle lists of different lengths\n4. Use the two-pointer technique with length adjustment\n5. Implement the solution step by step in your chosen language",
+      "mentorSays": "At the end of this lesson, you will be able to:\n\n1. Understand what the Intersection of Two Linked Lists lesson asks for\n2. Use two pointers to find the intersection point\n3. Handle lists of different lengths\n4. Use the two-pointer technique with length adjustment\n5. Implement the solution step by step in your chosen language",
       "action": "continue",
-      "next": "problem-illustration"
+      "next": "lesson-illustration"
     },
     {
-      "stepId": "problem-illustration",
-      "mentorSays": "Perfect! Now let's understand what the Intersection of Two Linked Lists problem is asking.\n\n**Problem Definition:**\nGiven the heads of two singly linked lists `headA` and `headB`, return the node at which the two lists intersect. If the two linked lists have no intersection at all, return `null`.\n\n**Key Observations:**\n- Two lists may intersect at some node\n- After intersection, both lists share the same nodes\n- Lists may have different lengths before intersection\n- We need to find the first common node\n\n**Example 1:**\nlistA: 4 -> 1 -> 8 -> 4 -> 5\nlistB: 5 -> 6 -> 1 -> 8 -> 4 -> 5\n\nIntersection at node with value 8.\nAnswer: node(8)\n\n**Example 2:**\nlistA: 1 -> 2 -> 3\nlistB: 4 -> 5\n\nNo intersection.\nAnswer: null\n\n**Example 3:**\nlistA: 2 -> 6 -> 4\nlistB: 1 -> 5\n\nNo intersection.\nAnswer: null\n\n**Step-by-step trace for Example 1 (Two-pointer approach):**\n\nlistA: 4 -> 1 -> 8 -> 4 -> 5 (length 5)\nlistB: 5 -> 6 -> 1 -> 8 -> 4 -> 5 (length 6)\n\nWe'll use two pointers:\n1. Find lengths of both lists\n2. Move the longer list's pointer ahead by the difference\n3. Move both pointers together until they meet\n\n- **Step 1**: Find lengths\n  - lenA = 5, lenB = 6\n  - diff = 6 - 5 = 1\n- **Step 2**: Move listB pointer 1 step ahead\n  - ptrA = node(4), ptrB = node(6)\n- **Step 3**: Move both together\n  - ptrA = node(1), ptrB = node(1) - different nodes\n  - ptrA = node(8), ptrB = node(8) - same node! ✓\n\n**Key Insight:**\nBy aligning the starting positions (moving the longer list's pointer ahead), both pointers will reach the intersection at the same time!\n\n**What makes this tricky:**\n1. Lists have different lengths before intersection\n2. Finding the intersection point efficiently\n3. Handling the case where there's no intersection\n4. The two-pointer technique with length adjustment\n\n**Common pitfalls:**\n- Not handling different lengths\n- Comparing node values instead of node references\n- Not handling the no-intersection case\n- Off-by-one errors in pointer movement",
+      "stepId": "lesson-illustration",
+      "mentorSays": "Perfect! Now let's understand what the Intersection of Two Linked Lists lesson is asking.\n\n**Lesson Definition:**\nGiven the heads of two singly linked lists `headA` and `headB`, return the node at which the two lists intersect. If the two linked lists have no intersection at all, return `null`.\n\n**Key Observations:**\n- Two lists may intersect at some node\n- After intersection, both lists share the same nodes\n- Lists may have different lengths before intersection\n- We need to find the first common node\n\n**Example 1:**\nlistA: 4 -> 1 -> 8 -> 4 -> 5\nlistB: 5 -> 6 -> 1 -> 8 -> 4 -> 5\n\nIntersection at node with value 8.\nAnswer: node(8)\n\n**Example 2:**\nlistA: 1 -> 2 -> 3\nlistB: 4 -> 5\n\nNo intersection.\nAnswer: null\n\n**Example 3:**\nlistA: 2 -> 6 -> 4\nlistB: 1 -> 5\n\nNo intersection.\nAnswer: null\n\n**Step-by-step trace for Example 1 (Two-pointer approach):**\n\nlistA: 4 -> 1 -> 8 -> 4 -> 5 (length 5)\nlistB: 5 -> 6 -> 1 -> 8 -> 4 -> 5 (length 6)\n\nWe'll use two pointers:\n1. Find lengths of both lists\n2. Move the longer list's pointer ahead by the difference\n3. Move both pointers together until they meet\n\n- **Step 1**: Find lengths\n  - lenA = 5, lenB = 6\n  - diff = 6 - 5 = 1\n- **Step 2**: Move listB pointer 1 step ahead\n  - ptrA = node(4), ptrB = node(6)\n- **Step 3**: Move both together\n  - ptrA = node(1), ptrB = node(1) - different nodes\n  - ptrA = node(8), ptrB = node(8) - same node! ✓\n\n**Key Insight:**\nBy aligning the starting positions (moving the longer list's pointer ahead), both pointers will reach the intersection at the same time!\n\n**What makes this tricky:**\n1. Lists have different lengths before intersection\n2. Finding the intersection point efficiently\n3. Handling the case where there's no intersection\n4. The two-pointer technique with length adjustment\n\n**Common pitfalls:**\n- Not handling different lengths\n- Comparing node values instead of node references\n- Not handling the no-intersection case\n- Off-by-one errors in pointer movement",
       "example": "Example 1:\nlistA: 4 -> 1 -> 8 -> 4 -> 5\nlistB: 5 -> 6 -> 1 -> 8 -> 4 -> 5\n\nIntersection at node(8)\n\nExample 2:\nlistA: 1 -> 2 -> 3\nlistB: 4 -> 5\n\nNo intersection: null",
       "action": "continue",
       "next": "thinking-challenge"
     },
     {
       "stepId": "thinking-challenge",
-      "mentorSays": "Now that you understand what the problem wants, here's the real question:\n\nHow would YOU find the intersection point of two linked lists?\n\nThink about it for a moment. What approach feels natural to you?",
+      "mentorSays": "Now that you understand what the lesson wants, here's the real question:\n\nHow would YOU find the intersection point of two linked lists?\n\nThink about it for a moment. What approach feels natural to you?",
       "choices": [
         {
           "label": "Use two pointers - find lengths, align, then move together",
@@ -146,7 +146,7 @@
     },
     {
       "stepId": "linked-list-check-js",
-      "mentorSays": "To solve this problem, we'll need to work with linked lists. Do you know what a linked list is?",
+      "mentorSays": "To solve this lesson, we'll need to work with linked lists. Do you know what a linked list is?",
       "choices": [
         {
           "label": "Yes, I know linked lists",
@@ -167,7 +167,7 @@
     },
     {
       "stepId": "loop-check-js",
-      "mentorSays": "To solve this problem, we'll need to use loops. Do you know what a loop is in JavaScript?",
+      "mentorSays": "To solve this lesson, we'll need to use loops. Do you know what a loop is in JavaScript?",
       "choices": [
         {
           "label": "Yes, I know loops",
@@ -307,7 +307,7 @@
     },
     {
       "stepId": "linked-list-check-python",
-      "mentorSays": "To solve this problem, we'll need to work with linked lists. Do you know what a linked list is?",
+      "mentorSays": "To solve this lesson, we'll need to work with linked lists. Do you know what a linked list is?",
       "choices": [
         {
           "label": "Yes, I know linked lists",
@@ -328,7 +328,7 @@
     },
     {
       "stepId": "loop-check-python",
-      "mentorSays": "To solve this problem, we'll need to use loops. Do you know what a loop is in Python?",
+      "mentorSays": "To solve this lesson, we'll need to use loops. Do you know what a loop is in Python?",
       "choices": [
         {
           "label": "Yes, I know loops",
@@ -468,7 +468,7 @@
     },
     {
       "stepId": "linked-list-check-java",
-      "mentorSays": "To solve this problem, we'll need to work with linked lists. Do you know what a linked list is?",
+      "mentorSays": "To solve this lesson, we'll need to work with linked lists. Do you know what a linked list is?",
       "choices": [
         {
           "label": "Yes, I know linked lists",
@@ -489,7 +489,7 @@
     },
     {
       "stepId": "loop-check-java",
-      "mentorSays": "To solve this problem, we'll need to use loops. Do you know what a loop is in Java?",
+      "mentorSays": "To solve this lesson, we'll need to use loops. Do you know what a loop is in Java?",
       "choices": [
         {
           "label": "Yes, I know loops",
@@ -629,7 +629,7 @@
     },
     {
       "stepId": "linked-list-check-cpp",
-      "mentorSays": "To solve this problem, we'll need to work with linked lists. Do you know what a linked list is?",
+      "mentorSays": "To solve this lesson, we'll need to work with linked lists. Do you know what a linked list is?",
       "choices": [
         {
           "label": "Yes, I know linked lists",
@@ -650,7 +650,7 @@
     },
     {
       "stepId": "loop-check-cpp",
-      "mentorSays": "To solve this problem, we'll need to use loops. Do you know what a loop is in C++?",
+      "mentorSays": "To solve this lesson, we'll need to use loops. Do you know what a loop is in C++?",
       "choices": [
         {
           "label": "Yes, I know loops",
@@ -790,7 +790,7 @@
     },
     {
       "stepId": "linked-list-check-ts",
-      "mentorSays": "To solve this problem, we'll need to work with linked lists. Do you know what a linked list is?",
+      "mentorSays": "To solve this lesson, we'll need to work with linked lists. Do you know what a linked list is?",
       "choices": [
         {
           "label": "Yes, I know linked lists",
@@ -811,7 +811,7 @@
     },
     {
       "stepId": "loop-check-ts",
-      "mentorSays": "To solve this problem, we'll need to use loops. Do you know what a loop is in TypeScript?",
+      "mentorSays": "To solve this lesson, we'll need to use loops. Do you know what a loop is in TypeScript?",
       "choices": [
         {
           "label": "Yes, I know loops",
@@ -888,7 +888,7 @@
     },
     {
       "stepId": "final",
-      "mentorSays": "🎉 Well done! You've successfully implemented the Intersection of Two Linked Lists solution!\n\n**Time Complexity:** O(m + n)\n- We traverse both lists once to find lengths: O(m + n)\n- We traverse again to find intersection: O(min(m, n))\n- Total: O(m + n) where m and n are the lengths of the lists\n\n**Space Complexity:** O(1)\n- We only use a constant amount of extra space (pointers and length variables)\n- No additional data structures are needed\n\n**Key Takeaways:**\n1. **Two-pointer technique**: Use pointers to traverse both lists\n2. **Length alignment**: Move the longer list's pointer ahead by the difference\n3. **Move together**: After alignment, both pointers travel the same distance\n4. **Node comparison**: Compare node references (===), not values\n5. **Edge cases**: Handle null lists, no intersection, same node\n\n**Related Practice Problems:**\n- Linked List Cycle (LeetCode #141) - detect cycle in list\n- Linked List Cycle II (LeetCode #142) - find cycle start\n- Remove Nth Node From End (LeetCode #19) - similar two-pointer technique\n\nKeep practicing linked list problems - they're common in interviews!",
+      "mentorSays": "🎉 Well done! You've successfully implemented the Intersection of Two Linked Lists solution!\n\n**Time Complexity:** O(m + n)\n- We traverse both lists once to find lengths: O(m + n)\n- We traverse again to find intersection: O(min(m, n))\n- Total: O(m + n) where m and n are the lengths of the lists\n\n**Space Complexity:** O(1)\n- We only use a constant amount of extra space (pointers and length variables)\n- No additional data structures are needed\n\n**Key Takeaways:**\n1. **Two-pointer technique**: Use pointers to traverse both lists\n2. **Length alignment**: Move the longer list's pointer ahead by the difference\n3. **Move together**: After alignment, both pointers travel the same distance\n4. **Node comparison**: Compare node references (===), not values\n5. **Edge cases**: Handle null lists, no intersection, same node\n\n**Related Practice Lessons:**\n- Linked List Cycle (LeetCode #141) - detect cycle in list\n- Linked List Cycle II (LeetCode #142) - find cycle start\n- Remove Nth Node From End (LeetCode #19) - similar two-pointer technique\n\nKeep practicing linked list lessons - they're common in interviews!",
       "action": "continue"
     }
   ]

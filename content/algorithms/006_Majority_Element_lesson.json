@@ -3,13 +3,13 @@
   "config": {
     "lessonId": "ai-algorithms-06",
     "track": "algorithms",
-    "problemNum": 6,
+    "lessonNum": 6,
     "title": "Majority Element",
     "shortName": "P06",
     "intro": {
       "tag": "LESSON #6",
       "title": "Majority Element",
-      "body": "In this lesson, you will build a function that finds the majority element in an array, which is the element that appears more than half the time. You will learn the core concept of frequency counting using a hash map to track occurrences efficiently. The main technologies involved are JavaScript arrays, objects for mapping, and conditional logic. This beginner-friendly exercise will help you practice problem-solving with common data structures and algorithms.",
+      "body": "In this lesson, you will build a function that finds the majority element in an array, which is the element that appears more than half the time. You will learn the core concept of frequency counting using a hash map to track occurrences efficiently. The main technologies involved are JavaScript arrays, objects for mapping, and conditional logic. This beginner-friendly exercise will help you practice lesson-solving with common data structures and algorithms.",
       "usecase": "The majority element algorithm is essential in systems that analyze user behavior or aggregate preferences, such as social media platforms identifying trending hashtags or e-commerce sites determining most popular products. In developer tools, it helps analyze log files to find the most frequent error type across thousands of requests. This pattern also powers recommendation engines that need to identify dominant user preferences from large datasets, and voting systems that must quickly determine if a candidate has majority support in real-time results."
     },
     "objectives": [

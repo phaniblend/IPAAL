@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-node-33",
     "track": "node",
-    "problemNum": 33,
+    "lessonNum": 33,
     "title": "Build secure static file serving rules",
     "shortName": "P33",
     "intro": {

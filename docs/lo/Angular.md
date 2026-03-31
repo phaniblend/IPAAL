@@ -229,7 +229,7 @@ Explain zoneless Angular and why it's the future
 LOs:
 
 01
-Explain what Webpack Module Federation is and the problem it solves
+Explain what Webpack Module Federation is and the lesson it solves
 
 02
 Distinguish Host vs Remote — ownership and deployment boundaries
@@ -278,7 +278,7 @@ Use the pipe in a template with the | syntax
 
 ---
 
-**{PROBLEM #1 (Angular) :: Counter App}**
+**{LESSON #1 (Angular) :: Counter App}**
 
 LOs:
 
@@ -296,7 +296,7 @@ Export a standalone component
 
 ---
 
-**{PROBLEM #2 (Angular) :: Toggle Visibility}**
+**{LESSON #2 (Angular) :: Toggle Visibility}**
 
 LOs:
 
@@ -314,7 +314,7 @@ Dynamic button label with ternary in template
 
 ---
 
-**{PROBLEM #3 (Angular) :: Controlled Input}**
+**{LESSON #3 (Angular) :: Controlled Input}**
 
 LOs:
 
@@ -332,7 +332,7 @@ Paragraph showing {{ text() }}
 
 ---
 
-**{PROBLEM #4 (Angular) :: Multiple State Variables}**
+**{LESSON #4 (Angular) :: Multiple State Variables}**
 
 LOs:
 
@@ -350,7 +350,7 @@ Live paragraph with both {{ name() }} and {{ age() }}
 
 ---
 
-**{PROBLEM #5 (Angular) :: Conditional Rendering with Ternary}**
+**{LESSON #5 (Angular) :: Conditional Rendering with Ternary}**
 
 LOs:
 
@@ -368,7 +368,7 @@ Standalone component with CommonModule
 
 ---
 
-**{PROBLEM #6 (Angular) :: List Rendering with map()}**
+**{LESSON #6 (Angular) :: List Rendering with map()}**
 
 LOs:
 
@@ -386,7 +386,7 @@ CommonModule for NgFor
 
 ---
 
-**{PROBLEM #7 (Angular) :: useEffect & Side Effects}**
+**{LESSON #7 (Angular) :: useEffect & Side Effects}**
 
 LOs:
 
@@ -404,7 +404,7 @@ Optional: cleanup with effect's return or DestroyRef
 
 ---
 
-**{PROBLEM #8 (Angular) :: Forms & Validation}**
+**{LESSON #8 (Angular) :: Forms & Validation}**
 
 LOs:
 
@@ -422,7 +422,7 @@ Display errors when control invalid and touched
 
 ---
 
-**{PROBLEM #9 (Angular) :: Color Picker}**
+**{LESSON #9 (Angular) :: Color Picker}**
 
 LOs:
 
@@ -440,7 +440,7 @@ Display selected color name with {{ selectedColor() }}
 
 ---
 
-**{PROBLEM #10 (Angular) :: Multiple State Vars}**
+**{LESSON #10 (Angular) :: Multiple State Vars}**
 
 LOs:
 
@@ -458,7 +458,7 @@ Summary paragraph with {{ firstName() }} {{ lastName() }}
 
 ---
 
-**{PROBLEM #100 (Angular) :: angular_c100_engine}**
+**{LESSON #100 (Angular) :: angular_c100_engine}**
 
 LOs:
 
@@ -476,7 +476,7 @@ Reconnect logic and loading state
 
 ---
 
-**{PROBLEM #11 (Angular) :: angular_c11_engine}**
+**{LESSON #11 (Angular) :: angular_c11_engine}**
 
 LOs:
 
@@ -494,7 +494,7 @@ Parent uses <app-btn [label]="'Save'" (clicked)="onSave()">
 
 ---
 
-**{PROBLEM #12 (Angular) :: angular_c12_engine}**
+**{LESSON #12 (Angular) :: angular_c12_engine}**
 
 LOs:
 
@@ -512,7 +512,7 @@ Use in parent: <app-card [title]="myTitle">content</app-card>
 
 ---
 
-**{PROBLEM #13 (Angular) :: angular_c13_engine}**
+**{LESSON #13 (Angular) :: angular_c13_engine}**
 
 LOs:
 
@@ -530,7 +530,7 @@ Avoid drilling with services or signals in a shared context later
 
 ---
 
-**{PROBLEM #14 (Angular) :: angular_c14_engine}**
+**{LESSON #14 (Angular) :: angular_c14_engine}**
 
 LOs:
 
@@ -548,7 +548,7 @@ Type the @Input() when needed: @Input() count = 0
 
 ---
 
-**{PROBLEM #15 (Angular) :: angular_c15_engine}**
+**{LESSON #15 (Angular) :: angular_c15_engine}**
 
 LOs:
 
@@ -566,7 +566,7 @@ Single slot projects all content into one ng-content
 
 ---
 
-**{PROBLEM #16 (Angular) :: angular_c16_engine}**
+**{LESSON #16 (Angular) :: angular_c16_engine}**
 
 LOs:
 
@@ -584,7 +584,7 @@ CommonModule for NgIf
 
 ---
 
-**{PROBLEM #17 (Angular) :: angular_c17_engine}**
+**{LESSON #17 (Angular) :: angular_c17_engine}**
 
 LOs:
 
@@ -602,7 +602,7 @@ Use signal or array for the list source
 
 ---
 
-**{PROBLEM #18 (Angular) :: angular_c18_engine}**
+**{LESSON #18 (Angular) :: angular_c18_engine}**
 
 LOs:
 
@@ -620,7 +620,7 @@ Type @Output() with EventEmitter<User> when emitting objects
 
 ---
 
-**{PROBLEM #19 (Angular) :: angular_c19_engine}**
+**{LESSON #19 (Angular) :: angular_c19_engine}**
 
 LOs:
 
@@ -638,7 +638,7 @@ Import child components in parent's imports array
 
 ---
 
-**{PROBLEM #20 (Angular) :: angular_c20_engine}**
+**{LESSON #20 (Angular) :: angular_c20_engine}**
 
 LOs:
 
@@ -656,7 +656,7 @@ Pass event: (click)="onClick($event)" when you need the DOM event
 
 ---
 
-**{PROBLEM #21 (Angular) :: angular_c21_engine}**
+**{LESSON #21 (Angular) :: angular_c21_engine}**
 
 LOs:
 
@@ -674,7 +674,7 @@ Combine with signals for reactive class toggling
 
 ---
 
-**{PROBLEM #22 (Angular) :: angular_c22_engine}**
+**{LESSON #22 (Angular) :: angular_c22_engine}**
 
 LOs:
 
@@ -692,7 +692,7 @@ Units: [style.width.px], [style.opacity] for numbers
 
 ---
 
-**{PROBLEM #23 (Angular) :: angular_c23_engine}**
+**{LESSON #23 (Angular) :: angular_c23_engine}**
 
 LOs:
 
@@ -710,7 +710,7 @@ ViewEncapsulation.Emulated (default) or .None for global styles
 
 ---
 
-**{PROBLEM #24 (Angular) :: angular_c24_engine}**
+**{LESSON #24 (Angular) :: angular_c24_engine}**
 
 LOs:
 
@@ -728,7 +728,7 @@ Keep styles in the component; reuse via selector in parent
 
 ---
 
-**{PROBLEM #25 (Angular) :: angular_c25_engine}**
+**{LESSON #25 (Angular) :: angular_c25_engine}**
 
 LOs:
 
@@ -746,7 +746,7 @@ Two-way binding option: [(value)]="state" with model() or EventEmitter pattern
 
 ---
 
-**{PROBLEM #26 (Angular) :: angular_c26_engine}**
+**{LESSON #26 (Angular) :: angular_c26_engine}**
 
 LOs:
 
@@ -764,7 +764,7 @@ Choose controlled for validation and single source of truth
 
 ---
 
-**{PROBLEM #27 (Angular) :: angular_c27_engine}**
+**{LESSON #27 (Angular) :: angular_c27_engine}**
 
 LOs:
 
@@ -782,7 +782,7 @@ Toggle: (click) calling a method that updates the signal
 
 ---
 
-**{PROBLEM #28 (Angular) :: angular_c28_engine}**
+**{LESSON #28 (Angular) :: angular_c28_engine}**
 
 LOs:
 
@@ -800,7 +800,7 @@ Parent binds [(value)] or [value] and (valueChange)
 
 ---
 
-**{PROBLEM #29 (Angular) :: A}**
+**{LESSON #29 (Angular) :: A}**
 
 LOs:
 
@@ -818,7 +818,7 @@ Use *ngFor for multiple panels
 
 ---
 
-**{PROBLEM #30 (Angular) :: angular_c30_engine}**
+**{LESSON #30 (Angular) :: angular_c30_engine}**
 
 LOs:
 
@@ -836,7 +836,7 @@ Optional: use NgOptimizedImage for loading
 
 ---
 
-**{PROBLEM #31 (Angular) :: angular_c31_engine}**
+**{LESSON #31 (Angular) :: angular_c31_engine}**
 
 LOs:
 
@@ -854,7 +854,7 @@ Provide HttpClient via provideHttpClient() in app config
 
 ---
 
-**{PROBLEM #32 (Angular) :: angular_c32_engine}**
+**{LESSON #32 (Angular) :: angular_c32_engine}**
 
 LOs:
 
@@ -872,7 +872,7 @@ Unsubscribe in ngOnDestroy or use takeUntilDestroyed()
 
 ---
 
-**{PROBLEM #33 (Angular) :: angular_c33_engine}**
+**{LESSON #33 (Angular) :: angular_c33_engine}**
 
 LOs:
 
@@ -890,7 +890,7 @@ Handle SSR: check typeof localStorage !== 'undefined'
 
 ---
 
-**{PROBLEM #34 (Angular) :: angular_c34_engine}**
+**{LESSON #34 (Angular) :: angular_c34_engine}**
 
 LOs:
 
@@ -908,7 +908,7 @@ Use in *ngIf or [class.open]="on()"
 
 ---
 
-**{PROBLEM #35 (Angular) :: angular_c35_engine}**
+**{LESSON #35 (Angular) :: angular_c35_engine}**
 
 LOs:
 
@@ -926,7 +926,7 @@ Inject PLATFORM_ID and check isPlatformBrowser before using window
 
 ---
 
-**{PROBLEM #36 (Angular) :: angular_c36_engine}**
+**{LESSON #36 (Angular) :: angular_c36_engine}**
 
 LOs:
 
@@ -944,7 +944,7 @@ Handle first run (no previous) with undefined
 
 ---
 
-**{PROBLEM #37 (Angular) :: angular_c37_engine}**
+**{LESSON #37 (Angular) :: angular_c37_engine}**
 
 LOs:
 
@@ -962,7 +962,7 @@ Or use a directive with @HostListener and @Output() for reusability
 
 ---
 
-**{PROBLEM #38 (Angular) :: angular_c38_engine}**
+**{LESSON #38 (Angular) :: angular_c38_engine}**
 
 LOs:
 
@@ -980,7 +980,7 @@ Use keydown.key.enter or keydown.key.escape in template (Angular 17+)
 
 ---
 
-**{PROBLEM #39 (Angular) :: angular_c39_engine}**
+**{LESSON #39 (Angular) :: angular_c39_engine}**
 
 LOs:
 
@@ -998,7 +998,7 @@ Optional: use fromEvent(window, 'online').pipe(map(() => true)) and merge with o
 
 ---
 
-**{PROBLEM #40 (Angular) :: angular_c40_engine}**
+**{LESSON #40 (Angular) :: angular_c40_engine}**
 
 LOs:
 
@@ -1016,7 +1016,7 @@ Use isMatch() in template for *ngIf or [class.mobile]
 
 ---
 
-**{PROBLEM #41 (Angular) :: angular_c41_engine}**
+**{LESSON #41 (Angular) :: angular_c41_engine}**
 
 LOs:
 
@@ -1034,7 +1034,7 @@ Optional: provide at component level for scoped theme
 
 ---
 
-**{PROBLEM #42 (Angular) :: angular_c42_engine}**
+**{LESSON #42 (Angular) :: angular_c42_engine}**
 
 LOs:
 
@@ -1052,7 +1052,7 @@ Components: inject(AuthService) and *ngIf="authService.user()" for protected UI
 
 ---
 
-**{PROBLEM #43 (Angular) :: angular_c43_engine}**
+**{LESSON #43 (Angular) :: angular_c43_engine}**
 
 LOs:
 
@@ -1070,7 +1070,7 @@ Optional: use model() for two-way in child
 
 ---
 
-**{PROBLEM #44 (Angular) :: angular_c44_engine}**
+**{LESSON #44 (Angular) :: angular_c44_engine}**
 
 LOs:
 
@@ -1088,7 +1088,7 @@ Provide service in root
 
 ---
 
-**{PROBLEM #45 (Angular) :: angular_c45_engine}**
+**{LESSON #45 (Angular) :: angular_c45_engine}**
 
 LOs:
 
@@ -1106,7 +1106,7 @@ Avoid returning new object/array from getters in templates; use signals/computed
 
 ---
 
-**{PROBLEM #46 (Angular) :: angular_c46_engine}**
+**{LESSON #46 (Angular) :: angular_c46_engine}**
 
 LOs:
 
@@ -1124,7 +1124,7 @@ Template reads state().count and calls dispatch({ type: 'INC' })
 
 ---
 
-**{PROBLEM #47 (Angular) :: angular_c47_engine}**
+**{LESSON #47 (Angular) :: angular_c47_engine}**
 
 LOs:
 
@@ -1142,7 +1142,7 @@ Or inject parent via optional host and call parent.select(i)
 
 ---
 
-**{PROBLEM #48 (Angular) :: angular_c48_engine}**
+**{LESSON #48 (Angular) :: angular_c48_engine}**
 
 LOs:
 
@@ -1160,7 +1160,7 @@ Use trackBy in *ngFor to avoid list thrashing
 
 ---
 
-**{PROBLEM #49 (Angular) :: angular_c49_engine}**
+**{LESSON #49 (Angular) :: angular_c49_engine}**
 
 LOs:
 
@@ -1178,7 +1178,7 @@ For async or external data use toSignal or resource()
 
 ---
 
-**{PROBLEM #50 (Angular) :: angular_c50_engine}**
+**{LESSON #50 (Angular) :: angular_c50_engine}**
 
 LOs:
 
@@ -1196,7 +1196,7 @@ OnPush on child so it only updates when @Input() or events change
 
 ---
 
-**{PROBLEM #51 (Angular) :: angular_c51_engine}**
+**{LESSON #51 (Angular) :: angular_c51_engine}**
 
 LOs:
 
@@ -1214,7 +1214,7 @@ Or use @Input() and ensure parent passes same reference when value unchanged
 
 ---
 
-**{PROBLEM #52 (Angular) :: angular_c52_engine}**
+**{LESSON #52 (Angular) :: angular_c52_engine}**
 
 LOs:
 
@@ -1232,7 +1232,7 @@ Optional: use trackBy with cdkVirtualFor for stability
 
 ---
 
-**{PROBLEM #53 (Angular) :: angular_c53_engine}**
+**{LESSON #53 (Angular) :: angular_c53_engine}**
 
 LOs:
 
@@ -1250,7 +1250,7 @@ Provide routes with provideRouter(routes)
 
 ---
 
-**{PROBLEM #54 (Angular) :: angular_c54_engine}**
+**{LESSON #54 (Angular) :: angular_c54_engine}**
 
 LOs:
 
@@ -1268,7 +1268,7 @@ NgOptimizedImage requires width/height or fill
 
 ---
 
-**{PROBLEM #55 (Angular) :: angular_c55_engine}**
+**{LESSON #55 (Angular) :: angular_c55_engine}**
 
 LOs:
 
@@ -1286,7 +1286,7 @@ Optional: WithAuthComponent that *ngIf="auth.user()" and ng-content
 
 ---
 
-**{PROBLEM #56 (Angular) :: angular_c56_engine}**
+**{LESSON #56 (Angular) :: angular_c56_engine}**
 
 LOs:
 
@@ -1304,7 +1304,7 @@ Template: <ng-container *ngTemplateOutlet="template; context: { $implicit: posit
 
 ---
 
-**{PROBLEM #57 (Angular) :: angular_c57_engine}**
+**{LESSON #57 (Angular) :: angular_c57_engine}**
 
 LOs:
 
@@ -1322,7 +1322,7 @@ Or use model() for two-way: value = model<Date | null>(null)
 
 ---
 
-**{PROBLEM #58 (Angular) :: angular_c58_engine}**
+**{LESSON #58 (Angular) :: angular_c58_engine}**
 
 LOs:
 
@@ -1340,7 +1340,7 @@ Detach and dispose on destroy
 
 ---
 
-**{PROBLEM #59 (Angular) :: angular_c59_engine}**
+**{LESSON #59 (Angular) :: angular_c59_engine}**
 
 LOs:
 
@@ -1358,7 +1358,7 @@ provide ErrorHandler in app config for global handler
 
 ---
 
-**{PROBLEM #60 (Angular) :: angular_c60_engine}**
+**{LESSON #60 (Angular) :: angular_c60_engine}**
 
 LOs:
 
@@ -1376,7 +1376,7 @@ Base case: *ngIf="node.children?.length" for the recursive block
 
 ---
 
-**{PROBLEM #61 (Angular) :: angular_c61_engine}**
+**{LESSON #61 (Angular) :: angular_c61_engine}**
 
 LOs:
 
@@ -1394,7 +1394,7 @@ Buttons: (click)="currentPage.update(p => p - 1)" and similar for next; disable 
 
 ---
 
-**{PROBLEM #62 (Angular) :: angular_c62_engine}**
+**{LESSON #62 (Angular) :: angular_c62_engine}**
 
 LOs:
 
@@ -1412,7 +1412,7 @@ Debounce or throttle loadMore to avoid duplicate requests
 
 ---
 
-**{PROBLEM #63 (Angular) :: angular_c63_engine}**
+**{LESSON #63 (Angular) :: angular_c63_engine}**
 
 LOs:
 
@@ -1430,7 +1430,7 @@ Or use FormsModule and control.valueChanges.pipe(debounceTime(300))
 
 ---
 
-**{PROBLEM #64 (Angular) :: angular_c64_engine}**
+**{LESSON #64 (Angular) :: angular_c64_engine}**
 
 LOs:
 
@@ -1448,7 +1448,7 @@ Submit on last step
 
 ---
 
-**{PROBLEM #65 (Angular) :: angular_c65_engine}**
+**{LESSON #65 (Angular) :: angular_c65_engine}**
 
 LOs:
 
@@ -1466,7 +1466,7 @@ Declare component as ListComponent<T> or use generic in @Input typings
 
 ---
 
-**{PROBLEM #66 (Angular) :: angular_c66_engine}**
+**{LESSON #66 (Angular) :: angular_c66_engine}**
 
 LOs:
 
@@ -1484,7 +1484,7 @@ Use @switch in control flow (Angular 17) for exhaustive check
 
 ---
 
-**{PROBLEM #67 (Angular) :: angular_c67_engine}**
+**{LESSON #67 (Angular) :: angular_c67_engine}**
 
 LOs:
 
@@ -1502,7 +1502,7 @@ Signal query: inputRef = viewChild.required<ElementRef<HTMLInputElement>>('input
 
 ---
 
-**{PROBLEM #68 (Angular) :: angular_c68_engine}**
+**{LESSON #68 (Angular) :: angular_c68_engine}**
 
 LOs:
 
@@ -1520,7 +1520,7 @@ LOs:
 
 ---
 
-**{PROBLEM #69 (Angular) :: angular_c69_engine}**
+**{LESSON #69 (Angular) :: angular_c69_engine}**
 
 LOs:
 
@@ -1538,7 +1538,7 @@ Type the component's data signal as signal<User[] | null>
 
 ---
 
-**{PROBLEM #70 (Angular) :: angular_c70_engine}**
+**{LESSON #70 (Angular) :: angular_c70_engine}**
 
 LOs:
 
@@ -1556,7 +1556,7 @@ Use in service return types and template context types
 
 ---
 
-**{PROBLEM #71 (Angular) :: angular_c71_engine}**
+**{LESSON #71 (Angular) :: angular_c71_engine}**
 
 LOs:
 
@@ -1574,7 +1574,7 @@ Signal query: child = viewChild.required(ChildComp); child()?.focus()
 
 ---
 
-**{PROBLEM #72 (Angular) :: angular_c72_engine}**
+**{LESSON #72 (Angular) :: angular_c72_engine}**
 
 LOs:
 
@@ -1592,7 +1592,7 @@ Update store: store.dispatch(action) and state.next(newState)
 
 ---
 
-**{PROBLEM #73 (Angular) :: angular_c73_engine}**
+**{LESSON #73 (Angular) :: angular_c73_engine}**
 
 LOs:
 
@@ -1610,7 +1610,7 @@ Heavy computation: run in worker or chunk with requestAnimationFrame
 
 ---
 
-**{PROBLEM #74 (Angular) :: angular_c74_engine}**
+**{LESSON #74 (Angular) :: angular_c74_engine}**
 
 LOs:
 
@@ -1628,7 +1628,7 @@ Optional: use Angular's @defer block for lazy rendering
 
 ---
 
-**{PROBLEM #75 (Angular) :: angular_c75_engine}**
+**{LESSON #75 (Angular) :: angular_c75_engine}**
 
 LOs:
 
@@ -1646,7 +1646,7 @@ Documentation: effect = async after render; afterNextRender = sync after render
 
 ---
 
-**{PROBLEM #76 (Angular) :: angular_c76_engine}**
+**{LESSON #76 (Angular) :: angular_c76_engine}**
 
 LOs:
 
@@ -1664,7 +1664,7 @@ getState() and state$ = state.asObservable(); toSignal(store.state$) in componen
 
 ---
 
-**{PROBLEM #77 (Angular) :: angular_c77_engine}**
+**{LESSON #77 (Angular) :: angular_c77_engine}**
 
 LOs:
 
@@ -1679,7 +1679,7 @@ Show error state and revert; optionally retry
 
 ---
 
-**{PROBLEM #78 (Angular) :: angular_c78_engine}**
+**{LESSON #78 (Angular) :: angular_c78_engine}**
 
 LOs:
 
@@ -1697,7 +1697,7 @@ Use shareReplay({ bufferSize: 1, refCount: true }) for cache with ref count
 
 ---
 
-**{PROBLEM #79 (Angular) :: angular_c79_engine}**
+**{LESSON #79 (Angular) :: angular_c79_engine}**
 
 LOs:
 
@@ -1715,7 +1715,7 @@ Optional: pause/resume with a subject or signal
 
 ---
 
-**{PROBLEM #80 (Angular) :: angular_c80_engine}**
+**{LESSON #80 (Angular) :: angular_c80_engine}**
 
 LOs:
 
@@ -1733,7 +1733,7 @@ Optional: reconnect logic with Subject
 
 ---
 
-**{PROBLEM #81 (Angular) :: angular_c81_engine}**
+**{LESSON #81 (Angular) :: angular_c81_engine}**
 
 LOs:
 
@@ -1751,7 +1751,7 @@ Optional: environment-based defaults before API load
 
 ---
 
-**{PROBLEM #82 (Angular) :: angular_c82_engine}**
+**{LESSON #82 (Angular) :: angular_c82_engine}**
 
 LOs:
 
@@ -1769,7 +1769,7 @@ Can use signal for current state and sync from history[index()]
 
 ---
 
-**{PROBLEM #83 (Angular) :: angular_c83_engine}**
+**{LESSON #83 (Angular) :: angular_c83_engine}**
 
 LOs:
 
@@ -1787,7 +1787,7 @@ Submit: read form value and validate
 
 ---
 
-**{PROBLEM #84 (Angular) :: angular_c84_engine}**
+**{LESSON #84 (Angular) :: angular_c84_engine}**
 
 LOs:
 
@@ -1805,7 +1805,7 @@ Document theme variables in component
 
 ---
 
-**{PROBLEM #85 (Angular) :: angular_c85_engine}**
+**{LESSON #85 (Angular) :: angular_c85_engine}**
 
 LOs:
 
@@ -1823,7 +1823,7 @@ Shared dependencies (e.g. Angular core) via shared config
 
 ---
 
-**{PROBLEM #86 (Angular) :: angular_c86_engine}**
+**{LESSON #86 (Angular) :: angular_c86_engine}**
 
 LOs:
 
@@ -1841,7 +1841,7 @@ takeUntilDestroyed to clean up
 
 ---
 
-**{PROBLEM #87 (Angular) :: angular_c87_engine}**
+**{LESSON #87 (Angular) :: angular_c87_engine}**
 
 LOs:
 
@@ -1859,7 +1859,7 @@ Pure pipe for date/currency so result is cached per input
 
 ---
 
-**{PROBLEM #88 (Angular) :: angular_c88_engine}**
+**{LESSON #88 (Angular) :: angular_c88_engine}**
 
 LOs:
 
@@ -1877,7 +1877,7 @@ Check for duplicate dependencies and use path mapping
 
 ---
 
-**{PROBLEM #89 (Angular) :: angular_c89_engine}**
+**{LESSON #89 (Angular) :: angular_c89_engine}**
 
 LOs:
 
@@ -1895,7 +1895,7 @@ Signals trigger CD when read in template; avoid writing to signals in effect tha
 
 ---
 
-**{PROBLEM #90 (Angular) :: angular_c90_engine}**
+**{LESSON #90 (Angular) :: angular_c90_engine}**
 
 LOs:
 
@@ -1913,7 +1913,7 @@ Avoid closing over component in long-lived callbacks
 
 ---
 
-**{PROBLEM #91 (Angular) :: Hello}**
+**{LESSON #91 (Angular) :: Hello}**
 
 LOs:
 
@@ -1931,7 +1931,7 @@ http.verify() to ensure no outstanding requests
 
 ---
 
-**{PROBLEM #92 (Angular) :: angular_c92_engine}**
+**{LESSON #92 (Angular) :: angular_c92_engine}**
 
 LOs:
 
@@ -1949,7 +1949,7 @@ Test loading state: assert before flush; assert result after flush
 
 ---
 
-**{PROBLEM #93 (Angular) :: angular_c93_engine}**
+**{LESSON #93 (Angular) :: angular_c93_engine}**
 
 LOs:
 
@@ -1967,7 +1967,7 @@ Use By.directive(MyDirective) to query by directive
 
 ---
 
-**{PROBLEM #94 (Angular) :: angular_c94_engine}**
+**{LESSON #94 (Angular) :: angular_c94_engine}**
 
 LOs:
 
@@ -1985,7 +1985,7 @@ Test both branches: provide light and dark and assert each
 
 ---
 
-**{PROBLEM #95 (Angular) :: angular_c95_engine}**
+**{LESSON #95 (Angular) :: angular_c95_engine}**
 
 LOs:
 
@@ -2003,7 +2003,7 @@ Spy on ErrorHandler and expect handleError to have been called
 
 ---
 
-**{PROBLEM #96 (Angular) :: angular_c96_engine}**
+**{LESSON #96 (Angular) :: angular_c96_engine}**
 
 LOs:
 
@@ -2021,7 +2021,7 @@ Optional: page = signal(1); pageSize = signal(10); slice in computed
 
 ---
 
-**{PROBLEM #97 (Angular) :: angular_c97_engine}**
+**{LESSON #97 (Angular) :: angular_c97_engine}**
 
 LOs:
 
@@ -2039,7 +2039,7 @@ Optional: HTTP_INTERCEPTORS that add Authorization header
 
 ---
 
-**{PROBLEM #98 (Angular) :: angular_c98_engine}**
+**{LESSON #98 (Angular) :: angular_c98_engine}**
 
 LOs:
 
@@ -2057,7 +2057,7 @@ Optional: maxVisible; queue when full
 
 ---
 
-**{PROBLEM #99 (Angular) :: angular_c99_engine}**
+**{LESSON #99 (Angular) :: angular_c99_engine}**
 
 LOs:
 
@@ -2318,7 +2318,7 @@ Custom schematics/builders
 
 ---
 
-**{PROBLEM #1 (Angular) :: Counter App}**
+**{LESSON #1 (Angular) :: Counter App}**
 
 LOs:
 
@@ -2351,7 +2351,7 @@ Export a React component using the export default function syntax
 
 ---
 
-**{PROBLEM #2 (Angular) :: Toggle Visibility}**
+**{LESSON #2 (Angular) :: Toggle Visibility}**
 
 LOs:
 
@@ -2378,7 +2378,7 @@ Structure a complete React component with boolean state
 
 ---
 
-**{PROBLEM #3 (Angular) :: Controlled Input}**
+**{LESSON #3 (Angular) :: Controlled Input}**
 
 LOs:
 
@@ -2405,7 +2405,7 @@ Explain the difference between controlled and uncontrolled inputs
 
 ---
 
-**{PROBLEM #4 (Angular) :: Multiple State Variables}**
+**{LESSON #4 (Angular) :: Multiple State Variables}**
 
 LOs:
 
@@ -2426,7 +2426,7 @@ Understand why we don't put both values in one useState object
 
 ---
 
-**{PROBLEM #5 (Angular) :: Conditional Rendering with Ternary}**
+**{LESSON #5 (Angular) :: Conditional Rendering with Ternary}**
 
 LOs:
 
@@ -2450,7 +2450,7 @@ Explain why if/else doesn't work directly inside JSX return
 
 ---
 
-**{PROBLEM #6 (Angular) :: List Rendering with map()}**
+**{LESSON #6 (Angular) :: List Rendering with map()}**
 
 LOs:
 
@@ -2474,7 +2474,7 @@ Understand why you never mutate state directly with .push()
 
 ---
 
-**{PROBLEM #7 (Angular) :: useEffect & Side Effects}**
+**{LESSON #7 (Angular) :: useEffect & Side Effects}**
 
 LOs:
 
@@ -2498,7 +2498,7 @@ Explain why setting state directly in render causes infinite loops
 
 ---
 
-**{PROBLEM #8 (Angular) :: Forms & Validation}**
+**{LESSON #8 (Angular) :: Forms & Validation}**
 
 LOs:
 
@@ -2522,7 +2522,7 @@ Show a success state after valid submission
 
 ---
 
-**{PROBLEM #9 (Angular) :: Color Picker}**
+**{LESSON #9 (Angular) :: Color Picker}**
 
 LOs:
 
@@ -2540,7 +2540,7 @@ Apply dynamic inline style (e.g. backgroundColor) to a div based on state
 
 ---
 
-**{PROBLEM #10 (Angular) :: Multiple State Vars}**
+**{LESSON #10 (Angular) :: Multiple State Vars}**
 
 LOs:
 
@@ -2555,7 +2555,7 @@ Optionally show live feedback (e.g. passwords match / don't match)
 
 ---
 
-**{PROBLEM #100 (Angular) :: Design Real-Time Dashboard}**
+**{LESSON #100 (Angular) :: Design Real-Time Dashboard}**
 
 LOs:
 
@@ -2576,7 +2576,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #11 (Angular) :: Reusable Button}**
+**{LESSON #11 (Angular) :: Reusable Button}**
 
 LOs:
 
@@ -2591,7 +2591,7 @@ Disable the button when disabled is true
 
 ---
 
-**{PROBLEM #12 (Angular) :: Card Component}**
+**{LESSON #12 (Angular) :: Card Component}**
 
 LOs:
 
@@ -2606,7 +2606,7 @@ Use children or a footer prop for the bottom section
 
 ---
 
-**{PROBLEM #13 (Angular) :: Props Drilling}**
+**{LESSON #13 (Angular) :: Props Drilling}**
 
 LOs:
 
@@ -2624,7 +2624,7 @@ Export the App that wires the three layers
 
 ---
 
-**{PROBLEM #14 (Angular) :: Default Props}**
+**{LESSON #14 (Angular) :: Default Props}**
 
 LOs:
 
@@ -2639,7 +2639,7 @@ Render an img with size as width/height
 
 ---
 
-**{PROBLEM #15 (Angular) :: Children Prop}**
+**{LESSON #15 (Angular) :: Children Prop}**
 
 LOs:
 
@@ -2654,7 +2654,7 @@ Apply inline styles (maxWidth, padding, etc.)
 
 ---
 
-**{PROBLEM #16 (Angular) :: Conditional Rendering}**
+**{LESSON #16 (Angular) :: Conditional Rendering}**
 
 LOs:
 
@@ -2669,7 +2669,7 @@ Optionally show mock data when status is 'data'
 
 ---
 
-**{PROBLEM #17 (Angular) :: List Rendering}**
+**{LESSON #17 (Angular) :: List Rendering}**
 
 LOs:
 
@@ -2684,7 +2684,7 @@ Add key={item.id} (or stable unique key) to the mapped element
 
 ---
 
-**{PROBLEM #18 (Angular) :: PropTypes / TypeScript Interface}**
+**{LESSON #18 (Angular) :: PropTypes / TypeScript Interface}**
 
 LOs:
 
@@ -2699,7 +2699,7 @@ Render name, age, and optional avatar
 
 ---
 
-**{PROBLEM #19 (Angular) :: Component Composition}**
+**{LESSON #19 (Angular) :: Component Composition}**
 
 LOs:
 
@@ -2714,7 +2714,7 @@ Place each prop in the correct region
 
 ---
 
-**{PROBLEM #20 (Angular) :: Event Handling}**
+**{LESSON #20 (Angular) :: Event Handling}**
 
 LOs:
 
@@ -2729,7 +2729,7 @@ If e.key === 'Escape', clear the form state
 
 ---
 
-**{PROBLEM #21 (Angular) :: Conditional Classes}**
+**{LESSON #21 (Angular) :: Conditional Classes}**
 
 LOs:
 
@@ -2744,7 +2744,7 @@ Apply the result to className={...}
 
 ---
 
-**{PROBLEM #22 (Angular) :: Inline Styles}**
+**{LESSON #22 (Angular) :: Inline Styles}**
 
 LOs:
 
@@ -2759,7 +2759,7 @@ Set the bar's width with style={{ width: `${progress}%` }}
 
 ---
 
-**{PROBLEM #23 (Angular) :: CSS Modules}**
+**{LESSON #23 (Angular) :: CSS Modules}**
 
 LOs:
 
@@ -2774,7 +2774,7 @@ Use className={styles.container} in the component
 
 ---
 
-**{PROBLEM #24 (Angular) :: Styled Component Pattern}**
+**{LESSON #24 (Angular) :: Styled Component Pattern}**
 
 LOs:
 
@@ -2789,7 +2789,7 @@ Render a button that uses the variables
 
 ---
 
-**{PROBLEM #25 (Angular) :: Lifting State Up}**
+**{LESSON #25 (Angular) :: Lifting State Up}**
 
 LOs:
 
@@ -2804,7 +2804,7 @@ One child displays, one child updates
 
 ---
 
-**{PROBLEM #26 (Angular) :: Controlled vs Uncontrolled}**
+**{LESSON #26 (Angular) :: Controlled vs Uncontrolled}**
 
 LOs:
 
@@ -2819,7 +2819,7 @@ Show both in one component or two
 
 ---
 
-**{PROBLEM #27 (Angular) :: Simple Todo List}**
+**{LESSON #27 (Angular) :: Simple Todo List}**
 
 LOs:
 
@@ -2837,7 +2837,7 @@ Delete: filter out by id
 
 ---
 
-**{PROBLEM #28 (Angular) :: Star Rating Component}**
+**{LESSON #28 (Angular) :: Star Rating Component}**
 
 LOs:
 
@@ -2855,7 +2855,7 @@ onClick sets rating to that star's value
 
 ---
 
-**{PROBLEM #29 (Angular) :: Accordion}**
+**{LESSON #29 (Angular) :: Accordion}**
 
 LOs:
 
@@ -2870,7 +2870,7 @@ Render panels: show content only when openIndex === index
 
 ---
 
-**{PROBLEM #30 (Angular) :: Image Gallery}**
+**{LESSON #30 (Angular) :: Image Gallery}**
 
 LOs:
 
@@ -2888,7 +2888,7 @@ Modal: when selectedImage is set, show overlay with large image and close button
 
 ---
 
-**{PROBLEM #31 (Angular) :: useFetch}**
+**{LESSON #31 (Angular) :: useFetch}**
 
 LOs:
 
@@ -2909,7 +2909,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #32 (Angular) :: useDebounce}**
+**{LESSON #32 (Angular) :: useDebounce}**
 
 LOs:
 
@@ -2930,7 +2930,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #33 (Angular) :: useLocalStorage}**
+**{LESSON #33 (Angular) :: useLocalStorage}**
 
 LOs:
 
@@ -2951,7 +2951,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #34 (Angular) :: useToggle}**
+**{LESSON #34 (Angular) :: useToggle}**
 
 LOs:
 
@@ -2972,7 +2972,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #35 (Angular) :: useWindowSize}**
+**{LESSON #35 (Angular) :: useWindowSize}**
 
 LOs:
 
@@ -2993,7 +2993,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #36 (Angular) :: usePrevious}**
+**{LESSON #36 (Angular) :: usePrevious}**
 
 LOs:
 
@@ -3014,7 +3014,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #37 (Angular) :: useClickOutside}**
+**{LESSON #37 (Angular) :: useClickOutside}**
 
 LOs:
 
@@ -3035,7 +3035,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #38 (Angular) :: useKeyPress}**
+**{LESSON #38 (Angular) :: useKeyPress}**
 
 LOs:
 
@@ -3056,7 +3056,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #39 (Angular) :: useOnlineStatus}**
+**{LESSON #39 (Angular) :: useOnlineStatus}**
 
 LOs:
 
@@ -3077,7 +3077,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #40 (Angular) :: useMediaQuery}**
+**{LESSON #40 (Angular) :: useMediaQuery}**
 
 LOs:
 
@@ -3098,7 +3098,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #41 (Angular) :: Theme Context}**
+**{LESSON #41 (Angular) :: Theme Context}**
 
 LOs:
 
@@ -3119,7 +3119,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #42 (Angular) :: Auth Context}**
+**{LESSON #42 (Angular) :: Auth Context}**
 
 LOs:
 
@@ -3140,7 +3140,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #43 (Angular) :: Cart Context}**
+**{LESSON #43 (Angular) :: Cart Context}**
 
 LOs:
 
@@ -3161,7 +3161,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #44 (Angular) :: Notification Context}**
+**{LESSON #44 (Angular) :: Notification Context}**
 
 LOs:
 
@@ -3182,7 +3182,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #45 (Angular) :: Context Performance}**
+**{LESSON #45 (Angular) :: Context Performance}**
 
 LOs:
 
@@ -3203,7 +3203,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #46 (Angular) :: useReducer vs useState}**
+**{LESSON #46 (Angular) :: useReducer vs useState}**
 
 LOs:
 
@@ -3224,7 +3224,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #47 (Angular) :: Compound Component (Tabs)}**
+**{LESSON #47 (Angular) :: Compound Component (Tabs)}**
 
 LOs:
 
@@ -3245,7 +3245,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #48 (Angular) :: Unnecessary Re-renders}**
+**{LESSON #48 (Angular) :: Unnecessary Re-renders}**
 
 LOs:
 
@@ -3266,7 +3266,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #49 (Angular) :: useMemo for Expensive Computation}**
+**{LESSON #49 (Angular) :: useMemo for Expensive Computation}**
 
 LOs:
 
@@ -3287,7 +3287,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #50 (Angular) :: useCallback for Stable References}**
+**{LESSON #50 (Angular) :: useCallback for Stable References}**
 
 LOs:
 
@@ -3308,7 +3308,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #51 (Angular) :: React.memo}**
+**{LESSON #51 (Angular) :: React.memo}**
 
 LOs:
 
@@ -3329,7 +3329,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #52 (Angular) :: List Virtualization}**
+**{LESSON #52 (Angular) :: List Virtualization}**
 
 LOs:
 
@@ -3350,7 +3350,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #53 (Angular) :: Lazy Loading Routes}**
+**{LESSON #53 (Angular) :: Lazy Loading Routes}**
 
 LOs:
 
@@ -3371,7 +3371,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #54 (Angular) :: Image Lazy Loading}**
+**{LESSON #54 (Angular) :: Image Lazy Loading}**
 
 LOs:
 
@@ -3392,7 +3392,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #55 (Angular) :: HOC withAuth}**
+**{LESSON #55 (Angular) :: HOC withAuth}**
 
 LOs:
 
@@ -3413,7 +3413,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #56 (Angular) :: Render Props (MouseTracker)}**
+**{LESSON #56 (Angular) :: Render Props (MouseTracker)}**
 
 LOs:
 
@@ -3434,7 +3434,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #57 (Angular) :: Controlled DatePicker}**
+**{LESSON #57 (Angular) :: Controlled DatePicker}**
 
 LOs:
 
@@ -3455,7 +3455,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #58 (Angular) :: Portal}**
+**{LESSON #58 (Angular) :: Portal}**
 
 LOs:
 
@@ -3476,7 +3476,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #59 (Angular) :: Error Boundary}**
+**{LESSON #59 (Angular) :: Error Boundary}**
 
 LOs:
 
@@ -3497,7 +3497,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #60 (Angular) :: Recursive TreeView}**
+**{LESSON #60 (Angular) :: Recursive TreeView}**
 
 LOs:
 
@@ -3518,7 +3518,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #61 (Angular) :: Pagination}**
+**{LESSON #61 (Angular) :: Pagination}**
 
 LOs:
 
@@ -3539,7 +3539,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #62 (Angular) :: Infinite Scroll}**
+**{LESSON #62 (Angular) :: Infinite Scroll}**
 
 LOs:
 
@@ -3560,7 +3560,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #63 (Angular) :: Debounced Search}**
+**{LESSON #63 (Angular) :: Debounced Search}**
 
 LOs:
 
@@ -3581,7 +3581,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #64 (Angular) :: Multi-Step Form}**
+**{LESSON #64 (Angular) :: Multi-Step Form}**
 
 LOs:
 
@@ -3602,7 +3602,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #65 (Angular) :: Generic List<T>}**
+**{LESSON #65 (Angular) :: Generic List<T>}**
 
 LOs:
 
@@ -3623,7 +3623,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #66 (Angular) :: Discriminated Union Props}**
+**{LESSON #66 (Angular) :: Discriminated Union Props}**
 
 LOs:
 
@@ -3644,7 +3644,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #67 (Angular) :: useRef Typing}**
+**{LESSON #67 (Angular) :: useRef Typing}**
 
 LOs:
 
@@ -3665,7 +3665,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #68 (Angular) :: Event Typing}**
+**{LESSON #68 (Angular) :: Event Typing}**
 
 LOs:
 
@@ -3686,7 +3686,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #69 (Angular) :: Generic useFetch<T>}**
+**{LESSON #69 (Angular) :: Generic useFetch<T>}**
 
 LOs:
 
@@ -3707,7 +3707,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #70 (Angular) :: Utility Types}**
+**{LESSON #70 (Angular) :: Utility Types}**
 
 LOs:
 
@@ -3728,7 +3728,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #71 (Angular) :: useImperativeHandle}**
+**{LESSON #71 (Angular) :: useImperativeHandle}**
 
 LOs:
 
@@ -3749,7 +3749,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #72 (Angular) :: useSyncExternalStore}**
+**{LESSON #72 (Angular) :: useSyncExternalStore}**
 
 LOs:
 
@@ -3770,7 +3770,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #73 (Angular) :: useTransition}**
+**{LESSON #73 (Angular) :: useTransition}**
 
 LOs:
 
@@ -3791,7 +3791,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #74 (Angular) :: useDeferredValue}**
+**{LESSON #74 (Angular) :: useDeferredValue}**
 
 LOs:
 
@@ -3812,7 +3812,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #75 (Angular) :: useLayoutEffect vs useEffect}**
+**{LESSON #75 (Angular) :: useLayoutEffect vs useEffect}**
 
 LOs:
 
@@ -3833,7 +3833,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #76 (Angular) :: Mini Redux}**
+**{LESSON #76 (Angular) :: Mini Redux}**
 
 LOs:
 
@@ -3854,7 +3854,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #77 (Angular) :: Optimistic UI}**
+**{LESSON #77 (Angular) :: Optimistic UI}**
 
 LOs:
 
@@ -3875,7 +3875,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #78 (Angular) :: Request Deduplication}**
+**{LESSON #78 (Angular) :: Request Deduplication}**
 
 LOs:
 
@@ -3896,7 +3896,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #79 (Angular) :: Polling Hook}**
+**{LESSON #79 (Angular) :: Polling Hook}**
 
 LOs:
 
@@ -3917,7 +3917,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #80 (Angular) :: WebSocket Hook}**
+**{LESSON #80 (Angular) :: WebSocket Hook}**
 
 LOs:
 
@@ -3938,7 +3938,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #81 (Angular) :: Feature Flag Hook}**
+**{LESSON #81 (Angular) :: Feature Flag Hook}**
 
 LOs:
 
@@ -3959,7 +3959,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #82 (Angular) :: Undo/Redo}**
+**{LESSON #82 (Angular) :: Undo/Redo}**
 
 LOs:
 
@@ -3980,7 +3980,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #83 (Angular) :: Form Library from Scratch}**
+**{LESSON #83 (Angular) :: Form Library from Scratch}**
 
 LOs:
 
@@ -4001,7 +4001,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #84 (Angular) :: Component Library Theming}**
+**{LESSON #84 (Angular) :: Component Library Theming}**
 
 LOs:
 
@@ -4022,7 +4022,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #85 (Angular) :: Micro-frontend Shell}**
+**{LESSON #85 (Angular) :: Micro-frontend Shell}**
 
 LOs:
 
@@ -4043,7 +4043,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #86 (Angular) :: Race Condition Fix}**
+**{LESSON #86 (Angular) :: Race Condition Fix}**
 
 LOs:
 
@@ -4064,7 +4064,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #87 (Angular) :: Memoization Strategy}**
+**{LESSON #87 (Angular) :: Memoization Strategy}**
 
 LOs:
 
@@ -4085,7 +4085,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #88 (Angular) :: Bundle Analysis}**
+**{LESSON #88 (Angular) :: Bundle Analysis}**
 
 LOs:
 
@@ -4106,7 +4106,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #89 (Angular) :: Concurrent Mode Gotchas}**
+**{LESSON #89 (Angular) :: Concurrent Mode Gotchas}**
 
 LOs:
 
@@ -4127,7 +4127,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #90 (Angular) :: Memory Leak Hunt}**
+**{LESSON #90 (Angular) :: Memory Leak Hunt}**
 
 LOs:
 
@@ -4148,7 +4148,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #91 (Angular) :: Test useFetch}**
+**{LESSON #91 (Angular) :: Test useFetch}**
 
 LOs:
 
@@ -4169,7 +4169,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #92 (Angular) :: Test Async Component}**
+**{LESSON #92 (Angular) :: Test Async Component}**
 
 LOs:
 
@@ -4190,7 +4190,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #93 (Angular) :: Test User Interactions}**
+**{LESSON #93 (Angular) :: Test User Interactions}**
 
 LOs:
 
@@ -4211,7 +4211,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #94 (Angular) :: Test Context}**
+**{LESSON #94 (Angular) :: Test Context}**
 
 LOs:
 
@@ -4232,7 +4232,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #95 (Angular) :: Test Error Boundary}**
+**{LESSON #95 (Angular) :: Test Error Boundary}**
 
 LOs:
 
@@ -4253,7 +4253,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #96 (Angular) :: Design DataTable API}**
+**{LESSON #96 (Angular) :: Design DataTable API}**
 
 LOs:
 
@@ -4274,7 +4274,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #97 (Angular) :: Design Auth Flow}**
+**{LESSON #97 (Angular) :: Design Auth Flow}**
 
 LOs:
 
@@ -4295,7 +4295,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #98 (Angular) :: Design Notification System}**
+**{LESSON #98 (Angular) :: Design Notification System}**
 
 LOs:
 
@@ -4316,7 +4316,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #99 (Angular) :: Design Permission System}**
+**{LESSON #99 (Angular) :: Design Permission System}**
 
 LOs:
 

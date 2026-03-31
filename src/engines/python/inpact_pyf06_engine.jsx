@@ -7,4 +7,4 @@ const NODES = [
 class User(BaseModel): email: EmailStr; @validator('email') ...\nuser.model_dump()`, feedback_correct: "✅ @dataclass(frozen=True); BaseModel with validators; model_dump/model_dump_json.", feedback_wrong: "dataclass frozen; Pydantic BaseModel and validators; model_dump.", expected: "Dataclasses and Pydantic" },
 ];
 const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }];
-export default createINPACTEngine({ NODES, sideItems, problemNum: "PY-F06", title: "Dataclasses & Pydantic", shortName: "PY — DATACLASS" });
+export default createINPACTEngine({ NODES, sideItems, lessonNum: "PY-F06", title: "Dataclasses & Pydantic", shortName: "PY — DATACLASS" });

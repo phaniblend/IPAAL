@@ -10,18 +10,18 @@
       "stepId": "title",
       "mentorSays": "At the end of this lesson, you will be able to:\n\n1. Understand what a cycle in a linked list means\n2. Use Floyd's cycle detection (tortoise and hare) algorithm\n3. Detect cycles using two pointers moving at different speeds\n4. Implement the solution step by step in your chosen language",
       "action": "continue",
-      "next": "problem-illustration"
+      "next": "lesson-illustration"
     },
     {
-      "stepId": "problem-illustration",
-      "mentorSays": "Perfect! Now let's understand what the Linked List Cycle problem is asking.\n\nA cycle in a linked list occurs when a node's next pointer points back to a previous node, creating a loop.\n\n**Example 1 (No Cycle):** 3 -> 2 -> 0 -> -4 -> null\n- Each node points to the next, ending with null\n- No cycle → return false\n\n**Example 2 (Has Cycle):** 3 -> 2 -> 0 -> -4 -> (points back to 2)\n- The list forms a cycle: 3 -> 2 -> 0 -> -4 -> 2 -> 0 -> -4 -> ...\n- Has cycle → return true\n\n**How to detect a cycle:**\nWe use Floyd's cycle detection algorithm (also called \"tortoise and hare\"):\n- Use two pointers: slow (moves 1 step) and fast (moves 2 steps)\n- If there's a cycle, the fast pointer will eventually catch up to the slow pointer\n- If there's no cycle, the fast pointer will reach null first\n\n**Step-by-step trace (with cycle):**\n\nList: 3 -> 2 -> 0 -> -4 -> (back to 2)\n\n- **Initial**: slow = 3, fast = 3\n- **Step 1**: slow = 2, fast = 0\n- **Step 2**: slow = 0, fast = 2\n- **Step 3**: slow = -4, fast = -4\n- **They meet!** Cycle detected → return true ✓",
+      "stepId": "lesson-illustration",
+      "mentorSays": "Perfect! Now let's understand what the Linked List Cycle lesson is asking.\n\nA cycle in a linked list occurs when a node's next pointer points back to a previous node, creating a loop.\n\n**Example 1 (No Cycle):** 3 -> 2 -> 0 -> -4 -> null\n- Each node points to the next, ending with null\n- No cycle → return false\n\n**Example 2 (Has Cycle):** 3 -> 2 -> 0 -> -4 -> (points back to 2)\n- The list forms a cycle: 3 -> 2 -> 0 -> -4 -> 2 -> 0 -> -4 -> ...\n- Has cycle → return true\n\n**How to detect a cycle:**\nWe use Floyd's cycle detection algorithm (also called \"tortoise and hare\"):\n- Use two pointers: slow (moves 1 step) and fast (moves 2 steps)\n- If there's a cycle, the fast pointer will eventually catch up to the slow pointer\n- If there's no cycle, the fast pointer will reach null first\n\n**Step-by-step trace (with cycle):**\n\nList: 3 -> 2 -> 0 -> -4 -> (back to 2)\n\n- **Initial**: slow = 3, fast = 3\n- **Step 1**: slow = 2, fast = 0\n- **Step 2**: slow = 0, fast = 2\n- **Step 3**: slow = -4, fast = -4\n- **They meet!** Cycle detected → return true ✓",
       "example": "No cycle:\n3 -> 2 -> 0 -> -4 -> null\n\nFast pointer reaches null first → No cycle\n\n---\n\nHas cycle:\n3 -> 2 -> 0 -> -4 -> (back to 2)\n\nSlow and fast pointers meet → Cycle detected!",
       "action": "continue",
       "next": "thinking-challenge"
     },
     {
       "stepId": "thinking-challenge",
-      "mentorSays": "Now that you understand what the problem wants, here's the real question:\n\nHow would YOU detect if a linked list has a cycle?\n\nThink about it for a moment. What approach feels natural to you?",
+      "mentorSays": "Now that you understand what the lesson wants, here's the real question:\n\nHow would YOU detect if a linked list has a cycle?\n\nThink about it for a moment. What approach feels natural to you?",
       "choices": [
         {
           "label": "Use two pointers: slow (1 step) and fast (2 steps)",
@@ -146,7 +146,7 @@
     },
     {
       "stepId": "linked-list-check-js",
-      "mentorSays": "To solve this problem, we'll need to work with linked lists. Do you know what a linked list is?",
+      "mentorSays": "To solve this lesson, we'll need to work with linked lists. Do you know what a linked list is?",
       "choices": [
         {
           "label": "Yes, I know linked lists",
@@ -167,7 +167,7 @@
     },
     {
       "stepId": "loop-check-js",
-      "mentorSays": "To solve this problem, we'll need to use loops. Do you know what a loop is in JavaScript?",
+      "mentorSays": "To solve this lesson, we'll need to use loops. Do you know what a loop is in JavaScript?",
       "choices": [
         {
           "label": "Yes, I know loops",
@@ -286,7 +286,7 @@
     },
     {
       "stepId": "linked-list-check-python",
-      "mentorSays": "To solve this problem, we'll need to work with linked lists. Do you know what a linked list is?",
+      "mentorSays": "To solve this lesson, we'll need to work with linked lists. Do you know what a linked list is?",
       "choices": [
         {
           "label": "Yes, I know linked lists",
@@ -307,7 +307,7 @@
     },
     {
       "stepId": "loop-check-python",
-      "mentorSays": "To solve this problem, we'll need to use loops. Do you know what a loop is in Python?",
+      "mentorSays": "To solve this lesson, we'll need to use loops. Do you know what a loop is in Python?",
       "choices": [
         {
           "label": "Yes, I know loops",
@@ -426,7 +426,7 @@
     },
     {
       "stepId": "linked-list-check-java",
-      "mentorSays": "To solve this problem, we'll need to work with linked lists. Do you know what a linked list is?",
+      "mentorSays": "To solve this lesson, we'll need to work with linked lists. Do you know what a linked list is?",
       "choices": [
         {
           "label": "Yes, I know linked lists",
@@ -447,7 +447,7 @@
     },
     {
       "stepId": "loop-check-java",
-      "mentorSays": "To solve this problem, we'll need to use loops. Do you know what a loop is in Java?",
+      "mentorSays": "To solve this lesson, we'll need to use loops. Do you know what a loop is in Java?",
       "choices": [
         {
           "label": "Yes, I know loops",
@@ -566,7 +566,7 @@
     },
     {
       "stepId": "linked-list-check-cpp",
-      "mentorSays": "To solve this problem, we'll need to work with linked lists. Do you know what a linked list is?",
+      "mentorSays": "To solve this lesson, we'll need to work with linked lists. Do you know what a linked list is?",
       "choices": [
         {
           "label": "Yes, I know linked lists",
@@ -587,7 +587,7 @@
     },
     {
       "stepId": "loop-check-cpp",
-      "mentorSays": "To solve this problem, we'll need to use loops. Do you know what a loop is in C++?",
+      "mentorSays": "To solve this lesson, we'll need to use loops. Do you know what a loop is in C++?",
       "choices": [
         {
           "label": "Yes, I know loops",
@@ -706,7 +706,7 @@
     },
     {
       "stepId": "linked-list-check-ts",
-      "mentorSays": "To solve this problem, we'll need to work with linked lists. Do you know what a linked list is?",
+      "mentorSays": "To solve this lesson, we'll need to work with linked lists. Do you know what a linked list is?",
       "choices": [
         {
           "label": "Yes, I know linked lists",
@@ -727,7 +727,7 @@
     },
     {
       "stepId": "loop-check-ts",
-      "mentorSays": "To solve this problem, we'll need to use loops. Do you know what a loop is in TypeScript?",
+      "mentorSays": "To solve this lesson, we'll need to use loops. Do you know what a loop is in TypeScript?",
       "choices": [
         {
           "label": "Yes, I know loops",
@@ -783,7 +783,7 @@
     },
     {
       "stepId": "final",
-      "mentorSays": "🎉 Well done! You've learned to think through the Linked List Cycle problem. You understand what a cycle means, how to use Floyd's cycle detection (tortoise and hare) algorithm, and how to detect cycles using two pointers moving at different speeds.\n\nThis kind of thinking—using two pointers at different speeds—is essential for solving many linked list problems. Keep practicing!",
+      "mentorSays": "🎉 Well done! You've learned to think through the Linked List Cycle lesson. You understand what a cycle means, how to use Floyd's cycle detection (tortoise and hare) algorithm, and how to detect cycles using two pointers moving at different speeds.\n\nThis kind of thinking—using two pointers at different speeds—is essential for solving many linked list lessons. Keep practicing!",
       "action": "continue"
     }
   ]

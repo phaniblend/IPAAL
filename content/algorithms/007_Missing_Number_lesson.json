@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-algorithms-07",
     "track": "algorithms",
-    "problemNum": 7,
+    "lessonNum": 7,
     "title": "Missing Number",
     "shortName": "P07",
     "intro": {
@@ -265,7 +265,7 @@
         "phase": "Step 15 of 15",
         "title": "Done",
         "content": {
-          "body": "Great work! You've implemented a hash map solution for the Missing Number problem. Remember: the lookup object lets us remember what we've seen in one pass, avoiding repeated scans. This pattern—using a structure to track seen items—is powerful for many array problems.",
+          "body": "Great work! You've implemented a hash map solution for the Missing Number lesson. Remember: the lookup object lets us remember what we've seen in one pass, avoiding repeated scans. This pattern—using a structure to track seen items—is powerful for many array lessons.",
           "title": "Done"
         }
       }

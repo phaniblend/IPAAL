@@ -1,7 +1,7 @@
 import createINPACTEngine from "../inpact_engine_shared";
 
 const NODES = [
-  { id: "intro", type: "reveal", phase: "Lesson", content: { tag: "LESSON #10 (Angular)", title: "Multiple State Vars", body: "Manage several independent signals in one component (e.g. firstName, lastName, email). Each has its own input and updates independently. Display a summary line combining them.", usecase: "Forms and dashboards often use multiple signals — same pattern as Problem 4 with more fields." } },
+  { id: "intro", type: "reveal", phase: "Lesson", content: { tag: "LESSON #10 (Angular)", title: "Multiple State Vars", body: "Manage several independent signals in one component (e.g. firstName, lastName, email). Each has its own input and updates independently. Display a summary line combining them.", usecase: "Forms and dashboards often use multiple signals — same pattern as Lesson 4 with more fields." } },
   { id: "objectives", type: "objectives", phase: "Objectives", items: ["Declare 3+ signals (e.g. firstName, lastName, email)", "One input per signal with [value] and (input)", "One handler per field or a generic handler with a key", "Summary paragraph with {{ firstName() }} {{ lastName() }}"] },
   { id: "step1", type: "question", phase: "Step 1 of 3", paal: "Create a component with firstName = signal(''), lastName = signal(''), email = signal('').", answer_keywords: ["signal", "firstName", "lastName", "email"], seed_code: `import { Component, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -58,4 +58,4 @@ export class MultipleStateVarsComponent {
 ];
 
 const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
-export default createINPACTEngine({ NODES, sideItems, problemNum: 10, title: "Multiple State Vars (Angular)", shortName: "A — MULTI STATE" });
+export default createINPACTEngine({ NODES, sideItems, lessonNum: 10, title: "Multiple State Vars (Angular)", shortName: "A — MULTI STATE" });

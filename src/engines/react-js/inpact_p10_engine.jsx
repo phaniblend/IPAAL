@@ -115,4 +115,4 @@ const sideItems = [
   { label: "Step 3 — Form + match", id: "step3" },
 ];
 
-export default createINPACTEngine({ NODES, sideItems, problemNum: 10, title: "Multiple State Vars", shortName: "MULTIPLE STATE VARS" });
+export default createINPACTEngine({ NODES, sideItems, lessonNum: 10, title: "Multiple State Vars", shortName: "MULTIPLE STATE VARS" });

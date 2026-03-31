@@ -8,4 +8,4 @@ const plugin = { install(app) { app.directive('focus', ...) } }
 app.use(plugin)`, feedback_correct: "✅ directive with mounted hook; plugin.install(app); app.use(plugin).", feedback_wrong: "Directive with mounted; install(app); app.use(plugin).", expected: "Directives and plugins" },
 ];
 const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }];
-export default createINPACTEngine({ NODES, sideItems, problemNum: "VUE-F09", title: "Custom directives & plugins", shortName: "VUE — DIRECTIVES" });
+export default createINPACTEngine({ NODES, sideItems, lessonNum: "VUE-F09", title: "Custom directives & plugins", shortName: "VUE — DIRECTIVES" });

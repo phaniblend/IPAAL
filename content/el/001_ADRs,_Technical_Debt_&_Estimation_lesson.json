@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-el-01",
     "track": "el",
-    "problemNum": 1,
+    "lessonNum": 1,
     "title": "ADRs, Technical Debt & Estimation",
     "shortName": "P01",
     "intro": {
@@ -82,22 +82,22 @@
         "type": "question",
         "phase": "Step 3 of 10",
         "title": "Write the Context section",
-        "instruction": "Add a Context section below the header that describes the background and problem statement that requires a technical decision.",
-        "hint": "The Context section should explain what problem you're solving and why a decision is needed.",
+        "instruction": "Add a Context section below the header that describes the background and lesson statement that requires a technical decision.",
+        "hint": "The Context section should explain what lesson you're solving and why a decision is needed.",
         "analogousExample": "// Example: Context section in an ADR\n## Context\nWe need to choose between two database solutions because our current system cannot handle the expected load increase.",
         "seedCode": "# Title\n\n**Status:** \n**Date:** \n**Decision Makers:**\n\n## Context\n",
-        "expectedOutcome": "The ADR now includes a Context section that documents the problem background.",
+        "expectedOutcome": "The ADR now includes a Context section that documents the lesson background.",
         "successCriteria": [
           "The Context section heading and descriptive content are added to the ADR."
         ],
         "feedbackCorrect": "Nice! Proceed to the next step.",
-        "feedbackPartial": "You've added the Context heading, but make sure to include descriptive text explaining the problem that requires a decision.",
-        "feedbackWrong": "The Context section is missing or incomplete. Add a '## Context' heading followed by a description of the problem background.",
+        "feedbackPartial": "You've added the Context heading, but make sure to include descriptive text explaining the lesson that requires a decision.",
+        "feedbackWrong": "The Context section is missing or incomplete. Add a '## Context' heading followed by a description of the lesson background.",
         "evaluation": {
           "mode": "keyword_match",
           "required": [
             "## Context",
-            "problem",
+            "lesson",
             "decision"
           ],
           "partialThreshold": 0.5,

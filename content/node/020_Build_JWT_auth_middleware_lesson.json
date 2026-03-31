@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-node-20",
     "track": "node",
-    "problemNum": 20,
+    "lessonNum": 20,
     "title": "Build JWT auth middleware",
     "shortName": "P20",
     "intro": {

@@ -29,7 +29,7 @@ const book = {
   overlay: {
     position: "fixed",
     inset: 0,
-    zIndex: 10001,
+    zIndex: 11040,
     display: "flex",
     alignItems: "center",
     justifyContent: "center",

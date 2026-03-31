@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-js-103",
     "track": "js",
-    "problemNum": 103,
+    "lessonNum": 103,
     "title": "Build offline sync queue and replay",
     "shortName": "P103",
     "intro": {

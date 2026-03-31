@@ -261,7 +261,7 @@ constructor(
   @Inject(API_BASE_URL) private baseUrl: string
 ) {}
 // @Inject tells Angular: "use API_BASE_URL token, not 'string' type"`,
-      explain: "InjectionToken solves the problem of injecting primitive values. Angular's DI uses TypeScript types to match dependencies — 'string' is too generic. InjectionToken creates a unique named token. Common: API URLs, feature flags, environment config.",
+      explain: "InjectionToken solves the lesson of injecting primitive values. Angular's DI uses TypeScript types to match dependencies — 'string' is too generic. InjectionToken creates a unique named token. Common: API URLs, feature flags, environment config.",
     },
     evaluate: (ans) => {
       const a = ans.toLowerCase().replace(/\s+/g, "");
@@ -474,7 +474,7 @@ const sideItems = [
   { id: "wfs", label: "Write From Scratch" },
 ];
 
-export default function AngularA03Services({ onNextProblem }) {
+export default function AngularA03Services({ onNextLesson }) {
   const [nodeIndex, setNodeIndex] = useState(0);
   const [answers, setAnswers] = useState({});
   const [result, setResult] = useState(null);
@@ -646,7 +646,7 @@ export default function AngularA03Services({ onNextProblem }) {
         {allChecked && (
           <div>
             <div style={s.feedback("correct")}>{"✅ Engine ANG03 Complete — Services & DI mastered.\nNext: ANG04 — RxJS Essentials"}</div>
-            <div style={s.btnRow}><button style={s.btn("primary")} onClick={onNextProblem ?? next}>NEXT ENGINE →</button></div>
+            <div style={s.btnRow}><button style={s.btn("primary")} onClick={onNextLesson ?? next}>NEXT ENGINE →</button></div>
           </div>
         )}
       </div>
@@ -659,7 +659,7 @@ export default function AngularA03Services({ onNextProblem }) {
         <div style={{ fontSize: "48px", marginBottom: "24px" }}>🎯</div>
         <h1 style={{ ...s.h1, textAlign: "center" }}>Engine ANG03 Complete</h1>
         <p style={{ color: "#4a5568", fontSize: "13px" }}>Services & Dependency Injection — mastered.</p>
-        {onNextProblem && <div style={{ ...s.btnRow, justifyContent: "center", marginTop: "24px" }}><button style={s.btn("primary")} onClick={onNextProblem}>NEXT ENGINE →</button></div>}
+        {onNextLesson && <div style={{ ...s.btnRow, justifyContent: "center", marginTop: "24px" }}><button style={s.btn("primary")} onClick={onNextLesson}>NEXT ENGINE →</button></div>}
       </div>
     );
   }

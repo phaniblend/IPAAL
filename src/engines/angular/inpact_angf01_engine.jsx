@@ -6,4 +6,4 @@ const NODES = [
   { id: "step1", type: "question", phase: "Step 1 of 3", paal: "Write a component with interpolation {{ title }}, property binding [disabled]=\"loading\", and event binding (click)=\"submit()\".", answer_keywords: ["interpolation", "property binding", "event binding", "Component", "template"], seed_code: `// {{ value }} [prop]="expr" (event)="handler()" #ref`, feedback_correct: "✅ {{ }}, [prop], (event), #ref.", feedback_wrong: "Interpolation {{ }}, [prop] binding, (event) binding.", expected: "Component template syntax" },
 ];
 const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }];
-export default createINPACTEngine({ NODES, sideItems, problemNum: "ANG-F01", title: "Components & templates", shortName: "ANG — TEMPLATES" });
+export default createINPACTEngine({ NODES, sideItems, lessonNum: "ANG-F01", title: "Components & templates", shortName: "ANG — TEMPLATES" });

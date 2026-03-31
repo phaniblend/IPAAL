@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-ts-19",
     "track": "ts",
-    "problemNum": 19,
+    "lessonNum": 19,
     "title": "Write typed groupBy helper",
     "shortName": "P19",
     "intro": {

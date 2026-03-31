@@ -27,4 +27,4 @@ app.use((err, req, res, next) => {
 ];
 
 const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }];
-export default createINPACTEngine({ NODES, sideItems, problemNum: "EXP-F06", title: "Error handling", shortName: "EXP — ERRORS" });
+export default createINPACTEngine({ NODES, sideItems, lessonNum: "EXP-F06", title: "Error handling", shortName: "EXP — ERRORS" });

@@ -100,8 +100,8 @@ function cssTabsGetOutputPreview(answer) {
 
 /**
  * @param {import("../schema.js").z.infer<typeof import("../schema.js").lessonConfigSchema>} lesson
- * @param {{ track?: string, getOutputPreview?: (code: string) => string, language?: string, answerShape?: string, defaultHtml?: string, defaultSeedCode?: string, skipIntroAndObjectives?: boolean, problemNumFallback?: number }} options - Pass track to get correct tabs (css-tabs, angular-tabs). Use problemNumFallback when lesson JSON omits problemNum (e.g. list index + 1).
- * @returns {{ NODES: object[], sideItems: { id: string, label: string }[], problemNum: number, title: string, shortName: string, language: string, getOutputPreview: (code: string) => string, answerShape: string, defaultHtml?: string, defaultSeedCode?: string }}
+ * @param {{ track?: string, getOutputPreview?: (code: string) => string, language?: string, answerShape?: string, defaultHtml?: string, defaultSeedCode?: string, skipIntroAndObjectives?: boolean, lessonNumFallback?: number }} options - Pass track to get correct tabs (css-tabs, angular-tabs). Use lessonNumFallback when lesson JSON omits lessonNum (e.g. list index + 1).
+ * @returns {{ NODES: object[], sideItems: { id: string, label: string }[], lessonNum: number, title: string, shortName: string, language: string, getOutputPreview: (code: string) => string, answerShape: string, defaultHtml?: string, defaultSeedCode?: string }}
  */
 export function aiLessonToEngineConfig(lesson, options = {}) {
   const trackOpts = getAnswerShapeForTrack(options.track);
@@ -112,13 +112,13 @@ export function aiLessonToEngineConfig(lesson, options = {}) {
     defaultHtml: optionDefaultHtml,
     defaultSeedCode,
     skipIntroAndObjectives = false,
-    problemNumFallback,
+    lessonNumFallback,
   } = options;
   const answerShape = optionAnswerShape ?? lesson.answerShape ?? (inferMultiFileLesson(lesson) ? "multi-file" : trackOpts.answerShape);
   const defaultHtml = optionDefaultHtml ?? trackOpts.defaultHtml;
   const getOutputPreview = optionGetOutputPreview ?? (answerShape === "css-tabs" ? cssTabsGetOutputPreview : undefined);
 
-  const algoRevealTypes = ["problem", "example", "reasoning", "dryRun", "discovery", "reflection", "scale-problem", "concept-bridge", "reveal-idea", "flow-explainer", "complete"];
+  const algoRevealTypes = ["lesson", "example", "reasoning", "dryRun", "discovery", "reflection", "scale-problem", "concept-bridge", "reveal-idea", "flow-explainer", "complete"];
   const isAlgoLesson = lesson.steps.some(
     (s) => algoRevealTypes.includes(s.type) || s.type === "flowchart"
   );
@@ -246,7 +246,7 @@ export function aiLessonToEngineConfig(lesson, options = {}) {
   const out = {
     NODES,
     sideItems,
-    problemNum: lesson.problemNum ?? problemNumFallback ?? 1,
+    lessonNum: lesson.lessonNum ?? lessonNumFallback ?? 1,
     title: lesson.title,
     shortName: lesson.shortName ?? lesson.title,
     language,

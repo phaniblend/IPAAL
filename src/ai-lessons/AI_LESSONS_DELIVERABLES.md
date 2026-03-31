@@ -2,11 +2,11 @@
 
 ## 1. Current lesson-card click flow (summary)
 
-- **Landing:** `App` renders `LandingPage` when `problemIndex === null`, with `track`, `onTrackChange`, `onSelectProblem`, `problemList={getProblemList(track)}`.
-- **Grid:** `LandingPage` builds `list` from `problemList ?? PROBLEM_LIST.map(title => ({ title }))` (or Angular-specific list), then renders a grid of cards. Each card calls `onSelectProblem(i, item)` on click (with `item` = `{ title, shortName?, why? }`).
-- **After click:** `App` sets `problemIndex` to the clicked index and (with this implementation) `selectedLessonItem` to the clicked item.
-- **Engine choice:** `App` gets `engines = getEngines(track)` and `Engine = engines[problemIndex]`, then renders `<Engine onNextProblem={...} onBackToProblems={onBackToProblems} />` inside a fixed “← All Lessons” bar.
-- **Shared engine:** Each `Engine` is created by `createINPACTEngine(config)` with `config`: `NODES`, `sideItems`, `problemNum`, `title`, `shortName`, and optional `language`, `getOutputPreview`, `answerShape`, `defaultSeedCode`. The shared shell in `inpact_engine_shared.jsx` renders intro → objectives → question steps (editor, hints, feedback).
+- **Landing:** `App` renders `LandingPage` when `lessonIndex === null`, with `track`, `onTrackChange`, `onSelectLesson`, `lessonList={getLessonList(track)}`.
+- **Grid:** `LandingPage` builds `list` from `lessonList ?? LESSON_LIST.map(title => ({ title }))` (or Angular-specific list), then renders a grid of cards. Each card calls `onSelectLesson(i, item)` on click (with `item` = `{ title, shortName?, why? }`).
+- **After click:** `App` sets `lessonIndex` to the clicked index and (with this implementation) `selectedLessonItem` to the clicked item.
+- **Engine choice:** `App` gets `engines = getEngines(track)` and `Engine = engines[lessonIndex]`, then renders `<Engine onNextLesson={...} onBackToLessons={onBackToLessons} />` inside a fixed “← All Lessons” bar.
+- **Shared engine:** Each `Engine` is created by `createINPACTEngine(config)` with `config`: `NODES`, `sideItems`, `lessonNum`, `title`, `shortName`, and optional `language`, `getOutputPreview`, `answerShape`, `defaultSeedCode`. The shared shell in `inpact_engine_shared.jsx` renders intro → objectives → question steps (editor, hints, feedback).
 
 ## 2. Branch name
 
@@ -41,19 +41,19 @@ src/
     adapters/
       normalizeToEngineConfig.js # AI config → createINPACTEngine config
   ai-prompt.txt                 # Source spec for 12 stages (unchanged)
-  App.jsx                        # handleSelectProblem, useAILessons, DynamicLessonPage
-  LandingPage.jsx                # onSelectProblem(i, item)
+  App.jsx                        # handleSelectLesson, useAILessons, DynamicLessonPage
+  LandingPage.jsx                # onSelectLesson(i, item)
 ```
 
 ## 4. Exact integration points changed
 
-- **`src/LandingPage.jsx`:** Card click now calls `onSelectProblem(i, item)` instead of `onSelectProblem(i)` so the app has access to `title` / `shortName` without relying on `getProblemList(track)` in App.
+- **`src/LandingPage.jsx`:** Card click now calls `onSelectLesson(i, item)` instead of `onSelectLesson(i)` so the app has access to `title` / `shortName` without relying on `getLessonList(track)` in App.
 - **`src/App.jsx`:**
   - Imports `AI_LESSONS_CONFIG` and `DynamicLessonPage`.
   - New state: `selectedLessonItem`, `useAILessonFailed`.
-  - `onSelectProblem` replaced with `handleSelectProblem(i, item)` which sets `problemIndex`, `selectedLessonItem`, and resets `useAILessonFailed`.
-  - `onBackToProblems` clears `selectedLessonItem` and `useAILessonFailed`.
-  - When `problemIndex !== null`: if `AI_LESSONS_CONFIG.useAILessons && !useAILessonFailed`, render `DynamicLessonPage` with `track`, `lessonTitle` (from `selectedLessonItem?.title ?? getProblemList(track)?.[problemIndex]?.title ?? 'Lesson N'`), `lessonIndex={problemIndex}`, `onBackToProblems`, `onNextProblem`, `onFallbackToLocal`. Otherwise render the existing `Engine` as before.
+  - `onSelectLesson` replaced with `handleSelectLesson(i, item)` which sets `lessonIndex`, `selectedLessonItem`, and resets `useAILessonFailed`.
+  - `onBackToLessons` clears `selectedLessonItem` and `useAILessonFailed`.
+  - When `lessonIndex !== null`: if `AI_LESSONS_CONFIG.useAILessons && !useAILessonFailed`, render `DynamicLessonPage` with `track`, `lessonTitle` (from `selectedLessonItem?.title ?? getLessonList(track)?.[lessonIndex]?.title ?? 'Lesson N'`), `lessonIndex={lessonIndex}`, `onBackToLessons`, `onNextLesson`, `onFallbackToLocal`. Otherwise render the existing `Engine` as before.
 
 ## 5. Schema / types added
 
@@ -62,7 +62,7 @@ src/
   - `lessonStepSchema`: `id`, `type`, `phase`, `title`, `instruction`, `hint`, `analogousExample`, `seedCode`, `expectedOutcome`, `successCriteria`, `feedbackCorrect` / `feedbackPartial` / `feedbackWrong`, `evaluation`, `answer_keywords`.
   - `lessonIntroSchema`: `tag`, `title`, `body`, `usecase`.
   - `sideItemSchema`: `label`, `id`.
-  - `lessonConfigSchema`: `lessonId`, `track`, `problemNum`, `title`, `shortName`, `intro`, `objectives`, `steps`, `sideItems`.
+  - `lessonConfigSchema`: `lessonId`, `track`, `lessonNum`, `title`, `shortName`, `intro`, `objectives`, `steps`, `sideItems`.
   - Helpers: `validateLessonConfig`, `parseLessonConfig`.
 
 ## 6. Prompt-template structure from ai-prompt.txt
@@ -86,7 +86,7 @@ src/
 ## 8. Frontend components added/updated
 
 - **Added:** `src/ai-lessons/DynamicLessonPage.jsx`
-  - Props: `track`, `lessonTitle`, `lessonIndex`, `onBackToProblems`, `onNextProblem`, `onFallbackToLocal`.
+  - Props: `track`, `lessonTitle`, `lessonIndex`, `onBackToLessons`, `onNextLesson`, `onFallbackToLocal`.
   - State: `loading` → calls `generateLesson(...)`; on success adapts config with `aiLessonToEngineConfig` and renders `createINPACTEngine(engineConfig)`; on error shows message and “Use local lesson instead” (if `onFallbackToLocal`), plus “← All Lessons”.
 - **Updated:** `App.jsx` (see §4). `LandingPage.jsx`: card click passes `(i, item)`.
 
@@ -97,7 +97,7 @@ src/
 
 ## 10. Migration notes
 
-- **Existing lessons:** Not removed. All current engine files and `getEngines`/`getProblemList` are unchanged. The AI path is additive.
+- **Existing lessons:** Not removed. All current engine files and `getEngines`/`getLessonList` are unchanged. The AI path is additive.
 - **Env:** See `AI_LESSONS_ENV.md`. Use `VITE_USE_AI_LESSONS=true` and `VITE_DEEPSEEK_API_KEY` (or server with `DEEPSEEK_API_KEY`) in project root `.env`. No hardcoded secrets.
 - **Track context:** Generation and validation are language- and framework-aware (React TS vs React JS, etc.). See `TRACK_CONTEXT.md` for how track drives prompts and validation.
 - **Real AI:** Implemented in `realLessonService.js`; orchestrator tries real AI first, then mock, then returns error for “Use local lesson instead”.

@@ -73,7 +73,7 @@ function getOutputPreview(answer) {
 export default createINPACTEngine({
   NODES,
   sideItems,
-  problemNum: 44,
+  lessonNum: 44,
   title: "aspect-ratio",
   shortName: "C44",
   language: "css",

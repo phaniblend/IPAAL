@@ -73,7 +73,7 @@ function getOutputPreview(answer) {
 export default createINPACTEngine({
   NODES,
   sideItems,
-  problemNum: 93,
+  lessonNum: 93,
   title: "print styles (@media print)",
   shortName: "C93",
   language: "css",

@@ -268,4 +268,4 @@ const sideItems = [
   { label: "Step 5 — ?. and ??", id: "step5" },
 ];
 
-export default createINPACTEngine({ NODES, sideItems, problemNum: "JS-B02", title: "Truthy, Falsy & Short-Circuit", shortName: "JS — TRUTHY/FALSY" });
+export default createINPACTEngine({ NODES, sideItems, lessonNum: "JS-B02", title: "Truthy, Falsy & Short-Circuit", shortName: "JS — TRUTHY/FALSY" });

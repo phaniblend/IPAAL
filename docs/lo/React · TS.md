@@ -2,7 +2,7 @@
 
 Lessons and learning objectives.
 
-**{PROBLEM #1 (TypeScript) :: Counter App — Typed}**
+**{LESSON #1 (TypeScript) :: Counter App — Typed}**
 
 LOs:
 
@@ -20,7 +20,7 @@ Export the typed function component
 
 ---
 
-**{PROBLEM #2 (TypeScript) :: Toggle Visibility — Typed}**
+**{LESSON #2 (TypeScript) :: Toggle Visibility — Typed}**
 
 LOs:
 
@@ -35,7 +35,7 @@ Conditionally render the paragraph
 
 ---
 
-**{PROBLEM #3 (TypeScript) :: Controlled Input — Typed}**
+**{LESSON #3 (TypeScript) :: Controlled Input — Typed}**
 
 LOs:
 
@@ -50,7 +50,7 @@ Display value.length for character count
 
 ---
 
-**{PROBLEM #4 (TypeScript) :: Multiple State Variables — Typed}**
+**{LESSON #4 (TypeScript) :: Multiple State Variables — Typed}**
 
 LOs:
 
@@ -65,7 +65,7 @@ Wire controlled inputs
 
 ---
 
-**{PROBLEM #5 (TypeScript) :: Conditional Rendering with Ternary — Typed}**
+**{LESSON #5 (TypeScript) :: Conditional Rendering with Ternary — Typed}**
 
 LOs:
 
@@ -80,7 +80,7 @@ Render different JSX with ternary
 
 ---
 
-**{PROBLEM #6 (TypeScript) :: List Rendering with map() — Typed}**
+**{LESSON #6 (TypeScript) :: List Rendering with map() — Typed}**
 
 LOs:
 
@@ -95,7 +95,7 @@ Use .map with typed callback parameter
 
 ---
 
-**{PROBLEM #7 (TypeScript) :: useEffect & Side Effects — Typed}**
+**{LESSON #7 (TypeScript) :: useEffect & Side Effects — Typed}**
 
 LOs:
 
@@ -110,7 +110,7 @@ Optionally type the cleanup return
 
 ---
 
-**{PROBLEM #8 (TypeScript) :: Forms & Validation — Typed}**
+**{LESSON #8 (TypeScript) :: Forms & Validation — Typed}**
 
 LOs:
 
@@ -125,7 +125,7 @@ Optional: type errors as { email?: string; password?: string }
 
 ---
 
-**{PROBLEM #9 (TypeScript) :: Color Picker — Typed}**
+**{LESSON #9 (TypeScript) :: Color Picker — Typed}**
 
 LOs:
 
@@ -140,7 +140,7 @@ Type the select onChange event
 
 ---
 
-**{PROBLEM #10 (TypeScript) :: Multiple State Vars — Typed}**
+**{LESSON #10 (TypeScript) :: Multiple State Vars — Typed}**
 
 LOs:
 
@@ -155,7 +155,7 @@ Optional: type match message as boolean or string
 
 ---
 
-**{PROBLEM #11 (TypeScript) :: Reusable Button — Typed}**
+**{LESSON #11 (TypeScript) :: Reusable Button — Typed}**
 
 LOs:
 
@@ -170,7 +170,7 @@ Apply styles from variant
 
 ---
 
-**{PROBLEM #12 (TypeScript) :: Card Component — Typed}**
+**{LESSON #12 (TypeScript) :: Card Component — Typed}**
 
 LOs:
 
@@ -185,7 +185,7 @@ Render all props
 
 ---
 
-**{PROBLEM #13 (TypeScript) :: Props Drilling — Typed}**
+**{LESSON #13 (TypeScript) :: Props Drilling — Typed}**
 
 LOs:
 
@@ -200,7 +200,7 @@ Optional: type label as string
 
 ---
 
-**{PROBLEM #14 (TypeScript) :: Default Props — Typed}**
+**{LESSON #14 (TypeScript) :: Default Props — Typed}**
 
 LOs:
 
@@ -215,7 +215,7 @@ Render img with typed dimensions
 
 ---
 
-**{PROBLEM #15 (TypeScript) :: Children Prop — Typed}**
+**{LESSON #15 (TypeScript) :: Children Prop — Typed}**
 
 LOs:
 
@@ -230,7 +230,7 @@ Apply styles to wrapper div
 
 ---
 
-**{PROBLEM #16 (TypeScript) :: Conditional Rendering — Typed}**
+**{LESSON #16 (TypeScript) :: Conditional Rendering — Typed}**
 
 LOs:
 
@@ -245,7 +245,7 @@ Render different JSX per status
 
 ---
 
-**{PROBLEM #17 (TypeScript) :: List Rendering — Typed}**
+**{LESSON #17 (TypeScript) :: List Rendering — Typed}**
 
 LOs:
 
@@ -260,7 +260,7 @@ map with (item: Product) => ...
 
 ---
 
-**{PROBLEM #18 (TypeScript) :: PropTypes / TypeScript Interface}**
+**{LESSON #18 (TypeScript) :: PropTypes / TypeScript Interface}**
 
 LOs:
 
@@ -275,7 +275,7 @@ Conditionally render avatar
 
 ---
 
-**{PROBLEM #19 (TypeScript) :: Component Composition — Typed}**
+**{LESSON #19 (TypeScript) :: Component Composition — Typed}**
 
 LOs:
 
@@ -290,7 +290,7 @@ Style with flex/grid
 
 ---
 
-**{PROBLEM #20 (TypeScript) :: Event Handling — Typed}**
+**{LESSON #20 (TypeScript) :: Event Handling — Typed}**
 
 LOs:
 
@@ -305,7 +305,7 @@ Check e.key === 'Enter' and e.key === 'Escape'
 
 ---
 
-**{PROBLEM #21 (TypeScript) :: Conditional Classes — Typed}**
+**{LESSON #21 (TypeScript) :: Conditional Classes — Typed}**
 
 LOs:
 
@@ -320,7 +320,7 @@ Apply to button
 
 ---
 
-**{PROBLEM #22 (TypeScript) :: Inline Styles — Typed}**
+**{LESSON #22 (TypeScript) :: Inline Styles — Typed}**
 
 LOs:
 
@@ -335,7 +335,7 @@ Clamp 0–100 with Math.min/Math.max
 
 ---
 
-**{PROBLEM #23 (TypeScript) :: CSS Modules — Typed}**
+**{LESSON #23 (TypeScript) :: CSS Modules — Typed}**
 
 LOs:
 
@@ -350,7 +350,7 @@ Comment: modules scope class names
 
 ---
 
-**{PROBLEM #24 (TypeScript) :: Styled Component Pattern — Typed}**
+**{LESSON #24 (TypeScript) :: Styled Component Pattern — Typed}**
 
 LOs:
 
@@ -365,7 +365,7 @@ Render Primary and Secondary buttons
 
 ---
 
-**{PROBLEM #25 (TypeScript) :: Lifting State Up — Typed}**
+**{LESSON #25 (TypeScript) :: Lifting State Up — Typed}**
 
 LOs:
 
@@ -380,7 +380,7 @@ Controls({ onIncrement, onDecrement }: { onIncrement: () => void; onDecrement: (
 
 ---
 
-**{PROBLEM #26 (TypeScript) :: Controlled vs Uncontrolled — Typed}**
+**{LESSON #26 (TypeScript) :: Controlled vs Uncontrolled — Typed}**
 
 LOs:
 
@@ -395,7 +395,7 @@ Show both in one component
 
 ---
 
-**{PROBLEM #27 (TypeScript) :: Simple Todo List — Typed}**
+**{LESSON #27 (TypeScript) :: Simple Todo List — Typed}**
 
 LOs:
 
@@ -410,7 +410,7 @@ Add, toggle (map), delete (filter) with typed setters
 
 ---
 
-**{PROBLEM #28 (TypeScript) :: Star Rating Component — Typed}**
+**{LESSON #28 (TypeScript) :: Star Rating Component — Typed}**
 
 LOs:
 
@@ -425,7 +425,7 @@ onClick sets rating; optional: rating === i ? 0 : i to clear
 
 ---
 
-**{PROBLEM #29 (TypeScript) :: Accordion — Typed}**
+**{LESSON #29 (TypeScript) :: Accordion — Typed}**
 
 LOs:
 
@@ -440,7 +440,7 @@ Show content when openIndex === i; click toggles
 
 ---
 
-**{PROBLEM #30 (TypeScript) :: Image Gallery — Typed}**
+**{LESSON #30 (TypeScript) :: Image Gallery — Typed}**
 
 LOs:
 
@@ -455,7 +455,7 @@ Grid of thumbnails; modal when selectedImage is set; close sets null
 
 ---
 
-**{PROBLEM #31 (TypeScript) :: useFetch — Typed}**
+**{LESSON #31 (TypeScript) :: useFetch — Typed}**
 
 LOs:
 
@@ -470,7 +470,7 @@ Export typed component
 
 ---
 
-**{PROBLEM #32 (TypeScript) :: useDebounce — Typed}**
+**{LESSON #32 (TypeScript) :: useDebounce — Typed}**
 
 LOs:
 
@@ -485,7 +485,7 @@ Export typed component
 
 ---
 
-**{PROBLEM #33 (TypeScript) :: useLocalStorage — Typed}**
+**{LESSON #33 (TypeScript) :: useLocalStorage — Typed}**
 
 LOs:
 
@@ -500,7 +500,7 @@ Export typed component
 
 ---
 
-**{PROBLEM #34 (TypeScript) :: useToggle — Typed}**
+**{LESSON #34 (TypeScript) :: useToggle — Typed}**
 
 LOs:
 
@@ -515,7 +515,7 @@ Export typed component
 
 ---
 
-**{PROBLEM #35 (TypeScript) :: useWindowSize — Typed}**
+**{LESSON #35 (TypeScript) :: useWindowSize — Typed}**
 
 LOs:
 
@@ -530,7 +530,7 @@ Export typed component
 
 ---
 
-**{PROBLEM #36 (TypeScript) :: usePrevious — Typed}**
+**{LESSON #36 (TypeScript) :: usePrevious — Typed}**
 
 LOs:
 
@@ -545,7 +545,7 @@ Export typed component
 
 ---
 
-**{PROBLEM #37 (TypeScript) :: useClickOutside — Typed}**
+**{LESSON #37 (TypeScript) :: useClickOutside — Typed}**
 
 LOs:
 
@@ -560,7 +560,7 @@ Export typed component
 
 ---
 
-**{PROBLEM #38 (TypeScript) :: useKeyPress — Typed}**
+**{LESSON #38 (TypeScript) :: useKeyPress — Typed}**
 
 LOs:
 
@@ -575,7 +575,7 @@ Export typed component
 
 ---
 
-**{PROBLEM #39 (TypeScript) :: useOnlineStatus — Typed}**
+**{LESSON #39 (TypeScript) :: useOnlineStatus — Typed}**
 
 LOs:
 
@@ -590,7 +590,7 @@ Export typed component
 
 ---
 
-**{PROBLEM #40 (TypeScript) :: useMediaQuery — Typed}**
+**{LESSON #40 (TypeScript) :: useMediaQuery — Typed}**
 
 LOs:
 
@@ -605,7 +605,7 @@ Export typed component
 
 ---
 
-**{PROBLEM #41 (TypeScript) :: Theme Context — Typed}**
+**{LESSON #41 (TypeScript) :: Theme Context — Typed}**
 
 LOs:
 
@@ -620,7 +620,7 @@ Export typed component
 
 ---
 
-**{PROBLEM #42 (TypeScript) :: Auth Context — Typed}**
+**{LESSON #42 (TypeScript) :: Auth Context — Typed}**
 
 LOs:
 
@@ -635,7 +635,7 @@ Export typed component
 
 ---
 
-**{PROBLEM #43 (TypeScript) :: Cart Context — Typed}**
+**{LESSON #43 (TypeScript) :: Cart Context — Typed}**
 
 LOs:
 
@@ -650,7 +650,7 @@ Export typed component
 
 ---
 
-**{PROBLEM #44 (TypeScript) :: Notification Context — Typed}**
+**{LESSON #44 (TypeScript) :: Notification Context — Typed}**
 
 LOs:
 
@@ -665,7 +665,7 @@ Export typed component
 
 ---
 
-**{PROBLEM #45 (TypeScript) :: Context Performance — Typed}**
+**{LESSON #45 (TypeScript) :: Context Performance — Typed}**
 
 LOs:
 
@@ -680,7 +680,7 @@ Export typed component
 
 ---
 
-**{PROBLEM #46 (TypeScript) :: useReducer vs useState — Typed}**
+**{LESSON #46 (TypeScript) :: useReducer vs useState — Typed}**
 
 LOs:
 
@@ -695,7 +695,7 @@ Export typed component
 
 ---
 
-**{PROBLEM #47 (TypeScript) :: Compound Component (Tabs) — Typed}**
+**{LESSON #47 (TypeScript) :: Compound Component (Tabs) — Typed}**
 
 LOs:
 
@@ -710,7 +710,7 @@ Export typed component
 
 ---
 
-**{PROBLEM #48 (TypeScript) :: Unnecessary Re-renders — Typed}**
+**{LESSON #48 (TypeScript) :: Unnecessary Re-renders — Typed}**
 
 LOs:
 
@@ -725,7 +725,7 @@ Export typed component
 
 ---
 
-**{PROBLEM #49 (TypeScript) :: useMemo for Expensive Computation — Typed}**
+**{LESSON #49 (TypeScript) :: useMemo for Expensive Computation — Typed}**
 
 LOs:
 
@@ -740,7 +740,7 @@ Export typed component
 
 ---
 
-**{PROBLEM #50 (TypeScript) :: useCallback for Stable References — Typed}**
+**{LESSON #50 (TypeScript) :: useCallback for Stable References — Typed}**
 
 LOs:
 
@@ -755,7 +755,7 @@ Export typed component
 
 ---
 
-**{PROBLEM #51 (TypeScript) :: React.memo — Typed}**
+**{LESSON #51 (TypeScript) :: React.memo — Typed}**
 
 LOs:
 
@@ -770,7 +770,7 @@ Export typed component
 
 ---
 
-**{PROBLEM #52 (TypeScript) :: List Virtualization — Typed}**
+**{LESSON #52 (TypeScript) :: List Virtualization — Typed}**
 
 LOs:
 
@@ -785,7 +785,7 @@ Export typed component
 
 ---
 
-**{PROBLEM #53 (TypeScript) :: Lazy Loading Routes — Typed}**
+**{LESSON #53 (TypeScript) :: Lazy Loading Routes — Typed}**
 
 LOs:
 
@@ -800,7 +800,7 @@ Export typed component
 
 ---
 
-**{PROBLEM #54 (TypeScript) :: Image Lazy Loading — Typed}**
+**{LESSON #54 (TypeScript) :: Image Lazy Loading — Typed}**
 
 LOs:
 
@@ -815,7 +815,7 @@ Export typed component
 
 ---
 
-**{PROBLEM #55 (TypeScript) :: HOC withAuth — Typed}**
+**{LESSON #55 (TypeScript) :: HOC withAuth — Typed}**
 
 LOs:
 
@@ -830,7 +830,7 @@ Export typed component
 
 ---
 
-**{PROBLEM #56 (TypeScript) :: Render Props (MouseTracker) — Typed}**
+**{LESSON #56 (TypeScript) :: Render Props (MouseTracker) — Typed}**
 
 LOs:
 
@@ -845,7 +845,7 @@ Export typed component
 
 ---
 
-**{PROBLEM #57 (TypeScript) :: Controlled DatePicker — Typed}**
+**{LESSON #57 (TypeScript) :: Controlled DatePicker — Typed}**
 
 LOs:
 
@@ -860,7 +860,7 @@ Export typed component
 
 ---
 
-**{PROBLEM #58 (TypeScript) :: Portal — Typed}**
+**{LESSON #58 (TypeScript) :: Portal — Typed}**
 
 LOs:
 
@@ -875,7 +875,7 @@ Export typed component
 
 ---
 
-**{PROBLEM #59 (TypeScript) :: Error Boundary — Typed}**
+**{LESSON #59 (TypeScript) :: Error Boundary — Typed}**
 
 LOs:
 
@@ -890,7 +890,7 @@ Export typed component
 
 ---
 
-**{PROBLEM #60 (TypeScript) :: Recursive TreeView — Typed}**
+**{LESSON #60 (TypeScript) :: Recursive TreeView — Typed}**
 
 LOs:
 
@@ -905,7 +905,7 @@ Export typed component
 
 ---
 
-**{PROBLEM #61 (TypeScript) :: Pagination — Typed}**
+**{LESSON #61 (TypeScript) :: Pagination — Typed}**
 
 LOs:
 
@@ -920,7 +920,7 @@ Export typed component
 
 ---
 
-**{PROBLEM #62 (TypeScript) :: Infinite Scroll — Typed}**
+**{LESSON #62 (TypeScript) :: Infinite Scroll — Typed}**
 
 LOs:
 
@@ -935,7 +935,7 @@ Export typed component
 
 ---
 
-**{PROBLEM #63 (TypeScript) :: Debounced Search — Typed}**
+**{LESSON #63 (TypeScript) :: Debounced Search — Typed}**
 
 LOs:
 
@@ -950,7 +950,7 @@ Export typed component
 
 ---
 
-**{PROBLEM #64 (TypeScript) :: Multi-Step Form — Typed}**
+**{LESSON #64 (TypeScript) :: Multi-Step Form — Typed}**
 
 LOs:
 
@@ -965,7 +965,7 @@ Export typed component
 
 ---
 
-**{PROBLEM #65 (TypeScript) :: Generic List<T> — Typed}**
+**{LESSON #65 (TypeScript) :: Generic List<T> — Typed}**
 
 LOs:
 
@@ -980,7 +980,7 @@ Export typed component
 
 ---
 
-**{PROBLEM #66 (TypeScript) :: Discriminated Union Props — Typed}**
+**{LESSON #66 (TypeScript) :: Discriminated Union Props — Typed}**
 
 LOs:
 
@@ -995,7 +995,7 @@ Export typed component
 
 ---
 
-**{PROBLEM #67 (TypeScript) :: useRef Typing — Typed}**
+**{LESSON #67 (TypeScript) :: useRef Typing — Typed}**
 
 LOs:
 
@@ -1010,7 +1010,7 @@ Export typed component
 
 ---
 
-**{PROBLEM #68 (TypeScript) :: Event Typing — Typed}**
+**{LESSON #68 (TypeScript) :: Event Typing — Typed}**
 
 LOs:
 
@@ -1025,7 +1025,7 @@ Export typed component
 
 ---
 
-**{PROBLEM #69 (TypeScript) :: Generic useFetch<T> — Typed}**
+**{LESSON #69 (TypeScript) :: Generic useFetch<T> — Typed}**
 
 LOs:
 
@@ -1040,7 +1040,7 @@ Export typed component
 
 ---
 
-**{PROBLEM #70 (TypeScript) :: Utility Types — Typed}**
+**{LESSON #70 (TypeScript) :: Utility Types — Typed}**
 
 LOs:
 
@@ -1055,7 +1055,7 @@ Export typed component
 
 ---
 
-**{PROBLEM #71 (TypeScript) :: useImperativeHandle — Typed}**
+**{LESSON #71 (TypeScript) :: useImperativeHandle — Typed}**
 
 LOs:
 
@@ -1070,7 +1070,7 @@ Export typed component
 
 ---
 
-**{PROBLEM #72 (TypeScript) :: useSyncExternalStore — Typed}**
+**{LESSON #72 (TypeScript) :: useSyncExternalStore — Typed}**
 
 LOs:
 
@@ -1085,7 +1085,7 @@ Export typed component
 
 ---
 
-**{PROBLEM #73 (TypeScript) :: useTransition — Typed}**
+**{LESSON #73 (TypeScript) :: useTransition — Typed}**
 
 LOs:
 
@@ -1100,7 +1100,7 @@ Export typed component
 
 ---
 
-**{PROBLEM #74 (TypeScript) :: useDeferredValue — Typed}**
+**{LESSON #74 (TypeScript) :: useDeferredValue — Typed}**
 
 LOs:
 
@@ -1115,7 +1115,7 @@ Export typed component
 
 ---
 
-**{PROBLEM #75 (TypeScript) :: useLayoutEffect vs useEffect — Typed}**
+**{LESSON #75 (TypeScript) :: useLayoutEffect vs useEffect — Typed}**
 
 LOs:
 
@@ -1130,7 +1130,7 @@ Export typed component
 
 ---
 
-**{PROBLEM #76 (TypeScript) :: Mini Redux — Typed}**
+**{LESSON #76 (TypeScript) :: Mini Redux — Typed}**
 
 LOs:
 
@@ -1145,7 +1145,7 @@ Export typed component
 
 ---
 
-**{PROBLEM #77 (TypeScript) :: Optimistic UI — Typed}**
+**{LESSON #77 (TypeScript) :: Optimistic UI — Typed}**
 
 LOs:
 
@@ -1160,7 +1160,7 @@ Export typed component
 
 ---
 
-**{PROBLEM #78 (TypeScript) :: Request Deduplication — Typed}**
+**{LESSON #78 (TypeScript) :: Request Deduplication — Typed}**
 
 LOs:
 
@@ -1175,7 +1175,7 @@ Export typed component
 
 ---
 
-**{PROBLEM #79 (TypeScript) :: Polling Hook — Typed}**
+**{LESSON #79 (TypeScript) :: Polling Hook — Typed}**
 
 LOs:
 
@@ -1190,7 +1190,7 @@ Export typed component
 
 ---
 
-**{PROBLEM #80 (TypeScript) :: WebSocket Hook — Typed}**
+**{LESSON #80 (TypeScript) :: WebSocket Hook — Typed}**
 
 LOs:
 
@@ -1205,7 +1205,7 @@ Export typed component
 
 ---
 
-**{PROBLEM #81 (TypeScript) :: Feature Flag Hook — Typed}**
+**{LESSON #81 (TypeScript) :: Feature Flag Hook — Typed}**
 
 LOs:
 
@@ -1220,7 +1220,7 @@ Export typed component
 
 ---
 
-**{PROBLEM #82 (TypeScript) :: Undo/Redo — Typed}**
+**{LESSON #82 (TypeScript) :: Undo/Redo — Typed}**
 
 LOs:
 
@@ -1235,7 +1235,7 @@ Export typed component
 
 ---
 
-**{PROBLEM #83 (TypeScript) :: Form Library from Scratch — Typed}**
+**{LESSON #83 (TypeScript) :: Form Library from Scratch — Typed}**
 
 LOs:
 
@@ -1250,7 +1250,7 @@ Export typed component
 
 ---
 
-**{PROBLEM #84 (TypeScript) :: Component Library Theming — Typed}**
+**{LESSON #84 (TypeScript) :: Component Library Theming — Typed}**
 
 LOs:
 
@@ -1265,7 +1265,7 @@ Export typed component
 
 ---
 
-**{PROBLEM #85 (TypeScript) :: Micro-frontend Shell — Typed}**
+**{LESSON #85 (TypeScript) :: Micro-frontend Shell — Typed}**
 
 LOs:
 
@@ -1280,7 +1280,7 @@ Export typed component
 
 ---
 
-**{PROBLEM #86 (TypeScript) :: Race Condition Fix — Typed}**
+**{LESSON #86 (TypeScript) :: Race Condition Fix — Typed}**
 
 LOs:
 
@@ -1295,7 +1295,7 @@ Export typed component
 
 ---
 
-**{PROBLEM #87 (TypeScript) :: Memoization Strategy — Typed}**
+**{LESSON #87 (TypeScript) :: Memoization Strategy — Typed}**
 
 LOs:
 
@@ -1310,7 +1310,7 @@ Export typed component
 
 ---
 
-**{PROBLEM #88 (TypeScript) :: Bundle Analysis — Typed}**
+**{LESSON #88 (TypeScript) :: Bundle Analysis — Typed}**
 
 LOs:
 
@@ -1325,7 +1325,7 @@ Export typed component
 
 ---
 
-**{PROBLEM #89 (TypeScript) :: Concurrent Mode Gotchas — Typed}**
+**{LESSON #89 (TypeScript) :: Concurrent Mode Gotchas — Typed}**
 
 LOs:
 
@@ -1340,7 +1340,7 @@ Export typed component
 
 ---
 
-**{PROBLEM #90 (TypeScript) :: Memory Leak Hunt — Typed}**
+**{LESSON #90 (TypeScript) :: Memory Leak Hunt — Typed}**
 
 LOs:
 
@@ -1355,7 +1355,7 @@ Export typed component
 
 ---
 
-**{PROBLEM #91 (TypeScript) :: Test useFetch — Typed}**
+**{LESSON #91 (TypeScript) :: Test useFetch — Typed}**
 
 LOs:
 
@@ -1370,7 +1370,7 @@ Export typed component
 
 ---
 
-**{PROBLEM #92 (TypeScript) :: Test Async Component — Typed}**
+**{LESSON #92 (TypeScript) :: Test Async Component — Typed}**
 
 LOs:
 
@@ -1385,7 +1385,7 @@ Export typed component
 
 ---
 
-**{PROBLEM #93 (TypeScript) :: Test User Interactions — Typed}**
+**{LESSON #93 (TypeScript) :: Test User Interactions — Typed}**
 
 LOs:
 
@@ -1400,7 +1400,7 @@ Export typed component
 
 ---
 
-**{PROBLEM #94 (TypeScript) :: Test Context — Typed}**
+**{LESSON #94 (TypeScript) :: Test Context — Typed}**
 
 LOs:
 
@@ -1415,7 +1415,7 @@ Export typed component
 
 ---
 
-**{PROBLEM #95 (TypeScript) :: Test Error Boundary — Typed}**
+**{LESSON #95 (TypeScript) :: Test Error Boundary — Typed}**
 
 LOs:
 
@@ -1430,7 +1430,7 @@ Export typed component
 
 ---
 
-**{PROBLEM #96 (TypeScript) :: Design DataTable API — Typed}**
+**{LESSON #96 (TypeScript) :: Design DataTable API — Typed}**
 
 LOs:
 
@@ -1445,7 +1445,7 @@ Export typed component
 
 ---
 
-**{PROBLEM #97 (TypeScript) :: Design Auth Flow — Typed}**
+**{LESSON #97 (TypeScript) :: Design Auth Flow — Typed}**
 
 LOs:
 
@@ -1460,7 +1460,7 @@ Export typed component
 
 ---
 
-**{PROBLEM #98 (TypeScript) :: Design Notification System — Typed}**
+**{LESSON #98 (TypeScript) :: Design Notification System — Typed}**
 
 LOs:
 
@@ -1475,7 +1475,7 @@ Export typed component
 
 ---
 
-**{PROBLEM #99 (TypeScript) :: Design Permission System — Typed}**
+**{LESSON #99 (TypeScript) :: Design Permission System — Typed}**
 
 LOs:
 
@@ -1490,7 +1490,7 @@ Export typed component
 
 ---
 
-**{PROBLEM #100 (TypeScript) :: Design Real-Time Dashboard — Typed}**
+**{LESSON #100 (TypeScript) :: Design Real-Time Dashboard — Typed}**
 
 LOs:
 

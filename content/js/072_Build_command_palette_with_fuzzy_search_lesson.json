@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-js-72",
     "track": "js",
-    "problemNum": 72,
+    "lessonNum": 72,
     "title": "Build command palette with fuzzy search",
     "shortName": "P72",
     "intro": {

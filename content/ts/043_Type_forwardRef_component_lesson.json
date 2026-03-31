@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-ts-43",
     "track": "ts",
-    "problemNum": 43,
+    "lessonNum": 43,
     "title": "Type forwardRef component",
     "shortName": "P43",
     "intro": {

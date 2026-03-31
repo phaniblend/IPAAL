@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-vue-01",
     "track": "vue",
-    "problemNum": 1,
+    "lessonNum": 1,
     "title": "Counter App",
     "shortName": "P01",
     "intro": {

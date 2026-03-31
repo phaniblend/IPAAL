@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-js-30",
     "track": "js",
-    "problemNum": 30,
+    "lessonNum": 30,
     "title": "Write a custom map polyfill",
     "shortName": "P30",
     "intro": {

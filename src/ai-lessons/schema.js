@@ -66,7 +66,7 @@ export const lessonStepSchema = z.object({
   introducesConcepts: z.array(z.string()).optional(),
 });
 
-// --- Algorithm lesson: flowchart + structured steps (problem → example → flowchart → reasoning → dryRun → code) ---
+// --- Algorithm lesson: flowchart + structured steps (lesson → example → flowchart → reasoning → dryRun → code) ---
 
 /** Flowchart node: start, process, decision, end. */
 export const flowchartNodeSchema = z.object({
@@ -87,7 +87,7 @@ export const flowchartSchema = z.object({
   edges: z.array(flowchartEdgeSchema),
 });
 
-/** Content for algo reveal-style steps (problem, example, reasoning, dryRun). */
+/** Content for algo reveal-style steps (lesson, example, reasoning, dryRun). */
 const algoContentSchema = z.object({
   body: z.string(),
   title: z.string().optional(),
@@ -110,7 +110,7 @@ const algoBeginnerContentSchema = algoContentSchema.extend({
   commonConfusions: z.array(z.string()).optional(),
 });
 
-/** Algorithm step: problem statement. */
+/** Algorithm step: lesson statement. */
 export const algoProblemStepSchema = z.object({
   type: z.literal("problem"),
   id: z.string(),
@@ -175,7 +175,7 @@ export const algoRevealStepSchema = z.union([
   algoBeginnerRevealStepSchema,
 ]);
 
-/** Single step: either code (question) or algo reveal (problem, example, flowchart, reasoning, dryRun, or beginner discovery/concept-bridge/reveal-idea/etc.). */
+/** Single step: either code (question) or algo reveal (lesson, example, flowchart, reasoning, dryRun, or beginner discovery/concept-bridge/reveal-idea/etc.). */
 export const lessonStepUnionSchema = z.union([lessonStepSchema, algoRevealStepSchema]);
 
 /** Intro content. */
@@ -200,11 +200,11 @@ export const familyTeachingProfileSchema = z.object({
   commonConfusions: z.array(z.string()).optional(),
 }).optional();
 
-/** Full lesson config (API / normalized). UI lessons have steps all type "question"; algorithm lessons have problem, example, flowchart, reasoning, dryRun, or discovery/concept-bridge/reveal-idea, then question steps. */
+/** Full lesson config (API / normalized). UI lessons have steps all type "question"; algorithm lessons have lesson, example, flowchart, reasoning, dryRun, or discovery/concept-bridge/reveal-idea, then question steps. */
 export const lessonConfigSchema = z.object({
   lessonId: z.string().optional(),
   track: z.string(),
-  problemNum: z.union([z.number(), z.string()]).optional(),
+  lessonNum: z.union([z.number(), z.string()]).optional(),
   title: z.string(),
   shortName: z.string().optional(),
   intro: lessonIntroSchema,
@@ -270,7 +270,7 @@ export const stepDetailOutputSchema = lessonStepSchema.extend({
   type: z.literal("question").optional(),
 });
 
-/** Algorithm lesson: full structure from AI (problem, example, flowchart, reasoning, dryRun, code step blueprints). */
+/** Algorithm lesson: full structure from AI (lesson, example, flowchart, reasoning, dryRun, code step blueprints). */
 export const algoStructureOutputSchema = z.object({
   problem: z.object({ body: z.string(), title: z.string().optional() }),
   example: z.object({ body: z.string(), title: z.string().optional() }),

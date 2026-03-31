@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-css-80",
     "track": "css",
-    "problemNum": 80,
+    "lessonNum": 80,
     "title": "Custom property fallbacks",
     "shortName": "P80",
     "intro": {

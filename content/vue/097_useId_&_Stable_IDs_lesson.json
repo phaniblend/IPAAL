@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-vue-97",
     "track": "vue",
-    "problemNum": 97,
+    "lessonNum": 97,
     "title": "useId & Stable IDs",
     "shortName": "P97",
     "intro": {

@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-css-91",
     "track": "css",
-    "problemNum": 91,
+    "lessonNum": 91,
     "title": "CSS custom properties in JS",
     "shortName": "P91",
     "intro": {

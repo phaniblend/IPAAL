@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-css-03",
     "track": "css",
-    "problemNum": 3,
+    "lessonNum": 3,
     "title": "Margin Collapse",
     "shortName": "P03",
     "intro": {

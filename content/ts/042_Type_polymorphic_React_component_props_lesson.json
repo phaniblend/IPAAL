@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-ts-42",
     "track": "ts",
-    "problemNum": 42,
+    "lessonNum": 42,
     "title": "Type polymorphic React component props",
     "shortName": "P42",
     "intro": {

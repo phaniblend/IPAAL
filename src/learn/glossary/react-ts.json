@@ -58,8 +58,8 @@
     }
   },
   "introductions": [
-    { "conceptId": "reactRouterDom", "problemNum": 50, "stepId": "step5" },
-    { "conceptId": "reactRouterDom", "problemNum": 100, "stepId": "step1" },
-    { "conceptId": "createAsyncThunk", "problemNum": 122, "stepId": "step1" }
+    { "conceptId": "reactRouterDom", "lessonNum": 50, "stepId": "step5" },
+    { "conceptId": "reactRouterDom", "lessonNum": 100, "stepId": "step1" },
+    { "conceptId": "createAsyncThunk", "lessonNum": 122, "stepId": "step1" }
   ]
 }

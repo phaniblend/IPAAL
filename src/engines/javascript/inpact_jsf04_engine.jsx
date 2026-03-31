@@ -244,4 +244,4 @@ const sideItems = [
   { label: "Step 5 — flat/flatMap/iter", id: "step5" },
 ];
 
-export default createINPACTEngine({ NODES, sideItems, problemNum: "JS-F04", title: "Arrays & Iterators", shortName: "JS — ARRAYS" });
+export default createINPACTEngine({ NODES, sideItems, lessonNum: "JS-F04", title: "Arrays & Iterators", shortName: "JS — ARRAYS" });

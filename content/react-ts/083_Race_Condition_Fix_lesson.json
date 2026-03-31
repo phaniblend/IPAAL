@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-react-ts-83",
     "track": "react-ts",
-    "problemNum": 83,
+    "lessonNum": 83,
     "title": "Race Condition Fix",
     "shortName": "P83",
     "intro": {

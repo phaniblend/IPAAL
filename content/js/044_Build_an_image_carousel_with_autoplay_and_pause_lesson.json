@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-js-44",
     "track": "js",
-    "problemNum": 44,
+    "lessonNum": 44,
     "title": "Build an image carousel with autoplay and pause",
     "shortName": "P44",
     "intro": {

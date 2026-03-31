@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-vue-53",
     "track": "vue",
-    "problemNum": 53,
+    "lessonNum": 53,
     "title": "Render Props (MouseTracker)",
     "shortName": "P53",
     "intro": {

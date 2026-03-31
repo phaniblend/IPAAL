@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-sd-02",
     "track": "sd",
-    "problemNum": 2,
+    "lessonNum": 2,
     "title": "Caching Strategies",
     "shortName": "P02",
     "intro": {

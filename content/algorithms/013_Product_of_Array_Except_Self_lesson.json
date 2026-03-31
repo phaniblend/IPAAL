@@ -3,13 +3,13 @@
   "config": {
     "lessonId": "ai-algorithms-13",
     "track": "algorithms",
-    "problemNum": 13,
+    "lessonNum": 13,
     "title": "Product of Array Except Self",
     "shortName": "P13",
     "intro": {
       "tag": "LESSON #13",
       "title": "Product of Array Except Self",
-      "body": "In this lesson, you will build a function that calculates the product of all elements in an array except for the element at each index. You will learn the core concept of using prefix and suffix products to solve this problem efficiently without using division. The main technologies involved are JavaScript arrays, loops, and basic arithmetic operations. This approach helps you understand how to optimize algorithms by avoiding nested loops and reducing time complexity. By the end, you will have a working solution that handles arrays of any size.",
+      "body": "In this lesson, you will build a function that calculates the product of all elements in an array except for the element at each index. You will learn the core concept of using prefix and suffix products to solve this lesson efficiently without using division. The main technologies involved are JavaScript arrays, loops, and basic arithmetic operations. This approach helps you understand how to optimize algorithms by avoiding nested loops and reducing time complexity. By the end, you will have a working solution that handles arrays of any size.",
       "usecase": "The 'Product of Array Except Self' algorithm is essential in data visualization dashboards where you need to calculate derived metrics. For example, in a financial analytics panel showing monthly revenue, you might need to compute running totals or percentage contributions where each value depends on all others. This pattern also appears in recommendation systems where item scores are adjusted based on surrounding context, or in image processing filters where pixel values are normalized relative to neighboring pixels. Mastering this algorithm helps developers efficiently handle complex data transformations in real-time interfaces."
     },
     "objectives": [
@@ -28,7 +28,7 @@
         "phase": "Step 1 of 18",
         "title": "Welcome",
         "content": {
-          "body": "Imagine you're at a party and want to know everyone's name except your own. How would you quickly find out? In this lesson, we'll learn how to calculate the product of all numbers in an array except the one at each position. This is a clever array problem that teaches us to use what we've already seen.",
+          "body": "Imagine you're at a party and want to know everyone's name except your own. How would you quickly find out? In this lesson, we'll learn how to calculate the product of all numbers in an array except the one at each position. This is a clever array lesson that teaches us to use what we've already seen.",
           "title": "Welcome"
         }
       },
@@ -38,7 +38,7 @@
         "phase": "Step 2 of 18",
         "title": "What you'll learn",
         "content": {
-          "body": "• Apply the 'remember what we have already seen' mental model to solve array problems\n• Implement a solution using prefix and suffix products\n• Explain why we store products as values in our calculation\n• Build the final result array step by step",
+          "body": "• Apply the 'remember what we have already seen' mental model to solve array lessons\n• Implement a solution using prefix and suffix products\n• Explain why we store products as values in our calculation\n• Build the final result array step by step",
           "title": "What you'll learn"
         }
       },
@@ -336,7 +336,7 @@
         "phase": "Step 18 of 18",
         "title": "Done",
         "content": {
-          "body": "Congratulations! You've implemented an efficient solution to 'Product of Array Except Self'. Remember: we used the 'remember what we have already seen' approach by storing running products in two passes. This avoids O(n²) time complexity and gives us O(n) time with O(1) extra space (excluding the result array). The key insight was to separate the problem into left products and right products, then combine them.",
+          "body": "Congratulations! You've implemented an efficient solution to 'Product of Array Except Self'. Remember: we used the 'remember what we have already seen' approach by storing running products in two passes. This avoids O(n²) time complexity and gives us O(n) time with O(1) extra space (excluding the result array). The key insight was to separate the lesson into left products and right products, then combine them.",
           "title": "Done"
         }
       }

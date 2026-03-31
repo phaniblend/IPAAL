@@ -312,4 +312,4 @@ const sideItems = [
   { label: "Step 5 — Remove item", id: "step5" },
 ];
 
-export default createINPACTEngine({ NODES, sideItems, problemNum: 6, title: "List Rendering with map()", shortName: "LIST RENDERING" });
+export default createINPACTEngine({ NODES, sideItems, lessonNum: 6, title: "List Rendering with map()", shortName: "LIST RENDERING" });

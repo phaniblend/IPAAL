@@ -73,7 +73,7 @@ function getOutputPreview(answer) {
 export default createINPACTEngine({
   NODES,
   sideItems,
-  problemNum: 86,
+  lessonNum: 86,
   title: "resize and overflow",
   shortName: "C86",
   language: "css",

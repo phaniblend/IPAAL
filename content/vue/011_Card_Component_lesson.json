@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-vue-11",
     "track": "vue",
-    "problemNum": 11,
+    "lessonNum": 11,
     "title": "Card Component",
     "shortName": "P11",
     "intro": {

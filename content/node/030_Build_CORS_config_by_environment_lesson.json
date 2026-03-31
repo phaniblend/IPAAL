@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-node-30",
     "track": "node",
-    "problemNum": 30,
+    "lessonNum": 30,
     "title": "Build CORS config by environment",
     "shortName": "P30",
     "intro": {

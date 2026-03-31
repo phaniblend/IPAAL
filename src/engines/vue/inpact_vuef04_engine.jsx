@@ -11,4 +11,4 @@ const NODES = [
 }`, feedback_correct: "✅ useX pattern; refs and functions; onMounted in composable; return object.", feedback_wrong: "Composable returns refs and methods; can use lifecycle inside.", expected: "Composables" },
 ];
 const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }];
-export default createINPACTEngine({ NODES, sideItems, problemNum: "VUE-F04", title: "Composables", shortName: "VUE — COMPOSABLES" });
+export default createINPACTEngine({ NODES, sideItems, lessonNum: "VUE-F04", title: "Composables", shortName: "VUE — COMPOSABLES" });

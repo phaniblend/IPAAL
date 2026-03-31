@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-react-js-40",
     "track": "react-js",
-    "problemNum": 40,
+    "lessonNum": 40,
     "title": "Cart Context",
     "shortName": "P40",
     "intro": {

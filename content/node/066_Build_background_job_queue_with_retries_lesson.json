@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-node-66",
     "track": "node",
-    "problemNum": 66,
+    "lessonNum": 66,
     "title": "Build background job queue with retries",
     "shortName": "P66",
     "intro": {

@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-angular-123",
     "track": "angular",
-    "problemNum": 123,
+    "lessonNum": 123,
     "title": "RBAC Permission Hook",
     "shortName": "P123",
     "intro": {

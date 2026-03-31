@@ -26,4 +26,4 @@ app.use('/api/users', router)`,
 ];
 
 const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }];
-export default createINPACTEngine({ NODES, sideItems, problemNum: "EXP-F02", title: "Routing", shortName: "EXP — ROUTING" });
+export default createINPACTEngine({ NODES, sideItems, lessonNum: "EXP-F02", title: "Routing", shortName: "EXP — ROUTING" });

@@ -8,4 +8,4 @@ defineEmits<{ (e: 'update'): void }>()
 // v-model: prop modelValue + emit('update:modelValue', value)`, feedback_correct: "✅ defineProps/defineEmits; v-model = modelValue + update:modelValue.", feedback_wrong: "defineProps/defineEmits; v-model on component needs modelValue and emit.", expected: "Component communication" },
 ];
 const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }];
-export default createINPACTEngine({ NODES, sideItems, problemNum: "VUE-F03", title: "Component communication", shortName: "VUE — PROPS EMIT" });
+export default createINPACTEngine({ NODES, sideItems, lessonNum: "VUE-F03", title: "Component communication", shortName: "VUE — PROPS EMIT" });

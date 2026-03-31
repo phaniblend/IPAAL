@@ -8,20 +8,20 @@
   "flow": [
     {
       "stepId": "title",
-      "mentorSays": "At the end of this lesson, you will be able to:\n\n1. Understand what the Top K Frequent Elements problem asks for\n2. Use hash maps to count element frequencies\n3. Sort or use heaps to find the K most frequent elements\n4. Implement the solution step by step in your chosen language",
+      "mentorSays": "At the end of this lesson, you will be able to:\n\n1. Understand what the Top K Frequent Elements lesson asks for\n2. Use hash maps to count element frequencies\n3. Sort or use heaps to find the K most frequent elements\n4. Implement the solution step by step in your chosen language",
       "action": "continue",
-      "next": "problem-illustration"
+      "next": "lesson-illustration"
     },
     {
-      "stepId": "problem-illustration",
-      "mentorSays": "Perfect! Now let's understand what the Top K Frequent Elements problem is asking.\n\nImagine you have an array of numbers: [1, 1, 1, 2, 2, 3]\n\nAnd you're told: \"Find the 2 most frequent elements.\"\n\nLet's count how many times each number appears:\n- 1 appears 3 times\n- 2 appears 2 times\n- 3 appears 1 time\n\nThe 2 most frequent elements are 1 (appears 3 times) and 2 (appears 2 times).\n\nSo the answer is [1, 2]. Note: The order can vary, but typically we return them in order of frequency (most frequent first).\n\nThat's what the problem wants: the K elements that appear most frequently in the array.",
+      "stepId": "lesson-illustration",
+      "mentorSays": "Perfect! Now let's understand what the Top K Frequent Elements lesson is asking.\n\nImagine you have an array of numbers: [1, 1, 1, 2, 2, 3]\n\nAnd you're told: \"Find the 2 most frequent elements.\"\n\nLet's count how many times each number appears:\n- 1 appears 3 times\n- 2 appears 2 times\n- 3 appears 1 time\n\nThe 2 most frequent elements are 1 (appears 3 times) and 2 (appears 2 times).\n\nSo the answer is [1, 2]. Note: The order can vary, but typically we return them in order of frequency (most frequent first).\n\nThat's what the lesson wants: the K elements that appear most frequently in the array.",
       "example": "nums = [1, 1, 1, 2, 2, 3]\nK = 2\n\nCount frequencies:\n- 1 appears 3 times (most frequent)\n- 2 appears 2 times (second most frequent)\n- 3 appears 1 time\n\nAnswer: [1, 2]\n\nAnother example:\nnums = [4, 1, -1, 2, -1, 2, 3]\nK = 2\n\nCount frequencies:\n- -1 appears 2 times\n- 2 appears 2 times\n- 1 appears 1 time\n- 3 appears 1 time\n- 4 appears 1 time\n\nTop 2: [-1, 2] (both appear 2 times)",
       "action": "continue",
       "next": "thinking-challenge"
     },
     {
       "stepId": "thinking-challenge",
-      "mentorSays": "Now that you understand what the problem wants, here's the real question:\n\nHow would YOU find the K most frequent elements?\n\nThink about it for a moment. What approach feels natural to you?",
+      "mentorSays": "Now that you understand what the lesson wants, here's the real question:\n\nHow would YOU find the K most frequent elements?\n\nThink about it for a moment. What approach feels natural to you?",
       "choices": [
         {
           "label": "Count frequencies with a hash map, then sort by frequency",
@@ -154,7 +154,7 @@
     },
     {
       "stepId": "loop-check-js",
-      "mentorSays": "To solve this problem, we'll need to use loops. Do you know what a loop is in JavaScript?",
+      "mentorSays": "To solve this lesson, we'll need to use loops. Do you know what a loop is in JavaScript?",
       "choices": [
         {
           "label": "Yes, I know loops",
@@ -315,7 +315,7 @@
     },
     {
       "stepId": "loop-check-python",
-      "mentorSays": "To solve this problem, we'll need to use loops. Do you know what a loop is in Python?",
+      "mentorSays": "To solve this lesson, we'll need to use loops. Do you know what a loop is in Python?",
       "choices": [
         {
           "label": "Yes, I know loops",
@@ -462,7 +462,7 @@
     },
     {
       "stepId": "loop-check-java",
-      "mentorSays": "To solve this problem, we'll need to use loops. Do you know what a loop is in Java?",
+      "mentorSays": "To solve this lesson, we'll need to use loops. Do you know what a loop is in Java?",
       "choices": [
         {
           "label": "Yes, I know loops",
@@ -609,7 +609,7 @@
     },
     {
       "stepId": "loop-check-cpp",
-      "mentorSays": "To solve this problem, we'll need to use loops. Do you know what a loop is in C++?",
+      "mentorSays": "To solve this lesson, we'll need to use loops. Do you know what a loop is in C++?",
       "choices": [
         {
           "label": "Yes, I know loops",
@@ -756,7 +756,7 @@
     },
     {
       "stepId": "loop-check-ts",
-      "mentorSays": "To solve this problem, we'll need to use loops. Do you know what a loop is in TypeScript?",
+      "mentorSays": "To solve this lesson, we'll need to use loops. Do you know what a loop is in TypeScript?",
       "choices": [
         {
           "label": "Yes, I know loops",
@@ -950,7 +950,7 @@
     },
     {
       "stepId": "final",
-      "mentorSays": "🎉 Well done! You've learned to think through the Top K Frequent Elements problem. You understand what the problem asks for, how to count frequencies with hash maps, and how to find the K most frequent elements by sorting.\n\nThis kind of thinking—using hash maps to count frequencies and sorting to find top elements—is essential for solving many algorithm problems. Keep practicing!",
+      "mentorSays": "🎉 Well done! You've learned to think through the Top K Frequent Elements lesson. You understand what the lesson asks for, how to count frequencies with hash maps, and how to find the K most frequent elements by sorting.\n\nThis kind of thinking—using hash maps to count frequencies and sorting to find top elements—is essential for solving many algorithm lessons. Keep practicing!",
       "action": "continue"
     }
   ]

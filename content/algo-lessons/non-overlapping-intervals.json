@@ -10,11 +10,11 @@
       "stepId": "title",
       "mentorSays": "At the end of this lesson, you will be able to:\n\n1. Understand what Non-overlapping Intervals asks for\n2. Find minimum intervals to remove\n3. Use greedy approach\n4. Sort by end time\n5. Implement the solution step by step in your chosen language",
       "action": "continue",
-      "next": "problem-illustration"
+      "next": "lesson-illustration"
     },
     {
-      "stepId": "problem-illustration",
-      "mentorSays": "Perfect! Now let's understand what Non-overlapping Intervals is asking.\n\n**Problem Definition:**\nGiven an array of intervals `intervals` where intervals[i] = [starti, endi], return the minimum number of intervals you need to remove to make the rest of the intervals non-overlapping.\n\n**Example 1:** intervals = [[1,2],[2,3],[3,4],[1,3]]\nRemove [1,3] to make non-overlapping\nAnswer: 1\n\n**Example 2:** intervals = [[1,2],[1,2],[1,2]]\nRemove 2 intervals\nAnswer: 2\n\n**Key Insight:** Greedy approach. Sort by end time, keep intervals with earliest end times, remove overlapping ones.",
+      "stepId": "lesson-illustration",
+      "mentorSays": "Perfect! Now let's understand what Non-overlapping Intervals is asking.\n\n**Lesson Definition:**\nGiven an array of intervals `intervals` where intervals[i] = [starti, endi], return the minimum number of intervals you need to remove to make the rest of the intervals non-overlapping.\n\n**Example 1:** intervals = [[1,2],[2,3],[3,4],[1,3]]\nRemove [1,3] to make non-overlapping\nAnswer: 1\n\n**Example 2:** intervals = [[1,2],[1,2],[1,2]]\nRemove 2 intervals\nAnswer: 2\n\n**Key Insight:** Greedy approach. Sort by end time, keep intervals with earliest end times, remove overlapping ones.",
       "example": "Example: [[1,2],[2,3],[3,4],[1,3]] → remove 1, [[1,2],[1,2],[1,2]] → remove 2",
       "action": "continue",
       "next": "thinking-challenge"

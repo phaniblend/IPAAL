@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-node-91",
     "track": "node",
-    "problemNum": 91,
+    "lessonNum": 91,
     "title": "Build fallback strategy for provider outages",
     "shortName": "P91",
     "intro": {

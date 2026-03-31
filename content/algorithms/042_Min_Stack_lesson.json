@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-algorithms-42",
     "track": "algorithms",
-    "problemNum": 42,
+    "lessonNum": 42,
     "title": "Min Stack",
     "shortName": "P42",
     "intro": {
@@ -27,7 +27,7 @@
         "phase": "Step 1 of 16",
         "title": "Welcome",
         "content": {
-          "body": "Imagine you're stacking plates in a cafeteria. You can only take the top plate off the pile. Now, what if you also needed to instantly know which plate is the smallest in the entire stack? That's the Min Stack problem. We'll build a special stack that tracks its minimum element efficiently.",
+          "body": "Imagine you're stacking plates in a cafeteria. You can only take the top plate off the pile. Now, what if you also needed to instantly know which plate is the smallest in the entire stack? That's the Min Stack lesson. We'll build a special stack that tracks its minimum element efficiently.",
           "title": "Welcome"
         }
       },

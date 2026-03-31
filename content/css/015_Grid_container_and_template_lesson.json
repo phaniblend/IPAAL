@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-css-15",
     "track": "css",
-    "problemNum": 15,
+    "lessonNum": 15,
     "title": "Grid: container and template",
     "shortName": "P15",
     "intro": {

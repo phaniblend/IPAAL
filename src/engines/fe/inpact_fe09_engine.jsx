@@ -8,4 +8,4 @@ const NODES = [
 // postMessage: check event.origin; never trust data`, feedback_correct: "✅ CSP whitelist; SRI for integrity; postMessage validate origin.", feedback_wrong: "CSP; SRI; postMessage security.", expected: "Frontend security" },
 ];
 const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }];
-export default createINPACTEngine({ NODES, sideItems, problemNum: "FE-09", title: "Web security for frontend", shortName: "FE — SECURITY" });
+export default createINPACTEngine({ NODES, sideItems, lessonNum: "FE-09", title: "Web security for frontend", shortName: "FE — SECURITY" });

@@ -8,4 +8,4 @@ const NODES = [
 // Error boundary: catch render errors; useTransition: non-urgent updates`, feedback_correct: "✅ Compound = context shared; portal = render elsewhere; error boundary; useTransition for deferring.", feedback_wrong: "Compound components; portals; error boundaries; useTransition.", expected: "React advanced" },
 ];
 const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }];
-export default createINPACTEngine({ NODES, sideItems, problemNum: "FE-10", title: "React advanced patterns", shortName: "FE — REACT ADV" });
+export default createINPACTEngine({ NODES, sideItems, lessonNum: "FE-10", title: "React advanced patterns", shortName: "FE — REACT ADV" });

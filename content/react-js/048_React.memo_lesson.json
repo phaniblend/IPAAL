@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-react-js-48",
     "track": "react-js",
-    "problemNum": 48,
+    "lessonNum": 48,
     "title": "React.memo",
     "shortName": "P48",
     "intro": {

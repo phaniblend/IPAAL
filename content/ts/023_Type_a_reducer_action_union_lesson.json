@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-ts-23",
     "track": "ts",
-    "problemNum": 23,
+    "lessonNum": 23,
     "title": "Type a reducer action union",
     "shortName": "P23",
     "intro": {

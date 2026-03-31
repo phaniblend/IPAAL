@@ -73,7 +73,7 @@ function getOutputPreview(answer) {
 export default createINPACTEngine({
   NODES,
   sideItems,
-  problemNum: 61,
+  lessonNum: 61,
   title: "@supports",
   shortName: "C61",
   language: "css",

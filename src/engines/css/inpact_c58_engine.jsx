@@ -73,7 +73,7 @@ function getOutputPreview(answer) {
 export default createINPACTEngine({
   NODES,
   sideItems,
-  problemNum: 58,
+  lessonNum: 58,
   title: "color-scheme",
   shortName: "C58",
   language: "css",

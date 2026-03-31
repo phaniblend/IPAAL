@@ -1040,7 +1040,7 @@ const sideItems = [
 ];
 
 // ─── COMPONENT ────────────────────────────────────────────────────────────────
-export default function AngularA01Components({ onNextProblem }) {
+export default function AngularA01Components({ onNextLesson }) {
   const [nodeIndex, setNodeIndex] = useState(0);
   const [answers, setAnswers] = useState({}); // keyed by node.id
   const [result, setResult] = useState(null); // 'correct' | 'partial' | 'wrong'
@@ -1338,7 +1338,7 @@ No hints. No looking back. Check each item as you write it.`}</div>
               {`✅ Engine ANG01 Complete — Components & Decorators mastered.\nNext: ANG02 — Data Binding (all 4 types)`}
             </div>
             <div style={s.btnRow}>
-              <button style={s.btn("primary")} onClick={onNextProblem ?? next}>
+              <button style={s.btn("primary")} onClick={onNextLesson ?? next}>
                 NEXT ENGINE →
               </button>
             </div>
@@ -1356,9 +1356,9 @@ No hints. No looking back. Check each item as you write it.`}</div>
         <p style={{ color: "#0f172a", fontSize: "13px" }}>
           Components & Decorators — mastered.
         </p>
-        {onNextProblem && (
+        {onNextLesson && (
           <div style={{ ...s.btnRow, justifyContent: "center", marginTop: "24px" }}>
-            <button style={s.btn("primary")} onClick={onNextProblem}>NEXT ENGINE →</button>
+            <button style={s.btn("primary")} onClick={onNextLesson}>NEXT ENGINE →</button>
           </div>
         )}
       </div>

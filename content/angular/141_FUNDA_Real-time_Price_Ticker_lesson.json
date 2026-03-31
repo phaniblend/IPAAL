@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-angular-funda-13",
     "track": "angular",
-    "problemNum": 146,
+    "lessonNum": 146,
     "title": "FUNDA — Real-time Price Ticker",
     "shortName": "FUNDA13",
     "intro": {

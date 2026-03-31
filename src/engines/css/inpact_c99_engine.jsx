@@ -73,7 +73,7 @@ function getOutputPreview(answer) {
 export default createINPACTEngine({
   NODES,
   sideItems,
-  problemNum: 99,
+  lessonNum: 99,
   title: "@scope",
   shortName: "C99",
   language: "css",

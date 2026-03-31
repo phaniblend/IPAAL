@@ -8,20 +8,20 @@
   "flow": [
     {
       "stepId": "title",
-      "mentorSays": "At the end of this lesson, you will be able to:\n\n1. Understand what the Edit Distance (Levenshtein Distance) problem asks for\n2. Use dynamic programming with a 2D table to find minimum edit operations\n3. Handle three operations: insert, delete, and replace\n4. Implement the solution step by step in your chosen language",
+      "mentorSays": "At the end of this lesson, you will be able to:\n\n1. Understand what the Edit Distance (Levenshtein Distance) lesson asks for\n2. Use dynamic programming with a 2D table to find minimum edit operations\n3. Handle three operations: insert, delete, and replace\n4. Implement the solution step by step in your chosen language",
       "action": "continue",
-      "next": "problem-illustration"
+      "next": "lesson-illustration"
     },
     {
-      "stepId": "problem-illustration",
-      "mentorSays": "Edit Distance (Levenshtein Distance) is a classic HARD DP problem.\n\nPROBLEM:\nTransform \"horse\" to \"ros\" with minimum operations.\nOperations: Insert, Delete, Replace\n\nLet's find the answer!\n\n2D DP TABLE:\ndp[i][j] = minimum operations to transform word1[0..i-1] to word2[0..j-1]\n\n       \"\"  r  o  s\n    \"\" 0   1  2  3\n    h  1   ?  ?  ?\n    o  2   ?  ?  ?\n    r  3   ?  ?  ?\n    s  4   ?  ?  ?\n    e  5   ?  ?  ?\n\nBASE CASES:\ndp[0][j] = j  (insert j characters)\ndp[i][0] = i  (delete i characters)\n\nFILL THE TABLE:\nFor each cell dp[i][j]:\n  If word1[i-1] == word2[j-1]:\n    dp[i][j] = dp[i-1][j-1]  (no operation needed)\n  Else:\n    dp[i][j] = 1 + min(\n      dp[i-1][j],    // delete from word1\n      dp[i][j-1],    // insert into word1\n      dp[i-1][j-1]   // replace in word1\n    )\n\nCOMPLETED TABLE:\n       \"\"  r  o  s\n    \"\" 0   1  2  3\n    h  1   1  2  3\n    o  2   2  1  2\n    r  3   2  2  2\n    s  4   3  3  2\n    e  5   4  4  3\n\nANSWER: dp[5][3] = 3\n\nTRACE BACK THE OPERATIONS:\n1. Replace 'h' with 'r': \"horse\" → \"rorse\"\n2. Delete 'r': \"rorse\" → \"rose\"\n3. Delete 'e': \"rose\" → \"ros\"\n\nTotal: 3 operations\n\nTIME: O(m × n) where m = len(word1), n = len(word2)\nSPACE: O(m × n) or O(n) with optimization",
+      "stepId": "lesson-illustration",
+      "mentorSays": "Edit Distance (Levenshtein Distance) is a classic HARD DP lesson.\n\nPROBLEM:\nTransform \"horse\" to \"ros\" with minimum operations.\nOperations: Insert, Delete, Replace\n\nLet's find the answer!\n\n2D DP TABLE:\ndp[i][j] = minimum operations to transform word1[0..i-1] to word2[0..j-1]\n\n       \"\"  r  o  s\n    \"\" 0   1  2  3\n    h  1   ?  ?  ?\n    o  2   ?  ?  ?\n    r  3   ?  ?  ?\n    s  4   ?  ?  ?\n    e  5   ?  ?  ?\n\nBASE CASES:\ndp[0][j] = j  (insert j characters)\ndp[i][0] = i  (delete i characters)\n\nFILL THE TABLE:\nFor each cell dp[i][j]:\n  If word1[i-1] == word2[j-1]:\n    dp[i][j] = dp[i-1][j-1]  (no operation needed)\n  Else:\n    dp[i][j] = 1 + min(\n      dp[i-1][j],    // delete from word1\n      dp[i][j-1],    // insert into word1\n      dp[i-1][j-1]   // replace in word1\n    )\n\nCOMPLETED TABLE:\n       \"\"  r  o  s\n    \"\" 0   1  2  3\n    h  1   1  2  3\n    o  2   2  1  2\n    r  3   2  2  2\n    s  4   3  3  2\n    e  5   4  4  3\n\nANSWER: dp[5][3] = 3\n\nTRACE BACK THE OPERATIONS:\n1. Replace 'h' with 'r': \"horse\" → \"rorse\"\n2. Delete 'r': \"rorse\" → \"rose\"\n3. Delete 'e': \"rose\" → \"ros\"\n\nTotal: 3 operations\n\nTIME: O(m × n) where m = len(word1), n = len(word2)\nSPACE: O(m × n) or O(n) with optimization",
       "example": "word1 = \"horse\"\nword2 = \"ros\"\n\nFind minimum edit distance:\n- Replace 'h' with 'r' → \"rorse\"\n- Delete 'r' → \"orse\"\n- Delete 'o' → \"rse\"\n- Replace 's' with 'o' → \"roe\"\n- Replace 'e' with 's' → \"ros\"\n\nWait, optimal is 3:\n- Replace 'h' with 'r' → \"rorse\"\n- Delete 'r' → \"orse\"\n- Delete 'o' → \"rse\"\n- Delete 's' → \"re\"\n- Insert 'o' → \"roe\"\n- Insert 's' → \"ros\"\n\nActually: 3 operations\n\nAnother example:\nword1 = \"intention\"\nword2 = \"execution\"\n\nAnswer: 5\n\nAnother example:\nword1 = \"\"\nword2 = \"abc\"\n\nAnswer: 3 (insert 3 characters)",
       "action": "continue",
       "next": "thinking-challenge"
     },
     {
       "stepId": "thinking-challenge",
-      "mentorSays": "Now that you understand what the problem wants, here's the real question:\n\nHow would YOU find the minimum edit distance?\n\nThink about it for a moment. What approach feels natural to you?",
+      "mentorSays": "Now that you understand what the lesson wants, here's the real question:\n\nHow would YOU find the minimum edit distance?\n\nThink about it for a moment. What approach feels natural to you?",
       "choices": [
         {
           "label": "Use dynamic programming with a 2D table",
@@ -888,7 +888,7 @@
     },
     {
       "stepId": "final",
-      "mentorSays": "🎉 Well done! You've learned edit distance (Levenshtein distance). You understand how to use dynamic programming with a 2D table to find the minimum operations needed to convert one string to another!\n\nThis is O(m × n) time and O(m × n) space - excellent for string transformation problems! Keep practicing!",
+      "mentorSays": "🎉 Well done! You've learned edit distance (Levenshtein distance). You understand how to use dynamic programming with a 2D table to find the minimum operations needed to convert one string to another!\n\nThis is O(m × n) time and O(m × n) space - excellent for string transformation lessons! Keep practicing!",
       "action": "continue"
     }
   ]

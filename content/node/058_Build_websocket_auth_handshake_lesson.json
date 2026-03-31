@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-node-58",
     "track": "node",
-    "problemNum": 58,
+    "lessonNum": 58,
     "title": "Build websocket auth handshake",
     "shortName": "P58",
     "intro": {

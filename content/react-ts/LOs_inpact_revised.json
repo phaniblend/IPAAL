@@ -303,7 +303,7 @@
       "file": "inpact_ts28_engine.jsx",
       "title": "useFetch — Typed",
       "objectives": [
-        "Write a custom hook useFetch<T>(url: string) with a generic type parameter T for the response data so the abstraction solves a concrete UI problem and exposes a reliable typed contract.",
+        "Write a custom hook useFetch<T>(url: string) with a generic type parameter T for the response data so the abstraction solves a concrete UI lesson and exposes a reliable typed contract.",
         "Model typed state variables for data (T | null), loading (boolean), and error (Error | null) so state, refs, or values keep a predictable shape as the feature evolves.",
         "Call fetch inside useEffect, parse the JSON response, and cast it to T using the generic parameter so the hook or API is used with an intentional contract, and async data is handled with an explicit and safe data shape.",
         "Return a typed object { data, loading, error } from the custom hook and consume it in a component so consumers receive a stable contract and the effect of that contract can be tested immediately."
@@ -314,7 +314,7 @@
       "file": "inpact_ts29_engine.jsx",
       "title": "useDebounce — Typed",
       "objectives": [
-        "Write a custom hook useDebounce<T>(value: T, delay: number): T with explicit input and return types so the abstraction solves a concrete UI problem and exposes a reliable typed contract.",
+        "Write a custom hook useDebounce<T>(value: T, delay: number): T with explicit input and return types so the abstraction solves a concrete UI lesson and exposes a reliable typed contract.",
         "Model a useState<T> variable for the debounced value initialized to the input value so state, refs, or values keep a predictable shape as the feature evolves, and data shape and updates remain explicit throughout the lesson.",
         "Use useEffect with a setTimeout to update the debounced state and return a clearTimeout cleanup so the pattern drives visible behavior, and the effect leaves no stale subscriptions, timers, or listeners behind.",
         "Consume useDebounce in a search component and demonstrate that the API call fires only after the delay so the learner can connect the typed API to real screen behavior."
@@ -325,9 +325,9 @@
       "file": "inpact_ts30_engine.jsx",
       "title": "useLocalStorage — Typed",
       "objectives": [
-        "Write a custom hook useLocalStorage<T>(key: string, initialValue: T): [T, (val: T) => void] so the abstraction solves a concrete UI problem and exposes a reliable typed contract.",
+        "Write a custom hook useLocalStorage<T>(key: string, initialValue: T): [T, (val: T) => void] so the abstraction solves a concrete UI lesson and exposes a reliable typed contract.",
         "Read from localStorage in the useState initializer function and parse the JSON with a try/catch so the learner can explain what runtime information is driving the next decision so data shape and updates remain explicit throughout the lesson.",
-        "Write a typed setter that serializes the new value with JSON.stringify before calling localStorage.setItem so the abstraction solves a concrete UI problem and exposes a reliable typed contract.",
+        "Write a typed setter that serializes the new value with JSON.stringify before calling localStorage.setItem so the abstraction solves a concrete UI lesson and exposes a reliable typed contract.",
         "Return the typed [value, setValue] tuple and consume it as a drop-in replacement for useState so consumers receive a stable contract and the effect of that contract can be tested immediately so data shape and updates remain explicit throughout the lesson."
       ]
     },
@@ -336,7 +336,7 @@
       "file": "inpact_ts31_engine.jsx",
       "title": "useToggle — Typed",
       "objectives": [
-        "Write a custom hook useToggle(initialValue: boolean): [boolean, () => void] with explicit return type so the abstraction solves a concrete UI problem and exposes a reliable typed contract.",
+        "Write a custom hook useToggle(initialValue: boolean): [boolean, () => void] with explicit return type so the abstraction solves a concrete UI lesson and exposes a reliable typed contract.",
         "Implement the toggle function using the functional form of useState setter: setVal(v => !v) so the feature works end to end, and data shape and updates remain explicit throughout the lesson.",
         "Return a tuple typed as [boolean, () => void] and destructure it at the call site so consumers receive a stable contract and the effect of that contract can be tested immediately.",
         "Extend the hook to accept an optional forceValue: boolean parameter typed in the setter overload so reuse does not weaken the contract or blur responsibility."
@@ -348,7 +348,7 @@
       "title": "useWindowSize — Typed",
       "objectives": [
         "Establish a WindowSize interface with width and height fields both typed as number so the contract is explicit and incorrect usage is caught early.",
-        "Write a custom hook useWindowSize(): WindowSize that initializes state from window.innerWidth and window.innerHeight so the abstraction solves a concrete UI problem and exposes a reliable typed contract.",
+        "Write a custom hook useWindowSize(): WindowSize that initializes state from window.innerWidth and window.innerHeight so the abstraction solves a concrete UI lesson and exposes a reliable typed contract.",
         "Attach a resize event listener in useEffect and return a cleanup that calls removeEventListener so the event or DOM boundary behaves correctly and can be verified during interaction so the effect leaves no stale subscriptions, timers, or listeners behind.",
         "Consume the typed WindowSize object in a component to conditionally render based on breakpoints so the learner can connect the typed API to real screen behavior, and the UI exposes only the branch that matches the current state."
       ]
@@ -358,7 +358,7 @@
       "file": "inpact_ts33_engine.jsx",
       "title": "usePrevious — Typed",
       "objectives": [
-        "Write a custom hook usePrevious<T>(value: T): T | undefined with a generic type parameter so the abstraction solves a concrete UI problem and exposes a reliable typed contract.",
+        "Write a custom hook usePrevious<T>(value: T): T | undefined with a generic type parameter so the abstraction solves a concrete UI lesson and exposes a reliable typed contract.",
         "Model a useRef<T | undefined>(undefined) to store the previous value without triggering re-renders so state, refs, or values keep a predictable shape as the feature evolves.",
         "Update the ref inside useEffect after every render so it always holds the prior value so the learner can explain both the mechanism and the visible result, and side effects stay predictable across renders and teardown.",
         "Consume usePrevious in a component and display both current and previous values to verify behavior so the learner can connect the typed API to real screen behavior."
@@ -369,7 +369,7 @@
       "file": "inpact_ts34_engine.jsx",
       "title": "useClickOutside — Typed",
       "objectives": [
-        "Write a custom hook useClickOutside<T extends HTMLElement>(callback: () => void): React.RefObject<T> so the abstraction solves a concrete UI problem and exposes a reliable typed contract.",
+        "Write a custom hook useClickOutside<T extends HTMLElement>(callback: () => void): React.RefObject<T> so the abstraction solves a concrete UI lesson and exposes a reliable typed contract.",
         "Model a useRef<T>(null) and attach it to a DOM element to obtain a typed element reference so state, refs, or values keep a predictable shape as the feature evolves.",
         "Attach a mousedown event listener to document in useEffect and check if ref.current.contains(e.target as Node) so the event or DOM boundary behaves correctly and can be verified during interaction so side effects stay predictable across renders and teardown.",
         "Return the typed ref from the hook and attach it to a JSX element to close a dropdown on outside click so consumers receive a stable contract and the effect of that contract can be tested immediately."
@@ -380,7 +380,7 @@
       "file": "inpact_ts35_engine.jsx",
       "title": "useKeyPress — Typed",
       "objectives": [
-        "Write a custom hook useKeyPress(targetKey: string): boolean with explicit return type so the abstraction solves a concrete UI problem and exposes a reliable typed contract.",
+        "Write a custom hook useKeyPress(targetKey: string): boolean with explicit return type so the abstraction solves a concrete UI lesson and exposes a reliable typed contract.",
         "Model a useState<boolean> to track whether the target key is currently pressed so state, refs, or values keep a predictable shape as the feature evolves, and data shape and updates remain explicit throughout the lesson.",
         "Attach keydown and keyup event listeners in useEffect typed as (e: KeyboardEvent) => void so the event or DOM boundary behaves correctly and can be verified during interaction so side effects stay predictable across renders and teardown.",
         "Return the boolean keyPressed value and use it in a component to trigger a UI state change so consumers receive a stable contract and the effect of that contract can be tested immediately."
@@ -391,7 +391,7 @@
       "file": "inpact_ts36_engine.jsx",
       "title": "useOnlineStatus — Typed",
       "objectives": [
-        "Write a custom hook useOnlineStatus(): boolean that returns navigator.onLine as initial state so the abstraction solves a concrete UI problem and exposes a reliable typed contract.",
+        "Write a custom hook useOnlineStatus(): boolean that returns navigator.onLine as initial state so the abstraction solves a concrete UI lesson and exposes a reliable typed contract.",
         "Attach online and offline event listeners to window in useEffect and update boolean state in each handler so the event or DOM boundary behaves correctly and can be verified during interaction so side effects stay predictable across renders and teardown.",
         "Return a cleanup function from useEffect that removes both event listeners so consumers receive a stable contract and the effect of that contract can be tested immediately so the effect leaves no stale subscriptions, timers, or listeners behind.",
         "Consume the boolean return value in a component to render a typed status indicator so the learner can connect the typed API to real screen behavior."
@@ -402,7 +402,7 @@
       "file": "inpact_ts37_engine.jsx",
       "title": "useMediaQuery — Typed",
       "objectives": [
-        "Write a custom hook useMediaQuery(query: string): boolean using window.matchMedia so the abstraction solves a concrete UI problem and exposes a reliable typed contract.",
+        "Write a custom hook useMediaQuery(query: string): boolean using window.matchMedia so the abstraction solves a concrete UI lesson and exposes a reliable typed contract.",
         "Initialize useState<boolean> from matchMedia(query).matches so the learner can explain both the mechanism and the visible result, and data shape and updates remain explicit throughout the lesson.",
         "Attach a change event listener on a MediaQueryList object typed as MediaQueryListEvent in useEffect so the event or DOM boundary behaves correctly and can be verified during interaction so side effects stay predictable across renders and teardown.",
         "Return the boolean match value and use it in a component to conditionally render a typed layout so consumers receive a stable contract and the effect of that contract can be tested immediately so the UI exposes only the branch that matches the current state."
@@ -414,8 +414,8 @@
       "title": "Theme Context — Typed",
       "objectives": [
         "Establish a ThemeContextType interface and create a typed context with createContext<ThemeContextType | undefined>(undefined) so the contract is explicit, and shared data can move without losing type safety across components.",
-        "Write a ThemeProvider component that wraps children with Context.Provider and supplies a typed value so the abstraction solves a concrete UI problem and exposes a reliable typed contract so shared data can move without losing type safety across components.",
-        "Write a useTheme custom hook that calls useContext, checks for undefined, and returns the typed context value so the abstraction solves a concrete UI problem and exposes a reliable typed contract so shared data can move without losing type safety across components.",
+        "Write a ThemeProvider component that wraps children with Context.Provider and supplies a typed value so the abstraction solves a concrete UI lesson and exposes a reliable typed contract so shared data can move without losing type safety across components.",
+        "Write a useTheme custom hook that calls useContext, checks for undefined, and returns the typed context value so the abstraction solves a concrete UI lesson and exposes a reliable typed contract so shared data can move without losing type safety across components.",
         "Consume useTheme in a child component and apply the theme token to a React.CSSProperties object so the learner can connect the typed API to real screen behavior."
       ]
     },
@@ -567,7 +567,7 @@
       "file": "inpact_ts52_engine.jsx",
       "title": "HOC withAuth — Typed",
       "objectives": [
-        "Write a higher-order component withAuth<P>(Component: React.ComponentType<P>): React.FC<P> with a generic type parameter so the abstraction solves a concrete UI problem and exposes a reliable typed contract.",
+        "Write a higher-order component withAuth<P>(Component: React.ComponentType<P>): React.FC<P> with a generic type parameter so the abstraction solves a concrete UI lesson and exposes a reliable typed contract.",
         "Read authentication state from a typed context inside the HOC and redirect unauthenticated users so the learner can explain what runtime information is driving the next decision.",
         "Spread the original props typed as P onto the wrapped Component to pass through all existing props so reusable wrappers preserve native behavior without losing type clarity.",
         "Apply the HOC at the export site and confirm the wrapped component retains its full typed prop surface so the learner sees how a typed pattern changes behavior, reuse, or safety in practice."
@@ -623,7 +623,7 @@
       "title": "Recursive TreeView — Typed",
       "objectives": [
         "Establish a TreeNode interface with id, label, and an optional children: TreeNode[] recursive field so the contract is explicit and incorrect usage is caught early.",
-        "Write a TreeNode component typed as React.FC<{ node: TreeNode }> that calls itself for each child node so the abstraction solves a concrete UI problem and exposes a reliable typed contract.",
+        "Write a TreeNode component typed as React.FC<{ node: TreeNode }> that calls itself for each child node so the abstraction solves a concrete UI lesson and exposes a reliable typed contract.",
         "Model a useState<Set<string>> to track expanded node IDs and update it in a typed toggle handler so state, refs, or values keep a predictable shape as the feature evolves, and data shape and updates remain explicit throughout the lesson.",
         "Use the && operator to conditionally render children only when a node's ID is in the expanded set so the pattern drives visible behavior, and the UI exposes only the branch that matches the current state."
       ]
@@ -677,7 +677,7 @@
       "file": "inpact_ts62_engine.jsx",
       "title": "Generic List<T> — Typed",
       "objectives": [
-        "Write a generic component List<T> that accepts items: T[] and a renderItem prop typed as (item: T) => React.ReactNode so the abstraction solves a concrete UI problem and exposes a reliable typed contract.",
+        "Write a generic component List<T> that accepts items: T[] and a renderItem prop typed as (item: T) => React.ReactNode so the abstraction solves a concrete UI lesson and exposes a reliable typed contract.",
         "Add a keyExtractor prop typed as (item: T) => string | number to supply stable keys in the .map() call so the UI becomes more robust, accessible, or verifiable in use.",
         "Apply a generic type constraint <T extends { id: string }> to guarantee a fallback key field so the learner sees how a typed pattern changes behavior, reuse, or safety in practice.",
         "Instantiate list<Product>, List<User>, and List<Order> at the call site and confirm each enforces its typed item shape so the generic or runtime object proves its value in a concrete case."
@@ -721,7 +721,7 @@
       "file": "inpact_ts66_engine.jsx",
       "title": "Generic useFetch<T> — Typed",
       "objectives": [
-        "Write a generic hook useFetch<T>(url: string): { data: T | null; loading: boolean; error: Error | null } so the abstraction solves a concrete UI problem and exposes a reliable typed contract.",
+        "Write a generic hook useFetch<T>(url: string): { data: T | null; loading: boolean; error: Error | null } so the abstraction solves a concrete UI lesson and exposes a reliable typed contract.",
         "Cast the fetch JSON response to T using the as keyword and explain its type-assertion semantics so the learner can explain both the mechanism and the visible result, and async data is handled with an explicit and safe data shape.",
         "Instantiate useFetch<User[]>, useFetch<Product>, and useFetch<Order> and confirm each returns a correctly typed data field so the generic or runtime object proves its value in a concrete case.",
         "Add a generic constraint <T extends object> to prevent the hook from being instantiated with primitive types so the UI becomes more robust, accessible, or verifiable in use."
@@ -821,7 +821,7 @@
       "title": "Request Deduplication — Typed",
       "objectives": [
         "Create a typed in-flight cache using Map<string, Promise<T>> to store pending requests by URL key so the design pattern is reusable and its contract is clear to downstream code.",
-        "Write a typed fetchOnce<T>(url: string): Promise<T> function that returns the existing promise if a request is already in flight so the abstraction solves a concrete UI problem and exposes a reliable typed contract so async data is handled with an explicit and safe data shape.",
+        "Write a typed fetchOnce<T>(url: string): Promise<T> function that returns the existing promise if a request is already in flight so the abstraction solves a concrete UI lesson and exposes a reliable typed contract so async data is handled with an explicit and safe data shape.",
         "Remove the cache entry in the .finally() handler of the promise to allow re-fetching after completion so the learner can explain both the mechanism and the visible result, and async data is handled with an explicit and safe data shape.",
         "Consume fetchOnce in multiple components that mount simultaneously and verify only one network request fires so the learner can connect the typed API to real screen behavior, and async data is handled with an explicit and safe data shape."
       ]
@@ -831,7 +831,7 @@
       "file": "inpact_ts76_engine.jsx",
       "title": "Polling Hook — Typed",
       "objectives": [
-        "Write a custom hook usePolling<T>(fetchFn: () => Promise<T>, interval: number): { data: T | null; error: Error | null } so the abstraction solves a concrete UI problem and exposes a reliable typed contract so async data is handled with an explicit and safe data shape.",
+        "Write a custom hook usePolling<T>(fetchFn: () => Promise<T>, interval: number): { data: T | null; error: Error | null } so the abstraction solves a concrete UI lesson and exposes a reliable typed contract so async data is handled with an explicit and safe data shape.",
         "Use setInterval inside useEffect to call fetchFn on each tick and update typed state with the result so the pattern drives visible behavior, and async data is handled with an explicit and safe data shape.",
         "Return a clearInterval cleanup from useEffect to stop polling when the component unmounts so consumers receive a stable contract and the effect of that contract can be tested immediately so the effect leaves no stale subscriptions, timers, or listeners behind.",
         "Expose a stop function typed as () => void from the hook so the consumer can pause polling manually so consumers interact with a deliberate surface instead of reaching into implementation details."
@@ -842,7 +842,7 @@
       "file": "inpact_ts77_engine.jsx",
       "title": "WebSocket Hook — Typed",
       "objectives": [
-        "Write a custom hook useWebSocket<T>(url: string) that opens a WebSocket connection inside useEffect so the abstraction solves a concrete UI problem and exposes a reliable typed contract so side effects stay predictable across renders and teardown.",
+        "Write a custom hook useWebSocket<T>(url: string) that opens a WebSocket connection inside useEffect so the abstraction solves a concrete UI lesson and exposes a reliable typed contract so side effects stay predictable across renders and teardown.",
         "Type the onmessage handler as (e: MessageEvent) => void and parse e.data with JSON.parse, casting the result to T so invalid interactions are rejected by the compiler instead of leaking into runtime.",
         "Model a useState<T | null> to store the latest typed message and update it in the message handler so state, refs, or values keep a predictable shape as the feature evolves, and data shape and updates remain explicit throughout the lesson.",
         "Return a send function typed as (payload: T) => void that calls ws.send(JSON.stringify(payload)) so consumers receive a stable contract and the effect of that contract can be tested immediately."
@@ -854,7 +854,7 @@
       "title": "Feature Flag Hook — Typed",
       "objectives": [
         "Establish a FeatureFlags interface with boolean fields for each flag and create a typed context for it so the contract is explicit and incorrect usage is caught early.",
-        "Write a useFeatureFlag(flag: keyof FeatureFlags): boolean hook that reads and returns the typed flag value so the abstraction solves a concrete UI problem and exposes a reliable typed contract.",
+        "Write a useFeatureFlag(flag: keyof FeatureFlags): boolean hook that reads and returns the typed flag value so the abstraction solves a concrete UI lesson and exposes a reliable typed contract.",
         "Consume useFeatureFlag in a component to conditionally render a typed JSX block with the && operator so the learner can connect the typed API to real screen behavior, and the UI exposes only the branch that matches the current state.",
         "Implement a FeatureFlagProvider that merges server-fetched flags with a typed default flags object so the feature works end to end, and async data is handled with an explicit and safe data shape."
       ]
@@ -875,7 +875,7 @@
       "file": "inpact_ts80_engine.jsx",
       "title": "Form Library from Scratch — Typed",
       "objectives": [
-        "Write a generic useForm<T extends object>(initialValues: T) hook that manages typed field values and errors so the abstraction solves a concrete UI problem and exposes a reliable typed contract.",
+        "Write a generic useForm<T extends object>(initialValues: T) hook that manages typed field values and errors so the abstraction solves a concrete UI lesson and exposes a reliable typed contract.",
         "Implement a typed handleChange function using keyof T to update individual fields without losing type safety so the feature works end to end and the resulting behavior can be observed and explained.",
         "Implement a validate function typed as (values: T) => Partial<Record<keyof T, string>> that returns per-field errors so the feature works end to end and the resulting behavior can be observed and explained.",
         "Return a typed register function from the hook that produces value, onChange, and onBlur props for any field so consumers receive a stable contract and the effect of that contract can be tested immediately."
@@ -887,7 +887,7 @@
       "title": "Component Library Theming — Typed",
       "objectives": [
         "Establish a Theme interface with typed token fields (colors, spacing, typography) and create a typed ThemeContext so the contract is explicit, and shared data can move without losing type safety across components.",
-        "Write a typed useTheme hook that reads the ThemeContext and returns the full Theme object so the abstraction solves a concrete UI problem and exposes a reliable typed contract so shared data can move without losing type safety across components.",
+        "Write a typed useTheme hook that reads the ThemeContext and returns the full Theme object so the abstraction solves a concrete UI lesson and exposes a reliable typed contract so shared data can move without losing type safety across components.",
         "Apply theme tokens inside a component by reading from the typed theme object and assigning to React.CSSProperties so the learner sees how a typed pattern changes behavior, reuse, or safety in practice.",
         "Extend the Theme interface to add a new token and confirm that all components using useTheme receive a compiler error until the token is provided so reuse does not weaken the contract or blur responsibility and use the compiler feedback to correct the contract before runtime."
       ]
@@ -922,7 +922,7 @@
         "Apply useMemo with a typed return type to memoize a derived data transformation over a typed array so the learner sees how a typed pattern changes behavior, reuse, or safety in practice.",
         "Apply useCallback with a typed signature to memoize an event handler passed to a React.memo child so the learner sees how a typed pattern changes behavior, reuse, or safety in practice and verify whether stable props actually reduce avoidable re-renders.",
         "Identify when memoization is unnecessary by tracing the component tree for referential stability so the learner can spot the failure mode before applying the fix.",
-        "Write a typed selector function and compose it with useMemo to derive computed state from a context value so the abstraction solves a concrete UI problem and exposes a reliable typed contract."
+        "Write a typed selector function and compose it with useMemo to derive computed state from a context value so the abstraction solves a concrete UI lesson and exposes a reliable typed contract."
       ]
     },
     {
@@ -953,7 +953,7 @@
       "title": "Test useFetch — Typed",
       "objectives": [
         "Mock the global fetch function using vi.fn() or jest.fn() with a typed return value matching the API response so tests stay realistic while preserving the same contract as production code so async data is handled with an explicit and safe data shape.",
-        "Write a typed renderHook call from @testing-library/react to invoke useFetch<T> in a test environment so the abstraction solves a concrete UI problem and exposes a reliable typed contract.",
+        "Write a typed renderHook call from @testing-library/react to invoke useFetch<T> in a test environment so the abstraction solves a concrete UI lesson and exposes a reliable typed contract.",
         "Assert that the loading state is true before the fetch resolves and false after using waitFor so the expected behavior is proven rather than assumed so async data is handled with an explicit and safe data shape.",
         "Assert that the returned data matches the typed mock response using expect with typed matchers so the expected behavior is proven rather than assumed."
       ]
@@ -996,7 +996,7 @@
       "file": "inpact_ts91_engine.jsx",
       "title": "Test Error Boundary — Typed",
       "objectives": [
-        "Write a typed child component that conditionally throws an Error to trigger the error boundary so the abstraction solves a concrete UI problem and exposes a reliable typed contract.",
+        "Write a typed child component that conditionally throws an Error to trigger the error boundary so the abstraction solves a concrete UI lesson and exposes a reliable typed contract.",
         "Render the ErrorBoundary wrapping the typed throwing child and assert the fallback UI is displayed so the learner can connect the typed data shape to the final UI output.",
         "Spy on console.error and suppress it during the test to avoid noisy output from expected errors so the learner can explain both the mechanism and the visible result.",
         "Re-render with a non-throwing child and assert the error boundary resets and shows the normal UI so the learner can explain both the mechanism and the visible result."
@@ -1008,7 +1008,7 @@
       "title": "Design DataTable API — Typed",
       "objectives": [
         "Establish a generic Column<T> interface with key: keyof T, header: string, and an optional render prop typed as (val: T[keyof T], row: T) => React.ReactNode so the contract is explicit and incorrect usage is caught early.",
-        "Write a generic DataTable<T> component that accepts rows: T[] and columns: Column<T>[] and renders a typed <table> so the abstraction solves a concrete UI problem and exposes a reliable typed contract.",
+        "Write a generic DataTable<T> component that accepts rows: T[] and columns: Column<T>[] and renders a typed <table> so the abstraction solves a concrete UI lesson and exposes a reliable typed contract.",
         "Implement a typed sort handler that reads the Column key and sorts the rows array using Array.prototype.sort so the feature works end to end and the resulting behavior can be observed and explained.",
         "Expose a typed onRowClick prop as (row: T) => void and call it inside the row's onClick handler so consumers interact with a deliberate surface instead of reaching into implementation details."
       ]
@@ -1031,7 +1031,7 @@
       "objectives": [
         "Establish a Notification interface and a typed NotificationContext with add and remove functions so the contract is explicit, and shared data can move without losing type safety across components.",
         "Implement a typed useReducer with ADD_NOTIFICATION and REMOVE_NOTIFICATION action shapes in the provider so the feature works end to end and the resulting behavior can be observed and explained.",
-        "Write a useNotify hook typed as () => (n: Omit<Notification, 'id'>) => void that dispatches add actions so the abstraction solves a concrete UI problem and exposes a reliable typed contract.",
+        "Write a useNotify hook typed as () => (n: Omit<Notification, 'id'>) => void that dispatches add actions so the abstraction solves a concrete UI lesson and exposes a reliable typed contract.",
         "Auto-dismiss notifications by scheduling a setTimeout in the reducer's dispatch side effect and typing its cleanup so the learner can explain both the mechanism and the visible result, and the effect leaves no stale subscriptions, timers, or listeners behind."
       ]
     },
@@ -1041,7 +1041,7 @@
       "title": "Design Permission System — Typed",
       "objectives": [
         "Establish a string literal union type Permission and a User interface with a permissions: Permission[] field so the contract is explicit and incorrect usage is caught early.",
-        "Write a usePermission(p: Permission): boolean hook that checks if the current user holds the given permission so the abstraction solves a concrete UI problem and exposes a reliable typed contract.",
+        "Write a usePermission(p: Permission): boolean hook that checks if the current user holds the given permission so the abstraction solves a concrete UI lesson and exposes a reliable typed contract.",
         "Build a typed <CanAccess permission={Permission}> component that renders children only when the hook returns true so multiple typed pieces work together as one coherent UI pattern.",
         "Apply the Omit<T, K> utility type to strip permission-sensitive fields before passing data to an unprivileged component so the learner sees how a typed pattern changes behavior, reuse, or safety in practice."
       ]
@@ -1183,7 +1183,7 @@
       "file": "inpact_ts108_engine.jsx",
       "title": "Session Timeout Hook — Typed",
       "objectives": [
-        "Write a useSessionTimeout(timeoutMs: number, onTimeout: () => void): void hook so the abstraction solves a concrete UI problem and exposes a reliable typed contract.",
+        "Write a useSessionTimeout(timeoutMs: number, onTimeout: () => void): void hook so the abstraction solves a concrete UI lesson and exposes a reliable typed contract.",
         "Reset a setTimeout reference stored in a useRef<ReturnType<typeof setTimeout> | null> on each user interaction so the learner can explain both the mechanism and the visible result.",
         "Attach activity event listeners (mousemove, keydown) in useEffect and call resetTimer in each handler so the event or DOM boundary behaves correctly and can be verified during interaction so side effects stay predictable across renders and teardown.",
         "Return a clearTimeout cleanup from useEffect to prevent a stale timeout from firing after unmount so consumers receive a stable contract and the effect of that contract can be tested immediately so the effect leaves no stale subscriptions, timers, or listeners behind."
@@ -1250,8 +1250,8 @@
       "title": "RBAC Permission Hook — Typed",
       "objectives": [
         "Establish a Permission string literal union and a RolePermissions type as Record<Role, Permission[]> so the contract is explicit and incorrect usage is caught early.",
-        "Write a useHasPermission(permission: Permission): boolean hook that looks up the current user's role in RolePermissions so the abstraction solves a concrete UI problem and exposes a reliable typed contract.",
-        "Write a useHasAnyPermission(permissions: Permission[]): boolean hook using Array.prototype.some against the role's permissions so the abstraction solves a concrete UI problem and exposes a reliable typed contract.",
+        "Write a useHasPermission(permission: Permission): boolean hook that looks up the current user's role in RolePermissions so the abstraction solves a concrete UI lesson and exposes a reliable typed contract.",
+        "Write a useHasAnyPermission(permissions: Permission[]): boolean hook using Array.prototype.some against the role's permissions so the abstraction solves a concrete UI lesson and exposes a reliable typed contract.",
         "Consume both hooks in a component and use their boolean returns with the && operator to show/hide typed UI elements so the learner can connect the typed API to real screen behavior."
       ]
     },
@@ -1271,7 +1271,7 @@
       "file": "inpact_ts116_engine.jsx",
       "title": "Secure Token Rotation — Typed",
       "objectives": [
-        "Write a typed refreshAccessToken(): Promise<TokenResponse> function that sends the refresh token and returns a new typed token pair so the abstraction solves a concrete UI problem and exposes a reliable typed contract.",
+        "Write a typed refreshAccessToken(): Promise<TokenResponse> function that sends the refresh token and returns a new typed token pair so the abstraction solves a concrete UI lesson and exposes a reliable typed contract.",
         "Schedule a proactive token refresh using setTimeout before the access token expires, reading the exp field from the typed JWT payload so the learner can explain both the mechanism and the visible result.",
         "Store the refresh timeout ID in a useRef<ReturnType<typeof setTimeout> | null> and clear it in the useEffect cleanup so the state can survive the required boundary while keeping its intended type so the effect leaves no stale subscriptions, timers, or listeners behind.",
         "Revoke the refresh token on logout by calling a typed endpoint and clearing all token values from the typed useLocalStorage hook so the learner can explain both the mechanism and the visible result."
@@ -1294,7 +1294,7 @@
       "title": "Redux Toolkit — createSlice & createAsyncThunk — Typed",
       "objectives": [
         "Establish a typed SliceState interface and create a slice using createSlice<SliceState, 'sliceName', CaseReducers> so the contract is explicit and incorrect usage is caught early.",
-        "Write typed case reducers in the reducers field and export the auto-generated typed action creators so the abstraction solves a concrete UI problem and exposes a reliable typed contract.",
+        "Write typed case reducers in the reducers field and export the auto-generated typed action creators so the abstraction solves a concrete UI lesson and exposes a reliable typed contract.",
         "Create an async thunk using createAsyncThunk<ReturnType, ArgType, ThunkApiConfig>('action/type', async (arg) => { ... }) so the design pattern is reusable and its contract is clear to downstream code.",
         "Handle the thunk's pending, fulfilled, and rejected cases in extraReducers using builder.addCase with typed payloads so the edge case is explicitly managed instead of silently leaking into runtime."
       ]

@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-node-11",
     "track": "node",
-    "problemNum": 11,
+    "lessonNum": 11,
     "title": "Error handling",
     "shortName": "P11",
     "intro": {

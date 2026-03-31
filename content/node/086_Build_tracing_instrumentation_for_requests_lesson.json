@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-node-86",
     "track": "node",
-    "problemNum": 86,
+    "lessonNum": 86,
     "title": "Build tracing instrumentation for requests",
     "shortName": "P86",
     "intro": {

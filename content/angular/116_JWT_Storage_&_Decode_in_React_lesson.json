@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-angular-116",
     "track": "angular",
-    "problemNum": 116,
+    "lessonNum": 116,
     "title": "JWT Storage & Decode in React",
     "shortName": "P116",
     "intro": {

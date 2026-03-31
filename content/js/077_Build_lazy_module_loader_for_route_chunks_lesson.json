@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-js-77",
     "track": "js",
-    "problemNum": 77,
+    "lessonNum": 77,
     "title": "Build lazy module loader for route chunks",
     "shortName": "P77",
     "intro": {

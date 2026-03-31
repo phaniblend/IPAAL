@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-node-10",
     "track": "node",
-    "problemNum": 10,
+    "lessonNum": 10,
     "title": "Path, URL & OS",
     "shortName": "P10",
     "intro": {

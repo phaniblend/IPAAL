@@ -250,4 +250,4 @@ const sideItems = [
   { label: "Step 5 — race / any", id: "step5" },
 ];
 
-export default createINPACTEngine({ NODES, sideItems, problemNum: "JS-F03", title: "Promises & Async/Await", shortName: "JS — ASYNC" });
+export default createINPACTEngine({ NODES, sideItems, lessonNum: "JS-F03", title: "Promises & Async/Await", shortName: "JS — ASYNC" });

@@ -2,7 +2,7 @@
 
 Human-readable notes on **Deep-dive** wiring.
 
-- **React · TS lessons (catalog):** `content/react-ts/000_deep_dives.json` — per-lesson extended dives (problem number from key prefix `001_` … `122_`, etc.). SVG and prose live in each entry’s `deepDive` fields.
+- **React · TS lessons (catalog):** `content/react-ts/000_deep_dives.json` — per-lesson extended dives (lesson number from key prefix `001_` … `122_`, etc.). SVG and prose live in each entry’s `deepDive` fields.
 - **Glossary concepts** (still used where `introductions` or step `introducesConcepts` reference them): `src/learn/glossary/react-ts.json` (`concepts` + `introductions`).  
   The UI merges glossary + extended via `getDeepDiveConceptsForStep()` in `src/learn/conceptGlossary.js`.
 

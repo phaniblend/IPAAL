@@ -8,4 +8,4 @@ const NODES = [
 <router-view />`, feedback_correct: "✅ path: '/:id'; beforeEnter; router-link and router-view.", feedback_wrong: "Dynamic path; beforeEnter guard; router-link and router-view.", expected: "Vue Router" },
 ];
 const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }];
-export default createINPACTEngine({ NODES, sideItems, problemNum: "VUE-F05", title: "Vue Router", shortName: "VUE — ROUTER" });
+export default createINPACTEngine({ NODES, sideItems, lessonNum: "VUE-F05", title: "Vue Router", shortName: "VUE — ROUTER" });

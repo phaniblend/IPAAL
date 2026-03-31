@@ -73,7 +73,7 @@ function getOutputPreview(answer) {
 export default createINPACTEngine({
   NODES,
   sideItems,
-  problemNum: 60,
+  lessonNum: 60,
   title: "Subgrid",
   shortName: "C60",
   language: "css",

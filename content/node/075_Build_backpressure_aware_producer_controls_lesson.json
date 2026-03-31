@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-node-75",
     "track": "node",
-    "problemNum": 75,
+    "lessonNum": 75,
     "title": "Build backpressure aware producer controls",
     "shortName": "P75",
     "intro": {

@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-js-41",
     "track": "js",
-    "problemNum": 41,
+    "lessonNum": 41,
     "title": "Build a dropdown with outside click close",
     "shortName": "P41",
     "intro": {

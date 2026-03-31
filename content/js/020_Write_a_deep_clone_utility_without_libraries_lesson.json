@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-js-20",
     "track": "js",
-    "problemNum": 20,
+    "lessonNum": 20,
     "title": "Write a deep clone utility without libraries",
     "shortName": "P20",
     "intro": {

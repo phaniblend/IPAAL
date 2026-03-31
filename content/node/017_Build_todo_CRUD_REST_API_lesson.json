@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-node-17",
     "track": "node",
-    "problemNum": 17,
+    "lessonNum": 17,
     "title": "Build todo CRUD REST API",
     "shortName": "P17",
     "intro": {

@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-node-76",
     "track": "node",
-    "problemNum": 76,
+    "lessonNum": 76,
     "title": "Build OpenAPI documented REST service",
     "shortName": "P76",
     "intro": {

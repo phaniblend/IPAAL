@@ -44,7 +44,7 @@ const CHECKLIST_EXPRESS_LANG = `Express: app.METHOD routing, middleware order, r
 
 const CHECKLIST_CSS_LANG = `CSS: only valid rules; selectors and properties named in success criteria must be present and syntactically sound. Shorthand vs longhand is fine if behavior matches the step.`;
 
-const CHECKLIST_ALGO_LANG = `Algorithms: grade logic and completeness for the stated problem, not buzzwords. If criteria mention boundaries, empty inputs, or complexity goals, the code or explanation must reflect them.`;
+const CHECKLIST_ALGO_LANG = `Algorithms: grade logic and completeness for the stated lesson, not buzzwords. If criteria mention boundaries, empty inputs, or complexity goals, the code or explanation must reflect them.`;
 
 const CHECKLIST_PLAIN_JS = `Plain JavaScript: valid ES syntax for the environment implied by the step (browser vs Node); module system consistent with seed and instruction.`;
 

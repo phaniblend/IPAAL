@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-js-13",
     "track": "js",
-    "problemNum": 13,
+    "lessonNum": 13,
     "title": "Type Coercion, Equality & Truthy/Falsy",
     "shortName": "P13",
     "intro": {

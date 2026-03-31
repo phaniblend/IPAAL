@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-angular-61",
     "track": "angular",
-    "problemNum": 61,
+    "lessonNum": 61,
     "title": "HOC withAuth",
     "shortName": "P61",
     "intro": {

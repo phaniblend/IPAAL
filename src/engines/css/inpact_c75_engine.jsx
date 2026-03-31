@@ -73,7 +73,7 @@ function getOutputPreview(answer) {
 export default createINPACTEngine({
   NODES,
   sideItems,
-  problemNum: 75,
+  lessonNum: 75,
   title: "fr unit and grid",
   shortName: "C75",
   language: "css",

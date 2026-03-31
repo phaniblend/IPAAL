@@ -10,11 +10,11 @@
       "stepId": "title",
       "mentorSays": "At the end of this lesson, you will be able to:\n\n1. Understand what Palindromic Substrings asks for\n2. Count all palindromic substrings\n3. Use expand around centers approach\n4. Handle odd and even length palindromes\n5. Implement the solution step by step in your chosen language",
       "action": "continue",
-      "next": "problem-illustration"
+      "next": "lesson-illustration"
     },
     {
-      "stepId": "problem-illustration",
-      "mentorSays": "Perfect! Now let's understand what Palindromic Substrings is asking.\n\n**Problem Definition:**\nGiven a string `s`, return the number of palindromic substrings in it.\n\nA string is a palindrome when it reads the same backward as forward.\nA substring is a contiguous sequence of characters within the string.\n\n**Example 1:** s = \"abc\"\nPalindromic substrings: \"a\", \"b\", \"c\"\nAnswer: 3\n\n**Example 2:** s = \"aaa\"\nPalindromic substrings: \"a\", \"a\", \"a\", \"aa\", \"aa\", \"aaa\"\nAnswer: 6\n\n**Key Insight:** Expand around centers. For each position, expand for odd-length (center at char) and even-length (center between chars) palindromes.",
+      "stepId": "lesson-illustration",
+      "mentorSays": "Perfect! Now let's understand what Palindromic Substrings is asking.\n\n**Lesson Definition:**\nGiven a string `s`, return the number of palindromic substrings in it.\n\nA string is a palindrome when it reads the same backward as forward.\nA substring is a contiguous sequence of characters within the string.\n\n**Example 1:** s = \"abc\"\nPalindromic substrings: \"a\", \"b\", \"c\"\nAnswer: 3\n\n**Example 2:** s = \"aaa\"\nPalindromic substrings: \"a\", \"a\", \"a\", \"aa\", \"aa\", \"aaa\"\nAnswer: 6\n\n**Key Insight:** Expand around centers. For each position, expand for odd-length (center at char) and even-length (center between chars) palindromes.",
       "example": "Example: 'abc' → 3, 'aaa' → 6",
       "action": "continue",
       "next": "thinking-challenge"

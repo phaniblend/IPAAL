@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-vue-39",
     "track": "vue",
-    "problemNum": 39,
+    "lessonNum": 39,
     "title": "Auth Context",
     "shortName": "P39",
     "intro": {

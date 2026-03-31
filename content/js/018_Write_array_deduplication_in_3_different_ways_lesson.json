@@ -3,13 +3,13 @@
   "config": {
     "lessonId": "ai-js-18",
     "track": "js",
-    "problemNum": 18,
+    "lessonNum": 18,
     "title": "Write array deduplication in 3 different ways",
     "shortName": "P18",
     "intro": {
       "tag": "LESSON #18",
       "title": "Write array deduplication in 3 different ways",
-      "body": "In this lesson, you will build a function that removes duplicate values from an array, implementing three distinct approaches. You will learn core programming concepts like iteration, conditional logic, and working with built-in JavaScript objects. The main technologies involved include arrays, loops, the Set object, and array methods like filter() and indexOf(). By the end, you'll understand how to solve the same problem using different techniques, enhancing your problem-solving skills in JavaScript.",
+      "body": "In this lesson, you will build a function that removes duplicate values from an array, implementing three distinct approaches. You will learn core programming concepts like iteration, conditional logic, and working with built-in JavaScript objects. The main technologies involved include arrays, loops, the Set object, and array methods like filter() and indexOf(). By the end, you'll understand how to solve the same lesson using different techniques, enhancing your lesson-solving skills in JavaScript.",
       "usecase": "Array deduplication is essential in real-world applications where you need to display unique values from user data. For example, in e-commerce dashboards, you might need to show unique product categories from customer purchase histories without duplicates. In form applications, you might need to filter duplicate email addresses from multiple contact lists before sending notifications. Social media platforms use deduplication to ensure users don't see duplicate posts in their feeds from overlapping friend circles. Data visualization tools apply deduplication to clean datasets before generating charts and reports."
     },
     "objectives": [

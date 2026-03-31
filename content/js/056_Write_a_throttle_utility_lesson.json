@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-js-56",
     "track": "js",
-    "problemNum": 56,
+    "lessonNum": 56,
     "title": "Write a throttle utility",
     "shortName": "P56",
     "intro": {

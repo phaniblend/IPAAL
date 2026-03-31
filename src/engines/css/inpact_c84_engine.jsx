@@ -73,7 +73,7 @@ function getOutputPreview(answer) {
 export default createINPACTEngine({
   NODES,
   sideItems,
-  problemNum: 84,
+  lessonNum: 84,
   title: "visibility and opacity",
   shortName: "C84",
   language: "css",

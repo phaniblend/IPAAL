@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-angular-57",
     "track": "angular",
-    "problemNum": 57,
+    "lessonNum": 57,
     "title": "React.memo",
     "shortName": "P57",
     "intro": {

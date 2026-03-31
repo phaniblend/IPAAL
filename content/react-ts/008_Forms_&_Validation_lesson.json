@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-react-ts-08",
     "track": "react-ts",
-    "problemNum": 8,
+    "lessonNum": 8,
     "title": "Forms & Validation",
     "shortName": "P08",
     "intro": {

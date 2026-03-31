@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-node-106",
     "track": "node",
-    "problemNum": 106,
+    "lessonNum": 106,
     "title": "Build secure cookie session strategy",
     "shortName": "P106",
     "intro": {

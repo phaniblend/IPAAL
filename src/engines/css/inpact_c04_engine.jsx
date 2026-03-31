@@ -179,7 +179,7 @@ function getOutputPreview(answer) {
 export default createINPACTEngine({
   NODES,
   sideItems,
-  problemNum: 4,
+  lessonNum: 4,
   title: "Display Values",
   shortName: "DISPLAY",
   language: "css",

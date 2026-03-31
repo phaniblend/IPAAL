@@ -8,20 +8,20 @@
   "flow": [
     {
       "stepId": "title",
-      "mentorSays": "At the end of this lesson, you will be able to:\n\n1. Understand what the Search in Rotated Sorted Array problem asks for\n2. Identify which half of the rotated array is sorted\n3. Use modified binary search to find the target\n4. Handle the rotation by checking sorted halves\n5. Implement the solution step by step in your chosen language",
+      "mentorSays": "At the end of this lesson, you will be able to:\n\n1. Understand what the Search in Rotated Sorted Array lesson asks for\n2. Identify which half of the rotated array is sorted\n3. Use modified binary search to find the target\n4. Handle the rotation by checking sorted halves\n5. Implement the solution step by step in your chosen language",
       "action": "continue",
-      "next": "problem-illustration"
+      "next": "lesson-illustration"
     },
     {
-      "stepId": "problem-illustration",
-      "mentorSays": "Perfect! Now let's understand what the Search in Rotated Sorted Array problem is asking.\n\n**Problem Definition:**\nThere is an integer array `nums` sorted in ascending order (with distinct values). The array is rotated at some pivot point. Given a target value, return its index if it exists in the array, or -1 if it doesn't.\n\n**Key Observations:**\n- The array was originally sorted in ascending order\n- It was rotated at some pivot (e.g., [0,1,2,4,5,6,7] rotated at index 3 becomes [4,5,6,7,0,1,2])\n- All values are distinct\n- We need to find the target in O(log n) time\n\n**Example 1:** nums = [4, 5, 6, 7, 0, 1, 2], target = 0\n\nThis array was rotated. Originally: [0, 1, 2, 4, 5, 6, 7], rotated at index 4.\n\nTarget 0 is at index 4.\nAnswer: 4\n\n**Example 2:** nums = [4, 5, 6, 7, 0, 1, 2], target = 3\n\nTarget 3 doesn't exist in the array.\nAnswer: -1\n\n**Example 3:** nums = [1], target = 0\n\nTarget 0 doesn't exist.\nAnswer: -1\n\n**Step-by-step trace for Example 1:**\n\nnums = [4, 5, 6, 7, 0, 1, 2], target = 0\n\nWe'll use modified binary search:\n- **Iteration 1**: left=0, right=6, mid=3, nums[3]=7\n  - Left half [4,5,6,7] is sorted (4 <= 7)\n  - Target 0 is not in [4,5,6,7] (0 < 4), so search right half\n  - left = 4\n- **Iteration 2**: left=4, right=6, mid=5, nums[5]=1\n  - Right half [0,1,2] is sorted (0 <= 2)\n  - Target 0 is in [0,1,2] (0 <= 0 <= 2), so search left half of this range\n  - right = 4\n- **Iteration 3**: left=4, right=4, mid=4, nums[4]=0\n  - 0 == 0, Found! Return 4 ✓\n\n**Key Insight:**\nEven though the array is rotated, at least one half (left or right of mid) is always sorted! We can:\n1. Check which half is sorted\n2. Determine if target is in the sorted half\n3. Search in the appropriate half\n\n**What makes this tricky:**\n1. Identifying which half is sorted\n2. Determining if target is in the sorted half\n3. Handling edge cases (single element, no rotation)\n4. The logic for deciding which half to search\n\n**Common pitfalls:**\n- Not checking which half is sorted\n- Incorrectly determining if target is in sorted half\n- Off-by-one errors in boundary conditions\n- Not handling the case where array is not rotated",
+      "stepId": "lesson-illustration",
+      "mentorSays": "Perfect! Now let's understand what the Search in Rotated Sorted Array lesson is asking.\n\n**Lesson Definition:**\nThere is an integer array `nums` sorted in ascending order (with distinct values). The array is rotated at some pivot point. Given a target value, return its index if it exists in the array, or -1 if it doesn't.\n\n**Key Observations:**\n- The array was originally sorted in ascending order\n- It was rotated at some pivot (e.g., [0,1,2,4,5,6,7] rotated at index 3 becomes [4,5,6,7,0,1,2])\n- All values are distinct\n- We need to find the target in O(log n) time\n\n**Example 1:** nums = [4, 5, 6, 7, 0, 1, 2], target = 0\n\nThis array was rotated. Originally: [0, 1, 2, 4, 5, 6, 7], rotated at index 4.\n\nTarget 0 is at index 4.\nAnswer: 4\n\n**Example 2:** nums = [4, 5, 6, 7, 0, 1, 2], target = 3\n\nTarget 3 doesn't exist in the array.\nAnswer: -1\n\n**Example 3:** nums = [1], target = 0\n\nTarget 0 doesn't exist.\nAnswer: -1\n\n**Step-by-step trace for Example 1:**\n\nnums = [4, 5, 6, 7, 0, 1, 2], target = 0\n\nWe'll use modified binary search:\n- **Iteration 1**: left=0, right=6, mid=3, nums[3]=7\n  - Left half [4,5,6,7] is sorted (4 <= 7)\n  - Target 0 is not in [4,5,6,7] (0 < 4), so search right half\n  - left = 4\n- **Iteration 2**: left=4, right=6, mid=5, nums[5]=1\n  - Right half [0,1,2] is sorted (0 <= 2)\n  - Target 0 is in [0,1,2] (0 <= 0 <= 2), so search left half of this range\n  - right = 4\n- **Iteration 3**: left=4, right=4, mid=4, nums[4]=0\n  - 0 == 0, Found! Return 4 ✓\n\n**Key Insight:**\nEven though the array is rotated, at least one half (left or right of mid) is always sorted! We can:\n1. Check which half is sorted\n2. Determine if target is in the sorted half\n3. Search in the appropriate half\n\n**What makes this tricky:**\n1. Identifying which half is sorted\n2. Determining if target is in the sorted half\n3. Handling edge cases (single element, no rotation)\n4. The logic for deciding which half to search\n\n**Common pitfalls:**\n- Not checking which half is sorted\n- Incorrectly determining if target is in sorted half\n- Off-by-one errors in boundary conditions\n- Not handling the case where array is not rotated",
       "example": "Example 1:\nnums = [4, 5, 6, 7, 0, 1, 2], target = 0\n\nArray rotated at index 4\nTarget 0 found at index 4\nAnswer: 4\n\nExample 2:\nnums = [4, 5, 6, 7, 0, 1, 2], target = 3\n\nTarget not found\nAnswer: -1\n\nExample 3:\nnums = [1], target = 0\n\nTarget not found\nAnswer: -1",
       "action": "continue",
       "next": "thinking-challenge"
     },
     {
       "stepId": "thinking-challenge",
-      "mentorSays": "Now that you understand what the problem wants, here's the real question:\n\nHow would YOU search for a target in a rotated sorted array?\n\nThink about it for a moment. What approach feels natural to you?",
+      "mentorSays": "Now that you understand what the lesson wants, here's the real question:\n\nHow would YOU search for a target in a rotated sorted array?\n\nThink about it for a moment. What approach feels natural to you?",
       "choices": [
         {
           "label": "Use modified binary search - identify sorted half and search appropriately",
@@ -146,7 +146,7 @@
     },
     {
       "stepId": "array-check-js",
-      "mentorSays": "To solve this problem, we'll need to work with arrays. Do you know what an array is in JavaScript?",
+      "mentorSays": "To solve this lesson, we'll need to work with arrays. Do you know what an array is in JavaScript?",
       "choices": [
         {
           "label": "Yes, I know arrays",
@@ -167,7 +167,7 @@
     },
     {
       "stepId": "loop-check-js",
-      "mentorSays": "To solve this problem, we'll need to use loops. Do you know what a loop is in JavaScript?",
+      "mentorSays": "To solve this lesson, we'll need to use loops. Do you know what a loop is in JavaScript?",
       "choices": [
         {
           "label": "Yes, I know loops",
@@ -314,7 +314,7 @@
     },
     {
       "stepId": "array-check-python",
-      "mentorSays": "To solve this problem, we'll need to work with arrays. Do you know what an array is in Python?",
+      "mentorSays": "To solve this lesson, we'll need to work with arrays. Do you know what an array is in Python?",
       "choices": [
         {
           "label": "Yes, I know arrays",
@@ -335,7 +335,7 @@
     },
     {
       "stepId": "loop-check-python",
-      "mentorSays": "To solve this problem, we'll need to use loops. Do you know what a loop is in Python?",
+      "mentorSays": "To solve this lesson, we'll need to use loops. Do you know what a loop is in Python?",
       "choices": [
         {
           "label": "Yes, I know loops",
@@ -482,7 +482,7 @@
     },
     {
       "stepId": "array-check-java",
-      "mentorSays": "To solve this problem, we'll need to work with arrays. Do you know what an array is in Java?",
+      "mentorSays": "To solve this lesson, we'll need to work with arrays. Do you know what an array is in Java?",
       "choices": [
         {
           "label": "Yes, I know arrays",
@@ -503,7 +503,7 @@
     },
     {
       "stepId": "loop-check-java",
-      "mentorSays": "To solve this problem, we'll need to use loops. Do you know what a loop is in Java?",
+      "mentorSays": "To solve this lesson, we'll need to use loops. Do you know what a loop is in Java?",
       "choices": [
         {
           "label": "Yes, I know loops",
@@ -650,7 +650,7 @@
     },
     {
       "stepId": "array-check-cpp",
-      "mentorSays": "To solve this problem, we'll need to work with arrays. Do you know what an array is in C++?",
+      "mentorSays": "To solve this lesson, we'll need to work with arrays. Do you know what an array is in C++?",
       "choices": [
         {
           "label": "Yes, I know arrays",
@@ -671,7 +671,7 @@
     },
     {
       "stepId": "loop-check-cpp",
-      "mentorSays": "To solve this problem, we'll need to use loops. Do you know what a loop is in C++?",
+      "mentorSays": "To solve this lesson, we'll need to use loops. Do you know what a loop is in C++?",
       "choices": [
         {
           "label": "Yes, I know loops",
@@ -818,7 +818,7 @@
     },
     {
       "stepId": "array-check-ts",
-      "mentorSays": "To solve this problem, we'll need to work with arrays. Do you know what an array is in TypeScript?",
+      "mentorSays": "To solve this lesson, we'll need to work with arrays. Do you know what an array is in TypeScript?",
       "choices": [
         {
           "label": "Yes, I know arrays",
@@ -839,7 +839,7 @@
     },
     {
       "stepId": "loop-check-ts",
-      "mentorSays": "To solve this problem, we'll need to use loops. Do you know what a loop is in TypeScript?",
+      "mentorSays": "To solve this lesson, we'll need to use loops. Do you know what a loop is in TypeScript?",
       "choices": [
         {
           "label": "Yes, I know loops",
@@ -923,7 +923,7 @@
     },
     {
       "stepId": "final",
-      "mentorSays": "🎉 Well done! You've successfully implemented the Search in Rotated Sorted Array solution!\n\n**Time Complexity:** O(log n)\n- We use binary search, which eliminates half the elements at each step\n- Even with rotation, we still achieve O(log n) time\n\n**Space Complexity:** O(1)\n- We only use a constant amount of extra space (left, right, mid variables)\n- No additional data structures are needed\n\n**Key Takeaways:**\n1. **One half is always sorted**: In a rotated sorted array, at least one half (left or right of mid) is always sorted\n2. **Identify sorted half**: Compare nums[left] with nums[mid] to determine which half is sorted\n3. **Target in sorted half**: If target is in the sorted half's range, search there; otherwise search the other half\n4. **Modified binary search**: The logic is similar to regular binary search, but we check which half is sorted first\n5. **Edge cases**: Handle single element, no rotation (fully sorted), target not found\n\n**Related Practice Problems:**\n- Find Minimum in Rotated Sorted Array (LeetCode #153) - find the pivot\n- Search in Rotated Sorted Array II (LeetCode #81) - with duplicates\n- Find Peak Element (LeetCode #162) - similar modified binary search\n\nKeep practicing - rotated array problems are common in interviews!",
+      "mentorSays": "🎉 Well done! You've successfully implemented the Search in Rotated Sorted Array solution!\n\n**Time Complexity:** O(log n)\n- We use binary search, which eliminates half the elements at each step\n- Even with rotation, we still achieve O(log n) time\n\n**Space Complexity:** O(1)\n- We only use a constant amount of extra space (left, right, mid variables)\n- No additional data structures are needed\n\n**Key Takeaways:**\n1. **One half is always sorted**: In a rotated sorted array, at least one half (left or right of mid) is always sorted\n2. **Identify sorted half**: Compare nums[left] with nums[mid] to determine which half is sorted\n3. **Target in sorted half**: If target is in the sorted half's range, search there; otherwise search the other half\n4. **Modified binary search**: The logic is similar to regular binary search, but we check which half is sorted first\n5. **Edge cases**: Handle single element, no rotation (fully sorted), target not found\n\n**Related Practice Lessons:**\n- Find Minimum in Rotated Sorted Array (LeetCode #153) - find the pivot\n- Search in Rotated Sorted Array II (LeetCode #81) - with duplicates\n- Find Peak Element (LeetCode #162) - similar modified binary search\n\nKeep practicing - rotated array lessons are common in interviews!",
       "action": "continue"
     }
   ]

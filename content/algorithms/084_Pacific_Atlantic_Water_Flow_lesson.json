@@ -3,13 +3,13 @@
   "config": {
     "lessonId": "ai-algorithms-84",
     "track": "algorithms",
-    "problemNum": 84,
+    "lessonNum": 84,
     "title": "Pacific Atlantic Water Flow",
     "shortName": "P84",
     "intro": {
       "tag": "LESSON #84",
       "title": "Pacific Atlantic Water Flow",
-      "body": "In this lesson, you will build a solution to the Pacific Atlantic Water Flow problem, which involves determining which cells on a grid allow water to flow to both the Pacific and Atlantic oceans. You will learn the core programming concept of depth-first search (DFS) to traverse the grid from the ocean edges and track reachable cells. The main technologies and constructs involved include recursion, arrays, and conditional logic in JavaScript. By the end, you will understand how to apply DFS to solve grid-based flow problems efficiently.",
+      "body": "In this lesson, you will build a solution to the Pacific Atlantic Water Flow lesson, which involves determining which cells on a grid allow water to flow to both the Pacific and Atlantic oceans. You will learn the core programming concept of depth-first search (DFS) to traverse the grid from the ocean edges and track reachable cells. The main technologies and constructs involved include recursion, arrays, and conditional logic in JavaScript. By the end, you will understand how to apply DFS to solve grid-based flow lessons efficiently.",
       "usecase": "The Pacific Atlantic Water Flow algorithm pattern appears in geographic information systems (GIS) and environmental monitoring dashboards where you need to identify areas affected by multiple sources. For example, in flood prediction software, developers implement this pattern to determine which coastal regions are vulnerable to water flowing from both ocean boundaries during storm surges. This same multi-source propagation logic is used in network analysis tools to find nodes reachable from multiple entry points, such as identifying server locations accessible from different data centers in infrastructure monitoring panels. Understanding this algorithm helps developers build more accurate environmental simulation tools and network visualization dashboards."
     },
     "objectives": [
@@ -19,7 +19,7 @@
       "Manipulate the grid traversal to respect the water flow constraint (higher or equal elevation)",
       "Integrate the Pacific and Atlantic reachability results to identify common cells",
       "Render the final list of coordinates where water can flow to both oceans",
-      "Apply the algorithm to solve the Pacific Atlantic Water Flow problem on various grid inputs"
+      "Apply the algorithm to solve the Pacific Atlantic Water Flow lesson on various grid inputs"
     ],
     "steps": [
       {

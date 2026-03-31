@@ -280,4 +280,4 @@ const sideItems = [
   { label: "Step 5 — Scope chain", id: "step5" },
 ];
 
-export default createINPACTEngine({ NODES, sideItems, problemNum: "JS-B03", title: "Scope, Hoisting & TDZ", shortName: "JS — SCOPE" });
+export default createINPACTEngine({ NODES, sideItems, lessonNum: "JS-B03", title: "Scope, Hoisting & TDZ", shortName: "JS — SCOPE" });

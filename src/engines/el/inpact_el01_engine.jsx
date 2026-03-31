@@ -405,7 +405,7 @@ WHY RFCS?
   RFCs also prevent the "I wasn't consulted" resentment that
   kills team cohesion.
 
-FORMAT: Problem → Proposal → Alternatives → Open Questions → Decision
+FORMAT: Lesson → Proposal → Alternatives → Open Questions → Decision
 */
 
 const rfc = \`
@@ -416,7 +416,7 @@ const rfc = \`
 **Status:** Under Review (feedback requested by 2024-03-29)
 **Stakeholders:** Frontend team, Backend team, Mobile team, Platform
 
-## Problem
+## Lesson
 
 Our current REST API requires 4-7 round trips for the dashboard page:
   GET /users/me
@@ -483,9 +483,9 @@ Pending feedback. Decision deadline: 2024-03-29.
 \`
 
 export { rfc }`,
-    feedback_correct: "✅ RFC: Problem → Proposal → Alternatives → Risks → Open Questions. Builds alignment before building. Surfaces objections early when cheap to address.",
-    feedback_partial: "RFC sections: problem (measurable), proposal (concrete), alternatives (honest), risks (with mitigations), open questions (specific, actionable).",
-    feedback_wrong: "RFC: state the problem with data, propose solution, show alternatives considered, list risks with mitigations, ask specific questions. Time-box feedback.",
+    feedback_correct: "✅ RFC: Lesson → Proposal → Alternatives → Risks → Open Questions. Builds alignment before building. Surfaces objections early when cheap to address.",
+    feedback_partial: "RFC sections: lesson (measurable), proposal (concrete), alternatives (honest), risks (with mitigations), open questions (specific, actionable).",
+    feedback_wrong: "RFC: state the lesson with data, propose solution, show alternatives considered, list risks with mitigations, ask specific questions. Time-box feedback.",
     expected: "RFC writing for technical alignment",
   },
 ];
@@ -500,4 +500,4 @@ const sideItems = [
   { label: "Step 5 — RFC writing", id: "step5" },
 ];
 
-export default createINPACTEngine({ NODES, sideItems, problemNum: "EL-01", title: "ADRs, Technical Debt & Estimation", shortName: "EL — DECISIONS" });
+export default createINPACTEngine({ NODES, sideItems, lessonNum: "EL-01", title: "ADRs, Technical Debt & Estimation", shortName: "EL — DECISIONS" });

@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-angular-funda-17",
     "track": "angular",
-    "problemNum": 150,
+    "lessonNum": 150,
     "title": "FUNDA — Global HTTP Error Banner",
     "shortName": "FUNDA17",
     "intro": {

@@ -3,13 +3,13 @@
   "config": {
     "lessonId": "ai-algorithms-72",
     "track": "algorithms",
-    "problemNum": 72,
+    "lessonNum": 72,
     "title": "Same Tree",
     "shortName": "P72",
     "intro": {
       "tag": "LESSON #72",
       "title": "Same Tree",
-      "body": "In this lesson, you will build a function that checks if two binary trees are identical in structure and node values. You will learn the core concept of tree traversal, specifically using a depth-first search approach to compare nodes. The main technologies involved are JavaScript functions, conditional logic, and recursion to navigate the tree nodes. This beginner-friendly exercise will help you understand fundamental tree operations and recursive problem-solving in algorithms.",
+      "body": "In this lesson, you will build a function that checks if two binary trees are identical in structure and node values. You will learn the core concept of tree traversal, specifically using a depth-first search approach to compare nodes. The main technologies involved are JavaScript functions, conditional logic, and recursion to navigate the tree nodes. This beginner-friendly exercise will help you understand fundamental tree operations and recursive lesson-solving in algorithms.",
       "usecase": "The Same Tree algorithm is essential in software that manages hierarchical data structures, such as file systems, document outlines, or organizational charts. For example, when a cloud storage service needs to verify that two folder structures are identical before syncing, or when a project management tool compares two versions of a task hierarchy to detect changes. Developers implement this pattern in UI components like tree views in file explorers, nested comment threads, or configuration panels where structural consistency must be validated. Understanding how to compare tree structures efficiently helps build reliable features for version control systems, database indexing, and any application dealing with nested data relationships."
     },
     "objectives": [
@@ -254,7 +254,7 @@
         "phase": "Step 15 of 15",
         "title": "Done",
         "content": {
-          "body": "Excellent work! You've implemented the Same Tree algorithm using depth-first traversal. Remember: always check base cases first (empty trees), compare current nodes, then recursively explore branches. This pattern of 'check current, then explore children' applies to many tree problems. Keep practicing exploring trees branch by branch!",
+          "body": "Excellent work! You've implemented the Same Tree algorithm using depth-first traversal. Remember: always check base cases first (empty trees), compare current nodes, then recursively explore branches. This pattern of 'check current, then explore children' applies to many tree lessons. Keep practicing exploring trees branch by branch!",
           "title": "Done"
         }
       }

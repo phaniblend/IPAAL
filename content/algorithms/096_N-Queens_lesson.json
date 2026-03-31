@@ -3,19 +3,19 @@
   "config": {
     "lessonId": "ai-algorithms-96",
     "track": "algorithms",
-    "problemNum": 96,
+    "lessonNum": 96,
     "title": "N-Queens",
     "shortName": "P96",
     "intro": {
       "tag": "LESSON #96",
       "title": "N-Queens",
-      "body": "In this lesson, you will build a program that solves the N-Queens problem, which involves placing N chess queens on an N×N chessboard so that no two queens threaten each other. You will learn to implement a backtracking algorithm, a core programming concept that explores possible solutions step-by-step and undoes choices when they lead to a dead end. The main technologies involved are JavaScript arrays for representing the board and recursion for exploring placements. By the end, you'll understand how to systematically solve constraint-based problems using this fundamental algorithmic approach.",
+      "body": "In this lesson, you will build a program that solves the N-Queens lesson, which involves placing N chess queens on an N×N chessboard so that no two queens threaten each other. You will learn to implement a backtracking algorithm, a core programming concept that explores possible solutions step-by-step and undoes choices when they lead to a dead end. The main technologies involved are JavaScript arrays for representing the board and recursion for exploring placements. By the end, you'll understand how to systematically solve constraint-based lessons using this fundamental algorithmic approach.",
       "usecase": "The N-Queens backtracking algorithm pattern appears in real-world scheduling and resource allocation systems, such as conference room booking interfaces where multiple meetings must be placed without time conflicts. Product managers use similar constraint-solving logic in dashboard filters that prevent overlapping date ranges or mutually exclusive options. This pattern also powers interactive seating chart tools for events, ensuring guests are placed according to social distancing or grouping rules without violating proximity constraints."
     },
     "objectives": [
       "Construct a function to validate queen placements on a chessboard.",
       "Implement a recursive backtracking algorithm to explore board configurations.",
-      "Apply the algorithm to solve the N-Queens problem for a given board size.",
+      "Apply the algorithm to solve the N-Queens lesson for a given board size.",
       "Initialize and manipulate a 2D array to represent the chessboard state.",
       "Render a visual representation of a valid N-Queens solution.",
       "Integrate validation checks within the backtracking process to prune invalid placements.",
@@ -28,7 +28,7 @@
         "phase": "Step 1 of 18",
         "title": "Welcome",
         "content": {
-          "body": "Imagine placing queens on a chessboard so none can attack each other. This classic puzzle teaches a powerful problem-solving technique. Today you'll learn how to systematically explore possibilities and backtrack when needed.",
+          "body": "Imagine placing queens on a chessboard so none can attack each other. This classic puzzle teaches a powerful lesson-solving technique. Today you'll learn how to systematically explore possibilities and backtrack when needed.",
           "title": "Welcome"
         }
       },
@@ -38,7 +38,7 @@
         "phase": "Step 2 of 18",
         "title": "What you'll learn",
         "content": {
-          "body": "• Explain when and why backtracking is needed\n• Implement the try → explore → undo pattern\n• Solve the N-Queens problem using backtracking",
+          "body": "• Explain when and why backtracking is needed\n• Implement the try → explore → undo pattern\n• Solve the N-Queens lesson using backtracking",
           "title": "What you'll learn"
         }
       },
@@ -362,7 +362,7 @@
         "phase": "Step 18 of 18",
         "title": "Done",
         "content": {
-          "body": "Congratulations! You've implemented the N-Queens solution using backtracking. Remember: backtracking is try → explore → undo. When you hit a dead end, undo the last choice and try another path. This pattern works for many constraint satisfaction problems like Sudoku, maze solving, and permutation generation.",
+          "body": "Congratulations! You've implemented the N-Queens solution using backtracking. Remember: backtracking is try → explore → undo. When you hit a dead end, undo the last choice and try another path. This pattern works for many constraint satisfaction lessons like Sudoku, maze solving, and permutation generation.",
           "title": "Done"
         }
       }

@@ -8,20 +8,20 @@
   "flow": [
     {
       "stepId": "title",
-      "mentorSays": "At the end of this lesson, you will be able to:\n\n1. Understand what the Contains Duplicate problem asks for\n2. Use hash maps (or sets) to track seen elements efficiently\n3. Detect duplicates in O(n) time using a single pass\n4. Implement the solution step by step in your chosen language",
+      "mentorSays": "At the end of this lesson, you will be able to:\n\n1. Understand what the Contains Duplicate lesson asks for\n2. Use hash maps (or sets) to track seen elements efficiently\n3. Detect duplicates in O(n) time using a single pass\n4. Implement the solution step by step in your chosen language",
       "action": "continue",
-      "next": "problem-illustration"
+      "next": "lesson-illustration"
     },
     {
-      "stepId": "problem-illustration",
-      "mentorSays": "Perfect! Now let's understand what the Contains Duplicate problem is asking.\n\nGiven an array of integers, determine if any value appears at least twice in the array.\n\n**Example 1:** nums = [1, 2, 3, 1]\n- Value 1 appears at index 0 and index 3\n- Since 1 appears twice, return true ✓\n\n**Example 2:** nums = [1, 2, 3, 4]\n- All values are unique (1, 2, 3, 4 each appear once)\n- No duplicates found, return false ✗\n\n**Example 3:** nums = [1, 1, 1, 3, 3, 4, 3, 2, 4, 2]\n- Value 1 appears 3 times\n- Value 3 appears 3 times\n- Value 4 appears 2 times\n- Value 2 appears 2 times\n- Since multiple values appear more than once, return true ✓\n\n**Key insight:** We need to check if any number appears more than once. We can do this by tracking which numbers we've seen before.",
+      "stepId": "lesson-illustration",
+      "mentorSays": "Perfect! Now let's understand what the Contains Duplicate lesson is asking.\n\nGiven an array of integers, determine if any value appears at least twice in the array.\n\n**Example 1:** nums = [1, 2, 3, 1]\n- Value 1 appears at index 0 and index 3\n- Since 1 appears twice, return true ✓\n\n**Example 2:** nums = [1, 2, 3, 4]\n- All values are unique (1, 2, 3, 4 each appear once)\n- No duplicates found, return false ✗\n\n**Example 3:** nums = [1, 1, 1, 3, 3, 4, 3, 2, 4, 2]\n- Value 1 appears 3 times\n- Value 3 appears 3 times\n- Value 4 appears 2 times\n- Value 2 appears 2 times\n- Since multiple values appear more than once, return true ✓\n\n**Key insight:** We need to check if any number appears more than once. We can do this by tracking which numbers we've seen before.",
       "example": "nums = [1, 2, 3, 1]\n\nCheck for duplicates:\n- Index 0: 1 (first time seeing 1)\n- Index 1: 2 (first time seeing 2)\n- Index 2: 3 (first time seeing 3)\n- Index 3: 1 (we've seen 1 before!)\n\nDuplicate found → Answer: true\n\n---\n\nnums = [1, 2, 3, 4]\n\nAll unique:\n- 1, 2, 3, 4 each appear once\n\nNo duplicates → Answer: false",
       "action": "continue",
       "next": "thinking-challenge"
     },
     {
       "stepId": "thinking-challenge",
-      "mentorSays": "Now that you understand what the problem wants, here's the real question:\n\nHow would YOU check if an array contains duplicates?\n\nThink about it for a moment. What approach feels natural to you?",
+      "mentorSays": "Now that you understand what the lesson wants, here's the real question:\n\nHow would YOU check if an array contains duplicates?\n\nThink about it for a moment. What approach feels natural to you?",
       "choices": [
         {
           "label": "Use nested loops to compare every pair",
@@ -146,7 +146,7 @@
     },
     {
       "stepId": "array-check-js",
-      "mentorSays": "To solve this problem, we'll need to work with arrays. Do you know what an array is in JavaScript?",
+      "mentorSays": "To solve this lesson, we'll need to work with arrays. Do you know what an array is in JavaScript?",
       "choices": [
         {
           "label": "Yes, I know arrays",
@@ -167,7 +167,7 @@
     },
     {
       "stepId": "loop-check-js",
-      "mentorSays": "To solve this problem, we'll need to use loops. Do you know what a loop is in JavaScript?",
+      "mentorSays": "To solve this lesson, we'll need to use loops. Do you know what a loop is in JavaScript?",
       "choices": [
         {
           "label": "Yes, I know loops",
@@ -293,7 +293,7 @@
     },
     {
       "stepId": "array-check-python",
-      "mentorSays": "To solve this problem, we'll need to work with lists. Do you know what a list is in Python?",
+      "mentorSays": "To solve this lesson, we'll need to work with lists. Do you know what a list is in Python?",
       "choices": [
         {
           "label": "Yes, I know lists",
@@ -314,7 +314,7 @@
     },
     {
       "stepId": "loop-check-python",
-      "mentorSays": "To solve this problem, we'll need to use loops. Do you know what a loop is in Python?",
+      "mentorSays": "To solve this lesson, we'll need to use loops. Do you know what a loop is in Python?",
       "choices": [
         {
           "label": "Yes, I know loops",
@@ -440,7 +440,7 @@
     },
     {
       "stepId": "array-check-java",
-      "mentorSays": "To solve this problem, we'll need to work with arrays. Do you know what an array is in Java?",
+      "mentorSays": "To solve this lesson, we'll need to work with arrays. Do you know what an array is in Java?",
       "choices": [
         {
           "label": "Yes, I know arrays",
@@ -461,7 +461,7 @@
     },
     {
       "stepId": "loop-check-java",
-      "mentorSays": "To solve this problem, we'll need to use loops. Do you know what a loop is in Java?",
+      "mentorSays": "To solve this lesson, we'll need to use loops. Do you know what a loop is in Java?",
       "choices": [
         {
           "label": "Yes, I know loops",
@@ -587,7 +587,7 @@
     },
     {
       "stepId": "array-check-cpp",
-      "mentorSays": "To solve this problem, we'll need to work with vectors (arrays). Do you know what a vector is in C++?",
+      "mentorSays": "To solve this lesson, we'll need to work with vectors (arrays). Do you know what a vector is in C++?",
       "choices": [
         {
           "label": "Yes, I know vectors",
@@ -608,7 +608,7 @@
     },
     {
       "stepId": "loop-check-cpp",
-      "mentorSays": "To solve this problem, we'll need to use loops. Do you know what a loop is in C++?",
+      "mentorSays": "To solve this lesson, we'll need to use loops. Do you know what a loop is in C++?",
       "choices": [
         {
           "label": "Yes, I know loops",
@@ -734,7 +734,7 @@
     },
     {
       "stepId": "array-check-ts",
-      "mentorSays": "To solve this problem, we'll need to work with arrays. Do you know what an array is in TypeScript?",
+      "mentorSays": "To solve this lesson, we'll need to work with arrays. Do you know what an array is in TypeScript?",
       "choices": [
         {
           "label": "Yes, I know arrays",
@@ -755,7 +755,7 @@
     },
     {
       "stepId": "loop-check-ts",
-      "mentorSays": "To solve this problem, we'll need to use loops. Do you know what a loop is in TypeScript?",
+      "mentorSays": "To solve this lesson, we'll need to use loops. Do you know what a loop is in TypeScript?",
       "choices": [
         {
           "label": "Yes, I know loops",
@@ -818,7 +818,7 @@
     },
     {
       "stepId": "final",
-      "mentorSays": "🎉 Well done! You've learned to think through the Contains Duplicate problem. You understand what the problem asks for, how to use hash sets to track seen elements efficiently, and how to detect duplicates in O(n) time using a single pass.\n\nThis kind of thinking—using hash sets for O(1) lookups—is essential for solving many array and string problems. Keep practicing!",
+      "mentorSays": "🎉 Well done! You've learned to think through the Contains Duplicate lesson. You understand what the lesson asks for, how to use hash sets to track seen elements efficiently, and how to detect duplicates in O(n) time using a single pass.\n\nThis kind of thinking—using hash sets for O(1) lookups—is essential for solving many array and string lessons. Keep practicing!",
       "action": "continue"
     }
   ]

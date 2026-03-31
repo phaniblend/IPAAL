@@ -9,4 +9,4 @@ const emit = defineEmits<{ (e: 'update', v: number): void }>()
 const inputRef = useTemplateRef<HTMLInputElement>('inputRef')`, feedback_correct: "✅ defineProps<Props>(); defineEmits<...>(); useTemplateRef<HTMLElement>().", feedback_wrong: "Generic defineProps/defineEmits; useTemplateRef for typed refs.", expected: "TypeScript with Vue" },
 ];
 const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }];
-export default createINPACTEngine({ NODES, sideItems, problemNum: "VUE-F12", title: "TypeScript with Vue", shortName: "VUE — TYPESCRIPT" });
+export default createINPACTEngine({ NODES, sideItems, lessonNum: "VUE-F12", title: "TypeScript with Vue", shortName: "VUE — TYPESCRIPT" });

@@ -8,20 +8,20 @@
   "flow": [
     {
       "stepId": "title",
-      "mentorSays": "At the end of this lesson, you will be able to:\n\n1. Understand what the Longest Consecutive Sequence problem asks for\n2. Use hash sets to efficiently find consecutive sequences\n3. Identify sequence starts and count consecutive elements\n4. Implement the solution step by step in your chosen language",
+      "mentorSays": "At the end of this lesson, you will be able to:\n\n1. Understand what the Longest Consecutive Sequence lesson asks for\n2. Use hash sets to efficiently find consecutive sequences\n3. Identify sequence starts and count consecutive elements\n4. Implement the solution step by step in your chosen language",
       "action": "continue",
-      "next": "problem-illustration"
+      "next": "lesson-illustration"
     },
     {
-      "stepId": "problem-illustration",
-      "mentorSays": "Perfect! Now let's understand what the Longest Consecutive Sequence problem is asking.\n\nGiven an unsorted array of integers, find the length of the longest consecutive elements sequence.\n\nExample: nums = [100, 4, 200, 1, 3, 2]\n\nLet's find consecutive sequences:\n- 100: no consecutive neighbors → sequence length = 1\n- 4: has 3 (before) and potentially others → let's check\n- 200: no consecutive neighbors → sequence length = 1\n- 1: has 2, 3, 4 as consecutive → sequence [1, 2, 3, 4] with length 4\n- 3: part of [1, 2, 3, 4]\n- 2: part of [1, 2, 3, 4]\n\nThe longest consecutive sequence is [1, 2, 3, 4] with length 4.\n\nAnother example: nums = [0, 3, 7, 2, 5, 8, 4, 6, 0, 1]\n- Consecutive sequences: [0, 1, 2, 3, 4, 5, 6, 7, 8] → length 9\n\nThat's what the problem wants: return the length of the longest consecutive sequence.",
+      "stepId": "lesson-illustration",
+      "mentorSays": "Perfect! Now let's understand what the Longest Consecutive Sequence lesson is asking.\n\nGiven an unsorted array of integers, find the length of the longest consecutive elements sequence.\n\nExample: nums = [100, 4, 200, 1, 3, 2]\n\nLet's find consecutive sequences:\n- 100: no consecutive neighbors → sequence length = 1\n- 4: has 3 (before) and potentially others → let's check\n- 200: no consecutive neighbors → sequence length = 1\n- 1: has 2, 3, 4 as consecutive → sequence [1, 2, 3, 4] with length 4\n- 3: part of [1, 2, 3, 4]\n- 2: part of [1, 2, 3, 4]\n\nThe longest consecutive sequence is [1, 2, 3, 4] with length 4.\n\nAnother example: nums = [0, 3, 7, 2, 5, 8, 4, 6, 0, 1]\n- Consecutive sequences: [0, 1, 2, 3, 4, 5, 6, 7, 8] → length 9\n\nThat's what the lesson wants: return the length of the longest consecutive sequence.",
       "example": "nums = [100, 4, 200, 1, 3, 2]\n\nFind consecutive sequences:\n- 100: alone → length 1\n- 200: alone → length 1\n- [1, 2, 3, 4]: consecutive → length 4\n\nAnswer: 4\n\nAnother example:\nnums = [0, 3, 7, 2, 5, 8, 4, 6, 0, 1]\n\nConsecutive sequence: [0, 1, 2, 3, 4, 5, 6, 7, 8]\n\nAnswer: 9",
       "action": "continue",
       "next": "thinking-challenge"
     },
     {
       "stepId": "thinking-challenge",
-      "mentorSays": "Now that you understand what the problem wants, here's the real question:\n\nHow would YOU find the longest consecutive sequence?\n\nThink about it for a moment. What approach feels natural to you?",
+      "mentorSays": "Now that you understand what the lesson wants, here's the real question:\n\nHow would YOU find the longest consecutive sequence?\n\nThink about it for a moment. What approach feels natural to you?",
       "choices": [
         {
           "label": "Sort the array and find consecutive sequences",
@@ -146,7 +146,7 @@
     },
     {
       "stepId": "loop-check-js",
-      "mentorSays": "To solve this problem, we'll need to use loops. Do you know what a loop is in JavaScript?",
+      "mentorSays": "To solve this lesson, we'll need to use loops. Do you know what a loop is in JavaScript?",
       "choices": [
         {
           "label": "Yes, I know loops",
@@ -293,7 +293,7 @@
     },
     {
       "stepId": "loop-check-python",
-      "mentorSays": "To solve this problem, we'll need to use loops. Do you know what a loop is in Python?",
+      "mentorSays": "To solve this lesson, we'll need to use loops. Do you know what a loop is in Python?",
       "choices": [
         {
           "label": "Yes, I know loops",
@@ -440,7 +440,7 @@
     },
     {
       "stepId": "loop-check-java",
-      "mentorSays": "To solve this problem, we'll need to use loops. Do you know what a loop is in Java?",
+      "mentorSays": "To solve this lesson, we'll need to use loops. Do you know what a loop is in Java?",
       "choices": [
         {
           "label": "Yes, I know loops",
@@ -587,7 +587,7 @@
     },
     {
       "stepId": "loop-check-cpp",
-      "mentorSays": "To solve this problem, we'll need to use loops. Do you know what a loop is in C++?",
+      "mentorSays": "To solve this lesson, we'll need to use loops. Do you know what a loop is in C++?",
       "choices": [
         {
           "label": "Yes, I know loops",
@@ -734,7 +734,7 @@
     },
     {
       "stepId": "loop-check-ts",
-      "mentorSays": "To solve this problem, we'll need to use loops. Do you know what a loop is in TypeScript?",
+      "mentorSays": "To solve this lesson, we'll need to use loops. Do you know what a loop is in TypeScript?",
       "choices": [
         {
           "label": "Yes, I know loops",
@@ -818,7 +818,7 @@
     },
     {
       "stepId": "final",
-      "mentorSays": "🎉 Well done! You've learned to think through the Longest Consecutive Sequence problem. You understand what the problem asks for, how to use hash sets to efficiently find sequence starts, and how to count consecutive elements.\n\nThis kind of thinking—using hash sets to optimize lookups and identifying sequence starts—is essential for solving many array problems. Keep practicing!",
+      "mentorSays": "🎉 Well done! You've learned to think through the Longest Consecutive Sequence lesson. You understand what the lesson asks for, how to use hash sets to efficiently find sequence starts, and how to count consecutive elements.\n\nThis kind of thinking—using hash sets to optimize lookups and identifying sequence starts—is essential for solving many array lessons. Keep practicing!",
       "action": "continue"
     }
   ]

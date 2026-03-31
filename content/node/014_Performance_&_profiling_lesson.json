@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-node-14",
     "track": "node",
-    "problemNum": 14,
+    "lessonNum": 14,
     "title": "Performance & profiling",
     "shortName": "P14",
     "intro": {

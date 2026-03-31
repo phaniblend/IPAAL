@@ -3,13 +3,13 @@
   "config": {
     "lessonId": "ai-algorithms-43",
     "track": "algorithms",
-    "problemNum": 43,
+    "lessonNum": 43,
     "title": "Daily Temperatures",
     "shortName": "P43",
     "intro": {
       "tag": "LESSON #43",
       "title": "Daily Temperatures",
-      "body": "In this lesson, you will build a function that, given an array of daily temperatures, returns an array showing how many days you must wait for a warmer temperature for each day. You will learn to use a stack data structure to efficiently track temperatures and indices. The main technologies involved are arrays, loops, and conditional logic in JavaScript. This exercise will help you understand how to solve problems by processing data in a single pass, which is a common pattern in algorithm design.",
+      "body": "In this lesson, you will build a function that, given an array of daily temperatures, returns an array showing how many days you must wait for a warmer temperature for each day. You will learn to use a stack data structure to efficiently track temperatures and indices. The main technologies involved are arrays, loops, and conditional logic in JavaScript. This exercise will help you understand how to solve lessons by processing data in a single pass, which is a common pattern in algorithm design.",
       "usecase": "The Daily Temperatures algorithm pattern appears in weather forecasting dashboards where you need to calculate how many days until a warmer temperature occurs. This is used in financial applications to determine waiting periods for stock prices to rise above current levels, or in e-commerce platforms to show customers how long until a price drop ends. Developers implement this when building features that require finding the next occurrence of a higher value in time-series data, such as monitoring systems tracking when metrics exceed thresholds or travel apps showing when temperatures become more favorable."
     },
     "objectives": [
@@ -28,7 +28,7 @@
         "phase": "Step 1 of 16",
         "title": "Introduction",
         "content": {
-          "body": "Have you ever wondered how many days you'd have to wait for a warmer temperature? In this lesson, we'll solve the Daily Temperatures problem. We'll learn to use a clever technique to track temperatures and find waiting days efficiently.",
+          "body": "Have you ever wondered how many days you'd have to wait for a warmer temperature? In this lesson, we'll solve the Daily Temperatures lesson. We'll learn to use a clever technique to track temperatures and find waiting days efficiently.",
           "title": "Introduction"
         }
       },

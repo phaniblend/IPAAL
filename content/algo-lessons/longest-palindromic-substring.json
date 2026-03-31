@@ -8,13 +8,13 @@
   "flow": [
     {
       "stepId": "title",
-      "mentorSays": "At the end of this lesson, you will be able to:\n\n1. Understand what the Longest Palindromic Substring problem asks for\n2. Use expand around centers approach\n3. Handle odd and even length palindromes\n4. Track the longest palindrome found\n5. Implement the solution step by step in your chosen language",
+      "mentorSays": "At the end of this lesson, you will be able to:\n\n1. Understand what the Longest Palindromic Substring lesson asks for\n2. Use expand around centers approach\n3. Handle odd and even length palindromes\n4. Track the longest palindrome found\n5. Implement the solution step by step in your chosen language",
       "action": "continue",
-      "next": "problem-illustration"
+      "next": "lesson-illustration"
     },
     {
-      "stepId": "problem-illustration",
-      "mentorSays": "Perfect! Now let's understand what the Longest Palindromic Substring problem is asking.\n\n**Problem Definition:**\nGiven a string s, return the longest palindromic substring in s.\n\nA palindrome reads the same backward as forward.\n\n**Example 1:** s = \"babad\"\nLongest palindromes: \"bab\" or \"aba\"\nAnswer: \"bab\" (or \"aba\")\n\n**Example 2:** s = \"cbbd\"\nLongest palindrome: \"bb\"\nAnswer: \"bb\"\n\n**Key Insight:** For each position, expand around center(s) to find longest palindrome. Handle odd (center at char) and even (center between chars) lengths.",
+      "stepId": "lesson-illustration",
+      "mentorSays": "Perfect! Now let's understand what the Longest Palindromic Substring lesson is asking.\n\n**Lesson Definition:**\nGiven a string s, return the longest palindromic substring in s.\n\nA palindrome reads the same backward as forward.\n\n**Example 1:** s = \"babad\"\nLongest palindromes: \"bab\" or \"aba\"\nAnswer: \"bab\" (or \"aba\")\n\n**Example 2:** s = \"cbbd\"\nLongest palindrome: \"bb\"\nAnswer: \"bb\"\n\n**Key Insight:** For each position, expand around center(s) to find longest palindrome. Handle odd (center at char) and even (center between chars) lengths.",
       "example": "Example: 'babad' → 'bab', 'cbbd' → 'bb'",
       "action": "continue",
       "next": "thinking-challenge"

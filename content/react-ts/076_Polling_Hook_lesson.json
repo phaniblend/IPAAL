@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-react-ts-76",
     "track": "react-ts",
-    "problemNum": 76,
+    "lessonNum": 76,
     "title": "Polling Hook",
     "shortName": "P76",
     "intro": {

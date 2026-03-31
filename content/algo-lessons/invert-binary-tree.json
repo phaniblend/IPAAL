@@ -8,20 +8,20 @@
   "flow": [
     {
       "stepId": "title",
-      "mentorSays": "At the end of this lesson, you will be able to:\n\n1. Understand what the Invert Binary Tree problem asks for\n2. Use recursion to swap left and right children\n3. Invert the tree by recursively inverting subtrees\n4. Handle base cases (null nodes)\n5. Implement the solution step by step in your chosen language",
+      "mentorSays": "At the end of this lesson, you will be able to:\n\n1. Understand what the Invert Binary Tree lesson asks for\n2. Use recursion to swap left and right children\n3. Invert the tree by recursively inverting subtrees\n4. Handle base cases (null nodes)\n5. Implement the solution step by step in your chosen language",
       "action": "continue",
-      "next": "problem-illustration"
+      "next": "lesson-illustration"
     },
     {
-      "stepId": "problem-illustration",
-      "mentorSays": "Perfect! Now let's understand what the Invert Binary Tree problem is asking.\n\n**Problem Definition:**\nGiven the root of a binary tree, invert the tree, and return its root.\n\n**Key Observations:**\n- We need to swap the left and right children of every node\n- This should be done recursively for all nodes\n- An empty tree (null root) remains empty\n- After inversion, the tree structure is mirrored\n\n**Example 1:**\nOriginal tree:\n    4\n   / \\\n  2   7\n / \\ / \\\n1  3 6  9\n\nInverted tree:\n    4\n   / \\\n  7   2\n / \\ / \\\n9  6 3  1\n\n**Example 2:**\nOriginal tree:\n    2\n   / \\\n  1   3\n\nInverted tree:\n    2\n   / \\\n  3   1\n\n**Example 3:**\nOriginal tree: null (empty tree)\n\nInverted tree: null (empty tree)\n\n**Step-by-step trace for Example 1 (Recursive approach):**\n\nOriginal:\n    4\n   / \\\n  2   7\n / \\ / \\\n1  3 6  9\n\nWe'll use recursion:\n- **invertTree(4)**:\n  - Swap left (2) and right (7)\n  - Recursively invert left subtree: invertTree(2)\n  - Recursively invert right subtree: invertTree(7)\n  - Return root (4)\n\n- **invertTree(2)**:\n  - Swap left (1) and right (3)\n  - Recursively invert left: invertTree(1) = null\n  - Recursively invert right: invertTree(3) = null\n  - Return root (2)\n\n- **invertTree(7)**:\n  - Swap left (6) and right (9)\n  - Recursively invert left: invertTree(6) = null\n  - Recursively invert right: invertTree(9) = null\n  - Return root (7)\n\nResult:\n    4\n   / \\\n  7   2\n / \\ / \\\n9  6 3  1\n\n**Key Insight:**\nTo invert a tree, we:\n1. Swap the left and right children of the current node\n2. Recursively invert the left subtree\n3. Recursively invert the right subtree\n\n**What makes this tricky:**\n1. Understanding that we need to swap children at every node\n2. Recursive thinking: invert subtrees first, then swap\n3. Handling null nodes correctly\n4. The order matters: we can swap before or after recursion (both work!)\n\n**Common pitfalls:**\n- Not swapping children\n- Only swapping at root level (need to swap at all levels)\n- Not handling null nodes\n- Forgetting to return the root",
+      "stepId": "lesson-illustration",
+      "mentorSays": "Perfect! Now let's understand what the Invert Binary Tree lesson is asking.\n\n**Lesson Definition:**\nGiven the root of a binary tree, invert the tree, and return its root.\n\n**Key Observations:**\n- We need to swap the left and right children of every node\n- This should be done recursively for all nodes\n- An empty tree (null root) remains empty\n- After inversion, the tree structure is mirrored\n\n**Example 1:**\nOriginal tree:\n    4\n   / \\\n  2   7\n / \\ / \\\n1  3 6  9\n\nInverted tree:\n    4\n   / \\\n  7   2\n / \\ / \\\n9  6 3  1\n\n**Example 2:**\nOriginal tree:\n    2\n   / \\\n  1   3\n\nInverted tree:\n    2\n   / \\\n  3   1\n\n**Example 3:**\nOriginal tree: null (empty tree)\n\nInverted tree: null (empty tree)\n\n**Step-by-step trace for Example 1 (Recursive approach):**\n\nOriginal:\n    4\n   / \\\n  2   7\n / \\ / \\\n1  3 6  9\n\nWe'll use recursion:\n- **invertTree(4)**:\n  - Swap left (2) and right (7)\n  - Recursively invert left subtree: invertTree(2)\n  - Recursively invert right subtree: invertTree(7)\n  - Return root (4)\n\n- **invertTree(2)**:\n  - Swap left (1) and right (3)\n  - Recursively invert left: invertTree(1) = null\n  - Recursively invert right: invertTree(3) = null\n  - Return root (2)\n\n- **invertTree(7)**:\n  - Swap left (6) and right (9)\n  - Recursively invert left: invertTree(6) = null\n  - Recursively invert right: invertTree(9) = null\n  - Return root (7)\n\nResult:\n    4\n   / \\\n  7   2\n / \\ / \\\n9  6 3  1\n\n**Key Insight:**\nTo invert a tree, we:\n1. Swap the left and right children of the current node\n2. Recursively invert the left subtree\n3. Recursively invert the right subtree\n\n**What makes this tricky:**\n1. Understanding that we need to swap children at every node\n2. Recursive thinking: invert subtrees first, then swap\n3. Handling null nodes correctly\n4. The order matters: we can swap before or after recursion (both work!)\n\n**Common pitfalls:**\n- Not swapping children\n- Only swapping at root level (need to swap at all levels)\n- Not handling null nodes\n- Forgetting to return the root",
       "example": "Example 1:\nOriginal:\n    4\n   / \\\n  2   7\n / \\ / \\\n1  3 6  9\n\nInverted:\n    4\n   / \\\n  7   2\n / \\ / \\\n9  6 3  1\n\nExample 2:\nOriginal:\n    2\n   / \\\n  1   3\n\nInverted:\n    2\n   / \\\n  3   1",
       "action": "continue",
       "next": "thinking-challenge"
     },
     {
       "stepId": "thinking-challenge",
-      "mentorSays": "Now that you understand what the problem wants, here's the real question:\n\nHow would YOU invert a binary tree?\n\nThink about it for a moment. What approach feels natural to you?",
+      "mentorSays": "Now that you understand what the lesson wants, here's the real question:\n\nHow would YOU invert a binary tree?\n\nThink about it for a moment. What approach feels natural to you?",
       "choices": [
         {
           "label": "Use recursion - swap children, then recursively invert subtrees",
@@ -51,7 +51,7 @@
     },
     {
       "stepId": "explore-recursive",
-      "mentorSays": "Excellent choice! Recursion is the most elegant solution for this problem. Here's the core idea:\n\n**The Algorithm:**\n1. **Base case**: If root is null, return null (empty tree)\n2. **Swap children**: Swap the left and right children of the current node\n3. **Recursive case**: \n   - Recursively invert the left subtree: invertTree(root.left)\n   - Recursively invert the right subtree: invertTree(root.right)\n4. **Return root**\n\n**Why it works**:\n- We swap children at each node\n- We recursively invert the subtrees\n- The base case handles null nodes\n\n**Key insight**: We can swap before or after recursion - both work! The classic approach swaps after recursion, but swapping before also works.\n\nLet's trace with tree:\n    4\n   / \\\n  2   7\n\n- **invertTree(4)**:\n  - Recursively invert left: invertTree(2) = 2 (swapped)\n  - Recursively invert right: invertTree(7) = 7 (swapped)\n  - Swap left and right: 4's children are now swapped\n  - Return 4\n\n- **invertTree(2)**:\n  - Both children are null, so nothing to swap\n  - Return 2\n\n- **invertTree(7)**:\n  - Both children are null, so nothing to swap\n  - Return 7\n\nResult: 4 with left=7, right=2 ✓\n\nThis is O(n) time (visit each node once) and O(h) space (recursion stack)! Now let's code it step by step.",
+      "mentorSays": "Excellent choice! Recursion is the most elegant solution for this lesson. Here's the core idea:\n\n**The Algorithm:**\n1. **Base case**: If root is null, return null (empty tree)\n2. **Swap children**: Swap the left and right children of the current node\n3. **Recursive case**: \n   - Recursively invert the left subtree: invertTree(root.left)\n   - Recursively invert the right subtree: invertTree(root.right)\n4. **Return root**\n\n**Why it works**:\n- We swap children at each node\n- We recursively invert the subtrees\n- The base case handles null nodes\n\n**Key insight**: We can swap before or after recursion - both work! The classic approach swaps after recursion, but swapping before also works.\n\nLet's trace with tree:\n    4\n   / \\\n  2   7\n\n- **invertTree(4)**:\n  - Recursively invert left: invertTree(2) = 2 (swapped)\n  - Recursively invert right: invertTree(7) = 7 (swapped)\n  - Swap left and right: 4's children are now swapped\n  - Return 4\n\n- **invertTree(2)**:\n  - Both children are null, so nothing to swap\n  - Return 2\n\n- **invertTree(7)**:\n  - Both children are null, so nothing to swap\n  - Return 7\n\nResult: 4 with left=7, right=2 ✓\n\nThis is O(n) time (visit each node once) and O(h) space (recursion stack)! Now let's code it step by step.",
       "action": "continue",
       "next": "language-selection"
     },
@@ -146,7 +146,7 @@
     },
     {
       "stepId": "tree-check-js",
-      "mentorSays": "To solve this problem, we'll need to work with binary trees. Do you know what a binary tree is?",
+      "mentorSays": "To solve this lesson, we'll need to work with binary trees. Do you know what a binary tree is?",
       "choices": [
         {
           "label": "Yes, I know binary trees",
@@ -167,7 +167,7 @@
     },
     {
       "stepId": "recursion-check-js",
-      "mentorSays": "To solve this problem, we'll use recursion. Do you know what recursion is in JavaScript?",
+      "mentorSays": "To solve this lesson, we'll use recursion. Do you know what recursion is in JavaScript?",
       "choices": [
         {
           "label": "Yes, I know recursion",
@@ -181,7 +181,7 @@
     },
     {
       "stepId": "recursion-explanation-js",
-      "mentorSays": "Recursion is when a function calls itself. For tree problems, we often use recursion because:\n- A tree is naturally recursive (each subtree is also a tree)\n- We can solve the problem for the whole tree by solving it for subtrees",
+      "mentorSays": "Recursion is when a function calls itself. For tree lessons, we often use recursion because:\n- A tree is naturally recursive (each subtree is also a tree)\n- We can solve the lesson for the whole tree by solving it for subtrees",
       "example": "function invertTree(root) {\n  if (root === null) return null;\n  \n  // Recursive calls\n  invertTree(root.left);   // Recursive call!\n  invertTree(root.right);  // Recursive call!\n  \n  // Swap children\n  let temp = root.left;\n  root.left = root.right;\n  root.right = temp;\n  \n  return root;\n}",
       "action": "continue",
       "next": "coding-start-js"
@@ -300,7 +300,7 @@
     },
     {
       "stepId": "tree-check-python",
-      "mentorSays": "To solve this problem, we'll need to work with binary trees. Do you know what a binary tree is?",
+      "mentorSays": "To solve this lesson, we'll need to work with binary trees. Do you know what a binary tree is?",
       "choices": [
         {
           "label": "Yes, I know binary trees",
@@ -321,7 +321,7 @@
     },
     {
       "stepId": "recursion-check-python",
-      "mentorSays": "To solve this problem, we'll use recursion. Do you know what recursion is in Python?",
+      "mentorSays": "To solve this lesson, we'll use recursion. Do you know what recursion is in Python?",
       "choices": [
         {
           "label": "Yes, I know recursion",
@@ -335,7 +335,7 @@
     },
     {
       "stepId": "recursion-explanation-python",
-      "mentorSays": "Recursion is when a function calls itself. For tree problems, we often use recursion because:\n- A tree is naturally recursive (each subtree is also a tree)\n- We can solve the problem for the whole tree by solving it for subtrees",
+      "mentorSays": "Recursion is when a function calls itself. For tree lessons, we often use recursion because:\n- A tree is naturally recursive (each subtree is also a tree)\n- We can solve the lesson for the whole tree by solving it for subtrees",
       "example": "function invertTree(root) {\n  if (root === null) return null;\n  \n  // Recursive calls\n  invertTree(root.left);   // Recursive call!\n  invertTree(root.right);  // Recursive call!\n  \n  // Swap children\n  let temp = root.left;\n  root.left = root.right;\n  root.right = temp;\n  \n  return root;\n}",
       "action": "continue",
       "next": "coding-start-python"
@@ -454,7 +454,7 @@
     },
     {
       "stepId": "tree-check-java",
-      "mentorSays": "To solve this problem, we'll need to work with binary trees. Do you know what a binary tree is?",
+      "mentorSays": "To solve this lesson, we'll need to work with binary trees. Do you know what a binary tree is?",
       "choices": [
         {
           "label": "Yes, I know binary trees",
@@ -475,7 +475,7 @@
     },
     {
       "stepId": "recursion-check-java",
-      "mentorSays": "To solve this problem, we'll use recursion. Do you know what recursion is in Java?",
+      "mentorSays": "To solve this lesson, we'll use recursion. Do you know what recursion is in Java?",
       "choices": [
         {
           "label": "Yes, I know recursion",
@@ -489,7 +489,7 @@
     },
     {
       "stepId": "recursion-explanation-java",
-      "mentorSays": "Recursion is when a function calls itself. For tree problems, we often use recursion because:\n- A tree is naturally recursive (each subtree is also a tree)\n- We can solve the problem for the whole tree by solving it for subtrees",
+      "mentorSays": "Recursion is when a function calls itself. For tree lessons, we often use recursion because:\n- A tree is naturally recursive (each subtree is also a tree)\n- We can solve the lesson for the whole tree by solving it for subtrees",
       "example": "function invertTree(root) {\n  if (root === null) return null;\n  \n  // Recursive calls\n  invertTree(root.left);   // Recursive call!\n  invertTree(root.right);  // Recursive call!\n  \n  // Swap children\n  let temp = root.left;\n  root.left = root.right;\n  root.right = temp;\n  \n  return root;\n}",
       "action": "continue",
       "next": "coding-start-java"
@@ -608,7 +608,7 @@
     },
     {
       "stepId": "tree-check-cpp",
-      "mentorSays": "To solve this problem, we'll need to work with binary trees. Do you know what a binary tree is?",
+      "mentorSays": "To solve this lesson, we'll need to work with binary trees. Do you know what a binary tree is?",
       "choices": [
         {
           "label": "Yes, I know binary trees",
@@ -629,7 +629,7 @@
     },
     {
       "stepId": "recursion-check-cpp",
-      "mentorSays": "To solve this problem, we'll use recursion. Do you know what recursion is in C++?",
+      "mentorSays": "To solve this lesson, we'll use recursion. Do you know what recursion is in C++?",
       "choices": [
         {
           "label": "Yes, I know recursion",
@@ -643,7 +643,7 @@
     },
     {
       "stepId": "recursion-explanation-cpp",
-      "mentorSays": "Recursion is when a function calls itself. For tree problems, we often use recursion because:\n- A tree is naturally recursive (each subtree is also a tree)\n- We can solve the problem for the whole tree by solving it for subtrees",
+      "mentorSays": "Recursion is when a function calls itself. For tree lessons, we often use recursion because:\n- A tree is naturally recursive (each subtree is also a tree)\n- We can solve the lesson for the whole tree by solving it for subtrees",
       "example": "function invertTree(root) {\n  if (root === null) return null;\n  \n  // Recursive calls\n  invertTree(root.left);   // Recursive call!\n  invertTree(root.right);  // Recursive call!\n  \n  // Swap children\n  let temp = root.left;\n  root.left = root.right;\n  root.right = temp;\n  \n  return root;\n}",
       "action": "continue",
       "next": "coding-start-cpp"
@@ -762,7 +762,7 @@
     },
     {
       "stepId": "tree-check-ts",
-      "mentorSays": "To solve this problem, we'll need to work with binary trees. Do you know what a binary tree is?",
+      "mentorSays": "To solve this lesson, we'll need to work with binary trees. Do you know what a binary tree is?",
       "choices": [
         {
           "label": "Yes, I know binary trees",
@@ -783,7 +783,7 @@
     },
     {
       "stepId": "recursion-check-ts",
-      "mentorSays": "To solve this problem, we'll use recursion. Do you know what recursion is in TypeScript?",
+      "mentorSays": "To solve this lesson, we'll use recursion. Do you know what recursion is in TypeScript?",
       "choices": [
         {
           "label": "Yes, I know recursion",
@@ -797,7 +797,7 @@
     },
     {
       "stepId": "recursion-explanation-ts",
-      "mentorSays": "Recursion is when a function calls itself. For tree problems, we often use recursion because:\n- A tree is naturally recursive (each subtree is also a tree)\n- We can solve the problem for the whole tree by solving it for subtrees",
+      "mentorSays": "Recursion is when a function calls itself. For tree lessons, we often use recursion because:\n- A tree is naturally recursive (each subtree is also a tree)\n- We can solve the lesson for the whole tree by solving it for subtrees",
       "example": "function invertTree(root) {\n  if (root === null) return null;\n  \n  // Recursive calls\n  invertTree(root.left);   // Recursive call!\n  invertTree(root.right);  // Recursive call!\n  \n  // Swap children\n  let temp = root.left;\n  root.left = root.right;\n  root.right = temp;\n  \n  return root;\n}",
       "action": "continue",
       "next": "coding-start-ts"
@@ -853,7 +853,7 @@
     },
     {
       "stepId": "final",
-      "mentorSays": "🎉 Well done! You've successfully implemented the Invert Binary Tree solution!\n\n**Time Complexity:** O(n)\n- We visit each node exactly once\n- n is the number of nodes in the tree\n\n**Space Complexity:** O(h)\n- The recursion stack uses space proportional to the height of the tree\n- In the worst case (skewed tree), h = n, so O(n)\n- In the best case (balanced tree), h = log n, so O(log n)\n\n**Key Takeaways:**\n1. **Recursive approach**: Invert subtrees recursively, then swap children\n2. **Base case**: Empty tree (null) returns null\n3. **Swap children**: At each node, swap left and right children\n4. **Post-order traversal**: We process children before swapping (can also swap before recursion)\n5. **Natural recursion**: Trees are recursive structures, so recursion fits perfectly\n\n**Related Practice Problems:**\n- Same Tree (LeetCode #100) - compare trees\n- Symmetric Tree (LeetCode #101) - check if tree is symmetric\n- Maximum Depth of Binary Tree (LeetCode #104) - similar recursive pattern\n\nKeep practicing tree problems - they're fundamental for interviews!",
+      "mentorSays": "🎉 Well done! You've successfully implemented the Invert Binary Tree solution!\n\n**Time Complexity:** O(n)\n- We visit each node exactly once\n- n is the number of nodes in the tree\n\n**Space Complexity:** O(h)\n- The recursion stack uses space proportional to the height of the tree\n- In the worst case (skewed tree), h = n, so O(n)\n- In the best case (balanced tree), h = log n, so O(log n)\n\n**Key Takeaways:**\n1. **Recursive approach**: Invert subtrees recursively, then swap children\n2. **Base case**: Empty tree (null) returns null\n3. **Swap children**: At each node, swap left and right children\n4. **Post-order traversal**: We process children before swapping (can also swap before recursion)\n5. **Natural recursion**: Trees are recursive structures, so recursion fits perfectly\n\n**Related Practice Lessons:**\n- Same Tree (LeetCode #100) - compare trees\n- Symmetric Tree (LeetCode #101) - check if tree is symmetric\n- Maximum Depth of Binary Tree (LeetCode #104) - similar recursive pattern\n\nKeep practicing tree lessons - they're fundamental for interviews!",
       "action": "continue"
     }
   ]

@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-react-js-59",
     "track": "react-js",
-    "problemNum": 59,
+    "lessonNum": 59,
     "title": "Infinite Scroll",
     "shortName": "P59",
     "intro": {

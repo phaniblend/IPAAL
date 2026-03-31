@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-mobile-angular-04",
     "track": "mobile-angular",
-    "problemNum": 4,
+    "lessonNum": 4,
     "title": "Ionic Checkout Form",
     "shortName": "P04",
     "intro": {

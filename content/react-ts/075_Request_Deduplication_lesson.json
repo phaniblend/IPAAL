@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-react-ts-75",
     "track": "react-ts",
-    "problemNum": 75,
+    "lessonNum": 75,
     "title": "Request Deduplication",
     "shortName": "P75",
     "intro": {
@@ -197,12 +197,12 @@
         "id": "step7",
         "type": "question",
         "phase": "Step 7 of 10",
-        "title": "Identify the duplicate request problem",
+        "title": "Identify the duplicate request lesson",
         "instruction": "Add a console.log statement inside your makeRequest handler to log each time a request is made, so you can observe duplicate requests when clicking the button rapidly.",
         "hint": "Place console.log('Making request...') at the beginning of your makeRequest function before the fetchData call.",
         "analogousExample": "// Example: logging function activity\nfunction processOrder() {\n  console.log('Processing order...');\n  // rest of order logic\n}",
         "seedCode": "import React, { useState } from 'react';\n\nconst App = () => {\n  const [pendingRequests, setPendingRequests] = useState<Set<string>>(new Set());\n  const [data, setData] = useState<string>('');\n\n  const fetchData = async (requestId: string): Promise<string> => {\n    // Simulate API delay\n    await new Promise(resolve => setTimeout(resolve, 1000));\n    return `Data for ${requestId}`;\n  };\n\n  const makeRequest = async () => {\n    const requestId = Date.now().toString();\n    // Add console.log here\n    \n    const result = await fetchData(requestId);\n    setData(result);\n  };\n\n  return (\n    <div>\n      <button onClick={makeRequest}>Make Request</button>\n      <p>{data}</p>\n    </div>\n  );\n};\n\nexport default App;",
-        "expectedOutcome": "When you click the button rapidly multiple times, you'll see multiple 'Making request...' logs in the console, demonstrating the duplicate request problem.",
+        "expectedOutcome": "When you click the button rapidly multiple times, you'll see multiple 'Making request...' logs in the console, demonstrating the duplicate request lesson.",
         "successCriteria": [
           "console.log statement is added inside makeRequest function",
           "Log message clearly indicates a request is being made"
@@ -337,7 +337,7 @@
         "id": "step6"
       },
       {
-        "label": "Identify the duplicate request problem",
+        "label": "Identify the duplicate request lesson",
         "id": "step7"
       },
       {

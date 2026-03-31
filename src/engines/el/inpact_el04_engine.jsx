@@ -8,4 +8,4 @@ const NODES = [
 // Take-home: signal on real work; live: signal on pressure`, feedback_correct: "✅ JD with impact; structured = same Q + rubric; take-home vs live trade-offs.", feedback_wrong: "Job descriptions; structured interviews; take-home vs live.", expected: "Hiring" },
 ];
 const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }];
-export default createINPACTEngine({ NODES, sideItems, problemNum: "EL-04", title: "Hiring & interviews", shortName: "EL — HIRING" });
+export default createINPACTEngine({ NODES, sideItems, lessonNum: "EL-04", title: "Hiring & interviews", shortName: "EL — HIRING" });

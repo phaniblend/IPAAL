@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-ts-98",
     "track": "ts",
-    "problemNum": 98,
+    "lessonNum": 98,
     "title": "Build typed form library core APIs",
     "shortName": "P98",
     "intro": {

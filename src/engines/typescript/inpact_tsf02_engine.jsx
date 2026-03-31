@@ -178,7 +178,7 @@ const sideItems = [
 export default createINPACTEngine({
   NODES,
   sideItems,
-  problemNum: "F02",
+  lessonNum: "F02",
   title: "Typing Functions",
   shortName: "TS — FUNCTIONS",
 });

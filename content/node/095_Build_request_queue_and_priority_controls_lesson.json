@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-node-95",
     "track": "node",
-    "problemNum": 95,
+    "lessonNum": 95,
     "title": "Build request queue and priority controls",
     "shortName": "P95",
     "intro": {

@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-vue-118",
     "track": "vue",
-    "problemNum": 118,
+    "lessonNum": 118,
     "title": "Redux Toolkit — createSlice & createAsyncThunk",
     "shortName": "P118",
     "intro": {

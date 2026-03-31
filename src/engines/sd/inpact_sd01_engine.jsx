@@ -28,7 +28,7 @@ The question isn't "does it work?" — it's
       "Identify vertical vs horizontal scaling trade-offs",
       "Recognise the four bottleneck categories: CPU, memory, I/O, network",
       "Distinguish read-heavy vs write-heavy workloads and their solutions",
-      "Explain the C10K problem and why async/event-loop matters",
+      "Explain the C10K lesson and why async/event-loop matters",
       "Apply the 80/20 rule: most performance wins come from a few changes",
     ],
   },
@@ -220,7 +220,7 @@ SOCIAL FEED — 100:1 read:write ratio
 Read feed: SELECT * FROM posts WHERE user_id IN (following_ids)
            ORDER BY created_at DESC LIMIT 20
 
-Problems:
+Lessons:
   ❌ Complex query joins at read time
   ❌ Slow for users following thousands of people
   ❌ Hits DB on every feed request
@@ -258,7 +258,7 @@ export const feedArchitecture = {
   cacheHitRate: '>95% for active users',
   storageTrade: 'Store feed per user in Redis = more storage, way faster reads',
 }`,
-    feedback_correct: "✅ Pre-compute on write, serve from cache on read. CQRS separates write and read models. Fanout handles the N-follower problem.",
+    feedback_correct: "✅ Pre-compute on write, serve from cache on read. CQRS separates write and read models. Fanout handles the N-follower lesson.",
     feedback_partial: "Read-heavy = cache the read result. Write fanout = push to all follower caches on post. CQRS = different models for reads vs writes.",
     feedback_wrong: "Cache feeds in Redis (pre-computed). Fanout on write. Read from cache. CQRS = separate read/write data models.",
     expected: "Read vs write path architecture",
@@ -320,7 +320,7 @@ export const quickWins = [
   { action: 'Enable connection pooling', effort: 'minutes', impact: '2-10×' },
   { action: 'Paginate all list endpoints', effort: 'hours', impact: 'prevents OOM' },
 ]`,
-    feedback_correct: "✅ Index → Cache → Fix N+1 → Pool connections. In that order. This solves 80% of real-world performance problems.",
+    feedback_correct: "✅ Index → Cache → Fix N+1 → Pool connections. In that order. This solves 80% of real-world performance lessons.",
     feedback_partial: "Missing index, N+1 queries, no connection pool, no cache — these four cause most production slowdowns.",
     feedback_wrong: "Tier 1: add index, add cache, fix N+1, enable pooling. Do ALL of these before re-architecting anything.",
     expected: "80/20 performance quick wins",
@@ -337,4 +337,4 @@ const sideItems = [
   { label: "Step 5 — 80/20 quick wins", id: "step5" },
 ];
 
-export default createINPACTEngine({ NODES, sideItems, problemNum: "SD-01", title: "Scale, Load & Bottlenecks", shortName: "SD — SCALE" });
+export default createINPACTEngine({ NODES, sideItems, lessonNum: "SD-01", title: "Scale, Load & Bottlenecks", shortName: "SD — SCALE" });

@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-pe-03",
     "track": "pe",
-    "problemNum": 3,
+    "lessonNum": 3,
     "title": "Deployment strategies",
     "shortName": "P03",
     "intro": {

@@ -232,4 +232,4 @@ const sideItems = [
   { label: "Step 5 — Unicode", id: "step5" },
 ];
 
-export default createINPACTEngine({ NODES, sideItems, problemNum: "JS-C01", title: "String Methods", shortName: "JS — STRINGS" });
+export default createINPACTEngine({ NODES, sideItems, lessonNum: "JS-C01", title: "String Methods", shortName: "JS — STRINGS" });

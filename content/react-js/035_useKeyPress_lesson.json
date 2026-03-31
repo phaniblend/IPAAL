@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-react-js-35",
     "track": "react-js",
-    "problemNum": 35,
+    "lessonNum": 35,
     "title": "useKeyPress",
     "shortName": "P35",
     "intro": {

@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-node-12",
     "track": "node",
-    "problemNum": 12,
+    "lessonNum": 12,
     "title": "Module system",
     "shortName": "P12",
     "intro": {

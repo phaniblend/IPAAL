@@ -8,4 +8,4 @@ const NODES = [
 // caniuse: check support; Baseline: minimal set`, feedback_correct: "✅ Feature detection over UA; Browserslist for tooling; caniuse for support.", feedback_wrong: "Feature detection; Browserslist; caniuse.", expected: "Browser compatibility" },
 ];
 const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }];
-export default createINPACTEngine({ NODES, sideItems, problemNum: "FE-08", title: "Browser compatibility", shortName: "FE — COMPAT" });
+export default createINPACTEngine({ NODES, sideItems, lessonNum: "FE-08", title: "Browser compatibility", shortName: "FE — COMPAT" });

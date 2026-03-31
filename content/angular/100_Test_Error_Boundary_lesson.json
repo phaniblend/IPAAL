@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-angular-100",
     "track": "angular",
-    "problemNum": 100,
+    "lessonNum": 100,
     "title": "Test Error Boundary",
     "shortName": "P100",
     "intro": {

@@ -8,20 +8,20 @@
   "flow": [
     {
       "stepId": "title",
-      "mentorSays": "At the end of this lesson, you will be able to:\n\n1. Understand what the Plus One problem asks for\n2. Add 1 to a number represented as an array of digits\n3. Handle carry propagation correctly\n4. Implement the solution step by step in your chosen language",
+      "mentorSays": "At the end of this lesson, you will be able to:\n\n1. Understand what the Plus One lesson asks for\n2. Add 1 to a number represented as an array of digits\n3. Handle carry propagation correctly\n4. Implement the solution step by step in your chosen language",
       "action": "continue",
-      "next": "problem-illustration"
+      "next": "lesson-illustration"
     },
     {
-      "stepId": "problem-illustration",
-      "mentorSays": "Perfect! Now let's understand what the Plus One problem is asking.\n\nImagine you have an array representing a number: [1, 2, 3]\n\nThis represents the number 123.\n\nYour task: Add 1 to this number and return the result as an array.\n\n123 + 1 = 124\n\nSo the result should be [1, 2, 4].\n\n**But what about cases with carry?**\n\nExample: [9, 9]\n- This represents 99\n- 99 + 1 = 100\n- Result: [1, 0, 0]\n\nNotice: The array length increased from 2 to 3 because of the carry!\n\n**How carry works:**\n- Start from the rightmost digit (ones place)\n- Add 1\n- If result is 10, set digit to 0 and carry 1 to the next position\n- Continue until no more carry or we reach the beginning\n\nLet's trace [9, 9]:\n- Index 1 (ones): 9 + 1 = 10 → set to 0, carry 1\n- Index 0 (tens): 9 + 1 = 10 → set to 0, carry 1\n- No more digits, but we have carry → add new digit 1 at the beginning\n- Result: [1, 0, 0]\n\nThat's what the problem wants: add 1 to the number represented by the array, handling carry correctly.",
+      "stepId": "lesson-illustration",
+      "mentorSays": "Perfect! Now let's understand what the Plus One lesson is asking.\n\nImagine you have an array representing a number: [1, 2, 3]\n\nThis represents the number 123.\n\nYour task: Add 1 to this number and return the result as an array.\n\n123 + 1 = 124\n\nSo the result should be [1, 2, 4].\n\n**But what about cases with carry?**\n\nExample: [9, 9]\n- This represents 99\n- 99 + 1 = 100\n- Result: [1, 0, 0]\n\nNotice: The array length increased from 2 to 3 because of the carry!\n\n**How carry works:**\n- Start from the rightmost digit (ones place)\n- Add 1\n- If result is 10, set digit to 0 and carry 1 to the next position\n- Continue until no more carry or we reach the beginning\n\nLet's trace [9, 9]:\n- Index 1 (ones): 9 + 1 = 10 → set to 0, carry 1\n- Index 0 (tens): 9 + 1 = 10 → set to 0, carry 1\n- No more digits, but we have carry → add new digit 1 at the beginning\n- Result: [1, 0, 0]\n\nThat's what the lesson wants: add 1 to the number represented by the array, handling carry correctly.",
       "example": "digits = [1, 2, 3]\n\nAdd 1: 123 + 1 = 124\n\nResult: [1, 2, 4]\n\n---\n\ndigits = [9, 9]\n\nAdd 1: 99 + 1 = 100\n\nResult: [1, 0, 0]\n\n---\n\ndigits = [4, 3, 2, 1]\n\nAdd 1: 4321 + 1 = 4322\n\nResult: [4, 3, 2, 2]",
       "action": "continue",
       "next": "thinking-challenge"
     },
     {
       "stepId": "thinking-challenge",
-      "mentorSays": "Now that you understand what the problem wants, here's the real question:\n\nHow would YOU add 1 to a number represented as an array?\n\nThink about it for a moment. What approach feels natural to you?",
+      "mentorSays": "Now that you understand what the lesson wants, here's the real question:\n\nHow would YOU add 1 to a number represented as an array?\n\nThink about it for a moment. What approach feels natural to you?",
       "choices": [
         {
           "label": "Start from the right, add 1, handle carry if needed",
@@ -146,7 +146,7 @@
     },
     {
       "stepId": "loop-check-js",
-      "mentorSays": "To solve this problem, we'll need to use a loop to iterate through digits from right to left. Do you know what a loop is in JavaScript?",
+      "mentorSays": "To solve this lesson, we'll need to use a loop to iterate through digits from right to left. Do you know what a loop is in JavaScript?",
       "choices": [
         {
           "label": "Yes, I know loops",
@@ -307,7 +307,7 @@
     },
     {
       "stepId": "loop-check-python",
-      "mentorSays": "To solve this problem, we'll need to use a loop to iterate through digits from right to left. Do you know what a loop is in Python?",
+      "mentorSays": "To solve this lesson, we'll need to use a loop to iterate through digits from right to left. Do you know what a loop is in Python?",
       "choices": [
         {
           "label": "Yes, I know loops",
@@ -468,7 +468,7 @@
     },
     {
       "stepId": "loop-check-java",
-      "mentorSays": "To solve this problem, we'll need to use a loop to iterate through digits from right to left. Do you know what a loop is in Java?",
+      "mentorSays": "To solve this lesson, we'll need to use a loop to iterate through digits from right to left. Do you know what a loop is in Java?",
       "choices": [
         {
           "label": "Yes, I know loops",
@@ -629,7 +629,7 @@
     },
     {
       "stepId": "loop-check-cpp",
-      "mentorSays": "To solve this problem, we'll need to use a loop to iterate through digits from right to left. Do you know what a loop is in C++?",
+      "mentorSays": "To solve this lesson, we'll need to use a loop to iterate through digits from right to left. Do you know what a loop is in C++?",
       "choices": [
         {
           "label": "Yes, I know loops",
@@ -790,7 +790,7 @@
     },
     {
       "stepId": "loop-check-ts",
-      "mentorSays": "To solve this problem, we'll need to use a loop to iterate through digits from right to left. Do you know what a loop is in TypeScript?",
+      "mentorSays": "To solve this lesson, we'll need to use a loop to iterate through digits from right to left. Do you know what a loop is in TypeScript?",
       "choices": [
         {
           "label": "Yes, I know loops",
@@ -888,7 +888,7 @@
     },
     {
       "stepId": "final",
-      "mentorSays": "🎉 Well done! You've learned to think through the Plus One problem. You understand what the problem asks for, how to add 1 to a number represented as an array of digits, and how to handle carry propagation correctly.\n\nThis kind of thinking—handling carry in digit-by-digit arithmetic—is essential for solving many number manipulation problems. Keep practicing!",
+      "mentorSays": "🎉 Well done! You've learned to think through the Plus One lesson. You understand what the lesson asks for, how to add 1 to a number represented as an array of digits, and how to handle carry propagation correctly.\n\nThis kind of thinking—handling carry in digit-by-digit arithmetic—is essential for solving many number manipulation lessons. Keep practicing!",
       "action": "continue"
     }
   ]

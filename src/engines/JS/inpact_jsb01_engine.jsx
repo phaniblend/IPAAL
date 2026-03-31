@@ -251,4 +251,4 @@ const sideItems = [
   { label: "Step 5 — Safe == usage", id: "step5" },
 ];
 
-export default createINPACTEngine({ NODES, sideItems, problemNum: "JS-B01", title: "Type Coercion & Equality", shortName: "JS — COERCION" });
+export default createINPACTEngine({ NODES, sideItems, lessonNum: "JS-B01", title: "Type Coercion & Equality", shortName: "JS — COERCION" });

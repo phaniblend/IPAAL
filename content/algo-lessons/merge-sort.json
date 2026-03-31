@@ -10,10 +10,10 @@
       "stepId": "title",
       "mentorSays": "At the end of this lesson, you will be able to:\n\n1. Understand how merge sort works using divide-and-conquer\n2. Split arrays in half recursively\n3. Merge two sorted arrays into one\n4. Implement merge sort step by step in your chosen language",
       "action": "continue",
-      "next": "problem-illustration"
+      "next": "lesson-illustration"
     },
     {
-      "stepId": "problem-illustration",
+      "stepId": "lesson-illustration",
       "mentorSays": "Perfect! Now let's understand what Merge Sort does.\n\nImagine you have an unsorted array: [5, 2, 8, 1, 9, 3]\n\nYour task: Sort it in ascending order (smallest to largest).\n\nMerge sort uses a \"divide-and-conquer\" strategy:\n1. **Divide**: Split the array in half\n2. **Conquer**: Recursively sort each half\n3. **Combine**: Merge the two sorted halves back together\n\nLet's trace through the algorithm:\n\n**Initial**: [5, 2, 8, 1, 9, 3]\n\n**Divide**: Split into [5, 2, 8] and [1, 9, 3]\n\n**Recursively sort left half [5, 2, 8]**:\n  - Split: [5, 2] and [8]\n  - Sort [5, 2]: Split → [5] and [2] → Merge → [2, 5]\n  - Sort [8]: Already sorted → [8]\n  - Merge [2, 5] and [8] → [2, 5, 8]\n\n**Recursively sort right half [1, 9, 3]**:\n  - Split: [1, 9] and [3]\n  - Sort [1, 9]: Split → [1] and [9] → Merge → [1, 9]\n  - Sort [3]: Already sorted → [3]\n  - Merge [1, 9] and [3] → [1, 3, 9]\n\n**Merge the two sorted halves**:\n  - [2, 5, 8] and [1, 3, 9]\n  - Compare 2 and 1 → 1 is smaller → [1]\n  - Compare 2 and 3 → 2 is smaller → [1, 2]\n  - Compare 5 and 3 → 3 is smaller → [1, 2, 3]\n  - Compare 5 and 9 → 5 is smaller → [1, 2, 3, 5]\n  - Compare 8 and 9 → 8 is smaller → [1, 2, 3, 5, 8]\n  - Add remaining 9 → [1, 2, 3, 5, 8, 9]\n\n**Final**: [1, 2, 3, 5, 8, 9] (sorted!)\n\nThe key insight: merging two sorted arrays is easy - just compare the front elements and pick the smaller one!",
       "example": "nums = [5, 2, 8, 1, 9, 3]\n\nDivide: [5, 2, 8] | [1, 9, 3]\n\nSort left: [5, 2, 8]\n  Divide: [5, 2] | [8]\n  Sort [5, 2]: [5] | [2] → Merge → [2, 5]\n  Merge [2, 5] and [8] → [2, 5, 8]\n\nSort right: [1, 9, 3]\n  Divide: [1, 9] | [3]\n  Sort [1, 9]: [1] | [9] → Merge → [1, 9]\n  Merge [1, 9] and [3] → [1, 3, 9]\n\nMerge [2, 5, 8] and [1, 3, 9] → [1, 2, 3, 5, 8, 9]",
       "action": "continue",

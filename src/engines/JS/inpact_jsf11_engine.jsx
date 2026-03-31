@@ -265,4 +265,4 @@ const sideItems = [
   { label: "Step 5 — slugify & highlight", id: "step5" },
 ];
 
-export default createINPACTEngine({ NODES, sideItems, problemNum: "JS-F11", title: "Strings & Template Literals", shortName: "JS — STRINGS" });
+export default createINPACTEngine({ NODES, sideItems, lessonNum: "JS-F11", title: "Strings & Template Literals", shortName: "JS — STRINGS" });

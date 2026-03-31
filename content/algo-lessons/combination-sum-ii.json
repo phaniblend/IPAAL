@@ -10,11 +10,11 @@
       "stepId": "title",
       "mentorSays": "At the end of this lesson, you will be able to:\n\n1. Understand what Combination Sum II asks for\n2. Use backtracking to find unique combinations\n3. Handle duplicates correctly (each number used once)\n4. Skip duplicate elements during generation\n5. Implement the solution step by step in your chosen language",
       "action": "continue",
-      "next": "problem-illustration"
+      "next": "lesson-illustration"
     },
     {
-      "stepId": "problem-illustration",
-      "mentorSays": "Perfect! Now let's understand what Combination Sum II is asking.\n\n**Problem Definition:**\nGiven a collection of candidate numbers `candidates` and a target number `target`, find all unique combinations in candidates where the candidate numbers sum to `target`.\n\nEach number in candidates may only be used once in the combination.\n\n**Example 1:** candidates = [10,1,2,7,6,1,5], target = 8\nUnique combinations: [1,1,6], [1,2,5], [1,7], [2,6]\nAnswer: [[1,1,6],[1,2,5],[1,7],[2,6]]\n\n**Key Insight:** Similar to Combination Sum, but each number used once. Sort first, skip duplicates at same level.",
+      "stepId": "lesson-illustration",
+      "mentorSays": "Perfect! Now let's understand what Combination Sum II is asking.\n\n**Lesson Definition:**\nGiven a collection of candidate numbers `candidates` and a target number `target`, find all unique combinations in candidates where the candidate numbers sum to `target`.\n\nEach number in candidates may only be used once in the combination.\n\n**Example 1:** candidates = [10,1,2,7,6,1,5], target = 8\nUnique combinations: [1,1,6], [1,2,5], [1,7], [2,6]\nAnswer: [[1,1,6],[1,2,5],[1,7],[2,6]]\n\n**Key Insight:** Similar to Combination Sum, but each number used once. Sort first, skip duplicates at same level.",
       "example": "Example: candidates=[10,1,2,7,6,1,5], target=8 → [[1,1,6],[1,2,5],[1,7],[2,6]]",
       "action": "continue",
       "next": "thinking-challenge"

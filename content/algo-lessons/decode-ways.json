@@ -10,11 +10,11 @@
       "stepId": "title",
       "mentorSays": "At the end of this lesson, you will be able to:\n\n1. Understand what Decode Ways asks for\n2. Use dynamic programming to count ways\n3. Handle single and double digit decoding\n4. Check valid encoding (1-26)\n5. Implement the solution step by step in your chosen language",
       "action": "continue",
-      "next": "problem-illustration"
+      "next": "lesson-illustration"
     },
     {
-      "stepId": "problem-illustration",
-      "mentorSays": "Perfect! Now let's understand what Decode Ways is asking.\n\n**Problem Definition:**\nA message containing letters from A-Z can be encoded into numbers: A=1, B=2, ..., Z=26.\n\nGiven a string s containing only digits, return the number of ways to decode it.\n\n**Example 1:** s = \"12\"\nWays: \"1\" + \"2\" = AB, or \"12\" = L\nAnswer: 2\n\n**Example 2:** s = \"226\"\nWays: \"2\" + \"2\" + \"6\" = BBF, \"22\" + \"6\" = VF, \"2\" + \"26\" = BZ\nAnswer: 3\n\n**Key Insight:** Use DP. For each position, can decode as single digit (if 1-9) or double digit (if 10-26).",
+      "stepId": "lesson-illustration",
+      "mentorSays": "Perfect! Now let's understand what Decode Ways is asking.\n\n**Lesson Definition:**\nA message containing letters from A-Z can be encoded into numbers: A=1, B=2, ..., Z=26.\n\nGiven a string s containing only digits, return the number of ways to decode it.\n\n**Example 1:** s = \"12\"\nWays: \"1\" + \"2\" = AB, or \"12\" = L\nAnswer: 2\n\n**Example 2:** s = \"226\"\nWays: \"2\" + \"2\" + \"6\" = BBF, \"22\" + \"6\" = VF, \"2\" + \"26\" = BZ\nAnswer: 3\n\n**Key Insight:** Use DP. For each position, can decode as single digit (if 1-9) or double digit (if 10-26).",
       "example": "Example: s='12' → 2 ways, s='226' → 3 ways",
       "action": "continue",
       "next": "thinking-challenge"
@@ -159,7 +159,7 @@
     },
     {
       "stepId": "dp-explanation-js",
-      "mentorSays": "DP solves problems by breaking into subproblems, storing results, building up solution.",
+      "mentorSays": "DP solves lessons by breaking into subproblems, storing results, building up solution.",
       "example": "let dp = []; dp[i] = number of ways to decode up to index i;",
       "action": "continue",
       "next": "coding-start-js"
@@ -292,7 +292,7 @@
     },
     {
       "stepId": "dp-explanation-python",
-      "mentorSays": "DP solves problems by breaking into subproblems, storing results, building up solution.",
+      "mentorSays": "DP solves lessons by breaking into subproblems, storing results, building up solution.",
       "example": "let dp = []; dp[i] = number of ways to decode up to index i;",
       "action": "continue",
       "next": "coding-start-python"
@@ -425,7 +425,7 @@
     },
     {
       "stepId": "dp-explanation-java",
-      "mentorSays": "DP solves problems by breaking into subproblems, storing results, building up solution.",
+      "mentorSays": "DP solves lessons by breaking into subproblems, storing results, building up solution.",
       "example": "let dp = []; dp[i] = number of ways to decode up to index i;",
       "action": "continue",
       "next": "coding-start-java"
@@ -558,7 +558,7 @@
     },
     {
       "stepId": "dp-explanation-cpp",
-      "mentorSays": "DP solves problems by breaking into subproblems, storing results, building up solution.",
+      "mentorSays": "DP solves lessons by breaking into subproblems, storing results, building up solution.",
       "example": "let dp = []; dp[i] = number of ways to decode up to index i;",
       "action": "continue",
       "next": "coding-start-cpp"
@@ -691,7 +691,7 @@
     },
     {
       "stepId": "dp-explanation-ts",
-      "mentorSays": "DP solves problems by breaking into subproblems, storing results, building up solution.",
+      "mentorSays": "DP solves lessons by breaking into subproblems, storing results, building up solution.",
       "example": "let dp = []; dp[i] = number of ways to decode up to index i;",
       "action": "continue",
       "next": "coding-start-ts"

@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-ts-02",
     "track": "ts",
-    "problemNum": 2,
+    "lessonNum": 2,
     "title": "Typing Functions",
     "shortName": "P02",
     "intro": {

@@ -73,7 +73,7 @@ function getOutputPreview(answer) {
 export default createINPACTEngine({
   NODES,
   sideItems,
-  problemNum: 81,
+  lessonNum: 81,
   title: "font-display",
   shortName: "C81",
   language: "css",

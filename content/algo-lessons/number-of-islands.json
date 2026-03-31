@@ -8,20 +8,20 @@
   "flow": [
     {
       "stepId": "title",
-      "mentorSays": "At the end of this lesson, you will be able to:\n\n1. Understand what the Number of Islands problem asks for\n2. Use DFS (Depth-First Search) to explore connected land cells\n3. Mark visited cells to avoid counting islands multiple times\n4. Handle 2D grid traversal with boundary checks\n5. Implement the solution step by step in your chosen language",
+      "mentorSays": "At the end of this lesson, you will be able to:\n\n1. Understand what the Number of Islands lesson asks for\n2. Use DFS (Depth-First Search) to explore connected land cells\n3. Mark visited cells to avoid counting islands multiple times\n4. Handle 2D grid traversal with boundary checks\n5. Implement the solution step by step in your chosen language",
       "action": "continue",
-      "next": "problem-illustration"
+      "next": "lesson-illustration"
     },
     {
-      "stepId": "problem-illustration",
-      "mentorSays": "Perfect! Now let's understand what the Number of Islands problem is asking.\n\n**Problem Definition:**\nGiven an `m x n` 2D binary grid `grid` which represents a map of '1's (land) and '0's (water), return the number of islands.\n\nAn island is surrounded by water and is formed by connecting adjacent lands horizontally or vertically. You may assume all four edges of the grid are all surrounded by water.\n\n**Key Observations:**\n- '1' represents land, '0' represents water\n- Islands are connected horizontally or vertically (not diagonally)\n- We need to count distinct connected components of '1's\n- We should mark visited cells to avoid counting the same island multiple times\n\n**Example 1:**\ngrid = [\n  [\"1\",\"1\",\"1\",\"1\",\"0\"],\n  [\"1\",\"1\",\"0\",\"1\",\"0\"],\n  [\"1\",\"1\",\"0\",\"0\",\"0\"],\n  [\"0\",\"0\",\"0\",\"0\",\"0\"]\n]\n\nVisual representation:\n1 1 1 1 0\n1 1 0 1 0\n1 1 0 0 0\n0 0 0 0 0\n\nThere is one island (all connected '1's in the top-left region).\nAnswer: 1\n\n**Example 2:**\ngrid = [\n  [\"1\",\"1\",\"0\",\"0\",\"0\"],\n  [\"1\",\"1\",\"0\",\"0\",\"0\"],\n  [\"0\",\"0\",\"1\",\"0\",\"0\"],\n  [\"0\",\"0\",\"0\",\"1\",\"1\"]\n]\n\nVisual representation:\n1 1 0 0 0\n1 1 0 0 0\n0 0 1 0 0\n0 0 0 1 1\n\nThere are three islands:\n- Island 1: Top-left (4 connected '1's)\n- Island 2: Middle (1 '1')\n- Island 3: Bottom-right (2 connected '1's)\n\nAnswer: 3\n\n**Step-by-step trace for Example 2 (DFS approach):**\n\ngrid = [\n  [\"1\",\"1\",\"0\",\"0\",\"0\"],\n  [\"1\",\"1\",\"0\",\"0\",\"0\"],\n  [\"0\",\"0\",\"1\",\"0\",\"0\"],\n  [\"0\",\"0\",\"0\",\"1\",\"1\"]\n]\n\nWe'll use DFS to explore each island:\n- **Island 1**: Start at (0,0), DFS explores all connected '1's, marks them as visited\n  - Visit (0,0) → (0,1) → (1,0) → (1,1)\n  - Count: 1 island\n- **Island 2**: Next unvisited '1' at (2,2), DFS explores it\n  - Visit (2,2)\n  - Count: 2 islands\n- **Island 3**: Next unvisited '1' at (3,3), DFS explores connected '1's\n  - Visit (3,3) → (3,4)\n  - Count: 3 islands\n\n**Key Insight:**\nWe traverse the grid, and whenever we find an unvisited '1', we:\n1. Increment the island count\n2. Use DFS to mark all connected '1's as visited\n\nThis ensures we count each island exactly once!\n\n**What makes this tricky:**\n1. Understanding that islands are connected components\n2. Marking visited cells (can modify grid or use visited set)\n3. Boundary checks when exploring neighbors (up, down, left, right)\n4. DFS recursion or iterative approach\n\n**Common pitfalls:**\n- Not marking visited cells (counts same island multiple times)\n- Forgetting boundary checks (array out of bounds)\n- Exploring diagonally (should only be horizontal/vertical)\n- Not handling edge cases (empty grid, all water, all land)",
+      "stepId": "lesson-illustration",
+      "mentorSays": "Perfect! Now let's understand what the Number of Islands lesson is asking.\n\n**Lesson Definition:**\nGiven an `m x n` 2D binary grid `grid` which represents a map of '1's (land) and '0's (water), return the number of islands.\n\nAn island is surrounded by water and is formed by connecting adjacent lands horizontally or vertically. You may assume all four edges of the grid are all surrounded by water.\n\n**Key Observations:**\n- '1' represents land, '0' represents water\n- Islands are connected horizontally or vertically (not diagonally)\n- We need to count distinct connected components of '1's\n- We should mark visited cells to avoid counting the same island multiple times\n\n**Example 1:**\ngrid = [\n  [\"1\",\"1\",\"1\",\"1\",\"0\"],\n  [\"1\",\"1\",\"0\",\"1\",\"0\"],\n  [\"1\",\"1\",\"0\",\"0\",\"0\"],\n  [\"0\",\"0\",\"0\",\"0\",\"0\"]\n]\n\nVisual representation:\n1 1 1 1 0\n1 1 0 1 0\n1 1 0 0 0\n0 0 0 0 0\n\nThere is one island (all connected '1's in the top-left region).\nAnswer: 1\n\n**Example 2:**\ngrid = [\n  [\"1\",\"1\",\"0\",\"0\",\"0\"],\n  [\"1\",\"1\",\"0\",\"0\",\"0\"],\n  [\"0\",\"0\",\"1\",\"0\",\"0\"],\n  [\"0\",\"0\",\"0\",\"1\",\"1\"]\n]\n\nVisual representation:\n1 1 0 0 0\n1 1 0 0 0\n0 0 1 0 0\n0 0 0 1 1\n\nThere are three islands:\n- Island 1: Top-left (4 connected '1's)\n- Island 2: Middle (1 '1')\n- Island 3: Bottom-right (2 connected '1's)\n\nAnswer: 3\n\n**Step-by-step trace for Example 2 (DFS approach):**\n\ngrid = [\n  [\"1\",\"1\",\"0\",\"0\",\"0\"],\n  [\"1\",\"1\",\"0\",\"0\",\"0\"],\n  [\"0\",\"0\",\"1\",\"0\",\"0\"],\n  [\"0\",\"0\",\"0\",\"1\",\"1\"]\n]\n\nWe'll use DFS to explore each island:\n- **Island 1**: Start at (0,0), DFS explores all connected '1's, marks them as visited\n  - Visit (0,0) → (0,1) → (1,0) → (1,1)\n  - Count: 1 island\n- **Island 2**: Next unvisited '1' at (2,2), DFS explores it\n  - Visit (2,2)\n  - Count: 2 islands\n- **Island 3**: Next unvisited '1' at (3,3), DFS explores connected '1's\n  - Visit (3,3) → (3,4)\n  - Count: 3 islands\n\n**Key Insight:**\nWe traverse the grid, and whenever we find an unvisited '1', we:\n1. Increment the island count\n2. Use DFS to mark all connected '1's as visited\n\nThis ensures we count each island exactly once!\n\n**What makes this tricky:**\n1. Understanding that islands are connected components\n2. Marking visited cells (can modify grid or use visited set)\n3. Boundary checks when exploring neighbors (up, down, left, right)\n4. DFS recursion or iterative approach\n\n**Common pitfalls:**\n- Not marking visited cells (counts same island multiple times)\n- Forgetting boundary checks (array out of bounds)\n- Exploring diagonally (should only be horizontal/vertical)\n- Not handling edge cases (empty grid, all water, all land)",
       "example": "Example 1:\n1 1 1 1 0\n1 1 0 1 0\n1 1 0 0 0\n0 0 0 0 0\n\n1 island\n\nExample 2:\n1 1 0 0 0\n1 1 0 0 0\n0 0 1 0 0\n0 0 0 1 1\n\n3 islands\n\nExample 3:\n0 0 0\n0 0 0\n\n0 islands",
       "action": "continue",
       "next": "thinking-challenge"
     },
     {
       "stepId": "thinking-challenge",
-      "mentorSays": "Now that you understand what the problem wants, here's the real question:\n\nHow would YOU count the number of islands in a 2D grid?\n\nThink about it for a moment. What approach feels natural to you?",
+      "mentorSays": "Now that you understand what the lesson wants, here's the real question:\n\nHow would YOU count the number of islands in a 2D grid?\n\nThink about it for a moment. What approach feels natural to you?",
       "choices": [
         {
           "label": "Use DFS to explore each island and mark visited cells",
@@ -51,7 +51,7 @@
     },
     {
       "stepId": "explore-dfs",
-      "mentorSays": "Excellent choice! DFS (Depth-First Search) is perfect for this problem. Here's the core idea:\n\n**The Algorithm:**\n1. **Traverse the grid**: For each cell (i, j)\n2. **If cell is '1' and unvisited**:\n   - Increment island count\n   - Use DFS to mark all connected '1's as visited\n3. **DFS function**:\n   - Mark current cell as visited (change '1' to '0' or use visited set)\n   - Recursively explore all 4 neighbors (up, down, left, right)\n   - Only explore if neighbor is within bounds and is '1'\n4. **Return island count**\n\n**Why it works**:\n- Each time we find an unvisited '1', it's the start of a new island\n- DFS explores all connected '1's, marking them as visited\n- This ensures we count each island exactly once\n\n**Key insight**: We can modify the grid in-place (change '1' to '0') to mark visited cells, avoiding the need for a separate visited set!\n\nLet's trace with grid:\n1 1 0 0 0\n1 1 0 0 0\n0 0 1 0 0\n0 0 0 1 1\n\n- **Cell (0,0)**: Found '1', start DFS, mark connected cells, count = 1\n- **Cell (0,1)**: Already visited (marked as '0')\n- **Cell (0,2)**: '0', skip\n- **Cell (2,2)**: Found '1', start DFS, mark it, count = 2\n- **Cell (3,3)**: Found '1', start DFS, mark connected, count = 3\n\n**Return 3** ✓\n\nThis is O(m*n) time and O(m*n) space (for recursion stack in worst case)! Now let's code it step by step.",
+      "mentorSays": "Excellent choice! DFS (Depth-First Search) is perfect for this lesson. Here's the core idea:\n\n**The Algorithm:**\n1. **Traverse the grid**: For each cell (i, j)\n2. **If cell is '1' and unvisited**:\n   - Increment island count\n   - Use DFS to mark all connected '1's as visited\n3. **DFS function**:\n   - Mark current cell as visited (change '1' to '0' or use visited set)\n   - Recursively explore all 4 neighbors (up, down, left, right)\n   - Only explore if neighbor is within bounds and is '1'\n4. **Return island count**\n\n**Why it works**:\n- Each time we find an unvisited '1', it's the start of a new island\n- DFS explores all connected '1's, marking them as visited\n- This ensures we count each island exactly once\n\n**Key insight**: We can modify the grid in-place (change '1' to '0') to mark visited cells, avoiding the need for a separate visited set!\n\nLet's trace with grid:\n1 1 0 0 0\n1 1 0 0 0\n0 0 1 0 0\n0 0 0 1 1\n\n- **Cell (0,0)**: Found '1', start DFS, mark connected cells, count = 1\n- **Cell (0,1)**: Already visited (marked as '0')\n- **Cell (0,2)**: '0', skip\n- **Cell (2,2)**: Found '1', start DFS, mark it, count = 2\n- **Cell (3,3)**: Found '1', start DFS, mark connected, count = 3\n\n**Return 3** ✓\n\nThis is O(m*n) time and O(m*n) space (for recursion stack in worst case)! Now let's code it step by step.",
       "action": "continue",
       "next": "language-selection"
     },
@@ -146,7 +146,7 @@
     },
     {
       "stepId": "array-check-js",
-      "mentorSays": "To solve this problem, we'll need to work with 2D arrays (grids). Do you know what a 2D array is in JavaScript?",
+      "mentorSays": "To solve this lesson, we'll need to work with 2D arrays (grids). Do you know what a 2D array is in JavaScript?",
       "choices": [
         {
           "label": "Yes, I know 2D arrays",
@@ -167,7 +167,7 @@
     },
     {
       "stepId": "recursion-check-js",
-      "mentorSays": "To solve this problem, we'll use recursion (DFS). Do you know what recursion is in JavaScript?",
+      "mentorSays": "To solve this lesson, we'll use recursion (DFS). Do you know what recursion is in JavaScript?",
       "choices": [
         {
           "label": "Yes, I know recursion",
@@ -307,7 +307,7 @@
     },
     {
       "stepId": "array-check-python",
-      "mentorSays": "To solve this problem, we'll need to work with 2D arrays (grids). Do you know what a 2D array is in Python?",
+      "mentorSays": "To solve this lesson, we'll need to work with 2D arrays (grids). Do you know what a 2D array is in Python?",
       "choices": [
         {
           "label": "Yes, I know 2D arrays",
@@ -328,7 +328,7 @@
     },
     {
       "stepId": "recursion-check-python",
-      "mentorSays": "To solve this problem, we'll use recursion (DFS). Do you know what recursion is in Python?",
+      "mentorSays": "To solve this lesson, we'll use recursion (DFS). Do you know what recursion is in Python?",
       "choices": [
         {
           "label": "Yes, I know recursion",
@@ -468,7 +468,7 @@
     },
     {
       "stepId": "array-check-java",
-      "mentorSays": "To solve this problem, we'll need to work with 2D arrays (grids). Do you know what a 2D array is in Java?",
+      "mentorSays": "To solve this lesson, we'll need to work with 2D arrays (grids). Do you know what a 2D array is in Java?",
       "choices": [
         {
           "label": "Yes, I know 2D arrays",
@@ -489,7 +489,7 @@
     },
     {
       "stepId": "recursion-check-java",
-      "mentorSays": "To solve this problem, we'll use recursion (DFS). Do you know what recursion is in Java?",
+      "mentorSays": "To solve this lesson, we'll use recursion (DFS). Do you know what recursion is in Java?",
       "choices": [
         {
           "label": "Yes, I know recursion",
@@ -629,7 +629,7 @@
     },
     {
       "stepId": "array-check-cpp",
-      "mentorSays": "To solve this problem, we'll need to work with 2D arrays (grids). Do you know what a 2D array is in C++?",
+      "mentorSays": "To solve this lesson, we'll need to work with 2D arrays (grids). Do you know what a 2D array is in C++?",
       "choices": [
         {
           "label": "Yes, I know 2D arrays",
@@ -650,7 +650,7 @@
     },
     {
       "stepId": "recursion-check-cpp",
-      "mentorSays": "To solve this problem, we'll use recursion (DFS). Do you know what recursion is in C++?",
+      "mentorSays": "To solve this lesson, we'll use recursion (DFS). Do you know what recursion is in C++?",
       "choices": [
         {
           "label": "Yes, I know recursion",
@@ -790,7 +790,7 @@
     },
     {
       "stepId": "array-check-ts",
-      "mentorSays": "To solve this problem, we'll need to work with 2D arrays (grids). Do you know what a 2D array is in TypeScript?",
+      "mentorSays": "To solve this lesson, we'll need to work with 2D arrays (grids). Do you know what a 2D array is in TypeScript?",
       "choices": [
         {
           "label": "Yes, I know 2D arrays",
@@ -811,7 +811,7 @@
     },
     {
       "stepId": "recursion-check-ts",
-      "mentorSays": "To solve this problem, we'll use recursion (DFS). Do you know what recursion is in TypeScript?",
+      "mentorSays": "To solve this lesson, we'll use recursion (DFS). Do you know what recursion is in TypeScript?",
       "choices": [
         {
           "label": "Yes, I know recursion",
@@ -888,7 +888,7 @@
     },
     {
       "stepId": "final",
-      "mentorSays": "🎉 Well done! You've successfully implemented the Number of Islands solution!\n\n**Time Complexity:** O(m * n)\n- We visit each cell at most once\n- m is the number of rows, n is the number of columns\n- DFS visits each '1' cell exactly once\n\n**Space Complexity:** O(m * n)\n- In the worst case, the recursion stack can be O(m * n) deep (if the entire grid is one island)\n- We modify the grid in-place, so no additional space for visited set\n\n**Key Takeaways:**\n1. **DFS for connected components**: Use DFS to explore all connected cells in a component\n2. **Mark visited cells**: Change '1' to '0' (or use visited set) to avoid revisiting\n3. **Boundary checks**: Always check if indices are within grid bounds before accessing\n4. **4-directional neighbors**: Explore up, down, left, right (not diagonally)\n5. **Count unvisited starts**: Each time we find an unvisited '1', it's a new island\n\n**Related Practice Problems:**\n- Max Area of Island (LeetCode #695) - find largest island\n- Surrounded Regions (LeetCode #130) - similar DFS on grid\n- Walls and Gates (LeetCode #286) - BFS on grid\n\nKeep practicing graph/DFS problems - they're essential for interviews!",
+      "mentorSays": "🎉 Well done! You've successfully implemented the Number of Islands solution!\n\n**Time Complexity:** O(m * n)\n- We visit each cell at most once\n- m is the number of rows, n is the number of columns\n- DFS visits each '1' cell exactly once\n\n**Space Complexity:** O(m * n)\n- In the worst case, the recursion stack can be O(m * n) deep (if the entire grid is one island)\n- We modify the grid in-place, so no additional space for visited set\n\n**Key Takeaways:**\n1. **DFS for connected components**: Use DFS to explore all connected cells in a component\n2. **Mark visited cells**: Change '1' to '0' (or use visited set) to avoid revisiting\n3. **Boundary checks**: Always check if indices are within grid bounds before accessing\n4. **4-directional neighbors**: Explore up, down, left, right (not diagonally)\n5. **Count unvisited starts**: Each time we find an unvisited '1', it's a new island\n\n**Related Practice Lessons:**\n- Max Area of Island (LeetCode #695) - find largest island\n- Surrounded Regions (LeetCode #130) - similar DFS on grid\n- Walls and Gates (LeetCode #286) - BFS on grid\n\nKeep practicing graph/DFS lessons - they're essential for interviews!",
       "action": "continue"
     }
   ]

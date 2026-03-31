@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-js-21",
     "track": "js",
-    "problemNum": 21,
+    "lessonNum": 21,
     "title": "Write a function to merge objects deeply",
     "shortName": "P21",
     "intro": {

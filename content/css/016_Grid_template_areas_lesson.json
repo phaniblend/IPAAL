@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-css-16",
     "track": "css",
-    "problemNum": 16,
+    "lessonNum": 16,
     "title": "Grid template areas",
     "shortName": "P16",
     "intro": {

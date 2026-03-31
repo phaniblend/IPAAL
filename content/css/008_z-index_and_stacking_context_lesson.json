@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-css-08",
     "track": "css",
-    "problemNum": 8,
+    "lessonNum": 8,
     "title": "z-index and stacking context",
     "shortName": "P08",
     "intro": {

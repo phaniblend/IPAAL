@@ -55,7 +55,7 @@ const sideItems = [
 export default createINPACTEngine({
   NODES,
   sideItems,
-  problemNum: 4,
+  lessonNum: 4,
   title: "Capacitor GPS + Nearby Restaurants",
   shortName: "QB04",
   answerShape: "angular-tabs",

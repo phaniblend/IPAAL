@@ -14,4 +14,4 @@ const sideItems = [
   { label: "Step 3 — Tag function", id: "step3" }, { label: "Step 4 — SQL tag", id: "step4" },
   { label: "Step 5 — HTML tag", id: "step5" },
 ];
-export default createINPACTEngine({ NODES, sideItems, problemNum: "JS-C02", title: "Template Literals & Tagged Templates", shortName: "JS — TAGGED TEMPLATES" });
+export default createINPACTEngine({ NODES, sideItems, lessonNum: "JS-C02", title: "Template Literals & Tagged Templates", shortName: "JS — TAGGED TEMPLATES" });

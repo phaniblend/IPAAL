@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-angular-62",
     "track": "angular",
-    "problemNum": 62,
+    "lessonNum": 62,
     "title": "Render Props (MouseTracker)",
     "shortName": "P62",
     "intro": {

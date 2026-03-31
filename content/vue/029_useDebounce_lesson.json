@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-vue-29",
     "track": "vue",
-    "problemNum": 29,
+    "lessonNum": 29,
     "title": "useDebounce",
     "shortName": "P29",
     "intro": {

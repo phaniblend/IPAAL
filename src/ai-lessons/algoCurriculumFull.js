@@ -1,5 +1,5 @@
 /**
- * Full algorithm curriculum (110 problems) for the Algorithms tab.
+ * Full algorithm curriculum (110 lessons) for the Algorithms tab.
  * Ordered by phase: A Arrays/HashMap → B Two Pointers → C Sliding Window → … → J DP.
  * Each item: { title, family }. Family is used for family-aware lesson generation.
  */
@@ -102,7 +102,7 @@ function buildFullList() {
   return out;
 }
 
-/** Full list of 110 algo problems: { title, family }[]. Order = A → B → … → J. */
+/** Full list of 110 algo lessons: { title, family }[]. Order = A → B → … → J. */
 export const ALGO_FULL_LIST = buildFullList();
 
 /** Titles only (for backward compat / counts). */

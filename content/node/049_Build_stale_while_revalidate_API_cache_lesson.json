@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-node-49",
     "track": "node",
-    "problemNum": 49,
+    "lessonNum": 49,
     "title": "Build stale while revalidate API cache",
     "shortName": "P49",
     "intro": {

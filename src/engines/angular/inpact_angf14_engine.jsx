@@ -8,4 +8,4 @@ const NODES = [
 // @defer { <heavy-component /> }  // load when in viewport`, feedback_correct: "✅ trackBy reduces re-renders; virtual scroll for long lists; @defer lazy loads.", feedback_wrong: "trackBy; virtual scrolling for large lists; @defer for lazy loading.", expected: "Performance" },
 ];
 const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }];
-export default createINPACTEngine({ NODES, sideItems, problemNum: "ANG-F14", title: "Performance optimisation", shortName: "ANG — PERF" });
+export default createINPACTEngine({ NODES, sideItems, lessonNum: "ANG-F14", title: "Performance optimisation", shortName: "ANG — PERF" });

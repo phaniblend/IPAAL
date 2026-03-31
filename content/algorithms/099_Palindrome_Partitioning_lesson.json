@@ -3,13 +3,13 @@
   "config": {
     "lessonId": "ai-algorithms-99",
     "track": "algorithms",
-    "problemNum": 99,
+    "lessonNum": 99,
     "title": "Palindrome Partitioning",
     "shortName": "P99",
     "intro": {
       "tag": "LESSON #99",
       "title": "Palindrome Partitioning",
-      "body": "In this lesson, you will build a function that solves the palindrome partitioning problem, which involves splitting a given string into substrings where each substring is a palindrome (reads the same forward and backward). You will learn the core concept of backtracking, a recursive algorithmic technique that explores all possible partitions and discards invalid ones. The main technologies involved are JavaScript functions, recursion, and array manipulation for storing and returning valid partitions. By the end, you will understand how to implement an efficient solution to generate all possible palindrome partitions for any input string.",
+      "body": "In this lesson, you will build a function that solves the palindrome partitioning lesson, which involves splitting a given string into substrings where each substring is a palindrome (reads the same forward and backward). You will learn the core concept of backtracking, a recursive algorithmic technique that explores all possible partitions and discards invalid ones. The main technologies involved are JavaScript functions, recursion, and array manipulation for storing and returning valid partitions. By the end, you will understand how to implement an efficient solution to generate all possible palindrome partitions for any input string.",
       "usecase": "Palindrome Partitioning is used in text processing applications like document editors and search engines, where identifying and grouping palindromic segments helps in tasks such as text analysis, plagiarism detection, and optimizing data compression. For example, in a content management dashboard, this algorithm can analyze user-generated text to detect symmetrical patterns for moderation or formatting purposes. Developers implement it to efficiently break down strings into valid palindromic substrings, which is crucial in bioinformatics for DNA sequence analysis and in natural language processing for palindrome-based feature extraction in machine learning models."
     },
     "objectives": [
@@ -28,7 +28,7 @@
         "phase": "Step 1 of 18",
         "title": "Welcome",
         "content": {
-          "body": "Welcome! Today we'll explore a fascinating string problem: finding all the ways to split a string into palindromes. This is like discovering all the beautiful symmetrical patterns hidden within a word. We'll learn a clever approach using backtracking and memoization.",
+          "body": "Welcome! Today we'll explore a fascinating string lesson: finding all the ways to split a string into palindromes. This is like discovering all the beautiful symmetrical patterns hidden within a word. We'll learn a clever approach using backtracking and memoization.",
           "title": "Welcome"
         }
       },

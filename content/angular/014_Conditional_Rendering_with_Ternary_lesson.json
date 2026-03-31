@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-angular-14",
     "track": "angular",
-    "problemNum": 14,
+    "lessonNum": 14,
     "title": "Conditional Rendering with Ternary",
     "shortName": "P14",
     "intro": {

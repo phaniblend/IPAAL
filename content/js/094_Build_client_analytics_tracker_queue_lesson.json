@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-js-94",
     "track": "js",
-    "problemNum": 94,
+    "lessonNum": 94,
     "title": "Build client analytics tracker queue",
     "shortName": "P94",
     "intro": {

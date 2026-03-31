@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-node-54",
     "track": "node",
-    "problemNum": 54,
+    "lessonNum": 54,
     "title": "Build bulk operation endpoint with partial failures",
     "shortName": "P54",
     "intro": {

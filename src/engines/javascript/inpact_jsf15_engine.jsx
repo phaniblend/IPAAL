@@ -287,4 +287,4 @@ const sideItems = [
   { label: "Step 5 — Lexical scope", id: "step5" },
 ];
 
-export default createINPACTEngine({ NODES, sideItems, problemNum: "JS-F15", title: "Scope, Hoisting & the TDZ", shortName: "JS — SCOPE" });
+export default createINPACTEngine({ NODES, sideItems, lessonNum: "JS-F15", title: "Scope, Hoisting & the TDZ", shortName: "JS — SCOPE" });

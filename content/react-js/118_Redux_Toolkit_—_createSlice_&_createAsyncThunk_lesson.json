@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-react-js-118",
     "track": "react-js",
-    "problemNum": 118,
+    "lessonNum": 118,
     "title": "Redux Toolkit — createSlice & createAsyncThunk",
     "shortName": "P118",
     "intro": {

@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-react-ts-10",
     "track": "react-ts",
-    "problemNum": 10,
+    "lessonNum": 10,
     "title": "Reusable Button",
     "shortName": "P10",
     "intro": {

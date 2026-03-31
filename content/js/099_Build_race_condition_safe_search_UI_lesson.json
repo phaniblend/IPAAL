@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-js-99",
     "track": "js",
-    "problemNum": 99,
+    "lessonNum": 99,
     "title": "Build race condition safe search UI",
     "shortName": "P99",
     "intro": {

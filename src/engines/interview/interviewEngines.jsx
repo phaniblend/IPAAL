@@ -309,8 +309,8 @@ export const NODE_INTERVIEW_TITLES = [
   "Build end to end capstone production ready commerce backend Node",
 ];
 
-function makeInterviewConfig(problemNum, title, prefix, trackName) {
-  const pad = String(problemNum).padStart(2, "0");
+function makeInterviewConfig(lessonNum, title, prefix, trackName) {
+  const pad = String(lessonNum).padStart(2, "0");
   const shortName = `${prefix}${pad}`;
   const keywords = title
     .toLowerCase()
@@ -332,7 +332,7 @@ function makeInterviewConfig(problemNum, title, prefix, trackName) {
   };
 
   return {
-    problemNum,
+    lessonNum,
     title,
     shortName,
     sideItems: [
@@ -346,7 +346,7 @@ function makeInterviewConfig(problemNum, title, prefix, trackName) {
         type: "reveal",
         phase: "Lesson",
         content: {
-          tag: `${trackName} #${problemNum}`,
+          tag: `${trackName} #${lessonNum}`,
           title,
           body: `Implement this interview task end-to-end.\n\nGoal: production-grade solution quality with clean code, edge-case handling, and clear reasoning.`,
           usecase:
@@ -388,19 +388,19 @@ function makeInterviewConfig(problemNum, title, prefix, trackName) {
 export const JS_INTERVIEW_CURRICULUM = JS_INTERVIEW_TITLES.map((title, i) => ({
   title,
   shortName: `JSI${String(i + 1).padStart(2, "0")}`,
-  why: "Common JavaScript coding interview problem.",
+  why: "Common JavaScript coding interview lesson.",
 }));
 
 export const TS_INTERVIEW_CURRICULUM = TS_INTERVIEW_TITLES.map((title, i) => ({
   title,
   shortName: `TSI${String(i + 1).padStart(2, "0")}`,
-  why: "Common TypeScript interview problem with strong typing.",
+  why: "Common TypeScript interview lesson with strong typing.",
 }));
 
 export const NODE_INTERVIEW_CURRICULUM = NODE_INTERVIEW_TITLES.map((title, i) => ({
   title,
   shortName: `NDI${String(i + 1).padStart(2, "0")}`,
-  why: "Common Node.js interview problem for API/backend depth.",
+  why: "Common Node.js interview lesson for API/backend depth.",
 }));
 
 const JS_INTERVIEW_CONFIGS = JS_INTERVIEW_TITLES.map((title, i) =>

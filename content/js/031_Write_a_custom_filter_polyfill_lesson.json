@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-js-31",
     "track": "js",
-    "problemNum": 31,
+    "lessonNum": 31,
     "title": "Write a custom filter polyfill",
     "shortName": "P31",
     "intro": {

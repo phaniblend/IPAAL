@@ -7,4 +7,4 @@ const NODES = [
 canActivate: [AuthGuard]  // inject service, return true/false or UrlTree`, feedback_correct: "✅ loadComponent for lazy; canActivate guard; return boolean or UrlTree.", feedback_wrong: "loadComponent for lazy load; canActivate guard for auth.", expected: "Routing and guards" },
 ];
 const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }];
-export default createINPACTEngine({ NODES, sideItems, problemNum: "ANG-F06", title: "Routing & lazy loading", shortName: "ANG — ROUTING" });
+export default createINPACTEngine({ NODES, sideItems, lessonNum: "ANG-F06", title: "Routing & lazy loading", shortName: "ANG — ROUTING" });

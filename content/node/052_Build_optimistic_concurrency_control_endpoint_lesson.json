@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-node-52",
     "track": "node",
-    "problemNum": 52,
+    "lessonNum": 52,
     "title": "Build optimistic concurrency control endpoint",
     "shortName": "P52",
     "intro": {

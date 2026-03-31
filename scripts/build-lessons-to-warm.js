@@ -11,13 +11,13 @@ import { fileURLToPath } from "url";
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const rootDir = path.resolve(__dirname, "..");
 
-// Extract PROBLEM_LIST titles from LandingPage (same 100 + gap lessons for react-js, react-ts, angular, vue)
-function getProblemListTitles() {
+// Extract LESSON_LIST titles from LandingPage (same 100 + gap lessons for react-js, react-ts, angular, vue)
+function getLessonListTitles() {
   const lpPath = path.join(rootDir, "src", "LandingPage.jsx");
   const content = fs.readFileSync(lpPath, "utf8");
-  const start = content.indexOf("export const PROBLEM_LIST = [");
+  const start = content.indexOf("export const LESSON_LIST = [");
   if (start === -1) return [];
-  const slice = content.slice(start + "export const PROBLEM_LIST = [".length);
+  const slice = content.slice(start + "export const LESSON_LIST = [".length);
   const end = slice.indexOf("];");
   const arrBody = slice.slice(0, end);
   const titles = [];
@@ -55,9 +55,9 @@ function extractInterviewTitles(jsxPath, arrayName) {
 async function main() {
   const list = [];
 
-  const problemTitles = getProblemListTitles();
+  const problemTitles = getLessonListTitles();
 
-  // react-js, react-ts, vue: 120 each (same PROBLEM_LIST)
+  // react-js, react-ts, vue: 120 each (same LESSON_LIST)
   for (const track of ["react-js", "react-ts", "vue"]) {
     problemTitles.forEach((title, i) => {
       list.push({ track, lessonTitle: title, lessonIndex: i });

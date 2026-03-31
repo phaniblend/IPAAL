@@ -21,7 +21,7 @@ Use this guide to turn an **algo-style lesson JSON** (lessonTitle, description, 
 |-------|------|----------|--------|
 | `lessonId` | string | no | e.g. `"ai-js-two-sum"`. |
 | `track` | string | no | e.g. `"js"`, `"algorithms"`. |
-| `problemNum` | number | no | 1-based lesson number. |
+| `lessonNum` | number | no | 1-based lesson number. |
 | `title` | string | yes | Lesson title (e.g. from `lessonTitle`). |
 | `shortName` | string | no | Short label (e.g. `"P01"`, `"Two Sum"`). |
 | `intro` | object | yes | See **Intro** below. |
@@ -90,7 +90,7 @@ If omitted, the adapter builds them from intro + objectives + steps. If provided
 [
   { "id": "intro", "label": "Intro" },
   { "id": "objectives", "label": "Objectives" },
-  { "id": "step1", "label": "Understand the Two Sum Problem" },
+  { "id": "step1", "label": "Understand the Two Sum Lesson" },
   { "id": "step2", "label": "Brainstorm a Brute Force Solution" }
   // ... one per step
 ]
@@ -178,8 +178,8 @@ For a first pass, only the **steps** array (as `"question"` steps) is needed.
 ```json
 {
   "id": "1",
-  "title": "Understand the Two Sum Problem",
-  "instruction": "Read the problem statement carefully: Given an array of integers ...",
+  "title": "Understand the Two Sum Lesson",
+  "instruction": "Read the lesson statement carefully: Given an array of integers ...",
   "analogy": "Imagine you are a cashier...",
   "hint": "Focus on what you need to return: the indices of the two numbers.",
   "starterCode": "",
@@ -194,13 +194,13 @@ For a first pass, only the **steps** array (as `"question"` steps) is needed.
   "id": "step1",
   "type": "question",
   "phase": "Step 1 of 11",
-  "title": "Understand the Two Sum Problem",
-  "instruction": "Read the problem statement carefully: Given an array of integers ...\n\n**Analogy:** Imagine you are a cashier...\n\n**Hint:** Focus on what you need to return: the indices of the two numbers.",
+  "title": "Understand the Two Sum Lesson",
+  "instruction": "Read the lesson statement carefully: Given an array of integers ...\n\n**Analogy:** Imagine you are a cashier...\n\n**Hint:** Focus on what you need to return: the indices of the two numbers.",
   "hint": "Focus on what you need to return: the indices of the two numbers.",
-  "seedCode": "// Understand the problem: two numbers in array that add to target; return their indices.\n",
-  "expectedOutcome": "You understand the problem and what to return (indices).",
+  "seedCode": "// Understand the lesson: two numbers in array that add to target; return their indices.\n",
+  "expectedOutcome": "You understand the lesson and what to return (indices).",
   "successCriteria": ["Understand array indices and target sum."],
-  "feedbackCorrect": "Great, you've got the problem clear.",
+  "feedbackCorrect": "Great, you've got the lesson clear.",
   "feedbackPartial": "Review: we return indices of the two numbers, not the values.",
   "feedbackWrong": "Return the indices of the two numbers that add up to target.",
   "evaluation": {
@@ -224,7 +224,7 @@ For a first pass, only the **steps** array (as `"question"` steps) is needed.
   "config": {
     "lessonId": "ai-js-two-sum",
     "track": "js",
-    "problemNum": 1,
+    "lessonNum": 1,
     "title": "Solving Two Sum Efficiently with Hash Maps in JavaScript",
     "shortName": "Two Sum",
     "intro": {
@@ -258,7 +258,7 @@ For a first pass, only the **steps** array (as `"question"` steps) is needed.
 
 1. **Save the file** as `content/<track>/NNN_Title_lesson.json` (e.g. `content/js/001_Two_Sum_lesson.json`).
 2. **Ensure the track has this lesson index:**  
-   The server’s `getContentLesson(track, lessonIndex)` uses 0-based index: file `001_...` = index 0, `002_...` = index 1. So the track’s problem list (or curriculum) must include this lesson at the same index if you want “Lesson 1” to open this content.
+   The server’s `getContentLesson(track, lessonIndex)` uses 0-based index: file `001_...` = index 0, `002_...` = index 1. So the track’s lesson list (or curriculum) must include this lesson at the same index if you want “Lesson 1” to open this content.
 3. **Restart or rely on hot reload** so the server picks up the new file. Opening that track and that lesson index should return your JSON and the INPACT renderer will show intro → objectives → your steps with editor, validation, and “Ask your mentor”.
 
 If you add a new track (e.g. `algorithms`) that should use content + INPACT (not the mentor AlgoEngine), add that track in the app and point its lesson list to the same `content/algorithms/` indices.

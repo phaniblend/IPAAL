@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-node-104",
     "track": "node",
-    "problemNum": 104,
+    "lessonNum": 104,
     "title": "Build security test cases for common OWASP attacks",
     "shortName": "P104",
     "intro": {

@@ -3,13 +3,13 @@
   "config": {
     "lessonId": "ai-algorithms-39",
     "track": "algorithms",
-    "problemNum": 39,
+    "lessonNum": 39,
     "title": "Fruit Into Baskets",
     "shortName": "P39",
     "intro": {
       "tag": "LESSON #39",
       "title": "Fruit Into Baskets",
-      "body": "In this lesson, you will build a function that solves the 'Fruit Into Baskets' problem, which involves finding the longest subarray containing at most two distinct types of fruit. You will learn the sliding window technique, a core algorithm pattern for efficiently processing arrays. The main constructs involved are arrays, hash maps (or objects) for counting, and while loops. This beginner-friendly exercise will help you practice problem-solving with a focus on time and space complexity.",
+      "body": "In this lesson, you will build a function that solves the 'Fruit Into Baskets' lesson, which involves finding the longest subarray containing at most two distinct types of fruit. You will learn the sliding window technique, a core algorithm pattern for efficiently processing arrays. The main constructs involved are arrays, hash maps (or objects) for counting, and while loops. This beginner-friendly exercise will help you practice lesson-solving with a focus on time and space complexity.",
       "usecase": "The 'Fruit Into Baskets' algorithm pattern is essential for managing limited resources or constraints in real-time systems, such as streaming data windows or UI state limits. For example, in a live analytics dashboard, you might need to track the maximum number of unique user sessions within a fixed time window to optimize server load. Similarly, in a content moderation panel, it could help enforce rules like displaying only the two most frequent types of flagged content in a queue, ensuring moderators focus on prevalent issues. This technique is widely used in network traffic analysis, recommendation systems, and any scenario requiring efficient sliding window calculations with bounded uniqueness."
     },
     "objectives": [

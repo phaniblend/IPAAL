@@ -8,4 +8,4 @@ const NODES = [
 # GIL: one thread runs Python bytecode at a time`, feedback_correct: "✅ cProfile; multiprocessing for CPU-bound (GIL); threading for I/O.", feedback_wrong: "cProfile for profiling; multiprocessing for CPU; GIL limits threading.", expected: "Performance" },
 ];
 const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }];
-export default createINPACTEngine({ NODES, sideItems, problemNum: "PY-F10", title: "Performance & profiling", shortName: "PY — PERF" });
+export default createINPACTEngine({ NODES, sideItems, lessonNum: "PY-F10", title: "Performance & profiling", shortName: "PY — PERF" });

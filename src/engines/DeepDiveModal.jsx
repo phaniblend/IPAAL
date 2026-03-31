@@ -74,12 +74,30 @@ export default function DeepDiveModal({ open, onClose, concept }) {
   const dd = concept.deepDive;
   const title = concept.label || "Deep dive";
 
+  // Some deep-dive entries embed an SVG “illustration” inside dd.hook.
+  // We want that illustration to appear right before the Pattern section (inside dd.discover),
+  // not above the rest of the explanation.
+  let adjustedHook = dd.hook;
+  let adjustedDiscover = dd.discover;
+  if (typeof dd?.hook === "string" && typeof dd?.discover === "string") {
+    const hookText = dd.hook;
+    // Extract a leading <svg>...</svg> (optionally preceded/followed by whitespace/newlines).
+    const m = hookText.match(/^\s*(<svg[\s\S]*?<\/svg>)(\s*\n\n|\s*\n|\s*)/);
+    if (m) {
+      const svg = m[1];
+      const rest = hookText.slice(m[0].length);
+      // Keep hook readable by trimming only leading whitespace.
+      adjustedHook = rest.trimStart();
+      adjustedDiscover = `${svg}\n\n${dd.discover}`;
+    }
+  }
+
   return (
     <div
       style={{
         position: "fixed",
         inset: 0,
-        zIndex: 10002,
+        zIndex: 11050,
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
@@ -147,10 +165,10 @@ export default function DeepDiveModal({ open, onClose, concept }) {
           </button>
         </div>
         <div style={{ flex: 1, minHeight: 0, overflowY: "auto", padding: "20px 22px 24px" }}>
-          <Section text={dd.hook} />
+          <Section text={adjustedHook} />
           <Section text={dd.pain} />
           <Section text={dd.mentalModel} />
-          <Section text={dd.discover} />
+          <Section text={adjustedDiscover} />
           <Section title="THINK, DON'T TYPE YET" emoji="🔁" text={dd.dryRun} showLabel emphasize />
           <Section text={dd.build} />
         </div>

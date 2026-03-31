@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-angular-40",
     "track": "angular",
-    "problemNum": 40,
+    "lessonNum": 40,
     "title": "useToggle",
     "shortName": "P40",
     "intro": {

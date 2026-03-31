@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-vue-98",
     "track": "vue",
-    "problemNum": 98,
+    "lessonNum": 98,
     "title": "forwardRef & Exposing DOM Nodes",
     "shortName": "P98",
     "intro": {

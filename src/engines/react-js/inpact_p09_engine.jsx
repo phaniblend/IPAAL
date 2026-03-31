@@ -141,4 +141,4 @@ const sideItems = [
   { label: "Step 4 — Full", id: "step4" },
 ];
 
-export default createINPACTEngine({ NODES, sideItems, problemNum: 9, title: "Color Picker", shortName: "COLOR PICKER" });
+export default createINPACTEngine({ NODES, sideItems, lessonNum: 9, title: "Color Picker", shortName: "COLOR PICKER" });

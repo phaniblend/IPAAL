@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-mobile-angular-06",
     "track": "mobile-angular",
-    "problemNum": 6,
+    "lessonNum": 6,
     "title": "Ionic Theming & Dark Mode",
     "shortName": "P06",
     "intro": {

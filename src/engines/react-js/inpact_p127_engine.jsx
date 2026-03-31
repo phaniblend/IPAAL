@@ -45,7 +45,7 @@ const sideItems = [
 export default createINPACTEngine({
   NODES,
   sideItems,
-  problemNum: 121,
+  lessonNum: 121,
   title: "Query Building in RTK",
   shortName: "RTK QUERY",
 });

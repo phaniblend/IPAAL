@@ -73,7 +73,7 @@ function getOutputPreview(answer) {
 export default createINPACTEngine({
   NODES,
   sideItems,
-  problemNum: 49,
+  lessonNum: 49,
   title: "focus-visible and a11y",
   shortName: "C49",
   language: "css",

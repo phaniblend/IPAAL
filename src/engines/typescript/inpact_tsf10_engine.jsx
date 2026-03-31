@@ -16,7 +16,7 @@ Template literal types — type-level string manipulation
 infer keyword     — extract a type from within another type
 Declaration files — .d.ts, ambient declarations, module augmentation
 
-Each of these solves a class of problem that nothing else can.
+Each of these solves a class of lesson that nothing else can.
 You don't need them daily — but when you do, nothing else works.`,
       usecase: `Writing your own utility types, typing event emitters, extending third-party library types, and generating getter/setter types from a model all require this toolkit.`,
     },
@@ -258,7 +258,7 @@ const sideItems = [
 export default createINPACTEngine({
   NODES,
   sideItems,
-  problemNum: "F10",
+  lessonNum: "F10",
   title: "Advanced Patterns",
   shortName: "TS — ADVANCED",
 });

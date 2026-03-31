@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-node-16",
     "track": "node",
-    "problemNum": 16,
+    "lessonNum": 16,
     "title": "Build a health check endpoint",
     "shortName": "P16",
     "intro": {

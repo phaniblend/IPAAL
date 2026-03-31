@@ -8,4 +8,4 @@ const NODES = [
 // Timezone: core hours overlap; rotate who gets late/early`, feedback_correct: "✅ Written proposals; agenda + pre-read; core hours and rotation.", feedback_wrong: "Async decision-making; meeting reduction; timezone strategies.", expected: "Remote & async" },
 ];
 const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }];
-export default createINPACTEngine({ NODES, sideItems, problemNum: "EL-10", title: "Remote & async engineering", shortName: "EL — REMOTE" });
+export default createINPACTEngine({ NODES, sideItems, lessonNum: "EL-10", title: "Remote & async engineering", shortName: "EL — REMOTE" });

@@ -22,7 +22,7 @@ Eliminate layout shift (CLS) with reserved space and font strategies
 Improve INP by moving work off the main thread
 
 06
-Use the browser's rendering pipeline to explain performance problems
+Use the browser's rendering pipeline to explain performance lessons
 
 ---
 

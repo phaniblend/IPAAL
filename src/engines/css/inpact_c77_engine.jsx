@@ -73,7 +73,7 @@ function getOutputPreview(answer) {
 export default createINPACTEngine({
   NODES,
   sideItems,
-  problemNum: 77,
+  lessonNum: 77,
   title: "inset and position shorthand",
   shortName: "C77",
   language: "css",

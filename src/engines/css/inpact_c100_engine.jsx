@@ -73,7 +73,7 @@ function getOutputPreview(answer) {
 export default createINPACTEngine({
   NODES,
   sideItems,
-  problemNum: 100,
+  lessonNum: 100,
   title: "Anchor positioning",
   shortName: "C100",
   language: "css",

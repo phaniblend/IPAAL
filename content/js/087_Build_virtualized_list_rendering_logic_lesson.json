@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-js-87",
     "track": "js",
-    "problemNum": 87,
+    "lessonNum": 87,
     "title": "Build virtualized list rendering logic",
     "shortName": "P87",
     "intro": {

@@ -29,30 +29,30 @@ function walkJsonFiles(dir) {
 }
 
 function issuesForLesson(raw) {
-  const problems = [];
+  const lessons = [];
   const c = raw?.config;
   if (!c) {
-    problems.push("missing config");
-    return problems;
+    lessons.push("missing config");
+    return lessons;
   }
 
-  if (!c.intro?.title?.trim()) problems.push("intro.title missing");
-  if (!c.intro?.body?.trim()) problems.push("intro.body missing");
-  if (!c.intro?.usecase?.trim()) problems.push("intro.usecase missing");
-  if (!Array.isArray(c.objectives) || c.objectives.length === 0) problems.push("objectives empty or missing");
-  if (!Array.isArray(c.steps) || c.steps.length === 0) problems.push("steps empty or missing");
+  if (!c.intro?.title?.trim()) lessons.push("intro.title missing");
+  if (!c.intro?.body?.trim()) lessons.push("intro.body missing");
+  if (!c.intro?.usecase?.trim()) lessons.push("intro.usecase missing");
+  if (!Array.isArray(c.objectives) || c.objectives.length === 0) lessons.push("objectives empty or missing");
+  if (!Array.isArray(c.steps) || c.steps.length === 0) lessons.push("steps empty or missing");
 
   (c.steps || []).forEach((s, i) => {
     const label = s?.id || `index ${i}`;
     if (s?.type !== "question") return;
-    if (!s.instruction?.trim()) problems.push(`step ${label}: instruction missing`);
+    if (!s.instruction?.trim()) lessons.push(`step ${label}: instruction missing`);
     for (const k of ["feedbackCorrect", "feedbackPartial", "feedbackWrong"]) {
-      if (!s[k]?.trim()) problems.push(`step ${label}: ${k} missing`);
+      if (!s[k]?.trim()) lessons.push(`step ${label}: ${k} missing`);
     }
-    if (!s.evaluation) problems.push(`step ${label}: evaluation missing`);
+    if (!s.evaluation) lessons.push(`step ${label}: evaluation missing`);
   });
 
-  return problems;
+  return lessons;
 }
 
 const files = TRACKS.flatMap((t) => walkJsonFiles(path.join(root, "content", t)));
@@ -63,11 +63,11 @@ for (const file of files) {
   try {
     raw = JSON.parse(fs.readFileSync(file, "utf8"));
   } catch (e) {
-    rows.push({ file: path.relative(root, file), problems: [`invalid JSON: ${e.message}`] });
+    rows.push({ file: path.relative(root, file), lessons: [`invalid JSON: ${e.message}`] });
     continue;
   }
-  const problems = issuesForLesson(raw);
-  if (problems.length) rows.push({ file: path.relative(root, file), problems });
+  const lessons = issuesForLesson(raw);
+  if (lessons.length) rows.push({ file: path.relative(root, file), lessons });
 }
 
 console.log(`Scanned ${files.length} lesson files (react-ts + react-js).`);
@@ -76,7 +76,7 @@ if (rows.length) {
   console.log("\n--- Issues ---\n");
   for (const r of rows.slice(0, 100)) {
     console.log(r.file);
-    r.problems.forEach((p) => console.log(`  - ${p}`));
+    r.lessons.forEach((p) => console.log(`  - ${p}`));
   }
   if (rows.length > 100) console.log(`\n... and ${rows.length - 100} more files`);
 }

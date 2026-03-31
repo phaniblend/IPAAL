@@ -8,4 +8,4 @@ const NODES = [
 // Vision doc: where we're going, why, principles`, feedback_correct: "✅ Glue = unblock/align; influence via consensus and writing; vision = direction + why.", feedback_wrong: "Glue work; influence without authority; vision docs.", expected: "Staff patterns" },
 ];
 const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }];
-export default createINPACTEngine({ NODES, sideItems, problemNum: "EL-08", title: "Staff engineer patterns", shortName: "EL — STAFF" });
+export default createINPACTEngine({ NODES, sideItems, lessonNum: "EL-08", title: "Staff engineer patterns", shortName: "EL — STAFF" });

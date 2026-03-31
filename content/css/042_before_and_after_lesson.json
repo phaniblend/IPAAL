@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-css-42",
     "track": "css",
-    "problemNum": 42,
+    "lessonNum": 42,
     "title": "::before and ::after",
     "shortName": "P42",
     "intro": {

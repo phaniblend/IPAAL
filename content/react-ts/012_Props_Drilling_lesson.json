@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-react-ts-12",
     "track": "react-ts",
-    "problemNum": 12,
+    "lessonNum": 12,
     "title": "Props Drilling",
     "shortName": "P12",
     "intro": {

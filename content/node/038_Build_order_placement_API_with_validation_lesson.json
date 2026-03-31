@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-node-38",
     "track": "node",
-    "problemNum": 38,
+    "lessonNum": 38,
     "title": "Build order placement API with validation",
     "shortName": "P38",
     "intro": {

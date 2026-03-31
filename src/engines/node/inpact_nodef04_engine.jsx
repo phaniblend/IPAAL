@@ -26,4 +26,4 @@ worker_threads — CPU-bound work offloading, shared memory.`,
 ];
 
 const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }];
-export default createINPACTEngine({ NODES, sideItems, problemNum: "NODE-F04", title: "Child processes", shortName: "NODE — CHILD" });
+export default createINPACTEngine({ NODES, sideItems, lessonNum: "NODE-F04", title: "Child processes", shortName: "NODE — CHILD" });

@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-python-08",
     "track": "python",
-    "problemNum": 8,
+    "lessonNum": 8,
     "title": "SQLAlchemy & Alembic",
     "shortName": "P08",
     "intro": {

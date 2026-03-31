@@ -273,7 +273,7 @@ const sideItems = [
 export default createINPACTEngine({
   NODES,
   sideItems,
-  problemNum: "F07",
+  lessonNum: "F07",
   title: "Enums & Tuples",
   shortName: "TS — ENUMS & TUPLES",
 });

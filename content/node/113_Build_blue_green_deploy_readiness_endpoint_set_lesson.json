@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-node-113",
     "track": "node",
-    "problemNum": 113,
+    "lessonNum": 113,
     "title": "Build blue green deploy readiness endpoint set",
     "shortName": "P113",
     "intro": {

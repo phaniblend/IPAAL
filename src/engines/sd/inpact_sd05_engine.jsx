@@ -394,4 +394,4 @@ const sideItems = [
   { label: "Step 5 — Queue comparison", id: "step5" },
 ];
 
-export default createINPACTEngine({ NODES, sideItems, problemNum: "SD-05", title: "Message Queues & Event-Driven Architecture", shortName: "SD — QUEUES" });
+export default createINPACTEngine({ NODES, sideItems, lessonNum: "SD-05", title: "Message Queues & Event-Driven Architecture", shortName: "SD — QUEUES" });

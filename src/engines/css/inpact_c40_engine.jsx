@@ -73,7 +73,7 @@ function getOutputPreview(answer) {
 export default createINPACTEngine({
   NODES,
   sideItems,
-  problemNum: 40,
+  lessonNum: 40,
   title: "Container queries",
   shortName: "C40",
   language: "css",

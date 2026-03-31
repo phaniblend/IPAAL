@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-node-23",
     "track": "node",
-    "problemNum": 23,
+    "lessonNum": 23,
     "title": "Build role based access middleware",
     "shortName": "P23",
     "intro": {

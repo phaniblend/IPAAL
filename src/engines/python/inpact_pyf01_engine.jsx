@@ -9,4 +9,4 @@ def __exit__(self, *exc): ...; return False
 # or @contextmanager`, feedback_correct: "✅ __repr__ for dev, __str__ for user; __len__/__getitem__; __enter__/__exit__ or contextlib.", feedback_wrong: "Dunder methods; context manager with __enter__/__exit__.", expected: "Data model" },
 ];
 const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }];
-export default createINPACTEngine({ NODES, sideItems, problemNum: "PY-F01", title: "Python data model", shortName: "PY — DATA MODEL" });
+export default createINPACTEngine({ NODES, sideItems, lessonNum: "PY-F01", title: "Python data model", shortName: "PY — DATA MODEL" });

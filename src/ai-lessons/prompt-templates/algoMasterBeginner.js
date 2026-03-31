@@ -1,6 +1,6 @@
 /**
  * Master generic algorithm prompt — family-aware, beginner-friendly.
- * Universal flow: tiny case → natural attempt → reflection → scale problem → concept-bridge → reveal → (flow) → code-step(s) → complete.
+ * Universal flow: tiny case → natural attempt → reflection → scale lesson → concept-bridge → reveal → (flow) → code-step(s) → complete.
  * Variables: {{ALGO_NAME}}, {{LANGUAGE}}, {{TRACK}}, {{LESSON_NUMBER}}, {{LESSON_ID}}, {{ALGORITHM_FAMILY}}, {{MENTAL_MODEL}}, {{CONCEPT_BRIDGE}}, {{VISUAL_METAPHOR}}, {{COMMON_CONFUSIONS}}.
  */
 
@@ -23,9 +23,9 @@ Lesson inputs:
 - Common confusions to address: {{COMMON_CONFUSIONS}}
 
 UNIVERSAL BEGINNER FLOW (use this structure; adapt wording by family):
-1. intro — Short hook and what we'll learn (2–3 sentences). No "Understand the problem" or "Brainstorm brute force" as step titles.
+1. intro — Short hook and what we'll learn (2–3 sentences). No "Understand the lesson" or "Brainstorm brute force" as step titles.
 2. objectives — Learning objectives are generated separately; they must be Bloom Level 3 (Application) quantifiable coding achievements (Apply X to Y, Use X, Implement X, etc.), not "Explain why" or "Determine what".
-3. discovery (interactive when array-hashmap) — Start with a QUESTION, not a long problem statement. For array-hashmap: ask "Which two numbers add to X?" with a tiny array; learner answers (we appreciate); then scale to 5–6 elements, ask again; then 10 elements, ask again. Use prompt, exampleArray, target, successMessage in content so the UI can show the question and appreciate.
+3. discovery (interactive when array-hashmap) — Start with a QUESTION, not a long lesson statement. For array-hashmap: ask "Which two numbers add to X?" with a tiny array; learner answers (we appreciate); then scale to 5–6 elements, ask again; then 10 elements, ask again. Use prompt, exampleArray, target, successMessage in content so the UI can show the question and appreciate.
 4. reflection — Name what they did: "What you just did was brute force — you checked pairs from the start until you found a match. That doesn't scale."
 5. scale-problem — "When the array grows, we need a better method. Can't figure it out? Click Show me." Use showMeFirst and illustratedExample in the NEXT step (reveal-idea) so the UI can show [Show me] then an illustrated 5–6 element walkthrough.
 6. concept-bridge — Introduce the family mental model. Use {{CONCEPT_BRIDGE}} and {{MENTAL_MODEL}}. Do NOT reuse the same wording for all families. For binary search emphasize "cut in half"; for graph emphasize "visited"; for recursion emphasize "smaller version"; for sliding window emphasize "expand/shrink"; etc.
@@ -40,7 +40,7 @@ FAMILY-SPECIFIC RULES (adapt; do not ignore):
 - linked-list: Concept-bridge = pointer mental model first, no direct indexing ({{CONCEPT_BRIDGE}}); discovery = move node-to-node (body + optional visualMetaphor). No exampleArray/target.
 - tree: Concept-bridge = branch/root ({{CONCEPT_BRIDGE}}); discovery = visiting nodes or exploring levels (body). No exampleArray/target.
 - graph: Concept-bridge = introduce "visited" before using it ({{CONCEPT_BRIDGE}}); discovery = network/path (body). No exampleArray/target.
-- recursion: Discovery = what happens for a smaller version (body); concept-bridge = base case + smaller-problem thinking ({{CONCEPT_BRIDGE}}); do NOT jump straight to recursive code. No exampleArray/target.
+- recursion: Discovery = what happens for a smaller version (body); concept-bridge = base case + smaller-lesson thinking ({{CONCEPT_BRIDGE}}); do NOT jump straight to recursive code. No exampleArray/target.
 - dynamic-programming: Discovery = repeated work on small examples (body); concept-bridge = remembering solved subproblems ({{CONCEPT_BRIDGE}}); reveal = reuse, not formula. No exampleArray/target.
 - binary-search: Discovery = eliminating half of the search space (body); concept-bridge = sorted prerequisite and midpoint ({{CONCEPT_BRIDGE}}). No exampleArray/target.
 - stack-queue: Discovery = real-life metaphor — stack = plates, queue = line (body); then map to code ({{CONCEPT_BRIDGE}}). No exampleArray/target.
@@ -72,6 +72,6 @@ RULES:
 - Keep the universal flow; adapt discovery and reveal to {{ALGORITHM_FAMILY}}.
 - Teach prerequisites before use (e.g. "visited" before graph traversal).
 - Feel warm, guided, and confidence-building.
-- No visible step titles like "Understand the problem" or "Analyze complexity" for beginner lessons.
+- No visible step titles like "Understand the lesson" or "Analyze complexity" for beginner lessons.
 - One small coding action per question step; seedCode cumulative.
 - Output strict JSON only.`;

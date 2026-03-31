@@ -55,17 +55,17 @@ export const ALGORITHM_FAMILY_PROFILES = {
     ],
   },
   "recursion": {
-    mentalModel: "Solve a smaller version of the same problem",
-    conceptBridge: "Explain base case and 'smaller problem' thinking; do not jump directly into recursive code.",
-    visualMetaphor: "Same problem, smaller input; when does it stop?",
+    mentalModel: "Solve a smaller version of the same lesson",
+    conceptBridge: "Explain base case and 'smaller lesson' thinking; do not jump directly into recursive code.",
+    visualMetaphor: "Same lesson, smaller input; when does it stop?",
     commonConfusions: [
       "What is the base case?",
-      "How is the smaller problem related to the big one?",
+      "How is the smaller lesson related to the big one?",
     ],
   },
   "dynamic-programming": {
     mentalModel: "Reuse answers to smaller subproblems",
-    conceptBridge: "Introduce 'remembering solved smaller problems'; focus on reuse, not formula memorization.",
+    conceptBridge: "Introduce 'remembering solved smaller lessons'; focus on reuse, not formula memorization.",
     visualMetaphor: "Fill a table or reuse previous results; avoid doing the same work twice.",
     commonConfusions: [
       "What do we store?",
@@ -119,11 +119,11 @@ export const ALGORITHM_FAMILY_PROFILES = {
   },
 };
 
-/** Default family when lesson title cannot be mapped (e.g. generic array problem). */
+/** Default family when lesson title cannot be mapped (e.g. generic array lesson). */
 const DEFAULT_FAMILY = "array-hashmap";
 
 /**
- * Map a lesson title (or problem name) to an algorithm family key.
+ * Map a lesson title (or lesson name) to an algorithm family key.
  * Uses simple keyword matching; can be extended with a full curriculum map.
  * @param {string} lessonTitle
  * @returns {string} family key

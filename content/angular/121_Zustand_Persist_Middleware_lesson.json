@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-angular-121",
     "track": "angular",
-    "problemNum": 121,
+    "lessonNum": 121,
     "title": "Zustand Persist Middleware",
     "shortName": "P121",
     "intro": {

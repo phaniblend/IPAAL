@@ -8,4 +8,4 @@ const NODES = [
 // Refactor when possible; rewrite when cost of change > replacement`, feedback_correct: "✅ Strangler = incremental replace; char tests = lock behaviour; refactor first.", feedback_wrong: "Strangler fig; characterisation tests; rewrite vs refactor.", expected: "Legacy & rewrites" },
 ];
 const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }];
-export default createINPACTEngine({ NODES, sideItems, problemNum: "EL-09", title: "Legacy code & rewrites", shortName: "EL — LEGACY" });
+export default createINPACTEngine({ NODES, sideItems, lessonNum: "EL-09", title: "Legacy code & rewrites", shortName: "EL — LEGACY" });

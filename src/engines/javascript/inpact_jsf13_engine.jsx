@@ -288,4 +288,4 @@ const sideItems = [
   { label: "Step 5 — Intl.DateTimeFormat", id: "step5" },
 ];
 
-export default createINPACTEngine({ NODES, sideItems, problemNum: "JS-F13", title: "Numbers, Math, Date & Intl", shortName: "JS — NUMBERS & DATES" });
+export default createINPACTEngine({ NODES, sideItems, lessonNum: "JS-F13", title: "Numbers, Math, Date & Intl", shortName: "JS — NUMBERS & DATES" });

@@ -11,4 +11,4 @@ const NODES = [
 const store = useCounterStore(); store.increment()`, feedback_correct: "✅ defineStore with state/getters/actions; useStore() in component.", feedback_wrong: "defineStore; state, getters, actions; useStore() to access.", expected: "Pinia" },
 ];
 const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }];
-export default createINPACTEngine({ NODES, sideItems, problemNum: "VUE-F06", title: "Pinia", shortName: "VUE — PINIA" });
+export default createINPACTEngine({ NODES, sideItems, lessonNum: "VUE-F06", title: "Pinia", shortName: "VUE — PINIA" });

@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-algorithms-92",
     "track": "algorithms",
-    "problemNum": 92,
+    "lessonNum": 92,
     "title": "Generate Parentheses",
     "shortName": "P92",
     "intro": {
@@ -28,7 +28,7 @@
         "phase": "Step 1 of 16",
         "title": "Welcome",
         "content": {
-          "body": "Have you ever wondered how to generate all valid combinations of parentheses? This classic problem combines pattern building with careful validation. We'll learn to generate all possible balanced parentheses combinations using a systematic approach.",
+          "body": "Have you ever wondered how to generate all valid combinations of parentheses? This classic lesson combines pattern building with careful validation. We'll learn to generate all possible balanced parentheses combinations using a systematic approach.",
           "title": "Welcome"
         }
       },

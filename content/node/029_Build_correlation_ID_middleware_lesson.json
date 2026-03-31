@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-node-29",
     "track": "node",
-    "problemNum": 29,
+    "lessonNum": 29,
     "title": "Build correlation ID middleware",
     "shortName": "P29",
     "intro": {

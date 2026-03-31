@@ -1,6 +1,6 @@
 // ─── INPACT TypeScript Fundamentals — Curriculum Index ────────────────────────
 //
-// Drop all 10 engine files into your /problems directory alongside the existing
+// Drop all 10 engine files into your /lessons directory alongside the existing
 // inpact_engine_shared.js. Register them in your router just like p07, p09, etc.
 //
 // ──────────────────────────────────────────────────────────────────────────────
@@ -19,7 +19,7 @@ export const TS_FUNDAMENTALS_CURRICULUM = [
       "const vs let inference",
       "literal types",
     ],
-    why: "The foundation. Every other problem builds on knowing exactly what type each variable holds.",
+    why: "The foundation. Every other lesson builds on knowing exactly what type each variable holds.",
   },
   {
     id: "tsf02",

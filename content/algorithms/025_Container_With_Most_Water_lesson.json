@@ -3,14 +3,14 @@
   "config": {
     "lessonId": "ai-algorithms-25",
     "track": "algorithms",
-    "problemNum": 25,
+    "lessonNum": 25,
     "title": "Container With Most Water",
     "shortName": "P25",
     "intro": {
       "tag": "LESSON #25",
       "title": "Container With Most Water",
-      "body": "In this lesson, you will build a function that solves the 'Container With Most Water' problem, a classic algorithm challenge. You will learn to find the maximum area of water that can be contained between vertical lines represented by an array of heights. The core concept is the two-pointer technique, an efficient approach for scanning arrays from both ends. Using JavaScript, you will implement this algorithm with basic loops, conditional logic, and mathematical calculations. By the end, you will understand how to optimize solutions by reducing time complexity from a brute-force method to a linear scan.",
-      "usecase": "The Container With Most Water algorithm solves optimization problems where you need to find maximum capacity between boundaries, similar to how UI layout engines calculate optimal spacing between elements. In responsive web design, this pattern helps determine the best dimensions for content containers, image galleries, or dashboard panels to maximize visible area while maintaining proportions. Frontend developers use variations of this approach when implementing dynamic resizing features in data visualization tools, video players, or collaborative whiteboard applications where available space must be utilized efficiently."
+      "body": "In this lesson, you will build a function that solves the 'Container With Most Water' lesson, a classic algorithm challenge. You will learn to find the maximum area of water that can be contained between vertical lines represented by an array of heights. The core concept is the two-pointer technique, an efficient approach for scanning arrays from both ends. Using JavaScript, you will implement this algorithm with basic loops, conditional logic, and mathematical calculations. By the end, you will understand how to optimize solutions by reducing time complexity from a brute-force method to a linear scan.",
+      "usecase": "The Container With Most Water algorithm solves optimization lessons where you need to find maximum capacity between boundaries, similar to how UI layout engines calculate optimal spacing between elements. In responsive web design, this pattern helps determine the best dimensions for content containers, image galleries, or dashboard panels to maximize visible area while maintaining proportions. Frontend developers use variations of this approach when implementing dynamic resizing features in data visualization tools, video players, or collaborative whiteboard applications where available space must be utilized efficiently."
     },
     "objectives": [
       "Implement the two-pointer technique to traverse the height array",
@@ -28,7 +28,7 @@
         "phase": "Step 1 of 15",
         "title": "Introduction",
         "content": {
-          "body": "Imagine you're given a series of vertical lines with different heights. Your task is to find the two lines that, together with the x-axis, form a container that can hold the most water. This is a classic two-pointer problem where we'll use two positions moving through the data to find the optimal solution efficiently.",
+          "body": "Imagine you're given a series of vertical lines with different heights. Your task is to find the two lines that, together with the x-axis, form a container that can hold the most water. This is a classic two-pointer lesson where we'll use two positions moving through the data to find the optimal solution efficiently.",
           "title": "Introduction"
         }
       },
@@ -249,7 +249,7 @@
         "phase": "Step 15 of 15",
         "title": "Done",
         "content": {
-          "body": "Congratulations! You've implemented the Container With Most Water algorithm using the two-pointer technique. Remember: we move the pointer with the shorter line because that's the limiting factor for area. This approach runs in O(n) time instead of O(n²) for brute force. The key insight is that by moving the shorter line inward, we might find a taller line that could give us more area, while moving the taller line would only decrease width. This pattern of two positions moving through the data is powerful for many array problems.",
+          "body": "Congratulations! You've implemented the Container With Most Water algorithm using the two-pointer technique. Remember: we move the pointer with the shorter line because that's the limiting factor for area. This approach runs in O(n) time instead of O(n²) for brute force. The key insight is that by moving the shorter line inward, we might find a taller line that could give us more area, while moving the taller line would only decrease width. This pattern of two positions moving through the data is powerful for many array lessons.",
           "title": "Done"
         }
       }

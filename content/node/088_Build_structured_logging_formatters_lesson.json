@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-node-88",
     "track": "node",
-    "problemNum": 88,
+    "lessonNum": 88,
     "title": "Build structured logging formatters",
     "shortName": "P88",
     "intro": {

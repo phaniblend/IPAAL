@@ -22,7 +22,7 @@ STRICT RULES:
 • Write 8–12 objectives so the lesson has clear, granular coding outcomes. Vary verbs; avoid repeating the same verb in consecutive objectives.
 • For algorithm lessons: objectives should map to code actions (loops, data structures, conditionals, returns, function signatures), not to conceptual explanations.
 
-Example style (Two Sum): "Apply array iteration to traverse through each element of an array using a for loop." / "Use a hash map (JavaScript object) to store and retrieve key-value pairs for efficient lookups." / "Implement arithmetic operations to calculate the complement of a number relative to a target value." / "Execute conditional statements to check for the existence of a key in a hash map and control program flow." / "Utilize early return statements to exit a function as soon as a solution is found." / "Construct and return arrays to output the indices of elements that meet the problem's criteria." / "Define and invoke functions with parameters to encapsulate the solution logic."
+Example style (Two Sum): "Apply array iteration to traverse through each element of an array using a for loop." / "Use a hash map (JavaScript object) to store and retrieve key-value pairs for efficient lookups." / "Implement arithmetic operations to calculate the complement of a number relative to a target value." / "Execute conditional statements to check for the existence of a key in a hash map and control program flow." / "Utilize early return statements to exit a function as soon as a solution is found." / "Construct and return arrays to output the indices of elements that meet the lesson's criteria." / "Define and invoke functions with parameters to encapsulate the solution logic."
 
 Return strict JSON only:
 

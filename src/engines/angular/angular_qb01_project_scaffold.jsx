@@ -55,7 +55,7 @@ const sideItems = [
 export default createINPACTEngine({
   NODES,
   sideItems,
-  problemNum: 1,
+  lessonNum: 1,
   title: "Project Scaffold",
   shortName: "QB01",
   answerShape: "angular-tabs",

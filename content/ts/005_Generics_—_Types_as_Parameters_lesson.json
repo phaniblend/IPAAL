@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-ts-05",
     "track": "ts",
-    "problemNum": 5,
+    "lessonNum": 5,
     "title": "Generics — Types as Parameters",
     "shortName": "P05",
     "intro": {

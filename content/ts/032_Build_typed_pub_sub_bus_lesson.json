@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-ts-32",
     "track": "ts",
-    "problemNum": 32,
+    "lessonNum": 32,
     "title": "Build typed pub sub bus",
     "shortName": "P32",
     "intro": {

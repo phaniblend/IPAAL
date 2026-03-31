@@ -73,7 +73,7 @@ function getOutputPreview(answer) {
 export default createINPACTEngine({
   NODES,
   sideItems,
-  problemNum: 9,
+  lessonNum: 9,
   title: "Flex: container and direction",
   shortName: "C09",
   language: "css",

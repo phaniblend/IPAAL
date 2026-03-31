@@ -8,4 +8,4 @@ const NODES = [
 // Dedup: content-addressable; save space`, feedback_correct: "✅ Object for blobs; block for disks; multipart for large uploads; dedup by hash.", feedback_wrong: "Object/block/file; multipart uploads; deduplication.", expected: "File storage" },
 ];
 const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }];
-export default createINPACTEngine({ NODES, sideItems, problemNum: "SD-13", title: "File storage systems", shortName: "SD — STORAGE" });
+export default createINPACTEngine({ NODES, sideItems, lessonNum: "SD-13", title: "File storage systems", shortName: "SD — STORAGE" });

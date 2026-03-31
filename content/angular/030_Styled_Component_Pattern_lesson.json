@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-angular-30",
     "track": "angular",
-    "problemNum": 30,
+    "lessonNum": 30,
     "title": "Styled Component Pattern",
     "shortName": "P30",
     "intro": {

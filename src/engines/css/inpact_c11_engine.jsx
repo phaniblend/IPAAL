@@ -73,7 +73,7 @@ function getOutputPreview(answer) {
 export default createINPACTEngine({
   NODES,
   sideItems,
-  problemNum: 11,
+  lessonNum: 11,
   title: "justify-content",
   shortName: "C11",
   language: "css",

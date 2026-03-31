@@ -8,20 +8,20 @@
   "flow": [
     {
       "stepId": "title",
-      "mentorSays": "At the end of this lesson, you will be able to:\n\n1. Understand what the Climbing Stairs problem asks for\n2. Use dynamic programming to count ways to climb stairs\n3. Build the solution by storing previously computed values\n4. Implement the solution step by step in your chosen language",
+      "mentorSays": "At the end of this lesson, you will be able to:\n\n1. Understand what the Climbing Stairs lesson asks for\n2. Use dynamic programming to count ways to climb stairs\n3. Build the solution by storing previously computed values\n4. Implement the solution step by step in your chosen language",
       "action": "continue",
-      "next": "problem-illustration"
+      "next": "lesson-illustration"
     },
     {
-      "stepId": "problem-illustration",
-      "mentorSays": "Let's understand the climbing stairs problem deeply.\n\nTHE PROBLEM:\nYou have a staircase with n steps.\nEach time you can climb either 1 step or 2 steps.\nHow many distinct ways can you reach the top?\n\nEXAMPLE: n = 5 (Detailed Walkthrough)\n\nLet's list all possible ways:\n1. 1+1+1+1+1 (five single steps)\n2. 1+1+1+2 (three singles, one double)\n3. 1+1+2+1\n4. 1+2+1+1\n5. 2+1+1+1\n6. 1+2+2\n7. 2+1+2\n8. 2+2+1\n\nTotal: 8 ways\n\nRECURSIVE THINKING:\nTo reach step 5, I could:\n- Be at step 4, then take 1 step → ways(4)\n- Be at step 3, then take 2 steps → ways(3)\n\nSo: ways(5) = ways(4) + ways(3)\n\nBUILDING THE SOLUTION:\nways(0) = 1  (base case: 0 steps = do nothing)\nways(1) = 1  (base case: only one way)\nways(2) = ways(1) + ways(0) = 1 + 1 = 2\nways(3) = ways(2) + ways(1) = 2 + 1 = 3\nways(4) = ways(3) + ways(2) = 3 + 2 = 5\nways(5) = ways(4) + ways(3) = 5 + 3 = 8 ✓\n\nRECURSION TREE (shows overlapping subproblems):\n                ways(5)\n               /       \\\n          ways(4)     ways(3)\n          /    \\       /    \\\n    ways(3) ways(2) ways(2) ways(1)\n     /  \\     /  \\    /  \\\n   w(2) w(1) w(1) w(0) w(1) w(0)\n\nNotice: ways(2) appears 3 times, ways(3) appears 2 times!\n\nThis is why we need dynamic programming - to avoid recalculating!\n\nDP TABLE CONSTRUCTION:\ni:     0  1  2  3  4  5\ndp[i]: 1  1  2  3  5  8\n\nPattern: This is the Fibonacci sequence!\n\nTIME COMPLEXITY: O(n) - single pass\nSPACE COMPLEXITY: O(n) or O(1) with optimization\n\nWHY DP IS BETTER:\n- Naive recursion: O(2^n) - exponential!\n- DP: O(n) - linear!\n- For n=30: Recursion makes millions of calls, DP makes 30 calculations!",
+      "stepId": "lesson-illustration",
+      "mentorSays": "Let's understand the climbing stairs lesson deeply.\n\nTHE PROBLEM:\nYou have a staircase with n steps.\nEach time you can climb either 1 step or 2 steps.\nHow many distinct ways can you reach the top?\n\nEXAMPLE: n = 5 (Detailed Walkthrough)\n\nLet's list all possible ways:\n1. 1+1+1+1+1 (five single steps)\n2. 1+1+1+2 (three singles, one double)\n3. 1+1+2+1\n4. 1+2+1+1\n5. 2+1+1+1\n6. 1+2+2\n7. 2+1+2\n8. 2+2+1\n\nTotal: 8 ways\n\nRECURSIVE THINKING:\nTo reach step 5, I could:\n- Be at step 4, then take 1 step → ways(4)\n- Be at step 3, then take 2 steps → ways(3)\n\nSo: ways(5) = ways(4) + ways(3)\n\nBUILDING THE SOLUTION:\nways(0) = 1  (base case: 0 steps = do nothing)\nways(1) = 1  (base case: only one way)\nways(2) = ways(1) + ways(0) = 1 + 1 = 2\nways(3) = ways(2) + ways(1) = 2 + 1 = 3\nways(4) = ways(3) + ways(2) = 3 + 2 = 5\nways(5) = ways(4) + ways(3) = 5 + 3 = 8 ✓\n\nRECURSION TREE (shows overlapping subproblems):\n                ways(5)\n               /       \\\n          ways(4)     ways(3)\n          /    \\       /    \\\n    ways(3) ways(2) ways(2) ways(1)\n     /  \\     /  \\    /  \\\n   w(2) w(1) w(1) w(0) w(1) w(0)\n\nNotice: ways(2) appears 3 times, ways(3) appears 2 times!\n\nThis is why we need dynamic programming - to avoid recalculating!\n\nDP TABLE CONSTRUCTION:\ni:     0  1  2  3  4  5\ndp[i]: 1  1  2  3  5  8\n\nPattern: This is the Fibonacci sequence!\n\nTIME COMPLEXITY: O(n) - single pass\nSPACE COMPLEXITY: O(n) or O(1) with optimization\n\nWHY DP IS BETTER:\n- Naive recursion: O(2^n) - exponential!\n- DP: O(n) - linear!\n- For n=30: Recursion makes millions of calls, DP makes 30 calculations!",
       "example": "n = 5\n\nFind number of ways to climb:\nF(5) = 8 ways ✓\n\nAnother example:\nn = 3\n\nAnswer: 3 ways\n(1+1+1, 1+2, 2+1)\n\nAnother example:\nn = 2\n\nAnswer: 2 ways\n(1+1, 2)",
       "action": "continue",
       "next": "thinking-challenge"
     },
     {
       "stepId": "thinking-challenge",
-      "mentorSays": "Now that you understand what the problem wants, here's the real question:\n\nHow would YOU count the number of ways?\n\nThink about it for a moment. What approach feels natural to you?",
+      "mentorSays": "Now that you understand what the lesson wants, here's the real question:\n\nHow would YOU count the number of ways?\n\nThink about it for a moment. What approach feels natural to you?",
       "choices": [
         {
           "label": "Use dynamic programming to store and reuse computed values",
@@ -153,7 +153,7 @@
     },
     {
       "stepId": "overlapping-subproblems-check-js",
-      "mentorSays": "Do you understand why we need dynamic programming for this problem?",
+      "mentorSays": "Do you understand why we need dynamic programming for this lesson?",
       "choices": [
         {
           "label": "Yes, I know overlapping-subproblems",
@@ -174,7 +174,7 @@
     },
     {
       "stepId": "base-cases-explanation-js",
-      "mentorSays": "Base cases are the simplest inputs where the answer is obvious. For climbing stairs: 0 steps = 1 way (do nothing), 1 step = 1 way (one single step), 2 steps = 2 ways (two singles OR one double). These form the foundation for solving larger problems!\n\n// Base cases for climbing stairs:\n// dp[0] = 1  (one way to be at start)\n// dp[1] = 1  (one way: climb 1 step)\n\nlet dp = [1, 1];\n// These are the simplest cases where answer is obvious!\n\nGot it?",
+      "mentorSays": "Base cases are the simplest inputs where the answer is obvious. For climbing stairs: 0 steps = 1 way (do nothing), 1 step = 1 way (one single step), 2 steps = 2 ways (two singles OR one double). These form the foundation for solving larger lessons!\n\n// Base cases for climbing stairs:\n// dp[0] = 1  (one way to be at start)\n// dp[1] = 1  (one way: climb 1 step)\n\nlet dp = [1, 1];\n// These are the simplest cases where answer is obvious!\n\nGot it?",
       "example": "// Base cases for climbing stairs:\n// dp[0] = 1  (one way to be at start)\n// dp[1] = 1  (one way: climb 1 step)\n\nlet dp = [1, 1];\n// These are the simplest cases where answer is obvious!",
       "action": "continue",
       "next": "coding-start-js"
@@ -314,7 +314,7 @@
     },
     {
       "stepId": "overlapping-subproblems-check-python",
-      "mentorSays": "Do you understand why we need dynamic programming for this problem?",
+      "mentorSays": "Do you understand why we need dynamic programming for this lesson?",
       "choices": [
         {
           "label": "Yes, I know overlapping-subproblems",
@@ -335,7 +335,7 @@
     },
     {
       "stepId": "base-cases-explanation-python",
-      "mentorSays": "Base cases are the simplest inputs where the answer is obvious. For climbing stairs: 0 steps = 1 way (do nothing), 1 step = 1 way (one single step), 2 steps = 2 ways (two singles OR one double). These form the foundation for solving larger problems!\n\n# Base cases for climbing stairs:\n# dp[0] = 1  (one way to be at start)\n# dp[1] = 1  (one way: climb 1 step)\n\ndp = [1, 1]\n# These are the simplest cases where answer is obvious!\n\nGot it?",
+      "mentorSays": "Base cases are the simplest inputs where the answer is obvious. For climbing stairs: 0 steps = 1 way (do nothing), 1 step = 1 way (one single step), 2 steps = 2 ways (two singles OR one double). These form the foundation for solving larger lessons!\n\n# Base cases for climbing stairs:\n# dp[0] = 1  (one way to be at start)\n# dp[1] = 1  (one way: climb 1 step)\n\ndp = [1, 1]\n# These are the simplest cases where answer is obvious!\n\nGot it?",
       "example": "# Base cases for climbing stairs:\n# dp[0] = 1  (one way to be at start)\n# dp[1] = 1  (one way: climb 1 step)\n\ndp = [1, 1]\n# These are the simplest cases where answer is obvious!",
       "action": "continue",
       "next": "coding-start-python"
@@ -475,7 +475,7 @@
     },
     {
       "stepId": "overlapping-subproblems-check-java",
-      "mentorSays": "Do you understand why we need dynamic programming for this problem?",
+      "mentorSays": "Do you understand why we need dynamic programming for this lesson?",
       "choices": [
         {
           "label": "Yes, I know overlapping-subproblems",
@@ -496,7 +496,7 @@
     },
     {
       "stepId": "base-cases-explanation-java",
-      "mentorSays": "Base cases are the simplest inputs where the answer is obvious. For climbing stairs: 0 steps = 1 way (do nothing), 1 step = 1 way (one single step), 2 steps = 2 ways (two singles OR one double). These form the foundation for solving larger problems!\n\n// Base cases for climbing stairs:\n// dp[0] = 1  (one way to be at start)\n// dp[1] = 1  (one way: climb 1 step)\n\nint[] dp = {1, 1};\n// These are the simplest cases where answer is obvious!\n\nGot it?",
+      "mentorSays": "Base cases are the simplest inputs where the answer is obvious. For climbing stairs: 0 steps = 1 way (do nothing), 1 step = 1 way (one single step), 2 steps = 2 ways (two singles OR one double). These form the foundation for solving larger lessons!\n\n// Base cases for climbing stairs:\n// dp[0] = 1  (one way to be at start)\n// dp[1] = 1  (one way: climb 1 step)\n\nint[] dp = {1, 1};\n// These are the simplest cases where answer is obvious!\n\nGot it?",
       "example": "// Base cases for climbing stairs:\n// dp[0] = 1  (one way to be at start)\n// dp[1] = 1  (one way: climb 1 step)\n\nint[] dp = {1, 1};\n// These are the simplest cases where answer is obvious!",
       "action": "continue",
       "next": "coding-start-java"
@@ -636,7 +636,7 @@
     },
     {
       "stepId": "overlapping-subproblems-check-cpp",
-      "mentorSays": "Do you understand why we need dynamic programming for this problem?",
+      "mentorSays": "Do you understand why we need dynamic programming for this lesson?",
       "choices": [
         {
           "label": "Yes, I know overlapping-subproblems",
@@ -657,7 +657,7 @@
     },
     {
       "stepId": "base-cases-explanation-cpp",
-      "mentorSays": "Base cases are the simplest inputs where the answer is obvious. For climbing stairs: 0 steps = 1 way (do nothing), 1 step = 1 way (one single step), 2 steps = 2 ways (two singles OR one double). These form the foundation for solving larger problems!\n\n// Base cases for climbing stairs:\n// dp[0] = 1  (one way to be at start)\n// dp[1] = 1  (one way: climb 1 step)\n\nvector<int> dp = {1, 1};\n// These are the simplest cases where answer is obvious!\n\nGot it?",
+      "mentorSays": "Base cases are the simplest inputs where the answer is obvious. For climbing stairs: 0 steps = 1 way (do nothing), 1 step = 1 way (one single step), 2 steps = 2 ways (two singles OR one double). These form the foundation for solving larger lessons!\n\n// Base cases for climbing stairs:\n// dp[0] = 1  (one way to be at start)\n// dp[1] = 1  (one way: climb 1 step)\n\nvector<int> dp = {1, 1};\n// These are the simplest cases where answer is obvious!\n\nGot it?",
       "example": "// Base cases for climbing stairs:\n// dp[0] = 1  (one way to be at start)\n// dp[1] = 1  (one way: climb 1 step)\n\nvector<int> dp = {1, 1};\n// These are the simplest cases where answer is obvious!",
       "action": "continue",
       "next": "coding-start-cpp"
@@ -797,7 +797,7 @@
     },
     {
       "stepId": "overlapping-subproblems-check-ts",
-      "mentorSays": "Do you understand why we need dynamic programming for this problem?",
+      "mentorSays": "Do you understand why we need dynamic programming for this lesson?",
       "choices": [
         {
           "label": "Yes, I know overlapping-subproblems",
@@ -818,7 +818,7 @@
     },
     {
       "stepId": "base-cases-explanation-ts",
-      "mentorSays": "Base cases are the simplest inputs where the answer is obvious. For climbing stairs: 0 steps = 1 way (do nothing), 1 step = 1 way (one single step), 2 steps = 2 ways (two singles OR one double). These form the foundation for solving larger problems!\n\n// Base cases for climbing stairs:\n// dp[0] = 1  (one way to be at start)\n// dp[1] = 1  (one way: climb 1 step)\n\nlet dp: number[] = [1, 1];\n// These are the simplest cases where answer is obvious!\n\nGot it?",
+      "mentorSays": "Base cases are the simplest inputs where the answer is obvious. For climbing stairs: 0 steps = 1 way (do nothing), 1 step = 1 way (one single step), 2 steps = 2 ways (two singles OR one double). These form the foundation for solving larger lessons!\n\n// Base cases for climbing stairs:\n// dp[0] = 1  (one way to be at start)\n// dp[1] = 1  (one way: climb 1 step)\n\nlet dp: number[] = [1, 1];\n// These are the simplest cases where answer is obvious!\n\nGot it?",
       "example": "// Base cases for climbing stairs:\n// dp[0] = 1  (one way to be at start)\n// dp[1] = 1  (one way: climb 1 step)\n\nlet dp: number[] = [1, 1];\n// These are the simplest cases where answer is obvious!",
       "action": "continue",
       "next": "coding-start-ts"
@@ -888,7 +888,7 @@
     },
     {
       "stepId": "final",
-      "mentorSays": "🎉 Well done! You've learned climbing stairs using dynamic programming. You understand how this problem is essentially the Fibonacci sequence - each step depends on the previous two!\n\nThis is O(n) time and O(n) space - much better than exponential recursion! Keep practicing!",
+      "mentorSays": "🎉 Well done! You've learned climbing stairs using dynamic programming. You understand how this lesson is essentially the Fibonacci sequence - each step depends on the previous two!\n\nThis is O(n) time and O(n) space - much better than exponential recursion! Keep practicing!",
       "action": "continue"
     }
   ]

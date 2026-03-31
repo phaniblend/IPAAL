@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-angular-111",
     "track": "angular",
-    "problemNum": 111,
+    "lessonNum": 111,
     "title": "TanStack Query Basics",
     "shortName": "P111",
     "intro": {

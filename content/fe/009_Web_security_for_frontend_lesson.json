@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-fe-09",
     "track": "fe",
-    "problemNum": 9,
+    "lessonNum": 9,
     "title": "Web security for frontend",
     "shortName": "P09",
     "intro": {

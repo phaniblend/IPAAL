@@ -8,20 +8,20 @@
   "flow": [
     {
       "stepId": "title",
-      "mentorSays": "At the end of this lesson, you will be able to:\n\n1. Understand what the Longest Substring Without Repeating Characters problem asks for\n2. Use a sliding window with a hash map to track characters\n3. Expand and shrink the window to find the longest valid substring\n4. Implement the solution step by step in your chosen language",
+      "mentorSays": "At the end of this lesson, you will be able to:\n\n1. Understand what the Longest Substring Without Repeating Characters lesson asks for\n2. Use a sliding window with a hash map to track characters\n3. Expand and shrink the window to find the longest valid substring\n4. Implement the solution step by step in your chosen language",
       "action": "continue",
-      "next": "problem-illustration"
+      "next": "lesson-illustration"
     },
     {
-      "stepId": "problem-illustration",
-      "mentorSays": "Perfect! Now let's understand what the Longest Substring Without Repeating Characters problem is asking.\n\nImagine you have a string: \"abcabcbb\"\n\nYour task: Find the length of the longest substring that doesn't contain any repeating characters.\n\nLet's explore the string:\n- \"abc\" - all unique, length 3\n- \"abca\" - 'a' repeats, invalid\n- \"bca\" - all unique, length 3\n- \"bcab\" - 'b' repeats, invalid\n- \"cab\" - all unique, length 3\n- \"cabc\" - 'c' repeats, invalid\n- \"abcbb\" - 'b' repeats multiple times, invalid\n- \"bb\" - 'b' repeats, invalid\n- \"b\" - single character, length 1\n\nWait, let me trace more carefully:\n- Start at index 0: \"a\" (length 1)\n- Expand to \"ab\" (length 2)\n- Expand to \"abc\" (length 3) ✓\n- Try to expand to \"abca\" - 'a' repeats! So the longest starting at 0 is \"abc\" (length 3)\n- Start at index 1: \"b\" → \"bc\" → \"bca\" (length 3) ✓\n- Start at index 3: \"a\" → \"ab\" → \"abc\" (length 3) ✓\n- Start at index 4: \"b\" → \"bc\" → \"bcb\" - 'b' repeats! So \"bc\" (length 2)\n- Start at index 5: \"c\" → \"cb\" → \"cbb\" - 'b' repeats! So \"cb\" (length 2)\n- Start at index 6: \"b\" (length 1)\n- Start at index 7: \"b\" (length 1)\n\nThe longest substring without repeating characters is \"abc\" (or \"bca\" or \"cab\"), which has length 3.\n\nThat's what the problem wants: the length of the longest substring with all unique characters.",
+      "stepId": "lesson-illustration",
+      "mentorSays": "Perfect! Now let's understand what the Longest Substring Without Repeating Characters lesson is asking.\n\nImagine you have a string: \"abcabcbb\"\n\nYour task: Find the length of the longest substring that doesn't contain any repeating characters.\n\nLet's explore the string:\n- \"abc\" - all unique, length 3\n- \"abca\" - 'a' repeats, invalid\n- \"bca\" - all unique, length 3\n- \"bcab\" - 'b' repeats, invalid\n- \"cab\" - all unique, length 3\n- \"cabc\" - 'c' repeats, invalid\n- \"abcbb\" - 'b' repeats multiple times, invalid\n- \"bb\" - 'b' repeats, invalid\n- \"b\" - single character, length 1\n\nWait, let me trace more carefully:\n- Start at index 0: \"a\" (length 1)\n- Expand to \"ab\" (length 2)\n- Expand to \"abc\" (length 3) ✓\n- Try to expand to \"abca\" - 'a' repeats! So the longest starting at 0 is \"abc\" (length 3)\n- Start at index 1: \"b\" → \"bc\" → \"bca\" (length 3) ✓\n- Start at index 3: \"a\" → \"ab\" → \"abc\" (length 3) ✓\n- Start at index 4: \"b\" → \"bc\" → \"bcb\" - 'b' repeats! So \"bc\" (length 2)\n- Start at index 5: \"c\" → \"cb\" → \"cbb\" - 'b' repeats! So \"cb\" (length 2)\n- Start at index 6: \"b\" (length 1)\n- Start at index 7: \"b\" (length 1)\n\nThe longest substring without repeating characters is \"abc\" (or \"bca\" or \"cab\"), which has length 3.\n\nThat's what the lesson wants: the length of the longest substring with all unique characters.",
       "example": "s = \"abcabcbb\"\n\nFind longest substring without repeating characters:\n- \"abc\" (length 3) ✓\n- \"bca\" (length 3) ✓\n- \"cab\" (length 3) ✓\n- \"abc\" (length 3) ✓\n\nAnswer: 3\n\nAnother example:\ns = \"bbbbb\"\n\nAll characters repeat. Longest substring: \"b\" (length 1)\n\nAnswer: 1\n\nAnother example:\ns = \"pwwkew\"\n\n- \"pw\" (length 2)\n- \"wke\" (length 3) ✓\n- \"kew\" (length 3) ✓\n\nAnswer: 3",
       "action": "continue",
       "next": "thinking-challenge"
     },
     {
       "stepId": "thinking-challenge",
-      "mentorSays": "Now that you understand what the problem wants, here's the real question:\n\nHow would YOU find the longest substring without repeating characters?\n\nThink about it for a moment. What approach feels natural to you?",
+      "mentorSays": "Now that you understand what the lesson wants, here's the real question:\n\nHow would YOU find the longest substring without repeating characters?\n\nThink about it for a moment. What approach feels natural to you?",
       "choices": [
         {
           "label": "Use a sliding window with a hash map to track characters",
@@ -146,7 +146,7 @@
     },
     {
       "stepId": "loop-check-js",
-      "mentorSays": "To solve this problem, we'll need to use loops. Do you know what a loop is in JavaScript?",
+      "mentorSays": "To solve this lesson, we'll need to use loops. Do you know what a loop is in JavaScript?",
       "choices": [
         {
           "label": "Yes, I know loops",
@@ -307,7 +307,7 @@
     },
     {
       "stepId": "loop-check-python",
-      "mentorSays": "To solve this problem, we'll need to use loops. Do you know what a loop is in Python?",
+      "mentorSays": "To solve this lesson, we'll need to use loops. Do you know what a loop is in Python?",
       "choices": [
         {
           "label": "Yes, I know loops",
@@ -468,7 +468,7 @@
     },
     {
       "stepId": "loop-check-java",
-      "mentorSays": "To solve this problem, we'll need to use loops. Do you know what a loop is in Java?",
+      "mentorSays": "To solve this lesson, we'll need to use loops. Do you know what a loop is in Java?",
       "choices": [
         {
           "label": "Yes, I know loops",
@@ -629,7 +629,7 @@
     },
     {
       "stepId": "loop-check-cpp",
-      "mentorSays": "To solve this problem, we'll need to use loops. Do you know what a loop is in C++?",
+      "mentorSays": "To solve this lesson, we'll need to use loops. Do you know what a loop is in C++?",
       "choices": [
         {
           "label": "Yes, I know loops",
@@ -790,7 +790,7 @@
     },
     {
       "stepId": "loop-check-ts",
-      "mentorSays": "To solve this problem, we'll need to use loops. Do you know what a loop is in TypeScript?",
+      "mentorSays": "To solve this lesson, we'll need to use loops. Do you know what a loop is in TypeScript?",
       "choices": [
         {
           "label": "Yes, I know loops",
@@ -888,7 +888,7 @@
     },
     {
       "stepId": "final",
-      "mentorSays": "🎉 Well done! You've learned to think through the Longest Substring Without Repeating Characters problem. You understand what the problem asks for, how to use a sliding window with a hash map to track characters, and how to expand and shrink the window efficiently.\n\nThis kind of thinking—using sliding windows with hash maps—is essential for solving many string problems. Keep practicing!",
+      "mentorSays": "🎉 Well done! You've learned to think through the Longest Substring Without Repeating Characters lesson. You understand what the lesson asks for, how to use a sliding window with a hash map to track characters, and how to expand and shrink the window efficiently.\n\nThis kind of thinking—using sliding windows with hash maps—is essential for solving many string lessons. Keep practicing!",
       "action": "continue"
     }
   ]

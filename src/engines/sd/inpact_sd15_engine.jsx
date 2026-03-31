@@ -8,4 +8,4 @@ const NODES = [
 // Flink: true stream processing; Spark: micro-batch`, feedback_correct: "✅ Batch bounded; stream unbounded; Lambda two-tier; Kappa stream-only; Flink streaming.", feedback_wrong: "Batch vs stream; Lambda/Kappa; Flink for streaming.", expected: "Data-intensive" },
 ];
 const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }];
-export default createINPACTEngine({ NODES, sideItems, problemNum: "SD-15", title: "Designing data-intensive apps", shortName: "SD — DATA" });
+export default createINPACTEngine({ NODES, sideItems, lessonNum: "SD-15", title: "Designing data-intensive apps", shortName: "SD — DATA" });

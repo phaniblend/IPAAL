@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-angular-94",
     "track": "angular",
-    "problemNum": 94,
+    "lessonNum": 94,
     "title": "Concurrent Mode Gotchas",
     "shortName": "P94",
     "intro": {

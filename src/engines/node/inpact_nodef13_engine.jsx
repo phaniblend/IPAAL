@@ -26,4 +26,4 @@ const config = schema.parse(process.env)  // throws if invalid`,
 ];
 
 const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }];
-export default createINPACTEngine({ NODES, sideItems, problemNum: "NODE-F13", title: "Environment & config", shortName: "NODE — CONFIG" });
+export default createINPACTEngine({ NODES, sideItems, lessonNum: "NODE-F13", title: "Environment & config", shortName: "NODE — CONFIG" });

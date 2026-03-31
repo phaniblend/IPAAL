@@ -8,20 +8,20 @@
   "flow": [
     {
       "stepId": "title",
-      "mentorSays": "At the end of this lesson, you will be able to:\n\n1. Understand what the 3Sum problem asks for\n2. Use sorting and two pointers to find triplets efficiently\n3. Avoid duplicate triplets in the result\n4. Implement the solution step by step in your chosen language",
+      "mentorSays": "At the end of this lesson, you will be able to:\n\n1. Understand what the 3Sum lesson asks for\n2. Use sorting and two pointers to find triplets efficiently\n3. Avoid duplicate triplets in the result\n4. Implement the solution step by step in your chosen language",
       "action": "continue",
-      "next": "problem-illustration"
+      "next": "lesson-illustration"
     },
     {
-      "stepId": "problem-illustration",
-      "mentorSays": "Perfect! Now let's understand what the 3Sum problem is asking.\n\nGiven an array of integers, find all unique triplets (three numbers) that add up to zero (0).\n\n**Example:** nums = [-1, 0, 1, 2, -1, -4]\n\nYour task: Find all unique triplets [a, b, c] such that a + b + c = 0\n\nLet's find them:\n- Triplet 1: [-1, 0, 1] → -1 + 0 + 1 = 0 ✓\n- Triplet 2: [-1, -1, 2] → -1 + (-1) + 2 = 0 ✓\n\n**Important:** The result should contain unique triplets only. Even though -1 appears twice, we should list each unique combination only once.\n\n**Step-by-step approach:**\n1. Sort the array first (this helps us avoid duplicates and use two pointers)\n2. For each number, use two pointers to find pairs that sum to the negative of that number\n3. Skip duplicates to avoid duplicate triplets\n\nSorted: [-4, -1, -1, 0, 1, 2]\n\n- Fix -4, find pairs that sum to 4 → No valid pairs\n- Fix -1 (first), find pairs that sum to 1 → Found (-1, 2) and (0, 1)\n- Fix -1 (second), skip (duplicate of previous)\n- Fix 0, find pairs that sum to 0 → Already found\n\nResult: [[-1, -1, 2], [-1, 0, 1]]",
+      "stepId": "lesson-illustration",
+      "mentorSays": "Perfect! Now let's understand what the 3Sum lesson is asking.\n\nGiven an array of integers, find all unique triplets (three numbers) that add up to zero (0).\n\n**Example:** nums = [-1, 0, 1, 2, -1, -4]\n\nYour task: Find all unique triplets [a, b, c] such that a + b + c = 0\n\nLet's find them:\n- Triplet 1: [-1, 0, 1] → -1 + 0 + 1 = 0 ✓\n- Triplet 2: [-1, -1, 2] → -1 + (-1) + 2 = 0 ✓\n\n**Important:** The result should contain unique triplets only. Even though -1 appears twice, we should list each unique combination only once.\n\n**Step-by-step approach:**\n1. Sort the array first (this helps us avoid duplicates and use two pointers)\n2. For each number, use two pointers to find pairs that sum to the negative of that number\n3. Skip duplicates to avoid duplicate triplets\n\nSorted: [-4, -1, -1, 0, 1, 2]\n\n- Fix -4, find pairs that sum to 4 → No valid pairs\n- Fix -1 (first), find pairs that sum to 1 → Found (-1, 2) and (0, 1)\n- Fix -1 (second), skip (duplicate of previous)\n- Fix 0, find pairs that sum to 0 → Already found\n\nResult: [[-1, -1, 2], [-1, 0, 1]]",
       "example": "nums = [-1, 0, 1, 2, -1, -4]\n\nSorted: [-4, -1, -1, 0, 1, 2]\n\nFind triplets that sum to 0:\n\nFix -4: Need sum = 4\n  Search in [-1, -1, 0, 1, 2] → No valid pairs\n\nFix -1 (first): Need sum = 1\n  Search in [-1, 0, 1, 2]\n  Found: (-1, 2) → [-1, -1, 2] ✓\n  Found: (0, 1) → [-1, 0, 1] ✓\n\nFix -1 (second): Skip (duplicate)\n\nResult: [[-1, -1, 2], [-1, 0, 1]]",
       "action": "continue",
       "next": "thinking-challenge"
     },
     {
       "stepId": "thinking-challenge",
-      "mentorSays": "Now that you understand what the problem wants, here's the real question:\n\nHow would YOU find all triplets that sum to zero?\n\nThink about it for a moment. What approach feels natural to you?",
+      "mentorSays": "Now that you understand what the lesson wants, here's the real question:\n\nHow would YOU find all triplets that sum to zero?\n\nThink about it for a moment. What approach feels natural to you?",
       "choices": [
         {
           "label": "Use three nested loops to check all triplets",
@@ -146,7 +146,7 @@
     },
     {
       "stepId": "array-check-js",
-      "mentorSays": "To solve this problem, we'll need to work with arrays. Do you know what an array is in JavaScript?",
+      "mentorSays": "To solve this lesson, we'll need to work with arrays. Do you know what an array is in JavaScript?",
       "choices": [
         {
           "label": "Yes, I know arrays",
@@ -167,7 +167,7 @@
     },
     {
       "stepId": "loop-check-js",
-      "mentorSays": "To solve this problem, we'll need to use loops. Do you know what a loop is in JavaScript?",
+      "mentorSays": "To solve this lesson, we'll need to use loops. Do you know what a loop is in JavaScript?",
       "choices": [
         {
           "label": "Yes, I know loops",
@@ -307,7 +307,7 @@
     },
     {
       "stepId": "array-check-python",
-      "mentorSays": "To solve this problem, we'll need to work with lists. Do you know what a list is in Python?",
+      "mentorSays": "To solve this lesson, we'll need to work with lists. Do you know what a list is in Python?",
       "choices": [
         {
           "label": "Yes, I know lists",
@@ -328,7 +328,7 @@
     },
     {
       "stepId": "loop-check-python",
-      "mentorSays": "To solve this problem, we'll need to use loops. Do you know what a loop is in Python?",
+      "mentorSays": "To solve this lesson, we'll need to use loops. Do you know what a loop is in Python?",
       "choices": [
         {
           "label": "Yes, I know loops",
@@ -468,7 +468,7 @@
     },
     {
       "stepId": "array-check-java",
-      "mentorSays": "To solve this problem, we'll need to work with arrays. Do you know what an array is in Java?",
+      "mentorSays": "To solve this lesson, we'll need to work with arrays. Do you know what an array is in Java?",
       "choices": [
         {
           "label": "Yes, I know arrays",
@@ -489,7 +489,7 @@
     },
     {
       "stepId": "loop-check-java",
-      "mentorSays": "To solve this problem, we'll need to use loops. Do you know what a loop is in Java?",
+      "mentorSays": "To solve this lesson, we'll need to use loops. Do you know what a loop is in Java?",
       "choices": [
         {
           "label": "Yes, I know loops",
@@ -629,7 +629,7 @@
     },
     {
       "stepId": "array-check-cpp",
-      "mentorSays": "To solve this problem, we'll need to work with vectors (arrays). Do you know what a vector is in C++?",
+      "mentorSays": "To solve this lesson, we'll need to work with vectors (arrays). Do you know what a vector is in C++?",
       "choices": [
         {
           "label": "Yes, I know vectors",
@@ -650,7 +650,7 @@
     },
     {
       "stepId": "loop-check-cpp",
-      "mentorSays": "To solve this problem, we'll need to use loops. Do you know what a loop is in C++?",
+      "mentorSays": "To solve this lesson, we'll need to use loops. Do you know what a loop is in C++?",
       "choices": [
         {
           "label": "Yes, I know loops",
@@ -790,7 +790,7 @@
     },
     {
       "stepId": "array-check-ts",
-      "mentorSays": "To solve this problem, we'll need to work with arrays. Do you know what an array is in TypeScript?",
+      "mentorSays": "To solve this lesson, we'll need to work with arrays. Do you know what an array is in TypeScript?",
       "choices": [
         {
           "label": "Yes, I know arrays",
@@ -811,7 +811,7 @@
     },
     {
       "stepId": "loop-check-ts",
-      "mentorSays": "To solve this problem, we'll need to use loops. Do you know what a loop is in TypeScript?",
+      "mentorSays": "To solve this lesson, we'll need to use loops. Do you know what a loop is in TypeScript?",
       "choices": [
         {
           "label": "Yes, I know loops",
@@ -888,7 +888,7 @@
     },
     {
       "stepId": "final",
-      "mentorSays": "🎉 Well done! You've learned to think through the 3Sum problem. You understand what the problem asks for, how to use sorting and two pointers to find triplets efficiently, and how to avoid duplicate triplets in the result.\n\nThis kind of thinking—combining sorting with two pointers—is essential for solving many array problems. Keep practicing!",
+      "mentorSays": "🎉 Well done! You've learned to think through the 3Sum lesson. You understand what the lesson asks for, how to use sorting and two pointers to find triplets efficiently, and how to avoid duplicate triplets in the result.\n\nThis kind of thinking—combining sorting with two pointers—is essential for solving many array lessons. Keep practicing!",
       "action": "continue"
     }
   ]

@@ -73,7 +73,7 @@ function getOutputPreview(answer) {
 export default createINPACTEngine({
   NODES,
   sideItems,
-  problemNum: 51,
+  lessonNum: 51,
   title: "filter and backdrop-filter",
   shortName: "C51",
   language: "css",

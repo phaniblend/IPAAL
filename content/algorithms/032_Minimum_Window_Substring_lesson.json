@@ -3,13 +3,13 @@
   "config": {
     "lessonId": "ai-algorithms-32",
     "track": "algorithms",
-    "problemNum": 32,
+    "lessonNum": 32,
     "title": "Minimum Window Substring",
     "shortName": "P32",
     "intro": {
       "tag": "LESSON #32",
       "title": "Minimum Window Substring",
-      "body": "In this lesson, you will build a function that finds the smallest substring in a given string that contains all characters of another target string. You will learn the core concept of the sliding window technique, which efficiently expands and contracts a window over the string to find the minimum valid substring. The main technologies involved are JavaScript strings, objects for frequency counting, and loops to traverse the string. This beginner-friendly approach will help you understand how to solve complex string problems with optimized two-pointer logic.",
+      "body": "In this lesson, you will build a function that finds the smallest substring in a given string that contains all characters of another target string. You will learn the core concept of the sliding window technique, which efficiently expands and contracts a window over the string to find the minimum valid substring. The main technologies involved are JavaScript strings, objects for frequency counting, and loops to traverse the string. This beginner-friendly approach will help you understand how to solve complex string lessons with optimized two-pointer logic.",
       "usecase": "The Minimum Window Substring algorithm powers intelligent search and filtering features in modern applications. When you type in a search bar within a large document editor or codebase, this algorithm helps find the smallest relevant snippet containing all your search terms. It's also used in data analysis dashboards to identify the most concise data segment matching multiple filter criteria, and in DNA sequence analysis tools to locate the shortest genetic segment containing specific marker patterns. As a developer, you'll implement this pattern when building efficient text search, data mining, or content recommendation features."
     },
     "objectives": [
@@ -38,7 +38,7 @@
         "phase": "Step 2 of 16",
         "title": "What you'll learn",
         "content": {
-          "body": "1. Explain what a sliding window represents in string problems\n2. Apply the expand-and-shrink logic to find minimum windows\n3. Implement the Minimum Window Substring algorithm in JavaScript\n4. Identify when to expand versus shrink the window during execution",
+          "body": "1. Explain what a sliding window represents in string lessons\n2. Apply the expand-and-shrink logic to find minimum windows\n3. Implement the Minimum Window Substring algorithm in JavaScript\n4. Identify when to expand versus shrink the window during execution",
           "title": "What you'll learn"
         }
       },
@@ -282,7 +282,7 @@
         "phase": "Step 16 of 16",
         "title": "Done",
         "content": {
-          "body": "Congratulations! You've implemented the Minimum Window Substring algorithm using the sliding window pattern. Remember: the window expands when we need more characters and shrinks when we have all required characters, always tracking the smallest valid window. This pattern is powerful for many substring and subarray problems where you need to find contiguous segments meeting certain criteria.",
+          "body": "Congratulations! You've implemented the Minimum Window Substring algorithm using the sliding window pattern. Remember: the window expands when we need more characters and shrinks when we have all required characters, always tracking the smallest valid window. This pattern is powerful for many substring and subarray lessons where you need to find contiguous segments meeting certain criteria.",
           "title": "Done"
         }
       }

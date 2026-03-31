@@ -73,7 +73,7 @@ function getOutputPreview(answer) {
 export default createINPACTEngine({
   NODES,
   sideItems,
-  problemNum: 35,
+  lessonNum: 35,
   title: ":is() and :where()",
   shortName: "C35",
   language: "css",

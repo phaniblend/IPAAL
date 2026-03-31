@@ -333,4 +333,4 @@ const sideItems = [
   { label: "Step 6 — Full", id: "step5" },
 ];
 
-export default createINPACTEngine({ NODES, sideItems, problemNum: 7, title: "useEffect & Side Effects", shortName: "USE EFFECT" });
+export default createINPACTEngine({ NODES, sideItems, lessonNum: 7, title: "useEffect & Side Effects", shortName: "USE EFFECT" });

@@ -3,14 +3,14 @@
   "config": {
     "lessonId": "ai-python-11",
     "track": "python",
-    "problemNum": 11,
+    "lessonNum": 11,
     "title": "Packaging & environments",
     "shortName": "P11",
     "intro": {
       "tag": "LESSON #11",
       "title": "Packaging & environments",
       "body": "In this lesson, you will learn how to create a simple Python package and manage its dependencies using a virtual environment. You will build a basic calculator package that includes functions for addition and subtraction, and you'll use a requirements.txt file to specify its dependencies. The core concepts covered are package structure, virtual environments, and dependency management with pip. By the end, you'll understand how to organize code into a reusable package and isolate project environments to avoid conflicts.",
-      "usecase": "Packaging and environment management are essential for developing reliable Python applications that can be deployed consistently across different systems. In real-world scenarios, data scientists use virtual environments to isolate dependencies for different machine learning projects, ensuring that libraries like TensorFlow or pandas don't conflict. Web developers package Flask or Django applications with requirements.txt files so they can be deployed on cloud platforms like AWS or Heroku without compatibility issues. Software teams use tools like pipenv or poetry to manage dependencies across development, testing, and production environments, preventing 'it works on my machine' problems."
+      "usecase": "Packaging and environment management are essential for developing reliable Python applications that can be deployed consistently across different systems. In real-world scenarios, data scientists use virtual environments to isolate dependencies for different machine learning projects, ensuring that libraries like TensorFlow or pandas don't conflict. Web developers package Flask or Django applications with requirements.txt files so they can be deployed on cloud platforms like AWS or Heroku without compatibility issues. Software teams use tools like pipenv or poetry to manage dependencies across development, testing, and production environments, preventing 'it works on my machine' lessons."
     },
     "objectives": [
       "Construct a virtual environment to isolate project dependencies",

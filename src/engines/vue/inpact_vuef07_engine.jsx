@@ -8,4 +8,4 @@ const NODES = [
 // async setup() allows await before return`, feedback_correct: "✅ defineAsyncComponent; Suspense with default and fallback; async setup can await.", feedback_wrong: "defineAsyncComponent for lazy; Suspense for loading state; async setup.", expected: "Async patterns" },
 ];
 const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }];
-export default createINPACTEngine({ NODES, sideItems, problemNum: "VUE-F07", title: "Async patterns", shortName: "VUE — ASYNC" });
+export default createINPACTEngine({ NODES, sideItems, lessonNum: "VUE-F07", title: "Async patterns", shortName: "VUE — ASYNC" });

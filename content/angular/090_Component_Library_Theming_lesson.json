@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-angular-90",
     "track": "angular",
-    "problemNum": 90,
+    "lessonNum": 90,
     "title": "Component Library Theming",
     "shortName": "P90",
     "intro": {

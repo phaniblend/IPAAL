@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-ts-12",
     "track": "ts",
-    "problemNum": 12,
+    "lessonNum": 12,
     "title": "Type a todo CRUD app with strict models",
     "shortName": "P12",
     "intro": {

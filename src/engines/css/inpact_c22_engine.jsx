@@ -73,7 +73,7 @@ function getOutputPreview(answer) {
 export default createINPACTEngine({
   NODES,
   sideItems,
-  problemNum: 22,
+  lessonNum: 22,
   title: "text-overflow and white-space",
   shortName: "C22",
   language: "css",

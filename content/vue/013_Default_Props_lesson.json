@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-vue-13",
     "track": "vue",
-    "problemNum": 13,
+    "lessonNum": 13,
     "title": "Default Props",
     "shortName": "P13",
     "intro": {

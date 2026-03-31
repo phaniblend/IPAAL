@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-node-07",
     "track": "node",
-    "problemNum": 7,
+    "lessonNum": 7,
     "title": "HTTP from scratch",
     "shortName": "P07",
     "intro": {

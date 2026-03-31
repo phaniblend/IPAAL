@@ -56,4 +56,4 @@ export class ColorPickerComponent {
 ];
 
 const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
-export default createINPACTEngine({ NODES, sideItems, problemNum: 9, title: "Color Picker (Angular)", shortName: "A — COLOR PICKER" });
+export default createINPACTEngine({ NODES, sideItems, lessonNum: 9, title: "Color Picker (Angular)", shortName: "A — COLOR PICKER" });

@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-node-63",
     "track": "node",
-    "problemNum": 63,
+    "lessonNum": 63,
     "title": "Build notification fan out service",
     "shortName": "P63",
     "intro": {

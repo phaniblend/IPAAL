@@ -8,4 +8,4 @@ const NODES = [
 // SG: stateful, instance-level; NACL: stateless, subnet`, feedback_correct: "✅ Public=IGW; private+NAT; SG stateful instance; NACL stateless subnet.", feedback_wrong: "Subnets; NAT; security groups vs NACLs.", expected: "Networking" },
 ];
 const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }];
-export default createINPACTEngine({ NODES, sideItems, problemNum: "PE-11", title: "Networking fundamentals", shortName: "PE — NETWORK" });
+export default createINPACTEngine({ NODES, sideItems, lessonNum: "PE-11", title: "Networking fundamentals", shortName: "PE — NETWORK" });

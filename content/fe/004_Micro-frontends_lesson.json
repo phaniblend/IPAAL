@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-fe-04",
     "track": "fe",
-    "problemNum": 4,
+    "lessonNum": 4,
     "title": "Micro-frontends",
     "shortName": "P04",
     "intro": {

@@ -10,11 +10,11 @@
       "stepId": "title",
       "mentorSays": "At the end of this lesson, you will be able to:\n\n1. Understand what Binary Tree Inorder Traversal traversal means\n2. Use recursion to traverse a binary tree in Inorder order\n3. Understand the left subtree, then root, then right subtree pattern\n4. Handle base cases (null nodes)\n5. Implement the solution step by step in your chosen language",
       "action": "continue",
-      "next": "problem-illustration"
+      "next": "lesson-illustration"
     },
     {
-      "stepId": "problem-illustration",
-      "mentorSays": "Perfect! Now let's understand what Binary Tree Inorder Traversal traversal means.\n\n**Problem Definition:**\nGiven the root of a binary tree, return the Inorder traversal of its nodes' values.\n\n**Key Observations:**\n- Tree traversal visits each node exactly once\n- Inorder order means: left subtree, then root, then right subtree\n- We can use recursion or iteration (stack)\n- The order matters for different use cases\n\n**Example 1:**\nTree:\n    1\n     \\\n      2\n     /\n    3\n\nInorder traversal: [1, 2, 3]\n\n**Example 2:**\nTree:\n    1\n   / \\\n  2   3\n / \\\n4   5\n\nInorder traversal: [4,2,5,1,3]\n\n**Step-by-step trace for Example 2 (Recursive approach):**\n\nTree:\n    1\n   / \\\n  2   3\n / \\\n4   5\n\nWe'll use recursion:\n- Visit left subtree (2,4,5)\n- Visit root (1)\n- Visit right subtree (3)\n- Result: [4,2,5,1,3]\n\n**Key Insight:**\nInorder traversal follows a specific order: left subtree, then root, then right subtree. We recursively visit left subtree, current node, and right subtree in the correct sequence.\n\n**What makes this tricky:**\n1. Understanding the traversal order\n2. Recursive thinking: visit subtrees before/after current node\n3. Handling base cases (null nodes)\n4. Building the result list correctly\n\n**Common pitfalls:**\n- Visiting nodes in wrong order\n- Not handling null nodes\n- Forgetting to return the result\n- Not initializing the result list",
+      "stepId": "lesson-illustration",
+      "mentorSays": "Perfect! Now let's understand what Binary Tree Inorder Traversal traversal means.\n\n**Lesson Definition:**\nGiven the root of a binary tree, return the Inorder traversal of its nodes' values.\n\n**Key Observations:**\n- Tree traversal visits each node exactly once\n- Inorder order means: left subtree, then root, then right subtree\n- We can use recursion or iteration (stack)\n- The order matters for different use cases\n\n**Example 1:**\nTree:\n    1\n     \\\n      2\n     /\n    3\n\nInorder traversal: [1, 2, 3]\n\n**Example 2:**\nTree:\n    1\n   / \\\n  2   3\n / \\\n4   5\n\nInorder traversal: [4,2,5,1,3]\n\n**Step-by-step trace for Example 2 (Recursive approach):**\n\nTree:\n    1\n   / \\\n  2   3\n / \\\n4   5\n\nWe'll use recursion:\n- Visit left subtree (2,4,5)\n- Visit root (1)\n- Visit right subtree (3)\n- Result: [4,2,5,1,3]\n\n**Key Insight:**\nInorder traversal follows a specific order: left subtree, then root, then right subtree. We recursively visit left subtree, current node, and right subtree in the correct sequence.\n\n**What makes this tricky:**\n1. Understanding the traversal order\n2. Recursive thinking: visit subtrees before/after current node\n3. Handling base cases (null nodes)\n4. Building the result list correctly\n\n**Common pitfalls:**\n- Visiting nodes in wrong order\n- Not handling null nodes\n- Forgetting to return the result\n- Not initializing the result list",
       "example": "Example 1:\n    1\n     \\\n      2\n     /\n    3\n\nInorder: [1, 2, 3]\n\nExample 2:\n    1\n   / \\\n  2   3\n\nInorder: [1, 2, 3]",
       "action": "continue",
       "next": "thinking-challenge"
@@ -146,7 +146,7 @@
     },
     {
       "stepId": "tree-check-js",
-      "mentorSays": "To solve this problem, we'll need to work with binary trees. Do you know what a binary tree is?",
+      "mentorSays": "To solve this lesson, we'll need to work with binary trees. Do you know what a binary tree is?",
       "choices": [
         {
           "label": "Yes, I know binary trees",
@@ -167,7 +167,7 @@
     },
     {
       "stepId": "recursion-check-js",
-      "mentorSays": "To solve this problem, we'll use recursion. Do you know what recursion is in JavaScript?",
+      "mentorSays": "To solve this lesson, we'll use recursion. Do you know what recursion is in JavaScript?",
       "choices": [
         {
           "label": "Yes, I know recursion",
@@ -181,7 +181,7 @@
     },
     {
       "stepId": "recursion-explanation-js",
-      "mentorSays": "Recursion is when a function calls itself. For tree problems, we use recursion because a tree is naturally recursive - each subtree is also a tree.",
+      "mentorSays": "Recursion is when a function calls itself. For tree lessons, we use recursion because a tree is naturally recursive - each subtree is also a tree.",
       "example": "function traverse(root) {\n  if (root === null) return [];\n  \n  // Recursive calls\n  let left = traverse(root.left);   // Recursive!\n  let right = traverse(root.right); // Recursive!\n  \n  // Combine results\n  return [...left, root.val, ...right];\n}",
       "action": "continue",
       "next": "coding-start-js"
@@ -307,7 +307,7 @@
     },
     {
       "stepId": "tree-check-python",
-      "mentorSays": "To solve this problem, we'll need to work with binary trees. Do you know what a binary tree is?",
+      "mentorSays": "To solve this lesson, we'll need to work with binary trees. Do you know what a binary tree is?",
       "choices": [
         {
           "label": "Yes, I know binary trees",
@@ -328,7 +328,7 @@
     },
     {
       "stepId": "recursion-check-python",
-      "mentorSays": "To solve this problem, we'll use recursion. Do you know what recursion is in Python?",
+      "mentorSays": "To solve this lesson, we'll use recursion. Do you know what recursion is in Python?",
       "choices": [
         {
           "label": "Yes, I know recursion",
@@ -342,7 +342,7 @@
     },
     {
       "stepId": "recursion-explanation-python",
-      "mentorSays": "Recursion is when a function calls itself. For tree problems, we use recursion because a tree is naturally recursive - each subtree is also a tree.",
+      "mentorSays": "Recursion is when a function calls itself. For tree lessons, we use recursion because a tree is naturally recursive - each subtree is also a tree.",
       "example": "function traverse(root) {\n  if (root === null) return [];\n  \n  // Recursive calls\n  let left = traverse(root.left);   // Recursive!\n  let right = traverse(root.right); // Recursive!\n  \n  // Combine results\n  return [...left, root.val, ...right];\n}",
       "action": "continue",
       "next": "coding-start-python"
@@ -461,7 +461,7 @@
     },
     {
       "stepId": "tree-check-java",
-      "mentorSays": "To solve this problem, we'll need to work with binary trees. Do you know what a binary tree is?",
+      "mentorSays": "To solve this lesson, we'll need to work with binary trees. Do you know what a binary tree is?",
       "choices": [
         {
           "label": "Yes, I know binary trees",
@@ -482,7 +482,7 @@
     },
     {
       "stepId": "recursion-check-java",
-      "mentorSays": "To solve this problem, we'll use recursion. Do you know what recursion is in Java?",
+      "mentorSays": "To solve this lesson, we'll use recursion. Do you know what recursion is in Java?",
       "choices": [
         {
           "label": "Yes, I know recursion",
@@ -496,7 +496,7 @@
     },
     {
       "stepId": "recursion-explanation-java",
-      "mentorSays": "Recursion is when a function calls itself. For tree problems, we use recursion because a tree is naturally recursive - each subtree is also a tree.",
+      "mentorSays": "Recursion is when a function calls itself. For tree lessons, we use recursion because a tree is naturally recursive - each subtree is also a tree.",
       "example": "function traverse(root) {\n  if (root === null) return [];\n  \n  // Recursive calls\n  let left = traverse(root.left);   // Recursive!\n  let right = traverse(root.right); // Recursive!\n  \n  // Combine results\n  return [...left, root.val, ...right];\n}",
       "action": "continue",
       "next": "coding-start-java"
@@ -615,7 +615,7 @@
     },
     {
       "stepId": "tree-check-cpp",
-      "mentorSays": "To solve this problem, we'll need to work with binary trees. Do you know what a binary tree is?",
+      "mentorSays": "To solve this lesson, we'll need to work with binary trees. Do you know what a binary tree is?",
       "choices": [
         {
           "label": "Yes, I know binary trees",
@@ -636,7 +636,7 @@
     },
     {
       "stepId": "recursion-check-cpp",
-      "mentorSays": "To solve this problem, we'll use recursion. Do you know what recursion is in C++?",
+      "mentorSays": "To solve this lesson, we'll use recursion. Do you know what recursion is in C++?",
       "choices": [
         {
           "label": "Yes, I know recursion",
@@ -650,7 +650,7 @@
     },
     {
       "stepId": "recursion-explanation-cpp",
-      "mentorSays": "Recursion is when a function calls itself. For tree problems, we use recursion because a tree is naturally recursive - each subtree is also a tree.",
+      "mentorSays": "Recursion is when a function calls itself. For tree lessons, we use recursion because a tree is naturally recursive - each subtree is also a tree.",
       "example": "function traverse(root) {\n  if (root === null) return [];\n  \n  // Recursive calls\n  let left = traverse(root.left);   // Recursive!\n  let right = traverse(root.right); // Recursive!\n  \n  // Combine results\n  return [...left, root.val, ...right];\n}",
       "action": "continue",
       "next": "coding-start-cpp"
@@ -769,7 +769,7 @@
     },
     {
       "stepId": "tree-check-ts",
-      "mentorSays": "To solve this problem, we'll need to work with binary trees. Do you know what a binary tree is?",
+      "mentorSays": "To solve this lesson, we'll need to work with binary trees. Do you know what a binary tree is?",
       "choices": [
         {
           "label": "Yes, I know binary trees",
@@ -790,7 +790,7 @@
     },
     {
       "stepId": "recursion-check-ts",
-      "mentorSays": "To solve this problem, we'll use recursion. Do you know what recursion is in TypeScript?",
+      "mentorSays": "To solve this lesson, we'll use recursion. Do you know what recursion is in TypeScript?",
       "choices": [
         {
           "label": "Yes, I know recursion",
@@ -804,7 +804,7 @@
     },
     {
       "stepId": "recursion-explanation-ts",
-      "mentorSays": "Recursion is when a function calls itself. For tree problems, we use recursion because a tree is naturally recursive - each subtree is also a tree.",
+      "mentorSays": "Recursion is when a function calls itself. For tree lessons, we use recursion because a tree is naturally recursive - each subtree is also a tree.",
       "example": "function traverse(root) {\n  if (root === null) return [];\n  \n  // Recursive calls\n  let left = traverse(root.left);   // Recursive!\n  let right = traverse(root.right); // Recursive!\n  \n  // Combine results\n  return [...left, root.val, ...right];\n}",
       "action": "continue",
       "next": "coding-start-ts"
@@ -860,7 +860,7 @@
     },
     {
       "stepId": "final",
-      "mentorSays": "🎉 Well done! You've successfully implemented Binary Tree Inorder Traversal traversal!\n\n**Time Complexity:** O(n)\n- We visit each node exactly once\n- Each node does constant work\n\n**Space Complexity:** O(h)\n- The recursion stack uses O(h) space where h is the height\n- For balanced tree: O(log n)\n- For skewed tree: O(n)\n- Result array uses O(n) space\n\n**Key Takeaways:**\n1. **Inorder order**: left subtree, then root, then right subtree\n2. **Recursion**: Natural fit for tree traversal\n3. **Base case**: Handle null nodes\n4. **Order matters**: Different orders for different use cases\n5. **Efficiency**: O(n) time is optimal (must visit all nodes)\n\n**Related Practice Problems:**\n- Binary Tree Preorder Traversal (LeetCode #144) - different order\n- Binary Tree Postorder Traversal (LeetCode #145) - different order\n- Binary Tree Level Order Traversal (LeetCode #102) - BFS traversal\n\nKeep practicing tree traversals - they're fundamental!",
+      "mentorSays": "🎉 Well done! You've successfully implemented Binary Tree Inorder Traversal traversal!\n\n**Time Complexity:** O(n)\n- We visit each node exactly once\n- Each node does constant work\n\n**Space Complexity:** O(h)\n- The recursion stack uses O(h) space where h is the height\n- For balanced tree: O(log n)\n- For skewed tree: O(n)\n- Result array uses O(n) space\n\n**Key Takeaways:**\n1. **Inorder order**: left subtree, then root, then right subtree\n2. **Recursion**: Natural fit for tree traversal\n3. **Base case**: Handle null nodes\n4. **Order matters**: Different orders for different use cases\n5. **Efficiency**: O(n) time is optimal (must visit all nodes)\n\n**Related Practice Lessons:**\n- Binary Tree Preorder Traversal (LeetCode #144) - different order\n- Binary Tree Postorder Traversal (LeetCode #145) - different order\n- Binary Tree Level Order Traversal (LeetCode #102) - BFS traversal\n\nKeep practicing tree traversals - they're fundamental!",
       "action": "continue"
     }
   ]

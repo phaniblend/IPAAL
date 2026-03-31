@@ -8,20 +8,20 @@
   "flow": [
     {
       "stepId": "title",
-      "mentorSays": "At the end of this lesson, you will be able to:\n\n1. Understand what the Maximum Depth of Binary Tree problem asks for\n2. Use recursion or iteration to traverse the tree\n3. Calculate the depth by finding the maximum depth of left and right subtrees\n4. Handle base cases (null nodes)\n5. Implement the solution step by step in your chosen language",
+      "mentorSays": "At the end of this lesson, you will be able to:\n\n1. Understand what the Maximum Depth of Binary Tree lesson asks for\n2. Use recursion or iteration to traverse the tree\n3. Calculate the depth by finding the maximum depth of left and right subtrees\n4. Handle base cases (null nodes)\n5. Implement the solution step by step in your chosen language",
       "action": "continue",
-      "next": "problem-illustration"
+      "next": "lesson-illustration"
     },
     {
-      "stepId": "problem-illustration",
-      "mentorSays": "Perfect! Now let's understand what the Maximum Depth of Binary Tree problem is asking.\n\n**Problem Definition:**\nGiven the root of a binary tree, return its maximum depth. A binary tree's maximum depth is the number of nodes along the longest path from the root node down to the farthest leaf node.\n\n**Key Observations:**\n- Depth is measured in number of nodes (not edges)\n- We need to find the longest path from root to any leaf\n- A leaf is a node with no children\n- An empty tree (null root) has depth 0\n\n**Example 1:**\nTree:\n    3\n   / \\\n  9   20\n      / \\\n     15  7\n\nMaximum depth: 3 (path: 3 -> 20 -> 15 or 3 -> 20 -> 7)\n\n**Example 2:**\nTree:\n    1\n     \\\n      2\n\nMaximum depth: 2 (path: 1 -> 2)\n\n**Example 3:**\nTree: null (empty tree)\n\nMaximum depth: 0\n\n**Step-by-step trace for Example 1 (Recursive approach):**\n\nTree:\n    3\n   / \\\n  9   20\n      / \\\n     15  7\n\nWe'll use recursion:\n- **maxDepth(3)**:\n  - Left subtree depth = maxDepth(9) = 1\n  - Right subtree depth = maxDepth(20) = 2\n  - Return 1 + max(1, 2) = 1 + 2 = 3 ✓\n\n- **maxDepth(9)**:\n  - Left = null, depth = 0\n  - Right = null, depth = 0\n  - Return 1 + max(0, 0) = 1 + 0 = 1\n\n- **maxDepth(20)**:\n  - Left subtree depth = maxDepth(15) = 1\n  - Right subtree depth = maxDepth(7) = 1\n  - Return 1 + max(1, 1) = 1 + 1 = 2\n\n- **maxDepth(15)**:\n  - Left = null, depth = 0\n  - Right = null, depth = 0\n  - Return 1 + max(0, 0) = 1\n\n- **maxDepth(7)**:\n  - Left = null, depth = 0\n  - Right = null, depth = 0\n  - Return 1 + max(0, 0) = 1\n\n**Key Insight:**\nThe maximum depth of a node = 1 (for the current node) + maximum depth of its left and right subtrees.\n\n**What makes this tricky:**\n1. Understanding that depth is measured in nodes (not edges)\n2. Handling the base case (null node returns 0)\n3. Recursive thinking: depth of current = 1 + max(depth of left, depth of right)\n4. Understanding that we need to find the maximum of left and right subtrees\n\n**Common pitfalls:**\n- Returning 0 for null node incorrectly (should return 0, not -1)\n- Not adding 1 for the current node\n- Confusing depth (nodes) with height (edges)\n- Not taking the maximum of left and right subtrees",
+      "stepId": "lesson-illustration",
+      "mentorSays": "Perfect! Now let's understand what the Maximum Depth of Binary Tree lesson is asking.\n\n**Lesson Definition:**\nGiven the root of a binary tree, return its maximum depth. A binary tree's maximum depth is the number of nodes along the longest path from the root node down to the farthest leaf node.\n\n**Key Observations:**\n- Depth is measured in number of nodes (not edges)\n- We need to find the longest path from root to any leaf\n- A leaf is a node with no children\n- An empty tree (null root) has depth 0\n\n**Example 1:**\nTree:\n    3\n   / \\\n  9   20\n      / \\\n     15  7\n\nMaximum depth: 3 (path: 3 -> 20 -> 15 or 3 -> 20 -> 7)\n\n**Example 2:**\nTree:\n    1\n     \\\n      2\n\nMaximum depth: 2 (path: 1 -> 2)\n\n**Example 3:**\nTree: null (empty tree)\n\nMaximum depth: 0\n\n**Step-by-step trace for Example 1 (Recursive approach):**\n\nTree:\n    3\n   / \\\n  9   20\n      / \\\n     15  7\n\nWe'll use recursion:\n- **maxDepth(3)**:\n  - Left subtree depth = maxDepth(9) = 1\n  - Right subtree depth = maxDepth(20) = 2\n  - Return 1 + max(1, 2) = 1 + 2 = 3 ✓\n\n- **maxDepth(9)**:\n  - Left = null, depth = 0\n  - Right = null, depth = 0\n  - Return 1 + max(0, 0) = 1 + 0 = 1\n\n- **maxDepth(20)**:\n  - Left subtree depth = maxDepth(15) = 1\n  - Right subtree depth = maxDepth(7) = 1\n  - Return 1 + max(1, 1) = 1 + 1 = 2\n\n- **maxDepth(15)**:\n  - Left = null, depth = 0\n  - Right = null, depth = 0\n  - Return 1 + max(0, 0) = 1\n\n- **maxDepth(7)**:\n  - Left = null, depth = 0\n  - Right = null, depth = 0\n  - Return 1 + max(0, 0) = 1\n\n**Key Insight:**\nThe maximum depth of a node = 1 (for the current node) + maximum depth of its left and right subtrees.\n\n**What makes this tricky:**\n1. Understanding that depth is measured in nodes (not edges)\n2. Handling the base case (null node returns 0)\n3. Recursive thinking: depth of current = 1 + max(depth of left, depth of right)\n4. Understanding that we need to find the maximum of left and right subtrees\n\n**Common pitfalls:**\n- Returning 0 for null node incorrectly (should return 0, not -1)\n- Not adding 1 for the current node\n- Confusing depth (nodes) with height (edges)\n- Not taking the maximum of left and right subtrees",
       "example": "Example 1:\n    3\n   / \\\n  9   20\n      / \\\n     15  7\n\nMax depth: 3\n\nExample 2:\n    1\n     \\\n      2\n\nMax depth: 2\n\nExample 3:\nnull\n\nMax depth: 0",
       "action": "continue",
       "next": "thinking-challenge"
     },
     {
       "stepId": "thinking-challenge",
-      "mentorSays": "Now that you understand what the problem wants, here's the real question:\n\nHow would YOU find the maximum depth of a binary tree?\n\nThink about it for a moment. What approach feels natural to you?",
+      "mentorSays": "Now that you understand what the lesson wants, here's the real question:\n\nHow would YOU find the maximum depth of a binary tree?\n\nThink about it for a moment. What approach feels natural to you?",
       "choices": [
         {
           "label": "Use recursion - depth = 1 + max(depth of left, depth of right)",
@@ -51,7 +51,7 @@
     },
     {
       "stepId": "explore-recursive",
-      "mentorSays": "Excellent choice! Recursion is the most elegant solution for this problem. Here's the core idea:\n\n**The Algorithm:**\n1. **Base case**: If root is null, return 0 (empty tree has depth 0)\n2. **Recursive case**: \n   - Calculate depth of left subtree: leftDepth = maxDepth(root.left)\n   - Calculate depth of right subtree: rightDepth = maxDepth(root.right)\n   - Return 1 + max(leftDepth, rightDepth)\n\n**Why it works**:\n- The depth of a node = 1 (for the current node) + the maximum depth of its children\n- We recursively calculate the depth of each subtree\n- The base case handles null nodes (leaves' children)\n\n**Key insight**: We don't need to track depth explicitly—the recursion naturally builds it up from the bottom!\n\nLet's trace with tree:\n    3\n   / \\\n  9   20\n      / \\\n     15  7\n\n- **maxDepth(3)**:\n  - leftDepth = maxDepth(9) = 1\n  - rightDepth = maxDepth(20) = 2\n  - Return 1 + max(1, 2) = 3 ✓\n\n- **maxDepth(9)**:\n  - leftDepth = maxDepth(null) = 0\n  - rightDepth = maxDepth(null) = 0\n  - Return 1 + max(0, 0) = 1\n\n- **maxDepth(20)**:\n  - leftDepth = maxDepth(15) = 1\n  - rightDepth = maxDepth(7) = 1\n  - Return 1 + max(1, 1) = 2\n\nThis is O(n) time (visit each node once) and O(h) space (recursion stack, where h is height)! Now let's code it step by step.",
+      "mentorSays": "Excellent choice! Recursion is the most elegant solution for this lesson. Here's the core idea:\n\n**The Algorithm:**\n1. **Base case**: If root is null, return 0 (empty tree has depth 0)\n2. **Recursive case**: \n   - Calculate depth of left subtree: leftDepth = maxDepth(root.left)\n   - Calculate depth of right subtree: rightDepth = maxDepth(root.right)\n   - Return 1 + max(leftDepth, rightDepth)\n\n**Why it works**:\n- The depth of a node = 1 (for the current node) + the maximum depth of its children\n- We recursively calculate the depth of each subtree\n- The base case handles null nodes (leaves' children)\n\n**Key insight**: We don't need to track depth explicitly—the recursion naturally builds it up from the bottom!\n\nLet's trace with tree:\n    3\n   / \\\n  9   20\n      / \\\n     15  7\n\n- **maxDepth(3)**:\n  - leftDepth = maxDepth(9) = 1\n  - rightDepth = maxDepth(20) = 2\n  - Return 1 + max(1, 2) = 3 ✓\n\n- **maxDepth(9)**:\n  - leftDepth = maxDepth(null) = 0\n  - rightDepth = maxDepth(null) = 0\n  - Return 1 + max(0, 0) = 1\n\n- **maxDepth(20)**:\n  - leftDepth = maxDepth(15) = 1\n  - rightDepth = maxDepth(7) = 1\n  - Return 1 + max(1, 1) = 2\n\nThis is O(n) time (visit each node once) and O(h) space (recursion stack, where h is height)! Now let's code it step by step.",
       "action": "continue",
       "next": "language-selection"
     },
@@ -146,7 +146,7 @@
     },
     {
       "stepId": "tree-check-js",
-      "mentorSays": "To solve this problem, we'll need to work with binary trees. Do you know what a binary tree is?",
+      "mentorSays": "To solve this lesson, we'll need to work with binary trees. Do you know what a binary tree is?",
       "choices": [
         {
           "label": "Yes, I know binary trees",
@@ -167,7 +167,7 @@
     },
     {
       "stepId": "recursion-check-js",
-      "mentorSays": "To solve this problem, we'll use recursion. Do you know what recursion is in JavaScript?",
+      "mentorSays": "To solve this lesson, we'll use recursion. Do you know what recursion is in JavaScript?",
       "choices": [
         {
           "label": "Yes, I know recursion",
@@ -181,7 +181,7 @@
     },
     {
       "stepId": "recursion-explanation-js",
-      "mentorSays": "Recursion is when a function calls itself. For tree problems, we often use recursion because:\n- A tree is naturally recursive (each subtree is also a tree)\n- We can solve the problem for the whole tree by solving it for subtrees\n\nFor example, to find max depth of a tree, we find max depth of left subtree and right subtree, then combine them.",
+      "mentorSays": "Recursion is when a function calls itself. For tree lessons, we often use recursion because:\n- A tree is naturally recursive (each subtree is also a tree)\n- We can solve the lesson for the whole tree by solving it for subtrees\n\nFor example, to find max depth of a tree, we find max depth of left subtree and right subtree, then combine them.",
       "example": "function maxDepth(root) {\n  // Base case: empty tree\n  if (root === null) return 0;\n  \n  // Recursive case: solve for subtrees\n  let leftDepth = maxDepth(root.left);  // Recursive call!\n  let rightDepth = maxDepth(root.right); // Recursive call!\n  \n  return 1 + Math.max(leftDepth, rightDepth);\n}",
       "action": "continue",
       "next": "coding-start-js"
@@ -293,7 +293,7 @@
     },
     {
       "stepId": "tree-check-python",
-      "mentorSays": "To solve this problem, we'll need to work with binary trees. Do you know what a binary tree is?",
+      "mentorSays": "To solve this lesson, we'll need to work with binary trees. Do you know what a binary tree is?",
       "choices": [
         {
           "label": "Yes, I know binary trees",
@@ -314,7 +314,7 @@
     },
     {
       "stepId": "recursion-check-python",
-      "mentorSays": "To solve this problem, we'll use recursion. Do you know what recursion is in Python?",
+      "mentorSays": "To solve this lesson, we'll use recursion. Do you know what recursion is in Python?",
       "choices": [
         {
           "label": "Yes, I know recursion",
@@ -328,7 +328,7 @@
     },
     {
       "stepId": "recursion-explanation-python",
-      "mentorSays": "Recursion is when a function calls itself. For tree problems, we often use recursion because:\n- A tree is naturally recursive (each subtree is also a tree)\n- We can solve the problem for the whole tree by solving it for subtrees\n\nFor example, to find max depth of a tree, we find max depth of left subtree and right subtree, then combine them.",
+      "mentorSays": "Recursion is when a function calls itself. For tree lessons, we often use recursion because:\n- A tree is naturally recursive (each subtree is also a tree)\n- We can solve the lesson for the whole tree by solving it for subtrees\n\nFor example, to find max depth of a tree, we find max depth of left subtree and right subtree, then combine them.",
       "example": "function maxDepth(root) {\n  // Base case: empty tree\n  if (root === null) return 0;\n  \n  // Recursive case: solve for subtrees\n  let leftDepth = maxDepth(root.left);  // Recursive call!\n  let rightDepth = maxDepth(root.right); // Recursive call!\n  \n  return 1 + Math.max(leftDepth, rightDepth);\n}",
       "action": "continue",
       "next": "coding-start-python"
@@ -440,7 +440,7 @@
     },
     {
       "stepId": "tree-check-java",
-      "mentorSays": "To solve this problem, we'll need to work with binary trees. Do you know what a binary tree is?",
+      "mentorSays": "To solve this lesson, we'll need to work with binary trees. Do you know what a binary tree is?",
       "choices": [
         {
           "label": "Yes, I know binary trees",
@@ -461,7 +461,7 @@
     },
     {
       "stepId": "recursion-check-java",
-      "mentorSays": "To solve this problem, we'll use recursion. Do you know what recursion is in Java?",
+      "mentorSays": "To solve this lesson, we'll use recursion. Do you know what recursion is in Java?",
       "choices": [
         {
           "label": "Yes, I know recursion",
@@ -475,7 +475,7 @@
     },
     {
       "stepId": "recursion-explanation-java",
-      "mentorSays": "Recursion is when a function calls itself. For tree problems, we often use recursion because:\n- A tree is naturally recursive (each subtree is also a tree)\n- We can solve the problem for the whole tree by solving it for subtrees\n\nFor example, to find max depth of a tree, we find max depth of left subtree and right subtree, then combine them.",
+      "mentorSays": "Recursion is when a function calls itself. For tree lessons, we often use recursion because:\n- A tree is naturally recursive (each subtree is also a tree)\n- We can solve the lesson for the whole tree by solving it for subtrees\n\nFor example, to find max depth of a tree, we find max depth of left subtree and right subtree, then combine them.",
       "example": "function maxDepth(root) {\n  // Base case: empty tree\n  if (root === null) return 0;\n  \n  // Recursive case: solve for subtrees\n  let leftDepth = maxDepth(root.left);  // Recursive call!\n  let rightDepth = maxDepth(root.right); // Recursive call!\n  \n  return 1 + Math.max(leftDepth, rightDepth);\n}",
       "action": "continue",
       "next": "coding-start-java"
@@ -587,7 +587,7 @@
     },
     {
       "stepId": "tree-check-cpp",
-      "mentorSays": "To solve this problem, we'll need to work with binary trees. Do you know what a binary tree is?",
+      "mentorSays": "To solve this lesson, we'll need to work with binary trees. Do you know what a binary tree is?",
       "choices": [
         {
           "label": "Yes, I know binary trees",
@@ -608,7 +608,7 @@
     },
     {
       "stepId": "recursion-check-cpp",
-      "mentorSays": "To solve this problem, we'll use recursion. Do you know what recursion is in C++?",
+      "mentorSays": "To solve this lesson, we'll use recursion. Do you know what recursion is in C++?",
       "choices": [
         {
           "label": "Yes, I know recursion",
@@ -622,7 +622,7 @@
     },
     {
       "stepId": "recursion-explanation-cpp",
-      "mentorSays": "Recursion is when a function calls itself. For tree problems, we often use recursion because:\n- A tree is naturally recursive (each subtree is also a tree)\n- We can solve the problem for the whole tree by solving it for subtrees\n\nFor example, to find max depth of a tree, we find max depth of left subtree and right subtree, then combine them.",
+      "mentorSays": "Recursion is when a function calls itself. For tree lessons, we often use recursion because:\n- A tree is naturally recursive (each subtree is also a tree)\n- We can solve the lesson for the whole tree by solving it for subtrees\n\nFor example, to find max depth of a tree, we find max depth of left subtree and right subtree, then combine them.",
       "example": "function maxDepth(root) {\n  // Base case: empty tree\n  if (root === null) return 0;\n  \n  // Recursive case: solve for subtrees\n  let leftDepth = maxDepth(root.left);  // Recursive call!\n  let rightDepth = maxDepth(root.right); // Recursive call!\n  \n  return 1 + Math.max(leftDepth, rightDepth);\n}",
       "action": "continue",
       "next": "coding-start-cpp"
@@ -734,7 +734,7 @@
     },
     {
       "stepId": "tree-check-ts",
-      "mentorSays": "To solve this problem, we'll need to work with binary trees. Do you know what a binary tree is?",
+      "mentorSays": "To solve this lesson, we'll need to work with binary trees. Do you know what a binary tree is?",
       "choices": [
         {
           "label": "Yes, I know binary trees",
@@ -755,7 +755,7 @@
     },
     {
       "stepId": "recursion-check-ts",
-      "mentorSays": "To solve this problem, we'll use recursion. Do you know what recursion is in TypeScript?",
+      "mentorSays": "To solve this lesson, we'll use recursion. Do you know what recursion is in TypeScript?",
       "choices": [
         {
           "label": "Yes, I know recursion",
@@ -769,7 +769,7 @@
     },
     {
       "stepId": "recursion-explanation-ts",
-      "mentorSays": "Recursion is when a function calls itself. For tree problems, we often use recursion because:\n- A tree is naturally recursive (each subtree is also a tree)\n- We can solve the problem for the whole tree by solving it for subtrees\n\nFor example, to find max depth of a tree, we find max depth of left subtree and right subtree, then combine them.",
+      "mentorSays": "Recursion is when a function calls itself. For tree lessons, we often use recursion because:\n- A tree is naturally recursive (each subtree is also a tree)\n- We can solve the lesson for the whole tree by solving it for subtrees\n\nFor example, to find max depth of a tree, we find max depth of left subtree and right subtree, then combine them.",
       "example": "function maxDepth(root) {\n  // Base case: empty tree\n  if (root === null) return 0;\n  \n  // Recursive case: solve for subtrees\n  let leftDepth = maxDepth(root.left);  // Recursive call!\n  let rightDepth = maxDepth(root.right); // Recursive call!\n  \n  return 1 + Math.max(leftDepth, rightDepth);\n}",
       "action": "continue",
       "next": "coding-start-ts"
@@ -818,7 +818,7 @@
     },
     {
       "stepId": "final",
-      "mentorSays": "🎉 Well done! You've successfully implemented the Maximum Depth of Binary Tree solution!\n\n**Time Complexity:** O(n)\n- We visit each node exactly once\n- n is the number of nodes in the tree\n\n**Space Complexity:** O(h)\n- The recursion stack uses space proportional to the height of the tree\n- In the worst case (skewed tree), h = n, so O(n)\n- In the best case (balanced tree), h = log n, so O(log n)\n\n**Key Takeaways:**\n1. **Recursive approach**: The depth of a node = 1 + max(depth of left subtree, depth of right subtree)\n2. **Base case**: Empty tree (null) has depth 0\n3. **Natural recursion**: Trees are naturally recursive structures, so recursion fits perfectly\n4. **Depth vs Height**: Depth is measured in nodes (we count the current node as 1)\n5. **Maximum of subtrees**: We take the maximum because we want the longest path\n\n**Related Practice Problems:**\n- Minimum Depth of Binary Tree (LeetCode #111) - find minimum instead of maximum\n- Balanced Binary Tree (LeetCode #110) - check if tree is balanced\n- Diameter of Binary Tree (LeetCode #543) - longest path between any two nodes\n\nKeep practicing tree problems - they're fundamental for interviews!",
+      "mentorSays": "🎉 Well done! You've successfully implemented the Maximum Depth of Binary Tree solution!\n\n**Time Complexity:** O(n)\n- We visit each node exactly once\n- n is the number of nodes in the tree\n\n**Space Complexity:** O(h)\n- The recursion stack uses space proportional to the height of the tree\n- In the worst case (skewed tree), h = n, so O(n)\n- In the best case (balanced tree), h = log n, so O(log n)\n\n**Key Takeaways:**\n1. **Recursive approach**: The depth of a node = 1 + max(depth of left subtree, depth of right subtree)\n2. **Base case**: Empty tree (null) has depth 0\n3. **Natural recursion**: Trees are naturally recursive structures, so recursion fits perfectly\n4. **Depth vs Height**: Depth is measured in nodes (we count the current node as 1)\n5. **Maximum of subtrees**: We take the maximum because we want the longest path\n\n**Related Practice Lessons:**\n- Minimum Depth of Binary Tree (LeetCode #111) - find minimum instead of maximum\n- Balanced Binary Tree (LeetCode #110) - check if tree is balanced\n- Diameter of Binary Tree (LeetCode #543) - longest path between any two nodes\n\nKeep practicing tree lessons - they're fundamental for interviews!",
       "action": "continue"
     }
   ]

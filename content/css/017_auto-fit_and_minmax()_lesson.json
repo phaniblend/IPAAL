@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-css-17",
     "track": "css",
-    "problemNum": 17,
+    "lessonNum": 17,
     "title": "auto-fit and minmax()",
     "shortName": "P17",
     "intro": {

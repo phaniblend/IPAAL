@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-angular-71",
     "track": "angular",
-    "problemNum": 71,
+    "lessonNum": 71,
     "title": "Generic List<T>",
     "shortName": "P71",
     "intro": {

@@ -306,7 +306,7 @@ const s = {
   }),
 };
 
-export default function AngularA09Pipes({ onNextProblem }) {
+export default function AngularA09Pipes({ onNextLesson }) {
   const [nodeIndex, setNodeIndex] = useState(0);
   const [answers, setAnswers] = useState({});
   const [result, setResult] = useState(null);

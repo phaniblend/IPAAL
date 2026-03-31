@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-vue-09",
     "track": "vue",
-    "problemNum": 9,
+    "lessonNum": 9,
     "title": "Color Picker",
     "shortName": "P09",
     "intro": {

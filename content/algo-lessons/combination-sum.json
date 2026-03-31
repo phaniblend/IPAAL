@@ -8,20 +8,20 @@
   "flow": [
     {
       "stepId": "title",
-      "mentorSays": "At the end of this lesson, you will be able to:\n\n1. Understand what the Combination Sum problem asks for\n2. Use backtracking to find all unique combinations\n3. Handle element reuse (same number can be used multiple times)\n4. Build combinations incrementally with proper constraints\n5. Implement the solution step by step in your chosen language",
+      "mentorSays": "At the end of this lesson, you will be able to:\n\n1. Understand what the Combination Sum lesson asks for\n2. Use backtracking to find all unique combinations\n3. Handle element reuse (same number can be used multiple times)\n4. Build combinations incrementally with proper constraints\n5. Implement the solution step by step in your chosen language",
       "action": "continue",
-      "next": "problem-illustration"
+      "next": "lesson-illustration"
     },
     {
-      "stepId": "problem-illustration",
-      "mentorSays": "Perfect! Now let's understand what the Combination Sum problem is asking.\n\n**Problem Definition:**\nGiven an array of distinct integers `candidates` and a target integer `target`, return a list of all unique combinations of candidates where the chosen numbers sum to `target`. You may return the combinations in any order.\n\n**Key Observations:**\n- The same number may be chosen from candidates an unlimited number of times\n- All combinations must sum to exactly `target`\n- We need to find ALL unique combinations (not just one)\n- We'll use backtracking to explore all possibilities\n\n**Example 1:** candidates = [2,3,6,7], target = 7\n\nValid combinations:\n- [7] (7 = 7)\n- [2,2,3] (2+2+3 = 7)\n\nAnswer: [[2,2,3], [7]]\n\n**Example 2:** candidates = [2,3,5], target = 8\n\nValid combinations:\n- [2,2,2,2] (2+2+2+2 = 8)\n- [2,3,3] (2+3+3 = 8)\n- [3,5] (3+5 = 8)\n\nAnswer: [[2,2,2,2], [2,3,3], [3,5]]\n\n**Example 3:** candidates = [2], target = 1\n\nNo valid combinations (smallest candidate is 2, can't reach 1).\nAnswer: []\n\n**Step-by-step trace for Example 1 (Backtracking approach):**\n\ncandidates = [2,3,6,7], target = 7\n\nWe'll use backtracking with current combination and remaining sum:\n- Start: current = [], remaining = 7\n\n**Decision tree:**\n\n1. **Try 2**: current = [2], remaining = 5\n   - Try 2 again: current = [2,2], remaining = 3\n     - Try 2 again: current = [2,2,2], remaining = 1 (too small, can't use 2)\n     - Try 3: current = [2,2,3], remaining = 0 ✓ (found! add to result)\n     - Try 6: current = [2,2,6], remaining = -1 (exceeded, backtrack)\n     - Try 7: current = [2,2,7], remaining = -2 (exceeded, backtrack)\n   - Try 3: current = [2,3], remaining = 2\n     - Try 2: current = [2,3,2], remaining = 0 ✓ (found! but [2,3,2] = [2,2,3] - duplicate)\n     - Try 3: current = [2,3,3], remaining = -1 (exceeded, backtrack)\n   - Try 6: current = [2,6], remaining = -1 (exceeded, backtrack)\n   - Try 7: current = [2,7], remaining = -2 (exceeded, backtrack)\n\n2. **Try 3**: current = [3], remaining = 4\n   - Try 3 again: current = [3,3], remaining = 1 (too small)\n   - Try 6: current = [3,6], remaining = -2 (exceeded, backtrack)\n   - Try 7: current = [3,7], remaining = -3 (exceeded, backtrack)\n\n3. **Try 6**: current = [6], remaining = 1 (too small, backtrack)\n\n4. **Try 7**: current = [7], remaining = 0 ✓ (found! add to result)\n\nResult: [[2,2,3], [7]] ✓\n\n**Key Insight:**\n- We can reuse the same number multiple times\n- We only add numbers that don't exceed the remaining sum\n- To avoid duplicates, we only consider candidates from current index onwards\n- When remaining == 0, we found a valid combination!\n\n**What makes this tricky:**\n1. Understanding that we can reuse elements\n2. Avoiding duplicate combinations (use index to track position)\n3. Knowing when to stop (remaining < 0 or remaining == 0)\n4. Backtracking properly to explore all possibilities\n\n**Common pitfalls:**\n- Generating duplicate combinations (not using index properly)\n- Not handling the case where no combination exists\n- Forgetting to backtrack after adding a number\n- Not checking if remaining sum is valid before recursing",
+      "stepId": "lesson-illustration",
+      "mentorSays": "Perfect! Now let's understand what the Combination Sum lesson is asking.\n\n**Lesson Definition:**\nGiven an array of distinct integers `candidates` and a target integer `target`, return a list of all unique combinations of candidates where the chosen numbers sum to `target`. You may return the combinations in any order.\n\n**Key Observations:**\n- The same number may be chosen from candidates an unlimited number of times\n- All combinations must sum to exactly `target`\n- We need to find ALL unique combinations (not just one)\n- We'll use backtracking to explore all possibilities\n\n**Example 1:** candidates = [2,3,6,7], target = 7\n\nValid combinations:\n- [7] (7 = 7)\n- [2,2,3] (2+2+3 = 7)\n\nAnswer: [[2,2,3], [7]]\n\n**Example 2:** candidates = [2,3,5], target = 8\n\nValid combinations:\n- [2,2,2,2] (2+2+2+2 = 8)\n- [2,3,3] (2+3+3 = 8)\n- [3,5] (3+5 = 8)\n\nAnswer: [[2,2,2,2], [2,3,3], [3,5]]\n\n**Example 3:** candidates = [2], target = 1\n\nNo valid combinations (smallest candidate is 2, can't reach 1).\nAnswer: []\n\n**Step-by-step trace for Example 1 (Backtracking approach):**\n\ncandidates = [2,3,6,7], target = 7\n\nWe'll use backtracking with current combination and remaining sum:\n- Start: current = [], remaining = 7\n\n**Decision tree:**\n\n1. **Try 2**: current = [2], remaining = 5\n   - Try 2 again: current = [2,2], remaining = 3\n     - Try 2 again: current = [2,2,2], remaining = 1 (too small, can't use 2)\n     - Try 3: current = [2,2,3], remaining = 0 ✓ (found! add to result)\n     - Try 6: current = [2,2,6], remaining = -1 (exceeded, backtrack)\n     - Try 7: current = [2,2,7], remaining = -2 (exceeded, backtrack)\n   - Try 3: current = [2,3], remaining = 2\n     - Try 2: current = [2,3,2], remaining = 0 ✓ (found! but [2,3,2] = [2,2,3] - duplicate)\n     - Try 3: current = [2,3,3], remaining = -1 (exceeded, backtrack)\n   - Try 6: current = [2,6], remaining = -1 (exceeded, backtrack)\n   - Try 7: current = [2,7], remaining = -2 (exceeded, backtrack)\n\n2. **Try 3**: current = [3], remaining = 4\n   - Try 3 again: current = [3,3], remaining = 1 (too small)\n   - Try 6: current = [3,6], remaining = -2 (exceeded, backtrack)\n   - Try 7: current = [3,7], remaining = -3 (exceeded, backtrack)\n\n3. **Try 6**: current = [6], remaining = 1 (too small, backtrack)\n\n4. **Try 7**: current = [7], remaining = 0 ✓ (found! add to result)\n\nResult: [[2,2,3], [7]] ✓\n\n**Key Insight:**\n- We can reuse the same number multiple times\n- We only add numbers that don't exceed the remaining sum\n- To avoid duplicates, we only consider candidates from current index onwards\n- When remaining == 0, we found a valid combination!\n\n**What makes this tricky:**\n1. Understanding that we can reuse elements\n2. Avoiding duplicate combinations (use index to track position)\n3. Knowing when to stop (remaining < 0 or remaining == 0)\n4. Backtracking properly to explore all possibilities\n\n**Common pitfalls:**\n- Generating duplicate combinations (not using index properly)\n- Not handling the case where no combination exists\n- Forgetting to backtrack after adding a number\n- Not checking if remaining sum is valid before recursing",
       "example": "Example 1: candidates=[2,3,6,7], target=7 → [[2,2,3], [7]]\n\nExample 2: candidates=[2,3,5], target=8 → [[2,2,2,2], [2,3,3], [3,5]]\n\nExample 3: candidates=[2], target=1 → []",
       "action": "continue",
       "next": "thinking-challenge"
     },
     {
       "stepId": "thinking-challenge",
-      "mentorSays": "Now that you understand what the problem wants, here's the real question:\n\nHow would YOU find all combinations that sum to the target?\n\nThink about it for a moment. What approach feels natural to you?",
+      "mentorSays": "Now that you understand what the lesson wants, here's the real question:\n\nHow would YOU find all combinations that sum to the target?\n\nThink about it for a moment. What approach feels natural to you?",
       "choices": [
         {
           "label": "Use backtracking - try each candidate, recurse, backtrack",
@@ -146,7 +146,7 @@
     },
     {
       "stepId": "backtracking-check-js",
-      "mentorSays": "To solve this problem, we'll use backtracking. Do you know what backtracking is?",
+      "mentorSays": "To solve this lesson, we'll use backtracking. Do you know what backtracking is?",
       "choices": [
         {
           "label": "Yes, I know backtracking",
@@ -167,7 +167,7 @@
     },
     {
       "stepId": "array-check-js",
-      "mentorSays": "To solve this problem, we'll work with arrays. Do you know what arrays are in JS?",
+      "mentorSays": "To solve this lesson, we'll work with arrays. Do you know what arrays are in JS?",
       "choices": [
         {
           "label": "Yes, I know arrays",
@@ -314,7 +314,7 @@
     },
     {
       "stepId": "backtracking-check-python",
-      "mentorSays": "To solve this problem, we'll use backtracking. Do you know what backtracking is?",
+      "mentorSays": "To solve this lesson, we'll use backtracking. Do you know what backtracking is?",
       "choices": [
         {
           "label": "Yes, I know backtracking",
@@ -335,7 +335,7 @@
     },
     {
       "stepId": "array-check-python",
-      "mentorSays": "To solve this problem, we'll work with arrays. Do you know what arrays are in PYTHON?",
+      "mentorSays": "To solve this lesson, we'll work with arrays. Do you know what arrays are in PYTHON?",
       "choices": [
         {
           "label": "Yes, I know arrays",
@@ -482,7 +482,7 @@
     },
     {
       "stepId": "backtracking-check-java",
-      "mentorSays": "To solve this problem, we'll use backtracking. Do you know what backtracking is?",
+      "mentorSays": "To solve this lesson, we'll use backtracking. Do you know what backtracking is?",
       "choices": [
         {
           "label": "Yes, I know backtracking",
@@ -503,7 +503,7 @@
     },
     {
       "stepId": "array-check-java",
-      "mentorSays": "To solve this problem, we'll work with arrays. Do you know what arrays are in JAVA?",
+      "mentorSays": "To solve this lesson, we'll work with arrays. Do you know what arrays are in JAVA?",
       "choices": [
         {
           "label": "Yes, I know arrays",
@@ -650,7 +650,7 @@
     },
     {
       "stepId": "backtracking-check-cpp",
-      "mentorSays": "To solve this problem, we'll use backtracking. Do you know what backtracking is?",
+      "mentorSays": "To solve this lesson, we'll use backtracking. Do you know what backtracking is?",
       "choices": [
         {
           "label": "Yes, I know backtracking",
@@ -671,7 +671,7 @@
     },
     {
       "stepId": "array-check-cpp",
-      "mentorSays": "To solve this problem, we'll work with arrays. Do you know what arrays are in CPP?",
+      "mentorSays": "To solve this lesson, we'll work with arrays. Do you know what arrays are in CPP?",
       "choices": [
         {
           "label": "Yes, I know arrays",
@@ -818,7 +818,7 @@
     },
     {
       "stepId": "backtracking-check-ts",
-      "mentorSays": "To solve this problem, we'll use backtracking. Do you know what backtracking is?",
+      "mentorSays": "To solve this lesson, we'll use backtracking. Do you know what backtracking is?",
       "choices": [
         {
           "label": "Yes, I know backtracking",
@@ -839,7 +839,7 @@
     },
     {
       "stepId": "array-check-ts",
-      "mentorSays": "To solve this problem, we'll work with arrays. Do you know what arrays are in TS?",
+      "mentorSays": "To solve this lesson, we'll work with arrays. Do you know what arrays are in TS?",
       "choices": [
         {
           "label": "Yes, I know arrays",
@@ -923,7 +923,7 @@
     },
     {
       "stepId": "final",
-      "mentorSays": "Well done! You've successfully implemented the Combination Sum solution!\n\n**Time Complexity:** O(2^target)\n- In the worst case, we explore all possible combinations\n- For each candidate, we can either include it or not (exponential)\n- However, pruning (remaining < 0) helps reduce the search space\n- Actual complexity depends on the candidates array\n\n**Space Complexity:** O(target)\n- The recursion stack uses O(target) space (depth of recursion)\n- The result array stores all valid combinations\n- Each combination can have at most target/min(candidates) elements\n- Total: O(target) for recursion + O(2^target) for output (worst case)\n\n**Key Takeaways:**\n1. **Backtracking**: Try choices, explore, backtrack, try next\n2. **Index parameter**: Use index to avoid duplicates (only consider candidates from current position onwards)\n3. **Base cases**: remaining == 0 (valid), remaining < 0 (invalid)\n4. **Element reuse**: Pass same index (i) to allow reusing candidates\n5. **Pruning**: Early return when remaining < 0 saves computation\n\n**Common Mistakes to Avoid:**\n- Generating duplicates (not using index properly)\n- Not handling the case where no combination exists\n- Forgetting to backtrack (not removing element after recursion)\n- Not making a copy of current before adding to result\n- Passing i+1 instead of i (prevents element reuse)\n\n**Related Practice Problems:**\n- Combination Sum II (LeetCode #40) - no duplicates allowed\n- Combination Sum III (LeetCode #216) - use only k numbers\n- Combination Sum IV (LeetCode #377) - count combinations (DP)\n\nKeep practicing backtracking problems - they're common in interviews!",
+      "mentorSays": "Well done! You've successfully implemented the Combination Sum solution!\n\n**Time Complexity:** O(2^target)\n- In the worst case, we explore all possible combinations\n- For each candidate, we can either include it or not (exponential)\n- However, pruning (remaining < 0) helps reduce the search space\n- Actual complexity depends on the candidates array\n\n**Space Complexity:** O(target)\n- The recursion stack uses O(target) space (depth of recursion)\n- The result array stores all valid combinations\n- Each combination can have at most target/min(candidates) elements\n- Total: O(target) for recursion + O(2^target) for output (worst case)\n\n**Key Takeaways:**\n1. **Backtracking**: Try choices, explore, backtrack, try next\n2. **Index parameter**: Use index to avoid duplicates (only consider candidates from current position onwards)\n3. **Base cases**: remaining == 0 (valid), remaining < 0 (invalid)\n4. **Element reuse**: Pass same index (i) to allow reusing candidates\n5. **Pruning**: Early return when remaining < 0 saves computation\n\n**Common Mistakes to Avoid:**\n- Generating duplicates (not using index properly)\n- Not handling the case where no combination exists\n- Forgetting to backtrack (not removing element after recursion)\n- Not making a copy of current before adding to result\n- Passing i+1 instead of i (prevents element reuse)\n\n**Related Practice Lessons:**\n- Combination Sum II (LeetCode #40) - no duplicates allowed\n- Combination Sum III (LeetCode #216) - use only k numbers\n- Combination Sum IV (LeetCode #377) - count combinations (DP)\n\nKeep practicing backtracking lessons - they're common in interviews!",
       "action": "continue"
     }
   ]

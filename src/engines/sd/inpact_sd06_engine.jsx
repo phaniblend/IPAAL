@@ -403,4 +403,4 @@ const sideItems = [
   { label: "Step 5 — Multi-region", id: "step5" },
 ];
 
-export default createINPACTEngine({ NODES, sideItems, problemNum: "SD-06", title: "CAP Theorem & Distributed Systems", shortName: "SD — CAP & DISTRIBUTED" });
+export default createINPACTEngine({ NODES, sideItems, lessonNum: "SD-06", title: "CAP Theorem & Distributed Systems", shortName: "SD — CAP & DISTRIBUTED" });

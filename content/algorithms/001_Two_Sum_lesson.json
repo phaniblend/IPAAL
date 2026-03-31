@@ -3,13 +3,13 @@
   "config": {
     "lessonId": "ai-algorithms-01",
     "track": "algorithms",
-    "problemNum": 1,
+    "lessonNum": 1,
     "title": "Two Sum",
     "shortName": "P01",
     "intro": {
       "tag": "LESSON #1",
       "title": "Two Sum",
-      "body": "In this lesson, you will build a function that solves the classic 'Two Sum' problem, which involves finding two numbers in an array that add up to a specific target value. The core programming concept used is the hash map (or object in JavaScript), which allows for efficient lookups to avoid nested loops. You will work with fundamental JavaScript constructs like arrays, objects, for loops, and conditional logic. By the end, you'll understand how to implement an optimal O(n) solution and practice problem-solving with common data structures.",
+      "body": "In this lesson, you will build a function that solves the classic 'Two Sum' lesson, which involves finding two numbers in an array that add up to a specific target value. The core programming concept used is the hash map (or object in JavaScript), which allows for efficient lookups to avoid nested loops. You will work with fundamental JavaScript constructs like arrays, objects, for loops, and conditional logic. By the end, you'll understand how to implement an optimal O(n) solution and practice lesson-solving with common data structures.",
       "usecase": "The Two Sum algorithm is essential for real-time data validation and matching systems in production applications. For example, e-commerce platforms use it to verify that a user's selected product combinations match available inventory or promotional bundles before checkout. In financial dashboards, it helps identify pairs of transactions that sum to specific amounts for fraud detection. Developers implement this pattern in search filters, recommendation engines, and form validation where matching pairs of values must be identified instantly from large datasets."
     },
     "objectives": [
@@ -299,7 +299,7 @@
         "phase": "Step 16 of 16",
         "title": "Done",
         "content": {
-          "body": "Congratulations! You've just mastered the Two Sum problem using the array-hashmap pattern. Remember: the key idea is to 'remember what we have already seen' using a lookup object. You store the number as the key and its index as the value. You check the lookup before adding to it. This single-pass solution is efficient and elegant. Great work on your first algorithm!",
+          "body": "Congratulations! You've just mastered the Two Sum lesson using the array-hashmap pattern. Remember: the key idea is to 'remember what we have already seen' using a lookup object. You store the number as the key and its index as the value. You check the lookup before adding to it. This single-pass solution is efficient and elegant. Great work on your first algorithm!",
           "title": "Done"
         }
       }

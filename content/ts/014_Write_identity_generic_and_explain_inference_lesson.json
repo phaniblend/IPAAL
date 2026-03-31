@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-ts-14",
     "track": "ts",
-    "problemNum": 14,
+    "lessonNum": 14,
     "title": "Write identity generic and explain inference",
     "shortName": "P14",
     "intro": {

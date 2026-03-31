@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-vue-24",
     "track": "vue",
-    "problemNum": 24,
+    "lessonNum": 24,
     "title": "Simple Todo List",
     "shortName": "P24",
     "intro": {

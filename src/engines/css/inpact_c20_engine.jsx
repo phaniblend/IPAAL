@@ -73,7 +73,7 @@ function getOutputPreview(answer) {
 export default createINPACTEngine({
   NODES,
   sideItems,
-  problemNum: 20,
+  lessonNum: 20,
   title: "Viewport units (vw, vh, vmin, vmax)",
   shortName: "C20",
   language: "css",

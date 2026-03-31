@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-express-11",
     "track": "express",
-    "problemNum": 11,
+    "lessonNum": 11,
     "title": "WebSockets with Express",
     "shortName": "P11",
     "intro": {

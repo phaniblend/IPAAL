@@ -3,20 +3,20 @@
   "config": {
     "lessonId": "ai-algorithms-108",
     "track": "algorithms",
-    "problemNum": 108,
+    "lessonNum": 108,
     "title": "Partition Equal Subset Sum",
     "shortName": "P108",
     "intro": {
       "tag": "LESSON #108",
       "title": "Partition Equal Subset Sum",
-      "body": "In this lesson, you will build a function that determines if an array of numbers can be split into two subsets with equal sums. You will learn the core concept of dynamic programming, which solves complex problems by breaking them down into simpler overlapping subproblems. The main technologies involved are JavaScript arrays, loops, and conditional logic to implement a solution step-by-step. This beginner-friendly lesson will guide you through understanding the problem and implementing an efficient algorithm.",
-      "usecase": "The Partition Equal Subset Sum algorithm solves resource allocation problems where you need to split items into two balanced groups. In e-commerce, this helps optimize warehouse storage by dividing products equally between two shipping containers to minimize space waste. Data analysts use it to create balanced A/B testing groups with similar total user engagement metrics. Financial platforms apply it to split investment portfolios into two funds with nearly identical total values for risk diversification."
+      "body": "In this lesson, you will build a function that determines if an array of numbers can be split into two subsets with equal sums. You will learn the core concept of dynamic programming, which solves complex lessons by breaking them down into simpler overlapping subproblems. The main technologies involved are JavaScript arrays, loops, and conditional logic to implement a solution step-by-step. This beginner-friendly lesson will guide you through understanding the lesson and implementing an efficient algorithm.",
+      "usecase": "The Partition Equal Subset Sum algorithm solves resource allocation lessons where you need to split items into two balanced groups. In e-commerce, this helps optimize warehouse storage by dividing products equally between two shipping containers to minimize space waste. Data analysts use it to create balanced A/B testing groups with similar total user engagement metrics. Financial platforms apply it to split investment portfolios into two funds with nearly identical total values for risk diversification."
     },
     "objectives": [
       "Implement a function to calculate the total sum of a given array of integers",
       "Construct a dynamic programming table to track subset sum possibilities",
       "Manipulate boolean values in a DP array to mark achievable sums",
-      "Initialize a DP solution with base cases for the subset sum problem",
+      "Initialize a DP solution with base cases for the subset sum lesson",
       "Apply the subset sum algorithm to determine if equal partition is possible",
       "Integrate early return conditions when the total sum is odd",
       "Control iteration through array elements and possible sums in the DP approach"
@@ -38,7 +38,7 @@
         "phase": "Step 2 of 18",
         "title": "What you'll learn",
         "content": {
-          "body": "• Apply the 'remember what we've seen' mental model to subset problems\n• Implement a dynamic programming approach using a Set to track achievable sums\n• Explain why checking for previously seen sums prevents redundant calculations",
+          "body": "• Apply the 'remember what we've seen' mental model to subset lessons\n• Implement a dynamic programming approach using a Set to track achievable sums\n• Explain why checking for previously seen sums prevents redundant calculations",
           "title": "What you'll learn"
         }
       },
@@ -345,7 +345,7 @@
         "phase": "Step 18 of 18",
         "title": "Done",
         "content": {
-          "body": "Great work! You've learned how to solve Partition Equal Subset Sum using the 'remember what we've seen' approach. Key takeaways: 1) Use a Set to track achievable sums, 2) Build possibilities incrementally, 3) Check for the target early. This pattern applies to many subset problems where remembering previous results avoids exponential combinations.",
+          "body": "Great work! You've learned how to solve Partition Equal Subset Sum using the 'remember what we've seen' approach. Key takeaways: 1) Use a Set to track achievable sums, 2) Build possibilities incrementally, 3) Check for the target early. This pattern applies to many subset lessons where remembering previous results avoids exponential combinations.",
           "title": "Done"
         }
       }

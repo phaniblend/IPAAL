@@ -1,6 +1,6 @@
 /**
  * Reads react_100_problems_improved.md and updates each inpact_pNN_engine.jsx
- * with the matching problem title, description (body), and learning objectives (items).
+ * with the matching lesson title, description (body), and learning objectives (items).
  * Run: node scripts/update-react-engines-from-improved.js
  * Or: npm run update-react-engines
  */
@@ -13,9 +13,9 @@ const improvedPath = path.join(__dirname, "../react_100_problems_improved.md");
 const enginesDir = path.join(__dirname, "../src/engines");
 const md = fs.readFileSync(improvedPath, "utf8");
 
-// Parse each problem block (## P01 — ... up to next --- or ##)
+// Parse each lesson block (## P01 — ... up to next --- or ##)
 const blocks = md.split(/\n---\s*\n/).filter(B => B.trim());
-const problems = [];
+const lessons = [];
 
 for (const block of blocks) {
   const numMatch = block.match(/^## P(\d+)\s*—\s*(.+?)(?:\n|$)/m);
@@ -37,12 +37,12 @@ for (const block of blocks) {
     }
   }
 
-  problems[num] = { num, title, description, objectives };
+  lessons[num] = { num, title, description, objectives };
 }
 
 // Update each engine file
 for (let n = 1; n <= 100; n++) {
-  const p = problems[n];
+  const p = lessons[n];
   if (!p || !p.objectives.length) continue;
 
   const fileName = `inpact_p${String(n).padStart(2, "0")}_engine.jsx`;
@@ -95,4 +95,4 @@ for (let n = 1; n <= 100; n++) {
   console.log(`Updated ${fileName} (P${String(n).padStart(2, "0")} — ${p.title})`);
 }
 
-console.log("Done. Updated all engine files with improved problem descriptions and learning objectives.");
+console.log("Done. Updated all engine files with improved lesson descriptions and learning objectives.");

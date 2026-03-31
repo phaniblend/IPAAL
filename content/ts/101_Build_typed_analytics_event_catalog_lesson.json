@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-ts-101",
     "track": "ts",
-    "problemNum": 101,
+    "lessonNum": 101,
     "title": "Build typed analytics event catalog",
     "shortName": "P101",
     "intro": {

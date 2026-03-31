@@ -8,20 +8,20 @@
   "flow": [
     {
       "stepId": "title",
-      "mentorSays": "At the end of this lesson, you will be able to:\n\n1. Understand what the Search Insert Position problem asks for\n2. Use binary search to find the insertion position efficiently\n3. Handle the case when target is not found\n4. Implement the solution step by step in your chosen language",
+      "mentorSays": "At the end of this lesson, you will be able to:\n\n1. Understand what the Search Insert Position lesson asks for\n2. Use binary search to find the insertion position efficiently\n3. Handle the case when target is not found\n4. Implement the solution step by step in your chosen language",
       "action": "continue",
-      "next": "problem-illustration"
+      "next": "lesson-illustration"
     },
     {
-      "stepId": "problem-illustration",
-      "mentorSays": "Perfect! Now let's understand what the Search Insert Position problem is asking.\n\nGiven a sorted array and a target value, return the index where the target would be inserted to keep the array sorted. If the target exists, return its index.\n\n**Example 1:** nums = [1, 3, 5, 6], target = 5\n- Target 5 exists at index 2\n- Return 2 ✓\n\n**Example 2:** nums = [1, 3, 5, 6], target = 2\n- Target 2 doesn't exist\n- If we insert 2, it should go at index 1 (between 1 and 3)\n- Return 1 ✓\n\n**Example 3:** nums = [1, 3, 5, 6], target = 7\n- Target 7 doesn't exist\n- If we insert 7, it should go at the end (index 4)\n- Return 4 ✓\n\n**Example 4:** nums = [1, 3, 5, 6], target = 0\n- Target 0 doesn't exist\n- If we insert 0, it should go at the beginning (index 0)\n- Return 0 ✓\n\n**Key insight:** We can use binary search! If target is found, return its index. If not found, return the position where it should be inserted (which is where left pointer ends up).",
+      "stepId": "lesson-illustration",
+      "mentorSays": "Perfect! Now let's understand what the Search Insert Position lesson is asking.\n\nGiven a sorted array and a target value, return the index where the target would be inserted to keep the array sorted. If the target exists, return its index.\n\n**Example 1:** nums = [1, 3, 5, 6], target = 5\n- Target 5 exists at index 2\n- Return 2 ✓\n\n**Example 2:** nums = [1, 3, 5, 6], target = 2\n- Target 2 doesn't exist\n- If we insert 2, it should go at index 1 (between 1 and 3)\n- Return 1 ✓\n\n**Example 3:** nums = [1, 3, 5, 6], target = 7\n- Target 7 doesn't exist\n- If we insert 7, it should go at the end (index 4)\n- Return 4 ✓\n\n**Example 4:** nums = [1, 3, 5, 6], target = 0\n- Target 0 doesn't exist\n- If we insert 0, it should go at the beginning (index 0)\n- Return 0 ✓\n\n**Key insight:** We can use binary search! If target is found, return its index. If not found, return the position where it should be inserted (which is where left pointer ends up).",
       "example": "nums = [1, 3, 5, 6], target = 2\n\nBinary search:\n- left=0, right=3, mid=1, nums[1]=3\n- 2 < 3, search left: right=0\n- left=0, right=0, mid=0, nums[0]=1\n- 2 > 1, search right: left=1\n- left=1, right=0 (loop ends)\n\nInsert position: left = 1 ✓\n\n---\n\nnums = [1, 3, 5, 6], target = 5\n\nBinary search finds 5 at index 2 → Return 2 ✓",
       "action": "continue",
       "next": "thinking-challenge"
     },
     {
       "stepId": "thinking-challenge",
-      "mentorSays": "Now that you understand what the problem wants, here's the real question:\n\nHow would YOU find the insertion position for a target in a sorted array?\n\nThink about it for a moment. What approach feels natural to you?",
+      "mentorSays": "Now that you understand what the lesson wants, here's the real question:\n\nHow would YOU find the insertion position for a target in a sorted array?\n\nThink about it for a moment. What approach feels natural to you?",
       "choices": [
         {
           "label": "Use binary search, return left pointer when not found",
@@ -146,7 +146,7 @@
     },
     {
       "stepId": "array-check-js",
-      "mentorSays": "To solve this problem, we'll need to work with arrays. Do you know what an array is in JavaScript?",
+      "mentorSays": "To solve this lesson, we'll need to work with arrays. Do you know what an array is in JavaScript?",
       "choices": [
         {
           "label": "Yes, I know arrays",
@@ -167,7 +167,7 @@
     },
     {
       "stepId": "loop-check-js",
-      "mentorSays": "To solve this problem, we'll need to use loops. Do you know what a loop is in JavaScript?",
+      "mentorSays": "To solve this lesson, we'll need to use loops. Do you know what a loop is in JavaScript?",
       "choices": [
         {
           "label": "Yes, I know loops",
@@ -293,7 +293,7 @@
     },
     {
       "stepId": "array-check-python",
-      "mentorSays": "To solve this problem, we'll need to work with lists. Do you know what a list is in Python?",
+      "mentorSays": "To solve this lesson, we'll need to work with lists. Do you know what a list is in Python?",
       "choices": [
         {
           "label": "Yes, I know lists",
@@ -314,7 +314,7 @@
     },
     {
       "stepId": "loop-check-python",
-      "mentorSays": "To solve this problem, we'll need to use loops. Do you know what a loop is in Python?",
+      "mentorSays": "To solve this lesson, we'll need to use loops. Do you know what a loop is in Python?",
       "choices": [
         {
           "label": "Yes, I know loops",
@@ -440,7 +440,7 @@
     },
     {
       "stepId": "array-check-java",
-      "mentorSays": "To solve this problem, we'll need to work with arrays. Do you know what an array is in Java?",
+      "mentorSays": "To solve this lesson, we'll need to work with arrays. Do you know what an array is in Java?",
       "choices": [
         {
           "label": "Yes, I know arrays",
@@ -461,7 +461,7 @@
     },
     {
       "stepId": "loop-check-java",
-      "mentorSays": "To solve this problem, we'll need to use loops. Do you know what a loop is in Java?",
+      "mentorSays": "To solve this lesson, we'll need to use loops. Do you know what a loop is in Java?",
       "choices": [
         {
           "label": "Yes, I know loops",
@@ -587,7 +587,7 @@
     },
     {
       "stepId": "array-check-cpp",
-      "mentorSays": "To solve this problem, we'll need to work with vectors (arrays). Do you know what a vector is in C++?",
+      "mentorSays": "To solve this lesson, we'll need to work with vectors (arrays). Do you know what a vector is in C++?",
       "choices": [
         {
           "label": "Yes, I know vectors",
@@ -608,7 +608,7 @@
     },
     {
       "stepId": "loop-check-cpp",
-      "mentorSays": "To solve this problem, we'll need to use loops. Do you know what a loop is in C++?",
+      "mentorSays": "To solve this lesson, we'll need to use loops. Do you know what a loop is in C++?",
       "choices": [
         {
           "label": "Yes, I know loops",
@@ -734,7 +734,7 @@
     },
     {
       "stepId": "array-check-ts",
-      "mentorSays": "To solve this problem, we'll need to work with arrays. Do you know what an array is in TypeScript?",
+      "mentorSays": "To solve this lesson, we'll need to work with arrays. Do you know what an array is in TypeScript?",
       "choices": [
         {
           "label": "Yes, I know arrays",
@@ -755,7 +755,7 @@
     },
     {
       "stepId": "loop-check-ts",
-      "mentorSays": "To solve this problem, we'll need to use loops. Do you know what a loop is in TypeScript?",
+      "mentorSays": "To solve this lesson, we'll need to use loops. Do you know what a loop is in TypeScript?",
       "choices": [
         {
           "label": "Yes, I know loops",
@@ -818,7 +818,7 @@
     },
     {
       "stepId": "final",
-      "mentorSays": "🎉 Well done! You've learned to think through the Search Insert Position problem. You understand what the problem asks for, how to use binary search to find the insertion position efficiently, and how to handle the case when target is not found.\n\nThis kind of thinking—using binary search with modified return logic—is essential for solving many search problems. Keep practicing!",
+      "mentorSays": "🎉 Well done! You've learned to think through the Search Insert Position lesson. You understand what the lesson asks for, how to use binary search to find the insertion position efficiently, and how to handle the case when target is not found.\n\nThis kind of thinking—using binary search with modified return logic—is essential for solving many search lessons. Keep practicing!",
       "action": "continue"
     }
   ]

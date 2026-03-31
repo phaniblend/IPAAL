@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-js-109",
     "track": "js",
-    "problemNum": 109,
+    "lessonNum": 109,
     "title": "Build bundle size guard script",
     "shortName": "P109",
     "intro": {

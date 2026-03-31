@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-react-js-21",
     "track": "react-js",
-    "problemNum": 21,
+    "lessonNum": 21,
     "title": "Styled Component Pattern",
     "shortName": "P21",
     "intro": {

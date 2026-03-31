@@ -8,4 +8,4 @@ const NODES = [
 // SSR: render on each request; SSG: pre-render at build`, feedback_correct: "✅ pages/ = routes; useFetch for API; useAsyncData generic; SSR per-request, SSG build-time.", feedback_wrong: "File-based routing in pages/; useFetch vs useAsyncData; SSR vs SSG.", expected: "Nuxt" },
 ];
 const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }];
-export default createINPACTEngine({ NODES, sideItems, problemNum: "VUE-F11", title: "Nuxt.js essentials", shortName: "VUE — NUXT" });
+export default createINPACTEngine({ NODES, sideItems, lessonNum: "VUE-F11", title: "Nuxt.js essentials", shortName: "VUE — NUXT" });

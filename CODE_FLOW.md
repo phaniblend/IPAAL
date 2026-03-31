@@ -6,10 +6,10 @@ High-level flow from landing to lesson complete and Next Lesson, in the format: 
 
 ## 1. User lands on the landing page
 
-**→ `LandingPage.jsx`** is rendered (via `App.jsx`: when `problemIndex === null`, App returns `<LandingPage ... />`).
+**→ `LandingPage.jsx`** is rendered (via `App.jsx`: when `lessonIndex === null`, App returns `<LandingPage ... />`).
 
-- `App.jsx` holds `track` (e.g. `'react-js'`) and `problemIndex` (`null` = landing).
-- `LandingPage.jsx` shows the track buttons and the grid of lesson cards (titles from `problemList` or `PROBLEM_LIST`).
+- `App.jsx` holds `track` (e.g. `'react-js'`) and `lessonIndex` (`null` = landing).
+- `LandingPage.jsx` shows the track buttons and the grid of lesson cards (titles from `lessonList` or `LESSON_LIST`).
 
 ---
 
@@ -18,7 +18,7 @@ High-level flow from landing to lesson complete and Next Lesson, in the format: 
 **→ `LandingPage.jsx`** stays rendered.
 
 - `onTrackChange("react-js")` is called → `App.jsx` updates `track` to `'react-js'`.
-- `getProblemList(track)` returns the list for that track; `LandingPage` re-renders with the same file, showing the correct lesson list for that track.
+- `getLessonList(track)` returns the list for that track; `LandingPage` re-renders with the same file, showing the correct lesson list for that track.
 
 ---
 
@@ -26,8 +26,8 @@ High-level flow from landing to lesson complete and Next Lesson, in the format: 
 
 **→ The engine for that lesson is mounted by `App.jsx`.**
 
-- `onSelectProblem(0)` → `App.jsx` sets `problemIndex = 0`.
-- `App.jsx` no longer renders `LandingPage`; it renders `Engine = engines[problemIndex]` (e.g. `INPACTEngineP01`).
+- `onSelectLesson(0)` → `App.jsx` sets `lessonIndex = 0`.
+- `App.jsx` no longer renders `LandingPage`; it renders `Engine = engines[lessonIndex]` (e.g. `INPACTEngineP01`).
 - **Engine** = component returned by `createINPACTEngine(config)` in **`inpact_engine_shared.jsx`**, with `NODES` (and config) from **`inpact_p01_engine.jsx`** (for P01).
 - The engine’s first node is `type: "reveal"` (intro). So **`inpact_engine_shared.jsx`** runs **`renderNode()` → `renderReveal()`** and shows the intro screen (lesson title, body, “CONTINUE →”).
 
@@ -82,7 +82,7 @@ So at this step: **`inpact_engine_shared.jsx`** (renderEditorContent) + **`Lesso
 **→ Same engine** (`inpact_engine_shared.jsx`).
 
 - `next()` eventually makes `nodeIndex >= NODES.length`.
-- **`renderNode()`** returns **`renderComplete()`** from **`inpact_engine_shared.jsx`** (e.g. “Problem #1 Complete”, “NEXT LESSON →”).
+- **`renderNode()`** returns **`renderComplete()`** from **`inpact_engine_shared.jsx`** (e.g. “Lesson #1 Complete”, “NEXT LESSON →”).
 
 ---
 
@@ -90,8 +90,8 @@ So at this step: **`inpact_engine_shared.jsx`** (renderEditorContent) + **`Lesso
 
 **→ `App.jsx`** switches to the next lesson.
 
-- The engine calls **`onNextProblem()`** (passed from `App.jsx`).
-- **`App.jsx`**: `setProblemIndex((i) => i + 1)` → e.g. `problemIndex = 1`.
+- The engine calls **`onNextLesson()`** (passed from `App.jsx`).
+- **`App.jsx`**: `setLessonIndex((i) => i + 1)` → e.g. `lessonIndex = 1`.
 - **`App.jsx`** re-renders and mounts the next engine: **`Engine = engines[1]`** (e.g. **`INPACTEngineP02`**), again from **`createINPACTEngine`** in **`inpact_engine_shared.jsx`** with **`inpact_p02_engine.jsx`** config.
 - Flow repeats from step 3: first node is “reveal” → **`renderReveal()`** for P02’s intro.
 
@@ -101,14 +101,14 @@ So at this step: **`inpact_engine_shared.jsx`** (renderEditorContent) + **`Lesso
 
 ```
 User lands
-  → App.jsx (problemIndex === null)
+  → App.jsx (lessonIndex === null)
   → LandingPage.jsx
 
 User selects track "React · JS"
   → LandingPage.jsx (same; track state in App.jsx)
 
 User clicks "Counter App" (P01)
-  → App.jsx (problemIndex = 0, Engine = INPACTEngineP01)
+  → App.jsx (lessonIndex = 0, Engine = INPACTEngineP01)
   → inpact_engine_shared.jsx (NODES from inpact_p01_engine.jsx)
      → renderReveal()  [intro]
 
@@ -132,7 +132,7 @@ All steps done
      → renderComplete()
 
 User clicks "NEXT LESSON →"
-  → App.jsx onNextProblem() → problemIndex = 1
+  → App.jsx onNextLesson() → lessonIndex = 1
   → INPACTEngineP02 (inpact_engine_shared.jsx + inpact_p02_engine.jsx)
      → renderReveal()  [P02 intro]
   … and so on.
@@ -144,11 +144,11 @@ User clicks "NEXT LESSON →"
 
 | Role | File |
 |------|------|
-| Root, track & problem index | `App.jsx` |
+| Root, track & lesson index | `App.jsx` |
 | Landing + lesson list | `LandingPage.jsx` |
 | All lesson UIs (reveal, objectives, editor, complete) | `inpact_engine_shared.jsx` |
 | Lesson data for P01 (Counter App) | `inpact_p01_engine.jsx` (or `src/engines/react-js/inpact_p01_engine.jsx`) |
 | Tabs (Lesson / Editor / Output) + task block in Editor | `LessonEditorOutputTabs.jsx` |
 | Code editor in Editor tab | `CodeEditor.jsx` |
 
-The same **engine component** (from `createINPACTEngine`) handles intro → objectives → each question step → complete; only **which lesson** (which engine instance / which NODES) is chosen by **`App.jsx`** via `engines[problemIndex]`.
+The same **engine component** (from `createINPACTEngine`) handles intro → objectives → each question step → complete; only **which lesson** (which engine instance / which NODES) is chosen by **`App.jsx`** via `engines[lessonIndex]`.

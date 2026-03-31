@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-js-85",
     "track": "js",
-    "problemNum": 85,
+    "lessonNum": 85,
     "title": "Build i18n translation helper with interpolation",
     "shortName": "P85",
     "intro": {

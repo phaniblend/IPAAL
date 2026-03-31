@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-react-ts-121",
     "track": "react-ts",
-    "problemNum": 121,
+    "lessonNum": 121,
     "title": "Query Building in RTK",
     "shortName": "RTK QUERY",
     "intro": {

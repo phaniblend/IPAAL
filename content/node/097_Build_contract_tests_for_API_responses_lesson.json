@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-node-97",
     "track": "node",
-    "problemNum": 97,
+    "lessonNum": 97,
     "title": "Build contract tests for API responses",
     "shortName": "P97",
     "intro": {

@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-node-43",
     "track": "node",
-    "problemNum": 43,
+    "lessonNum": 43,
     "title": "Build notification service API",
     "shortName": "P43",
     "intro": {

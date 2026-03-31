@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-angular-24",
     "track": "angular",
-    "problemNum": 24,
+    "lessonNum": 24,
     "title": "PropTypes / TypeScript Interface",
     "shortName": "P24",
     "intro": {

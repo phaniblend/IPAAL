@@ -73,7 +73,7 @@ function getOutputPreview(answer) {
 export default createINPACTEngine({
   NODES,
   sideItems,
-  problemNum: 27,
+  lessonNum: 27,
   title: "Gradients (linear and radial)",
   shortName: "C27",
   language: "css",

@@ -5,8 +5,8 @@
   "difficulty": "easy",
   "language": "javascript",
   "status": "draft",
-  "description": "This lesson guides you through solving the Two Sum problem, starting with a brute force approach, analyzing its inefficiency, and then implementing an optimized solution using a hash map. You'll learn how to think about problem constraints, trade-offs, and how to use data structures effectively.",
-  "realWorldApplication": "The Two Sum problem is foundational for understanding how to optimize algorithms using data structures. It's commonly used in financial analysis (e.g., finding two transactions that sum to a suspicious amount), data validation, and pair-based searches in large datasets.",
+  "description": "This lesson guides you through solving the Two Sum lesson, starting with a brute force approach, analyzing its inefficiency, and then implementing an optimized solution using a hash map. You'll learn how to think about lesson constraints, trade-offs, and how to use data structures effectively.",
+  "realWorldApplication": "The Two Sum lesson is foundational for understanding how to optimize algorithms using data structures. It's commonly used in financial analysis (e.g., finding two transactions that sum to a suspicious amount), data validation, and pair-based searches in large datasets.",
   "objectives": [
     "Analyze the time complexity of a brute force solution for Two Sum",
     "Explain the role of a hash map in reducing time complexity from O(n²) to O(n)",
@@ -24,13 +24,13 @@
     },
     {
       "stepId": "step-1",
-      "mentorSays": "**Step 1: Understand the Two Sum Problem**\n\nRead the problem statement carefully: Given an array of integers `nums` and an integer `target`, return the indices of the two numbers that add up to `target`. Each input has exactly one solution, and you may not use the same element twice.\n\n**Analogy:** Imagine you are a cashier. You need to find two receipts in a pile that add up to a specific amount. You can only pick each receipt once.\n\n**Hint:** Focus on what you need to return: the indices of the two numbers, not the numbers themselves.",
+      "mentorSays": "**Step 1: Understand the Two Sum Lesson**\n\nRead the lesson statement carefully: Given an array of integers `nums` and an integer `target`, return the indices of the two numbers that add up to `target`. Each input has exactly one solution, and you may not use the same element twice.\n\n**Analogy:** Imagine you are a cashier. You need to find two receipts in a pile that add up to a specific amount. You can only pick each receipt once.\n\n**Hint:** Focus on what you need to return: the indices of the two numbers, not the numbers themselves.",
       "action": "continue",
       "next": "step-2"
     },
     {
       "stepId": "step-2",
-      "mentorSays": "**Step 2: Brainstorm a Brute Force Solution**\n\nWrite down how you would solve this problem by checking every possible pair of numbers in the array. Use two nested loops to compare each element with every other element that comes after it.\n\n**Analogy:** This is like checking every pair of receipts in the pile to see if they add up to the target amount.\n\n**Hint:** The outer loop runs from the first element to the second-to-last element. The inner loop runs from the current element of the outer loop to the end of the array.",
+      "mentorSays": "**Step 2: Brainstorm a Brute Force Solution**\n\nWrite down how you would solve this lesson by checking every possible pair of numbers in the array. Use two nested loops to compare each element with every other element that comes after it.\n\n**Analogy:** This is like checking every pair of receipts in the pile to see if they add up to the target amount.\n\n**Hint:** The outer loop runs from the first element to the second-to-last element. The inner loop runs from the current element of the outer loop to the end of the array.",
       "example": "function twoSum(nums, target) {\n  // Write your brute force solution here\n}",
       "action": "continue",
       "next": "step-3"
@@ -91,14 +91,14 @@
     },
     {
       "stepId": "step-11",
-      "mentorSays": "**Step 11: Handle Edge Cases**\n\nTest your function with edge cases: an empty array, no solution, and duplicate numbers. Ensure it handles them correctly.\n\n**Analogy:** What if the pile of receipts is empty? Or if no two receipts add up to the target amount?\n\n**Hint:** Add a `return [];` at the end of the function to handle cases where no solution is found (though the problem states there is exactly one solution).",
+      "mentorSays": "**Step 11: Handle Edge Cases**\n\nTest your function with edge cases: an empty array, no solution, and duplicate numbers. Ensure it handles them correctly.\n\n**Analogy:** What if the pile of receipts is empty? Or if no two receipts add up to the target amount?\n\n**Hint:** Add a `return [];` at the end of the function to handle cases where no solution is found (though the lesson states there is exactly one solution).",
       "example": "function twoSum(nums, target) {\n  let numMap = {};\n  for (let i = 0; i < nums.length; i++) {\n    let complement = target - nums[i];\n    if (complement in numMap) {\n      return [numMap[complement], i];\n    }\n    numMap[nums[i]] = i;\n  }\n  return [];\n}",
       "action": "continue",
       "next": "final"
     },
     {
       "stepId": "final",
-      "mentorSays": "**Well done!** You've solved Two Sum efficiently with a hash map.\n\n**Summary:**\n• Brute force: O(n²) — check every pair\n• Optimized: O(n) — one pass, store seen numbers in a hash map and check for the complement\n• Keys in the map = array values; values = indices\n• Always check for the complement *before* storing the current number to avoid using the same element twice\n\n**Common mistakes to avoid:**\n• Using nested loops for the final solution (stick to one pass + hash map)\n• Returning values instead of indices\n• Storing indices as keys (keys should be array values, values = indices)\n• Checking for the complement after storing (causes same-element reuse)\n• Not handling edge cases (e.g. return [] when no solution)\n• Using an array instead of an object for the hash map (need O(1) lookup)\n\nReflect on the trade-offs between time and space complexity — the hash map uses O(n) extra space for O(n) time. Keep practicing; this pattern appears in many array and string problems!"
+      "mentorSays": "**Well done!** You've solved Two Sum efficiently with a hash map.\n\n**Summary:**\n• Brute force: O(n²) — check every pair\n• Optimized: O(n) — one pass, store seen numbers in a hash map and check for the complement\n• Keys in the map = array values; values = indices\n• Always check for the complement *before* storing the current number to avoid using the same element twice\n\n**Common mistakes to avoid:**\n• Using nested loops for the final solution (stick to one pass + hash map)\n• Returning values instead of indices\n• Storing indices as keys (keys should be array values, values = indices)\n• Checking for the complement after storing (causes same-element reuse)\n• Not handling edge cases (e.g. return [] when no solution)\n• Using an array instead of an object for the hash map (need O(1) lookup)\n\nReflect on the trade-offs between time and space complexity — the hash map uses O(n) extra space for O(n) time. Keep practicing; this pattern appears in many array and string lessons!"
     }
   ]
 }

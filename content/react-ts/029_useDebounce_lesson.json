@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-react-ts-29",
     "track": "react-ts",
-    "problemNum": 29,
+    "lessonNum": 29,
     "title": "useDebounce",
     "shortName": "P29",
     "intro": {
@@ -13,7 +13,7 @@
       "usecase": "Debounced input is essential where real-time typing must not trigger work on every keystroke. E‑commerce search, dashboard filters, and username availability checks typically wait until the user pauses before fetching or validating, keeping the app responsive and reducing load on servers and clients."
     },
     "objectives": [
-      "Write a custom hook useDebounce<T>(value: T, delay: number): T with explicit input and return types so the abstraction solves a concrete UI problem and exposes a reliable typed contract.",
+      "Write a custom hook useDebounce<T>(value: T, delay: number): T with explicit input and return types so the abstraction solves a concrete UI lesson and exposes a reliable typed contract.",
       "Model a useState<T> variable for the debounced value initialized to the input value so state, refs, or values keep a predictable shape as the feature evolves, and data shape and updates remain explicit throughout the lesson.",
       "Use useEffect with a setTimeout to update the debounced state and return a clearTimeout cleanup so the pattern drives visible behavior, and the effect leaves no stale subscriptions, timers, or listeners behind.",
       "Consume useDebounce in a search component and demonstrate that the API call fires only after the delay so the learner can connect the typed API to real screen behavior."

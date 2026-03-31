@@ -73,7 +73,7 @@ function getOutputPreview(answer) {
 export default createINPACTEngine({
   NODES,
   sideItems,
-  problemNum: 56,
+  lessonNum: 56,
   title: "animation fill-mode and direction",
   shortName: "C56",
   language: "css",

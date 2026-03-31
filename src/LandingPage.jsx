@@ -5,7 +5,7 @@ import { FUNDA_ANGULAR_LESSONS } from "./angularFundaLessons.js";
 import { MOBILE_ANGULAR_LESSONS } from "./mobileAngularLessons.js";
 
 // Must match ENGINES order in App.jsx (p01…p100 minus 10/16/17/88, then p101–p110, p113–p125, p126–p127; React TS adds TS120–TS122).
-export const PROBLEM_LIST = [
+export const LESSON_LIST = [
   "Counter App", "Toggle Visibility", "Controlled Input", "Multiple State Variables",
   "Conditional Rendering with Ternary", "List Rendering with map()", "useEffect & Side Effects", "Forms & Validation",
   "Color Picker", "Reusable Button", "Card Component",
@@ -37,7 +37,7 @@ export const PROBLEM_LIST = [
 ];
 
 /**
- * Groupings for the lessons grid (React · JS / React · TS / Vue) — indices align with PROBLEM_LIST.
+ * Groupings for the lessons grid (React · JS / React · TS / Vue) — indices align with LESSON_LIST.
  * Lesson numbers in the UI are index + 1 (01 … N).
  */
 const REACT_GRID_GROUPS = [
@@ -65,7 +65,7 @@ export function buildAngularLessonList() {
     { title: "Change Detection & Performance", shortName: "ANG07" },
     { title: "Micro-Frontend Architecture", shortName: "ANG08" },
     { title: "Pipes — Creation & Usage", shortName: "ANG09" },
-    ...PROBLEM_LIST.map((title) => ({ title })),
+    ...LESSON_LIST.map((title) => ({ title })),
     ...FUNDA_ANGULAR_LESSONS.map(({ title, shortName }) => ({ title, shortName })),
   ];
 }
@@ -230,12 +230,12 @@ const LP = {
   },
 };
 
-export default function LandingPage({ track, onSelectProblem, problemList, freeLessonsHint }) {
+export default function LandingPage({ track, onSelectLesson, onStartFree, lessonList, freeLessonsHint }) {
   const [hover, setHover] = useState(null);
   const [howItWorksOpen, setHowItWorksOpen] = useState(false);
 
-  // problemList: null = use PROBLEM_LIST (100 React problems); array = curriculum (TSF/JSF: title, shortName, why)
-  let list = problemList ?? PROBLEM_LIST.map((title) => ({ title }));
+  // lessonList: null = use LESSON_LIST (100 React lessons); array = curriculum (TSF/JSF: title, shortName, why)
+  let list = lessonList ?? LESSON_LIST.map((title) => ({ title }));
 
   // Angular track: QuickBite (QB01–QB05), then ANG01–ANG09, then React list, then FUNDA
   if (track === "angular") {
@@ -245,7 +245,7 @@ export default function LandingPage({ track, onSelectProblem, problemList, freeL
     list = MOBILE_ANGULAR_LESSONS.map((x) => ({ ...x }));
   }
 
-  const lessonCount = getLessonCount(track, { reactListLength: PROBLEM_LIST.length });
+  const lessonCount = getLessonCount(track, { reactListLength: LESSON_LIST.length });
 
   const wrap = {
     width: "100%",
@@ -337,12 +337,13 @@ export default function LandingPage({ track, onSelectProblem, problemList, freeL
   const showReactBlueprint =
     track === "react-js" || track === "react-ts" || track === "vue";
 
-  /** Full blueprint sections + deep bucket — only when list follows PROBLEM_LIST order (default React/Vue). */
-  const useBlueprintGroupedGrid = showReactBlueprint && !problemList;
+  /** Full blueprint sections + deep bucket — only when list follows LESSON_LIST order (default React/Vue). */
+  const useBlueprintGroupedGrid = showReactBlueprint && !lessonList;
 
   const startFirstLesson = () => {
     if (list.length === 0) return;
-    onSelectProblem(0, list[0]);
+    if (onStartFree) onStartFree(0, list[0]);
+    else onSelectLesson(0, list[0]);
   };
 
   useEffect(() => {
@@ -508,7 +509,7 @@ export default function LandingPage({ track, onSelectProblem, problemList, freeL
                         <div
                           key={i}
                           style={card(i)}
-                          onClick={() => onSelectProblem(i, item)}
+                          onClick={() => onSelectLesson(i, item)}
                           onMouseEnter={() => setHover(i)}
                           onMouseLeave={() => setHover(null)}
                           role="button"
@@ -516,7 +517,7 @@ export default function LandingPage({ track, onSelectProblem, problemList, freeL
                           onKeyDown={(e) => {
                             if (e.key === "Enter" || e.key === " ") {
                               e.preventDefault();
-                              onSelectProblem(i, item);
+                              onSelectLesson(i, item);
                             }
                           }}
                         >
@@ -562,7 +563,7 @@ export default function LandingPage({ track, onSelectProblem, problemList, freeL
                       <div
                         key={i}
                         style={card(i)}
-                        onClick={() => onSelectProblem(i, item)}
+                        onClick={() => onSelectLesson(i, item)}
                         onMouseEnter={() => setHover(i)}
                         onMouseLeave={() => setHover(null)}
                         role="button"
@@ -570,7 +571,7 @@ export default function LandingPage({ track, onSelectProblem, problemList, freeL
                         onKeyDown={(e) => {
                           if (e.key === "Enter" || e.key === " ") {
                             e.preventDefault();
-                            onSelectProblem(i, item);
+                            onSelectLesson(i, item);
                           }
                         }}
                       >
@@ -625,7 +626,7 @@ export default function LandingPage({ track, onSelectProblem, problemList, freeL
                 <div
                   key={i}
                   style={card(i)}
-                  onClick={() => onSelectProblem(i, item)}
+                  onClick={() => onSelectLesson(i, item)}
                   onMouseEnter={() => setHover(i)}
                   onMouseLeave={() => setHover(null)}
                   role="button"
@@ -633,7 +634,7 @@ export default function LandingPage({ track, onSelectProblem, problemList, freeL
                   onKeyDown={(e) => {
                     if (e.key === "Enter" || e.key === " ") {
                       e.preventDefault();
-                      onSelectProblem(i, item);
+                      onSelectLesson(i, item);
                     }
                   }}
                 >

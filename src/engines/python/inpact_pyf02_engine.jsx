@@ -7,4 +7,4 @@ const NODES = [
 from itertools import chain; list(chain([1,2], [3,4]))  # [1,2,3,4]`, feedback_correct: "✅ yield; yield from; itertools.chain, groupby, islice.", feedback_wrong: "Generators with yield; yield from; itertools for lazy combinators.", expected: "Generators" },
 ];
 const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }];
-export default createINPACTEngine({ NODES, sideItems, problemNum: "PY-F02", title: "Generators & itertools", shortName: "PY — GENERATORS" });
+export default createINPACTEngine({ NODES, sideItems, lessonNum: "PY-F02", title: "Generators & itertools", shortName: "PY — GENERATORS" });

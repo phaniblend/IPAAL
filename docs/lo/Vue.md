@@ -2,7 +2,7 @@
 
 Lessons and learning objectives.
 
-**{PROBLEM #1 (Vue) :: Counter App}**
+**{LESSON #1 (Vue) :: Counter App}**
 
 LOs:
 
@@ -50,7 +50,7 @@ watchEffect
 
 ---
 
-**{PROBLEM #2 (Vue) :: Toggle Visibility}**
+**{LESSON #2 (Vue) :: Toggle Visibility}**
 
 LOs:
 
@@ -92,7 +92,7 @@ Template refs
 
 ---
 
-**{PROBLEM #3 (Vue) :: Controlled Input}**
+**{LESSON #3 (Vue) :: Controlled Input}**
 
 LOs:
 
@@ -134,7 +134,7 @@ v-model on component
 
 ---
 
-**{PROBLEM #4 (Vue) :: Multiple State Variables}**
+**{LESSON #4 (Vue) :: Multiple State Variables}**
 
 LOs:
 
@@ -170,7 +170,7 @@ VueUse
 
 ---
 
-**{PROBLEM #5 (Vue) :: Conditional Rendering with Ternary}**
+**{LESSON #5 (Vue) :: Conditional Rendering with Ternary}**
 
 LOs:
 
@@ -209,7 +209,7 @@ Dynamic routes and meta
 
 ---
 
-**{PROBLEM #6 (Vue) :: List Rendering with map()}**
+**{LESSON #6 (Vue) :: List Rendering with map()}**
 
 LOs:
 
@@ -248,7 +248,7 @@ Use store in components
 
 ---
 
-**{PROBLEM #7 (Vue) :: useEffect & Side Effects}**
+**{LESSON #7 (Vue) :: useEffect & Side Effects}**
 
 LOs:
 
@@ -290,7 +290,7 @@ Error boundary
 
 ---
 
-**{PROBLEM #8 (Vue) :: Forms & Validation}**
+**{LESSON #8 (Vue) :: Forms & Validation}**
 
 LOs:
 
@@ -329,7 +329,7 @@ KeepAlive
 
 ---
 
-**{PROBLEM #9 (Vue) :: Color Picker}**
+**{LESSON #9 (Vue) :: Color Picker}**
 
 LOs:
 
@@ -362,7 +362,7 @@ Plugin with app.use
 
 ---
 
-**{PROBLEM #10 (Vue) :: Multiple State Vars}**
+**{LESSON #10 (Vue) :: Multiple State Vars}**
 
 LOs:
 
@@ -395,7 +395,7 @@ Stub components
 
 ---
 
-**{PROBLEM #11 (Vue) :: Reusable Button}**
+**{LESSON #11 (Vue) :: Reusable Button}**
 
 LOs:
 
@@ -425,7 +425,7 @@ SSR vs SSG
 
 ---
 
-**{PROBLEM #12 (Vue) :: Card Component}**
+**{LESSON #12 (Vue) :: Card Component}**
 
 LOs:
 
@@ -455,7 +455,7 @@ Typed Pinia
 
 ---
 
-**{PROBLEM #13 (Vue) :: Props Drilling}**
+**{LESSON #13 (Vue) :: Props Drilling}**
 
 LOs:
 
@@ -473,7 +473,7 @@ Export the App that wires the three layers
 
 ---
 
-**{PROBLEM #14 (Vue) :: Default Props}**
+**{LESSON #14 (Vue) :: Default Props}**
 
 LOs:
 
@@ -488,7 +488,7 @@ Render an img with size as width/height
 
 ---
 
-**{PROBLEM #15 (Vue) :: Children Prop}**
+**{LESSON #15 (Vue) :: Children Prop}**
 
 LOs:
 
@@ -503,7 +503,7 @@ Apply inline styles (maxWidth, padding, etc.)
 
 ---
 
-**{PROBLEM #16 (Vue) :: Conditional Rendering}**
+**{LESSON #16 (Vue) :: Conditional Rendering}**
 
 LOs:
 
@@ -518,7 +518,7 @@ Optionally show mock data when status is 'data'
 
 ---
 
-**{PROBLEM #17 (Vue) :: List Rendering}**
+**{LESSON #17 (Vue) :: List Rendering}**
 
 LOs:
 
@@ -533,7 +533,7 @@ Add key={item.id} (or stable unique key) to the mapped element
 
 ---
 
-**{PROBLEM #18 (Vue) :: PropTypes / TypeScript Interface}**
+**{LESSON #18 (Vue) :: PropTypes / TypeScript Interface}**
 
 LOs:
 
@@ -548,7 +548,7 @@ Render name, age, and optional avatar
 
 ---
 
-**{PROBLEM #19 (Vue) :: Component Composition}**
+**{LESSON #19 (Vue) :: Component Composition}**
 
 LOs:
 
@@ -563,7 +563,7 @@ Place each prop in the correct region
 
 ---
 
-**{PROBLEM #20 (Vue) :: Event Handling}**
+**{LESSON #20 (Vue) :: Event Handling}**
 
 LOs:
 
@@ -578,7 +578,7 @@ If e.key === 'Escape', clear the form state
 
 ---
 
-**{PROBLEM #21 (Vue) :: Conditional Classes}**
+**{LESSON #21 (Vue) :: Conditional Classes}**
 
 LOs:
 
@@ -593,7 +593,7 @@ Apply the result to className={...}
 
 ---
 
-**{PROBLEM #22 (Vue) :: Inline Styles}**
+**{LESSON #22 (Vue) :: Inline Styles}**
 
 LOs:
 
@@ -608,7 +608,7 @@ Set the bar's width with style={{ width: `${progress}%` }}
 
 ---
 
-**{PROBLEM #23 (Vue) :: CSS Modules}**
+**{LESSON #23 (Vue) :: CSS Modules}**
 
 LOs:
 
@@ -623,7 +623,7 @@ Use className={styles.container} in the component
 
 ---
 
-**{PROBLEM #24 (Vue) :: Styled Component Pattern}**
+**{LESSON #24 (Vue) :: Styled Component Pattern}**
 
 LOs:
 
@@ -638,7 +638,7 @@ Render a button that uses the variables
 
 ---
 
-**{PROBLEM #25 (Vue) :: Lifting State Up}**
+**{LESSON #25 (Vue) :: Lifting State Up}**
 
 LOs:
 
@@ -653,7 +653,7 @@ One child displays, one child updates
 
 ---
 
-**{PROBLEM #26 (Vue) :: Controlled vs Uncontrolled}**
+**{LESSON #26 (Vue) :: Controlled vs Uncontrolled}**
 
 LOs:
 
@@ -668,7 +668,7 @@ Show both in one component or two
 
 ---
 
-**{PROBLEM #27 (Vue) :: Simple Todo List}**
+**{LESSON #27 (Vue) :: Simple Todo List}**
 
 LOs:
 
@@ -686,7 +686,7 @@ Delete: filter out by id
 
 ---
 
-**{PROBLEM #28 (Vue) :: Star Rating Component}**
+**{LESSON #28 (Vue) :: Star Rating Component}**
 
 LOs:
 
@@ -704,7 +704,7 @@ onClick sets rating to that star's value
 
 ---
 
-**{PROBLEM #29 (Vue) :: Accordion}**
+**{LESSON #29 (Vue) :: Accordion}**
 
 LOs:
 
@@ -719,7 +719,7 @@ Render panels: show content only when openIndex === index
 
 ---
 
-**{PROBLEM #30 (Vue) :: Image Gallery}**
+**{LESSON #30 (Vue) :: Image Gallery}**
 
 LOs:
 
@@ -737,7 +737,7 @@ Modal: when selectedImage is set, show overlay with large image and close button
 
 ---
 
-**{PROBLEM #31 (Vue) :: useFetch}**
+**{LESSON #31 (Vue) :: useFetch}**
 
 LOs:
 
@@ -758,7 +758,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #32 (Vue) :: useDebounce}**
+**{LESSON #32 (Vue) :: useDebounce}**
 
 LOs:
 
@@ -779,7 +779,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #33 (Vue) :: useLocalStorage}**
+**{LESSON #33 (Vue) :: useLocalStorage}**
 
 LOs:
 
@@ -800,7 +800,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #34 (Vue) :: useToggle}**
+**{LESSON #34 (Vue) :: useToggle}**
 
 LOs:
 
@@ -821,7 +821,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #35 (Vue) :: useWindowSize}**
+**{LESSON #35 (Vue) :: useWindowSize}**
 
 LOs:
 
@@ -842,7 +842,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #36 (Vue) :: usePrevious}**
+**{LESSON #36 (Vue) :: usePrevious}**
 
 LOs:
 
@@ -863,7 +863,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #37 (Vue) :: useClickOutside}**
+**{LESSON #37 (Vue) :: useClickOutside}**
 
 LOs:
 
@@ -884,7 +884,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #38 (Vue) :: useKeyPress}**
+**{LESSON #38 (Vue) :: useKeyPress}**
 
 LOs:
 
@@ -905,7 +905,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #39 (Vue) :: useOnlineStatus}**
+**{LESSON #39 (Vue) :: useOnlineStatus}**
 
 LOs:
 
@@ -926,7 +926,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #40 (Vue) :: useMediaQuery}**
+**{LESSON #40 (Vue) :: useMediaQuery}**
 
 LOs:
 
@@ -947,7 +947,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #41 (Vue) :: Theme Context}**
+**{LESSON #41 (Vue) :: Theme Context}**
 
 LOs:
 
@@ -968,7 +968,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #42 (Vue) :: Auth Context}**
+**{LESSON #42 (Vue) :: Auth Context}**
 
 LOs:
 
@@ -989,7 +989,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #43 (Vue) :: Cart Context}**
+**{LESSON #43 (Vue) :: Cart Context}**
 
 LOs:
 
@@ -1010,7 +1010,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #44 (Vue) :: Notification Context}**
+**{LESSON #44 (Vue) :: Notification Context}**
 
 LOs:
 
@@ -1031,7 +1031,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #45 (Vue) :: Context Performance}**
+**{LESSON #45 (Vue) :: Context Performance}**
 
 LOs:
 
@@ -1052,7 +1052,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #46 (Vue) :: useReducer vs useState}**
+**{LESSON #46 (Vue) :: useReducer vs useState}**
 
 LOs:
 
@@ -1073,7 +1073,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #47 (Vue) :: Compound Component (Tabs)}**
+**{LESSON #47 (Vue) :: Compound Component (Tabs)}**
 
 LOs:
 
@@ -1094,7 +1094,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #48 (Vue) :: Unnecessary Re-renders}**
+**{LESSON #48 (Vue) :: Unnecessary Re-renders}**
 
 LOs:
 
@@ -1115,7 +1115,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #49 (Vue) :: useMemo for Expensive Computation}**
+**{LESSON #49 (Vue) :: useMemo for Expensive Computation}**
 
 LOs:
 
@@ -1136,7 +1136,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #50 (Vue) :: useCallback for Stable References}**
+**{LESSON #50 (Vue) :: useCallback for Stable References}**
 
 LOs:
 
@@ -1157,7 +1157,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #51 (Vue) :: React.memo}**
+**{LESSON #51 (Vue) :: React.memo}**
 
 LOs:
 
@@ -1178,7 +1178,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #52 (Vue) :: List Virtualization}**
+**{LESSON #52 (Vue) :: List Virtualization}**
 
 LOs:
 
@@ -1199,7 +1199,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #53 (Vue) :: Lazy Loading Routes}**
+**{LESSON #53 (Vue) :: Lazy Loading Routes}**
 
 LOs:
 
@@ -1220,7 +1220,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #54 (Vue) :: Image Lazy Loading}**
+**{LESSON #54 (Vue) :: Image Lazy Loading}**
 
 LOs:
 
@@ -1241,7 +1241,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #55 (Vue) :: HOC withAuth}**
+**{LESSON #55 (Vue) :: HOC withAuth}**
 
 LOs:
 
@@ -1262,7 +1262,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #56 (Vue) :: Render Props (MouseTracker)}**
+**{LESSON #56 (Vue) :: Render Props (MouseTracker)}**
 
 LOs:
 
@@ -1283,7 +1283,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #57 (Vue) :: Controlled DatePicker}**
+**{LESSON #57 (Vue) :: Controlled DatePicker}**
 
 LOs:
 
@@ -1304,7 +1304,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #58 (Vue) :: Portal}**
+**{LESSON #58 (Vue) :: Portal}**
 
 LOs:
 
@@ -1325,7 +1325,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #59 (Vue) :: Error Boundary}**
+**{LESSON #59 (Vue) :: Error Boundary}**
 
 LOs:
 
@@ -1346,7 +1346,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #60 (Vue) :: Recursive TreeView}**
+**{LESSON #60 (Vue) :: Recursive TreeView}**
 
 LOs:
 
@@ -1367,7 +1367,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #61 (Vue) :: Pagination}**
+**{LESSON #61 (Vue) :: Pagination}**
 
 LOs:
 
@@ -1388,7 +1388,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #62 (Vue) :: Infinite Scroll}**
+**{LESSON #62 (Vue) :: Infinite Scroll}**
 
 LOs:
 
@@ -1409,7 +1409,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #63 (Vue) :: Debounced Search}**
+**{LESSON #63 (Vue) :: Debounced Search}**
 
 LOs:
 
@@ -1430,7 +1430,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #64 (Vue) :: Multi-Step Form}**
+**{LESSON #64 (Vue) :: Multi-Step Form}**
 
 LOs:
 
@@ -1451,7 +1451,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #65 (Vue) :: Generic List<T>}**
+**{LESSON #65 (Vue) :: Generic List<T>}**
 
 LOs:
 
@@ -1472,7 +1472,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #66 (Vue) :: Discriminated Union Props}**
+**{LESSON #66 (Vue) :: Discriminated Union Props}**
 
 LOs:
 
@@ -1493,7 +1493,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #67 (Vue) :: useRef Typing}**
+**{LESSON #67 (Vue) :: useRef Typing}**
 
 LOs:
 
@@ -1514,7 +1514,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #68 (Vue) :: Event Typing}**
+**{LESSON #68 (Vue) :: Event Typing}**
 
 LOs:
 
@@ -1535,7 +1535,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #69 (Vue) :: Generic useFetch<T>}**
+**{LESSON #69 (Vue) :: Generic useFetch<T>}**
 
 LOs:
 
@@ -1556,7 +1556,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #70 (Vue) :: Utility Types}**
+**{LESSON #70 (Vue) :: Utility Types}**
 
 LOs:
 
@@ -1577,7 +1577,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #71 (Vue) :: useImperativeHandle}**
+**{LESSON #71 (Vue) :: useImperativeHandle}**
 
 LOs:
 
@@ -1598,7 +1598,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #72 (Vue) :: useSyncExternalStore}**
+**{LESSON #72 (Vue) :: useSyncExternalStore}**
 
 LOs:
 
@@ -1619,7 +1619,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #73 (Vue) :: useTransition}**
+**{LESSON #73 (Vue) :: useTransition}**
 
 LOs:
 
@@ -1640,7 +1640,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #74 (Vue) :: useDeferredValue}**
+**{LESSON #74 (Vue) :: useDeferredValue}**
 
 LOs:
 
@@ -1661,7 +1661,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #75 (Vue) :: useLayoutEffect vs useEffect}**
+**{LESSON #75 (Vue) :: useLayoutEffect vs useEffect}**
 
 LOs:
 
@@ -1682,7 +1682,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #76 (Vue) :: Mini Redux}**
+**{LESSON #76 (Vue) :: Mini Redux}**
 
 LOs:
 
@@ -1703,7 +1703,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #77 (Vue) :: Optimistic UI}**
+**{LESSON #77 (Vue) :: Optimistic UI}**
 
 LOs:
 
@@ -1724,7 +1724,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #78 (Vue) :: Request Deduplication}**
+**{LESSON #78 (Vue) :: Request Deduplication}**
 
 LOs:
 
@@ -1745,7 +1745,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #79 (Vue) :: Polling Hook}**
+**{LESSON #79 (Vue) :: Polling Hook}**
 
 LOs:
 
@@ -1766,7 +1766,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #80 (Vue) :: WebSocket Hook}**
+**{LESSON #80 (Vue) :: WebSocket Hook}**
 
 LOs:
 
@@ -1787,7 +1787,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #81 (Vue) :: Feature Flag Hook}**
+**{LESSON #81 (Vue) :: Feature Flag Hook}**
 
 LOs:
 
@@ -1808,7 +1808,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #82 (Vue) :: Undo/Redo}**
+**{LESSON #82 (Vue) :: Undo/Redo}**
 
 LOs:
 
@@ -1829,7 +1829,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #83 (Vue) :: Form Library from Scratch}**
+**{LESSON #83 (Vue) :: Form Library from Scratch}**
 
 LOs:
 
@@ -1850,7 +1850,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #84 (Vue) :: Component Library Theming}**
+**{LESSON #84 (Vue) :: Component Library Theming}**
 
 LOs:
 
@@ -1871,7 +1871,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #85 (Vue) :: Micro-frontend Shell}**
+**{LESSON #85 (Vue) :: Micro-frontend Shell}**
 
 LOs:
 
@@ -1892,7 +1892,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #86 (Vue) :: Race Condition Fix}**
+**{LESSON #86 (Vue) :: Race Condition Fix}**
 
 LOs:
 
@@ -1913,7 +1913,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #87 (Vue) :: Memoization Strategy}**
+**{LESSON #87 (Vue) :: Memoization Strategy}**
 
 LOs:
 
@@ -1934,7 +1934,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #88 (Vue) :: Bundle Analysis}**
+**{LESSON #88 (Vue) :: Bundle Analysis}**
 
 LOs:
 
@@ -1955,7 +1955,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #89 (Vue) :: Concurrent Mode Gotchas}**
+**{LESSON #89 (Vue) :: Concurrent Mode Gotchas}**
 
 LOs:
 
@@ -1976,7 +1976,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #90 (Vue) :: Memory Leak Hunt}**
+**{LESSON #90 (Vue) :: Memory Leak Hunt}**
 
 LOs:
 
@@ -1997,7 +1997,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #91 (Vue) :: Test useFetch}**
+**{LESSON #91 (Vue) :: Test useFetch}**
 
 LOs:
 
@@ -2018,7 +2018,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #92 (Vue) :: Test Async Component}**
+**{LESSON #92 (Vue) :: Test Async Component}**
 
 LOs:
 
@@ -2039,7 +2039,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #93 (Vue) :: Test User Interactions}**
+**{LESSON #93 (Vue) :: Test User Interactions}**
 
 LOs:
 
@@ -2060,7 +2060,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #94 (Vue) :: Test Context}**
+**{LESSON #94 (Vue) :: Test Context}**
 
 LOs:
 
@@ -2081,7 +2081,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #95 (Vue) :: Test Error Boundary}**
+**{LESSON #95 (Vue) :: Test Error Boundary}**
 
 LOs:
 
@@ -2102,7 +2102,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #96 (Vue) :: Design DataTable API}**
+**{LESSON #96 (Vue) :: Design DataTable API}**
 
 LOs:
 
@@ -2123,7 +2123,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #97 (Vue) :: Design Auth Flow}**
+**{LESSON #97 (Vue) :: Design Auth Flow}**
 
 LOs:
 
@@ -2144,7 +2144,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #98 (Vue) :: Design Notification System}**
+**{LESSON #98 (Vue) :: Design Notification System}**
 
 LOs:
 
@@ -2165,7 +2165,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #99 (Vue) :: Design Permission System}**
+**{LESSON #99 (Vue) :: Design Permission System}**
 
 LOs:
 
@@ -2186,7 +2186,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #100 (Vue) :: Design Real-Time Dashboard}**
+**{LESSON #100 (Vue) :: Design Real-Time Dashboard}**
 
 LOs:
 

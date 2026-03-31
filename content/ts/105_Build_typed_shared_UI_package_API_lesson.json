@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-ts-105",
     "track": "ts",
-    "problemNum": 105,
+    "lessonNum": 105,
     "title": "Build typed shared UI package API",
     "shortName": "P105",
     "intro": {

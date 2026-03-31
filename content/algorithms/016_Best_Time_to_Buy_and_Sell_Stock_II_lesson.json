@@ -3,13 +3,13 @@
   "config": {
     "lessonId": "ai-algorithms-16",
     "track": "algorithms",
-    "problemNum": 16,
+    "lessonNum": 16,
     "title": "Best Time to Buy and Sell Stock II",
     "shortName": "P16",
     "intro": {
       "tag": "LESSON #16",
       "title": "Best Time to Buy and Sell Stock II",
-      "body": "In this lesson, you will build a JavaScript function that calculates the maximum possible profit from buying and selling a stock multiple times, given an array of daily prices. You will learn the core concept of a greedy algorithm, which makes locally optimal choices at each step to achieve a globally optimal solution. The main technologies involved are JavaScript arrays, loops, and conditional logic. By the end, you'll understand how to identify profitable trading opportunities and implement an efficient solution to this classic algorithmic problem.",
+      "body": "In this lesson, you will build a JavaScript function that calculates the maximum possible profit from buying and selling a stock multiple times, given an array of daily prices. You will learn the core concept of a greedy algorithm, which makes locally optimal choices at each step to achieve a globally optimal solution. The main technologies involved are JavaScript arrays, loops, and conditional logic. By the end, you'll understand how to identify profitable trading opportunities and implement an efficient solution to this classic algorithmic lesson.",
       "usecase": "This algorithm is essential in financial technology applications where maximizing profit from price fluctuations is critical. You'll implement this pattern in trading dashboards that analyze historical stock data to calculate optimal buy/sell strategies. Portfolio management tools use this logic to simulate 'what-if' scenarios and provide profit-maximization recommendations to investors. As a developer, you'll apply this algorithm when building automated trading systems, investment analysis features, or financial data visualization components that help users make informed trading decisions."
     },
     "objectives": [

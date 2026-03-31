@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-ts-37",
     "track": "ts",
-    "problemNum": 37,
+    "lessonNum": 37,
     "title": "Build typed dependency container",
     "shortName": "P37",
     "intro": {

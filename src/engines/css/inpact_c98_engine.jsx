@@ -73,7 +73,7 @@ function getOutputPreview(answer) {
 export default createINPACTEngine({
   NODES,
   sideItems,
-  problemNum: 98,
+  lessonNum: 98,
   title: "Nesting (@nest / &)",
   shortName: "C98",
   language: "css",

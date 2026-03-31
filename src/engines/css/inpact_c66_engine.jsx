@@ -73,7 +73,7 @@ function getOutputPreview(answer) {
 export default createINPACTEngine({
   NODES,
   sideItems,
-  problemNum: 66,
+  lessonNum: 66,
   title: "Grid auto-placement",
   shortName: "C66",
   language: "css",

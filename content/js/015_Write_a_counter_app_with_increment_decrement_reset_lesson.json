@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-js-15",
     "track": "js",
-    "problemNum": 15,
+    "lessonNum": 15,
     "title": "Write a counter app with increment decrement reset",
     "shortName": "P15",
     "intro": {

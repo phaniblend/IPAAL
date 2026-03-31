@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-node-35",
     "track": "node",
-    "problemNum": 35,
+    "lessonNum": 35,
     "title": "Build API response envelope standardizer",
     "shortName": "P35",
     "intro": {

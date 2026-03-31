@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-mobile-angular-03",
     "track": "mobile-angular",
-    "problemNum": 3,
+    "lessonNum": 3,
     "title": "Modal & Action Sheet",
     "shortName": "P03",
     "intro": {

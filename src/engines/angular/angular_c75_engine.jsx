@@ -56,4 +56,4 @@ export class LayoutEffectComponent {
 ];
 
 const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
-export default createINPACTEngine({ NODES, sideItems, problemNum: 75, title: TITLE, shortName: "A — LAYOUT EFFECT" });
+export default createINPACTEngine({ NODES, sideItems, lessonNum: 75, title: TITLE, shortName: "A — LAYOUT EFFECT" });

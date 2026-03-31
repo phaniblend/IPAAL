@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-react-js-98",
     "track": "react-js",
-    "problemNum": 98,
+    "lessonNum": 98,
     "title": "forwardRef & Exposing DOM Nodes",
     "shortName": "P98",
     "intro": {

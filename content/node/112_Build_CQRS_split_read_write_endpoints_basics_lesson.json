@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-node-112",
     "track": "node",
-    "problemNum": 112,
+    "lessonNum": 112,
     "title": "Build CQRS split read write endpoints basics",
     "shortName": "P112",
     "intro": {

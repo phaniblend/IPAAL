@@ -31,7 +31,7 @@ To clear **all** cached lessons, delete the `cache/` folder (or the `intro`, `ob
 
 ### Algorithm lessons (algo-js, algo-ts, algo-python, algo-java)
 
-After fixing algo prompts (e.g. problem → example → flowchart → code-from-scratch), clear only algo cache and re-warm a few to test:
+After fixing algo prompts (e.g. lesson → example → flowchart → code-from-scratch), clear only algo cache and re-warm a few to test:
 
 ```bash
 npm run clear-algo-cache

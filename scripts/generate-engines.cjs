@@ -92,15 +92,15 @@ function makeJS(n, title, body, usecase) {
   return `import createINPACTEngine from "./inpact_engine_shared";
 
 const NODES = [
-  { id: "intro", type: "reveal", phase: "Problem", content: { tag: "PROBLEM #${n}", title: "${title}", body: "${body.replace(/"/g, '\\"')}", usecase: "${usecase.replace(/"/g, '\\"')}" } },
+  { id: "intro", type: "reveal", phase: "Lesson", content: { tag: "PROBLEM #${n}", title: "${title}", body: "${body.replace(/"/g, '\\"')}", usecase: "${usecase.replace(/"/g, '\\"')}" } },
   { id: "objectives", type: "objectives", phase: "Objectives", items: ["Understand the goal", "Implement step by step", "Export and verify"] },
-  { id: "step1", type: "question", phase: "Step 1 of 3", paal: "Set up the initial structure and state needed for this problem.", answer_keywords: ["import", "state", "function"], seed_code: "${seedForStep(n, 1, false).replace(/\n/g, '\\n').replace(/"/g, '\\"')}", feedback_correct: "✅ Step 1 done.", feedback_partial: "Add required setup.", feedback_wrong: "Set up structure", expected: "Initial setup" },
-  { id: "step2", type: "question", phase: "Step 2 of 3", paal: "Implement the core logic or UI for this problem.", answer_keywords: ["return", "render", "logic"], seed_code: "${seedForStep(n, 2, false).replace(/\n/g, '\\n').replace(/"/g, '\\"')}", feedback_correct: "✅ Step 2 done.", feedback_partial: "Core logic in place.", feedback_wrong: "Implement core", expected: "Core implementation" },
-  { id: "step3", type: "question", phase: "Step 3 of 3", paal: "Wire everything together, handle edge cases, and export the component.", answer_keywords: ["export", "default"], seed_code: "${seedForStep(n, 3, false).replace(/\n/g, '\\n').replace(/"/g, '\\"')}", feedback_correct: "✅ Problem #${n} complete.", feedback_partial: "Export and finish.", feedback_wrong: "Export component", expected: "Complete" },
+  { id: "step1", type: "question", phase: "Step 1 of 3", paal: "Set up the initial structure and state needed for this lesson.", answer_keywords: ["import", "state", "function"], seed_code: "${seedForStep(n, 1, false).replace(/\n/g, '\\n').replace(/"/g, '\\"')}", feedback_correct: "✅ Step 1 done.", feedback_partial: "Add required setup.", feedback_wrong: "Set up structure", expected: "Initial setup" },
+  { id: "step2", type: "question", phase: "Step 2 of 3", paal: "Implement the core logic or UI for this lesson.", answer_keywords: ["return", "render", "logic"], seed_code: "${seedForStep(n, 2, false).replace(/\n/g, '\\n').replace(/"/g, '\\"')}", feedback_correct: "✅ Step 2 done.", feedback_partial: "Core logic in place.", feedback_wrong: "Implement core", expected: "Core implementation" },
+  { id: "step3", type: "question", phase: "Step 3 of 3", paal: "Wire everything together, handle edge cases, and export the component.", answer_keywords: ["export", "default"], seed_code: "${seedForStep(n, 3, false).replace(/\n/g, '\\n').replace(/"/g, '\\"')}", feedback_correct: "✅ Lesson #${n} complete.", feedback_partial: "Export and finish.", feedback_wrong: "Export component", expected: "Complete" },
 ];
 
-const sideItems = [{ label: "Problem", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
-export default createINPACTEngine({ NODES, sideItems, problemNum: ${n}, title: "${title}", shortName: "${sn}" });
+const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
+export default createINPACTEngine({ NODES, sideItems, lessonNum: ${n}, title: "${title}", shortName: "${sn}" });
 `;
 }
 
@@ -108,14 +108,14 @@ function makeTS(n, title, body, usecase) {
   const sn = 'TS — ' + shortName(title).slice(0, 18);
   return `import createINPACTEngine from "./inpact_engine_shared";
 const NODES = [
-  { id: "intro", type: "reveal", phase: "Problem", content: { tag: "PROBLEM #${n} (TypeScript)", title: "${title} — Typed", body: "${(body + ' Use TypeScript where appropriate.').replace(/"/g, '\\"')}", usecase: "${usecase.replace(/"/g, '\\"')}" } },
+  { id: "intro", type: "reveal", phase: "Lesson", content: { tag: "PROBLEM #${n} (TypeScript)", title: "${title} — Typed", body: "${(body + ' Use TypeScript where appropriate.').replace(/"/g, '\\"')}", usecase: "${usecase.replace(/"/g, '\\"')}" } },
   { id: "objectives", type: "objectives", phase: "Objectives", items: ["Type state and props", "Implement step by step", "Export typed component"] },
-  { id: "step1", type: "question", phase: "Step 1 of 3", paal: "Set up the initial structure and typed state for this problem.", answer_keywords: ["import", "usestate", "interface"], seed_code: "${seedForStep(n, 1, true).replace(/\n/g, '\\n').replace(/"/g, '\\"')}", feedback_correct: "✅ Step 1 done.", feedback_partial: "Add typed setup.", feedback_wrong: "Set up structure", expected: "Initial setup" },
+  { id: "step1", type: "question", phase: "Step 1 of 3", paal: "Set up the initial structure and typed state for this lesson.", answer_keywords: ["import", "usestate", "interface"], seed_code: "${seedForStep(n, 1, true).replace(/\n/g, '\\n').replace(/"/g, '\\"')}", feedback_correct: "✅ Step 1 done.", feedback_partial: "Add typed setup.", feedback_wrong: "Set up structure", expected: "Initial setup" },
   { id: "step2", type: "question", phase: "Step 2 of 3", paal: "Implement the core logic or UI with proper types.", answer_keywords: ["return", "type"], seed_code: "${seedForStep(n, 2, true).replace(/\n/g, '\\n').replace(/"/g, '\\"')}", feedback_correct: "✅ Step 2 done.", feedback_partial: "Core logic in place.", feedback_wrong: "Implement core", expected: "Core implementation" },
-  { id: "step3", type: "question", phase: "Step 3 of 3", paal: "Wire everything together and export the typed component.", answer_keywords: ["export", "default"], seed_code: "${seedForStep(n, 3, true).replace(/\n/g, '\\n').replace(/"/g, '\\"')}", feedback_correct: "✅ Problem #${n} (TS) complete.", feedback_partial: "Export and finish.", feedback_wrong: "Export component", expected: "Complete" },
+  { id: "step3", type: "question", phase: "Step 3 of 3", paal: "Wire everything together and export the typed component.", answer_keywords: ["export", "default"], seed_code: "${seedForStep(n, 3, true).replace(/\n/g, '\\n').replace(/"/g, '\\"')}", feedback_correct: "✅ Lesson #${n} (TS) complete.", feedback_partial: "Export and finish.", feedback_wrong: "Export component", expected: "Complete" },
 ];
-const sideItems = [{ label: "Problem", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
-export default createINPACTEngine({ NODES, sideItems, problemNum: ${n}, title: "${title} (TS)", shortName: "${sn}" });
+const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
+export default createINPACTEngine({ NODES, sideItems, lessonNum: ${n}, title: "${title} (TS)", shortName: "${sn}" });
 `;
 }
 

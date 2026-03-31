@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-node-46",
     "track": "node",
-    "problemNum": 46,
+    "lessonNum": 46,
     "title": "Build BFF endpoint aggregating multiple services",
     "shortName": "P46",
     "intro": {

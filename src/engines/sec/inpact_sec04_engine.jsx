@@ -8,4 +8,4 @@ const NODES = [
 // WAF: rule-based; DDoS: rate limit, absorb, scrub`, feedback_correct: "✅ mTLS = mutual TLS; HSTS enforces HTTPS; WAF rules; DDoS = absorb + scrub.", feedback_wrong: "mTLS; HSTS; WAF; DDoS mitigation.", expected: "Network security" },
 ];
 const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }];
-export default createINPACTEngine({ NODES, sideItems, problemNum: "SEC-04", title: "Network security", shortName: "SEC — NETWORK" });
+export default createINPACTEngine({ NODES, sideItems, lessonNum: "SEC-04", title: "Network security", shortName: "SEC — NETWORK" });

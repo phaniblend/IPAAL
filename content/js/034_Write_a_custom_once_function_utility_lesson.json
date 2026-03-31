@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-js-34",
     "track": "js",
-    "problemNum": 34,
+    "lessonNum": 34,
     "title": "Write a custom once function utility",
     "shortName": "P34",
     "intro": {

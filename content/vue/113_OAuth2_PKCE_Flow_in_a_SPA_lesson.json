@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-vue-113",
     "track": "vue",
-    "problemNum": 113,
+    "lessonNum": 113,
     "title": "OAuth2 PKCE Flow in a SPA",
     "shortName": "P113",
     "intro": {

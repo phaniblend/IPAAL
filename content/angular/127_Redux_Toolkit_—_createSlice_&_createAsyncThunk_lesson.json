@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-angular-127",
     "track": "angular",
-    "problemNum": 127,
+    "lessonNum": 127,
     "title": "Redux Toolkit — createSlice & createAsyncThunk",
     "shortName": "P127",
     "intro": {

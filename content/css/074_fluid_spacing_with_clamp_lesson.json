@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-css-74",
     "track": "css",
-    "problemNum": 74,
+    "lessonNum": 74,
     "title": "fluid spacing with clamp",
     "shortName": "P74",
     "intro": {

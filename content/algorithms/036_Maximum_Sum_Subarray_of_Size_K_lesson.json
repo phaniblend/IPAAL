@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-algorithms-36",
     "track": "algorithms",
-    "problemNum": 36,
+    "lessonNum": 36,
     "title": "Maximum Sum Subarray of Size K",
     "shortName": "P36",
     "intro": {
@@ -38,7 +38,7 @@
         "phase": "Step 2 of 16",
         "title": "What you'll learn",
         "content": {
-          "body": "By the end of this lesson, you'll be able to:\n1. Explain why checking every possible window is inefficient\n2. Understand how to use a sliding window to avoid re-scanning\n3. Implement the maximum sum subarray algorithm for any window size\n4. Recognize when this pattern applies to real-world problems\n5. Calculate the time complexity improvement over brute force",
+          "body": "By the end of this lesson, you'll be able to:\n1. Explain why checking every possible window is inefficient\n2. Understand how to use a sliding window to avoid re-scanning\n3. Implement the maximum sum subarray algorithm for any window size\n4. Recognize when this pattern applies to real-world lessons\n5. Calculate the time complexity improvement over brute force",
           "title": "What you'll learn"
         }
       },
@@ -296,7 +296,7 @@
         "phase": "Step 16 of 16",
         "title": "Done",
         "content": {
-          "body": "Congratulations! You've implemented the maximum sum subarray algorithm using a sliding window. Key takeaways:\n1. Instead of re-scanning each window, we slide it and adjust the sum\n2. We subtract the element leaving and add the new element entering\n3. This reduces time complexity from O(n×k) to O(n)\n4. The pattern applies to any problem with fixed-size contiguous windows\n\nRemember: The sliding window technique is powerful for array problems where you need to examine contiguous segments efficiently. Keep practicing with different window sizes and array types!",
+          "body": "Congratulations! You've implemented the maximum sum subarray algorithm using a sliding window. Key takeaways:\n1. Instead of re-scanning each window, we slide it and adjust the sum\n2. We subtract the element leaving and add the new element entering\n3. This reduces time complexity from O(n×k) to O(n)\n4. The pattern applies to any lesson with fixed-size contiguous windows\n\nRemember: The sliding window technique is powerful for array lessons where you need to examine contiguous segments efficiently. Keep practicing with different window sizes and array types!",
           "title": "Done"
         }
       }

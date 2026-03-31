@@ -73,7 +73,7 @@ function getOutputPreview(answer) {
 export default createINPACTEngine({
   NODES,
   sideItems,
-  problemNum: 54,
+  lessonNum: 54,
   title: "Grid vs Flex: when to use which",
   shortName: "C54",
   language: "css",

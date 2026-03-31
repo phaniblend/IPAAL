@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-js-49",
     "track": "js",
-    "problemNum": 49,
+    "lessonNum": 49,
     "title": "Build a debounced search input",
     "shortName": "P49",
     "intro": {

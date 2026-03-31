@@ -8,4 +8,4 @@ const NODES = [
 # create_task: schedule, don't wait; gather: wait all`, feedback_correct: "✅ asyncio.gather for concurrent await; create_task to schedule without awaiting.", feedback_wrong: "asyncio.gather for parallel; create_task for background tasks.", expected: "Async Python" },
 ];
 const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }];
-export default createINPACTEngine({ NODES, sideItems, problemNum: "PY-F04", title: "Async Python", shortName: "PY — ASYNC" });
+export default createINPACTEngine({ NODES, sideItems, lessonNum: "PY-F04", title: "Async Python", shortName: "PY — ASYNC" });

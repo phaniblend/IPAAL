@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-ts-31",
     "track": "ts",
-    "problemNum": 31,
+    "lessonNum": 31,
     "title": "Build typed event emitter",
     "shortName": "P31",
     "intro": {

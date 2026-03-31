@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-node-44",
     "track": "node",
-    "problemNum": 44,
+    "lessonNum": 44,
     "title": "Build email queue worker endpoint trigger",
     "shortName": "P44",
     "intro": {

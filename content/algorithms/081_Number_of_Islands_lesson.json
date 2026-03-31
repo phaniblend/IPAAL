@@ -3,13 +3,13 @@
   "config": {
     "lessonId": "ai-algorithms-81",
     "track": "algorithms",
-    "problemNum": 81,
+    "lessonNum": 81,
     "title": "Number of Islands",
     "shortName": "P81",
     "intro": {
       "tag": "LESSON #81",
       "title": "Number of Islands",
-      "body": "In this lesson, you will build a function that counts the number of islands in a 2D grid map, where '1' represents land and '0' represents water. The core programming concept is depth-first search (DFS), a fundamental graph traversal algorithm used to explore connected land cells. You will use JavaScript arrays to represent the grid and implement recursion or a stack for the DFS traversal. This exercise will help you understand how to solve problems involving connected components in a grid, a common pattern in algorithmic challenges.",
+      "body": "In this lesson, you will build a function that counts the number of islands in a 2D grid map, where '1' represents land and '0' represents water. The core programming concept is depth-first search (DFS), a fundamental graph traversal algorithm used to explore connected land cells. You will use JavaScript arrays to represent the grid and implement recursion or a stack for the DFS traversal. This exercise will help you understand how to solve lessons involving connected components in a grid, a common pattern in algorithmic challenges.",
       "usecase": "The 'Number of Islands' algorithm is a foundational pattern for analyzing connected regions in grid-based data, directly applicable to real-world mapping and image processing software. For example, in a geographic information system (GIS) dashboard, it can count distinct landmasses from satellite imagery data displayed on an interactive map panel. Developers use this to build features like terrain analysis tools or to segment medical images in diagnostic UIs, where identifying separate regions is critical for accurate processing and visualization."
     },
     "objectives": [
@@ -316,7 +316,7 @@
         "phase": "Step 17 of 17",
         "title": "Done",
         "content": {
-          "body": "Congratulations! You've implemented the Number of Islands algorithm using DFS with visited tracking. Remember: always mark cells as visited when you first encounter them to prevent infinite loops in cyclic graphs. This pattern applies to many graph problems—explore connected components while avoiding revisits.",
+          "body": "Congratulations! You've implemented the Number of Islands algorithm using DFS with visited tracking. Remember: always mark cells as visited when you first encounter them to prevent infinite loops in cyclic graphs. This pattern applies to many graph lessons—explore connected components while avoiding revisits.",
           "title": "Done"
         }
       }

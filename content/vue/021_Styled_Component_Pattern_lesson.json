@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-vue-21",
     "track": "vue",
-    "problemNum": 21,
+    "lessonNum": 21,
     "title": "Styled Component Pattern",
     "shortName": "P21",
     "intro": {

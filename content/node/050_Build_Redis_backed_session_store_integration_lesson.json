@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-node-50",
     "track": "node",
-    "problemNum": 50,
+    "lessonNum": 50,
     "title": "Build Redis backed session store integration",
     "shortName": "P50",
     "intro": {

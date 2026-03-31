@@ -7,4 +7,4 @@ const NODES = [
 // Schematics: collection in angular.json; run with ng generate my-schematic:name`, feedback_correct: "✅ ng generate library; schematics in collection; multi-project angular.json.", feedback_wrong: "ng generate library; schematics extend CLI; workspace has multiple projects.", expected: "CLI & workspace" },
 ];
 const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }];
-export default createINPACTEngine({ NODES, sideItems, problemNum: "ANG-F15", title: "Angular CLI & workspace", shortName: "ANG — CLI" });
+export default createINPACTEngine({ NODES, sideItems, lessonNum: "ANG-F15", title: "Angular CLI & workspace", shortName: "ANG — CLI" });

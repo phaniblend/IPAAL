@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-react-ts-42",
     "track": "react-ts",
-    "problemNum": 42,
+    "lessonNum": 42,
     "title": "Context Performance",
     "shortName": "P42",
     "intro": {

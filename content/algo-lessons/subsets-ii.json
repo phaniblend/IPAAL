@@ -10,11 +10,11 @@
       "stepId": "title",
       "mentorSays": "At the end of this lesson, you will be able to:\n\n1. Understand what Subsets II asks for\n2. Use backtracking to generate unique subsets\n3. Handle duplicates correctly\n4. Skip duplicate elements during generation\n5. Implement the solution step by step in your chosen language",
       "action": "continue",
-      "next": "problem-illustration"
+      "next": "lesson-illustration"
     },
     {
-      "stepId": "problem-illustration",
-      "mentorSays": "Perfect! Now let's understand what Subsets II is asking.\n\n**Problem Definition:**\nGiven an integer array `nums` that may contain duplicates, return all possible subsets (the power set). The solution set must not contain duplicate subsets.\n\n**Example 1:** nums = [1,2,2]\nUnique subsets: [], [1], [2], [1,2], [2,2], [1,2,2]\nAnswer: [[],[1],[2],[1,2],[2,2],[1,2,2]]\n\n**Key Insight:** Similar to Subsets, but must skip duplicates. Sort first, skip if same element was used at same level.",
+      "stepId": "lesson-illustration",
+      "mentorSays": "Perfect! Now let's understand what Subsets II is asking.\n\n**Lesson Definition:**\nGiven an integer array `nums` that may contain duplicates, return all possible subsets (the power set). The solution set must not contain duplicate subsets.\n\n**Example 1:** nums = [1,2,2]\nUnique subsets: [], [1], [2], [1,2], [2,2], [1,2,2]\nAnswer: [[],[1],[2],[1,2],[2,2],[1,2,2]]\n\n**Key Insight:** Similar to Subsets, but must skip duplicates. Sort first, skip if same element was used at same level.",
       "example": "Example: nums=[1,2,2] → [[],[1],[2],[1,2],[2,2],[1,2,2]]",
       "action": "continue",
       "next": "thinking-challenge"

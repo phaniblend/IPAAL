@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-node-21",
     "track": "node",
-    "problemNum": 21,
+    "lessonNum": 21,
     "title": "Build refresh token rotation flow",
     "shortName": "P21",
     "intro": {

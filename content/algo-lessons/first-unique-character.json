@@ -8,20 +8,20 @@
   "flow": [
     {
       "stepId": "title",
-      "mentorSays": "At the end of this lesson, you will be able to:\n\n1. Understand what the First Unique Character problem asks for\n2. Use hash maps to count character frequencies\n3. Find the first character that appears exactly once\n4. Implement the solution step by step in your chosen language",
+      "mentorSays": "At the end of this lesson, you will be able to:\n\n1. Understand what the First Unique Character lesson asks for\n2. Use hash maps to count character frequencies\n3. Find the first character that appears exactly once\n4. Implement the solution step by step in your chosen language",
       "action": "continue",
-      "next": "problem-illustration"
+      "next": "lesson-illustration"
     },
     {
-      "stepId": "problem-illustration",
-      "mentorSays": "Perfect! Now let's understand what the First Unique Character problem is asking.\n\nImagine you have a string: s = \"leetcode\"\n\nYour task: Find the index of the first non-repeating character (a character that appears exactly once). If no such character exists, return -1.\n\nLet's count character frequencies:\n- 'l' appears 1 time\n- 'e' appears 2 times\n- 't' appears 1 time\n- 'c' appears 1 time\n- 'o' appears 1 time\n- 'd' appears 1 time\n\nCharacters that appear exactly once: 'l', 't', 'c', 'o', 'd'\n\nThe first one (reading left to right) is 'l' at index 0.\n\nAnother example: s = \"loveleetcode\"\n\nCount frequencies:\n- 'l' appears 2 times\n- 'o' appears 2 times\n- 'v' appears 1 time ✓\n- 'e' appears 4 times\n- 't' appears 1 time\n- 'c' appears 1 time\n- 'd' appears 1 time\n\nCharacters that appear exactly once: 'v', 't', 'c', 'd'\n\nThe first one is 'v' at index 2.\n\n**Key Insight**: We use a hash map to count character frequencies, then scan the string again to find the first character with count 1.\n\nThat's what the problem wants: the index of the first character that appears exactly once, or -1 if no such character exists.",
+      "stepId": "lesson-illustration",
+      "mentorSays": "Perfect! Now let's understand what the First Unique Character lesson is asking.\n\nImagine you have a string: s = \"leetcode\"\n\nYour task: Find the index of the first non-repeating character (a character that appears exactly once). If no such character exists, return -1.\n\nLet's count character frequencies:\n- 'l' appears 1 time\n- 'e' appears 2 times\n- 't' appears 1 time\n- 'c' appears 1 time\n- 'o' appears 1 time\n- 'd' appears 1 time\n\nCharacters that appear exactly once: 'l', 't', 'c', 'o', 'd'\n\nThe first one (reading left to right) is 'l' at index 0.\n\nAnother example: s = \"loveleetcode\"\n\nCount frequencies:\n- 'l' appears 2 times\n- 'o' appears 2 times\n- 'v' appears 1 time ✓\n- 'e' appears 4 times\n- 't' appears 1 time\n- 'c' appears 1 time\n- 'd' appears 1 time\n\nCharacters that appear exactly once: 'v', 't', 'c', 'd'\n\nThe first one is 'v' at index 2.\n\n**Key Insight**: We use a hash map to count character frequencies, then scan the string again to find the first character with count 1.\n\nThat's what the lesson wants: the index of the first character that appears exactly once, or -1 if no such character exists.",
       "example": "s = \"leetcode\"\n\nCount character frequencies:\nl: 1, e: 2, t: 1, c: 1, o: 1, d: 1\n\nCharacters appearing once: l, t, c, o, d\nFirst one: 'l' at index 0\n\nAnswer: 0\n\nAnother example:\ns = \"loveleetcode\"\n\nCount frequencies:\nl: 2, o: 2, v: 1, e: 4, t: 1, c: 1, d: 1\n\nCharacters appearing once: v, t, c, d\nFirst one: 'v' at index 2\n\nAnswer: 2\n\nAnother example:\ns = \"aabb\"\n\nAll characters repeat. No unique character.\n\nAnswer: -1",
       "action": "continue",
       "next": "thinking-challenge"
     },
     {
       "stepId": "thinking-challenge",
-      "mentorSays": "Now that you understand what the problem wants, here's the real question:\n\nHow would YOU find the first unique character?\n\nThink about it for a moment. What approach feels natural to you?",
+      "mentorSays": "Now that you understand what the lesson wants, here's the real question:\n\nHow would YOU find the first unique character?\n\nThink about it for a moment. What approach feels natural to you?",
       "choices": [
         {
           "label": "Count character frequencies, then find first character with count 1",
@@ -146,7 +146,7 @@
     },
     {
       "stepId": "loop-check-js",
-      "mentorSays": "To solve this problem, we'll need to use loops to iterate through the string. Do you know what a loop is in JavaScript?",
+      "mentorSays": "To solve this lesson, we'll need to use loops to iterate through the string. Do you know what a loop is in JavaScript?",
       "choices": [
         {
           "label": "Yes, I know loops",
@@ -293,7 +293,7 @@
     },
     {
       "stepId": "loop-check-python",
-      "mentorSays": "To solve this problem, we'll need to use loops to iterate through the string. Do you know what a loop is in Python?",
+      "mentorSays": "To solve this lesson, we'll need to use loops to iterate through the string. Do you know what a loop is in Python?",
       "choices": [
         {
           "label": "Yes, I know loops",
@@ -440,7 +440,7 @@
     },
     {
       "stepId": "loop-check-java",
-      "mentorSays": "To solve this problem, we'll need to use loops to iterate through the string. Do you know what a loop is in Java?",
+      "mentorSays": "To solve this lesson, we'll need to use loops to iterate through the string. Do you know what a loop is in Java?",
       "choices": [
         {
           "label": "Yes, I know loops",
@@ -587,7 +587,7 @@
     },
     {
       "stepId": "loop-check-cpp",
-      "mentorSays": "To solve this problem, we'll need to use loops to iterate through the string. Do you know what a loop is in C++?",
+      "mentorSays": "To solve this lesson, we'll need to use loops to iterate through the string. Do you know what a loop is in C++?",
       "choices": [
         {
           "label": "Yes, I know loops",
@@ -734,7 +734,7 @@
     },
     {
       "stepId": "loop-check-ts",
-      "mentorSays": "To solve this problem, we'll need to use loops to iterate through the string. Do you know what a loop is in TypeScript?",
+      "mentorSays": "To solve this lesson, we'll need to use loops to iterate through the string. Do you know what a loop is in TypeScript?",
       "choices": [
         {
           "label": "Yes, I know loops",
@@ -818,7 +818,7 @@
     },
     {
       "stepId": "final",
-      "mentorSays": "🎉 Well done! You've learned to think through the First Unique Character problem. You understand what the problem asks for, how to use hash maps to count character frequencies, and how to find the first character that appears exactly once.\n\nThis kind of thinking—using hash maps to track frequencies—is essential for solving many string problems. Keep practicing!",
+      "mentorSays": "🎉 Well done! You've learned to think through the First Unique Character lesson. You understand what the lesson asks for, how to use hash maps to count character frequencies, and how to find the first character that appears exactly once.\n\nThis kind of thinking—using hash maps to track frequencies—is essential for solving many string lessons. Keep practicing!",
       "action": "continue"
     }
   ]

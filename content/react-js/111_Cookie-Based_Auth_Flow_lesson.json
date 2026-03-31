@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-react-js-111",
     "track": "react-js",
-    "problemNum": 111,
+    "lessonNum": 111,
     "title": "Cookie-Based Auth Flow",
     "shortName": "P111",
     "intro": {

@@ -73,7 +73,7 @@ function getOutputPreview(answer) {
 export default createINPACTEngine({
   NODES,
   sideItems,
-  problemNum: 80,
+  lessonNum: 80,
   title: "Custom property fallbacks",
   shortName: "C80",
   language: "css",

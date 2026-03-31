@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-angular-65",
     "track": "angular",
-    "problemNum": 65,
+    "lessonNum": 65,
     "title": "Error Boundary",
     "shortName": "P65",
     "intro": {

@@ -3,13 +3,13 @@
   "config": {
     "lessonId": "ai-algorithms-38",
     "track": "algorithms",
-    "problemNum": 38,
+    "lessonNum": 38,
     "title": "Subarrays with K Distinct",
     "shortName": "P38",
     "intro": {
       "tag": "LESSON #38",
       "title": "Subarrays with K Distinct",
-      "body": "In this lesson, you will build a function that counts the number of subarrays with exactly K distinct integers in a given array. You will learn the sliding window technique, a core algorithmic pattern for efficiently processing contiguous sequences. The main technologies involved are JavaScript arrays, objects (for counting), and loops. By the end, you'll understand how to apply this technique to solve a common interview problem step by step.",
+      "body": "In this lesson, you will build a function that counts the number of subarrays with exactly K distinct integers in a given array. You will learn the sliding window technique, a core algorithmic pattern for efficiently processing contiguous sequences. The main technologies involved are JavaScript arrays, objects (for counting), and loops. By the end, you'll understand how to apply this technique to solve a common interview lesson step by step.",
       "usecase": "The subarrays with K distinct pattern is essential for analyzing sequential data in real-world applications like e-commerce analytics dashboards, where you might need to count all product view sequences containing exactly K different categories. It's used in content moderation systems to identify comment sections with exactly K unique users in sliding time windows, or in streaming services to find segments of a playlist where exactly K distinct genres appear. This algorithm helps developers implement sophisticated filtering and segmentation features in data-intensive applications where understanding specific diversity patterns within sequences is critical."
     },
     "objectives": [
@@ -387,7 +387,7 @@
         "phase": "Step 19 of 19",
         "title": "Done",
         "content": {
-          "body": "Congratulations! You've learned how to count subarrays with exactly K distinct elements using the sliding window technique and frequency maps. Remember: the key insight is converting 'exactly K' to 'at most K minus at most K-1'. This pattern of using a lookup structure to remember what we've seen appears in many array and string problems. Keep practicing with different values of K to build your intuition!",
+          "body": "Congratulations! You've learned how to count subarrays with exactly K distinct elements using the sliding window technique and frequency maps. Remember: the key insight is converting 'exactly K' to 'at most K minus at most K-1'. This pattern of using a lookup structure to remember what we've seen appears in many array and string lessons. Keep practicing with different values of K to build your intuition!",
           "title": "Done"
         }
       }

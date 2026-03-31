@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-react-ts-71",
     "track": "react-ts",
-    "problemNum": 71,
+    "lessonNum": 71,
     "title": "useDeferredValue",
     "shortName": "P71",
     "intro": {

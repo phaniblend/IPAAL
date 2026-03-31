@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-vue-95",
     "track": "vue",
-    "problemNum": 95,
+    "lessonNum": 95,
     "title": "Design Permission System",
     "shortName": "P95",
     "intro": {

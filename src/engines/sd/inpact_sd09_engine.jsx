@@ -8,4 +8,4 @@ const NODES = [
 // Origin shield: single hop to origin, reduces load`, feedback_correct: "✅ Purge/TTL; edge workers run at POP; origin shield protects origin.", feedback_wrong: "Cache invalidation; edge workers; origin shield.", expected: "CDN & edge" },
 ];
 const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }];
-export default createINPACTEngine({ NODES, sideItems, problemNum: "SD-09", title: "CDN & edge computing", shortName: "SD — CDN" });
+export default createINPACTEngine({ NODES, sideItems, lessonNum: "SD-09", title: "CDN & edge computing", shortName: "SD — CDN" });

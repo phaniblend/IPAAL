@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-js-89",
     "track": "js",
-    "problemNum": 89,
+    "lessonNum": 89,
     "title": "Build wizard engine with conditional steps",
     "shortName": "P89",
     "intro": {

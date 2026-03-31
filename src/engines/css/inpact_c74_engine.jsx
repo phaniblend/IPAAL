@@ -73,7 +73,7 @@ function getOutputPreview(answer) {
 export default createINPACTEngine({
   NODES,
   sideItems,
-  problemNum: 74,
+  lessonNum: 74,
   title: "fluid spacing with clamp",
   shortName: "C74",
   language: "css",

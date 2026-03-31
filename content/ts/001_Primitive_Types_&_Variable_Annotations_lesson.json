@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-ts-01",
     "track": "ts",
-    "problemNum": 1,
+    "lessonNum": 1,
     "title": "Primitive Types & Variable Annotations",
     "shortName": "P01",
     "intro": {

@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-css-38",
     "track": "css",
-    "problemNum": 38,
+    "lessonNum": 38,
     "title": "@layer and cascade layers",
     "shortName": "P38",
     "intro": {
@@ -31,7 +31,7 @@
         "hint": "Start by writing HTML elements like headings, paragraphs, and buttons. Then add CSS rules that target the same elements with different styles to create conflicts.",
         "analogousExample": "/* Example of conflicting styles without layers */\nh1 {\n    color: red;\n}\n\nh1 {\n    color: blue;\n}",
         "seedCode": "/* Add your HTML structure and conflicting CSS rules here */",
-        "expectedOutcome": "You will have an HTML page with elements that have conflicting CSS rules applied, showing the problem that cascade layers solve.",
+        "expectedOutcome": "You will have an HTML page with elements that have conflicting CSS rules applied, showing the lesson that cascade layers solve.",
         "successCriteria": [
           "The code includes multiple HTML elements and at least two CSS rules that target the same element with conflicting property values."
         ],

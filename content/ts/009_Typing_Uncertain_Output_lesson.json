@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-ts-09",
     "track": "ts",
-    "problemNum": 9,
+    "lessonNum": 9,
     "title": "Typing Uncertain Output",
     "shortName": "P09",
     "intro": {

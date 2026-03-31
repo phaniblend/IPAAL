@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-ts-102",
     "track": "ts",
-    "problemNum": 102,
+    "lessonNum": 102,
     "title": "Build typed A B experiment assignment model",
     "shortName": "P102",
     "intro": {

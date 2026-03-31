@@ -8,4 +8,4 @@ const inputRef = ref(null)  // <input ref="inputRef">  useTemplateRef
 // v-if: toggle DOM; v-show: display:none`, feedback_correct: "✅ v-model; ref for template ref; v-if removes from DOM, v-show toggles visibility.", feedback_wrong: "v-model; ref for DOM ref; v-if vs v-show trade-off.", expected: "Template syntax" },
 ];
 const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }];
-export default createINPACTEngine({ NODES, sideItems, problemNum: "VUE-F02", title: "Template syntax", shortName: "VUE — TEMPLATE" });
+export default createINPACTEngine({ NODES, sideItems, lessonNum: "VUE-F02", title: "Template syntax", shortName: "VUE — TEMPLATE" });

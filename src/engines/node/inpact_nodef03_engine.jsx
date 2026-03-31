@@ -27,4 +27,4 @@ Binary protocols — parsing frames, binary headers.`,
 ];
 
 const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }];
-export default createINPACTEngine({ NODES, sideItems, problemNum: "NODE-F03", title: "Buffer & encoding", shortName: "NODE — BUFFER" });
+export default createINPACTEngine({ NODES, sideItems, lessonNum: "NODE-F03", title: "Buffer & encoding", shortName: "NODE — BUFFER" });

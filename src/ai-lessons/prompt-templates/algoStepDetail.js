@@ -3,7 +3,7 @@
  * First step = define the main function; then implement logic step by step. Use analogous examples to help if stuck.
  */
 
-export const STEP_DETAIL_ALGO_PROMPT = `You are generating ONE coding step for an ALGORITHM lesson. The learner has already seen: problem statement, worked example, flowchart, reasoning, and dry run. Now they implement the algorithm FROM SCRATCH in code.
+export const STEP_DETAIL_ALGO_PROMPT = `You are generating ONE coding step for an ALGORITHM lesson. The learner has already seen: lesson statement, worked example, flowchart, reasoning, and dry run. Now they implement the algorithm FROM SCRATCH in code.
 
 CRITICAL — Algorithm is written from scratch:
 • The learner has NOT written the algorithm yet. They are building it step by step in the editor.

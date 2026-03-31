@@ -3,13 +3,13 @@
   "config": {
     "lessonId": "ai-algorithms-80",
     "track": "algorithms",
-    "problemNum": 80,
+    "lessonNum": 80,
     "title": "Construct Binary Tree from Traversals",
     "shortName": "P80",
     "intro": {
       "tag": "LESSON #80",
       "title": "Construct Binary Tree from Traversals",
-      "body": "In this lesson, you will build a function that reconstructs a binary tree from its preorder and inorder traversal arrays. You will learn the core concept of using recursion to divide the problem into smaller subproblems based on root identification in the traversals. The main technologies involved are JavaScript functions, arrays, recursion, and basic tree node objects. This exercise will help you understand how tree structures relate to their traversal sequences and practice recursive thinking in a practical context.",
+      "body": "In this lesson, you will build a function that reconstructs a binary tree from its preorder and inorder traversal arrays. You will learn the core concept of using recursion to divide the lesson into smaller subproblems based on root identification in the traversals. The main technologies involved are JavaScript functions, arrays, recursion, and basic tree node objects. This exercise will help you understand how tree structures relate to their traversal sequences and practice recursive thinking in a practical context.",
       "usecase": "Reconstructing a binary tree from its traversal data is a fundamental pattern in software that builds or restores hierarchical structures from serialized data. This is essential in applications like file system browsers, where directory trees are loaded from a stored traversal order, or in document editors that rebuild a collapsed outline or table of contents from saved metadata. Developers use this algorithm when implementing features like restoring a user's expanded/collapsed state in a complex UI dashboard or parsing configuration files that define nested menu systems, ensuring the interface accurately reflects the intended hierarchical relationships."
     },
     "objectives": [
@@ -288,7 +288,7 @@
         "phase": "Step 17 of 17",
         "title": "Lesson complete",
         "content": {
-          "body": "You've successfully implemented an algorithm to construct a binary tree from preorder and inorder traversals! Remember: preorder gives you the roots as you explore, inorder tells you left from right. The key insight is using the root to split the problem into smaller subtree problems - classic tree exploration thinking. This approach works for trees of any size by recursively exploring branches from each root.",
+          "body": "You've successfully implemented an algorithm to construct a binary tree from preorder and inorder traversals! Remember: preorder gives you the roots as you explore, inorder tells you left from right. The key insight is using the root to split the lesson into smaller subtree lessons - classic tree exploration thinking. This approach works for trees of any size by recursively exploring branches from each root.",
           "title": "Lesson complete"
         }
       }

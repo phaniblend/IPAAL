@@ -577,7 +577,7 @@ const sideItems = [
 const config = {
   lessonId: "ai-react-ts-120",
   track: "react-ts",
-  problemNum: 120,
+  lessonNum: 120,
   title: "Creating RTK Endpoints (from zero)",
   shortName: "RTK ENDPOINTS",
   intro: {

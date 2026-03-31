@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-node-34",
     "track": "node",
-    "problemNum": 34,
+    "lessonNum": 34,
     "title": "Build pagination filter sort API pattern",
     "shortName": "P34",
     "intro": {

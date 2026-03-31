@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-sd-10",
     "track": "sd",
-    "problemNum": 10,
+    "lessonNum": 10,
     "title": "Microservices patterns",
     "shortName": "P10",
     "intro": {

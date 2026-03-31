@@ -281,4 +281,4 @@ const sideItems = [
   { label: "Step 5 — Reactive state", id: "step5" },
 ];
 
-export default createINPACTEngine({ NODES, sideItems, problemNum: "JS-F09", title: "Generators, Iterators & Proxy", shortName: "JS — GENERATORS" });
+export default createINPACTEngine({ NODES, sideItems, lessonNum: "JS-F09", title: "Generators, Iterators & Proxy", shortName: "JS — GENERATORS" });

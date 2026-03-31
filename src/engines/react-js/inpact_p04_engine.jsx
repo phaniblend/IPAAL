@@ -309,4 +309,4 @@ const sideItems = [
   { label: "Step 5 — Full", id: "step5" },
 ];
 
-export default createINPACTEngine({ NODES, sideItems, problemNum: 4, title: "Multiple State Variables", shortName: "MULTIPLE STATE" });
+export default createINPACTEngine({ NODES, sideItems, lessonNum: 4, title: "Multiple State Variables", shortName: "MULTIPLE STATE" });

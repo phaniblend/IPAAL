@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-algorithms-79",
     "track": "algorithms",
-    "problemNum": 79,
+    "lessonNum": 79,
     "title": "Serialize & Deserialize Binary Tree",
     "shortName": "P79",
     "intro": {

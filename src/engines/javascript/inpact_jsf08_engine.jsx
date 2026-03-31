@@ -13,7 +13,7 @@ Set    — collection of unique values (deduplication, membership test)
 WeakMap / WeakSet — same but keys are weakly held (garbage-collected)
 Symbol — guaranteed unique primitive, used for metaprogramming
 
-These are the right tools for specific problems:
+These are the right tools for specific lessons:
 • Map when keys aren't strings
 • Set for deduplication and fast has() checks
 • WeakMap for private data / caching without memory leaks
@@ -285,4 +285,4 @@ const sideItems = [
   { label: "Step 5 — EventEmitter", id: "step5" },
 ];
 
-export default createINPACTEngine({ NODES, sideItems, problemNum: "JS-F08", title: "Map, Set, WeakMap & Symbols", shortName: "JS — DATA STRUCTURES" });
+export default createINPACTEngine({ NODES, sideItems, lessonNum: "JS-F08", title: "Map, Set, WeakMap & Symbols", shortName: "JS — DATA STRUCTURES" });

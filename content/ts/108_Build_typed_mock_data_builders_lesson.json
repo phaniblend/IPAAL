@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-ts-108",
     "track": "ts",
-    "problemNum": 108,
+    "lessonNum": 108,
     "title": "Build typed mock data builders",
     "shortName": "P108",
     "intro": {

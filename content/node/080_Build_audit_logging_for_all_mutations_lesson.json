@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-node-80",
     "track": "node",
-    "problemNum": 80,
+    "lessonNum": 80,
     "title": "Build audit logging for all mutations",
     "shortName": "P80",
     "intro": {

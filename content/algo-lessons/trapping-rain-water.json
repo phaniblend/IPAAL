@@ -8,20 +8,20 @@
   "flow": [
     {
       "stepId": "title",
-      "mentorSays": "At the end of this lesson, you will be able to:\n\n1. Understand what the Trapping Rain Water problem asks for\n2. Use two pointers to calculate trapped water efficiently\n3. Understand the key insight: water trapped = min(maxLeft, maxRight) - height[i]\n4. Track maximum heights from both sides as we traverse\n5. Implement the solution step by step in your chosen language",
+      "mentorSays": "At the end of this lesson, you will be able to:\n\n1. Understand what the Trapping Rain Water lesson asks for\n2. Use two pointers to calculate trapped water efficiently\n3. Understand the key insight: water trapped = min(maxLeft, maxRight) - height[i]\n4. Track maximum heights from both sides as we traverse\n5. Implement the solution step by step in your chosen language",
       "action": "continue",
-      "next": "problem-illustration"
+      "next": "lesson-illustration"
     },
     {
-      "stepId": "problem-illustration",
-      "mentorSays": "Perfect! Now let's understand what the Trapping Rain Water problem is asking.\n\n**Problem Definition:**\nGiven an array `height` of non-negative integers representing an elevation map, calculate how much rainwater can be trapped after raining.\n\n**Key Insight:**\nFor each position `i`, the water trapped is: `min(maxLeft, maxRight) - height[i]`\n- `maxLeft` = maximum height to the left of position `i`\n- `maxRight` = maximum height to the right of position `i`\n- Water can only be trapped if there are taller bars on both sides\n\n**Example 1:** height = [0, 1, 0, 2, 1, 0, 1, 3, 2, 1, 2, 1]\n\nLet's calculate water at each position:\n- Index 0 (h=0): maxLeft=0, maxRight=3, min(0,3)=0, water=0-0=0\n- Index 1 (h=1): maxLeft=1, maxRight=3, min(1,3)=1, water=1-1=0\n- Index 2 (h=0): maxLeft=1, maxRight=3, min(1,3)=1, water=1-0=1 ✓\n- Index 3 (h=2): maxLeft=2, maxRight=3, min(2,3)=2, water=2-2=0\n- Index 4 (h=1): maxLeft=2, maxRight=3, min(2,3)=2, water=2-1=1 ✓\n- Index 5 (h=0): maxLeft=2, maxRight=3, min(2,3)=2, water=2-0=2 ✓\n- Index 6 (h=1): maxLeft=2, maxRight=3, min(2,3)=2, water=2-1=1 ✓\n- Index 7 (h=3): maxLeft=3, maxRight=2, min(3,2)=2, water=2-3=0 (negative, so 0)\n- Index 8 (h=2): maxLeft=3, maxRight=2, min(3,2)=2, water=2-2=0\n- Index 9 (h=1): maxLeft=3, maxRight=2, min(3,2)=2, water=2-1=1 ✓\n- Index 10 (h=2): maxLeft=3, maxRight=1, min(3,1)=1, water=1-2=0 (negative, so 0)\n- Index 11 (h=1): maxLeft=3, maxRight=1, min(3,1)=1, water=1-1=0\n\nTotal water trapped: 0+0+1+0+1+2+1+0+0+1+0+0 = 6 ✓\n\n**Example 2:** height = [4, 2, 0, 3, 2, 5]\n\n- Index 0 (h=4): maxLeft=4, maxRight=5, min(4,5)=4, water=4-4=0\n- Index 1 (h=2): maxLeft=4, maxRight=5, min(4,5)=4, water=4-2=2 ✓\n- Index 2 (h=0): maxLeft=4, maxRight=5, min(4,5)=4, water=4-0=4 ✓\n- Index 3 (h=3): maxLeft=4, maxRight=5, min(4,5)=4, water=4-3=1 ✓\n- Index 4 (h=2): maxLeft=4, maxRight=5, min(4,5)=4, water=4-2=2 ✓\n- Index 5 (h=5): maxLeft=4, maxRight=5, min(4,5)=4, water=4-5=0 (negative, so 0)\n\nTotal water trapped: 0+2+4+1+2+0 = 9 ✓\n\n**Step-by-step trace for Example 1 using two pointers:**\n\nheight = [0, 1, 0, 2, 1, 0, 1, 3, 2, 1, 2, 1]\n\n**Two Pointers Approach:**\n- Start with left=0, right=11\n- Track maxLeft and maxRight as we move pointers\n- Water at current position = min(maxLeft, maxRight) - height[current]\n- Move the pointer with smaller max value\n\n- **left=0, right=11**: maxLeft=0, maxRight=1, min(0,1)=0, water=0-0=0, total=0\n  - Move left (maxLeft < maxRight) → left=1\n- **left=1, right=11**: maxLeft=1, maxRight=1, min(1,1)=1, water=1-1=0, total=0\n  - Move left → left=2\n- **left=2, right=11**: maxLeft=1, maxRight=1, min(1,1)=1, water=1-0=1, total=1\n  - Move left → left=3\n- **left=3, right=11**: maxLeft=2, maxRight=1, min(2,1)=1, water=1-2=0, total=1\n  - Move right (maxRight < maxLeft) → right=10\n- Continue until left > right\n- **Total = 6** ✓\n\n**What makes this tricky:**\n1. Understanding that water trapped depends on the minimum of max heights on both sides\n2. The two-pointer approach: move the pointer with smaller max value\n3. Water can only be trapped if there are taller bars on both sides\n4. Edge cases: no water if array is empty or all bars are same height\n\n**Common pitfalls:**\n- Calculating maxLeft and maxRight for each position separately (O(n²) instead of O(n))\n- Not understanding why we move the pointer with smaller max value\n- Forgetting to handle negative water values (set to 0)\n- Off-by-one errors when calculating trapped water",
+      "stepId": "lesson-illustration",
+      "mentorSays": "Perfect! Now let's understand what the Trapping Rain Water lesson is asking.\n\n**Lesson Definition:**\nGiven an array `height` of non-negative integers representing an elevation map, calculate how much rainwater can be trapped after raining.\n\n**Key Insight:**\nFor each position `i`, the water trapped is: `min(maxLeft, maxRight) - height[i]`\n- `maxLeft` = maximum height to the left of position `i`\n- `maxRight` = maximum height to the right of position `i`\n- Water can only be trapped if there are taller bars on both sides\n\n**Example 1:** height = [0, 1, 0, 2, 1, 0, 1, 3, 2, 1, 2, 1]\n\nLet's calculate water at each position:\n- Index 0 (h=0): maxLeft=0, maxRight=3, min(0,3)=0, water=0-0=0\n- Index 1 (h=1): maxLeft=1, maxRight=3, min(1,3)=1, water=1-1=0\n- Index 2 (h=0): maxLeft=1, maxRight=3, min(1,3)=1, water=1-0=1 ✓\n- Index 3 (h=2): maxLeft=2, maxRight=3, min(2,3)=2, water=2-2=0\n- Index 4 (h=1): maxLeft=2, maxRight=3, min(2,3)=2, water=2-1=1 ✓\n- Index 5 (h=0): maxLeft=2, maxRight=3, min(2,3)=2, water=2-0=2 ✓\n- Index 6 (h=1): maxLeft=2, maxRight=3, min(2,3)=2, water=2-1=1 ✓\n- Index 7 (h=3): maxLeft=3, maxRight=2, min(3,2)=2, water=2-3=0 (negative, so 0)\n- Index 8 (h=2): maxLeft=3, maxRight=2, min(3,2)=2, water=2-2=0\n- Index 9 (h=1): maxLeft=3, maxRight=2, min(3,2)=2, water=2-1=1 ✓\n- Index 10 (h=2): maxLeft=3, maxRight=1, min(3,1)=1, water=1-2=0 (negative, so 0)\n- Index 11 (h=1): maxLeft=3, maxRight=1, min(3,1)=1, water=1-1=0\n\nTotal water trapped: 0+0+1+0+1+2+1+0+0+1+0+0 = 6 ✓\n\n**Example 2:** height = [4, 2, 0, 3, 2, 5]\n\n- Index 0 (h=4): maxLeft=4, maxRight=5, min(4,5)=4, water=4-4=0\n- Index 1 (h=2): maxLeft=4, maxRight=5, min(4,5)=4, water=4-2=2 ✓\n- Index 2 (h=0): maxLeft=4, maxRight=5, min(4,5)=4, water=4-0=4 ✓\n- Index 3 (h=3): maxLeft=4, maxRight=5, min(4,5)=4, water=4-3=1 ✓\n- Index 4 (h=2): maxLeft=4, maxRight=5, min(4,5)=4, water=4-2=2 ✓\n- Index 5 (h=5): maxLeft=4, maxRight=5, min(4,5)=4, water=4-5=0 (negative, so 0)\n\nTotal water trapped: 0+2+4+1+2+0 = 9 ✓\n\n**Step-by-step trace for Example 1 using two pointers:**\n\nheight = [0, 1, 0, 2, 1, 0, 1, 3, 2, 1, 2, 1]\n\n**Two Pointers Approach:**\n- Start with left=0, right=11\n- Track maxLeft and maxRight as we move pointers\n- Water at current position = min(maxLeft, maxRight) - height[current]\n- Move the pointer with smaller max value\n\n- **left=0, right=11**: maxLeft=0, maxRight=1, min(0,1)=0, water=0-0=0, total=0\n  - Move left (maxLeft < maxRight) → left=1\n- **left=1, right=11**: maxLeft=1, maxRight=1, min(1,1)=1, water=1-1=0, total=0\n  - Move left → left=2\n- **left=2, right=11**: maxLeft=1, maxRight=1, min(1,1)=1, water=1-0=1, total=1\n  - Move left → left=3\n- **left=3, right=11**: maxLeft=2, maxRight=1, min(2,1)=1, water=1-2=0, total=1\n  - Move right (maxRight < maxLeft) → right=10\n- Continue until left > right\n- **Total = 6** ✓\n\n**What makes this tricky:**\n1. Understanding that water trapped depends on the minimum of max heights on both sides\n2. The two-pointer approach: move the pointer with smaller max value\n3. Water can only be trapped if there are taller bars on both sides\n4. Edge cases: no water if array is empty or all bars are same height\n\n**Common pitfalls:**\n- Calculating maxLeft and maxRight for each position separately (O(n²) instead of O(n))\n- Not understanding why we move the pointer with smaller max value\n- Forgetting to handle negative water values (set to 0)\n- Off-by-one errors when calculating trapped water",
       "example": "Example 1:\nheight = [0, 1, 0, 2, 1, 0, 1, 3, 2, 1, 2, 1]\n\nWater at each position:\nIndex 2: min(1,3)-0 = 1\nIndex 4: min(2,3)-1 = 1\nIndex 5: min(2,3)-0 = 2\nIndex 6: min(2,3)-1 = 1\nIndex 9: min(3,2)-1 = 1\n\nTotal: 6\n\nExample 2:\nheight = [4, 2, 0, 3, 2, 5]\n\nWater at each position:\nIndex 1: min(4,5)-2 = 2\nIndex 2: min(4,5)-0 = 4\nIndex 3: min(4,5)-3 = 1\nIndex 4: min(4,5)-2 = 2\n\nTotal: 9",
       "action": "continue",
       "next": "thinking-challenge"
     },
     {
       "stepId": "thinking-challenge",
-      "mentorSays": "Now that you understand what the problem wants, here's the real question:\n\nHow would YOU calculate how much rainwater can be trapped?\n\nThink about it for a moment. What approach feels natural to you?",
+      "mentorSays": "Now that you understand what the lesson wants, here's the real question:\n\nHow would YOU calculate how much rainwater can be trapped?\n\nThink about it for a moment. What approach feels natural to you?",
       "choices": [
         {
           "label": "Use two pointers, track maxLeft and maxRight, move pointer with smaller max",
@@ -146,7 +146,7 @@
     },
     {
       "stepId": "array-check-js",
-      "mentorSays": "To solve this problem, we'll need to work with arrays. Do you know what an array is in JavaScript?",
+      "mentorSays": "To solve this lesson, we'll need to work with arrays. Do you know what an array is in JavaScript?",
       "choices": [
         {
           "label": "Yes, I know arrays",
@@ -167,7 +167,7 @@
     },
     {
       "stepId": "loop-check-js",
-      "mentorSays": "To solve this problem, we'll need to use loops. Do you know what a loop is in JavaScript?",
+      "mentorSays": "To solve this lesson, we'll need to use loops. Do you know what a loop is in JavaScript?",
       "choices": [
         {
           "label": "Yes, I know loops",
@@ -307,7 +307,7 @@
     },
     {
       "stepId": "array-check-python",
-      "mentorSays": "To solve this problem, we'll need to work with arrays (lists in Python). Do you know what a list is in Python?",
+      "mentorSays": "To solve this lesson, we'll need to work with arrays (lists in Python). Do you know what a list is in Python?",
       "choices": [
         {
           "label": "Yes, I know lists",
@@ -328,7 +328,7 @@
     },
     {
       "stepId": "loop-check-python",
-      "mentorSays": "To solve this problem, we'll need to use loops. Do you know what a loop is in Python?",
+      "mentorSays": "To solve this lesson, we'll need to use loops. Do you know what a loop is in Python?",
       "choices": [
         {
           "label": "Yes, I know loops",
@@ -468,7 +468,7 @@
     },
     {
       "stepId": "array-check-java",
-      "mentorSays": "To solve this problem, we'll need to work with arrays. Do you know what an array is in Java?",
+      "mentorSays": "To solve this lesson, we'll need to work with arrays. Do you know what an array is in Java?",
       "choices": [
         {
           "label": "Yes, I know arrays",
@@ -489,7 +489,7 @@
     },
     {
       "stepId": "loop-check-java",
-      "mentorSays": "To solve this problem, we'll need to use loops. Do you know what a loop is in Java?",
+      "mentorSays": "To solve this lesson, we'll need to use loops. Do you know what a loop is in Java?",
       "choices": [
         {
           "label": "Yes, I know loops",
@@ -629,7 +629,7 @@
     },
     {
       "stepId": "array-check-cpp",
-      "mentorSays": "To solve this problem, we'll need to work with arrays (vectors in C++). Do you know what a vector is in C++?",
+      "mentorSays": "To solve this lesson, we'll need to work with arrays (vectors in C++). Do you know what a vector is in C++?",
       "choices": [
         {
           "label": "Yes, I know vectors",
@@ -650,7 +650,7 @@
     },
     {
       "stepId": "loop-check-cpp",
-      "mentorSays": "To solve this problem, we'll need to use loops. Do you know what a loop is in C++?",
+      "mentorSays": "To solve this lesson, we'll need to use loops. Do you know what a loop is in C++?",
       "choices": [
         {
           "label": "Yes, I know loops",
@@ -790,7 +790,7 @@
     },
     {
       "stepId": "array-check-ts",
-      "mentorSays": "To solve this problem, we'll need to work with arrays. Do you know what an array is in TypeScript?",
+      "mentorSays": "To solve this lesson, we'll need to work with arrays. Do you know what an array is in TypeScript?",
       "choices": [
         {
           "label": "Yes, I know arrays",
@@ -811,7 +811,7 @@
     },
     {
       "stepId": "loop-check-ts",
-      "mentorSays": "To solve this problem, we'll need to use loops. Do you know what a loop is in TypeScript?",
+      "mentorSays": "To solve this lesson, we'll need to use loops. Do you know what a loop is in TypeScript?",
       "choices": [
         {
           "label": "Yes, I know loops",
@@ -888,7 +888,7 @@
     },
     {
       "stepId": "final",
-      "mentorSays": "🎉 Well done! You've learned to think through the Trapping Rain Water problem. You understand what the problem asks for, how to use two pointers to calculate trapped water efficiently, and why moving the pointer with smaller height is optimal.\n\n**Key Takeaways:**\n1. **Key Formula**: Water trapped at position i = min(maxLeft, maxRight) - height[i]\n2. **Two Pointers Approach**: Start from both ends, track maxLeft and maxRight as we traverse\n3. **Greedy Strategy**: Process the side with smaller height first, because we know the limiting factor\n4. **Why it works**: When height[left] < height[right], we know maxRight >= height[right] >= height[left], so water at left is limited by maxLeft\n\n**Time Complexity**: O(n) - we traverse the array once with two pointers\n**Space Complexity**: O(1) - we only use a constant amount of extra space\n\n**What to practice next:**\n- Container With Most Water (similar two-pointer problem)\n- Product of Array Except Self (related array manipulation)\n- Best Time to Buy and Sell Stock (similar pattern)\n\nThis kind of thinking—using two pointers with greedy strategy—is essential for solving many array problems. Keep practicing!",
+      "mentorSays": "🎉 Well done! You've learned to think through the Trapping Rain Water lesson. You understand what the lesson asks for, how to use two pointers to calculate trapped water efficiently, and why moving the pointer with smaller height is optimal.\n\n**Key Takeaways:**\n1. **Key Formula**: Water trapped at position i = min(maxLeft, maxRight) - height[i]\n2. **Two Pointers Approach**: Start from both ends, track maxLeft and maxRight as we traverse\n3. **Greedy Strategy**: Process the side with smaller height first, because we know the limiting factor\n4. **Why it works**: When height[left] < height[right], we know maxRight >= height[right] >= height[left], so water at left is limited by maxLeft\n\n**Time Complexity**: O(n) - we traverse the array once with two pointers\n**Space Complexity**: O(1) - we only use a constant amount of extra space\n\n**What to practice next:**\n- Container With Most Water (similar two-pointer lesson)\n- Product of Array Except Self (related array manipulation)\n- Best Time to Buy and Sell Stock (similar pattern)\n\nThis kind of thinking—using two pointers with greedy strategy—is essential for solving many array lessons. Keep practicing!",
       "action": "continue"
     }
   ]

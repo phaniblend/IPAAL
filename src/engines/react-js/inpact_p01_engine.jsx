@@ -288,4 +288,4 @@ const sideItems = [
   { label: "Step 6 — Reset + Wire", id: "step4b" },
 ];
 
-export default createINPACTEngine({ NODES, sideItems, problemNum: 1, title: "Counter App", shortName: "COUNTER APP" });
+export default createINPACTEngine({ NODES, sideItems, lessonNum: 1, title: "Counter App", shortName: "COUNTER APP" });

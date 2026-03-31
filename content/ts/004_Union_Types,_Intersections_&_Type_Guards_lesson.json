@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-ts-04",
     "track": "ts",
-    "problemNum": 4,
+    "lessonNum": 4,
     "title": "Union Types, Intersections & Type Guards",
     "shortName": "P04",
     "intro": {

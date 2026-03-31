@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-mobile-angular-01",
     "track": "mobile-angular",
-    "problemNum": 1,
+    "lessonNum": 1,
     "title": "Tab-Based App Shell",
     "shortName": "P01",
     "intro": {

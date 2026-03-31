@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-ts-59",
     "track": "ts",
-    "problemNum": 59,
+    "lessonNum": 59,
     "title": "Build typed notification payloads",
     "shortName": "P59",
     "intro": {

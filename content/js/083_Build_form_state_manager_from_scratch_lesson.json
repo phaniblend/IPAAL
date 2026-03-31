@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-js-83",
     "track": "js",
-    "problemNum": 83,
+    "lessonNum": 83,
     "title": "Build form state manager from scratch",
     "shortName": "P83",
     "intro": {

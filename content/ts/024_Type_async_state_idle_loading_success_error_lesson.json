@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-ts-24",
     "track": "ts",
-    "problemNum": 24,
+    "lessonNum": 24,
     "title": "Type async state idle loading success error",
     "shortName": "P24",
     "intro": {

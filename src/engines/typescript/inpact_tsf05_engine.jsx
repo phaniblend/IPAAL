@@ -229,7 +229,7 @@ const sideItems = [
 export default createINPACTEngine({
   NODES,
   sideItems,
-  problemNum: "F05",
+  lessonNum: "F05",
   title: "Generics",
   shortName: "TS — GENERICS",
 });

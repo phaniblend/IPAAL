@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-algorithms-63",
     "track": "algorithms",
-    "problemNum": 63,
+    "lessonNum": 63,
     "title": "Merge Two Sorted Lists",
     "shortName": "P63",
     "intro": {
@@ -28,7 +28,7 @@
         "phase": "Step 1 of 17",
         "title": "Welcome",
         "content": {
-          "body": "Welcome! Today we'll solve a classic problem: merging two sorted lists. You'll learn how to efficiently combine sorted data using a clever pointer technique. This is a fundamental skill for working with sorted sequences.",
+          "body": "Welcome! Today we'll solve a classic lesson: merging two sorted lists. You'll learn how to efficiently combine sorted data using a clever pointer technique. This is a fundamental skill for working with sorted sequences.",
           "title": "Welcome"
         }
       },

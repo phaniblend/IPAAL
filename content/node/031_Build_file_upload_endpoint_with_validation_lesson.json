@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-node-31",
     "track": "node",
-    "problemNum": 31,
+    "lessonNum": 31,
     "title": "Build file upload endpoint with validation",
     "shortName": "P31",
     "intro": {

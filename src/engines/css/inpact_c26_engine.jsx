@@ -73,7 +73,7 @@ function getOutputPreview(answer) {
 export default createINPACTEngine({
   NODES,
   sideItems,
-  problemNum: 26,
+  lessonNum: 26,
   title: "background size, position, repeat",
   shortName: "C26",
   language: "css",

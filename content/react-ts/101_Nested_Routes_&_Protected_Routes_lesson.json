@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-react-ts-101",
     "track": "react-ts",
-    "problemNum": 101,
+    "lessonNum": 101,
     "title": "Nested Routes & Protected Routes",
     "shortName": "P101",
     "intro": {

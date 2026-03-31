@@ -12,4 +12,4 @@ def retry(n):
   return dec`, feedback_correct: "✅ @wraps preserves __name__; parameterised: decorator() returns dec; stacking order matters.", feedback_wrong: "functools.wraps; parameterised decorator returns inner decorator.", expected: "Decorators" },
 ];
 const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }];
-export default createINPACTEngine({ NODES, sideItems, problemNum: "PY-F03", title: "Decorators", shortName: "PY — DECORATORS" });
+export default createINPACTEngine({ NODES, sideItems, lessonNum: "PY-F03", title: "Decorators", shortName: "PY — DECORATORS" });

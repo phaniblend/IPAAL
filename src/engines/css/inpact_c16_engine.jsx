@@ -73,7 +73,7 @@ function getOutputPreview(answer) {
 export default createINPACTEngine({
   NODES,
   sideItems,
-  problemNum: 16,
+  lessonNum: 16,
   title: "Grid template areas",
   shortName: "C16",
   language: "css",

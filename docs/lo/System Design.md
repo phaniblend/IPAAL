@@ -19,7 +19,7 @@ Recognise the four bottleneck categories: CPU, memory, I/O, network
 Distinguish read-heavy vs write-heavy workloads and their solutions
 
 05
-Explain the C10K problem and why async/event-loop matters
+Explain the C10K lesson and why async/event-loop matters
 
 06
 Apply the 80/20 rule: most performance wins come from a few changes
@@ -40,7 +40,7 @@ Choose between cache-aside, write-through, and write-behind
 Handle cache invalidation — the hardest part
 
 04
-Prevent the thundering herd / cache stampede problem
+Prevent the thundering herd / cache stampede lesson
 
 05
 Design a cache key strategy that avoids collisions

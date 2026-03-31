@@ -22,10 +22,10 @@ Parameters:
 LESSON STRUCTURE — follow this exactly, in this order:
 
 ## 1. HOOK
-Write 3–4 sentences connecting {{LESSON_TITLE}} to a real-world scenario the learner has encountered (e.g. a search bar, a GPS route, a leaderboard). End with: "This is exactly the problem {{LESSON_TITLE}} solves."
+Write 3–4 sentences connecting {{LESSON_TITLE}} to a real-world scenario the learner has encountered (e.g. a search bar, a GPS route, a leaderboard). End with: "This is exactly the lesson {{LESSON_TITLE}} solves."
 
 ## 2. CHALLENGE
-State the problem precisely: inputs, outputs, constraints, and edge cases.
+State the lesson precisely: inputs, outputs, constraints, and edge cases.
 Then ask: "Before we go further — what's your instinct? How would you approach this with no hints?"
 Do NOT answer this yet. Leave space for the learner to think.
 

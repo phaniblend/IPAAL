@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-ts-46",
     "track": "ts",
-    "problemNum": 46,
+    "lessonNum": 46,
     "title": "Type form submit events",
     "shortName": "P46",
     "intro": {

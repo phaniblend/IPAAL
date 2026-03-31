@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-js-78",
     "track": "js",
-    "problemNum": 78,
+    "lessonNum": 78,
     "title": "Build feature flag utility with variants",
     "shortName": "P78",
     "intro": {

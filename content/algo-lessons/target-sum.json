@@ -8,13 +8,13 @@
   "flow": [
     {
       "stepId": "title",
-      "mentorSays": "At the end of this lesson, you will be able to:\n\n1. Understand what the Target Sum problem asks for\n2. Use backtracking or DP to count ways\n3. Add '+' or '-' to each number\n4. Track the current sum\n5. Implement the solution step by step in your chosen language",
+      "mentorSays": "At the end of this lesson, you will be able to:\n\n1. Understand what the Target Sum lesson asks for\n2. Use backtracking or DP to count ways\n3. Add '+' or '-' to each number\n4. Track the current sum\n5. Implement the solution step by step in your chosen language",
       "action": "continue",
-      "next": "problem-illustration"
+      "next": "lesson-illustration"
     },
     {
-      "stepId": "problem-illustration",
-      "mentorSays": "Perfect! Now let's understand what the Target Sum problem is asking.\n\n**Problem Definition:**\nYou are given an integer array `nums` and an integer `target`. You want to build an expression out of nums by adding one of the symbols '+' and '-' before each integer in nums and then concatenate all the integers.\n\nReturn the number of different expressions that you can build, which evaluates to `target`.\n\n**Example 1:** nums = [1,1,1,1,1], target = 3\nWays: -1+1+1+1+1 = 3, +1-1+1+1+1 = 3, +1+1-1+1+1 = 3, +1+1+1-1+1 = 3, +1+1+1+1-1 = 3\nAnswer: 5\n\n**Key Insight:** Use backtracking or DP. For each number, try adding '+' or '-', recurse, backtrack.",
+      "stepId": "lesson-illustration",
+      "mentorSays": "Perfect! Now let's understand what the Target Sum lesson is asking.\n\n**Lesson Definition:**\nYou are given an integer array `nums` and an integer `target`. You want to build an expression out of nums by adding one of the symbols '+' and '-' before each integer in nums and then concatenate all the integers.\n\nReturn the number of different expressions that you can build, which evaluates to `target`.\n\n**Example 1:** nums = [1,1,1,1,1], target = 3\nWays: -1+1+1+1+1 = 3, +1-1+1+1+1 = 3, +1+1-1+1+1 = 3, +1+1+1-1+1 = 3, +1+1+1+1-1 = 3\nAnswer: 5\n\n**Key Insight:** Use backtracking or DP. For each number, try adding '+' or '-', recurse, backtrack.",
       "example": "Example: nums=[1,1,1,1,1], target=3 → 5 ways",
       "action": "continue",
       "next": "thinking-challenge"

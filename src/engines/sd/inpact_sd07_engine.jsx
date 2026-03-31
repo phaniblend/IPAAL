@@ -8,4 +8,4 @@ const NODES = [
 // Fallback: cache, default, or reduced feature`, feedback_correct: "✅ Bulkhead isolates; timeouts prevent cascade; graceful = reduce features, don't crash.", feedback_wrong: "Bulkheads isolate; timeouts everywhere; graceful degradation.", expected: "Designing for failure" },
 ];
 const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }];
-export default createINPACTEngine({ NODES, sideItems, problemNum: "SD-07", title: "Designing for failure", shortName: "SD — FAILURE" });
+export default createINPACTEngine({ NODES, sideItems, lessonNum: "SD-07", title: "Designing for failure", shortName: "SD — FAILURE" });

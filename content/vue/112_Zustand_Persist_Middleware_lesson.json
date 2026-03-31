@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-vue-112",
     "track": "vue",
-    "problemNum": 112,
+    "lessonNum": 112,
     "title": "Zustand Persist Middleware",
     "shortName": "P112",
     "intro": {

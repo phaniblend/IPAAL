@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-js-70",
     "track": "js",
-    "problemNum": 70,
+    "lessonNum": 70,
     "title": "Build offline first notes with localStorage fallback",
     "shortName": "P70",
     "intro": {

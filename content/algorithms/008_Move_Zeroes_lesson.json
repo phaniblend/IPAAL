@@ -3,13 +3,13 @@
   "config": {
     "lessonId": "ai-algorithms-08",
     "track": "algorithms",
-    "problemNum": 8,
+    "lessonNum": 8,
     "title": "Move Zeroes",
     "shortName": "P08",
     "intro": {
       "tag": "LESSON #8",
       "title": "Move Zeroes",
-      "body": "In this lesson, you will build a function that moves all zeros in an array to the end while maintaining the relative order of the non-zero elements. You will learn the core concept of array manipulation using two-pointer traversal, a fundamental technique for in-place array operations. The main technologies involved are JavaScript arrays, loops, and conditional logic. This exercise will help you practice efficient problem-solving without using extra space, making it ideal for beginners to strengthen their algorithmic thinking.",
+      "body": "In this lesson, you will build a function that moves all zeros in an array to the end while maintaining the relative order of the non-zero elements. You will learn the core concept of array manipulation using two-pointer traversal, a fundamental technique for in-place array operations. The main technologies involved are JavaScript arrays, loops, and conditional logic. This exercise will help you practice efficient lesson-solving without using extra space, making it ideal for beginners to strengthen their algorithmic thinking.",
       "usecase": "The move zeroes algorithm is essential in data processing interfaces where you need to prioritize or organize information. In dashboards and analytics tools, this pattern helps keep important metrics and active data points visible while pushing empty or zero-value entries to the end. Product managers use this when displaying user lists, filtering out inactive accounts, or organizing inventory items to show available stock first. This approach ensures users see the most relevant data immediately, improving decision-making efficiency in applications like CRM systems, e-commerce platforms, and financial reporting tools."
     },
     "objectives": [
@@ -269,7 +269,7 @@
         "phase": "Step 15 of 15",
         "title": "Done",
         "content": {
-          "body": "You've successfully implemented the moveZeroes algorithm! Key takeaways: using a write pointer allows us to rearrange elements in one pass, preserving order efficiently. This pattern is useful for many array manipulation problems.",
+          "body": "You've successfully implemented the moveZeroes algorithm! Key takeaways: using a write pointer allows us to rearrange elements in one pass, preserving order efficiently. This pattern is useful for many array manipulation lessons.",
           "title": "Done"
         }
       }

@@ -73,7 +73,7 @@ function getOutputPreview(answer) {
 export default createINPACTEngine({
   NODES,
   sideItems,
-  problemNum: 67,
+  lessonNum: 67,
   title: "Flex order",
   shortName: "C67",
   language: "css",

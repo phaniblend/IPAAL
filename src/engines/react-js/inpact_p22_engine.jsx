@@ -36,4 +36,4 @@ export default function ProgressBar() {
 
 const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
 
-export default createINPACTEngine({ NODES, sideItems, problemNum: 22, title: "Inline Styles", shortName: "INLINE STYLES" });
+export default createINPACTEngine({ NODES, sideItems, lessonNum: 22, title: "Inline Styles", shortName: "INLINE STYLES" });

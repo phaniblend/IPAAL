@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-react-js-77",
     "track": "react-js",
-    "problemNum": 77,
+    "lessonNum": 77,
     "title": "WebSocket Hook",
     "shortName": "P77",
     "intro": {

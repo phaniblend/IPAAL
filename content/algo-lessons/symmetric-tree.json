@@ -8,20 +8,20 @@
   "flow": [
     {
       "stepId": "title",
-      "mentorSays": "At the end of this lesson, you will be able to:\n\n1. Understand what the Symmetric Tree problem asks for\n2. Use recursion to check if a tree is symmetric\n3. Compare left and right subtrees mirror-wise\n4. Handle base cases (null nodes)\n5. Implement the solution step by step in your chosen language",
+      "mentorSays": "At the end of this lesson, you will be able to:\n\n1. Understand what the Symmetric Tree lesson asks for\n2. Use recursion to check if a tree is symmetric\n3. Compare left and right subtrees mirror-wise\n4. Handle base cases (null nodes)\n5. Implement the solution step by step in your chosen language",
       "action": "continue",
-      "next": "problem-illustration"
+      "next": "lesson-illustration"
     },
     {
-      "stepId": "problem-illustration",
-      "mentorSays": "Perfect! Now let's understand what the Symmetric Tree problem is asking.\n\n**Problem Definition:**\nGiven the root of a binary tree, check whether it is a mirror of itself (i.e., symmetric around its center).\n\n**Key Observations:**\n- A tree is symmetric if the left and right subtrees are mirror images\n- Corresponding nodes must have the same value\n- The structure must be mirrored (left child of left = right child of right)\n- An empty tree is considered symmetric\n\n**Example 1:**\nTree:\n    1\n   / \\\n  2   2\n / \\ / \\\n3  4 4  3\n\nThis tree is symmetric. The left subtree (2,3,4) is a mirror of the right subtree (2,4,3).\nAnswer: true\n\n**Example 2:**\nTree:\n    1\n   / \\\n  2   2\n   \\   \\\n   3    3\n\nThis tree is NOT symmetric. The left subtree has a right child (3), but the right subtree has a right child (3) in the same position (not mirrored).\nAnswer: false\n\n**Example 3:**\nTree:\n    1\n   / \\\n  2   2\n /     \\\n3       3\n\nThis tree IS symmetric. The left child of left (3) mirrors the right child of right (3).\nAnswer: true\n\n**Step-by-step trace for Example 1 (Recursive approach):**\n\nTree:\n    1\n   / \\\n  2   2\n / \\ / \\\n3  4 4  3\n\nWe'll use a helper function to compare two subtrees mirror-wise:\n- **isSymmetric(1)**:\n  - Call helper: isMirror(left=2, right=2)\n  - Return result\n\n- **isMirror(left=2, right=2)**:\n  - Both not null ✓\n  - Values equal (2 == 2) ✓\n  - Check mirror: isMirror(left.left=3, right.right=3) = true\n  - Check mirror: isMirror(left.right=4, right.left=4) = true\n  - Return true && true = true ✓\n\n- **isMirror(3, 3)**:\n  - Both not null ✓\n  - Values equal ✓\n  - Both children null, return true\n\n- **isMirror(4, 4)**:\n  - Both not null ✓\n  - Values equal ✓\n  - Both children null, return true\n\n**Key Insight:**\nA tree is symmetric if:\n1. The root's left and right subtrees are mirror images\n2. Two subtrees are mirrors if:\n   - Both roots have the same value\n   - Left subtree's left child mirrors right subtree's right child\n   - Left subtree's right child mirrors right subtree's left child\n\n**What makes this tricky:**\n1. Understanding mirror symmetry (left.left mirrors right.right)\n2. Recursive thinking: subtrees are symmetric if they mirror each other\n3. Handling null cases correctly\n4. The helper function compares two nodes mirror-wise\n\n**Common pitfalls:**\n- Not understanding mirror symmetry (comparing left.left with right.left instead of right.right)\n- Only checking values without checking structure\n- Not handling null cases correctly\n- Confusing symmetric with same (they're different!)",
+      "stepId": "lesson-illustration",
+      "mentorSays": "Perfect! Now let's understand what the Symmetric Tree lesson is asking.\n\n**Lesson Definition:**\nGiven the root of a binary tree, check whether it is a mirror of itself (i.e., symmetric around its center).\n\n**Key Observations:**\n- A tree is symmetric if the left and right subtrees are mirror images\n- Corresponding nodes must have the same value\n- The structure must be mirrored (left child of left = right child of right)\n- An empty tree is considered symmetric\n\n**Example 1:**\nTree:\n    1\n   / \\\n  2   2\n / \\ / \\\n3  4 4  3\n\nThis tree is symmetric. The left subtree (2,3,4) is a mirror of the right subtree (2,4,3).\nAnswer: true\n\n**Example 2:**\nTree:\n    1\n   / \\\n  2   2\n   \\   \\\n   3    3\n\nThis tree is NOT symmetric. The left subtree has a right child (3), but the right subtree has a right child (3) in the same position (not mirrored).\nAnswer: false\n\n**Example 3:**\nTree:\n    1\n   / \\\n  2   2\n /     \\\n3       3\n\nThis tree IS symmetric. The left child of left (3) mirrors the right child of right (3).\nAnswer: true\n\n**Step-by-step trace for Example 1 (Recursive approach):**\n\nTree:\n    1\n   / \\\n  2   2\n / \\ / \\\n3  4 4  3\n\nWe'll use a helper function to compare two subtrees mirror-wise:\n- **isSymmetric(1)**:\n  - Call helper: isMirror(left=2, right=2)\n  - Return result\n\n- **isMirror(left=2, right=2)**:\n  - Both not null ✓\n  - Values equal (2 == 2) ✓\n  - Check mirror: isMirror(left.left=3, right.right=3) = true\n  - Check mirror: isMirror(left.right=4, right.left=4) = true\n  - Return true && true = true ✓\n\n- **isMirror(3, 3)**:\n  - Both not null ✓\n  - Values equal ✓\n  - Both children null, return true\n\n- **isMirror(4, 4)**:\n  - Both not null ✓\n  - Values equal ✓\n  - Both children null, return true\n\n**Key Insight:**\nA tree is symmetric if:\n1. The root's left and right subtrees are mirror images\n2. Two subtrees are mirrors if:\n   - Both roots have the same value\n   - Left subtree's left child mirrors right subtree's right child\n   - Left subtree's right child mirrors right subtree's left child\n\n**What makes this tricky:**\n1. Understanding mirror symmetry (left.left mirrors right.right)\n2. Recursive thinking: subtrees are symmetric if they mirror each other\n3. Handling null cases correctly\n4. The helper function compares two nodes mirror-wise\n\n**Common pitfalls:**\n- Not understanding mirror symmetry (comparing left.left with right.left instead of right.right)\n- Only checking values without checking structure\n- Not handling null cases correctly\n- Confusing symmetric with same (they're different!)",
       "example": "Example 1:\n    1\n   / \\\n  2   2\n / \\ / \\\n3  4 4  3\n\nSymmetric: true\n\nExample 2:\n    1\n   / \\\n  2   2\n   \\   \\\n   3    3\n\nSymmetric: false\n\nExample 3:\n    1\n   / \\\n  2   2\n /     \\\n3       3\n\nSymmetric: true",
       "action": "continue",
       "next": "thinking-challenge"
     },
     {
       "stepId": "thinking-challenge",
-      "mentorSays": "Now that you understand what the problem wants, here's the real question:\n\nHow would YOU check if a binary tree is symmetric?\n\nThink about it for a moment. What approach feels natural to you?",
+      "mentorSays": "Now that you understand what the lesson wants, here's the real question:\n\nHow would YOU check if a binary tree is symmetric?\n\nThink about it for a moment. What approach feels natural to you?",
       "choices": [
         {
           "label": "Use recursion with helper - compare left and right subtrees mirror-wise",
@@ -51,7 +51,7 @@
     },
     {
       "stepId": "explore-recursive",
-      "mentorSays": "Excellent choice! Recursion is the most elegant solution for this problem. Here's the core idea:\n\n**The Algorithm:**\n1. **Base case**: If root is null, return true (empty tree is symmetric)\n2. **Helper function**: Create isMirror(left, right) to check if two subtrees are mirrors\n3. **isMirror logic**:\n   - If both are null, return true\n   - If one is null, return false\n   - If values don't match, return false\n   - Return isMirror(left.left, right.right) && isMirror(left.right, right.left)\n4. **Main function**: Return isMirror(root.left, root.right)\n\n**Why it works**:\n- A tree is symmetric if left and right subtrees are mirror images\n- Two subtrees are mirrors if:\n  - Their roots have the same value\n  - Left's left child mirrors right's right child\n  - Left's right child mirrors right's left child\n\n**Key insight**: For mirror symmetry, we compare left.left with right.right (not right.left)! This is the key difference from checking if trees are the same.\n\nLet's trace with tree:\n    1\n   / \\\n  2   2\n / \\ / \\\n3  4 4  3\n\n- **isSymmetric(1)**:\n  - Return isMirror(2, 2)\n\n- **isMirror(2, 2)**:\n  - Both not null ✓\n  - Values equal (2 == 2) ✓\n  - Check: isMirror(2.left=3, 2.right=3) = true\n  - Check: isMirror(2.right=4, 2.left=4) = true\n  - Return true && true = true ✓\n\nThis is O(n) time (visit each node once) and O(h) space (recursion stack)! Now let's code it step by step.",
+      "mentorSays": "Excellent choice! Recursion is the most elegant solution for this lesson. Here's the core idea:\n\n**The Algorithm:**\n1. **Base case**: If root is null, return true (empty tree is symmetric)\n2. **Helper function**: Create isMirror(left, right) to check if two subtrees are mirrors\n3. **isMirror logic**:\n   - If both are null, return true\n   - If one is null, return false\n   - If values don't match, return false\n   - Return isMirror(left.left, right.right) && isMirror(left.right, right.left)\n4. **Main function**: Return isMirror(root.left, root.right)\n\n**Why it works**:\n- A tree is symmetric if left and right subtrees are mirror images\n- Two subtrees are mirrors if:\n  - Their roots have the same value\n  - Left's left child mirrors right's right child\n  - Left's right child mirrors right's left child\n\n**Key insight**: For mirror symmetry, we compare left.left with right.right (not right.left)! This is the key difference from checking if trees are the same.\n\nLet's trace with tree:\n    1\n   / \\\n  2   2\n / \\ / \\\n3  4 4  3\n\n- **isSymmetric(1)**:\n  - Return isMirror(2, 2)\n\n- **isMirror(2, 2)**:\n  - Both not null ✓\n  - Values equal (2 == 2) ✓\n  - Check: isMirror(2.left=3, 2.right=3) = true\n  - Check: isMirror(2.right=4, 2.left=4) = true\n  - Return true && true = true ✓\n\nThis is O(n) time (visit each node once) and O(h) space (recursion stack)! Now let's code it step by step.",
       "action": "continue",
       "next": "language-selection"
     },
@@ -146,7 +146,7 @@
     },
     {
       "stepId": "tree-check-js",
-      "mentorSays": "To solve this problem, we'll need to work with binary trees. Do you know what a binary tree is?",
+      "mentorSays": "To solve this lesson, we'll need to work with binary trees. Do you know what a binary tree is?",
       "choices": [
         {
           "label": "Yes, I know binary trees",
@@ -167,7 +167,7 @@
     },
     {
       "stepId": "recursion-check-js",
-      "mentorSays": "To solve this problem, we'll use recursion. Do you know what recursion is in JavaScript?",
+      "mentorSays": "To solve this lesson, we'll use recursion. Do you know what recursion is in JavaScript?",
       "choices": [
         {
           "label": "Yes, I know recursion",
@@ -181,7 +181,7 @@
     },
     {
       "stepId": "recursion-explanation-js",
-      "mentorSays": "Recursion is when a function calls itself. For tree problems, we often use recursion because:\n- A tree is naturally recursive (each subtree is also a tree)\n- We can solve the problem for the whole tree by solving it for subtrees",
+      "mentorSays": "Recursion is when a function calls itself. For tree lessons, we often use recursion because:\n- A tree is naturally recursive (each subtree is also a tree)\n- We can solve the lesson for the whole tree by solving it for subtrees",
       "example": "function isMirror(left, right) {\n  // Base cases\n  if (left === null && right === null) return true;\n  if (left === null || right === null) return false;\n  \n  // Recursive calls\n  return left.val === right.val &&\n         isMirror(left.left, right.right) &&  // Mirror comparison!\n         isMirror(left.right, right.left);     // Mirror comparison!\n}",
       "action": "continue",
       "next": "coding-start-js"
@@ -307,7 +307,7 @@
     },
     {
       "stepId": "tree-check-python",
-      "mentorSays": "To solve this problem, we'll need to work with binary trees. Do you know what a binary tree is?",
+      "mentorSays": "To solve this lesson, we'll need to work with binary trees. Do you know what a binary tree is?",
       "choices": [
         {
           "label": "Yes, I know binary trees",
@@ -328,7 +328,7 @@
     },
     {
       "stepId": "recursion-check-python",
-      "mentorSays": "To solve this problem, we'll use recursion. Do you know what recursion is in Python?",
+      "mentorSays": "To solve this lesson, we'll use recursion. Do you know what recursion is in Python?",
       "choices": [
         {
           "label": "Yes, I know recursion",
@@ -342,7 +342,7 @@
     },
     {
       "stepId": "recursion-explanation-python",
-      "mentorSays": "Recursion is when a function calls itself. For tree problems, we often use recursion because:\n- A tree is naturally recursive (each subtree is also a tree)\n- We can solve the problem for the whole tree by solving it for subtrees",
+      "mentorSays": "Recursion is when a function calls itself. For tree lessons, we often use recursion because:\n- A tree is naturally recursive (each subtree is also a tree)\n- We can solve the lesson for the whole tree by solving it for subtrees",
       "example": "function isMirror(left, right) {\n  // Base cases\n  if (left === null && right === null) return true;\n  if (left === null || right === null) return false;\n  \n  // Recursive calls\n  return left.val === right.val &&\n         isMirror(left.left, right.right) &&  // Mirror comparison!\n         isMirror(left.right, right.left);     // Mirror comparison!\n}",
       "action": "continue",
       "next": "coding-start-python"
@@ -468,7 +468,7 @@
     },
     {
       "stepId": "tree-check-java",
-      "mentorSays": "To solve this problem, we'll need to work with binary trees. Do you know what a binary tree is?",
+      "mentorSays": "To solve this lesson, we'll need to work with binary trees. Do you know what a binary tree is?",
       "choices": [
         {
           "label": "Yes, I know binary trees",
@@ -489,7 +489,7 @@
     },
     {
       "stepId": "recursion-check-java",
-      "mentorSays": "To solve this problem, we'll use recursion. Do you know what recursion is in Java?",
+      "mentorSays": "To solve this lesson, we'll use recursion. Do you know what recursion is in Java?",
       "choices": [
         {
           "label": "Yes, I know recursion",
@@ -503,7 +503,7 @@
     },
     {
       "stepId": "recursion-explanation-java",
-      "mentorSays": "Recursion is when a function calls itself. For tree problems, we often use recursion because:\n- A tree is naturally recursive (each subtree is also a tree)\n- We can solve the problem for the whole tree by solving it for subtrees",
+      "mentorSays": "Recursion is when a function calls itself. For tree lessons, we often use recursion because:\n- A tree is naturally recursive (each subtree is also a tree)\n- We can solve the lesson for the whole tree by solving it for subtrees",
       "example": "function isMirror(left, right) {\n  // Base cases\n  if (left === null && right === null) return true;\n  if (left === null || right === null) return false;\n  \n  // Recursive calls\n  return left.val === right.val &&\n         isMirror(left.left, right.right) &&  // Mirror comparison!\n         isMirror(left.right, right.left);     // Mirror comparison!\n}",
       "action": "continue",
       "next": "coding-start-java"
@@ -629,7 +629,7 @@
     },
     {
       "stepId": "tree-check-cpp",
-      "mentorSays": "To solve this problem, we'll need to work with binary trees. Do you know what a binary tree is?",
+      "mentorSays": "To solve this lesson, we'll need to work with binary trees. Do you know what a binary tree is?",
       "choices": [
         {
           "label": "Yes, I know binary trees",
@@ -650,7 +650,7 @@
     },
     {
       "stepId": "recursion-check-cpp",
-      "mentorSays": "To solve this problem, we'll use recursion. Do you know what recursion is in C++?",
+      "mentorSays": "To solve this lesson, we'll use recursion. Do you know what recursion is in C++?",
       "choices": [
         {
           "label": "Yes, I know recursion",
@@ -664,7 +664,7 @@
     },
     {
       "stepId": "recursion-explanation-cpp",
-      "mentorSays": "Recursion is when a function calls itself. For tree problems, we often use recursion because:\n- A tree is naturally recursive (each subtree is also a tree)\n- We can solve the problem for the whole tree by solving it for subtrees",
+      "mentorSays": "Recursion is when a function calls itself. For tree lessons, we often use recursion because:\n- A tree is naturally recursive (each subtree is also a tree)\n- We can solve the lesson for the whole tree by solving it for subtrees",
       "example": "function isMirror(left, right) {\n  // Base cases\n  if (left === null && right === null) return true;\n  if (left === null || right === null) return false;\n  \n  // Recursive calls\n  return left.val === right.val &&\n         isMirror(left.left, right.right) &&  // Mirror comparison!\n         isMirror(left.right, right.left);     // Mirror comparison!\n}",
       "action": "continue",
       "next": "coding-start-cpp"
@@ -790,7 +790,7 @@
     },
     {
       "stepId": "tree-check-ts",
-      "mentorSays": "To solve this problem, we'll need to work with binary trees. Do you know what a binary tree is?",
+      "mentorSays": "To solve this lesson, we'll need to work with binary trees. Do you know what a binary tree is?",
       "choices": [
         {
           "label": "Yes, I know binary trees",
@@ -811,7 +811,7 @@
     },
     {
       "stepId": "recursion-check-ts",
-      "mentorSays": "To solve this problem, we'll use recursion. Do you know what recursion is in TypeScript?",
+      "mentorSays": "To solve this lesson, we'll use recursion. Do you know what recursion is in TypeScript?",
       "choices": [
         {
           "label": "Yes, I know recursion",
@@ -825,7 +825,7 @@
     },
     {
       "stepId": "recursion-explanation-ts",
-      "mentorSays": "Recursion is when a function calls itself. For tree problems, we often use recursion because:\n- A tree is naturally recursive (each subtree is also a tree)\n- We can solve the problem for the whole tree by solving it for subtrees",
+      "mentorSays": "Recursion is when a function calls itself. For tree lessons, we often use recursion because:\n- A tree is naturally recursive (each subtree is also a tree)\n- We can solve the lesson for the whole tree by solving it for subtrees",
       "example": "function isMirror(left, right) {\n  // Base cases\n  if (left === null && right === null) return true;\n  if (left === null || right === null) return false;\n  \n  // Recursive calls\n  return left.val === right.val &&\n         isMirror(left.left, right.right) &&  // Mirror comparison!\n         isMirror(left.right, right.left);     // Mirror comparison!\n}",
       "action": "continue",
       "next": "coding-start-ts"
@@ -888,7 +888,7 @@
     },
     {
       "stepId": "final",
-      "mentorSays": "🎉 Well done! You've successfully implemented the Symmetric Tree solution!\n\n**Time Complexity:** O(n)\n- We visit each node exactly once\n- n is the number of nodes in the tree\n\n**Space Complexity:** O(h)\n- The recursion stack uses space proportional to the height of the tree\n- In the worst case (skewed tree), h = n, so O(n)\n- In the best case (balanced tree), h = log n, so O(log n)\n\n**Key Takeaways:**\n1. **Recursive approach**: Check if left and right subtrees are mirror images\n2. **Helper function**: Use isMirror to compare two subtrees mirror-wise\n3. **Mirror comparison**: left.left mirrors right.right, left.right mirrors right.left\n4. **Base cases**: Both null = true, one null = false\n5. **Different from same tree**: Mirror symmetry is different from identical trees!\n\n**Related Practice Problems:**\n- Same Tree (LeetCode #100) - check if trees are identical\n- Invert Binary Tree (LeetCode #226) - invert the tree\n- Maximum Depth of Binary Tree (LeetCode #104) - similar recursive pattern\n\nKeep practicing tree problems - they're fundamental for interviews!",
+      "mentorSays": "🎉 Well done! You've successfully implemented the Symmetric Tree solution!\n\n**Time Complexity:** O(n)\n- We visit each node exactly once\n- n is the number of nodes in the tree\n\n**Space Complexity:** O(h)\n- The recursion stack uses space proportional to the height of the tree\n- In the worst case (skewed tree), h = n, so O(n)\n- In the best case (balanced tree), h = log n, so O(log n)\n\n**Key Takeaways:**\n1. **Recursive approach**: Check if left and right subtrees are mirror images\n2. **Helper function**: Use isMirror to compare two subtrees mirror-wise\n3. **Mirror comparison**: left.left mirrors right.right, left.right mirrors right.left\n4. **Base cases**: Both null = true, one null = false\n5. **Different from same tree**: Mirror symmetry is different from identical trees!\n\n**Related Practice Lessons:**\n- Same Tree (LeetCode #100) - check if trees are identical\n- Invert Binary Tree (LeetCode #226) - invert the tree\n- Maximum Depth of Binary Tree (LeetCode #104) - similar recursive pattern\n\nKeep practicing tree lessons - they're fundamental for interviews!",
       "action": "continue"
     }
   ]

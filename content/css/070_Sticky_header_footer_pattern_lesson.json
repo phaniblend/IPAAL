@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-css-70",
     "track": "css",
-    "problemNum": 70,
+    "lessonNum": 70,
     "title": "Sticky header/footer pattern",
     "shortName": "P70",
     "intro": {

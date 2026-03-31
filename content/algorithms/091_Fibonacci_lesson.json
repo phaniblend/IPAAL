@@ -3,13 +3,13 @@
   "config": {
     "lessonId": "ai-algorithms-91",
     "track": "algorithms",
-    "problemNum": 91,
+    "lessonNum": 91,
     "title": "Fibonacci",
     "shortName": "P91",
     "intro": {
       "tag": "LESSON #91",
       "title": "Fibonacci",
-      "body": "In this lesson, you will build a function that calculates the Fibonacci sequence, a classic series where each number is the sum of the two preceding ones. You'll learn about recursion, a core programming concept where a function calls itself to solve smaller instances of the same problem. The main technologies involved are JavaScript functions, conditional statements, and recursive calls. By the end, you'll understand how to implement and test a recursive Fibonacci function step by step.",
+      "body": "In this lesson, you will build a function that calculates the Fibonacci sequence, a classic series where each number is the sum of the two preceding ones. You'll learn about recursion, a core programming concept where a function calls itself to solve smaller instances of the same lesson. The main technologies involved are JavaScript functions, conditional statements, and recursive calls. By the end, you'll understand how to implement and test a recursive Fibonacci function step by step.",
       "usecase": "The Fibonacci sequence appears in real-world applications like financial modeling for predicting stock price movements and calculating compound interest growth patterns. In UI development, Fibonacci numbers are used in responsive design systems to create harmonious spacing scales and typography hierarchies that follow natural proportions. Game developers implement Fibonacci algorithms for procedural generation of organic-looking terrain and vegetation patterns. Performance optimization tools also use Fibonacci heaps for priority queue implementations in network routing algorithms and task scheduling systems."
     },
     "objectives": [
@@ -28,7 +28,7 @@
         "phase": "Step 1 of 15",
         "title": "Welcome",
         "content": {
-          "body": "Have you ever noticed how a seashell's spiral grows? Or how branches split on a tree? These patterns often follow the Fibonacci sequence. Today, we'll learn how to compute Fibonacci numbers using a powerful problem-solving technique called recursion.",
+          "body": "Have you ever noticed how a seashell's spiral grows? Or how branches split on a tree? These patterns often follow the Fibonacci sequence. Today, we'll learn how to compute Fibonacci numbers using a powerful lesson-solving technique called recursion.",
           "title": "Welcome"
         }
       },
@@ -38,7 +38,7 @@
         "phase": "Step 2 of 15",
         "title": "What you'll learn",
         "content": {
-          "body": "By the end of this lesson, you will be able to:\n1. Explain what the Fibonacci sequence is.\n2. Identify the base case and smaller problem in a recursive solution.\n3. Implement a recursive function to find the nth Fibonacci number.",
+          "body": "By the end of this lesson, you will be able to:\n1. Explain what the Fibonacci sequence is.\n2. Identify the base case and smaller lesson in a recursive solution.\n3. Implement a recursive function to find the nth Fibonacci number.",
           "title": "What you'll learn"
         }
       },
@@ -78,7 +78,7 @@
         "phase": "Step 6 of 15",
         "title": "What you did",
         "content": {
-          "body": "You manually built the sequence from the ground up. This works, but for large numbers like F(50), writing it all out is tedious. We need a method that breaks the problem down automatically.",
+          "body": "You manually built the sequence from the ground up. This works, but for large numbers like F(50), writing it all out is tedious. We need a method that breaks the lesson down automatically.",
           "title": "What you did"
         }
       },
@@ -98,9 +98,9 @@
         "phase": "Step 8 of 15",
         "title": "Key idea",
         "content": {
-          "body": "Recursion solves a big problem by solving a smaller version of the same problem. For Fibonacci, finding F(n) requires finding F(n-1) and F(n-2)—those are smaller Fibonacci problems. But we can't keep making problems smaller forever. We need a stopping point, called the base case.",
+          "body": "Recursion solves a big lesson by solving a smaller version of the same lesson. For Fibonacci, finding F(n) requires finding F(n-1) and F(n-2)—those are smaller Fibonacci lessons. But we can't keep making lessons smaller forever. We need a stopping point, called the base case.",
           "title": "Key idea",
-          "visualMetaphor": "Same problem, smaller input; when does it stop?"
+          "visualMetaphor": "Same lesson, smaller input; when does it stop?"
         }
       },
       {
@@ -109,7 +109,7 @@
         "phase": "Step 9 of 15",
         "title": "The approach",
         "content": {
-          "body": "The recursive idea: To get F(n), call the same function for F(n-1) and F(n-2), then add their results. The base cases are F(0)=0 and F(1)=1—these are the smallest problems we already know the answer to, so we stop there.",
+          "body": "The recursive idea: To get F(n), call the same function for F(n-1) and F(n-2), then add their results. The base cases are F(0)=0 and F(1)=1—these are the smallest lessons we already know the answer to, so we stop there.",
           "title": "The approach"
         }
       },
@@ -231,7 +231,7 @@
         "phase": "Step 15 of 15",
         "title": "Done",
         "content": {
-          "body": "Congratulations! You've written your first recursive function. Remember: recursion solves a problem by solving smaller versions of the same problem, with base cases to stop. For Fibonacci, the base cases are F(0)=0 and F(1)=1, and the recursive step is F(n)=F(n-1)+F(n-2). This pattern appears in many algorithms, so you're building a foundational skill.",
+          "body": "Congratulations! You've written your first recursive function. Remember: recursion solves a lesson by solving smaller versions of the same lesson, with base cases to stop. For Fibonacci, the base cases are F(0)=0 and F(1)=1, and the recursive step is F(n)=F(n-1)+F(n-2). This pattern appears in many algorithms, so you're building a foundational skill.",
           "title": "Done"
         }
       }
@@ -308,12 +308,12 @@
     ],
     "algorithmFamily": "recursion",
     "familyTeachingProfile": {
-      "mentalModel": "Solve a smaller version of the same problem",
-      "conceptBridge": "Explain base case and 'smaller problem' thinking; do not jump directly into recursive code.",
-      "visualMetaphor": "Same problem, smaller input; when does it stop?",
+      "mentalModel": "Solve a smaller version of the same lesson",
+      "conceptBridge": "Explain base case and 'smaller lesson' thinking; do not jump directly into recursive code.",
+      "visualMetaphor": "Same lesson, smaller input; when does it stop?",
       "commonConfusions": [
         "What is the base case?",
-        "How is the smaller problem related to the big one?"
+        "How is the smaller lesson related to the big one?"
       ]
     }
   },

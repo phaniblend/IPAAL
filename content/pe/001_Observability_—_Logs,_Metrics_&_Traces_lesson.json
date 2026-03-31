@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-pe-01",
     "track": "pe",
-    "problemNum": 1,
+    "lessonNum": 1,
     "title": "Observability — Logs, Metrics & Traces",
     "shortName": "P01",
     "intro": {

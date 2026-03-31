@@ -8,4 +8,4 @@ const doubled = computed(() => count() * 2)
 effect(() => console.log(count()))  // runs when count changes`, feedback_correct: "✅ signal(), computed(), effect(); signals are synchronous and simpler for local state.", feedback_wrong: "signal/computed/effect; signals avoid subscription management.", expected: "Signals" },
 ];
 const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }];
-export default createINPACTEngine({ NODES, sideItems, problemNum: "ANG-F10", title: "Signals", shortName: "ANG — SIGNALS" });
+export default createINPACTEngine({ NODES, sideItems, lessonNum: "ANG-F10", title: "Signals", shortName: "ANG — SIGNALS" });

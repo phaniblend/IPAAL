@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-js-111",
     "track": "js",
-    "problemNum": 111,
+    "lessonNum": 111,
     "title": "Build CLS FID LCP web vitals logger",
     "shortName": "P111",
     "intro": {

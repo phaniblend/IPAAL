@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-angular-20",
     "track": "angular",
-    "problemNum": 20,
+    "lessonNum": 20,
     "title": "Card Component",
     "shortName": "P20",
     "intro": {

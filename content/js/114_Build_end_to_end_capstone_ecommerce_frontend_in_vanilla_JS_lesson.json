@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-js-114",
     "track": "js",
-    "problemNum": 114,
+    "lessonNum": 114,
     "title": "Build end to end capstone ecommerce frontend in vanilla JS",
     "shortName": "P114",
     "intro": {

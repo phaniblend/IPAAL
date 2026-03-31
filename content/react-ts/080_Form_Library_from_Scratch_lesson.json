@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-react-ts-80",
     "track": "react-ts",
-    "problemNum": 80,
+    "lessonNum": 80,
     "title": "Form Library from Scratch",
     "shortName": "P80",
     "intro": {

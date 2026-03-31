@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-ts-29",
     "track": "ts",
-    "problemNum": 29,
+    "lessonNum": 29,
     "title": "Build typed URL params parser",
     "shortName": "P29",
     "intro": {

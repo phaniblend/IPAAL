@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-algorithms-48",
     "track": "algorithms",
-    "problemNum": 48,
+    "lessonNum": 48,
     "title": "Sliding Window Maximum (Deque)",
     "shortName": "P48",
     "intro": {
@@ -28,7 +28,7 @@
         "phase": "Step 1 of 17",
         "title": "Welcome",
         "content": {
-          "body": "Imagine you're looking through a moving camera lens at a long line of numbers. You can only see a few numbers at a time through your lens. Your job is to find the largest number in each view as the lens slides along. This is the sliding window maximum problem—a clever way to track extremes in a moving segment of data.",
+          "body": "Imagine you're looking through a moving camera lens at a long line of numbers. You can only see a few numbers at a time through your lens. Your job is to find the largest number in each view as the lens slides along. This is the sliding window maximum lesson—a clever way to track extremes in a moving segment of data.",
           "title": "Welcome"
         }
       },
@@ -38,7 +38,7 @@
         "phase": "Step 2 of 17",
         "title": "What you'll learn",
         "content": {
-          "body": "• Explain what a sliding window is in array problems.\n• Identify when to expand and shrink the window.\n• Implement a deque (double-ended queue) to efficiently track maximum values.\n• Solve the sliding window maximum problem in one pass.",
+          "body": "• Explain what a sliding window is in array lessons.\n• Identify when to expand and shrink the window.\n• Implement a deque (double-ended queue) to efficiently track maximum values.\n• Solve the sliding window maximum lesson in one pass.",
           "title": "What you'll learn"
         }
       },
@@ -281,7 +281,7 @@
         "phase": "Step 17 of 17",
         "title": "Done",
         "content": {
-          "body": "Congratulations! You've implemented the sliding window maximum algorithm using a deque. Remember these key points:\n• The window is a moving segment that expands right and shrinks left.\n• The deque maintains candidate maximums in decreasing order.\n• We remove from front when indices leave the window.\n• We remove from back when smaller elements become irrelevant.\n• This approach runs in O(n) time—much faster than brute force!\nThis pattern applies to many sliding window problems where you need to track extremes or aggregates efficiently.",
+          "body": "Congratulations! You've implemented the sliding window maximum algorithm using a deque. Remember these key points:\n• The window is a moving segment that expands right and shrinks left.\n• The deque maintains candidate maximums in decreasing order.\n• We remove from front when indices leave the window.\n• We remove from back when smaller elements become irrelevant.\n• This approach runs in O(n) time—much faster than brute force!\nThis pattern applies to many sliding window lessons where you need to track extremes or aggregates efficiently.",
           "title": "Done"
         }
       }

@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-angular-119",
     "track": "angular",
-    "problemNum": 119,
+    "lessonNum": 119,
     "title": "Role-Based Route Protection",
     "shortName": "P119",
     "intro": {

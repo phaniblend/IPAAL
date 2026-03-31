@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-node-100",
     "track": "node",
-    "problemNum": 100,
+    "lessonNum": 100,
     "title": "Build mock server for third party dependencies",
     "shortName": "P100",
     "intro": {

@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-js-35",
     "track": "js",
-    "problemNum": 35,
+    "lessonNum": 35,
     "title": "Build a todo list CRUD app in JavaScript",
     "shortName": "P35",
     "intro": {

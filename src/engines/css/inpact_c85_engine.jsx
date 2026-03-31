@@ -73,7 +73,7 @@ function getOutputPreview(answer) {
 export default createINPACTEngine({
   NODES,
   sideItems,
-  problemNum: 85,
+  lessonNum: 85,
   title: "cursor and pointer-events",
   shortName: "C85",
   language: "css",

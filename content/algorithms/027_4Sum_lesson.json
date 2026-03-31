@@ -3,13 +3,13 @@
   "config": {
     "lessonId": "ai-algorithms-27",
     "track": "algorithms",
-    "problemNum": 27,
+    "lessonNum": 27,
     "title": "4Sum",
     "shortName": "P27",
     "intro": {
       "tag": "LESSON #27",
       "title": "4Sum",
-      "body": "In this lesson, you will build a function that solves the 4Sum problem, finding all unique quadruplets in an array that sum to a given target value. You will learn the core concept of using two nested loops combined with a two-pointer technique to efficiently search for combinations without checking every possible set. The main technologies involved are JavaScript arrays, loops, and conditional logic to handle duplicates and optimize performance. This exercise will help you understand how to break down complex problems into manageable steps and improve your algorithmic thinking skills.",
+      "body": "In this lesson, you will build a function that solves the 4Sum lesson, finding all unique quadruplets in an array that sum to a given target value. You will learn the core concept of using two nested loops combined with a two-pointer technique to efficiently search for combinations without checking every possible set. The main technologies involved are JavaScript arrays, loops, and conditional logic to handle duplicates and optimize performance. This exercise will help you understand how to break down complex lessons into manageable steps and improve your algorithmic thinking skills.",
       "usecase": "The 4Sum algorithm pattern is essential in data analysis and recommendation systems where you need to find combinations that meet specific criteria. For example, in financial portfolio optimization tools, analysts might use it to identify sets of four stocks whose combined risk metrics match a target threshold. In e-commerce platforms, this algorithm could help find product bundles where the total price equals a promotional discount target. Travel booking applications might use similar logic to find flight/hotel/car rental combinations that fit within a customer's budget constraints."
     },
     "objectives": [
@@ -28,7 +28,7 @@
         "phase": "Step 1 of 17",
         "title": "Welcome",
         "content": {
-          "body": "Finding four numbers that add up to a specific target sounds complex, but there's an elegant approach. In this lesson, you'll learn how to efficiently solve the 4Sum problem by remembering what you've already seen.",
+          "body": "Finding four numbers that add up to a specific target sounds complex, but there's an elegant approach. In this lesson, you'll learn how to efficiently solve the 4Sum lesson by remembering what you've already seen.",
           "title": "Welcome"
         }
       },
@@ -38,7 +38,7 @@
         "phase": "Step 2 of 17",
         "title": "What you'll learn",
         "content": {
-          "body": "1. Apply the 'remember what we have already seen' mental model to the 4Sum problem.\n2. Implement a solution using a hash map to store and check pairs of numbers.\n3. Explain why storing pairs in a lookup structure is more efficient than checking all quadruples.\n4. Determine what to store as keys and values in your hash map.\n5. Decide when to check the structure versus when to add to it.",
+          "body": "1. Apply the 'remember what we have already seen' mental model to the 4Sum lesson.\n2. Implement a solution using a hash map to store and check pairs of numbers.\n3. Explain why storing pairs in a lookup structure is more efficient than checking all quadruples.\n4. Determine what to store as keys and values in your hash map.\n5. Decide when to check the structure versus when to add to it.",
           "title": "What you'll learn"
         }
       },
@@ -133,7 +133,7 @@
         "phase": "Step 8 of 17",
         "title": "Key idea",
         "content": {
-          "body": "The core idea is to remember what we have already seen. Instead of checking all four numbers at once, we can break the problem into pairs. We'll use a lookup structure (like a Map) to store pairs we've encountered and check if their complement exists.",
+          "body": "The core idea is to remember what we have already seen. Instead of checking all four numbers at once, we can break the lesson into pairs. We'll use a lookup structure (like a Map) to store pairs we've encountered and check if their complement exists.",
           "title": "Key idea",
           "visualMetaphor": "Think of it like a notebook where we write down pairs of numbers we've seen. When we encounter a new pair, we check our notebook to see if we've already seen a pair that would complete the quadruple."
         }

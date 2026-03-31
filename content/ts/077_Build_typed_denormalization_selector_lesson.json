@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-ts-77",
     "track": "ts",
-    "problemNum": 77,
+    "lessonNum": 77,
     "title": "Build typed denormalization selector",
     "shortName": "P77",
     "intro": {

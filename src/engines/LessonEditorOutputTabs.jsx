@@ -229,11 +229,11 @@ function generateReactPreview(code) {
   <div id="root"><span class="loading">Loading preview…</span></div>
   <script>
     (function () {
-      function reportPreviewProblem(title, detail) {
+      function reportPreviewIssue(title, detail) {
         try {
           if (window.parent && window.parent !== window) {
             window.parent.postMessage(
-              { type: "inpact-preview-problem", message: title, detail: detail || "" },
+              { type: "inpact-preview-lesson", message: title, detail: detail || "" },
               "*"
             );
           }
@@ -246,7 +246,7 @@ function generateReactPreview(code) {
           }
         } catch (err) {}
       }
-      window.__inpactReportPreviewProblem = reportPreviewProblem;
+      window.__inpactReportPreviewIssue = reportPreviewIssue;
       window.__inpactReportPreviewOk = reportPreviewOk;
 
       function showPreviewError(title, detail) {
@@ -262,7 +262,7 @@ function generateReactPreview(code) {
           d.appendChild(document.createTextNode(detail));
         }
         r.appendChild(d);
-        reportPreviewProblem(title, detail || "");
+        reportPreviewIssue(title, detail || "");
       }
       window.onerror = function (message, _src, _line, _col, error) {
         var msg = message == null ? "" : String(message);
@@ -309,8 +309,8 @@ function generateReactPreview(code) {
         if (this.state.error) {
           var m = this.state.error.message || String(this.state.error);
           var det = this.state.error.stack ? String(this.state.error.stack) : "";
-          if (window.__inpactReportPreviewProblem) {
-            window.__inpactReportPreviewProblem("Render error: " + m, det);
+          if (window.__inpactReportPreviewIssue) {
+            window.__inpactReportPreviewIssue("Render error: " + m, det);
           }
           return React.createElement("div", { className: "error-box" }, "Render error: " + m);
         }
@@ -345,8 +345,8 @@ function generateReactPreview(code) {
         d.textContent = errTitle;
         r.appendChild(d);
       }
-      if (window.__inpactReportPreviewProblem) {
-        window.__inpactReportPreviewProblem(errTitle, e && e.stack ? String(e.stack) : "");
+      if (window.__inpactReportPreviewIssue) {
+        window.__inpactReportPreviewIssue(errTitle, e && e.stack ? String(e.stack) : "");
       }
     }
   </script>
@@ -390,7 +390,7 @@ const lessonStyles = {
   taskCard: { background: "rgba(245,158,11,0.1)", border: "1px solid rgba(245,158,11,0.35)", borderLeft: "4px solid #f59e0b", borderRadius: "10px", padding: "18px 22px", marginTop: "20px", marginBottom: "24px" },
   taskLabel: { fontSize: "10px", fontWeight: 700, letterSpacing: "0.15em", color: "#b45309", marginBottom: "8px" },
   taskText: { fontSize: "15px", color: "#422006", lineHeight: "1.65", whiteSpace: "pre-wrap" },
-  editorTaskWrap: { width: "100%", marginBottom: "4px", flexShrink: 0 },
+  editorTaskWrap: { width: "100%", marginBottom: "4px", flexShrink: 0, boxSizing: "border-box" },
   editorTaskBox: { background: "#ffffff", border: "1px solid #e2e8f0", borderLeft: "4px solid #0891b2", borderRadius: "8px", padding: "8px 12px", boxShadow: "0 1px 2px rgba(0,0,0,0.04)" },
   editorTaskLabel: { fontSize: "9px", color: "#0891b2", letterSpacing: "0.12em", marginBottom: "2px", fontWeight: 700 },
   editorTaskText: { fontSize: "13px", color: "#334155", lineHeight: "1.45", whiteSpace: "pre-wrap" },
@@ -416,40 +416,72 @@ export function EditorTaskBlock({
   if (!paal) return null;
   const pulseClass = taskInstructionPulseNonce > 0 ? " inpact-editor-task-box--pulse" : "";
   const dives = Array.isArray(deepDiveConcepts) ? deepDiveConcepts : [];
+  const hasDeepDive = dives.length > 0 && typeof onOpenDeepDive === "function";
   return (
-    <div style={lessonStyles.editorTaskWrap}>
+    <div
+      style={{
+        ...lessonStyles.editorTaskWrap,
+        display: "flex",
+        flexDirection: "row",
+        alignItems: "stretch",
+        gap: "12px",
+      }}
+    >
       <div
-        key={taskInstructionPulseNonce}
-        style={lessonStyles.editorTaskBox}
-        className={`inpact-editor-task-box${pulseClass}`}
+        style={{
+          flex: hasDeepDive ? "0 0 60%" : "1 1 100%",
+          maxWidth: hasDeepDive ? "60%" : "100%",
+          minWidth: 0,
+          maxHeight: "min(48vh, 560px)",
+          overflowY: "auto",
+          boxSizing: "border-box",
+        }}
       >
-        <div style={lessonStyles.editorTaskLabel}>TASK</div>
-        {mainText ? (
-          <RichLearnerText text={mainText} style={lessonStyles.editorTaskText} variant="task" />
-        ) : null}
-        {taskText ? (
-          <div style={{ ...lessonStyles.taskCard, marginTop: "12px", marginBottom: 0 }} className="inpact-task-callout">
-            <div style={lessonStyles.taskLabel} className="inpact-task-badge">YOUR TASK</div>
-            <RichLearnerText text={taskText} style={lessonStyles.taskText} variant="taskCallout" />
-          </div>
-        ) : null}
+        <div
+          key={taskInstructionPulseNonce}
+          style={{ ...lessonStyles.editorTaskBox, minHeight: "min-content" }}
+          className={`inpact-editor-task-box${pulseClass}`}
+        >
+          <div style={lessonStyles.editorTaskLabel}>TASK</div>
+          {mainText ? (
+            <RichLearnerText text={mainText} style={lessonStyles.editorTaskText} variant="task" />
+          ) : null}
+          {taskText ? (
+            <div style={{ ...lessonStyles.taskCard, marginTop: "12px", marginBottom: 0 }} className="inpact-task-callout">
+              <div style={lessonStyles.taskLabel} className="inpact-task-badge">YOUR TASK</div>
+              <RichLearnerText text={taskText} style={lessonStyles.taskText} variant="taskCallout" />
+            </div>
+          ) : null}
+        </div>
       </div>
-      {dives.length > 0 && typeof onOpenDeepDive === "function" ? (
-        <div className="inpact-editor-deep-dive-toolbar">
-          {dives.map((c) => (
-            <DeepDiveImageButton
-              key={c.id}
-              onClick={() => onOpenDeepDive(c)}
-              title={dives.length > 1 ? `Deep-dive: ${c.label || c.id}` : `Open concept guide: ${c.label || c.id}`}
-            />
-          ))}
+      {hasDeepDive ? (
+        <div
+          style={{
+            flex: "1 1 40%",
+            minWidth: 0,
+            display: "flex",
+            alignItems: "flex-start",
+            justifyContent: "center",
+            paddingTop: "2px",
+            boxSizing: "border-box",
+          }}
+        >
+          <div className="inpact-editor-deep-dive-toolbar inpact-editor-deep-dive-toolbar--beside-task">
+            {dives.map((c) => (
+              <DeepDiveImageButton
+                key={c.id}
+                onClick={() => onOpenDeepDive(c)}
+                title={dives.length > 1 ? `Deep-dive: ${c.label || c.id}` : `Open concept guide: ${c.label || c.id}`}
+              />
+            ))}
+          </div>
         </div>
       ) : null}
     </div>
   );
 }
 
-const introNodeFromNodes = (nodes) => nodes?.find((n) => n.type === "reveal" && (n.id === "intro" || n.phase === "Problem")) || nodes?.find((n) => n.type === "reveal");
+const introNodeFromNodes = (nodes) => nodes?.find((n) => n.type === "reveal" && (n.id === "intro" || n.phase === "Lesson")) || nodes?.find((n) => n.type === "reveal");
 const objectivesNodeFromNodes = (nodes) => nodes?.find((n) => n.type === "objectives");
 
 export default function LessonEditorOutputTabs({
@@ -465,18 +497,24 @@ export default function LessonEditorOutputTabs({
   lessonIntro = null,
   lessonObjectives = null,
   lessonTrack,
-  /** Lesson index (matches glossary `problemNum` in track JSON lessons). */
-  problemNum,
+  /** Lesson index (matches glossary `lessonNum` in track JSON lessons). */
+  lessonNum,
   /** Increment when learner advances from feedback modal "Next step" — subtle pulse on TASK box */
   taskInstructionPulseNonce = 0,
+  /** Full-screen editor workspace over the lesson chrome (shared INPACT engines). */
+  useEditorWorkspaceModal = false,
+  editorWorkspaceOpen = false,
+  onOpenEditorWorkspace,
+  onCloseEditorWorkspace,
+  editorWorkspaceTitle = "",
   children,
 }) {
   const lessonValidationCtx = useContext(LessonValidationContext);
   const track = lessonTrack || lessonValidationCtx?.track;
   const deepDiveConcepts = useMemo(
     () =>
-      getDeepDiveConceptsForStep(track, problemNum, node?.id, node?.introduces_concepts),
-    [track, problemNum, node?.id, node?.introduces_concepts]
+      getDeepDiveConceptsForStep(track, lessonNum, node?.id, node?.introduces_concepts),
+    [track, lessonNum, node?.id, node?.introduces_concepts]
   );
   const [deepDiveConcept, setDeepDiveConcept] = useState(null);
   const code = typeof previewCode === "string" && previewCode.trim() ? previewCode : (typeof answer === "string" ? answer : "");
@@ -491,11 +529,11 @@ export default function LessonEditorOutputTabs({
   const previewIframeRef = useRef(null);
   const introNode = introNodeFromNodes(nodes);
   const objectivesNode = objectivesNodeFromNodes(nodes);
-  const problemContent = introNode?.content || (lessonIntro && { tag: lessonIntro.tag, title: lessonIntro.title, body: lessonIntro.body, usecase: lessonIntro.usecase }) || {};
+  const lessonContent = introNode?.content || (lessonIntro && { tag: lessonIntro.tag, title: lessonIntro.title, body: lessonIntro.body, usecase: lessonIntro.usecase }) || {};
   const objectives = objectivesNode?.items || (Array.isArray(lessonObjectives) ? lessonObjectives : []);
   const introDeepDiveConcept = useMemo(
-    () => getIntroDeepDiveConcept(track, problemNum, problemContent.title),
-    [track, problemNum, problemContent.title]
+    () => getIntroDeepDiveConcept(track, lessonNum, lessonContent.title),
+    [track, lessonNum, lessonContent.title]
   );
 
   /** Same content as former Output tab: HTML for iframe or placeholder */
@@ -510,12 +548,25 @@ export default function LessonEditorOutputTabs({
           : null;
 
   useEffect(() => {
-    if (mainTab !== "lesson") return;
+    const showLessonMain = useEditorWorkspaceModal || mainTab === "lesson";
+    if (!showLessonMain) return;
     const el = lessonScrollRef.current;
     if (!el) return;
     const id = requestAnimationFrame(() => { el.scrollTop = 0; });
     return () => cancelAnimationFrame(id);
-  }, [mainTab]);
+  }, [mainTab, useEditorWorkspaceModal, node?.id]);
+
+  useEffect(() => {
+    if (!useEditorWorkspaceModal || !editorWorkspaceOpen) return undefined;
+    const onKey = (e) => {
+      if (e.key === "Escape") {
+        e.preventDefault();
+        onCloseEditorWorkspace?.();
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [useEditorWorkspaceModal, editorWorkspaceOpen, onCloseEditorWorkspace]);
 
   useEffect(() => {
     queueMicrotask(() => {
@@ -529,7 +580,7 @@ export default function LessonEditorOutputTabs({
       if (!iframe || e.source !== iframe.contentWindow) return;
       const d = e.data;
       if (!d || typeof d !== "object") return;
-      if (d.type === "inpact-preview-problem") {
+      if (d.type === "inpact-preview-lesson") {
         setPreviewCoach({
           message: typeof d.message === "string" ? d.message : String(d.message ?? ""),
           detail: typeof d.detail === "string" ? d.detail : "",
@@ -556,8 +607,28 @@ export default function LessonEditorOutputTabs({
       {!tabsInSidebar && (
         <div style={{ ...lessonStyles.tabBar, alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: "8px" }}>
           <div style={{ display: "flex", gap: "6px" }}>
-            <button type="button" style={lessonStyles.tab(mainTab === "lesson")} onClick={() => setMainTab("lesson")}>Lesson</button>
-            <button type="button" style={lessonStyles.tab(mainTab === "editor")} onClick={() => setMainTab("editor")}>Editor</button>
+            <button
+              type="button"
+              style={lessonStyles.tab(useEditorWorkspaceModal ? !editorWorkspaceOpen : mainTab === "lesson")}
+              onClick={() => {
+                if (useEditorWorkspaceModal) {
+                  onCloseEditorWorkspace?.();
+                  setMainTab("lesson");
+                } else setMainTab("lesson");
+              }}
+            >
+              Lesson
+            </button>
+            <button
+              type="button"
+              style={lessonStyles.tab(useEditorWorkspaceModal ? editorWorkspaceOpen : mainTab === "editor")}
+              onClick={() => {
+                if (useEditorWorkspaceModal) onOpenEditorWorkspace?.();
+                else setMainTab("editor");
+              }}
+            >
+              Editor
+            </button>
           </div>
           <div style={{ display: "flex", gap: "6px", flexWrap: "wrap" }}>
             <button
@@ -578,15 +649,15 @@ export default function LessonEditorOutputTabs({
           </div>
         </div>
       )}
-      {mainTab === "lesson" && (
+      {(useEditorWorkspaceModal || mainTab === "lesson") && (
         <div ref={lessonScrollRef} style={lessonStyles.lessonScroll}>
           <div style={lessonStyles.wrap}>
             <div style={lessonStyles.badge}>📖 LESSON</div>
-            {(problemContent.title || problemContent.body || problemContent.usecase) && (
+            {(lessonContent.title || lessonContent.body || lessonContent.usecase) && (
               <div style={lessonStyles.card}>
                 <div style={lessonStyles.paalLabel}>TOPICS & CONCEPTS</div>
-                {problemContent.tag && <div style={{ fontSize: "11px", color: "#7c3aed", marginBottom: "8px" }}>{problemContent.tag}</div>}
-                {problemContent.title && <div style={{ fontSize: "18px", fontWeight: 600, color: "#0f172a", marginBottom: "12px" }}>{problemContent.title}</div>}
+                {lessonContent.tag && <div style={{ fontSize: "11px", color: "#7c3aed", marginBottom: "8px" }}>{lessonContent.tag}</div>}
+                {lessonContent.title && <div style={{ fontSize: "18px", fontWeight: 600, color: "#0f172a", marginBottom: "12px" }}>{lessonContent.title}</div>}
                 {introDeepDiveConcept ? (
                   <div style={{ marginBottom: "16px" }}>
                     <div style={{ ...lessonStyles.paalLabel, marginBottom: "8px" }}>CONCEPT GUIDE</div>
@@ -596,12 +667,12 @@ export default function LessonEditorOutputTabs({
                     />
                   </div>
                 ) : null}
-                {problemContent.body && (
-                  <RichLearnerText text={problemContent.body} style={lessonStyles.paalText} />
+                {lessonContent.body && (
+                  <RichLearnerText text={lessonContent.body} style={lessonStyles.paalText} />
                 )}
-                {problemContent.usecase && (
+                {lessonContent.usecase && (
                   <RichLearnerText
-                    text={problemContent.usecase}
+                    text={lessonContent.usecase}
                     variant="muted"
                     style={{ marginTop: "14px", fontSize: "14px", color: "#94a3b8", fontStyle: "italic" }}
                   />
@@ -622,12 +693,22 @@ export default function LessonEditorOutputTabs({
             )}
             <div style={lessonStyles.cta}>
               <span style={{ fontSize: "18px" }}>👉</span>
-              <span>Switch to the <strong style={{ color: "#0891b2" }}>Editor</strong> tab to write your code, then click <strong style={{ color: "#0891b2" }}>Preview</strong> to see the output.</span>
+              <span>
+                {useEditorWorkspaceModal ? (
+                  <>
+                    Open the <strong style={{ color: "#0891b2" }}>Editor</strong> tab or use the <strong style={{ color: "#0891b2" }}>Open editor</strong> button to code in full screen, then <strong style={{ color: "#0891b2" }}>Preview</strong> to run output.
+                  </>
+                ) : (
+                  <>
+                    Switch to the <strong style={{ color: "#0891b2" }}>Editor</strong> tab to write your code, then click <strong style={{ color: "#0891b2" }}>Preview</strong> to see the output.
+                  </>
+                )}
+              </span>
             </div>
           </div>
         </div>
       )}
-      {mainTab === "editor" && (
+      {!useEditorWorkspaceModal && mainTab === "editor" && (
         <div style={{ display: "flex", flexDirection: "column", flex: 1, minHeight: 0, width: "100%", maxWidth: "100%", overflow: "hidden" }}>
           {showTaskInEditor && (
             <EditorTaskBlock
@@ -642,11 +723,132 @@ export default function LessonEditorOutputTabs({
           </div>
         </div>
       )}
+      {useEditorWorkspaceModal && (
+        <>
+          <div
+            style={{
+              position: "fixed",
+              inset: 0,
+              zIndex: 10020,
+              pointerEvents: editorWorkspaceOpen ? "auto" : "none",
+              visibility: editorWorkspaceOpen ? "visible" : "hidden",
+              background: editorWorkspaceOpen ? "rgba(15, 23, 42, 0.45)" : "transparent",
+              transition: "background 0.15s ease",
+            }}
+            aria-hidden={!editorWorkspaceOpen}
+            onClick={() => editorWorkspaceOpen && onCloseEditorWorkspace?.()}
+          >
+            <div
+              role="dialog"
+              aria-modal="true"
+              aria-label="Editor workspace"
+              onClick={(e) => e.stopPropagation()}
+              style={{
+                position: "absolute",
+                left: "max(8px, env(safe-area-inset-left, 0px))",
+                right: "max(8px, env(safe-area-inset-right, 0px))",
+                top: "max(8px, env(safe-area-inset-top, 0px))",
+                bottom: "max(8px, env(safe-area-inset-bottom, 0px))",
+                background: "#ffffff",
+                borderRadius: "12px",
+                boxShadow: "0 24px 80px rgba(15, 23, 42, 0.35)",
+                border: "1px solid #e2e8f0",
+                display: "flex",
+                flexDirection: "column",
+                overflow: "hidden",
+              }}
+            >
+              <div
+                style={{
+                  flexShrink: 0,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  gap: "12px",
+                  padding: "10px 16px",
+                  borderBottom: "1px solid #e2e8f0",
+                  background: "#f8fafc",
+                }}
+              >
+                <span style={{ fontSize: "13px", fontWeight: 600, color: "#0f172a", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                  {editorWorkspaceTitle || "Editor workspace"}
+                </span>
+                <button
+                  type="button"
+                  onClick={() => onCloseEditorWorkspace?.()}
+                  style={{
+                    flexShrink: 0,
+                    padding: "8px 16px",
+                    fontSize: "12px",
+                    fontWeight: 600,
+                    background: "#0f172a",
+                    color: "#f8fafc",
+                    border: "none",
+                    borderRadius: "8px",
+                    cursor: "pointer",
+                    fontFamily: "'DM Sans', sans-serif",
+                  }}
+                >
+                  Close
+                </button>
+              </div>
+              <div
+                style={{
+                  flex: 1,
+                  minHeight: 0,
+                  display: "flex",
+                  flexDirection: "column",
+                  padding: "8px 12px 12px",
+                  overflow: "hidden",
+                }}
+              >
+                {showTaskInEditor && (
+                  <div style={{ flexShrink: 0, marginBottom: "4px" }}>
+                    <EditorTaskBlock
+                      node={node}
+                      taskInstructionPulseNonce={taskInstructionPulseNonce}
+                      deepDiveConcepts={deepDiveConcepts}
+                      onOpenDeepDive={setDeepDiveConcept}
+                    />
+                  </div>
+                )}
+                <div style={{ flex: 1, minHeight: 0, display: "flex", flexDirection: "column", overflow: "hidden" }}>
+                  {children}
+                </div>
+              </div>
+            </div>
+          </div>
+          {!editorWorkspaceOpen && (
+            <button
+              type="button"
+              style={{
+                position: "fixed",
+                bottom: "max(24px, env(safe-area-inset-bottom, 0px))",
+                right: "max(24px, env(safe-area-inset-right, 0px))",
+                zIndex: 10018,
+                padding: "14px 22px",
+                borderRadius: "999px",
+                border: "none",
+                background: "#00d4ff",
+                color: "#052545",
+                fontWeight: 700,
+                fontSize: "13px",
+                cursor: "pointer",
+                boxShadow: "0 10px 30px rgba(15, 23, 42, 0.2)",
+                fontFamily: "'DM Sans', sans-serif",
+              }}
+              onClick={() => onOpenEditorWorkspace?.()}
+            >
+              Open editor
+            </button>
+          )}
+        </>
+      )}
       <ReadingModeModal
         open={showReadingModal}
         onClose={() => setShowReadingModal(false)}
         nodes={nodes}
-        lessonTitle={problemContent.title || node?.title || ""}
+        lessonTitle={lessonContent.title || node?.title || ""}
       />
       <DeepDiveModal open={Boolean(deepDiveConcept)} onClose={() => setDeepDiveConcept(null)} concept={deepDiveConcept} />
       {showOutputModal && (
@@ -654,7 +856,7 @@ export default function LessonEditorOutputTabs({
           style={{
             position: "fixed",
             inset: 0,
-            zIndex: 10000,
+            zIndex: 11000,
             display: "flex",
             alignItems: "center",
             justifyContent: "center",

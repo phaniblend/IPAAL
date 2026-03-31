@@ -73,7 +73,7 @@ function getOutputPreview(answer) {
 export default createINPACTEngine({
   NODES,
   sideItems,
-  problemNum: 42,
+  lessonNum: 42,
   title: "::before and ::after",
   shortName: "C42",
   language: "css",

@@ -3,19 +3,19 @@
   "config": {
     "lessonId": "ai-algorithms-101",
     "track": "algorithms",
-    "problemNum": 101,
+    "lessonNum": 101,
     "title": "Climbing Stairs",
     "shortName": "P101",
     "intro": {
       "tag": "LESSON #101",
       "title": "Climbing Stairs",
-      "body": "In this lesson, you will build a function to solve the 'Climbing Stairs' problem, which calculates the number of distinct ways to reach the top of a staircase by taking 1 or 2 steps at a time. You will learn the core programming concept of dynamic programming, which breaks down a complex problem into simpler overlapping subproblems. The main technologies involved are JavaScript functions, recursion, and memoization to optimize performance. By the end, you will understand how to implement an efficient solution and apply this approach to similar algorithmic challenges.",
+      "body": "In this lesson, you will build a function to solve the 'Climbing Stairs' lesson, which calculates the number of distinct ways to reach the top of a staircase by taking 1 or 2 steps at a time. You will learn the core programming concept of dynamic programming, which breaks down a complex lesson into simpler overlapping subproblems. The main technologies involved are JavaScript functions, recursion, and memoization to optimize performance. By the end, you will understand how to implement an efficient solution and apply this approach to similar algorithmic challenges.",
       "usecase": "The climbing stairs algorithm pattern appears in dynamic programming scenarios where you need to calculate the number of ways to reach a goal with incremental steps. In real software, this translates to calculating possible combinations in e-commerce checkout flows, determining valid navigation paths through multi-step forms, or computing possible configurations in product customization tools. Developers use this pattern when building progress trackers, step-by-step wizards, or any interface where users make sequential choices with cumulative outcomes. Understanding this algorithm helps optimize performance in features like pricing calculators, workflow builders, or any system requiring efficient combinatorial calculations."
     },
     "objectives": [
       "Implement a recursive solution to calculate the number of ways to climb stairs",
       "Apply memoization to optimize the recursive climbing stairs algorithm",
-      "Construct an iterative dynamic programming solution for the climbing stairs problem",
+      "Construct an iterative dynamic programming solution for the climbing stairs lesson",
       "Initialize and manipulate an array to store intermediate results in the dynamic programming approach",
       "Configure the base cases for both recursive and iterative implementations",
       "Integrate the climbing stairs solution into a complete JavaScript function",
@@ -78,7 +78,7 @@
         "phase": "Step 6 of 15",
         "title": "What you did",
         "content": {
-          "body": "You manually calculated ways for small n by breaking the problem into smaller versions. This is the essence of dynamic programming: solve small problems first, then build up.",
+          "body": "You manually calculated ways for small n by breaking the lesson into smaller versions. This is the essence of dynamic programming: solve small lessons first, then build up.",
           "title": "What you did"
         }
       },
@@ -88,7 +88,7 @@
         "phase": "Step 7 of 15",
         "title": "Why it gets hard",
         "content": {
-          "body": "If we tried to calculate ways for 10 steps by brute force, we'd have to explore all 1/2-step combinations. That's exponential! But we noticed we keep solving the same smaller problems over and over.",
+          "body": "If we tried to calculate ways for 10 steps by brute force, we'd have to explore all 1/2-step combinations. That's exponential! But we noticed we keep solving the same smaller lessons over and over.",
           "title": "Why it gets hard"
         }
       },
@@ -98,7 +98,7 @@
         "phase": "Step 8 of 15",
         "title": "Key idea",
         "content": {
-          "body": "Dynamic programming is about 'remembering solved smaller problems.' Instead of recalculating ways for 3 steps every time we need it, we store the answer and reuse it. This is the 'fill a table' approach: solve from bottom up, avoid doing the same work twice.",
+          "body": "Dynamic programming is about 'remembering solved smaller lessons.' Instead of recalculating ways for 3 steps every time we need it, we store the answer and reuse it. This is the 'fill a table' approach: solve from bottom up, avoid doing the same work twice.",
           "title": "Key idea",
           "visualMetaphor": "Imagine filling a table where each cell stores the number of ways for that many steps. Each new entry just adds the two previous entries."
         }
@@ -237,7 +237,7 @@
         "phase": "Step 15 of 15",
         "title": "Done",
         "content": {
-          "body": "Great work! You've solved Climbing Stairs using dynamic programming. Remember: 1) Store solutions to smaller problems, 2) Build up from base cases, 3) Reuse stored results to avoid redundant work. This 'fill a table' approach makes exponential problems efficient!",
+          "body": "Great work! You've solved Climbing Stairs using dynamic programming. Remember: 1) Store solutions to smaller lessons, 2) Build up from base cases, 3) Reuse stored results to avoid redundant work. This 'fill a table' approach makes exponential lessons efficient!",
           "title": "Done"
         }
       }
@@ -315,7 +315,7 @@
     "algorithmFamily": "dynamic-programming",
     "familyTeachingProfile": {
       "mentalModel": "Reuse answers to smaller subproblems",
-      "conceptBridge": "Introduce 'remembering solved smaller problems'; focus on reuse, not formula memorization.",
+      "conceptBridge": "Introduce 'remembering solved smaller lessons'; focus on reuse, not formula memorization.",
       "visualMetaphor": "Fill a table or reuse previous results; avoid doing the same work twice.",
       "commonConfusions": [
         "What do we store?",

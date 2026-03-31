@@ -8,4 +8,4 @@ const NODES = [
 // Rollback: revert deploy or blue-green switch`, feedback_correct: "✅ actions/cache; gates = approval/tests; rollback = revert or traffic switch.", feedback_wrong: "Cache with key; gates; rollback strategy.", expected: "CI/CD" },
 ];
 const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }];
-export default createINPACTEngine({ NODES, sideItems, problemNum: "PE-06", title: "CI/CD pipelines", shortName: "PE — CICD" });
+export default createINPACTEngine({ NODES, sideItems, lessonNum: "PE-06", title: "CI/CD pipelines", shortName: "PE — CICD" });

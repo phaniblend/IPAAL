@@ -10,18 +10,18 @@
       "stepId": "title",
       "mentorSays": "At the end of this lesson, you will be able to:\n\n1. Understand what Construct Binary Tree from Preorder and Inorder asks for\n2. Use recursion to build the tree from traversal arrays\n3. Find root in inorder to split left/right subtrees\n4. Build left and right subtrees recursively\n5. Implement the solution step by step in your chosen language",
       "action": "continue",
-      "next": "problem-illustration"
+      "next": "lesson-illustration"
     },
     {
-      "stepId": "problem-illustration",
-      "mentorSays": "Perfect! Now let's understand what the Construct Binary Tree problem is asking.\n\n**Problem Definition:**\nGiven two integer arrays `preorder` and `inorder` where preorder is the preorder traversal of a binary tree and inorder is the inorder traversal of the same tree, construct and return the binary tree.\n\n**Key Observations:**\n- Preorder: root, left, right (first element is always the root)\n- Inorder: left, root, right (root splits left and right subtrees)\n- We use root from preorder to find position in inorder\n- Everything left of root in inorder is left subtree\n- Everything right of root in inorder is right subtree\n- We recurse on left and right subtrees\n\n**Example 1:** \npreorder = [3,9,20,15,7]\ninorder = [9,3,15,20,7]\n\nStep 1: Root = 3 (first in preorder)\nStep 2: Find 3 in inorder: [9] (left), 3 (root), [15,20,7] (right)\nStep 3: Recurse on left: preorder=[9], inorder=[9]\nStep 4: Recurse on right: preorder=[20,15,7], inorder=[15,20,7]\n\nResult:\n    3\n   / \\\n  9  20\n    /  \\\n   15   7\n\n**Example 2:**\npreorder = [-1]\ninorder = [-1]\n\nResult:\n  -1\n\n**Step-by-step trace for Example 1 (Recursive approach):**\n\npreorder = [3,9,20,15,7]\ninorder = [9,3,15,20,7]\n\n- **buildTree([3,9,20,15,7], [9,3,15,20,7])**:\n  - Root = 3 (first in preorder)\n  - Find 3 in inorder at index 1\n  - Left subtree: inorder[0:1] = [9], preorder[1:2] = [9]\n  - Right subtree: inorder[2:5] = [15,20,7], preorder[2:5] = [20,15,7]\n  - Create node(3)\n  - node.left = buildTree([9], [9])\n  - node.right = buildTree([20,15,7], [15,20,7])\n  - Return node(3)\n\n- **buildTree([9], [9])**:\n  - Root = 9\n  - Find 9 in inorder at index 0\n  - Left subtree: [] (empty)\n  - Right subtree: [] (empty)\n  - Create node(9)\n  - node.left = null\n  - node.right = null\n  - Return node(9)\n\n- **buildTree([20,15,7], [15,20,7])**:\n  - Root = 20 (first in preorder)\n  - Find 20 in inorder at index 1\n  - Left subtree: inorder[0:1] = [15], preorder[1:2] = [15]\n  - Right subtree: inorder[2:3] = [7], preorder[2:3] = [7]\n  - Create node(20)\n  - node.left = buildTree([15], [15])\n  - node.right = buildTree([7], [7])\n  - Return node(20)\n\n**Key Insight:**\n- Preorder gives us the root (first element)\n- Inorder tells us what's left and right of the root\n- We use the root's position in inorder to split arrays\n- Recurse on left and right subtrees\n\n**What makes this tricky:**\n1. Understanding preorder vs inorder traversal\n2. Finding root position in inorder array\n3. Correctly splitting arrays for left/right subtrees\n4. Handling edge cases (empty arrays, single node)\n\n**Common pitfalls:**\n- Incorrect array slicing (off-by-one errors)\n- Not finding root in inorder correctly\n- Mixing up preorder and inorder\n- Not handling empty arrays (base case)",
+      "stepId": "lesson-illustration",
+      "mentorSays": "Perfect! Now let's understand what the Construct Binary Tree lesson is asking.\n\n**Lesson Definition:**\nGiven two integer arrays `preorder` and `inorder` where preorder is the preorder traversal of a binary tree and inorder is the inorder traversal of the same tree, construct and return the binary tree.\n\n**Key Observations:**\n- Preorder: root, left, right (first element is always the root)\n- Inorder: left, root, right (root splits left and right subtrees)\n- We use root from preorder to find position in inorder\n- Everything left of root in inorder is left subtree\n- Everything right of root in inorder is right subtree\n- We recurse on left and right subtrees\n\n**Example 1:** \npreorder = [3,9,20,15,7]\ninorder = [9,3,15,20,7]\n\nStep 1: Root = 3 (first in preorder)\nStep 2: Find 3 in inorder: [9] (left), 3 (root), [15,20,7] (right)\nStep 3: Recurse on left: preorder=[9], inorder=[9]\nStep 4: Recurse on right: preorder=[20,15,7], inorder=[15,20,7]\n\nResult:\n    3\n   / \\\n  9  20\n    /  \\\n   15   7\n\n**Example 2:**\npreorder = [-1]\ninorder = [-1]\n\nResult:\n  -1\n\n**Step-by-step trace for Example 1 (Recursive approach):**\n\npreorder = [3,9,20,15,7]\ninorder = [9,3,15,20,7]\n\n- **buildTree([3,9,20,15,7], [9,3,15,20,7])**:\n  - Root = 3 (first in preorder)\n  - Find 3 in inorder at index 1\n  - Left subtree: inorder[0:1] = [9], preorder[1:2] = [9]\n  - Right subtree: inorder[2:5] = [15,20,7], preorder[2:5] = [20,15,7]\n  - Create node(3)\n  - node.left = buildTree([9], [9])\n  - node.right = buildTree([20,15,7], [15,20,7])\n  - Return node(3)\n\n- **buildTree([9], [9])**:\n  - Root = 9\n  - Find 9 in inorder at index 0\n  - Left subtree: [] (empty)\n  - Right subtree: [] (empty)\n  - Create node(9)\n  - node.left = null\n  - node.right = null\n  - Return node(9)\n\n- **buildTree([20,15,7], [15,20,7])**:\n  - Root = 20 (first in preorder)\n  - Find 20 in inorder at index 1\n  - Left subtree: inorder[0:1] = [15], preorder[1:2] = [15]\n  - Right subtree: inorder[2:3] = [7], preorder[2:3] = [7]\n  - Create node(20)\n  - node.left = buildTree([15], [15])\n  - node.right = buildTree([7], [7])\n  - Return node(20)\n\n**Key Insight:**\n- Preorder gives us the root (first element)\n- Inorder tells us what's left and right of the root\n- We use the root's position in inorder to split arrays\n- Recurse on left and right subtrees\n\n**What makes this tricky:**\n1. Understanding preorder vs inorder traversal\n2. Finding root position in inorder array\n3. Correctly splitting arrays for left/right subtrees\n4. Handling edge cases (empty arrays, single node)\n\n**Common pitfalls:**\n- Incorrect array slicing (off-by-one errors)\n- Not finding root in inorder correctly\n- Mixing up preorder and inorder\n- Not handling empty arrays (base case)",
       "example": "Example 1:\npreorder=[3,9,20,15,7], inorder=[9,3,15,20,7]\nResult:\n    3\n   / \\\n  9  20\n    /  \\\n   15   7\n\nExample 2:\npreorder=[-1], inorder=[-1]\nResult: -1",
       "action": "continue",
       "next": "thinking-challenge"
     },
     {
       "stepId": "thinking-challenge",
-      "mentorSays": "Now that you understand what the problem wants, here's the real question:\n\nHow would YOU construct a binary tree from preorder and inorder traversals?\n\nThink about it for a moment. What approach feels natural to you?",
+      "mentorSays": "Now that you understand what the lesson wants, here's the real question:\n\nHow would YOU construct a binary tree from preorder and inorder traversals?\n\nThink about it for a moment. What approach feels natural to you?",
       "choices": [
         {
           "label": "Use recursion - find root in inorder, split arrays, recurse",
@@ -146,7 +146,7 @@
     },
     {
       "stepId": "recursion-check-js",
-      "mentorSays": "To solve this problem, we'll use recursion. Do you know what recursion is?",
+      "mentorSays": "To solve this lesson, we'll use recursion. Do you know what recursion is?",
       "choices": [
         {
           "label": "Yes, I know recursion",
@@ -160,14 +160,14 @@
     },
     {
       "stepId": "recursion-explanation-js",
-      "mentorSays": "Recursion is when a function calls itself. For tree problems, we:\n1. Handle the current node\n2. Recursively solve for left subtree\n3. Recursively solve for right subtree\n\nFor this problem: we build the root, then recursively build left and right subtrees.",
+      "mentorSays": "Recursion is when a function calls itself. For tree lessons, we:\n1. Handle the current node\n2. Recursively solve for left subtree\n3. Recursively solve for right subtree\n\nFor this lesson: we build the root, then recursively build left and right subtrees.",
       "example": "function buildTree(preorder, inorder) {\n  // Build root\n  let root = new TreeNode(preorder[0]);\n  \n  // Recursively build left subtree\n  root.left = buildTree(leftPreorder, leftInorder);\n  \n  // Recursively build right subtree\n  root.right = buildTree(rightPreorder, rightInorder);\n  \n  return root;\n}",
       "action": "continue",
       "next": "tree-check-js"
     },
     {
       "stepId": "tree-check-js",
-      "mentorSays": "To solve this problem, we'll work with binary trees. Do you know what a binary tree is in JS?",
+      "mentorSays": "To solve this lesson, we'll work with binary trees. Do you know what a binary tree is in JS?",
       "choices": [
         {
           "label": "Yes, I know binary trees",
@@ -307,7 +307,7 @@
     },
     {
       "stepId": "recursion-check-python",
-      "mentorSays": "To solve this problem, we'll use recursion. Do you know what recursion is?",
+      "mentorSays": "To solve this lesson, we'll use recursion. Do you know what recursion is?",
       "choices": [
         {
           "label": "Yes, I know recursion",
@@ -321,14 +321,14 @@
     },
     {
       "stepId": "recursion-explanation-python",
-      "mentorSays": "Recursion is when a function calls itself. For tree problems, we:\n1. Handle the current node\n2. Recursively solve for left subtree\n3. Recursively solve for right subtree\n\nFor this problem: we build the root, then recursively build left and right subtrees.",
+      "mentorSays": "Recursion is when a function calls itself. For tree lessons, we:\n1. Handle the current node\n2. Recursively solve for left subtree\n3. Recursively solve for right subtree\n\nFor this lesson: we build the root, then recursively build left and right subtrees.",
       "example": "function buildTree(preorder, inorder) {\n  // Build root\n  let root = new TreeNode(preorder[0]);\n  \n  // Recursively build left subtree\n  root.left = buildTree(leftPreorder, leftInorder);\n  \n  // Recursively build right subtree\n  root.right = buildTree(rightPreorder, rightInorder);\n  \n  return root;\n}",
       "action": "continue",
       "next": "tree-check-python"
     },
     {
       "stepId": "tree-check-python",
-      "mentorSays": "To solve this problem, we'll work with binary trees. Do you know what a binary tree is in PYTHON?",
+      "mentorSays": "To solve this lesson, we'll work with binary trees. Do you know what a binary tree is in PYTHON?",
       "choices": [
         {
           "label": "Yes, I know binary trees",
@@ -468,7 +468,7 @@
     },
     {
       "stepId": "recursion-check-java",
-      "mentorSays": "To solve this problem, we'll use recursion. Do you know what recursion is?",
+      "mentorSays": "To solve this lesson, we'll use recursion. Do you know what recursion is?",
       "choices": [
         {
           "label": "Yes, I know recursion",
@@ -482,14 +482,14 @@
     },
     {
       "stepId": "recursion-explanation-java",
-      "mentorSays": "Recursion is when a function calls itself. For tree problems, we:\n1. Handle the current node\n2. Recursively solve for left subtree\n3. Recursively solve for right subtree\n\nFor this problem: we build the root, then recursively build left and right subtrees.",
+      "mentorSays": "Recursion is when a function calls itself. For tree lessons, we:\n1. Handle the current node\n2. Recursively solve for left subtree\n3. Recursively solve for right subtree\n\nFor this lesson: we build the root, then recursively build left and right subtrees.",
       "example": "function buildTree(preorder, inorder) {\n  // Build root\n  let root = new TreeNode(preorder[0]);\n  \n  // Recursively build left subtree\n  root.left = buildTree(leftPreorder, leftInorder);\n  \n  // Recursively build right subtree\n  root.right = buildTree(rightPreorder, rightInorder);\n  \n  return root;\n}",
       "action": "continue",
       "next": "tree-check-java"
     },
     {
       "stepId": "tree-check-java",
-      "mentorSays": "To solve this problem, we'll work with binary trees. Do you know what a binary tree is in JAVA?",
+      "mentorSays": "To solve this lesson, we'll work with binary trees. Do you know what a binary tree is in JAVA?",
       "choices": [
         {
           "label": "Yes, I know binary trees",
@@ -629,7 +629,7 @@
     },
     {
       "stepId": "recursion-check-cpp",
-      "mentorSays": "To solve this problem, we'll use recursion. Do you know what recursion is?",
+      "mentorSays": "To solve this lesson, we'll use recursion. Do you know what recursion is?",
       "choices": [
         {
           "label": "Yes, I know recursion",
@@ -643,14 +643,14 @@
     },
     {
       "stepId": "recursion-explanation-cpp",
-      "mentorSays": "Recursion is when a function calls itself. For tree problems, we:\n1. Handle the current node\n2. Recursively solve for left subtree\n3. Recursively solve for right subtree\n\nFor this problem: we build the root, then recursively build left and right subtrees.",
+      "mentorSays": "Recursion is when a function calls itself. For tree lessons, we:\n1. Handle the current node\n2. Recursively solve for left subtree\n3. Recursively solve for right subtree\n\nFor this lesson: we build the root, then recursively build left and right subtrees.",
       "example": "function buildTree(preorder, inorder) {\n  // Build root\n  let root = new TreeNode(preorder[0]);\n  \n  // Recursively build left subtree\n  root.left = buildTree(leftPreorder, leftInorder);\n  \n  // Recursively build right subtree\n  root.right = buildTree(rightPreorder, rightInorder);\n  \n  return root;\n}",
       "action": "continue",
       "next": "tree-check-cpp"
     },
     {
       "stepId": "tree-check-cpp",
-      "mentorSays": "To solve this problem, we'll work with binary trees. Do you know what a binary tree is in CPP?",
+      "mentorSays": "To solve this lesson, we'll work with binary trees. Do you know what a binary tree is in CPP?",
       "choices": [
         {
           "label": "Yes, I know binary trees",
@@ -790,7 +790,7 @@
     },
     {
       "stepId": "recursion-check-ts",
-      "mentorSays": "To solve this problem, we'll use recursion. Do you know what recursion is?",
+      "mentorSays": "To solve this lesson, we'll use recursion. Do you know what recursion is?",
       "choices": [
         {
           "label": "Yes, I know recursion",
@@ -804,14 +804,14 @@
     },
     {
       "stepId": "recursion-explanation-ts",
-      "mentorSays": "Recursion is when a function calls itself. For tree problems, we:\n1. Handle the current node\n2. Recursively solve for left subtree\n3. Recursively solve for right subtree\n\nFor this problem: we build the root, then recursively build left and right subtrees.",
+      "mentorSays": "Recursion is when a function calls itself. For tree lessons, we:\n1. Handle the current node\n2. Recursively solve for left subtree\n3. Recursively solve for right subtree\n\nFor this lesson: we build the root, then recursively build left and right subtrees.",
       "example": "function buildTree(preorder, inorder) {\n  // Build root\n  let root = new TreeNode(preorder[0]);\n  \n  // Recursively build left subtree\n  root.left = buildTree(leftPreorder, leftInorder);\n  \n  // Recursively build right subtree\n  root.right = buildTree(rightPreorder, rightInorder);\n  \n  return root;\n}",
       "action": "continue",
       "next": "tree-check-ts"
     },
     {
       "stepId": "tree-check-ts",
-      "mentorSays": "To solve this problem, we'll work with binary trees. Do you know what a binary tree is in TS?",
+      "mentorSays": "To solve this lesson, we'll work with binary trees. Do you know what a binary tree is in TS?",
       "choices": [
         {
           "label": "Yes, I know binary trees",
@@ -888,7 +888,7 @@
     },
     {
       "stepId": "final",
-      "mentorSays": "Well done! You've successfully implemented the Construct Binary Tree solution!\n\n**Time Complexity:** O(n)\n- We visit each node exactly once\n- Finding root in inorder: O(n) without hash map, O(1) with hash map\n- Array slicing: O(n) in worst case\n- Total: O(n^2) without optimization, O(n) with hash map\n\n**Space Complexity:** O(n)\n- The recursion stack uses O(h) space where h is height (O(n) worst case)\n- We create O(n) new tree nodes\n- Array slicing creates O(n) space for subarrays\n- Total: O(n) for recursion + O(n) for nodes + O(n) for arrays = O(n)\n\n**Key Takeaways:**\n1. **Preorder gives root**: First element is always the root\n2. **Inorder splits subtrees**: Root position tells us left/right split\n3. **Recursion**: Build root, then recursively build left and right subtrees\n4. **Array slicing**: Left subtree has rootIndex elements\n5. **Optimization**: Use hash map for O(1) root lookup instead of O(n) search\n\n**Common Mistakes to Avoid:**\n- Incorrect array slicing (off-by-one errors)\n- Not finding root in inorder correctly\n- Mixing up preorder and inorder arrays\n- Not handling empty arrays (base case)\n- Forgetting to create new TreeNode objects\n\n**Related Practice Problems:**\n- Construct Binary Tree from Inorder and Postorder (LeetCode #106) - similar approach\n- Serialize and Deserialize Binary Tree (LeetCode #297) - convert tree to/from string\n- Validate Binary Search Tree (LeetCode #98) - check if tree is valid BST\n\nKeep practicing tree problems - they're common in interviews!",
+      "mentorSays": "Well done! You've successfully implemented the Construct Binary Tree solution!\n\n**Time Complexity:** O(n)\n- We visit each node exactly once\n- Finding root in inorder: O(n) without hash map, O(1) with hash map\n- Array slicing: O(n) in worst case\n- Total: O(n^2) without optimization, O(n) with hash map\n\n**Space Complexity:** O(n)\n- The recursion stack uses O(h) space where h is height (O(n) worst case)\n- We create O(n) new tree nodes\n- Array slicing creates O(n) space for subarrays\n- Total: O(n) for recursion + O(n) for nodes + O(n) for arrays = O(n)\n\n**Key Takeaways:**\n1. **Preorder gives root**: First element is always the root\n2. **Inorder splits subtrees**: Root position tells us left/right split\n3. **Recursion**: Build root, then recursively build left and right subtrees\n4. **Array slicing**: Left subtree has rootIndex elements\n5. **Optimization**: Use hash map for O(1) root lookup instead of O(n) search\n\n**Common Mistakes to Avoid:**\n- Incorrect array slicing (off-by-one errors)\n- Not finding root in inorder correctly\n- Mixing up preorder and inorder arrays\n- Not handling empty arrays (base case)\n- Forgetting to create new TreeNode objects\n\n**Related Practice Lessons:**\n- Construct Binary Tree from Inorder and Postorder (LeetCode #106) - similar approach\n- Serialize and Deserialize Binary Tree (LeetCode #297) - convert tree to/from string\n- Validate Binary Search Tree (LeetCode #98) - check if tree is valid BST\n\nKeep practicing tree lessons - they're common in interviews!",
       "action": "continue"
     }
   ]

@@ -3,13 +3,13 @@
   "config": {
     "lessonId": "ai-algorithms-55",
     "track": "algorithms",
-    "problemNum": 55,
+    "lessonNum": 55,
     "title": "Find Peak Element",
     "shortName": "P55",
     "intro": {
       "tag": "LESSON #55",
       "title": "Find Peak Element",
-      "body": "In this lesson, you will build a function that finds a peak element in an array. A peak element is defined as an element that is greater than or equal to its neighbors. You will learn to implement a binary search algorithm to solve this problem efficiently. The main technologies involved are JavaScript arrays, loops, and conditional logic. This exercise will help you understand how to apply binary search to non-sorted data and improve your problem-solving skills.",
+      "body": "In this lesson, you will build a function that finds a peak element in an array. A peak element is defined as an element that is greater than or equal to its neighbors. You will learn to implement a binary search algorithm to solve this lesson efficiently. The main technologies involved are JavaScript arrays, loops, and conditional logic. This exercise will help you understand how to apply binary search to non-sorted data and improve your lesson-solving skills.",
       "usecase": "The Find Peak Element algorithm is essential for analyzing data trends in real-world applications like financial dashboards and sensor monitoring systems. In stock trading platforms, it helps identify local price peaks to inform buy/sell decisions by analyzing historical price charts. For IoT systems monitoring temperature or pressure sensors, it detects abnormal spikes that could indicate equipment failure or security breaches. This pattern also powers features in fitness apps that identify peak performance moments during workout sessions, and in e-commerce analytics that find sales peaks during promotional campaigns."
     },
     "objectives": [
@@ -260,7 +260,7 @@
         "phase": "Step 15 of 15",
         "title": "Done",
         "content": {
-          "body": "Great work! You've implemented an efficient peak-finding algorithm. Remember: the key insight was walking through the array once and returning as soon as we find a descent. This is much faster than checking every element against both neighbors. Keep practicing this 'single pass with memory' pattern - it's useful for many array problems!",
+          "body": "Great work! You've implemented an efficient peak-finding algorithm. Remember: the key insight was walking through the array once and returning as soon as we find a descent. This is much faster than checking every element against both neighbors. Keep practicing this 'single pass with memory' pattern - it's useful for many array lessons!",
           "title": "Done"
         }
       }

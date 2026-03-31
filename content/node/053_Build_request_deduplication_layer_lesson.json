@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-node-53",
     "track": "node",
-    "problemNum": 53,
+    "lessonNum": 53,
     "title": "Build request deduplication layer",
     "shortName": "P53",
     "intro": {

@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-react-ts-86",
     "track": "react-ts",
-    "problemNum": 86,
+    "lessonNum": 86,
     "title": "Memory Leak Hunt",
     "shortName": "P86",
     "intro": {

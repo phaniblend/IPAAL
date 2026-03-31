@@ -1,7 +1,7 @@
 /**
  * File-based cache for AI lesson responses. Persists across server restarts and can be
  * bundled with the app (e.g. commit cache/ or copy into Docker) so live users get fast responses.
- * Keys are hashed for safe filenames; namespaces: intro, objectives, steps, lesson, validation, mentor.
+ * Keys are hashed for safe filenames; namespaces: intro, objectives, steps, lesson, validation, mentor, step-example.
  */
 
 import fs from "fs";

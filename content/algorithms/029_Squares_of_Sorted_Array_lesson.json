@@ -3,13 +3,13 @@
   "config": {
     "lessonId": "ai-algorithms-29",
     "track": "algorithms",
-    "problemNum": 29,
+    "lessonNum": 29,
     "title": "Squares of Sorted Array",
     "shortName": "P29",
     "intro": {
       "tag": "LESSON #29",
       "title": "Squares of Sorted Array",
-      "body": "In this lesson, you will build a function that takes a sorted array of integers and returns a new array containing the squares of each number, also sorted in non-decreasing order. You will learn the core programming concept of the two-pointer technique, which efficiently solves this problem by comparing elements from both ends of the array. The main technologies and constructs involved include JavaScript arrays, loops, conditionals, and basic arithmetic operations. This beginner-friendly exercise will help you practice algorithmic thinking and array manipulation in a clear, step-by-step manner.",
+      "body": "In this lesson, you will build a function that takes a sorted array of integers and returns a new array containing the squares of each number, also sorted in non-decreasing order. You will learn the core programming concept of the two-pointer technique, which efficiently solves this lesson by comparing elements from both ends of the array. The main technologies and constructs involved include JavaScript arrays, loops, conditionals, and basic arithmetic operations. This beginner-friendly exercise will help you practice algorithmic thinking and array manipulation in a clear, step-by-step manner.",
       "usecase": "This algorithm is essential for processing and visualizing data that has been transformed, such as squaring values for statistical variance or distance calculations. In real products, it appears when sorting and displaying transformed metrics on dashboards, like financial charts showing squared deviations or heatmaps based on squared distances. Developers use this pattern to prepare data for visualizations in analytics tools, ensuring sorted squared values are correctly rendered in graphs or sorted lists after a mathematical operation."
     },
     "objectives": [

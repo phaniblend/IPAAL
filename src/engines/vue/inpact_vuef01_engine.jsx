@@ -7,4 +7,4 @@ const NODES = [
 watchEffect(() => console.log(count.value))  // runs immediately and on change`, feedback_correct: "✅ ref(), computed(), watchEffect(); .value in script.", feedback_wrong: "ref/computed/watchEffect; refs need .value in script.", expected: "Composition API" },
 ];
 const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }];
-export default createINPACTEngine({ NODES, sideItems, problemNum: "VUE-F01", title: "Composition API", shortName: "VUE — COMPOSITION" });
+export default createINPACTEngine({ NODES, sideItems, lessonNum: "VUE-F01", title: "Composition API", shortName: "VUE — COMPOSITION" });

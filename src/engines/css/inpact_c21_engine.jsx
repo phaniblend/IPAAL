@@ -73,7 +73,7 @@ function getOutputPreview(answer) {
 export default createINPACTEngine({
   NODES,
   sideItems,
-  problemNum: 21,
+  lessonNum: 21,
   title: "font-size and line-height",
   shortName: "C21",
   language: "css",

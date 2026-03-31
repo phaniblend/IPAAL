@@ -73,7 +73,7 @@ function getOutputPreview(answer) {
 export default createINPACTEngine({
   NODES,
   sideItems,
-  problemNum: 87,
+  lessonNum: 87,
   title: "table layout",
   shortName: "C87",
   language: "css",

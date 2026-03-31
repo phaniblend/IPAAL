@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-js-48",
     "track": "js",
-    "problemNum": 48,
+    "lessonNum": 48,
     "title": "Build a typeahead autocomplete box",
     "shortName": "P48",
     "intro": {

@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-vue-43",
     "track": "vue",
-    "problemNum": 43,
+    "lessonNum": 43,
     "title": "useReducer vs useState",
     "shortName": "P43",
     "intro": {

@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-node-115",
     "track": "node",
-    "problemNum": 115,
+    "lessonNum": 115,
     "title": "Build end to end capstone production ready commerce backend Node",
     "shortName": "P115",
     "intro": {

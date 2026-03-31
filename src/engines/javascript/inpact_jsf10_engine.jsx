@@ -195,7 +195,7 @@ export { setupGood, processLargeDataGood, ComponentGood }`,
 
 // BAD: setTimeout is not synced to the display refresh rate:
 // setInterval(() => updateAnimation(), 16)  // 16ms ≈ 60fps, but not accurate
-// Problems: drifts over time, fires even when tab is hidden (wastes CPU)
+// Lessons: drifts over time, fires even when tab is hidden (wastes CPU)
 
 // GOOD: requestAnimationFrame — browser calls you at the RIGHT moment:
 function animateCounter(target, duration, el) {
@@ -292,4 +292,4 @@ const sideItems = [
   { label: "Step 5 — Web Workers", id: "step5" },
 ];
 
-export default createINPACTEngine({ NODES, sideItems, problemNum: "JS-F10", title: "Performance, Memory & Event Loop", shortName: "JS — PERFORMANCE" });
+export default createINPACTEngine({ NODES, sideItems, lessonNum: "JS-F10", title: "Performance, Memory & Event Loop", shortName: "JS — PERFORMANCE" });

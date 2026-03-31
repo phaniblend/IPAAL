@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-react-js-39",
     "track": "react-js",
-    "problemNum": 39,
+    "lessonNum": 39,
     "title": "Auth Context",
     "shortName": "P39",
     "intro": {

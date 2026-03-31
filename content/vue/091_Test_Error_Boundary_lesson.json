@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-vue-91",
     "track": "vue",
-    "problemNum": 91,
+    "lessonNum": 91,
     "title": "Test Error Boundary",
     "shortName": "P91",
     "intro": {

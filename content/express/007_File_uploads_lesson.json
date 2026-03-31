@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-express-07",
     "track": "express",
-    "problemNum": 7,
+    "lessonNum": 7,
     "title": "File uploads",
     "shortName": "P07",
     "intro": {

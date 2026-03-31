@@ -25,15 +25,14 @@ NEVER reference a variable, state, or handler before the step that introduces it
 - Do NOT ask to "wire the button to setCount" before a step that initializes count state.
 - Order: introduce state first → then handlers that use that state → then markup/UI that uses handlers. Every identifier used in a step must exist in the code built by earlier steps.
 
-Follow this conceptual dependency order when applicable:
-1. Imports — ONE PACKAGE (or one logical group) PER STEP. See rule below.
-2. Component or main structure definition
-3. State or data initialization
-4. Helper / handler functions
-5. Markup or structure (e.g. JSX, template, HTML)
-6. Content or display
-7. Event handlers or interactivity
-8. Advanced behaviors
+Follow this conceptual dependency order when applicable (React/TS, React JS, Vue, Angular with components):
+1. Imports — ONE PACKAGE (or one logical group) PER STEP. Seed may include imports for short lessons.
+2. State, types, interfaces, typed stubs — all data the UI will need before JSX that depends on it.
+3. Return JSX structure — layout, **buttons**, **inputs**, and copy; **omit** onClick/onChange (or template (click)) until a dedicated wiring step unless the lesson is intentionally one-step minimal.
+4. Handler functions — update state or run logic; **do not** combine with wiring if phases 3–5 are split (see below).
+5. Wire handlers to JSX — add onClick/onChange (or template events), conditional display, export/finish.
+
+Use concrete words in titles and actions: **button**, **input**, **link**, **form field** — avoid vague "control" when you mean a clickable button or a specific element.
 
 CRITICAL — One package per import step:
 • When the lesson uses multiple packages (e.g. 'react', '@reduxjs/toolkit/query/react', '@reduxjs/toolkit'), create ONE STEP PER PACKAGE. Step 1: "Import from 'react' (React and any hooks from this lesson)". Step 2: "Import createApi and fetchBaseQuery from '@reduxjs/toolkit/query/react'". Step 3: "Import configureStore from '@reduxjs/toolkit'". Do NOT combine all imports into one step.
@@ -47,22 +46,23 @@ CRITICAL — One simple micro-step per step (no compound instructions):
 • BAD: "Import Vue, createApi, fetchBaseQuery, and configureStore" (multiple packages in one step) → GOOD: one step per package.
 • Other examples: "Create the store" and "Add the API reducer and middleware to the store" are two steps. "Create the component" and "Return a wrapper div" can be two steps if the lesson is granular.
 
-When the track uses components (e.g. React, Angular, Vue), prefer: imports (complete) → component → state → handlers → markup → event wiring. When the track is CSS, use structure appropriate to layout/styling. Adapt step titles and concepts to {{TRACK}} and {{LESSON_TITLE}}.
+When the track uses components (e.g. React, Angular, Vue), prefer the **five-phase UI pattern** when the lesson teaches an interactive screen (not tiny one-liners):
+(1) Imports → (2) State/types → (3) JSX return with **button(s)/input(s)/layout only** (no event wiring yet) → (4) Handler function(s) → (5) Wire **button** onClick (or input onChange) and conditional render / export.
+When the track is CSS, use structure appropriate to layout/styling. Adapt step titles and concepts to {{TRACK}} and {{LESSON_TITLE}}.
 
 Examples of correct dependency order (adapt to the lesson):
-- Import React and useState (and any other hooks this lesson uses)
-- Create main component or entry
-- Initialize state or data
-- Define handlers
-- Write markup/structure
-- Display state or content
-- Add controls or buttons
-- Wire handlers to controls
+- Import useState from 'react' (or hooks needed)
+- Create component shell / export default
+- Initialize boolean (or other) state
+- Return JSX: div + **button** + paragraph (no onClick yet)
+- Define toggle (or submit) handler with functional update if applicable
+- Add onClick on the **button**, conditional **<p>**, ensure export
 
-Incorrect (forbidden): any step that uses a concept before the step that introduces it (e.g. display state before initializing state; add button before defining handler). Forbidden: an "Import React" only step followed by steps that use useState without having asked the learner to import useState in the first step.
+Incorrect (forbidden): any step that uses a concept before the step that introduces it. Forbidden: an import step that omits a hook the next step uses.
 
-Avoid repetition only for button + click:
-• Do not create two separate steps for "Add the button" and "Wire the button click to the handler." Combine into one step (e.g. "Add the toggle button and wire its onClick to the toggle handler") so the learner does the wiring when they add the button.
+Button + handler wiring (UPDATED):
+• For pedagogical lessons that split structure from behavior, **use three steps**: (A) JSX including **button** without onClick, (B) define handler only, (C) wire onClick and conditional display. Do **not** merge A+B+C into one step when the lesson goal is incremental learning.
+• For very short “single-shot” drills only, you may combine “add **button** and wire onClick” in one step — prefer the split pattern for standard track lessons.
 • For everything else: one micro-step per step. Do not combine "create X" and "define X with Y" — use two steps.
 
 Step blueprint generation rules:

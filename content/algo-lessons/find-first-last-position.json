@@ -8,20 +8,20 @@
   "flow": [
     {
       "stepId": "title",
-      "mentorSays": "At the end of this lesson, you will be able to:\n\n1. Understand what the Find First and Last Position problem asks for\n2. Use two binary searches to find the first and last occurrence\n3. Modify binary search to find leftmost and rightmost positions\n4. Handle edge cases like target not found or single occurrence\n5. Implement the solution step by step in your chosen language",
+      "mentorSays": "At the end of this lesson, you will be able to:\n\n1. Understand what the Find First and Last Position lesson asks for\n2. Use two binary searches to find the first and last occurrence\n3. Modify binary search to find leftmost and rightmost positions\n4. Handle edge cases like target not found or single occurrence\n5. Implement the solution step by step in your chosen language",
       "action": "continue",
-      "next": "problem-illustration"
+      "next": "lesson-illustration"
     },
     {
-      "stepId": "problem-illustration",
-      "mentorSays": "Perfect! Now let's understand what the Find First and Last Position problem is asking.\n\n**Problem Definition:**\nGiven a sorted array of integers `nums` and a target value `target`, find the starting and ending position of `target` in the array. If `target` is not found, return `[-1, -1]`.\n\n**Key Insight:**\nSince the array is sorted, we can use binary search! But we need TWO binary searches:\n1. Find the **first** occurrence (leftmost position)\n2. Find the **last** occurrence (rightmost position)\n\n**Example 1:** nums = [5, 7, 7, 8, 8, 10], target = 8\n\nTarget 8 appears at indices 3 and 4.\n- First position: 3\n- Last position: 4\n- Return: [3, 4] ✓\n\n**Example 2:** nums = [5, 7, 7, 8, 8, 10], target = 6\n\nTarget 6 doesn't exist in the array.\n- Return: [-1, -1] ✓\n\n**Example 3:** nums = [5, 7, 7, 8, 8, 10], target = 7\n\nTarget 7 appears at indices 1 and 2.\n- First position: 1\n- Last position: 2\n- Return: [1, 2] ✓\n\n**Step-by-step trace for Example 1:**\n\nnums = [5, 7, 7, 8, 8, 10], target = 8\n\n**Finding First Position (leftmost):**\nWe modify binary search to keep searching left even when we find the target!\n\n- **Iteration 1**: left=0, right=5, mid=2, nums[2]=7\n  - 7 < 8, search right: left = 3\n- **Iteration 2**: left=3, right=5, mid=4, nums[4]=8\n  - 8 == 8, but we want FIRST occurrence, so search left: right = 3\n- **Iteration 3**: left=3, right=3, mid=3, nums[3]=8\n  - 8 == 8, search left: right = 2\n- **Loop ends**: left=3, right=2\n- **First position = 3** ✓\n\n**Finding Last Position (rightmost):**\nWe modify binary search to keep searching right even when we find the target!\n\n- **Iteration 1**: left=0, right=5, mid=2, nums[2]=7\n  - 7 < 8, search right: left = 3\n- **Iteration 2**: left=3, right=5, mid=4, nums[4]=8\n  - 8 == 8, but we want LAST occurrence, so search right: left = 5\n- **Iteration 3**: left=5, right=5, mid=5, nums[5]=10\n  - 10 > 8, search left: right = 4\n- **Loop ends**: left=5, right=4\n- **Last position = 4** ✓\n\nReturn: [3, 4]\n\n**What makes this tricky:**\n1. We need TWO modified binary searches (one for first, one for last)\n2. When we find the target, we don't stop—we keep searching in the appropriate direction\n3. The \"first\" search moves left when target is found, the \"last\" search moves right\n4. Handling the case where target doesn't exist\n\n**Common pitfalls:**\n- Using regular binary search (stops at first match, doesn't find boundaries)\n- Forgetting to check if target exists before returning positions\n- Off-by-one errors in the modified binary search logic\n- Not understanding when to move left vs right when target is found",
+      "stepId": "lesson-illustration",
+      "mentorSays": "Perfect! Now let's understand what the Find First and Last Position lesson is asking.\n\n**Lesson Definition:**\nGiven a sorted array of integers `nums` and a target value `target`, find the starting and ending position of `target` in the array. If `target` is not found, return `[-1, -1]`.\n\n**Key Insight:**\nSince the array is sorted, we can use binary search! But we need TWO binary searches:\n1. Find the **first** occurrence (leftmost position)\n2. Find the **last** occurrence (rightmost position)\n\n**Example 1:** nums = [5, 7, 7, 8, 8, 10], target = 8\n\nTarget 8 appears at indices 3 and 4.\n- First position: 3\n- Last position: 4\n- Return: [3, 4] ✓\n\n**Example 2:** nums = [5, 7, 7, 8, 8, 10], target = 6\n\nTarget 6 doesn't exist in the array.\n- Return: [-1, -1] ✓\n\n**Example 3:** nums = [5, 7, 7, 8, 8, 10], target = 7\n\nTarget 7 appears at indices 1 and 2.\n- First position: 1\n- Last position: 2\n- Return: [1, 2] ✓\n\n**Step-by-step trace for Example 1:**\n\nnums = [5, 7, 7, 8, 8, 10], target = 8\n\n**Finding First Position (leftmost):**\nWe modify binary search to keep searching left even when we find the target!\n\n- **Iteration 1**: left=0, right=5, mid=2, nums[2]=7\n  - 7 < 8, search right: left = 3\n- **Iteration 2**: left=3, right=5, mid=4, nums[4]=8\n  - 8 == 8, but we want FIRST occurrence, so search left: right = 3\n- **Iteration 3**: left=3, right=3, mid=3, nums[3]=8\n  - 8 == 8, search left: right = 2\n- **Loop ends**: left=3, right=2\n- **First position = 3** ✓\n\n**Finding Last Position (rightmost):**\nWe modify binary search to keep searching right even when we find the target!\n\n- **Iteration 1**: left=0, right=5, mid=2, nums[2]=7\n  - 7 < 8, search right: left = 3\n- **Iteration 2**: left=3, right=5, mid=4, nums[4]=8\n  - 8 == 8, but we want LAST occurrence, so search right: left = 5\n- **Iteration 3**: left=5, right=5, mid=5, nums[5]=10\n  - 10 > 8, search left: right = 4\n- **Loop ends**: left=5, right=4\n- **Last position = 4** ✓\n\nReturn: [3, 4]\n\n**What makes this tricky:**\n1. We need TWO modified binary searches (one for first, one for last)\n2. When we find the target, we don't stop—we keep searching in the appropriate direction\n3. The \"first\" search moves left when target is found, the \"last\" search moves right\n4. Handling the case where target doesn't exist\n\n**Common pitfalls:**\n- Using regular binary search (stops at first match, doesn't find boundaries)\n- Forgetting to check if target exists before returning positions\n- Off-by-one errors in the modified binary search logic\n- Not understanding when to move left vs right when target is found",
       "example": "Example 1:\nnums = [5, 7, 7, 8, 8, 10], target = 8\n\nFirst position: 3 (leftmost 8)\nLast position: 4 (rightmost 8)\nReturn: [3, 4]\n\nExample 2:\nnums = [5, 7, 7, 8, 8, 10], target = 6\n\nTarget not found\nReturn: [-1, -1]\n\nExample 3:\nnums = [5, 7, 7, 8, 8, 10], target = 7\n\nFirst position: 1\nLast position: 2\nReturn: [1, 2]",
       "action": "continue",
       "next": "thinking-challenge"
     },
     {
       "stepId": "thinking-challenge",
-      "mentorSays": "Now that you understand what the problem wants, here's the real question:\n\nHow would YOU find the first and last position of a target in a sorted array?\n\nThink about it for a moment. What approach feels natural to you?",
+      "mentorSays": "Now that you understand what the lesson wants, here's the real question:\n\nHow would YOU find the first and last position of a target in a sorted array?\n\nThink about it for a moment. What approach feels natural to you?",
       "choices": [
         {
           "label": "Use two modified binary searches: one for first, one for last",
@@ -146,7 +146,7 @@
     },
     {
       "stepId": "array-check-js",
-      "mentorSays": "To solve this problem, we'll need to work with arrays. Do you know what an array is in JavaScript?",
+      "mentorSays": "To solve this lesson, we'll need to work with arrays. Do you know what an array is in JavaScript?",
       "choices": [
         {
           "label": "Yes, I know arrays",
@@ -167,7 +167,7 @@
     },
     {
       "stepId": "loop-check-js",
-      "mentorSays": "To solve this problem, we'll need to use loops. Do you know what a loop is in JavaScript?",
+      "mentorSays": "To solve this lesson, we'll need to use loops. Do you know what a loop is in JavaScript?",
       "choices": [
         {
           "label": "Yes, I know loops",
@@ -314,7 +314,7 @@
     },
     {
       "stepId": "array-check-python",
-      "mentorSays": "To solve this problem, we'll need to work with arrays (lists in Python). Do you know what a list is in Python?",
+      "mentorSays": "To solve this lesson, we'll need to work with arrays (lists in Python). Do you know what a list is in Python?",
       "choices": [
         {
           "label": "Yes, I know lists",
@@ -335,7 +335,7 @@
     },
     {
       "stepId": "loop-check-python",
-      "mentorSays": "To solve this problem, we'll need to use loops. Do you know what a loop is in Python?",
+      "mentorSays": "To solve this lesson, we'll need to use loops. Do you know what a loop is in Python?",
       "choices": [
         {
           "label": "Yes, I know loops",
@@ -482,7 +482,7 @@
     },
     {
       "stepId": "array-check-java",
-      "mentorSays": "To solve this problem, we'll need to work with arrays. Do you know what an array is in Java?",
+      "mentorSays": "To solve this lesson, we'll need to work with arrays. Do you know what an array is in Java?",
       "choices": [
         {
           "label": "Yes, I know arrays",
@@ -503,7 +503,7 @@
     },
     {
       "stepId": "loop-check-java",
-      "mentorSays": "To solve this problem, we'll need to use loops. Do you know what a loop is in Java?",
+      "mentorSays": "To solve this lesson, we'll need to use loops. Do you know what a loop is in Java?",
       "choices": [
         {
           "label": "Yes, I know loops",
@@ -650,7 +650,7 @@
     },
     {
       "stepId": "array-check-cpp",
-      "mentorSays": "To solve this problem, we'll need to work with arrays (vectors in C++). Do you know what a vector is in C++?",
+      "mentorSays": "To solve this lesson, we'll need to work with arrays (vectors in C++). Do you know what a vector is in C++?",
       "choices": [
         {
           "label": "Yes, I know vectors",
@@ -671,7 +671,7 @@
     },
     {
       "stepId": "loop-check-cpp",
-      "mentorSays": "To solve this problem, we'll need to use loops. Do you know what a loop is in C++?",
+      "mentorSays": "To solve this lesson, we'll need to use loops. Do you know what a loop is in C++?",
       "choices": [
         {
           "label": "Yes, I know loops",
@@ -818,7 +818,7 @@
     },
     {
       "stepId": "array-check-ts",
-      "mentorSays": "To solve this problem, we'll need to work with arrays. Do you know what an array is in TypeScript?",
+      "mentorSays": "To solve this lesson, we'll need to work with arrays. Do you know what an array is in TypeScript?",
       "choices": [
         {
           "label": "Yes, I know arrays",
@@ -839,7 +839,7 @@
     },
     {
       "stepId": "loop-check-ts",
-      "mentorSays": "To solve this problem, we'll need to use loops. Do you know what a loop is in TypeScript?",
+      "mentorSays": "To solve this lesson, we'll need to use loops. Do you know what a loop is in TypeScript?",
       "choices": [
         {
           "label": "Yes, I know loops",
@@ -923,7 +923,7 @@
     },
     {
       "stepId": "final",
-      "mentorSays": "🎉 Well done! You've learned to think through the Find First and Last Position problem. You understand what the problem asks for, how to use two modified binary searches to find boundaries, and how to handle edge cases.\n\n**Key Takeaways:**\n1. **Two Binary Searches**: We need one search for the first (leftmost) occurrence and one for the last (rightmost) occurrence\n2. **Modified Binary Search**: When we find the target, we don't stop—we keep searching in the direction that finds the boundary\n3. **First Search**: Moves left when target is found (right = mid - 1)\n4. **Last Search**: Moves right when target is found (left = mid + 1)\n5. **Validation**: Check if target actually exists before returning positions\n\n**Time Complexity**: O(log n) - we perform two binary searches, each O(log n)\n**Space Complexity**: O(1) - we only use a constant amount of extra space\n\n**What to practice next:**\n- Search Insert Position (similar binary search pattern)\n- Search in Rotated Sorted Array (more complex binary search)\n- Find Peak Element (binary search on unsorted array)\n\nThis kind of thinking—modifying binary search to find boundaries—is essential for solving many search problems. Keep practicing!",
+      "mentorSays": "🎉 Well done! You've learned to think through the Find First and Last Position lesson. You understand what the lesson asks for, how to use two modified binary searches to find boundaries, and how to handle edge cases.\n\n**Key Takeaways:**\n1. **Two Binary Searches**: We need one search for the first (leftmost) occurrence and one for the last (rightmost) occurrence\n2. **Modified Binary Search**: When we find the target, we don't stop—we keep searching in the direction that finds the boundary\n3. **First Search**: Moves left when target is found (right = mid - 1)\n4. **Last Search**: Moves right when target is found (left = mid + 1)\n5. **Validation**: Check if target actually exists before returning positions\n\n**Time Complexity**: O(log n) - we perform two binary searches, each O(log n)\n**Space Complexity**: O(1) - we only use a constant amount of extra space\n\n**What to practice next:**\n- Search Insert Position (similar binary search pattern)\n- Search in Rotated Sorted Array (more complex binary search)\n- Find Peak Element (binary search on unsorted array)\n\nThis kind of thinking—modifying binary search to find boundaries—is essential for solving many search lessons. Keep practicing!",
       "action": "continue"
     }
   ]

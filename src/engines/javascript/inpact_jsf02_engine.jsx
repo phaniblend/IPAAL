@@ -245,4 +245,4 @@ const sideItems = [
   { label: "Step 5 — Currying", id: "step5" },
 ];
 
-export default createINPACTEngine({ NODES, sideItems, problemNum: "JS-F02", title: "Functions Deep Dive", shortName: "JS — FUNCTIONS" });
+export default createINPACTEngine({ NODES, sideItems, lessonNum: "JS-F02", title: "Functions Deep Dive", shortName: "JS — FUNCTIONS" });

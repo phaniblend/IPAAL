@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-ts-18",
     "track": "ts",
-    "problemNum": 18,
+    "lessonNum": 18,
     "title": "Write merge generic preserving key types",
     "shortName": "P18",
     "intro": {

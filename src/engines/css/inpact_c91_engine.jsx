@@ -73,7 +73,7 @@ function getOutputPreview(answer) {
 export default createINPACTEngine({
   NODES,
   sideItems,
-  problemNum: 91,
+  lessonNum: 91,
   title: "CSS custom properties in JS",
   shortName: "C91",
   language: "css",

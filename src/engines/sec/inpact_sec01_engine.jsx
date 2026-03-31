@@ -8,4 +8,4 @@ const NODES = [
 // RBAC: role -> permissions`, feedback_correct: "✅ Authn = identity; Authz = permissions; session vs JWT; RBAC.", feedback_wrong: "Authentication vs authorisation; session vs JWT; RBAC.", expected: "Authn & Authz" },
 ];
 const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }];
-export default createINPACTEngine({ NODES, sideItems, problemNum: "SEC-01", title: "Authentication & authorisation", shortName: "SEC — AUTH" });
+export default createINPACTEngine({ NODES, sideItems, lessonNum: "SEC-01", title: "Authentication & authorisation", shortName: "SEC — AUTH" });

@@ -3,13 +3,13 @@
   "config": {
     "lessonId": "ai-algorithms-59",
     "track": "algorithms",
-    "problemNum": 59,
+    "lessonNum": 59,
     "title": "Koko Eating Bananas",
     "shortName": "P59",
     "intro": {
       "tag": "LESSON #59",
       "title": "Koko Eating Bananas",
-      "body": "In this lesson, you will implement a solution to the 'Koko Eating Bananas' problem, where you help Koko determine the minimum eating speed to finish all bananas within a given time limit. You will learn to apply the binary search algorithm to efficiently find the optimal speed in a range of possible values. The main technologies involved are JavaScript arrays, loops, and conditionals to simulate banana consumption and validate time constraints. This exercise will strengthen your understanding of algorithmic thinking and optimization techniques in a beginner-friendly context.",
+      "body": "In this lesson, you will implement a solution to the 'Koko Eating Bananas' lesson, where you help Koko determine the minimum eating speed to finish all bananas within a given time limit. You will learn to apply the binary search algorithm to efficiently find the optimal speed in a range of possible values. The main technologies involved are JavaScript arrays, loops, and conditionals to simulate banana consumption and validate time constraints. This exercise will strengthen your understanding of algorithmic thinking and optimization techniques in a beginner-friendly context.",
       "usecase": "The Koko Eating Bananas algorithm pattern appears in real-time optimization systems where you need to find the minimum viable rate to complete tasks within constraints. For example, in video streaming services, engineers use similar binary search logic to determine the minimum bandwidth required to buffer a video without interruptions before playback begins. In manufacturing dashboards, this approach helps calculate the minimum machine speed needed to meet production deadlines while conserving energy. Developers encounter this pattern when building resource allocation panels, load balancing systems, or any UI that involves finding optimal thresholds under time constraints."
     },
     "objectives": [
@@ -28,7 +28,7 @@
         "phase": "Step 1 of 17",
         "title": "Welcome",
         "content": {
-          "body": "Welcome! Today we're solving Koko Eating Bananas. Koko loves bananas but has piles of them and limited time. We'll find her minimum eating speed to finish all piles within a time limit. This is an array-hashmap problem where we'll use binary search with a helper function.",
+          "body": "Welcome! Today we're solving Koko Eating Bananas. Koko loves bananas but has piles of them and limited time. We'll find her minimum eating speed to finish all piles within a time limit. This is an array-hashmap lesson where we'll use binary search with a helper function.",
           "title": "Welcome"
         }
       },
@@ -38,7 +38,7 @@
         "phase": "Step 2 of 17",
         "title": "What you'll learn",
         "content": {
-          "body": "1. Apply binary search to find an optimal value within a range.\n2. Implement a helper function to calculate total hours for a given eating speed.\n3. Explain why binary search works for this problem instead of linear search.\n4. Use a hashmap (object) to store and check calculated hours efficiently.",
+          "body": "1. Apply binary search to find an optimal value within a range.\n2. Implement a helper function to calculate total hours for a given eating speed.\n3. Explain why binary search works for this lesson instead of linear search.\n4. Use a hashmap (object) to store and check calculated hours efficiently.",
           "title": "What you'll learn"
         }
       },
@@ -305,7 +305,7 @@
         "phase": "Step 17 of 17",
         "title": "Done",
         "content": {
-          "body": "Great job! You solved Koko Eating Bananas using binary search and a hashmap cache. Remember: binary search works because hours decrease as speed increases (monotonic). The hashmap helps avoid redundant calculations. This pattern applies to many optimization problems.",
+          "body": "Great job! You solved Koko Eating Bananas using binary search and a hashmap cache. Remember: binary search works because hours decrease as speed increases (monotonic). The hashmap helps avoid redundant calculations. This pattern applies to many optimization lessons.",
           "title": "Done"
         }
       }

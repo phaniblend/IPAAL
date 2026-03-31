@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-ts-40",
     "track": "ts",
-    "problemNum": 40,
+    "lessonNum": 40,
     "title": "Build typed sessionStorage wrapper",
     "shortName": "P40",
     "intro": {

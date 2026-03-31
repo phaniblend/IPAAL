@@ -8,4 +8,4 @@ const NODES = [
 // Container queries: @container; style by parent size`, feedback_correct: "✅ BEM for naming; CSS modules scope; container queries for component-driven layout.", feedback_wrong: "BEM; CSS modules; container queries.", expected: "CSS architecture" },
 ];
 const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }];
-export default createINPACTEngine({ NODES, sideItems, problemNum: "FE-03", title: "CSS architecture", shortName: "FE — CSS" });
+export default createINPACTEngine({ NODES, sideItems, lessonNum: "FE-03", title: "CSS architecture", shortName: "FE — CSS" });

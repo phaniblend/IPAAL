@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-angular-46",
     "track": "angular",
-    "problemNum": 46,
+    "lessonNum": 46,
     "title": "useMediaQuery",
     "shortName": "P46",
     "intro": {

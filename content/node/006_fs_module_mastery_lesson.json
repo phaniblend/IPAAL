@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-node-06",
     "track": "node",
-    "problemNum": 6,
+    "lessonNum": 6,
     "title": "fs module mastery",
     "shortName": "P06",
     "intro": {

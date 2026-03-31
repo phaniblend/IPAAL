@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-react-js-23",
     "track": "react-js",
-    "problemNum": 23,
+    "lessonNum": 23,
     "title": "Controlled vs Uncontrolled",
     "shortName": "P23",
     "intro": {

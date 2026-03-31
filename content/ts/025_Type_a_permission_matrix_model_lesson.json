@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-ts-25",
     "track": "ts",
-    "problemNum": 25,
+    "lessonNum": 25,
     "title": "Type a permission matrix model",
     "shortName": "P25",
     "intro": {

@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-ts-84",
     "track": "ts",
-    "problemNum": 84,
+    "lessonNum": 84,
     "title": "Build schema to type mapper",
     "shortName": "P84",
     "intro": {

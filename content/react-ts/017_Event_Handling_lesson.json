@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-react-ts-17",
     "track": "react-ts",
-    "problemNum": 17,
+    "lessonNum": 17,
     "title": "Event Handling",
     "shortName": "P17",
     "intro": {

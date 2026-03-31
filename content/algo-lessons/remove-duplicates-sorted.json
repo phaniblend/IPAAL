@@ -8,20 +8,20 @@
   "flow": [
     {
       "stepId": "title",
-      "mentorSays": "At the end of this lesson, you will be able to:\n\n1. Understand what the Remove Duplicates problem asks for\n2. Use two pointers to remove duplicates in-place\n3. Return the length of the unique elements\n4. Implement the solution step by step in your chosen language",
+      "mentorSays": "At the end of this lesson, you will be able to:\n\n1. Understand what the Remove Duplicates lesson asks for\n2. Use two pointers to remove duplicates in-place\n3. Return the length of the unique elements\n4. Implement the solution step by step in your chosen language",
       "action": "continue",
-      "next": "problem-illustration"
+      "next": "lesson-illustration"
     },
     {
-      "stepId": "problem-illustration",
-      "mentorSays": "Perfect! Now let's understand what the Remove Duplicates from Sorted Array problem is asking.\n\nGiven a sorted array, remove duplicates in-place so each unique element appears only once. Return the length of the unique elements.\n\n**Example:** nums = [1, 1, 2]\n\nYour task:\n1. Remove duplicates in-place: [1, 2, ...]\n2. Return the length of unique elements: 2\n\n**Another example:** nums = [0, 0, 1, 1, 1, 2, 2, 3, 3, 4]\n\nAfter removing duplicates:\n- Unique elements: [0, 1, 2, 3, 4]\n- Array becomes: [0, 1, 2, 3, 4, ...] (rest doesn't matter)\n- Return length: 5\n\n**Key insight:** Since the array is sorted, duplicates are adjacent! We can use two pointers:\n- One pointer tracks where to write the next unique element\n- Another pointer scans through the array\n- When we find a new unique element, write it at the write position\n\n**Step-by-step trace:**\n\nnums = [1, 1, 2]\n\n- **Initial**: writeIndex = 1, readIndex = 1\n- **readIndex = 1**: nums[1] = 1, nums[0] = 1\n  - Same as previous, skip → readIndex = 2\n- **readIndex = 2**: nums[2] = 2, nums[0] = 1\n  - Different! Write at writeIndex: nums[1] = 2, writeIndex = 2\n  Array: [1, 2, 2]\n- **Done**: Return writeIndex = 2 ✓",
+      "stepId": "lesson-illustration",
+      "mentorSays": "Perfect! Now let's understand what the Remove Duplicates from Sorted Array lesson is asking.\n\nGiven a sorted array, remove duplicates in-place so each unique element appears only once. Return the length of the unique elements.\n\n**Example:** nums = [1, 1, 2]\n\nYour task:\n1. Remove duplicates in-place: [1, 2, ...]\n2. Return the length of unique elements: 2\n\n**Another example:** nums = [0, 0, 1, 1, 1, 2, 2, 3, 3, 4]\n\nAfter removing duplicates:\n- Unique elements: [0, 1, 2, 3, 4]\n- Array becomes: [0, 1, 2, 3, 4, ...] (rest doesn't matter)\n- Return length: 5\n\n**Key insight:** Since the array is sorted, duplicates are adjacent! We can use two pointers:\n- One pointer tracks where to write the next unique element\n- Another pointer scans through the array\n- When we find a new unique element, write it at the write position\n\n**Step-by-step trace:**\n\nnums = [1, 1, 2]\n\n- **Initial**: writeIndex = 1, readIndex = 1\n- **readIndex = 1**: nums[1] = 1, nums[0] = 1\n  - Same as previous, skip → readIndex = 2\n- **readIndex = 2**: nums[2] = 2, nums[0] = 1\n  - Different! Write at writeIndex: nums[1] = 2, writeIndex = 2\n  Array: [1, 2, 2]\n- **Done**: Return writeIndex = 2 ✓",
       "example": "nums = [1, 1, 2]\n\nRemove duplicates:\nStep 1: Compare nums[1]=1 with nums[0]=1 → Same, skip\nStep 2: Compare nums[2]=2 with nums[0]=1 → Different! Write 2 at index 1\n\nResult: [1, 2, ...]\nLength: 2\n\n---\n\nnums = [0, 0, 1, 1, 1, 2, 2, 3, 3, 4]\n\nResult: [0, 1, 2, 3, 4, ...]\nLength: 5",
       "action": "continue",
       "next": "thinking-challenge"
     },
     {
       "stepId": "thinking-challenge",
-      "mentorSays": "Now that you understand what the problem wants, here's the real question:\n\nHow would YOU remove duplicates from a sorted array?\n\nThink about it for a moment. What approach feels natural to you?",
+      "mentorSays": "Now that you understand what the lesson wants, here's the real question:\n\nHow would YOU remove duplicates from a sorted array?\n\nThink about it for a moment. What approach feels natural to you?",
       "choices": [
         {
           "label": "Use two pointers: one to write unique elements, one to scan",
@@ -39,7 +39,7 @@
     },
     {
       "stepId": "explore-new-array",
-      "mentorSays": "That's a straightforward approach! You're thinking: \"I'll create a new array and only add unique elements.\"\n\nFor [1, 1, 2]:\n- New array: [1, 2]\n- Return length: 2\n\nThis works! However, the problem asks us to modify the array in-place (without creating a new array). Also, using extra space makes it less efficient.\n\nThere's a more efficient O(1) space approach using two pointers. Would you like to learn that?",
+      "mentorSays": "That's a straightforward approach! You're thinking: \"I'll create a new array and only add unique elements.\"\n\nFor [1, 1, 2]:\n- New array: [1, 2]\n- Return length: 2\n\nThis works! However, the lesson asks us to modify the array in-place (without creating a new array). Also, using extra space makes it less efficient.\n\nThere's a more efficient O(1) space approach using two pointers. Would you like to learn that?",
       "action": "continue",
       "next": "explore-two-pointers"
     },
@@ -146,7 +146,7 @@
     },
     {
       "stepId": "array-check-js",
-      "mentorSays": "To solve this problem, we'll need to work with arrays. Do you know what an array is in JavaScript?",
+      "mentorSays": "To solve this lesson, we'll need to work with arrays. Do you know what an array is in JavaScript?",
       "choices": [
         {
           "label": "Yes, I know arrays",
@@ -167,7 +167,7 @@
     },
     {
       "stepId": "loop-check-js",
-      "mentorSays": "To solve this problem, we'll need to use loops. Do you know what a loop is in JavaScript?",
+      "mentorSays": "To solve this lesson, we'll need to use loops. Do you know what a loop is in JavaScript?",
       "choices": [
         {
           "label": "Yes, I know loops",
@@ -286,7 +286,7 @@
     },
     {
       "stepId": "array-check-python",
-      "mentorSays": "To solve this problem, we'll need to work with lists. Do you know what a list is in Python?",
+      "mentorSays": "To solve this lesson, we'll need to work with lists. Do you know what a list is in Python?",
       "choices": [
         {
           "label": "Yes, I know lists",
@@ -307,7 +307,7 @@
     },
     {
       "stepId": "loop-check-python",
-      "mentorSays": "To solve this problem, we'll need to use loops. Do you know what a loop is in Python?",
+      "mentorSays": "To solve this lesson, we'll need to use loops. Do you know what a loop is in Python?",
       "choices": [
         {
           "label": "Yes, I know loops",
@@ -426,7 +426,7 @@
     },
     {
       "stepId": "array-check-java",
-      "mentorSays": "To solve this problem, we'll need to work with arrays. Do you know what an array is in Java?",
+      "mentorSays": "To solve this lesson, we'll need to work with arrays. Do you know what an array is in Java?",
       "choices": [
         {
           "label": "Yes, I know arrays",
@@ -447,7 +447,7 @@
     },
     {
       "stepId": "loop-check-java",
-      "mentorSays": "To solve this problem, we'll need to use loops. Do you know what a loop is in Java?",
+      "mentorSays": "To solve this lesson, we'll need to use loops. Do you know what a loop is in Java?",
       "choices": [
         {
           "label": "Yes, I know loops",
@@ -566,7 +566,7 @@
     },
     {
       "stepId": "array-check-cpp",
-      "mentorSays": "To solve this problem, we'll need to work with vectors (arrays). Do you know what a vector is in C++?",
+      "mentorSays": "To solve this lesson, we'll need to work with vectors (arrays). Do you know what a vector is in C++?",
       "choices": [
         {
           "label": "Yes, I know vectors",
@@ -587,7 +587,7 @@
     },
     {
       "stepId": "loop-check-cpp",
-      "mentorSays": "To solve this problem, we'll need to use loops. Do you know what a loop is in C++?",
+      "mentorSays": "To solve this lesson, we'll need to use loops. Do you know what a loop is in C++?",
       "choices": [
         {
           "label": "Yes, I know loops",
@@ -706,7 +706,7 @@
     },
     {
       "stepId": "array-check-ts",
-      "mentorSays": "To solve this problem, we'll need to work with arrays. Do you know what an array is in TypeScript?",
+      "mentorSays": "To solve this lesson, we'll need to work with arrays. Do you know what an array is in TypeScript?",
       "choices": [
         {
           "label": "Yes, I know arrays",
@@ -727,7 +727,7 @@
     },
     {
       "stepId": "loop-check-ts",
-      "mentorSays": "To solve this problem, we'll need to use loops. Do you know what a loop is in TypeScript?",
+      "mentorSays": "To solve this lesson, we'll need to use loops. Do you know what a loop is in TypeScript?",
       "choices": [
         {
           "label": "Yes, I know loops",
@@ -783,7 +783,7 @@
     },
     {
       "stepId": "final",
-      "mentorSays": "🎉 Well done! You've learned to think through the Remove Duplicates from Sorted Array problem. You understand what the problem asks for, how to use two pointers to remove duplicates in-place, and how to return the length of unique elements.\n\nThis kind of thinking—using two pointers for in-place modifications—is essential for solving many array problems. Keep practicing!",
+      "mentorSays": "🎉 Well done! You've learned to think through the Remove Duplicates from Sorted Array lesson. You understand what the lesson asks for, how to use two pointers to remove duplicates in-place, and how to return the length of unique elements.\n\nThis kind of thinking—using two pointers for in-place modifications—is essential for solving many array lessons. Keep practicing!",
       "action": "continue"
     }
   ]

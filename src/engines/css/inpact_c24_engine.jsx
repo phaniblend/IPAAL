@@ -73,7 +73,7 @@ function getOutputPreview(answer) {
 export default createINPACTEngine({
   NODES,
   sideItems,
-  problemNum: 24,
+  lessonNum: 24,
   title: "Colors: hex, rgb, hsl",
   shortName: "C24",
   language: "css",

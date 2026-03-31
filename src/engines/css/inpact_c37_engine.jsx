@@ -73,7 +73,7 @@ function getOutputPreview(answer) {
 export default createINPACTEngine({
   NODES,
   sideItems,
-  problemNum: 37,
+  lessonNum: 37,
   title: "Specificity",
   shortName: "C37",
   language: "css",

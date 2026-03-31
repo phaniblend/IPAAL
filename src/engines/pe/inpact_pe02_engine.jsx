@@ -450,4 +450,4 @@ const sideItems = [
   { label: "Step 5 — Health checks", id: "step5" },
 ];
 
-export default createINPACTEngine({ NODES, sideItems, problemNum: "PE-02", title: "Incident Response & Reliability", shortName: "PE — INCIDENTS" });
+export default createINPACTEngine({ NODES, sideItems, lessonNum: "PE-02", title: "Incident Response & Reliability", shortName: "PE — INCIDENTS" });

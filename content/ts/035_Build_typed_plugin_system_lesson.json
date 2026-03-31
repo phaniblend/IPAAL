@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-ts-35",
     "track": "ts",
-    "problemNum": 35,
+    "lessonNum": 35,
     "title": "Build typed plugin system",
     "shortName": "P35",
     "intro": {

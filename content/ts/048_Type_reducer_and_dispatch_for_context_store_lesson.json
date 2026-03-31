@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-ts-48",
     "track": "ts",
-    "problemNum": 48,
+    "lessonNum": 48,
     "title": "Type reducer and dispatch for context store",
     "shortName": "P48",
     "intro": {

@@ -73,7 +73,7 @@ function getOutputPreview(answer) {
 export default createINPACTEngine({
   NODES,
   sideItems,
-  problemNum: 38,
+  lessonNum: 38,
   title: "@layer and cascade layers",
   shortName: "C38",
   language: "css",

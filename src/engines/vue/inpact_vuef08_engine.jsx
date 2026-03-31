@@ -8,4 +8,4 @@ const NODES = [
 <KeepAlive><component :is="current" /></KeepAlive>  // cache inactive instances`, feedback_correct: "✅ v-memo for list item stability; shallowRef for non-deep; KeepAlive caches components.", feedback_wrong: "v-memo; shallowRef for shallow reactivity; KeepAlive for caching.", expected: "Performance" },
 ];
 const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }];
-export default createINPACTEngine({ NODES, sideItems, problemNum: "VUE-F08", title: "Vue performance", shortName: "VUE — PERF" });
+export default createINPACTEngine({ NODES, sideItems, lessonNum: "VUE-F08", title: "Vue performance", shortName: "VUE — PERF" });

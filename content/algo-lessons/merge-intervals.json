@@ -10,11 +10,11 @@
       "stepId": "title",
       "mentorSays": "At the end of this lesson, you will be able to:\n\n1. Understand what Merge Intervals asks for\n2. Sort intervals by start time\n3. Merge overlapping intervals\n4. Handle edge cases correctly\n5. Implement the solution step by step in your chosen language",
       "action": "continue",
-      "next": "problem-illustration"
+      "next": "lesson-illustration"
     },
     {
-      "stepId": "problem-illustration",
-      "mentorSays": "Perfect! Now let's understand what Merge Intervals is asking.\n\n**Problem Definition:**\nGiven an array of intervals where intervals[i] = [starti, endi], merge all overlapping intervals, and return an array of the non-overlapping intervals that cover all the intervals in the input.\n\n**Example 1:** intervals = [[1,3],[2,6],[8,10],[15,18]]\n[1,3] and [2,6] overlap → merge to [1,6]\nResult: [[1,6],[8,10],[15,18]]\n\n**Key Insight:** Sort by start time, then merge if current overlaps with previous (current.start <= previous.end).",
+      "stepId": "lesson-illustration",
+      "mentorSays": "Perfect! Now let's understand what Merge Intervals is asking.\n\n**Lesson Definition:**\nGiven an array of intervals where intervals[i] = [starti, endi], merge all overlapping intervals, and return an array of the non-overlapping intervals that cover all the intervals in the input.\n\n**Example 1:** intervals = [[1,3],[2,6],[8,10],[15,18]]\n[1,3] and [2,6] overlap → merge to [1,6]\nResult: [[1,6],[8,10],[15,18]]\n\n**Key Insight:** Sort by start time, then merge if current overlaps with previous (current.start <= previous.end).",
       "example": "Example: [[1,3],[2,6],[8,10],[15,18]] → [[1,6],[8,10],[15,18]]",
       "action": "continue",
       "next": "thinking-challenge"

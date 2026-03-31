@@ -2,7 +2,7 @@
 
 Lessons and learning objectives.
 
-**{PROBLEM #1 :: Counter App}**
+**{LESSON #1 :: Counter App}**
 
 LOs:
 
@@ -35,7 +35,7 @@ Export a React component using the export default function syntax
 
 ---
 
-**{PROBLEM #2 :: Toggle Visibility}**
+**{LESSON #2 :: Toggle Visibility}**
 
 LOs:
 
@@ -62,7 +62,7 @@ Build a complete React component that integrates boolean state: initialisation, 
 
 ---
 
-**{PROBLEM #3 :: Controlled Input}**
+**{LESSON #3 :: Controlled Input}**
 
 LOs:
 
@@ -86,7 +86,7 @@ Distinguish between controlled and uncontrolled inputs
 
 ---
 
-**{PROBLEM #4 :: Multiple State Variables}**
+**{LESSON #4 :: Multiple State Variables}**
 
 LOs:
 
@@ -107,7 +107,7 @@ Understand why we don't put both values in one useState object
 
 ---
 
-**{PROBLEM #5 :: Conditional Rendering with Ternary}**
+**{LESSON #5 :: Conditional Rendering with Ternary}**
 
 LOs:
 
@@ -131,7 +131,7 @@ Explain why if/else doesn't work directly inside JSX return
 
 ---
 
-**{PROBLEM #6 :: List Rendering with map()}**
+**{LESSON #6 :: List Rendering with map()}**
 
 LOs:
 
@@ -155,7 +155,7 @@ Understand why you never mutate state directly with .push()
 
 ---
 
-**{PROBLEM #7 :: useEffect & Side Effects}**
+**{LESSON #7 :: useEffect & Side Effects}**
 
 LOs:
 
@@ -179,7 +179,7 @@ Explain why setting state directly in render causes infinite loops
 
 ---
 
-**{PROBLEM #8 :: Forms & Validation}**
+**{LESSON #8 :: Forms & Validation}**
 
 LOs:
 
@@ -203,7 +203,7 @@ Show a success state after valid submission
 
 ---
 
-**{PROBLEM #9 :: Color Picker}**
+**{LESSON #9 :: Color Picker}**
 
 LOs:
 
@@ -221,7 +221,7 @@ Apply dynamic inline style (e.g. backgroundColor) to a div based on state
 
 ---
 
-**{PROBLEM #10 :: Multiple State Vars}**
+**{LESSON #10 :: Multiple State Vars}**
 
 LOs:
 
@@ -236,7 +236,7 @@ Optionally show live feedback (e.g. passwords match / don't match)
 
 ---
 
-**{PROBLEM #11 :: Reusable Button}**
+**{LESSON #11 :: Reusable Button}**
 
 LOs:
 
@@ -251,7 +251,7 @@ Disable the button when disabled is true
 
 ---
 
-**{PROBLEM #12 :: Card Component}**
+**{LESSON #12 :: Card Component}**
 
 LOs:
 
@@ -266,7 +266,7 @@ Use children or a footer prop for the bottom section
 
 ---
 
-**{PROBLEM #13 :: Props Drilling}**
+**{LESSON #13 :: Props Drilling}**
 
 LOs:
 
@@ -284,7 +284,7 @@ Export the App that wires the three layers
 
 ---
 
-**{PROBLEM #14 :: Default Props}**
+**{LESSON #14 :: Default Props}**
 
 LOs:
 
@@ -299,7 +299,7 @@ Render an img with size as width/height
 
 ---
 
-**{PROBLEM #15 :: Children Prop}**
+**{LESSON #15 :: Children Prop}**
 
 LOs:
 
@@ -314,7 +314,7 @@ Apply inline styles (maxWidth, padding, etc.)
 
 ---
 
-**{PROBLEM #16 :: Conditional Rendering}**
+**{LESSON #16 :: Conditional Rendering}**
 
 LOs:
 
@@ -329,7 +329,7 @@ Optionally show mock data when status is 'data'
 
 ---
 
-**{PROBLEM #17 :: List Rendering}**
+**{LESSON #17 :: List Rendering}**
 
 LOs:
 
@@ -344,7 +344,7 @@ Add key={item.id} (or stable unique key) to the mapped element
 
 ---
 
-**{PROBLEM #18 :: PropTypes (JavaScript)}**
+**{LESSON #18 :: PropTypes (JavaScript)}**
 
 LOs:
 
@@ -359,7 +359,7 @@ Export UserCard with full PropTypes
 
 ---
 
-**{PROBLEM #19 :: Component Composition}**
+**{LESSON #19 :: Component Composition}**
 
 LOs:
 
@@ -374,7 +374,7 @@ Place each prop in the correct region
 
 ---
 
-**{PROBLEM #20 :: Event Handling}**
+**{LESSON #20 :: Event Handling}**
 
 LOs:
 
@@ -389,7 +389,7 @@ If e.key === 'Escape', clear the form state
 
 ---
 
-**{PROBLEM #21 :: Conditional Classes}**
+**{LESSON #21 :: Conditional Classes}**
 
 LOs:
 
@@ -404,7 +404,7 @@ Apply the result to className={...}
 
 ---
 
-**{PROBLEM #22 :: Inline Styles}**
+**{LESSON #22 :: Inline Styles}**
 
 LOs:
 
@@ -419,7 +419,7 @@ Set the bar's width with style={{ width: `${progress}%` }}
 
 ---
 
-**{PROBLEM #23 :: CSS Modules}**
+**{LESSON #23 :: CSS Modules}**
 
 LOs:
 
@@ -434,7 +434,7 @@ Use className={styles.container} in the component
 
 ---
 
-**{PROBLEM #24 :: Styled Component Pattern}**
+**{LESSON #24 :: Styled Component Pattern}**
 
 LOs:
 
@@ -449,7 +449,7 @@ Render a button that uses the variables
 
 ---
 
-**{PROBLEM #25 :: Lifting State Up}**
+**{LESSON #25 :: Lifting State Up}**
 
 LOs:
 
@@ -464,7 +464,7 @@ One child displays, one child updates
 
 ---
 
-**{PROBLEM #26 :: Controlled vs Uncontrolled}**
+**{LESSON #26 :: Controlled vs Uncontrolled}**
 
 LOs:
 
@@ -479,7 +479,7 @@ Show both in one component or two
 
 ---
 
-**{PROBLEM #27 :: Simple Todo List}**
+**{LESSON #27 :: Simple Todo List}**
 
 LOs:
 
@@ -497,7 +497,7 @@ Delete: filter out by id
 
 ---
 
-**{PROBLEM #28 :: Star Rating Component}**
+**{LESSON #28 :: Star Rating Component}**
 
 LOs:
 
@@ -515,7 +515,7 @@ onClick sets rating to that star's value
 
 ---
 
-**{PROBLEM #29 :: Accordion}**
+**{LESSON #29 :: Accordion}**
 
 LOs:
 
@@ -530,7 +530,7 @@ Render panels: show content only when openIndex === index
 
 ---
 
-**{PROBLEM #30 :: Image Gallery}**
+**{LESSON #30 :: Image Gallery}**
 
 LOs:
 
@@ -548,7 +548,7 @@ Modal: when selectedImage is set, show overlay with large image and close button
 
 ---
 
-**{PROBLEM #31 :: useFetch}**
+**{LESSON #31 :: useFetch}**
 
 LOs:
 
@@ -569,7 +569,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #32 :: useDebounce}**
+**{LESSON #32 :: useDebounce}**
 
 LOs:
 
@@ -590,7 +590,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #33 :: useLocalStorage}**
+**{LESSON #33 :: useLocalStorage}**
 
 LOs:
 
@@ -611,7 +611,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #34 :: useToggle}**
+**{LESSON #34 :: useToggle}**
 
 LOs:
 
@@ -632,7 +632,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #35 :: useWindowSize}**
+**{LESSON #35 :: useWindowSize}**
 
 LOs:
 
@@ -653,7 +653,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #36 :: usePrevious}**
+**{LESSON #36 :: usePrevious}**
 
 LOs:
 
@@ -674,7 +674,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #37 :: useClickOutside}**
+**{LESSON #37 :: useClickOutside}**
 
 LOs:
 
@@ -695,7 +695,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #38 :: useKeyPress}**
+**{LESSON #38 :: useKeyPress}**
 
 LOs:
 
@@ -716,7 +716,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #39 :: useOnlineStatus}**
+**{LESSON #39 :: useOnlineStatus}**
 
 LOs:
 
@@ -737,7 +737,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #40 :: useMediaQuery}**
+**{LESSON #40 :: useMediaQuery}**
 
 LOs:
 
@@ -758,7 +758,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #41 :: Theme Context}**
+**{LESSON #41 :: Theme Context}**
 
 LOs:
 
@@ -779,7 +779,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #42 :: Auth Context}**
+**{LESSON #42 :: Auth Context}**
 
 LOs:
 
@@ -800,7 +800,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #43 :: Cart Context}**
+**{LESSON #43 :: Cart Context}**
 
 LOs:
 
@@ -821,7 +821,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #44 :: Notification Context}**
+**{LESSON #44 :: Notification Context}**
 
 LOs:
 
@@ -842,7 +842,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #45 :: Context Performance}**
+**{LESSON #45 :: Context Performance}**
 
 LOs:
 
@@ -863,7 +863,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #46 :: useReducer vs useState}**
+**{LESSON #46 :: useReducer vs useState}**
 
 LOs:
 
@@ -884,7 +884,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #47 :: Compound Component (Tabs)}**
+**{LESSON #47 :: Compound Component (Tabs)}**
 
 LOs:
 
@@ -905,7 +905,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #48 :: Unnecessary Re-renders}**
+**{LESSON #48 :: Unnecessary Re-renders}**
 
 LOs:
 
@@ -926,7 +926,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #49 :: useMemo for Expensive Computation}**
+**{LESSON #49 :: useMemo for Expensive Computation}**
 
 LOs:
 
@@ -947,7 +947,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #50 :: useCallback for Stable References}**
+**{LESSON #50 :: useCallback for Stable References}**
 
 LOs:
 
@@ -968,7 +968,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #51 :: React.memo}**
+**{LESSON #51 :: React.memo}**
 
 LOs:
 
@@ -989,7 +989,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #52 :: List Virtualization}**
+**{LESSON #52 :: List Virtualization}**
 
 LOs:
 
@@ -1010,7 +1010,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #53 :: Lazy Loading Routes}**
+**{LESSON #53 :: Lazy Loading Routes}**
 
 LOs:
 
@@ -1031,7 +1031,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #54 :: Image Lazy Loading}**
+**{LESSON #54 :: Image Lazy Loading}**
 
 LOs:
 
@@ -1052,7 +1052,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #55 :: HOC withAuth}**
+**{LESSON #55 :: HOC withAuth}**
 
 LOs:
 
@@ -1073,7 +1073,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #56 :: Render Props (MouseTracker)}**
+**{LESSON #56 :: Render Props (MouseTracker)}**
 
 LOs:
 
@@ -1094,7 +1094,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #57 :: Controlled DatePicker}**
+**{LESSON #57 :: Controlled DatePicker}**
 
 LOs:
 
@@ -1115,7 +1115,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #58 :: Portal}**
+**{LESSON #58 :: Portal}**
 
 LOs:
 
@@ -1136,7 +1136,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #59 :: Error Boundary}**
+**{LESSON #59 :: Error Boundary}**
 
 LOs:
 
@@ -1157,7 +1157,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #60 :: Recursive TreeView}**
+**{LESSON #60 :: Recursive TreeView}**
 
 LOs:
 
@@ -1178,7 +1178,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #61 :: Pagination}**
+**{LESSON #61 :: Pagination}**
 
 LOs:
 
@@ -1199,7 +1199,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #62 :: Infinite Scroll}**
+**{LESSON #62 :: Infinite Scroll}**
 
 LOs:
 
@@ -1220,7 +1220,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #63 :: Debounced Search}**
+**{LESSON #63 :: Debounced Search}**
 
 LOs:
 
@@ -1241,7 +1241,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #64 :: Multi-Step Form}**
+**{LESSON #64 :: Multi-Step Form}**
 
 LOs:
 
@@ -1262,7 +1262,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #65 :: Generic List<T>}**
+**{LESSON #65 :: Generic List<T>}**
 
 LOs:
 
@@ -1283,7 +1283,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #66 :: Discriminated Union Props}**
+**{LESSON #66 :: Discriminated Union Props}**
 
 LOs:
 
@@ -1304,7 +1304,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #67 :: useRef Typing}**
+**{LESSON #67 :: useRef Typing}**
 
 LOs:
 
@@ -1325,7 +1325,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #68 :: Event Typing}**
+**{LESSON #68 :: Event Typing}**
 
 LOs:
 
@@ -1346,7 +1346,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #69 :: Generic useFetch<T>}**
+**{LESSON #69 :: Generic useFetch<T>}**
 
 LOs:
 
@@ -1367,7 +1367,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #70 :: Utility Types}**
+**{LESSON #70 :: Utility Types}**
 
 LOs:
 
@@ -1388,7 +1388,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #71 :: useImperativeHandle}**
+**{LESSON #71 :: useImperativeHandle}**
 
 LOs:
 
@@ -1409,7 +1409,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #72 :: useSyncExternalStore}**
+**{LESSON #72 :: useSyncExternalStore}**
 
 LOs:
 
@@ -1430,7 +1430,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #73 :: useTransition}**
+**{LESSON #73 :: useTransition}**
 
 LOs:
 
@@ -1451,7 +1451,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #74 :: useDeferredValue}**
+**{LESSON #74 :: useDeferredValue}**
 
 LOs:
 
@@ -1472,7 +1472,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #75 :: useLayoutEffect vs useEffect}**
+**{LESSON #75 :: useLayoutEffect vs useEffect}**
 
 LOs:
 
@@ -1493,7 +1493,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #76 :: Mini Redux}**
+**{LESSON #76 :: Mini Redux}**
 
 LOs:
 
@@ -1514,7 +1514,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #77 :: Optimistic UI}**
+**{LESSON #77 :: Optimistic UI}**
 
 LOs:
 
@@ -1535,7 +1535,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #78 :: Request Deduplication}**
+**{LESSON #78 :: Request Deduplication}**
 
 LOs:
 
@@ -1556,7 +1556,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #79 :: Polling Hook}**
+**{LESSON #79 :: Polling Hook}**
 
 LOs:
 
@@ -1577,7 +1577,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #80 :: WebSocket Hook}**
+**{LESSON #80 :: WebSocket Hook}**
 
 LOs:
 
@@ -1598,7 +1598,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #81 :: Feature Flag Hook}**
+**{LESSON #81 :: Feature Flag Hook}**
 
 LOs:
 
@@ -1619,7 +1619,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #82 :: Undo/Redo}**
+**{LESSON #82 :: Undo/Redo}**
 
 LOs:
 
@@ -1640,7 +1640,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #83 :: Form Library from Scratch}**
+**{LESSON #83 :: Form Library from Scratch}**
 
 LOs:
 
@@ -1661,7 +1661,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #84 :: Component Library Theming}**
+**{LESSON #84 :: Component Library Theming}**
 
 LOs:
 
@@ -1682,7 +1682,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #85 :: Micro-frontend Shell}**
+**{LESSON #85 :: Micro-frontend Shell}**
 
 LOs:
 
@@ -1703,7 +1703,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #86 :: Race Condition Fix}**
+**{LESSON #86 :: Race Condition Fix}**
 
 LOs:
 
@@ -1724,7 +1724,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #87 :: Memoization Strategy}**
+**{LESSON #87 :: Memoization Strategy}**
 
 LOs:
 
@@ -1745,7 +1745,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #88 :: Bundle Analysis}**
+**{LESSON #88 :: Bundle Analysis}**
 
 LOs:
 
@@ -1766,7 +1766,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #89 :: Concurrent Mode Gotchas}**
+**{LESSON #89 :: Concurrent Mode Gotchas}**
 
 LOs:
 
@@ -1787,7 +1787,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #90 :: Memory Leak Hunt}**
+**{LESSON #90 :: Memory Leak Hunt}**
 
 LOs:
 
@@ -1808,7 +1808,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #91 :: Test useFetch}**
+**{LESSON #91 :: Test useFetch}**
 
 LOs:
 
@@ -1829,7 +1829,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #92 :: Test Async Component}**
+**{LESSON #92 :: Test Async Component}**
 
 LOs:
 
@@ -1850,7 +1850,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #93 :: Test User Interactions}**
+**{LESSON #93 :: Test User Interactions}**
 
 LOs:
 
@@ -1871,7 +1871,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #94 :: Test Context}**
+**{LESSON #94 :: Test Context}**
 
 LOs:
 
@@ -1892,7 +1892,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #95 :: Test Error Boundary}**
+**{LESSON #95 :: Test Error Boundary}**
 
 LOs:
 
@@ -1913,7 +1913,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #96 :: Design DataTable API}**
+**{LESSON #96 :: Design DataTable API}**
 
 LOs:
 
@@ -1934,7 +1934,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #97 :: Design Auth Flow}**
+**{LESSON #97 :: Design Auth Flow}**
 
 LOs:
 
@@ -1955,7 +1955,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #98 :: Design Notification System}**
+**{LESSON #98 :: Design Notification System}**
 
 LOs:
 
@@ -1976,7 +1976,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #99 :: Design Permission System}**
+**{LESSON #99 :: Design Permission System}**
 
 LOs:
 
@@ -1997,7 +1997,7 @@ Export and reuse the solution in other components or projects
 
 ---
 
-**{PROBLEM #100 :: Design Real-Time Dashboard}**
+**{LESSON #100 :: Design Real-Time Dashboard}**
 
 LOs:
 

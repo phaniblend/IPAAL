@@ -73,7 +73,7 @@ function getOutputPreview(answer) {
 export default createINPACTEngine({
   NODES,
   sideItems,
-  problemNum: 29,
+  lessonNum: 29,
   title: "outline vs border",
   shortName: "C29",
   language: "css",

@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-angular-87",
     "track": "angular",
-    "problemNum": 87,
+    "lessonNum": 87,
     "title": "Feature Flag Hook",
     "shortName": "P87",
     "intro": {

@@ -73,7 +73,7 @@ function getOutputPreview(answer) {
 export default createINPACTEngine({
   NODES,
   sideItems,
-  problemNum: 18,
+  lessonNum: 18,
   title: "Centering (all methods)",
   shortName: "C18",
   language: "css",

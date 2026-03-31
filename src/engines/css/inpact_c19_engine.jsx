@@ -73,7 +73,7 @@ function getOutputPreview(answer) {
 export default createINPACTEngine({
   NODES,
   sideItems,
-  problemNum: 19,
+  lessonNum: 19,
   title: "rem and em",
   shortName: "C19",
   language: "css",

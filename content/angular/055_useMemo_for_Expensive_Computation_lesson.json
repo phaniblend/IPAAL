@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-angular-55",
     "track": "angular",
-    "problemNum": 55,
+    "lessonNum": 55,
     "title": "useMemo for Expensive Computation",
     "shortName": "P55",
     "intro": {
@@ -251,7 +251,7 @@
         "id": "step9",
         "type": "question",
         "phase": "Step 9 of 9",
-        "title": "Add performance monitoring to demonstrate the problem",
+        "title": "Add performance monitoring to demonstrate the lesson",
         "instruction": "Add console.log statements to the ngOnInit method and incrementCounter method to log when the expensive computation runs.",
         "hint": "Add console.log('Running expensive computation...') before calling expensiveComputation in both methods.",
         "analogousExample": "// Example: logging in a method\nngOnInit() {\n  console.log('Component initialized');\n  this.loadData();\n}",
@@ -318,7 +318,7 @@
         "id": "step8"
       },
       {
-        "label": "Add performance monitoring to demonstrate the problem",
+        "label": "Add performance monitoring to demonstrate the lesson",
         "id": "step9"
       }
     ]

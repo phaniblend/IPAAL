@@ -3,13 +3,13 @@
   "config": {
     "lessonId": "ai-algorithms-28",
     "track": "algorithms",
-    "problemNum": 28,
+    "lessonNum": 28,
     "title": "Trapping Rain Water",
     "shortName": "P28",
     "intro": {
       "tag": "LESSON #28",
       "title": "Trapping Rain Water",
-      "body": "In this lesson, you will build a function to calculate how much rainwater can be trapped between bars of different heights, a classic problem in algorithm design. You will learn the core concept of using two pointers to efficiently scan the array from both ends, comparing heights to determine water capacity at each position. The main technologies involved are JavaScript arrays, loops, conditional logic, and the two-pointer technique. By the end, you will understand how to solve this problem step-by-step and implement a working solution in JavaScript.",
+      "body": "In this lesson, you will build a function to calculate how much rainwater can be trapped between bars of different heights, a classic lesson in algorithm design. You will learn the core concept of using two pointers to efficiently scan the array from both ends, comparing heights to determine water capacity at each position. The main technologies involved are JavaScript arrays, loops, conditional logic, and the two-pointer technique. By the end, you will understand how to solve this lesson step-by-step and implement a working solution in JavaScript.",
       "usecase": "The Trapping Rain Water algorithm is essential in real-world applications like urban planning software, where it helps model water accumulation in terrain or city landscapes to design effective drainage systems. In data visualization dashboards, this pattern can be used to represent resource allocation or capacity limits, such as showing storage usage peaks in cloud infrastructure monitoring tools. Developers implement similar logic in UI components like progress bars or gauges that need to calculate filled areas between boundaries, ensuring accurate visual representations of constrained metrics."
     },
     "objectives": [
@@ -28,7 +28,7 @@
         "phase": "Step 1 of 18",
         "title": "Welcome",
         "content": {
-          "body": "Imagine rainwater trapped between buildings of different heights. How much water can be stored? This classic problem, Trapping Rain Water, teaches us to think in terms of boundaries and remember what we've seen. We'll solve it efficiently using array scanning and lookup structures.",
+          "body": "Imagine rainwater trapped between buildings of different heights. How much water can be stored? This classic lesson, Trapping Rain Water, teaches us to think in terms of boundaries and remember what we've seen. We'll solve it efficiently using array scanning and lookup structures.",
           "title": "Welcome"
         }
       },
@@ -365,7 +365,7 @@
         "phase": "Step 18 of 18",
         "title": "Done",
         "content": {
-          "body": "You've successfully implemented the Trapping Rain Water solution! Remember: the key is to track the maximum heights from both sides as you go, using two pointers to avoid extra passes. This 'remember what we've seen' pattern—storing boundaries in variables—is powerful for many array problems. Keep practicing this mental model!",
+          "body": "You've successfully implemented the Trapping Rain Water solution! Remember: the key is to track the maximum heights from both sides as you go, using two pointers to avoid extra passes. This 'remember what we've seen' pattern—storing boundaries in variables—is powerful for many array lessons. Keep practicing this mental model!",
           "title": "Done"
         }
       }

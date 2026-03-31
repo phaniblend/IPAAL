@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-ts-65",
     "track": "ts",
-    "problemNum": 65,
+    "lessonNum": 65,
     "title": "Implement TupleToUnion type",
     "shortName": "P65",
     "intro": {

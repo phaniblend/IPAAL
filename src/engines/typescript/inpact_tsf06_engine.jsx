@@ -253,7 +253,7 @@ const sideItems = [
 export default createINPACTEngine({
   NODES,
   sideItems,
-  problemNum: "F06",
+  lessonNum: "F06",
   title: "Utility Types",
   shortName: "TS — UTILITY TYPES",
 });

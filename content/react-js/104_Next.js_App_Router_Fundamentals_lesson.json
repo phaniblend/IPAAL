@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-react-js-104",
     "track": "react-js",
-    "problemNum": 104,
+    "lessonNum": 104,
     "title": "Next.js App Router Fundamentals",
     "shortName": "P104",
     "intro": {

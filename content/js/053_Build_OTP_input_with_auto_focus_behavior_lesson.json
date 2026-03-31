@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-js-53",
     "track": "js",
-    "problemNum": 53,
+    "lessonNum": 53,
     "title": "Build OTP input with auto focus behavior",
     "shortName": "P53",
     "intro": {

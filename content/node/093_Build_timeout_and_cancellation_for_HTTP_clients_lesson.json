@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-node-93",
     "track": "node",
-    "problemNum": 93,
+    "lessonNum": 93,
     "title": "Build timeout and cancellation for HTTP clients",
     "shortName": "P93",
     "intro": {

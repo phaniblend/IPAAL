@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-ts-70",
     "track": "ts",
-    "problemNum": 70,
+    "lessonNum": 70,
     "title": "Implement KeysMatching type",
     "shortName": "P70",
     "intro": {
@@ -85,7 +85,7 @@
         "id": "step3",
         "type": "question",
         "phase": "Step 3 of 10",
-        "title": "Understand the KeysMatching type problem",
+        "title": "Understand the KeysMatching type lesson",
         "instruction": "Add a comment below the interface explaining what KeysMatching should do: extract keys whose values match a given type.",
         "hint": "Write a single-line comment starting with // that describes the purpose of KeysMatching.",
         "analogousExample": "// This function filters an array to keep only numbers\nfunction filterNumbers(arr: any[]) {\n  return arr.filter(item => typeof item === 'number');\n}",
@@ -340,7 +340,7 @@
         "id": "step2"
       },
       {
-        "label": "Understand the KeysMatching type problem",
+        "label": "Understand the KeysMatching type lesson",
         "id": "step3"
       },
       {

@@ -3,20 +3,20 @@
   "config": {
     "lessonId": "ai-algorithms-44",
     "track": "algorithms",
-    "problemNum": 44,
+    "lessonNum": 44,
     "title": "Next Greater Element",
     "shortName": "P44",
     "intro": {
       "tag": "LESSON #44",
       "title": "Next Greater Element",
-      "body": "In this lesson, you will build a function that finds the 'next greater element' for each element in an array. The next greater element is the first larger number that appears to the right of a given element. You will learn to implement this using a stack data structure, which helps efficiently track elements as you iterate through the array. The main technologies involved are JavaScript arrays, loops, and conditional logic. By the end, you'll understand how to solve this common algorithmic problem step by step.",
+      "body": "In this lesson, you will build a function that finds the 'next greater element' for each element in an array. The next greater element is the first larger number that appears to the right of a given element. You will learn to implement this using a stack data structure, which helps efficiently track elements as you iterate through the array. The main technologies involved are JavaScript arrays, loops, and conditional logic. By the end, you'll understand how to solve this common algorithmic lesson step by step.",
       "usecase": "The Next Greater Element algorithm is essential in e-commerce platforms where you need to display 'next higher price' suggestions to users browsing products. For example, when viewing a $50 item, the system can instantly show the next available product priced at $55 without sorting the entire catalog. This pattern powers stock trading dashboards that identify the next higher bid price in real-time order books, and appears in timeline interfaces where you need to find the next scheduled event after a given time. Developers implement this to create responsive filtering systems that efficiently navigate through sorted data like price ranges, time slots, or priority queues."
     },
     "objectives": [
       "Implement a brute-force solution to find the next greater element for each element in an array",
       "Construct a stack-based algorithm to optimize the next greater element search",
       "Initialize and manipulate a stack data structure to track elements while traversing the array",
-      "Apply the next greater element algorithm to solve problems with integer arrays",
+      "Apply the next greater element algorithm to solve lessons with integer arrays",
       "Configure the algorithm to handle edge cases like duplicate values and descending sequences",
       "Integrate the next greater element logic into a complete JavaScript function",
       "Update the algorithm to return appropriate results when no greater element exists"
@@ -310,7 +310,7 @@
         "phase": "Step 17 of 17",
         "title": "Done",
         "content": {
-          "body": "Congratulations! You've implemented the Next Greater Element algorithm using a stack and the 'remember what we've seen' approach. Key takeaways:\n1. We store indices in the stack as keys to track unresolved elements, and values in the result array.\n2. We check the stack when processing each element to resolve previous elements, and add the current index to the stack afterward.\n3. This single-pass method is efficient (O(n)) and avoids the quadratic time of brute force.\nRemember this pattern—it's useful for many array problems where you need to find next/previous greater/smaller elements.",
+          "body": "Congratulations! You've implemented the Next Greater Element algorithm using a stack and the 'remember what we've seen' approach. Key takeaways:\n1. We store indices in the stack as keys to track unresolved elements, and values in the result array.\n2. We check the stack when processing each element to resolve previous elements, and add the current index to the stack afterward.\n3. This single-pass method is efficient (O(n)) and avoids the quadratic time of brute force.\nRemember this pattern—it's useful for many array lessons where you need to find next/previous greater/smaller elements.",
           "title": "Done"
         }
       }

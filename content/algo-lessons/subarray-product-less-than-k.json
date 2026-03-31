@@ -10,18 +10,18 @@
       "stepId": "title",
       "mentorSays": "At the end of this lesson, you will be able to:\n\n1. Understand what it means to count subarrays based on product constraints\n2. Use a variable-size sliding window correctly\n3. Explain why shrinking the window restores validity when product >= k\n4. Count all valid subarrays ending at each position efficiently\n5. Implement the solution step by step in your chosen language",
       "action": "continue",
-      "next": "problem-illustration"
+      "next": "lesson-illustration"
     },
     {
-      "stepId": "problem-illustration",
-      "mentorSays": "Perfect! Now let's understand what the Subarray Product Less Than K problem is asking.\n\n**Problem Definition:**\nGiven an array of positive integers `nums` and an integer `k`, return the number of contiguous subarrays where the product of all the elements in the subarray is strictly less than `k`.\n\n**Key Observations:**\n- All numbers are positive (this is crucial!)\n- Subarrays must be contiguous\n- We're counting, not finding the maximum\n- Product grows when we expand the window (since all numbers are positive)\n\n**Example 1:** nums = [10, 5, 2, 6], k = 100\n\nWe need to count all contiguous subarrays where product < 100.\n\nLet's list all valid subarrays:\n- [10] → product = 10 < 100 ✓\n- [5] → product = 5 < 100 ✓\n- [2] → product = 2 < 100 ✓\n- [6] → product = 6 < 100 ✓\n- [10, 5] → product = 50 < 100 ✓\n- [5, 2] → product = 10 < 100 ✓\n- [2, 6] → product = 12 < 100 ✓\n- [5, 2, 6] → product = 60 < 100 ✓\n- [10, 5, 2] → product = 100 ❌ (not < 100)\n- [10, 5, 2, 6] → product = 600 ❌ (not < 100)\n\nTotal: 8 valid subarrays\n\n**Example 2:** nums = [1, 2, 3], k = 0\n\nSince all numbers are positive, no product can be < 0.\nAnswer: 0\n\n**Step-by-step trace for Example 1:**\n\nnums = [10, 5, 2, 6], k = 100\n\nWe'll use a sliding window approach:\n- **right = 0**: [10], product = 10 < 100 ✓\n  - Valid subarrays ending at 0: [10] → count = 1\n- **right = 1**: [10, 5], product = 50 < 100 ✓\n  - Valid subarrays ending at 1: [5], [10, 5] → count = 2\n- **right = 2**: [10, 5, 2], product = 100 ❌ (not < 100)\n  - Shrink: remove 10, [5, 2], product = 10 < 100 ✓\n  - Valid subarrays ending at 2: [2], [5, 2] → count = 2\n- **right = 3**: [5, 2, 6], product = 60 < 100 ✓\n  - Valid subarrays ending at 3: [6], [2, 6], [5, 2, 6] → count = 3\n\nTotal: 1 + 2 + 2 + 3 = 8 ✓\n\n**What makes this tricky:**\n1. Understanding that for each valid window ending at `right`, the number of valid subarrays is `right - left + 1`\n2. When product >= k, we must shrink from the left until product < k\n3. Since all numbers are positive, product only increases when expanding\n4. Edge case: k <= 1 means no valid subarrays (since all products are >= 1)\n\n**Common pitfalls:**\n- Trying to count subarrays starting at each position (inefficient)\n- Not understanding why `right - left + 1` gives the count of valid subarrays ending at `right`\n- Forgetting to handle the edge case where k <= 1\n- Using prefix products with division (can cause precision issues)",
+      "stepId": "lesson-illustration",
+      "mentorSays": "Perfect! Now let's understand what the Subarray Product Less Than K lesson is asking.\n\n**Lesson Definition:**\nGiven an array of positive integers `nums` and an integer `k`, return the number of contiguous subarrays where the product of all the elements in the subarray is strictly less than `k`.\n\n**Key Observations:**\n- All numbers are positive (this is crucial!)\n- Subarrays must be contiguous\n- We're counting, not finding the maximum\n- Product grows when we expand the window (since all numbers are positive)\n\n**Example 1:** nums = [10, 5, 2, 6], k = 100\n\nWe need to count all contiguous subarrays where product < 100.\n\nLet's list all valid subarrays:\n- [10] → product = 10 < 100 ✓\n- [5] → product = 5 < 100 ✓\n- [2] → product = 2 < 100 ✓\n- [6] → product = 6 < 100 ✓\n- [10, 5] → product = 50 < 100 ✓\n- [5, 2] → product = 10 < 100 ✓\n- [2, 6] → product = 12 < 100 ✓\n- [5, 2, 6] → product = 60 < 100 ✓\n- [10, 5, 2] → product = 100 ❌ (not < 100)\n- [10, 5, 2, 6] → product = 600 ❌ (not < 100)\n\nTotal: 8 valid subarrays\n\n**Example 2:** nums = [1, 2, 3], k = 0\n\nSince all numbers are positive, no product can be < 0.\nAnswer: 0\n\n**Step-by-step trace for Example 1:**\n\nnums = [10, 5, 2, 6], k = 100\n\nWe'll use a sliding window approach:\n- **right = 0**: [10], product = 10 < 100 ✓\n  - Valid subarrays ending at 0: [10] → count = 1\n- **right = 1**: [10, 5], product = 50 < 100 ✓\n  - Valid subarrays ending at 1: [5], [10, 5] → count = 2\n- **right = 2**: [10, 5, 2], product = 100 ❌ (not < 100)\n  - Shrink: remove 10, [5, 2], product = 10 < 100 ✓\n  - Valid subarrays ending at 2: [2], [5, 2] → count = 2\n- **right = 3**: [5, 2, 6], product = 60 < 100 ✓\n  - Valid subarrays ending at 3: [6], [2, 6], [5, 2, 6] → count = 3\n\nTotal: 1 + 2 + 2 + 3 = 8 ✓\n\n**What makes this tricky:**\n1. Understanding that for each valid window ending at `right`, the number of valid subarrays is `right - left + 1`\n2. When product >= k, we must shrink from the left until product < k\n3. Since all numbers are positive, product only increases when expanding\n4. Edge case: k <= 1 means no valid subarrays (since all products are >= 1)\n\n**Common pitfalls:**\n- Trying to count subarrays starting at each position (inefficient)\n- Not understanding why `right - left + 1` gives the count of valid subarrays ending at `right`\n- Forgetting to handle the edge case where k <= 1\n- Using prefix products with division (can cause precision issues)",
       "example": "Example 1:\nnums = [10, 5, 2, 6], k = 100\n\nValid subarrays:\n[10] → 10 < 100 ✓\n[5] → 5 < 100 ✓\n[2] → 2 < 100 ✓\n[6] → 6 < 100 ✓\n[10,5] → 50 < 100 ✓\n[5,2] → 10 < 100 ✓\n[2,6] → 12 < 100 ✓\n[5,2,6] → 60 < 100 ✓\n\nTotal: 8\n\nExample 2:\nnums = [1, 2, 3], k = 0\n\nAll products are positive, none < 0\nAnswer: 0",
       "action": "continue",
       "next": "thinking-challenge"
     },
     {
       "stepId": "thinking-challenge",
-      "mentorSays": "Now that you understand what the problem wants, here's the real question:\n\nHow would YOU count all subarrays with product < k?\n\nThink about it for a moment. What approach feels natural to you?",
+      "mentorSays": "Now that you understand what the lesson wants, here's the real question:\n\nHow would YOU count all subarrays with product < k?\n\nThink about it for a moment. What approach feels natural to you?",
       "choices": [
         {
           "label": "Check every subarray using nested loops",
@@ -45,7 +45,7 @@
     },
     {
       "stepId": "explore-prefix-products",
-      "mentorSays": "Great thinking! Prefix products can help calculate subarray products quickly.\n\nFor nums = [10, 5, 2, 6]:\nPrefix products: [1, 10, 50, 100, 600]\n\nTo get product of [5, 2] (indices 1-2): prefix[3] / prefix[1] = 100 / 10 = 10 ✓\n\nThis works, but there are issues:\n- Division can cause precision problems with floating-point numbers\n- If we had zeros (though this problem guarantees positive numbers), division would break\n- We still need to check all O(n²) subarrays\n\nThere's a cleaner O(n) approach using a sliding window. Would you like to learn that?",
+      "mentorSays": "Great thinking! Prefix products can help calculate subarray products quickly.\n\nFor nums = [10, 5, 2, 6]:\nPrefix products: [1, 10, 50, 100, 600]\n\nTo get product of [5, 2] (indices 1-2): prefix[3] / prefix[1] = 100 / 10 = 10 ✓\n\nThis works, but there are issues:\n- Division can cause precision lessons with floating-point numbers\n- If we had zeros (though this lesson guarantees positive numbers), division would break\n- We still need to check all O(n²) subarrays\n\nThere's a cleaner O(n) approach using a sliding window. Would you like to learn that?",
       "action": "continue",
       "next": "explore-sliding-window"
     },
@@ -146,7 +146,7 @@
     },
     {
       "stepId": "array-check-js",
-      "mentorSays": "To solve this problem, we'll need to work with arrays. Do you know what an array is in JavaScript?",
+      "mentorSays": "To solve this lesson, we'll need to work with arrays. Do you know what an array is in JavaScript?",
       "choices": [
         {
           "label": "Yes, I know arrays",
@@ -167,7 +167,7 @@
     },
     {
       "stepId": "loop-check-js",
-      "mentorSays": "To solve this problem, we'll need to use loops. Do you know what a loop is in JavaScript?",
+      "mentorSays": "To solve this lesson, we'll need to use loops. Do you know what a loop is in JavaScript?",
       "choices": [
         {
           "label": "Yes, I know loops",
@@ -314,7 +314,7 @@
     },
     {
       "stepId": "array-check-python",
-      "mentorSays": "To solve this problem, we'll need to work with lists (Python's version of arrays). Do you know what a list is in Python?",
+      "mentorSays": "To solve this lesson, we'll need to work with lists (Python's version of arrays). Do you know what a list is in Python?",
       "choices": [
         {
           "label": "Yes, I know lists",
@@ -335,7 +335,7 @@
     },
     {
       "stepId": "loop-check-python",
-      "mentorSays": "To solve this problem, we'll need to use loops. Do you know what a loop is in Python?",
+      "mentorSays": "To solve this lesson, we'll need to use loops. Do you know what a loop is in Python?",
       "choices": [
         {
           "label": "Yes, I know loops",
@@ -482,7 +482,7 @@
     },
     {
       "stepId": "array-check-java",
-      "mentorSays": "To solve this problem, we'll need to work with arrays. Do you know what an array is in Java?",
+      "mentorSays": "To solve this lesson, we'll need to work with arrays. Do you know what an array is in Java?",
       "choices": [
         {
           "label": "Yes, I know arrays",
@@ -503,7 +503,7 @@
     },
     {
       "stepId": "loop-check-java",
-      "mentorSays": "To solve this problem, we'll need to use loops. Do you know what a loop is in Java?",
+      "mentorSays": "To solve this lesson, we'll need to use loops. Do you know what a loop is in Java?",
       "choices": [
         {
           "label": "Yes, I know loops",
@@ -650,7 +650,7 @@
     },
     {
       "stepId": "array-check-cpp",
-      "mentorSays": "To solve this problem, we'll need to work with vectors (C++'s version of arrays). Do you know what a vector is in C++?",
+      "mentorSays": "To solve this lesson, we'll need to work with vectors (C++'s version of arrays). Do you know what a vector is in C++?",
       "choices": [
         {
           "label": "Yes, I know vectors",
@@ -671,7 +671,7 @@
     },
     {
       "stepId": "loop-check-cpp",
-      "mentorSays": "To solve this problem, we'll need to use loops. Do you know what a loop is in C++?",
+      "mentorSays": "To solve this lesson, we'll need to use loops. Do you know what a loop is in C++?",
       "choices": [
         {
           "label": "Yes, I know loops",
@@ -818,7 +818,7 @@
     },
     {
       "stepId": "array-check-ts",
-      "mentorSays": "To solve this problem, we'll need to work with arrays. Do you know what an array is in TypeScript?",
+      "mentorSays": "To solve this lesson, we'll need to work with arrays. Do you know what an array is in TypeScript?",
       "choices": [
         {
           "label": "Yes, I know arrays",
@@ -839,7 +839,7 @@
     },
     {
       "stepId": "loop-check-ts",
-      "mentorSays": "To solve this problem, we'll need to use loops. Do you know what a loop is in TypeScript?",
+      "mentorSays": "To solve this lesson, we'll need to use loops. Do you know what a loop is in TypeScript?",
       "choices": [
         {
           "label": "Yes, I know loops",
@@ -923,7 +923,7 @@
     },
     {
       "stepId": "final",
-      "mentorSays": "🎉 Well done! You've successfully implemented the Subarray Product Less Than K solution!\n\n**Time Complexity:** O(n)\n- We iterate through the array once with the right pointer\n- Each element is added and removed from the window at most once\n- Even though we have a nested while loop, each element is processed at most twice (once when added, once when removed)\n\n**Space Complexity:** O(1)\n- We only use a constant amount of extra space (product, left, count variables)\n- No additional data structures are needed\n\n**Key Takeaways:**\n1. **Positive numbers enable sliding window**: Since all numbers are positive, product only increases when expanding, making the sliding window technique perfect\n2. **Shrinking restores validity**: When product >= k, shrinking from the left will eventually make product < k (since we're dividing by positive numbers)\n3. **Count by window size**: For each valid window ending at `right`, the number of valid subarrays is `right - left + 1`\n4. **Edge case handling**: k <= 1 means no valid subarrays (since all products are >= 1)\n5. **Variable-size window**: Unlike fixed-size sliding windows, this problem requires a variable-size window that shrinks when needed\n\n**Related Practice Problems:**\n- Minimum Size Subarray Sum (LeetCode #209)\n- Fruit Into Baskets (LeetCode #904)\n- Longest Substring with At Most K Distinct Characters (LeetCode #340)\n\nKeep practicing sliding window problems - they're a powerful technique for array and string problems!",
+      "mentorSays": "🎉 Well done! You've successfully implemented the Subarray Product Less Than K solution!\n\n**Time Complexity:** O(n)\n- We iterate through the array once with the right pointer\n- Each element is added and removed from the window at most once\n- Even though we have a nested while loop, each element is processed at most twice (once when added, once when removed)\n\n**Space Complexity:** O(1)\n- We only use a constant amount of extra space (product, left, count variables)\n- No additional data structures are needed\n\n**Key Takeaways:**\n1. **Positive numbers enable sliding window**: Since all numbers are positive, product only increases when expanding, making the sliding window technique perfect\n2. **Shrinking restores validity**: When product >= k, shrinking from the left will eventually make product < k (since we're dividing by positive numbers)\n3. **Count by window size**: For each valid window ending at `right`, the number of valid subarrays is `right - left + 1`\n4. **Edge case handling**: k <= 1 means no valid subarrays (since all products are >= 1)\n5. **Variable-size window**: Unlike fixed-size sliding windows, this lesson requires a variable-size window that shrinks when needed\n\n**Related Practice Lessons:**\n- Minimum Size Subarray Sum (LeetCode #209)\n- Fruit Into Baskets (LeetCode #904)\n- Longest Substring with At Most K Distinct Characters (LeetCode #340)\n\nKeep practicing sliding window lessons - they're a powerful technique for array and string lessons!",
       "action": "continue"
     }
   ]

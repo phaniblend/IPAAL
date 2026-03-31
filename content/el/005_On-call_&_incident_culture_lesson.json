@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-el-05",
     "track": "el",
-    "problemNum": 5,
+    "lessonNum": 5,
     "title": "On-call & incident culture",
     "shortName": "P05",
     "intro": {

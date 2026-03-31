@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-pe-12",
     "track": "pe",
-    "problemNum": 12,
+    "lessonNum": 12,
     "title": "Observability at scale",
     "shortName": "P12",
     "intro": {

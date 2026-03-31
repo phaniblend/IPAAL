@@ -10,10 +10,10 @@
       "stepId": "title",
       "mentorSays": "At the end of this lesson, you will be able to:\n\n1. Understand how quick sort works using divide-and-conquer\n2. Select a pivot and partition the array\n3. Recursively sort the partitions\n4. Implement quick sort step by step in your chosen language",
       "action": "continue",
-      "next": "problem-illustration"
+      "next": "lesson-illustration"
     },
     {
-      "stepId": "problem-illustration",
+      "stepId": "lesson-illustration",
       "mentorSays": "Perfect! Now let's understand what Quick Sort does.\n\nImagine you have an unsorted array: [5, 2, 8, 1, 9, 3]\n\nYour task: Sort it in ascending order (smallest to largest).\n\nQuick sort uses a \"divide-and-conquer\" strategy:\n1. **Choose a pivot**: Pick an element (we'll use the last element)\n2. **Partition**: Rearrange the array so all elements smaller than pivot are on the left, and all elements larger are on the right\n3. **Recurse**: Recursively sort the left and right partitions\n\nLet's trace through the algorithm:\n\n**Initial**: [5, 2, 8, 1, 9, 3]\n- Pivot: 3 (last element)\n- Partition: Move elements < 3 to left, > 3 to right\n- After partition: [2, 1, 3, 5, 8, 9] (pivot at correct position)\n\n**Sort left partition [2, 1]**:\n- Pivot: 1 (last element)\n- Partition: [1, 2] (pivot at correct position)\n\n**Sort right partition [5, 8, 9]**:\n- Pivot: 9 (last element)\n- Partition: [5, 8, 9] (already in order)\n\n**Final**: [1, 2, 3, 5, 8, 9] (sorted!)\n\nThe key insight: after partitioning, the pivot is in its final sorted position!",
       "example": "nums = [5, 2, 8, 1, 9, 3]\n\nStep 1: Pivot = 3, Partition → [2, 1, 3, 5, 8, 9]\nStep 2: Sort left [2, 1] → Pivot = 1 → [1, 2]\nStep 3: Sort right [5, 8, 9] → Already sorted\n\nFinal: [1, 2, 3, 5, 8, 9]",
       "action": "continue",

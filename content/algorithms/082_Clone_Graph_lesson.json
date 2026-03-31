@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-algorithms-82",
     "track": "algorithms",
-    "problemNum": 82,
+    "lessonNum": 82,
     "title": "Clone Graph",
     "shortName": "P82",
     "intro": {
@@ -90,7 +90,7 @@
         "phase": "Step 7 of 17",
         "title": "Key idea: visited tracking",
         "content": {
-          "body": "The core concept for graph problems is marking nodes as 'visited' as soon as we encounter them. This prevents revisiting and ensures we explore each connection exactly once. Think of it like leaving breadcrumbs—once you've copied a node, you don't need to copy it again.",
+          "body": "The core concept for graph lessons is marking nodes as 'visited' as soon as we encounter them. This prevents revisiting and ensures we explore each connection exactly once. Think of it like leaving breadcrumbs—once you've copied a node, you don't need to copy it again.",
           "title": "Key idea: visited tracking",
           "visualMetaphor": "Show visited (colored) vs unvisited (gray) nodes; paths that don't circle back to visited nodes"
         }
@@ -297,7 +297,7 @@
         "phase": "Step 17 of 17",
         "title": "Done",
         "content": {
-          "body": "Congratulations! You've learned how to clone a graph using depth-first search with visited tracking. Remember: 1) Always mark nodes as visited immediately to prevent cycles, 2) The visited map serves both as tracking and original→copy lookup, 3) Recursively copy neighbors to preserve the graph structure. This pattern applies to many graph traversal problems.",
+          "body": "Congratulations! You've learned how to clone a graph using depth-first search with visited tracking. Remember: 1) Always mark nodes as visited immediately to prevent cycles, 2) The visited map serves both as tracking and original→copy lookup, 3) Recursively copy neighbors to preserve the graph structure. This pattern applies to many graph traversal lessons.",
           "title": "Done"
         }
       }

@@ -6,7 +6,7 @@ This doc tracks which tracks/lessons follow the **canonical engine pattern** (se
 
 ## Canonical pattern (short)
 
-- **Engine file**: `src/engines/<track>/inpact_<track><flavor><num>_engine.jsx` → single import from `../inpact_engine_shared`, `NODES`, `sideItems`, `export default createINPACTEngine({ NODES, sideItems, problemNum, title, shortName })`.
+- **Engine file**: `src/engines/<track>/inpact_<track><flavor><num>_engine.jsx` → single import from `../inpact_engine_shared`, `NODES`, `sideItems`, `export default createINPACTEngine({ NODES, sideItems, lessonNum, title, shortName })`.
 - **Index file**: `inpact_<track>_index.js` (or `inpact_<track>f_index.js`) → `export const CURRICULUM = [ { id, shortName, title, why } ]` in same order as engines in App.jsx.
 - **Node types**: `reveal` (intro), `objectives`, `question` (with paal, answer_keywords, seed_code, feedback_*, expected).
 
@@ -35,8 +35,8 @@ Reference engines: `el/inpact_el01_engine.jsx`, `typescript/inpact_tsf01_engine.
 | SD          | sd/           | inpact_sd_index.js       | ✅ sd01–sd15. |
 | PE          | pe/           | inpact_pe_index.js       | ✅ pe01–pe12. |
 | SEC         | sec/          | inpact_sec_index.js      | ✅ sec01–sec06. |
-| React (JS)  | react-js/     | (LandingPage PROBLEM_LIST) | 🔒 **p01, p02 locked** (do not edit). p03–p05 finalized (body + usecase). Rest: apply same rules. |
-| React (TS)  | react-ts/     | (LandingPage PROBLEM_LIST) | ✅ ts01 (Counter) updated to content rules. Rest: apply same. |
+| React (JS)  | react-js/     | (LandingPage LESSON_LIST) | 🔒 **p01, p02 locked** (do not edit). p03–p05 finalized (body + usecase). Rest: apply same rules. |
+| React (TS)  | react-ts/     | (LandingPage LESSON_LIST) | ✅ ts01 (Counter) updated to content rules. Rest: apply same. |
 | Angular     | angular/      | angular_curriculum_index, inpact_angf_index | 🔄 Mix of angular_* and inpact_angf*; align to one naming + pattern. |
 | Vue         | vue/          | inpact_vue_index, inpact_vuef_index | 🔄 Align all to NODES/sideItems/createINPACTEngine. |
 | CSS         | css/          | inpact_css_index.js      | ✅ Uses language/answerShape/getOutputPreview where needed. |

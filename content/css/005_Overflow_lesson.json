@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-css-05",
     "track": "css",
-    "problemNum": 5,
+    "lessonNum": 5,
     "title": "Overflow",
     "shortName": "P05",
     "intro": {

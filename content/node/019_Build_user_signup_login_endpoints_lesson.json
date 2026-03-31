@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-node-19",
     "track": "node",
-    "problemNum": 19,
+    "lessonNum": 19,
     "title": "Build user signup login endpoints",
     "shortName": "P19",
     "intro": {

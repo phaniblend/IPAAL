@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-react-ts-02",
     "track": "react-ts",
-    "problemNum": 2,
+    "lessonNum": 2,
     "title": "Toggle Visibility",
     "shortName": "P02",
     "intro": {

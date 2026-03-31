@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-ts-81",
     "track": "ts",
-    "problemNum": 81,
+    "lessonNum": 81,
     "title": "Build template literal route params type",
     "shortName": "P81",
     "intro": {

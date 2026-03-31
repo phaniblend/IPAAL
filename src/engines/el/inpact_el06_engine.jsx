@@ -8,4 +8,4 @@ const NODES = [
 // Change failure rate: % deploys causing incidents`, feedback_correct: "✅ DORA four; velocity trap = points not outcomes; change failure rate.", feedback_wrong: "DORA metrics; velocity traps; change failure rate.", expected: "Engineering metrics" },
 ];
 const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }];
-export default createINPACTEngine({ NODES, sideItems, problemNum: "EL-06", title: "Engineering metrics", shortName: "EL — METRICS" });
+export default createINPACTEngine({ NODES, sideItems, lessonNum: "EL-06", title: "Engineering metrics", shortName: "EL — METRICS" });

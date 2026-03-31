@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-vue-20",
     "track": "vue",
-    "problemNum": 20,
+    "lessonNum": 20,
     "title": "CSS Modules",
     "shortName": "P20",
     "intro": {

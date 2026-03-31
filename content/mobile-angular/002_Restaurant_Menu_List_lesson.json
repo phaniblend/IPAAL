@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-mobile-angular-02",
     "track": "mobile-angular",
-    "problemNum": 2,
+    "lessonNum": 2,
     "title": "Restaurant Menu List",
     "shortName": "P02",
     "intro": {

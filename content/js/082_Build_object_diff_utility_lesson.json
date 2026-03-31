@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-js-82",
     "track": "js",
-    "problemNum": 82,
+    "lessonNum": 82,
     "title": "Build object diff utility",
     "shortName": "P82",
     "intro": {

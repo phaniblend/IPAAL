@@ -73,7 +73,7 @@ function getOutputPreview(answer) {
 export default createINPACTEngine({
   NODES,
   sideItems,
-  problemNum: 59,
+  lessonNum: 59,
   title: "scroll-margin and scroll-padding",
   shortName: "C59",
   language: "css",

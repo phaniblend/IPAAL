@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-js-03",
     "track": "js",
-    "problemNum": 3,
+    "lessonNum": 3,
     "title": "Promises & Async/Await",
     "shortName": "P03",
     "intro": {

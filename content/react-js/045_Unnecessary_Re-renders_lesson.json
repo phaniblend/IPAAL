@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-react-js-45",
     "track": "react-js",
-    "problemNum": 45,
+    "lessonNum": 45,
     "title": "Unnecessary Re-renders",
     "shortName": "P45",
     "intro": {

@@ -35,7 +35,7 @@ something is slow — not just that it is.`,
       "Optimise images: modern formats, lazy loading, responsive sizing",
       "Eliminate layout shift (CLS) with reserved space and font strategies",
       "Improve INP by moving work off the main thread",
-      "Use the browser's rendering pipeline to explain performance problems",
+      "Use the browser's rendering pipeline to explain performance lessons",
     ],
   },
   {
@@ -476,4 +476,4 @@ const sideItems = [
   { label: "Step 5 — INP & main thread", id: "step5" },
 ];
 
-export default createINPACTEngine({ NODES, sideItems, problemNum: "FE-01", title: "Frontend Performance & Core Web Vitals", shortName: "FE — PERFORMANCE" });
+export default createINPACTEngine({ NODES, sideItems, lessonNum: "FE-01", title: "Frontend Performance & Core Web Vitals", shortName: "FE — PERFORMANCE" });

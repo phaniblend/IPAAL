@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-algorithms-93",
     "track": "algorithms",
-    "problemNum": 93,
+    "lessonNum": 93,
     "title": "Subsets",
     "shortName": "P93",
     "intro": {
@@ -28,7 +28,7 @@
         "phase": "Step 1 of 20",
         "title": "Introduction",
         "content": {
-          "body": "Finding all possible subsets of a set is a classic problem with many applications. Today, we'll learn how to generate all subsets efficiently using a backtracking approach. You'll implement a solution that builds subsets step by step.",
+          "body": "Finding all possible subsets of a set is a classic lesson with many applications. Today, we'll learn how to generate all subsets efficiently using a backtracking approach. You'll implement a solution that builds subsets step by step.",
           "title": "Introduction"
         }
       },
@@ -409,7 +409,7 @@
         "phase": "Step 20 of 20",
         "title": "Done",
         "content": {
-          "body": "Congratulations! You've implemented the subsets algorithm using backtracking. Key takeaways:\n1. Subsets generation is a decision tree problem\n2. Backtracking explores all include/exclude choices\n3. We use a current array to track the path and result to collect all subsets\n4. The time complexity is O(2ⁿ) since we generate 2ⁿ subsets\n5. Remember to create copies when saving subsets to avoid reference issues",
+          "body": "Congratulations! You've implemented the subsets algorithm using backtracking. Key takeaways:\n1. Subsets generation is a decision tree lesson\n2. Backtracking explores all include/exclude choices\n3. We use a current array to track the path and result to collect all subsets\n4. The time complexity is O(2ⁿ) since we generate 2ⁿ subsets\n5. Remember to create copies when saving subsets to avoid reference issues",
           "title": "Done"
         }
       }

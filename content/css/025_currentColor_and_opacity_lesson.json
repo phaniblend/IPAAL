@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-css-25",
     "track": "css",
-    "problemNum": 25,
+    "lessonNum": 25,
     "title": "currentColor and opacity",
     "shortName": "P25",
     "intro": {

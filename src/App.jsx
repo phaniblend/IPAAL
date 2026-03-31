@@ -1,6 +1,6 @@
 import { useState, useEffect, useLayoutEffect, useMemo, useCallback, useRef } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
-import LandingPage, { PROBLEM_LIST, buildAngularLessonList } from './LandingPage'
+import LandingPage, { LESSON_LIST, buildAngularLessonList } from './LandingPage'
 import { getLessonCount } from './trackLessonCounts.js'
 import { MOBILE_ANGULAR_LESSONS } from './mobileAngularLessons.js'
 import { TS_FUNDAMENTALS_CURRICULUM } from './engines/typescript/inpact_tsf_index'
@@ -742,7 +742,7 @@ const ENGINES_TS = [
   INPACTEngineTS122,
 ]
 
-// TypeScript Fundamentals: 10 language-first problems (no React)
+// TypeScript Fundamentals: 10 language-first lessons (no React)
 const ENGINES_TSF = [
   INPACTEngineTSF01,
   INPACTEngineTSF02,
@@ -756,7 +756,7 @@ const ENGINES_TSF = [
   INPACTEngineTSF10,
 ]
 
-// JavaScript Fundamentals: 10 language-first problems (no React)
+// JavaScript Fundamentals: 10 language-first lessons (no React)
 const ENGINES_JSF = [
   INPACTEngineJSF01,
   INPACTEngineJSF02,
@@ -774,7 +774,7 @@ const ENGINES_JSF = [
   INPACTEngineJSF15,
 ]
 
-// Node.js Fundamentals: 15 problems (nodef01–nodef15)
+// Node.js Fundamentals: 15 lessons (nodef01–nodef15)
 const ENGINES_NODE = [
   INPACTEngineNODEF01,
   INPACTEngineNODEF02,
@@ -793,14 +793,14 @@ const ENGINES_NODE = [
   INPACTEngineNODEF15,
 ]
 
-// Express.js: 12 problems
+// Express.js: 12 lessons
 const ENGINES_EXPRESS = [
   INPACTEngineEXPF01, INPACTEngineEXPF02, INPACTEngineEXPF03, INPACTEngineEXPF04,
   INPACTEngineEXPF05, INPACTEngineEXPF06, INPACTEngineEXPF07, INPACTEngineEXPF08,
   INPACTEngineEXPF09, INPACTEngineEXPF10, INPACTEngineEXPF11, INPACTEngineEXPF12,
 ]
 
-// Python: 12 problems
+// Python: 12 lessons
 const ENGINES_PYTHON = [
   INPACTEnginePYF01, INPACTEnginePYF02, INPACTEnginePYF03, INPACTEnginePYF04,
   INPACTEnginePYF05, INPACTEnginePYF06, INPACTEnginePYF07, INPACTEnginePYF08,
@@ -814,7 +814,7 @@ const ENGINES_SEC = [ INPACTEngineSEC01, INPACTEngineSEC02, INPACTEngineSEC03, I
 const ENGINES_EL = [ INPACTEngineEL01, INPACTEngineEL02, INPACTEngineEL03, INPACTEngineEL04, INPACTEngineEL05, INPACTEngineEL06, INPACTEngineEL07, INPACTEngineEL08, INPACTEngineEL09, INPACTEngineEL10 ]
 const ENGINES_FE = [ INPACTEngineFE01, INPACTEngineFE02, INPACTEngineFE03, INPACTEngineFE04, INPACTEngineFE05, INPACTEngineFE06, INPACTEngineFE07, INPACTEngineFE08, INPACTEngineFE09, INPACTEngineFE10 ]
 
-// JS Deep Dive: 13 problems (jsf11, jsb01–06, jsc01–05, jsd01)
+// JS Deep Dive: 13 lessons (jsf11, jsb01–06, jsc01–05, jsd01)
 const ENGINES_JS = [
   INPACTEngineJSF11,
   INPACTEngineJSB01,
@@ -956,7 +956,7 @@ function getEngines(track, lessonListLength = 0) {
   if (track === 'fe') return ENGINES_FE
   if (track === 'react-ts') return ENGINES_TS
   if (track === 'angular') {
-    const angularTotal = getLessonCount('angular', { reactListLength: PROBLEM_LIST.length })
+    const angularTotal = getLessonCount('angular', { reactListLength: LESSON_LIST.length })
     const staticAngularEngines = 14 + ENGINES_ANGULAR_CURRICULUM.length
     const pad = Math.max(0, angularTotal - staticAngularEngines)
     return [
@@ -983,7 +983,7 @@ function getEngines(track, lessonListLength = 0) {
   return ENGINES
 }
 
-function getProblemList(track) {
+function getLessonList(track) {
   if (track === 'js') {
     const jsFund = JS_FUNDAMENTALS_CURRICULUM.map((c) => ({ title: c.title, shortName: c.shortName, why: c.why }))
     return [...jsFund, ...JS_INTERVIEW_CURRICULUM]
@@ -1011,7 +1011,7 @@ function getProblemList(track) {
     return CSS_CURRICULUM.map((c) => ({ title: c.title, shortName: c.shortName }))
   }
   if (track === 'angular' || track === 'vue') {
-    return null // same 100 problem titles as React (PROBLEM_LIST in LandingPage)
+    return null // same 100 lesson titles as React (LESSON_LIST in LandingPage)
   }
   if (track === 'mobile-angular') {
     return MOBILE_ANGULAR_LESSONS.map((c) => ({ title: c.title, shortName: c.shortName }))
@@ -1019,7 +1019,7 @@ function getProblemList(track) {
   if (ALGO_AI_TRACKS.includes(track)) {
     return ALGO_AI_NAMES.map((title) => ({ title }))
   }
-  return null // react-js and react-ts use PROBLEM_LIST from LandingPage (100 items)
+  return null // react-js and react-ts use LESSON_LIST from LandingPage (100 items)
 }
 
 import { AI_LESSONS_CONFIG } from './ai-lessons/config.js'
@@ -1038,10 +1038,9 @@ import {
   recordLessonAccess,
   deductLessonPayment,
   getBalanceCents,
-  PRICE_PER_LESSON_CENTS,
+  getLessonPriceCents,
   TOTAL_FREE_LESSONS,
   MAX_FREE_UNREGISTERED,
-  FREE_LESSONS_AFTER_REGISTER,
   getStoredUser,
   logout,
   getRegisterDismissCount,
@@ -1071,7 +1070,9 @@ import {
   recordLessonStart,
   recordLessonComplete,
   isSupabaseConfigured,
+  isSupabaseAuthUserId,
 } from './auth/supabase.js'
+import { signOutFirebase } from './auth/firebase.js'
 import { setRegistered as setRegisteredLocal } from './auth/lessonAccess.js'
 import { LEARNER_FOCUS_TRACK } from './auth/learnerFocus.js'
 
@@ -1081,13 +1082,13 @@ export default function App() {
 
   const [track, setTrack] = useState(LEARNER_FOCUS_TRACK)
   const [lessonTrack, setLessonTrack] = useState(null) // track locked when lesson is opened (so React TS lesson never uses react-js)
-  const [problemIndex, setProblemIndex] = useState(null) // null = landing, 0-based index = problem
+  const [lessonIndex, setLessonIndex] = useState(null) // null = landing, 0-based index = lesson
   const [selectedLessonItem, setSelectedLessonItem] = useState(null) // { title, shortName?, why? } when a card is clicked
   const [useAILessonFailed, setUseAILessonFailed] = useState(false) // fallback to local engine when AI path fails
   const [showRegisterModal, setShowRegisterModal] = useState(false)
   /** Supabase emailed a recovery link; user must set a new password before normal sync. */
   const [passwordRecoveryActive, setPasswordRecoveryActive] = useState(false)
-  /** 'soft' = dismissible (lessons 6–8); 'hard' = must register (9th lesson). */
+  /** 'soft' = dismissible; 'hard' = must register; 'startFree' = first-run CTA (Google / email / guest). */
   const [registerModalVariant, setRegisterModalVariant] = useState('soft')
   const [showAddFundsModal, setShowAddFundsModal] = useState(false)
   const [pendingLesson, setPendingLesson] = useState(null) // { track, index, item } when gated
@@ -1122,8 +1123,8 @@ export default function App() {
     38 + (showWelcomeBackBanner ? 44 : 0) + (showRegBonusToast ? 44 : 0)
   /** Track + list index for the open lesson (for Supabase progress). */
   const activeLessonTrack = useMemo(
-    () => (problemIndex != null && lessonTrack != null ? lessonTrack : track),
-    [problemIndex, lessonTrack, track]
+    () => (lessonIndex != null && lessonTrack != null ? lessonTrack : track),
+    [lessonIndex, lessonTrack, track]
   )
   const lessonOpenedAtRef = useRef(null)
 
@@ -1134,7 +1135,7 @@ export default function App() {
       const t = trackOverride ?? track
       setLessonTrack(t)
       recordLessonAccess(t, idx)
-      setProblemIndex(idx)
+      setLessonIndex(idx)
       setSelectedLessonItem(item ?? null)
       setUseAILessonFailed(false)
       setPendingLesson(null)
@@ -1147,7 +1148,7 @@ export default function App() {
     setPendingLesson(null)
     clearStoredRedirectPath()
     setRegisterModalVariant('soft')
-    setProblemIndex(null)
+    setLessonIndex(null)
     setSelectedLessonItem(null)
     setLessonTrack(null)
     setUseAILessonFailed(false)
@@ -1233,7 +1234,7 @@ export default function App() {
       return
     }
     const p = peekPendingLesson()
-    if (problemIndex !== null) {
+    if (lessonIndex !== null) {
       if (p) clearPendingLesson()
       return
     }
@@ -1244,7 +1245,7 @@ export default function App() {
     }
     setLessonTrack(p.track)
     recordLessonAccess(p.track, p.index)
-    setProblemIndex(p.index)
+    setLessonIndex(p.index)
     setSelectedLessonItem(p.item ?? null)
     setUseAILessonFailed(false)
     setPendingLesson(null)
@@ -1252,7 +1253,7 @@ export default function App() {
     setShowRegisterModal(false)
     clearPendingLesson()
     navigate(buildLessonPath(p.track, p.index), { replace: true })
-  }, [user?.id, problemIndex, location.pathname, navigate])
+  }, [user?.id, lessonIndex, location.pathname, navigate])
 
   useEffect(() => {
     if (!authSessionReady) return
@@ -1266,12 +1267,12 @@ export default function App() {
     setShowCinematic(false)
     const { track: t, index: i } = parsed
     setTrack(t)
-    const list = getProblemList(t)
+    const list = getLessonList(t)
     const item =
       list?.[i] ??
       (t === 'angular' || t === 'vue' || t === 'react-js' || t === 'react-ts'
-        ? PROBLEM_LIST[i] != null
-          ? { title: PROBLEM_LIST[i] }
+        ? LESSON_LIST[i] != null
+          ? { title: LESSON_LIST[i] }
           : null
         : null)
 
@@ -1305,7 +1306,7 @@ export default function App() {
       return
     }
     if (mustPayToAccess(t, i, opts)) {
-      if (getBalanceCents() >= PRICE_PER_LESSON_CENTS) {
+      if (getBalanceCents() >= getLessonPriceCents()) {
         deductLessonPayment()
         openLesson(i, item, t)
         return
@@ -1329,17 +1330,17 @@ export default function App() {
   useEffect(() => {
     if (location.pathname !== '/dashboard') return
     setShowCinematic(false)
-    setProblemIndex(null)
+    setLessonIndex(null)
     setSelectedLessonItem(null)
     setLessonTrack(null)
     setTrack(LEARNER_FOCUS_TRACK)
   }, [location.pathname])
 
   useEffect(() => {
-    if (problemIndex !== null) return
+    if (lessonIndex !== null) return
     if (parseLessonPath(location.pathname)) return
     setTrack(LEARNER_FOCUS_TRACK)
-  }, [problemIndex, location.pathname])
+  }, [lessonIndex, location.pathname])
 
   useEffect(() => {
     if (!user?.id) return undefined
@@ -1351,27 +1352,27 @@ export default function App() {
 
   const handleLessonComplete = useCallback(() => {
     const uid = user?.id
-    if (!uid || !isSupabaseConfigured || problemIndex == null) return
+    if (!uid || !isSupabaseConfigured || !isSupabaseAuthUserId(uid) || lessonIndex == null) return
     const opened = lessonOpenedAtRef.current
     const sec = opened ? Math.max(0, Math.round((Date.now() - opened) / 1000)) : 0
-    void recordLessonComplete(uid, activeLessonTrack, problemIndex, sec)
-  }, [user?.id, problemIndex, activeLessonTrack, isSupabaseConfigured])
+    void recordLessonComplete(uid, activeLessonTrack, lessonIndex, sec)
+  }, [user?.id, lessonIndex, activeLessonTrack, isSupabaseConfigured])
 
   useEffect(() => {
-    if (!user?.id || !isSupabaseConfigured || problemIndex == null) return
+    if (!user?.id || !isSupabaseConfigured || !isSupabaseAuthUserId(user.id) || lessonIndex == null) return
     const t = activeLessonTrack
-    const idx = problemIndex
+    const idx = lessonIndex
     const list =
       t === 'angular'
         ? buildAngularLessonList()
-        : getProblemList(t) ?? PROBLEM_LIST.map((title) => ({ title }))
+        : getLessonList(t) ?? LESSON_LIST.map((title) => ({ title }))
     const title = selectedLessonItem?.title ?? list?.[idx]?.title ?? ''
     lessonOpenedAtRef.current = Date.now()
     void recordLessonStart(user.id, t, idx, title)
-  }, [user?.id, problemIndex, activeLessonTrack, selectedLessonItem?.title, isSupabaseConfigured])
+  }, [user?.id, lessonIndex, activeLessonTrack, selectedLessonItem?.title, isSupabaseConfigured])
 
-  const onBackToProblems = () => {
-    setProblemIndex(null)
+  const onBackToLessons = () => {
+    setLessonIndex(null)
     setSelectedLessonItem(null)
     setLessonTrack(null)
     setUseAILessonFailed(false)
@@ -1380,7 +1381,21 @@ export default function App() {
     navigate('/', { replace: true })
   }
 
-  const handleSelectProblem = (i, item, fullList) => {
+  const handleStartFree = (i, item) => {
+    const t = LEARNER_FOCUS_TRACK
+    if (user?.id) {
+      handleSelectLesson(i, item)
+      return
+    }
+    setPendingLesson({ track: t, index: i, item })
+    savePendingLesson(t, i, item)
+    setStoredRedirectPath(buildLessonPath(t, i))
+    setRegisterModalVariant('startFree')
+    setShowRegisterModal(true)
+    navigate('/register', { replace: true })
+  }
+
+  const handleSelectLesson = (i, item) => {
     const t = LEARNER_FOCUS_TRACK
     if (mustLoginToUnlockPastAnonymousLimit(t, i, lessonGateOpts)) {
       setPendingLesson({ track: t, index: i, item })
@@ -1410,7 +1425,7 @@ export default function App() {
       return
     }
     if (mustPayToAccess(t, i, lessonGateOpts)) {
-      if (getBalanceCents() >= PRICE_PER_LESSON_CENTS) {
+      if (getBalanceCents() >= getLessonPriceCents()) {
         deductLessonPayment()
         openLesson(i, item, t)
         return
@@ -1431,9 +1446,14 @@ export default function App() {
     const pl = pendingLesson
     clearPendingLesson()
     setPendingLesson(null)
-    if (meta?.flow === 'register') {
-      setWelcomeBonusMessage(`You have ${FREE_LESSONS_AFTER_REGISTER} free lessons left after registration!`)
-      window.setTimeout(() => setWelcomeBonusMessage(''), 12000)
+    if (meta?.flow === 'register' || meta?.flow === 'google') {
+      const r = getFreeLessonsRemaining({ loggedIn: true })
+      if (r != null && r > 0) {
+        setWelcomeBonusMessage(
+          `You have ${r} included lesson${r === 1 ? '' : 's'} left before paid lessons.`
+        )
+        window.setTimeout(() => setWelcomeBonusMessage(''), 12000)
+      }
     }
     if (pl && pl.track === LEARNER_FOCUS_TRACK) openLesson(pl.index, pl.item, pl.track)
   }
@@ -1444,12 +1464,36 @@ export default function App() {
     setRegisterModalVariant('soft')
     const pl = pendingLesson
     clearPendingLesson()
+    setPendingLesson(null)
     if (location.pathname === '/register') navigate('/', { replace: true })
     if (pl && pl.track === LEARNER_FOCUS_TRACK) openLesson(pl.index, pl.item, pl.track)
   }
 
+  const startFreeGuestContinue = () => {
+    setShowRegisterModal(false)
+    setRegisterModalVariant('soft')
+    const pl = pendingLesson
+    clearPendingLesson()
+    setPendingLesson(null)
+    if (location.pathname === '/register') navigate('/', { replace: true })
+    if (pl && pl.track === LEARNER_FOCUS_TRACK) openLesson(pl.index, pl.item, pl.track)
+  }
+
+  const registerModalOnClose = passwordRecoveryActive
+    ? undefined
+    : registerModalVariant === 'soft'
+      ? registerModalDismiss
+      : registerModalVariant === 'startFree'
+        ? startFreeGuestContinue
+        : undefined
+
   const handleLogout = async () => {
     await supabaseSignOut()
+    try {
+      await signOutFirebase()
+    } catch {
+      /* ignore */
+    }
     logout()
     setUser(null)
   }
@@ -1475,7 +1519,7 @@ export default function App() {
 
   const addFundsDone = () => {
     setShowAddFundsModal(false)
-    if (pendingLesson && getBalanceCents() >= PRICE_PER_LESSON_CENTS) {
+    if (pendingLesson && getBalanceCents() >= getLessonPriceCents()) {
       deductLessonPayment()
       openLesson(pendingLesson.index, pendingLesson.item, pendingLesson.track)
     }
@@ -1553,7 +1597,7 @@ export default function App() {
             dismissCount={getRegisterDismissCount()}
             softGateKind={softGateKindForModal}
             onSuccess={registerSuccess}
-            onClose={passwordRecoveryActive ? undefined : registerModalVariant === 'soft' ? registerModalDismiss : undefined}
+            onClose={registerModalOnClose}
             passwordRecovery={passwordRecoveryActive}
             onPasswordRecoveryComplete={() => {
               setPasswordRecoveryActive(false)
@@ -1561,12 +1605,12 @@ export default function App() {
             }}
           />
         )}
-        {showAddFundsModal && <AddFundsModal onDone={addFundsDone} />}
+        {showAddFundsModal && <AddFundsModal user={user} onDone={addFundsDone} />}
       </>
     )
   }
 
-  if (problemIndex === null) {
+  if (lessonIndex === null) {
     if (showCinematic) {
       return (
         <CinematicLanding
@@ -1643,7 +1687,7 @@ export default function App() {
               lineHeight: 1.45,
             }}
           >
-            Welcome back! Log in to access your remaining {FREE_LESSONS_AFTER_REGISTER} free lessons.
+            Welcome back! Log in to continue with any remaining included lessons on this browser.
           </div>
         ) : null}
         {showRegBonusToast ? (
@@ -1670,8 +1714,9 @@ export default function App() {
         <div style={{ paddingTop: `${catalogTopPadding}px` }}>
           <LandingPage
             track={LEARNER_FOCUS_TRACK}
-            onSelectProblem={handleSelectProblem}
-            problemList={getProblemList(LEARNER_FOCUS_TRACK)}
+            onSelectLesson={handleSelectLesson}
+            onStartFree={handleStartFree}
+            lessonList={getLessonList(LEARNER_FOCUS_TRACK)}
             freeLessonsHint={freeLessonsHint}
           />
         </div>
@@ -1682,7 +1727,7 @@ export default function App() {
             dismissCount={getRegisterDismissCount()}
             softGateKind={softGateKindForModal}
             onSuccess={registerSuccess}
-            onClose={passwordRecoveryActive ? undefined : registerModalVariant === 'soft' ? registerModalDismiss : undefined}
+            onClose={registerModalOnClose}
             passwordRecovery={passwordRecoveryActive}
             onPasswordRecoveryComplete={() => {
               setPasswordRecoveryActive(false)
@@ -1690,26 +1735,26 @@ export default function App() {
             }}
           />
         )}
-        {showAddFundsModal && <AddFundsModal onDone={addFundsDone} />}
+        {showAddFundsModal && <AddFundsModal user={user} onDone={addFundsDone} />}
       </>
     )
   }
 
   // When viewing a lesson, use the track that was selected when they opened it (lessonTrack) so React TS never gets react-js content.
-  const effectiveTrack = (problemIndex != null && lessonTrack != null) ? lessonTrack : track
+  const effectiveTrack = (lessonIndex != null && lessonTrack != null) ? lessonTrack : track
   const lessonList =
     effectiveTrack === 'angular'
       ? buildAngularLessonList()
-      : (getProblemList(effectiveTrack) ?? PROBLEM_LIST.map((title) => ({ title })))
+      : (getLessonList(effectiveTrack) ?? LESSON_LIST.map((title) => ({ title })))
   const engines = getEngines(effectiveTrack, lessonList?.length)
-  const Engine = engines[problemIndex]
+  const Engine = engines[lessonIndex]
 
-  const onNextProblem = () => {
-    const next = Math.min(problemIndex + 1, engines.length - 1)
-    if (next === problemIndex) return
+  const onNextLesson = () => {
+    const next = Math.min(lessonIndex + 1, engines.length - 1)
+    if (next === lessonIndex) return
     if (mustLoginToUnlockPastAnonymousLimit(effectiveTrack, next, lessonGateOpts)) {
       const nextItem = lessonList[next] ?? null
-      setProblemIndex(null)
+      setLessonIndex(null)
       setSelectedLessonItem(null)
       setLessonTrack(null)
       setUseAILessonFailed(false)
@@ -1723,7 +1768,7 @@ export default function App() {
     }
     if (mustHardRegisterToAccess(effectiveTrack, next, lessonGateOpts)) {
       const nextItem = lessonList[next] ?? null
-      setProblemIndex(null)
+      setLessonIndex(null)
       setSelectedLessonItem(null)
       setLessonTrack(null)
       setUseAILessonFailed(false)
@@ -1737,7 +1782,7 @@ export default function App() {
     }
     if (mustSoftRegisterToAccess(effectiveTrack, next, lessonGateOpts)) {
       const nextItem = lessonList[next] ?? null
-      setProblemIndex(null)
+      setLessonIndex(null)
       setSelectedLessonItem(null)
       setLessonTrack(null)
       setUseAILessonFailed(false)
@@ -1750,7 +1795,7 @@ export default function App() {
       return
     }
     if (mustPayToAccess(effectiveTrack, next, lessonGateOpts)) {
-      if (getBalanceCents() >= PRICE_PER_LESSON_CENTS) {
+      if (getBalanceCents() >= getLessonPriceCents()) {
         deductLessonPayment()
         openLesson(next, lessonList[next] ?? null)
         return
@@ -1764,8 +1809,8 @@ export default function App() {
     openLesson(next, lessonList[next] ?? null)
   }
   const useAILessons = AI_LESSONS_CONFIG.useAILessons && !useAILessonFailed
-  const lessonTitle = selectedLessonItem?.title ?? lessonList[problemIndex]?.title ?? `Lesson ${problemIndex + 1}`
-  const hasStaticEngine = Boolean(engines[problemIndex])
+  const lessonTitle = selectedLessonItem?.title ?? lessonList[lessonIndex]?.title ?? `Lesson ${lessonIndex + 1}`
+  const hasStaticEngine = Boolean(engines[lessonIndex])
   const useDynamicLesson = effectiveTrack === 'mobile-angular' || ALGO_AI_TRACKS.includes(effectiveTrack) || (useAILessons || !hasStaticEngine)
 
   if (useDynamicLesson) {
@@ -1790,7 +1835,7 @@ export default function App() {
           <div style={{ pointerEvents: 'auto', display: 'flex', alignItems: 'center', gap: '12px' }}>
             <button
               type="button"
-              onClick={onBackToProblems}
+              onClick={onBackToLessons}
               style={{
                 background: 'rgb(5, 37, 67)',
                 border: 'none',
@@ -1863,17 +1908,17 @@ export default function App() {
         <LessonValidationContext.Provider
           value={{
             track: effectiveTrack,
-            lessonIndex: problemIndex,
+            lessonIndex: lessonIndex,
             lessonTitle: lessonTitle ?? '',
-            lessonKey: `${effectiveTrack}:${problemIndex}:${lessonTitle ?? ''}`,
+            lessonKey: `${effectiveTrack}:${lessonIndex}:${lessonTitle ?? ''}`,
           }}
         >
           <DynamicLessonPage
             track={lessonTrack ?? track}
             lessonTitle={lessonTitle}
-            lessonIndex={problemIndex}
-            onBackToProblems={onBackToProblems}
-            onNextProblem={onNextProblem}
+            lessonIndex={lessonIndex}
+            onBackToLessons={onBackToLessons}
+            onNextLesson={onNextLesson}
             onLessonComplete={user?.id ? handleLessonComplete : undefined}
             onFallbackToLocal={AI_LESSONS_CONFIG.fallbackToLocalOnError ? () => setUseAILessonFailed(true) : undefined}
           />
@@ -1885,7 +1930,7 @@ export default function App() {
             dismissCount={getRegisterDismissCount()}
             softGateKind={softGateKindForModal}
             onSuccess={registerSuccess}
-            onClose={passwordRecoveryActive ? undefined : registerModalVariant === 'soft' ? registerModalDismiss : undefined}
+            onClose={registerModalOnClose}
             passwordRecovery={passwordRecoveryActive}
             onPasswordRecoveryComplete={() => {
               setPasswordRecoveryActive(false)
@@ -1893,7 +1938,7 @@ export default function App() {
             }}
           />
         )}
-        {showAddFundsModal && <AddFundsModal onDone={addFundsDone} />}
+        {showAddFundsModal && <AddFundsModal user={user} onDone={addFundsDone} />}
       </>
     )
   }
@@ -1903,7 +1948,7 @@ export default function App() {
       <>
         <div style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 9999, padding: '12px 24px', background: '#ffffff', borderBottom: '1px solid #e2e8f0', fontFamily: "'DM Sans', sans-serif", display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <button type="button" onClick={onBackToProblems} style={{ background: '#0f172a', border: 'none', borderRadius: '8px', color: '#ffffff', cursor: 'pointer', fontSize: '12px', fontWeight: '600', padding: '8px 14px' }}>← All Lessons</button>
+            <button type="button" onClick={onBackToLessons} style={{ background: '#0f172a', border: 'none', borderRadius: '8px', color: '#ffffff', cursor: 'pointer', fontSize: '12px', fontWeight: '600', padding: '8px 14px' }}>← All Lessons</button>
             {user ? (
               <button type="button" style={authBtnStyle} onClick={() => navigate('/dashboard')}>
                 Dashboard
@@ -1937,7 +1982,7 @@ export default function App() {
             dismissCount={getRegisterDismissCount()}
             softGateKind={softGateKindForModal}
             onSuccess={registerSuccess}
-            onClose={passwordRecoveryActive ? undefined : registerModalVariant === 'soft' ? registerModalDismiss : undefined}
+            onClose={registerModalOnClose}
             passwordRecovery={passwordRecoveryActive}
             onPasswordRecoveryComplete={() => {
               setPasswordRecoveryActive(false)
@@ -1945,7 +1990,7 @@ export default function App() {
             }}
           />
         )}
-        {showAddFundsModal && <AddFundsModal onDone={addFundsDone} />}
+        {showAddFundsModal && <AddFundsModal user={user} onDone={addFundsDone} />}
       </>
     )
   }
@@ -1971,7 +2016,7 @@ export default function App() {
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
           <button
             type="button"
-            onClick={onBackToProblems}
+            onClick={onBackToLessons}
             style={{
               background: '#0f172a',
               border: 'none',
@@ -2019,14 +2064,14 @@ export default function App() {
       <LessonValidationContext.Provider
         value={{
           track: effectiveTrack,
-          lessonIndex: problemIndex,
+          lessonIndex: lessonIndex,
           lessonTitle: lessonTitle ?? '',
-          lessonKey: `${effectiveTrack}:${problemIndex}:${lessonTitle ?? ''}`,
+          lessonKey: `${effectiveTrack}:${lessonIndex}:${lessonTitle ?? ''}`,
         }}
       >
         <Engine
-          onNextProblem={problemIndex < engines.length - 1 ? onNextProblem : undefined}
-          onBackToProblems={onBackToProblems}
+          onNextLesson={lessonIndex < engines.length - 1 ? onNextLesson : undefined}
+          onBackToLessons={onBackToLessons}
           onLessonComplete={user?.id ? handleLessonComplete : undefined}
         />
       </LessonValidationContext.Provider>
@@ -2037,7 +2082,7 @@ export default function App() {
           dismissCount={getRegisterDismissCount()}
           softGateKind={softGateKindForModal}
           onSuccess={registerSuccess}
-          onClose={passwordRecoveryActive ? undefined : registerModalVariant === 'soft' ? registerModalDismiss : undefined}
+          onClose={registerModalOnClose}
           passwordRecovery={passwordRecoveryActive}
           onPasswordRecoveryComplete={() => {
             setPasswordRecoveryActive(false)
@@ -2045,7 +2090,7 @@ export default function App() {
           }}
         />
       )}
-      {showAddFundsModal && <AddFundsModal onDone={addFundsDone} />}
+      {showAddFundsModal && <AddFundsModal user={user} onDone={addFundsDone} />}
     </>
   )
 }

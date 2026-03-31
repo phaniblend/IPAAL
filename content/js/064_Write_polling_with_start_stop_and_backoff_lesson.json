@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-js-64",
     "track": "js",
-    "problemNum": 64,
+    "lessonNum": 64,
     "title": "Write polling with start stop and backoff",
     "shortName": "P64",
     "intro": {

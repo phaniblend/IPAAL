@@ -238,4 +238,4 @@ const sideItems = [
   { label: "Step 5 — ESM/CJS interop", id: "step5" },
 ];
 
-export default createINPACTEngine({ NODES, sideItems, problemNum: "JS-F06", title: "Modules — ESM & CJS", shortName: "JS — MODULES" });
+export default createINPACTEngine({ NODES, sideItems, lessonNum: "JS-F06", title: "Modules — ESM & CJS", shortName: "JS — MODULES" });

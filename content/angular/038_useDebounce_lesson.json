@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-angular-38",
     "track": "angular",
-    "problemNum": 38,
+    "lessonNum": 38,
     "title": "useDebounce",
     "shortName": "P38",
     "intro": {

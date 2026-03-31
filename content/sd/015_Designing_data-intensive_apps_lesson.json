@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-sd-15",
     "track": "sd",
-    "problemNum": 15,
+    "lessonNum": 15,
     "title": "Designing data-intensive apps",
     "shortName": "P15",
     "intro": {

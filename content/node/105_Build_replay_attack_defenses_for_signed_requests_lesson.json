@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-node-105",
     "track": "node",
-    "problemNum": 105,
+    "lessonNum": 105,
     "title": "Build replay attack defenses for signed requests",
     "shortName": "P105",
     "intro": {

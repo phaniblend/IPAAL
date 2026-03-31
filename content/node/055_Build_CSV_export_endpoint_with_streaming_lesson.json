@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-node-55",
     "track": "node",
-    "problemNum": 55,
+    "lessonNum": 55,
     "title": "Build CSV export endpoint with streaming",
     "shortName": "P55",
     "intro": {

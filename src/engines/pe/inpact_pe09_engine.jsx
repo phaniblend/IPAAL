@@ -8,4 +8,4 @@ const NODES = [
 // IAM: minimal permissions; assume role, not long-lived keys`, feedback_correct: "✅ Rotate with automation; audit trail; SOC 2 controls; IAM minimal scope.", feedback_wrong: "Secret rotation; audit logs; least-privilege IAM.", expected: "Secrets & compliance" },
 ];
 const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }];
-export default createINPACTEngine({ NODES, sideItems, problemNum: "PE-09", title: "Secrets & compliance", shortName: "PE — SECRETS" });
+export default createINPACTEngine({ NODES, sideItems, lessonNum: "PE-09", title: "Secrets & compliance", shortName: "PE — SECRETS" });

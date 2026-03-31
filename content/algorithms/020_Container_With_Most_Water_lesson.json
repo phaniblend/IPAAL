@@ -3,13 +3,13 @@
   "config": {
     "lessonId": "ai-algorithms-20",
     "track": "algorithms",
-    "problemNum": 20,
+    "lessonNum": 20,
     "title": "Container With Most Water",
     "shortName": "P20",
     "intro": {
       "tag": "LESSON #20",
       "title": "Container With Most Water",
-      "body": "In this lesson, you will implement an algorithm to solve the 'Container With Most Water' problem, which involves finding two lines on a 2D plane that can hold the maximum amount of water between them. You will learn the core concept of the two-pointer technique, an efficient approach for scanning arrays. The main constructs you'll use are arrays, loops, and conditional logic in JavaScript. By the end, you'll be able to write a function that calculates the maximum water area and understand how to optimize such solutions.",
+      "body": "In this lesson, you will implement an algorithm to solve the 'Container With Most Water' lesson, which involves finding two lines on a 2D plane that can hold the maximum amount of water between them. You will learn the core concept of the two-pointer technique, an efficient approach for scanning arrays. The main constructs you'll use are arrays, loops, and conditional logic in JavaScript. By the end, you'll be able to write a function that calculates the maximum water area and understand how to optimize such solutions.",
       "usecase": "The Container With Most Water algorithm is essential for optimizing space allocation in UI layouts and data visualization tools. For example, in dashboard design systems, this algorithm helps determine the maximum display area for charts or panels within constrained screen dimensions. It's also used in image cropping interfaces to find the largest rectangular area that maintains aspect ratios, and in responsive web components that need to dynamically calculate optimal container sizes. Understanding this pattern enables developers to build more efficient, space-aware interfaces that automatically adapt to different viewport constraints."
     },
     "objectives": [
@@ -28,7 +28,7 @@
         "phase": "Step 1 of 17",
         "title": "Welcome",
         "content": {
-          "body": "Imagine you have a series of vertical lines of different heights. Your goal is to find the two lines that, together with the x-axis, form the container that can hold the most water. This is a classic two-pointer problem where we'll move two positions through the data to find the optimal solution efficiently.",
+          "body": "Imagine you have a series of vertical lines of different heights. Your goal is to find the two lines that, together with the x-axis, form the container that can hold the most water. This is a classic two-pointer lesson where we'll move two positions through the data to find the optimal solution efficiently.",
           "title": "Welcome"
         }
       },
@@ -285,7 +285,7 @@
         "phase": "Step 17 of 17",
         "title": "Done",
         "content": {
-          "body": "Great work! You've implemented the Container With Most Water solution using the two-pointer technique. Remember: always move the shorter pointer inward because the area is limited by the shorter height. This O(n) approach is much faster than checking all O(n²) pairs. The two-pointer pattern is powerful for many array problems where you need to compare elements from different positions.",
+          "body": "Great work! You've implemented the Container With Most Water solution using the two-pointer technique. Remember: always move the shorter pointer inward because the area is limited by the shorter height. This O(n) approach is much faster than checking all O(n²) pairs. The two-pointer pattern is powerful for many array lessons where you need to compare elements from different positions.",
           "title": "Done"
         }
       }

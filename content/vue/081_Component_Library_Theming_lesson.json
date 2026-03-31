@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-vue-81",
     "track": "vue",
-    "problemNum": 81,
+    "lessonNum": 81,
     "title": "Component Library Theming",
     "shortName": "P81",
     "intro": {

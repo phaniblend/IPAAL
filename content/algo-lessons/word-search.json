@@ -8,13 +8,13 @@
   "flow": [
     {
       "stepId": "title",
-      "mentorSays": "At the end of this lesson, you will be able to:\n\n1. Understand what the Word Search problem asks for\n2. Use backtracking to search for words in a 2D grid\n3. Mark visited cells to avoid revisiting\n4. Explore all 4 directions (up, down, left, right)\n5. Implement the solution step by step in your chosen language",
+      "mentorSays": "At the end of this lesson, you will be able to:\n\n1. Understand what the Word Search lesson asks for\n2. Use backtracking to search for words in a 2D grid\n3. Mark visited cells to avoid revisiting\n4. Explore all 4 directions (up, down, left, right)\n5. Implement the solution step by step in your chosen language",
       "action": "continue",
-      "next": "problem-illustration"
+      "next": "lesson-illustration"
     },
     {
-      "stepId": "problem-illustration",
-      "mentorSays": "Perfect! Now let's understand what the Word Search problem is asking.\n\n**Problem Definition:**\nGiven an m x n grid of characters `board` and a string `word`, return `true` if `word` exists in the grid.\n\nThe word can be constructed from letters of sequentially adjacent cells, where adjacent cells are horizontally or vertically neighboring. The same letter cell may not be used more than once.\n\n**Example 1:**\nboard = [['A','B','C','E'],['S','F','C','S'],['A','D','E','E']]\nword = \"ABCCED\"\nPath: A(0,0) -> B(0,1) -> C(0,2) -> C(1,2) -> E(2,2) -> D(2,1)\nAnswer: true\n\n**Key Insight:** Use backtracking with DFS, mark visited cells, explore 4 directions.",
+      "stepId": "lesson-illustration",
+      "mentorSays": "Perfect! Now let's understand what the Word Search lesson is asking.\n\n**Lesson Definition:**\nGiven an m x n grid of characters `board` and a string `word`, return `true` if `word` exists in the grid.\n\nThe word can be constructed from letters of sequentially adjacent cells, where adjacent cells are horizontally or vertically neighboring. The same letter cell may not be used more than once.\n\n**Example 1:**\nboard = [['A','B','C','E'],['S','F','C','S'],['A','D','E','E']]\nword = \"ABCCED\"\nPath: A(0,0) -> B(0,1) -> C(0,2) -> C(1,2) -> E(2,2) -> D(2,1)\nAnswer: true\n\n**Key Insight:** Use backtracking with DFS, mark visited cells, explore 4 directions.",
       "example": "Example: board with 'ABCCED' found",
       "action": "continue",
       "next": "thinking-challenge"

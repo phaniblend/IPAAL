@@ -220,7 +220,7 @@ const sideItems = [
 export default createINPACTEngine({
   NODES,
   sideItems,
-  problemNum: "F03",
+  lessonNum: "F03",
   title: "Interfaces",
   shortName: "TS — INTERFACES",
 });

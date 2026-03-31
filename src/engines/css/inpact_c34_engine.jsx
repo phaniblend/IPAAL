@@ -73,7 +73,7 @@ function getOutputPreview(answer) {
 export default createINPACTEngine({
   NODES,
   sideItems,
-  problemNum: 34,
+  lessonNum: 34,
   title: ":nth-child and :not()",
   shortName: "C34",
   language: "css",

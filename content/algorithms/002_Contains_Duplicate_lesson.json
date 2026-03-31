@@ -3,13 +3,13 @@
   "config": {
     "lessonId": "ai-algorithms-02",
     "track": "algorithms",
-    "problemNum": 2,
+    "lessonNum": 2,
     "title": "Contains Duplicate",
     "shortName": "P02",
     "intro": {
       "tag": "LESSON #2",
       "title": "Contains Duplicate",
-      "body": "In this lesson, you will build a function that checks if an array contains any duplicate numbers. You will learn to use a hash set data structure to efficiently track and compare elements as you iterate through the array. The main technologies involved are JavaScript arrays, loops, and the Set object. This beginner-friendly exercise will help you understand how to optimize for time complexity while solving a common algorithmic problem.",
+      "body": "In this lesson, you will build a function that checks if an array contains any duplicate numbers. You will learn to use a hash set data structure to efficiently track and compare elements as you iterate through the array. The main technologies involved are JavaScript arrays, loops, and the Set object. This beginner-friendly exercise will help you understand how to optimize for time complexity while solving a common algorithmic lesson.",
       "usecase": "The Contains Duplicate algorithm is essential for data validation in real-world applications. In user registration forms, it prevents duplicate email addresses or usernames from being added to databases. E-commerce platforms use it to detect duplicate items in shopping carts before checkout. Content management systems apply it to ensure unique tags or categories aren't duplicated. This pattern also helps maintain data integrity in analytics dashboards by identifying duplicate records before processing."
     },
     "objectives": [
@@ -19,7 +19,7 @@
       "Construct a function that returns a boolean based on duplicate detection",
       "Integrate conditional logic to handle early duplicate discovery",
       "Configure the function to accept different input arrays",
-      "Implement the complete algorithm to solve the Contains Duplicate problem"
+      "Implement the complete algorithm to solve the Contains Duplicate lesson"
     ],
     "steps": [
       {

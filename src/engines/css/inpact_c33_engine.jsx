@@ -73,7 +73,7 @@ function getOutputPreview(answer) {
 export default createINPACTEngine({
   NODES,
   sideItems,
-  problemNum: 33,
+  lessonNum: 33,
   title: "Descendant and child selectors",
   shortName: "C33",
   language: "css",

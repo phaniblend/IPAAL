@@ -9,4 +9,4 @@ createSelector(selectUsers, users => users.filter(...))
 // Effect: dispatch on action, call API, dispatch result`, feedback_correct: "✅ createAction, createReducer, createSelector; Effects for side effects.", feedback_wrong: "Actions, reducers, selectors; Effects for async/side effects.", expected: "NgRx" },
 ];
 const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }];
-export default createINPACTEngine({ NODES, sideItems, problemNum: "ANG-F08", title: "NgRx", shortName: "ANG — NGRX" });
+export default createINPACTEngine({ NODES, sideItems, lessonNum: "ANG-F08", title: "NgRx", shortName: "ANG — NGRX" });

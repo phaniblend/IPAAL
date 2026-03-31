@@ -3,14 +3,14 @@
   "config": {
     "lessonId": "ai-express-06",
     "track": "express",
-    "problemNum": 6,
+    "lessonNum": 6,
     "title": "Error handling",
     "shortName": "P06",
     "intro": {
       "tag": "LESSON #6",
       "title": "Error handling",
       "body": "In this lesson, you will build a simple Express server that gracefully handles errors when a user tries to access a non-existent route. You will learn the core concept of error handling by using Express middleware to catch and respond to errors. The main technologies involved are the Express framework and JavaScript's built-in error objects. You'll implement a custom error handler to return a user-friendly JSON response instead of a default HTML error page.",
-      "usecase": "Error handling is essential in any production Express application to provide clear feedback when things go wrong. In e-commerce platforms, proper error handling ensures users see helpful messages when payment processing fails or inventory is unavailable. API services use structured error responses to help client applications understand issues like invalid authentication or rate limiting. Without robust error handling, users encounter confusing crashes instead of actionable information to resolve problems."
+      "usecase": "Error handling is essential in any production Express application to provide clear feedback when things go wrong. In e-commerce platforms, proper error handling ensures users see helpful messages when payment processing fails or inventory is unavailable. API services use structured error responses to help client applications understand issues like invalid authentication or rate limiting. Without robust error handling, users encounter confusing crashes instead of actionable information to resolve lessons."
     },
     "objectives": [
       "Implement a basic error handler middleware function in an Express application",

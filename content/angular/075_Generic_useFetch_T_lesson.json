@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-angular-75",
     "track": "angular",
-    "problemNum": 75,
+    "lessonNum": 75,
     "title": "Generic useFetch<T>",
     "shortName": "P75",
     "intro": {

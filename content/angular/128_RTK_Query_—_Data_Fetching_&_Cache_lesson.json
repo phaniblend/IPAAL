@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-angular-128",
     "track": "angular",
-    "problemNum": 128,
+    "lessonNum": 128,
     "title": "RTK Query — Data Fetching & Cache",
     "shortName": "P128",
     "intro": {

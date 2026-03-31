@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-angular-117",
     "track": "angular",
-    "problemNum": 117,
+    "lessonNum": 117,
     "title": "Session Timeout Hook",
     "shortName": "P117",
     "intro": {

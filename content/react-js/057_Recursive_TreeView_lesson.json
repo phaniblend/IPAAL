@@ -3,13 +3,13 @@
   "config": {
     "lessonId": "ai-react-js-57",
     "track": "react-js",
-    "problemNum": 57,
+    "lessonNum": 57,
     "title": "Recursive TreeView",
     "shortName": "P57",
     "intro": {
       "tag": "LESSON #57",
       "title": "Recursive TreeView",
-      "body": "In this lesson, you will build a TreeView component that displays a hierarchical list of items, such as a file directory or organizational chart, using recursion. You will learn how to create a React component that calls itself to render nested children, demonstrating the core programming concept of recursion—a function that solves a problem by calling itself with a smaller subset of the data. The main technologies involved are React components, JavaScript objects for data structures, and JSX for rendering the UI. This hands-on project will help you understand how to handle nested data efficiently and build reusable, dynamic interfaces in React.",
+      "body": "In this lesson, you will build a TreeView component that displays a hierarchical list of items, such as a file directory or organizational chart, using recursion. You will learn how to create a React component that calls itself to render nested children, demonstrating the core programming concept of recursion—a function that solves a lesson by calling itself with a smaller subset of the data. The main technologies involved are React components, JavaScript objects for data structures, and JSX for rendering the UI. This hands-on project will help you understand how to handle nested data efficiently and build reusable, dynamic interfaces in React.",
       "usecase": "Recursive TreeView patterns are essential for displaying hierarchical data structures in modern applications. You'll find them in file explorers like VS Code's sidebar, organizational charts in HR software, nested comment threads on platforms like Reddit, and category filters in e-commerce sites. As a React developer, you'll implement these patterns when building navigation menus with expandable sub-sections, document outlines with collapsible chapters, or permission management interfaces with nested role groups. Mastering recursive components enables you to create clean, maintainable solutions for any UI that needs to represent parent-child relationships."
     },
     "objectives": [

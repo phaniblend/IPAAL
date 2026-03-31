@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-js-113",
     "track": "js",
-    "problemNum": 113,
+    "lessonNum": 113,
     "title": "Build resilient checkout state recovery flow",
     "shortName": "P113",
     "intro": {

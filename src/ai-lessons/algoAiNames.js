@@ -1,6 +1,6 @@
 /**
  * INPACT-style Algorithms (LeetCode) curriculum for AI-generated lessons.
- * Each lesson supports: Problem → Example → Flowchart → Reasoning → Dry run → Code.
+ * Each lesson supports: Lesson → Example → Flowchart → Reasoning → Dry run → Code.
  * User picks a lesson + language (algo-js, algo-ts, algo-python, algo-java) → engine generates flowchart + code.
  */
 
@@ -36,7 +36,7 @@ export const ALGO_CURRICULUM = [
     ],
   },
   {
-    category: "Hash Map Problems",
+    category: "Hash Map Lessons",
     lessons: [
       "Majority Element Detector",
       "Group Anagrams",
@@ -44,7 +44,7 @@ export const ALGO_CURRICULUM = [
     ],
   },
   {
-    category: "Stack Problems",
+    category: "Stack Lessons",
     lessons: [
       "Valid Parentheses Checker",
       "Min Stack Builder",
@@ -52,7 +52,7 @@ export const ALGO_CURRICULUM = [
     ],
   },
   {
-    category: "Queue Problems",
+    category: "Queue Lessons",
     lessons: [
       "Circular Queue Simulator",
       "Task Scheduler",

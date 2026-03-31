@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-ts-85",
     "track": "ts",
-    "problemNum": 85,
+    "lessonNum": 85,
     "title": "Build type guards for unknown API payloads",
     "shortName": "P85",
     "intro": {

@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-node-111",
     "track": "node",
-    "problemNum": 111,
+    "lessonNum": 111,
     "title": "Build event sourced audit trail basics",
     "shortName": "P111",
     "intro": {

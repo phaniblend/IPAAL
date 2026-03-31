@@ -73,7 +73,7 @@ function getOutputPreview(answer) {
 export default createINPACTEngine({
   NODES,
   sideItems,
-  problemNum: 17,
+  lessonNum: 17,
   title: "auto-fit and minmax()",
   shortName: "C17",
   language: "css",

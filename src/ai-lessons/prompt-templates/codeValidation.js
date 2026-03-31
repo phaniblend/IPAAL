@@ -11,6 +11,12 @@ export const UNIVERSAL_VALIDATION_DISCIPLINE = `Universal (all tracks):
 - Explanation / design / narrative steps: judge technical accuracy and whether every success criterion is actually addressed; generic filler or off-topic answers are "wrong" or "partial".`;
 
 /** Step-scoped file context: cumulative seed + dependency order. */
+/** Split React-style lessons: imports → state/types → JSX → handlers → wire events; use concrete UI words (button, input), not vague "control". */
+export const INCREMENTAL_UI_BUILD_PHASES = `Incremental UI lessons (React/TS and similar): many steps follow phases (1) imports, (2) state/types/stubs, (3) return JSX layout only, (4) handler functions only, (5) wire onClick/onChange/etc. and conditional render or export.
+- If this step forbids onClick or says "no click handler yet", do not require or mention onClick as missing.
+- If this step is handlers-only, do not require wiring to JSX.
+- In feedback, say **button**, **input**, or **form field** — avoid vague "control" when you mean a clickable button or a specific element.`;
+
 export const STEP_SCOPE_AND_DEPENDENCIES = `Step scope & dependency order (code submissions):
 - The learner's code is one submission for **this step**. The starter/seed may already include prior steps — treat seed + learner code as one unit. Judge only whether **this step's** instruction and success criteria are met; do not fail for omitting work reserved for a later step.
 - **Imports and declarations before use:** If the step asks to use a hook, decorator, module, or symbol, the submission must import or declare it before first use (standard source order). If the seed already imports it, the learner may rely on that. If the learner adds a new hook (e.g. useEffect) but does not add it to the import from 'react', that is not "correct".
@@ -80,7 +86,7 @@ Feedback requirements (critical):
 - feedback: For "partial" or "wrong": 1–3 clear, specific sentences. Never use vague or single-word feedback like "Not found", "Incorrect", "Wrong", or "Missing" without explanation. For "correct": keep it very brief (see below).
 - For "correct": Do NOT repeat what they did in detail. Use a short appreciation and nudge to proceed, e.g. "Nice! Proceed to the next step." or "Good. Move on to the next step." One short sentence only. Never say things like "You correctly imported X and Y using named imports. This satisfies the step's requirement."
 - For "partial": Say exactly what is good, what is missing or wrong, and what to change. Pinpoint location and fix. Use syntax and conventions appropriate to the step's language/track (provided in the user message).
-- For "wrong": Explain what the step asked for, pinpoint where the problem is in their code, and give a concrete next step or snippet (e.g. "Move the FormState interface outside the Form component, directly under the imports.").
+- For "wrong": Explain what the step asked for, pinpoint where the lesson is in their code, and give a concrete next step or snippet (e.g. "Move the FormState interface outside the Form component, directly under the imports.").
 - hint: optional; add a short nudge (syntax or next step) when useful. Omit if feedback is enough. For "correct" result, omit hint.
 - errors: optional array of 1–3 short, specific items; when placement is wrong, include e.g. "FormState is defined inside the component; it must be at module level." Omit if none. For "correct" result, omit errors.`;
 
@@ -137,6 +143,8 @@ ${seedCode || "(none)"}
 \`\`\`
 
 ${STEP_SCOPE_AND_DEPENDENCIES}
+
+${INCREMENTAL_UI_BUILD_PHASES}
 
 Presentation & ordering (code steps):
 - The submission must be a coherent single file (or merged tabs as provided): **imports and declarations before first use** of any symbol the learner introduced in this step. The starter/seed may already import or declare symbols from earlier steps — treat that as satisfied.

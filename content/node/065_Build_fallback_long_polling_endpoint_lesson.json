@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-node-65",
     "track": "node",
-    "problemNum": 65,
+    "lessonNum": 65,
     "title": "Build fallback long polling endpoint",
     "shortName": "P65",
     "intro": {

@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-css-30",
     "track": "css",
-    "problemNum": 30,
+    "lessonNum": 30,
     "title": "transform: translate, scale, rotate",
     "shortName": "P30",
     "intro": {

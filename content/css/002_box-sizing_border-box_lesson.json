@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-css-02",
     "track": "css",
-    "problemNum": 2,
+    "lessonNum": 2,
     "title": "box-sizing: border-box",
     "shortName": "P02",
     "intro": {
@@ -174,7 +174,7 @@
         "id": "step6",
         "type": "question",
         "phase": "Step 6 of 10",
-        "title": "Observe the problem with default box-sizing",
+        "title": "Observe the lesson with default box-sizing",
         "instruction": "Add a comment in your CSS explaining that both boxes exceed their intended 200px width due to padding and border.",
         "hint": "Place a CSS comment near the .box1 rule to document the width calculation issue.",
         "analogousExample": "/* This element's total width is 250px (200px width + 20px padding + 20px padding + 5px border + 5px border) */",
@@ -342,7 +342,7 @@
         "id": "step5"
       },
       {
-        "label": "Observe the problem with default box-sizing",
+        "label": "Observe the lesson with default box-sizing",
         "id": "step6"
       },
       {

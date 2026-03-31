@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-react-ts-32",
     "track": "react-ts",
-    "problemNum": 32,
+    "lessonNum": 32,
     "title": "useWindowSize",
     "shortName": "P32",
     "intro": {

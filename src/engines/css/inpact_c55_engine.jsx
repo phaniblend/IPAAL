@@ -73,7 +73,7 @@ function getOutputPreview(answer) {
 export default createINPACTEngine({
   NODES,
   sideItems,
-  problemNum: 55,
+  lessonNum: 55,
   title: "transform-origin",
   shortName: "C55",
   language: "css",

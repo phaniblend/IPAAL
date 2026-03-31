@@ -8,20 +8,20 @@
   "flow": [
     {
       "stepId": "title",
-      "mentorSays": "At the end of this lesson, you will be able to:\n\n1. Understand what the Find Minimum in Rotated Sorted Array problem asks for\n2. Use binary search to find the pivot point (minimum element)\n3. Compare mid with right to determine which half contains the minimum\n4. Handle edge cases (no rotation, single element)\n5. Implement the solution step by step in your chosen language",
+      "mentorSays": "At the end of this lesson, you will be able to:\n\n1. Understand what the Find Minimum in Rotated Sorted Array lesson asks for\n2. Use binary search to find the pivot point (minimum element)\n3. Compare mid with right to determine which half contains the minimum\n4. Handle edge cases (no rotation, single element)\n5. Implement the solution step by step in your chosen language",
       "action": "continue",
-      "next": "problem-illustration"
+      "next": "lesson-illustration"
     },
     {
-      "stepId": "problem-illustration",
-      "mentorSays": "Perfect! Now let's understand what the Find Minimum in Rotated Sorted Array problem is asking.\n\n**Problem Definition:**\nSuppose an array of length `n` sorted in ascending order is rotated between `1` and `n` times. Given the sorted rotated array `nums` of unique elements, return the minimum element of this array.\n\n**Key Observations:**\n- The array was originally sorted in ascending order\n- It was rotated at some pivot point\n- All values are unique\n- We need to find the minimum (pivot point) in O(log n) time\n\n**Example 1:** nums = [3, 4, 5, 1, 2]\n\nThis array was rotated. Originally: [1, 2, 3, 4, 5], rotated at index 3.\n\nMinimum element is 1 at index 3.\nAnswer: 1\n\n**Example 2:** nums = [4, 5, 6, 7, 0, 1, 2]\n\nMinimum element is 0 at index 4.\nAnswer: 0\n\n**Example 3:** nums = [11, 13, 15, 17]\n\nArray is not rotated (or rotated n times, back to original).\nMinimum element is 11 at index 0.\nAnswer: 11\n\n**Step-by-step trace for Example 1 (Binary search approach):**\n\nnums = [3, 4, 5, 1, 2]\n\nWe'll use binary search:\n- **Iteration 1**: left=0, right=4, mid=2, nums[2]=5\n  - Compare: nums[mid]=5 > nums[right]=2\n  - If mid > right, minimum is in right half (pivot is after mid)\n  - left = 3\n- **Iteration 2**: left=3, right=4, mid=3, nums[3]=1\n  - Compare: nums[mid]=1 < nums[right]=2\n  - If mid < right, minimum is in left half (pivot is at or before mid)\n  - right = 3\n- **Iteration 3**: left=3, right=3, mid=3, nums[3]=1\n  - left == right, exit loop\n  - Return nums[3] = 1 ✓\n\n**Key Insight:**\nCompare nums[mid] with nums[right]:\n- If nums[mid] > nums[right]: minimum is in right half (pivot after mid)\n- If nums[mid] < nums[right]: minimum is in left half (pivot at or before mid)\n- When left == right, we've found the minimum!\n\n**What makes this tricky:**\n1. Understanding that we compare with right (not left)\n2. Determining which half contains the minimum\n3. Handling the case where array is not rotated\n4. The binary search termination condition\n\n**Common pitfalls:**\n- Comparing with left instead of right\n- Not handling the no-rotation case\n- Off-by-one errors in pointer movement\n- Returning the wrong index",
+      "stepId": "lesson-illustration",
+      "mentorSays": "Perfect! Now let's understand what the Find Minimum in Rotated Sorted Array lesson is asking.\n\n**Lesson Definition:**\nSuppose an array of length `n` sorted in ascending order is rotated between `1` and `n` times. Given the sorted rotated array `nums` of unique elements, return the minimum element of this array.\n\n**Key Observations:**\n- The array was originally sorted in ascending order\n- It was rotated at some pivot point\n- All values are unique\n- We need to find the minimum (pivot point) in O(log n) time\n\n**Example 1:** nums = [3, 4, 5, 1, 2]\n\nThis array was rotated. Originally: [1, 2, 3, 4, 5], rotated at index 3.\n\nMinimum element is 1 at index 3.\nAnswer: 1\n\n**Example 2:** nums = [4, 5, 6, 7, 0, 1, 2]\n\nMinimum element is 0 at index 4.\nAnswer: 0\n\n**Example 3:** nums = [11, 13, 15, 17]\n\nArray is not rotated (or rotated n times, back to original).\nMinimum element is 11 at index 0.\nAnswer: 11\n\n**Step-by-step trace for Example 1 (Binary search approach):**\n\nnums = [3, 4, 5, 1, 2]\n\nWe'll use binary search:\n- **Iteration 1**: left=0, right=4, mid=2, nums[2]=5\n  - Compare: nums[mid]=5 > nums[right]=2\n  - If mid > right, minimum is in right half (pivot is after mid)\n  - left = 3\n- **Iteration 2**: left=3, right=4, mid=3, nums[3]=1\n  - Compare: nums[mid]=1 < nums[right]=2\n  - If mid < right, minimum is in left half (pivot is at or before mid)\n  - right = 3\n- **Iteration 3**: left=3, right=3, mid=3, nums[3]=1\n  - left == right, exit loop\n  - Return nums[3] = 1 ✓\n\n**Key Insight:**\nCompare nums[mid] with nums[right]:\n- If nums[mid] > nums[right]: minimum is in right half (pivot after mid)\n- If nums[mid] < nums[right]: minimum is in left half (pivot at or before mid)\n- When left == right, we've found the minimum!\n\n**What makes this tricky:**\n1. Understanding that we compare with right (not left)\n2. Determining which half contains the minimum\n3. Handling the case where array is not rotated\n4. The binary search termination condition\n\n**Common pitfalls:**\n- Comparing with left instead of right\n- Not handling the no-rotation case\n- Off-by-one errors in pointer movement\n- Returning the wrong index",
       "example": "Example 1: [3,4,5,1,2] → 1\nExample 2: [4,5,6,7,0,1,2] → 0\nExample 3: [11,13,15,17] → 11",
       "action": "continue",
       "next": "thinking-challenge"
     },
     {
       "stepId": "thinking-challenge",
-      "mentorSays": "Now that you understand what the problem wants, here's the real question:\n\nHow would YOU find the minimum element in a rotated sorted array?\n\nThink about it for a moment. What approach feels natural to you?",
+      "mentorSays": "Now that you understand what the lesson wants, here's the real question:\n\nHow would YOU find the minimum element in a rotated sorted array?\n\nThink about it for a moment. What approach feels natural to you?",
       "choices": [
         {
           "label": "Use binary search - compare mid with right to find pivot",
@@ -51,7 +51,7 @@
     },
     {
       "stepId": "explore-binary-search",
-      "mentorSays": "Excellent choice! Binary search is perfect for this problem. Here's the core idea:\n\n**The Algorithm:**\n1. **Compare mid with right**: Compare nums[mid] with nums[right]\n2. **If nums[mid] > nums[right]**: Minimum is in right half (pivot is after mid), search right\n3. **If nums[mid] < nums[right]**: Minimum is in left half (pivot is at or before mid), search left\n4. **Terminate**: When left == right, we've found the minimum\n\n**Why it works**:\n- In a rotated array, comparing mid with right tells us which half contains the pivot\n- If mid > right, the pivot (minimum) must be after mid\n- If mid < right, the pivot (minimum) is at or before mid\n- We narrow down until left == right, which is the minimum\n\n**Key insight**: We compare with right (not left) because it's more reliable for determining which half contains the pivot!\n\nLet's trace with nums = [3, 4, 5, 1, 2]:\n\n- **left=0, right=4, mid=2**: nums[2]=5 > nums[4]=2, search right: left=3\n- **left=3, right=4, mid=3**: nums[3]=1 < nums[4]=2, search left: right=3\n- **left=3, right=3**: Found! Return nums[3]=1 ✓\n\nThis is O(log n) time and O(1) space! Now let's code it step by step.",
+      "mentorSays": "Excellent choice! Binary search is perfect for this lesson. Here's the core idea:\n\n**The Algorithm:**\n1. **Compare mid with right**: Compare nums[mid] with nums[right]\n2. **If nums[mid] > nums[right]**: Minimum is in right half (pivot is after mid), search right\n3. **If nums[mid] < nums[right]**: Minimum is in left half (pivot is at or before mid), search left\n4. **Terminate**: When left == right, we've found the minimum\n\n**Why it works**:\n- In a rotated array, comparing mid with right tells us which half contains the pivot\n- If mid > right, the pivot (minimum) must be after mid\n- If mid < right, the pivot (minimum) is at or before mid\n- We narrow down until left == right, which is the minimum\n\n**Key insight**: We compare with right (not left) because it's more reliable for determining which half contains the pivot!\n\nLet's trace with nums = [3, 4, 5, 1, 2]:\n\n- **left=0, right=4, mid=2**: nums[2]=5 > nums[4]=2, search right: left=3\n- **left=3, right=4, mid=3**: nums[3]=1 < nums[4]=2, search left: right=3\n- **left=3, right=3**: Found! Return nums[3]=1 ✓\n\nThis is O(log n) time and O(1) space! Now let's code it step by step.",
       "action": "continue",
       "next": "language-selection"
     },
@@ -146,7 +146,7 @@
     },
     {
       "stepId": "array-check-js",
-      "mentorSays": "To solve this problem, we'll need to work with arrays. Do you know what an array is in JavaScript?",
+      "mentorSays": "To solve this lesson, we'll need to work with arrays. Do you know what an array is in JavaScript?",
       "choices": [
         {
           "label": "Yes, I know arrays",
@@ -167,7 +167,7 @@
     },
     {
       "stepId": "loop-check-js",
-      "mentorSays": "To solve this problem, we'll need to use loops. Do you know what a loop is in JavaScript?",
+      "mentorSays": "To solve this lesson, we'll need to use loops. Do you know what a loop is in JavaScript?",
       "choices": [
         {
           "label": "Yes, I know loops",
@@ -300,7 +300,7 @@
     },
     {
       "stepId": "array-check-python",
-      "mentorSays": "To solve this problem, we'll need to work with arrays. Do you know what an array is in Python?",
+      "mentorSays": "To solve this lesson, we'll need to work with arrays. Do you know what an array is in Python?",
       "choices": [
         {
           "label": "Yes, I know arrays",
@@ -321,7 +321,7 @@
     },
     {
       "stepId": "loop-check-python",
-      "mentorSays": "To solve this problem, we'll need to use loops. Do you know what a loop is in Python?",
+      "mentorSays": "To solve this lesson, we'll need to use loops. Do you know what a loop is in Python?",
       "choices": [
         {
           "label": "Yes, I know loops",
@@ -454,7 +454,7 @@
     },
     {
       "stepId": "array-check-java",
-      "mentorSays": "To solve this problem, we'll need to work with arrays. Do you know what an array is in Java?",
+      "mentorSays": "To solve this lesson, we'll need to work with arrays. Do you know what an array is in Java?",
       "choices": [
         {
           "label": "Yes, I know arrays",
@@ -475,7 +475,7 @@
     },
     {
       "stepId": "loop-check-java",
-      "mentorSays": "To solve this problem, we'll need to use loops. Do you know what a loop is in Java?",
+      "mentorSays": "To solve this lesson, we'll need to use loops. Do you know what a loop is in Java?",
       "choices": [
         {
           "label": "Yes, I know loops",
@@ -608,7 +608,7 @@
     },
     {
       "stepId": "array-check-cpp",
-      "mentorSays": "To solve this problem, we'll need to work with arrays. Do you know what an array is in C++?",
+      "mentorSays": "To solve this lesson, we'll need to work with arrays. Do you know what an array is in C++?",
       "choices": [
         {
           "label": "Yes, I know arrays",
@@ -629,7 +629,7 @@
     },
     {
       "stepId": "loop-check-cpp",
-      "mentorSays": "To solve this problem, we'll need to use loops. Do you know what a loop is in C++?",
+      "mentorSays": "To solve this lesson, we'll need to use loops. Do you know what a loop is in C++?",
       "choices": [
         {
           "label": "Yes, I know loops",
@@ -762,7 +762,7 @@
     },
     {
       "stepId": "array-check-ts",
-      "mentorSays": "To solve this problem, we'll need to work with arrays. Do you know what an array is in TypeScript?",
+      "mentorSays": "To solve this lesson, we'll need to work with arrays. Do you know what an array is in TypeScript?",
       "choices": [
         {
           "label": "Yes, I know arrays",
@@ -783,7 +783,7 @@
     },
     {
       "stepId": "loop-check-ts",
-      "mentorSays": "To solve this problem, we'll need to use loops. Do you know what a loop is in TypeScript?",
+      "mentorSays": "To solve this lesson, we'll need to use loops. Do you know what a loop is in TypeScript?",
       "choices": [
         {
           "label": "Yes, I know loops",
@@ -853,7 +853,7 @@
     },
     {
       "stepId": "final",
-      "mentorSays": "🎉 Well done! You've successfully implemented the Find Minimum in Rotated Sorted Array solution!\n\n**Time Complexity:** O(log n)\n- We use binary search, which eliminates half the elements at each step\n- Even with rotation, we still achieve O(log n) time\n\n**Space Complexity:** O(1)\n- We only use a constant amount of extra space (left, right, mid variables)\n- No additional data structures are needed\n\n**Key Takeaways:**\n1. **Compare with right**: Compare nums[mid] with nums[right] (not left)\n2. **Binary search**: If mid > right, minimum is in right half; otherwise in left half\n3. **Termination**: Use left < right (not <=) to find exact minimum\n4. **Return left**: After loop, left == right, return nums[left]\n5. **Handles no rotation**: Works even when array is not rotated\n\n**Related Practice Problems:**\n- Search in Rotated Sorted Array (LeetCode #33) - find target in rotated array\n- Find Minimum in Rotated Sorted Array II (LeetCode #154) - with duplicates\n- Search Insert Position (LeetCode #35) - similar binary search pattern\n\nKeep practicing binary search problems - they're common in interviews!",
+      "mentorSays": "🎉 Well done! You've successfully implemented the Find Minimum in Rotated Sorted Array solution!\n\n**Time Complexity:** O(log n)\n- We use binary search, which eliminates half the elements at each step\n- Even with rotation, we still achieve O(log n) time\n\n**Space Complexity:** O(1)\n- We only use a constant amount of extra space (left, right, mid variables)\n- No additional data structures are needed\n\n**Key Takeaways:**\n1. **Compare with right**: Compare nums[mid] with nums[right] (not left)\n2. **Binary search**: If mid > right, minimum is in right half; otherwise in left half\n3. **Termination**: Use left < right (not <=) to find exact minimum\n4. **Return left**: After loop, left == right, return nums[left]\n5. **Handles no rotation**: Works even when array is not rotated\n\n**Related Practice Lessons:**\n- Search in Rotated Sorted Array (LeetCode #33) - find target in rotated array\n- Find Minimum in Rotated Sorted Array II (LeetCode #154) - with duplicates\n- Search Insert Position (LeetCode #35) - similar binary search pattern\n\nKeep practicing binary search lessons - they're common in interviews!",
       "action": "continue"
     }
   ]

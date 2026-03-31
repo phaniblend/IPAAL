@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-react-js-87",
     "track": "react-js",
-    "problemNum": 87,
+    "lessonNum": 87,
     "title": "Test useFetch",
     "shortName": "P87",
     "intro": {

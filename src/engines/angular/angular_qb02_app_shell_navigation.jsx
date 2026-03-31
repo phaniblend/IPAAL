@@ -55,7 +55,7 @@ const sideItems = [
 export default createINPACTEngine({
   NODES,
   sideItems,
-  problemNum: 2,
+  lessonNum: 2,
   title: "App Shell & Navigation",
   shortName: "QB02",
   answerShape: "angular-tabs",

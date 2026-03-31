@@ -6,7 +6,7 @@ const NODES = [
     content: {
       tag: "SYSTEM DESIGN #2",
       title: "Caching — Strategy, Invalidation & Pitfalls",
-      body: `"There are only two hard problems in computer science:
+      body: `"There are only two hard lessons in computer science:
 cache invalidation and naming things." — Phil Karlton
 
 Caching is the single highest-leverage performance tool.
@@ -30,7 +30,7 @@ Each strategy has a failure mode you need to know.`,
       "Implement cache-aside (lazy loading) correctly with TTL",
       "Choose between cache-aside, write-through, and write-behind",
       "Handle cache invalidation — the hardest part",
-      "Prevent the thundering herd / cache stampede problem",
+      "Prevent the thundering herd / cache stampede lesson",
       "Design a cache key strategy that avoids collisions",
       "Know what NOT to cache — and why cache size matters",
     ],
@@ -340,4 +340,4 @@ const sideItems = [
   { label: "Step 5 — What not to cache", id: "step5" },
 ];
 
-export default createINPACTEngine({ NODES, sideItems, problemNum: "SD-02", title: "Caching Strategies", shortName: "SD — CACHING" });
+export default createINPACTEngine({ NODES, sideItems, lessonNum: "SD-02", title: "Caching Strategies", shortName: "SD — CACHING" });

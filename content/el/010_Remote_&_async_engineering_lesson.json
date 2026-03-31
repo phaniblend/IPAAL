@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-el-10",
     "track": "el",
-    "problemNum": 10,
+    "lessonNum": 10,
     "title": "Remote & async engineering",
     "shortName": "P10",
     "intro": {

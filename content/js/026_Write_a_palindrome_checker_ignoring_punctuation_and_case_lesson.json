@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-js-26",
     "track": "js",
-    "problemNum": 26,
+    "lessonNum": 26,
     "title": "Write a palindrome checker ignoring punctuation and case",
     "shortName": "P26",
     "intro": {

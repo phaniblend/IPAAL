@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-node-57",
     "track": "node",
-    "problemNum": 57,
+    "lessonNum": 57,
     "title": "Build websocket server with rooms",
     "shortName": "P57",
     "intro": {

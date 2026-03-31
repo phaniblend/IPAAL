@@ -24,4 +24,4 @@ app.use((err, req, res, next) => { res.status(500).json({ error: err.message }) 
 ];
 
 const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }];
-export default createINPACTEngine({ NODES, sideItems, problemNum: "EXP-F01", title: "App setup & middleware", shortName: "EXP — MIDDLEWARE" });
+export default createINPACTEngine({ NODES, sideItems, lessonNum: "EXP-F01", title: "App setup & middleware", shortName: "EXP — MIDDLEWARE" });

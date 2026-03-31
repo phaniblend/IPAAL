@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-node-48",
     "track": "node",
-    "problemNum": 48,
+    "lessonNum": 48,
     "title": "Build cache aside middleware with TTL",
     "shortName": "P48",
     "intro": {

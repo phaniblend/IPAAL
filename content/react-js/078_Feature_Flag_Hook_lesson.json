@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-react-js-78",
     "track": "react-js",
-    "problemNum": 78,
+    "lessonNum": 78,
     "title": "Feature Flag Hook",
     "shortName": "P78",
     "intro": {

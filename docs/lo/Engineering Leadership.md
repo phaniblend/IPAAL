@@ -40,10 +40,10 @@ Give the SBI feedback model: Situation, Behavior, Impact
 Structure a 30-60-90 day onboarding plan for new engineers
 
 04
-Run effective 1:1s that surface problems before they fester
+Run effective 1:1s that surface lessons before they fester
 
 05
-Build psychological safety so engineers flag problems early
+Build psychological safety so engineers flag lessons early
 
 06
 Know when to approve despite disagreement (disagree-and-commit)

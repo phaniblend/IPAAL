@@ -286,4 +286,4 @@ const sideItems = [
   { label: "Step 5 — Full", id: "step5" },
 ];
 
-export default createINPACTEngine({ NODES, sideItems, problemNum: 2, title: "Toggle Visibility", shortName: "TOGGLE VISIBILITY" });
+export default createINPACTEngine({ NODES, sideItems, lessonNum: 2, title: "Toggle Visibility", shortName: "TOGGLE VISIBILITY" });

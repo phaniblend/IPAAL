@@ -73,7 +73,7 @@ function getOutputPreview(answer) {
 export default createINPACTEngine({
   NODES,
   sideItems,
-  problemNum: 31,
+  lessonNum: 31,
   title: "transition basics",
   shortName: "C31",
   language: "css",

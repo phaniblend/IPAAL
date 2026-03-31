@@ -73,7 +73,7 @@ function getOutputPreview(answer) {
 export default createINPACTEngine({
   NODES,
   sideItems,
-  problemNum: 13,
+  lessonNum: 13,
   title: "flex-grow, shrink, basis",
   shortName: "C13",
   language: "css",

@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-angular-125",
     "track": "angular",
-    "problemNum": 125,
+    "lessonNum": 125,
     "title": "Secure Token Rotation",
     "shortName": "P125",
     "intro": {

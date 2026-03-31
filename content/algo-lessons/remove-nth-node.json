@@ -8,20 +8,20 @@
   "flow": [
     {
       "stepId": "title",
-      "mentorSays": "At the end of this lesson, you will be able to:\n\n1. Understand what the Remove Nth Node From End problem asks for\n2. Use two pointers to find the nth node from the end\n3. Handle edge cases like removing the head node\n4. Use a dummy node to simplify pointer manipulation\n5. Implement the solution step by step in your chosen language",
+      "mentorSays": "At the end of this lesson, you will be able to:\n\n1. Understand what the Remove Nth Node From End lesson asks for\n2. Use two pointers to find the nth node from the end\n3. Handle edge cases like removing the head node\n4. Use a dummy node to simplify pointer manipulation\n5. Implement the solution step by step in your chosen language",
       "action": "continue",
-      "next": "problem-illustration"
+      "next": "lesson-illustration"
     },
     {
-      "stepId": "problem-illustration",
-      "mentorSays": "Perfect! Now let's understand what the Remove Nth Node From End problem is asking.\n\n**Problem Definition:**\nGiven the head of a linked list, remove the nth node from the end of the list and return its head.\n\n**Key Observations:**\n- We need to remove the nth node from the END (not the beginning)\n- We need to update the previous node's next pointer\n- Edge case: removing the head node (n = length of list)\n- We should use a dummy node to handle edge cases\n\n**Example 1:** head = [1, 2, 3, 4, 5], n = 2\n\nRemove the 2nd node from the end (node with value 4).\n\nOriginal: 1 -> 2 -> 3 -> 4 -> 5\nAfter removal: 1 -> 2 -> 3 -> 5\n\n**Example 2:** head = [1], n = 1\n\nRemove the 1st node from the end (the only node).\n\nOriginal: 1\nAfter removal: null (empty list)\n\n**Example 3:** head = [1, 2], n = 1\n\nRemove the 1st node from the end (node with value 2).\n\nOriginal: 1 -> 2\nAfter removal: 1\n\n**Step-by-step trace for Example 1 (Two-pointer approach):**\n\nhead = 1 -> 2 -> 3 -> 4 -> 5, n = 2\n\nWe'll use two pointers:\n1. Move first pointer n steps ahead\n2. Then move both pointers together until first reaches end\n3. Second pointer will be at the node before the one to remove\n\n- **Step 1**: Create dummy node, first = dummy, second = dummy\n- **Step 2**: Move first pointer n+1 steps (n=2, so 3 steps)\n  - first = node(3)\n- **Step 3**: Move both pointers until first reaches null\n  - first = node(4), second = node(1)\n  - first = node(5), second = node(2)\n  - first = null, second = node(3) ✓\n- **Step 4**: second.next is the node to remove (node 4)\n  - second.next = second.next.next (skip node 4)\n- **Result**: 1 -> 2 -> 3 -> 5 ✓\n\n**Key Insight:**\nBy moving the first pointer n+1 steps ahead, when it reaches the end, the second pointer will be at the node BEFORE the one to remove. This lets us easily update the next pointer!\n\n**What makes this tricky:**\n1. Finding the nth node from the end (need to know the length or use two pointers)\n2. Handling the case where we remove the head node\n3. Using a dummy node to simplify edge cases\n4. The two-pointer technique (fast and slow pointers)\n\n**Common pitfalls:**\n- Not handling the case where n equals the list length (removing head)\n- Off-by-one errors in pointer movement\n- Not using a dummy node (makes head removal complex)\n- Moving pointers incorrectly",
+      "stepId": "lesson-illustration",
+      "mentorSays": "Perfect! Now let's understand what the Remove Nth Node From End lesson is asking.\n\n**Lesson Definition:**\nGiven the head of a linked list, remove the nth node from the end of the list and return its head.\n\n**Key Observations:**\n- We need to remove the nth node from the END (not the beginning)\n- We need to update the previous node's next pointer\n- Edge case: removing the head node (n = length of list)\n- We should use a dummy node to handle edge cases\n\n**Example 1:** head = [1, 2, 3, 4, 5], n = 2\n\nRemove the 2nd node from the end (node with value 4).\n\nOriginal: 1 -> 2 -> 3 -> 4 -> 5\nAfter removal: 1 -> 2 -> 3 -> 5\n\n**Example 2:** head = [1], n = 1\n\nRemove the 1st node from the end (the only node).\n\nOriginal: 1\nAfter removal: null (empty list)\n\n**Example 3:** head = [1, 2], n = 1\n\nRemove the 1st node from the end (node with value 2).\n\nOriginal: 1 -> 2\nAfter removal: 1\n\n**Step-by-step trace for Example 1 (Two-pointer approach):**\n\nhead = 1 -> 2 -> 3 -> 4 -> 5, n = 2\n\nWe'll use two pointers:\n1. Move first pointer n steps ahead\n2. Then move both pointers together until first reaches end\n3. Second pointer will be at the node before the one to remove\n\n- **Step 1**: Create dummy node, first = dummy, second = dummy\n- **Step 2**: Move first pointer n+1 steps (n=2, so 3 steps)\n  - first = node(3)\n- **Step 3**: Move both pointers until first reaches null\n  - first = node(4), second = node(1)\n  - first = node(5), second = node(2)\n  - first = null, second = node(3) ✓\n- **Step 4**: second.next is the node to remove (node 4)\n  - second.next = second.next.next (skip node 4)\n- **Result**: 1 -> 2 -> 3 -> 5 ✓\n\n**Key Insight:**\nBy moving the first pointer n+1 steps ahead, when it reaches the end, the second pointer will be at the node BEFORE the one to remove. This lets us easily update the next pointer!\n\n**What makes this tricky:**\n1. Finding the nth node from the end (need to know the length or use two pointers)\n2. Handling the case where we remove the head node\n3. Using a dummy node to simplify edge cases\n4. The two-pointer technique (fast and slow pointers)\n\n**Common pitfalls:**\n- Not handling the case where n equals the list length (removing head)\n- Off-by-one errors in pointer movement\n- Not using a dummy node (makes head removal complex)\n- Moving pointers incorrectly",
       "example": "Example 1:\nOriginal: 1 -> 2 -> 3 -> 4 -> 5, n = 2\nAfter: 1 -> 2 -> 3 -> 5\n(Removed node 4)\n\nExample 2:\nOriginal: 1, n = 1\nAfter: null\n(Removed the only node)\n\nExample 3:\nOriginal: 1 -> 2, n = 1\nAfter: 1\n(Removed node 2)",
       "action": "continue",
       "next": "thinking-challenge"
     },
     {
       "stepId": "thinking-challenge",
-      "mentorSays": "Now that you understand what the problem wants, here's the real question:\n\nHow would YOU remove the nth node from the end of a linked list?\n\nThink about it for a moment. What approach feels natural to you?",
+      "mentorSays": "Now that you understand what the lesson wants, here's the real question:\n\nHow would YOU remove the nth node from the end of a linked list?\n\nThink about it for a moment. What approach feels natural to you?",
       "choices": [
         {
           "label": "Use two pointers - move first n steps ahead, then move both together",
@@ -146,7 +146,7 @@
     },
     {
       "stepId": "linked-list-check-js",
-      "mentorSays": "To solve this problem, we'll need to work with linked lists. Do you know what a linked list is?",
+      "mentorSays": "To solve this lesson, we'll need to work with linked lists. Do you know what a linked list is?",
       "choices": [
         {
           "label": "Yes, I know linked lists",
@@ -167,7 +167,7 @@
     },
     {
       "stepId": "loop-check-js",
-      "mentorSays": "To solve this problem, we'll need to use loops. Do you know what a loop is in JavaScript?",
+      "mentorSays": "To solve this lesson, we'll need to use loops. Do you know what a loop is in JavaScript?",
       "choices": [
         {
           "label": "Yes, I know loops",
@@ -307,7 +307,7 @@
     },
     {
       "stepId": "linked-list-check-python",
-      "mentorSays": "To solve this problem, we'll need to work with linked lists. Do you know what a linked list is?",
+      "mentorSays": "To solve this lesson, we'll need to work with linked lists. Do you know what a linked list is?",
       "choices": [
         {
           "label": "Yes, I know linked lists",
@@ -328,7 +328,7 @@
     },
     {
       "stepId": "loop-check-python",
-      "mentorSays": "To solve this problem, we'll need to use loops. Do you know what a loop is in Python?",
+      "mentorSays": "To solve this lesson, we'll need to use loops. Do you know what a loop is in Python?",
       "choices": [
         {
           "label": "Yes, I know loops",
@@ -468,7 +468,7 @@
     },
     {
       "stepId": "linked-list-check-java",
-      "mentorSays": "To solve this problem, we'll need to work with linked lists. Do you know what a linked list is?",
+      "mentorSays": "To solve this lesson, we'll need to work with linked lists. Do you know what a linked list is?",
       "choices": [
         {
           "label": "Yes, I know linked lists",
@@ -489,7 +489,7 @@
     },
     {
       "stepId": "loop-check-java",
-      "mentorSays": "To solve this problem, we'll need to use loops. Do you know what a loop is in Java?",
+      "mentorSays": "To solve this lesson, we'll need to use loops. Do you know what a loop is in Java?",
       "choices": [
         {
           "label": "Yes, I know loops",
@@ -629,7 +629,7 @@
     },
     {
       "stepId": "linked-list-check-cpp",
-      "mentorSays": "To solve this problem, we'll need to work with linked lists. Do you know what a linked list is?",
+      "mentorSays": "To solve this lesson, we'll need to work with linked lists. Do you know what a linked list is?",
       "choices": [
         {
           "label": "Yes, I know linked lists",
@@ -650,7 +650,7 @@
     },
     {
       "stepId": "loop-check-cpp",
-      "mentorSays": "To solve this problem, we'll need to use loops. Do you know what a loop is in C++?",
+      "mentorSays": "To solve this lesson, we'll need to use loops. Do you know what a loop is in C++?",
       "choices": [
         {
           "label": "Yes, I know loops",
@@ -790,7 +790,7 @@
     },
     {
       "stepId": "linked-list-check-ts",
-      "mentorSays": "To solve this problem, we'll need to work with linked lists. Do you know what a linked list is?",
+      "mentorSays": "To solve this lesson, we'll need to work with linked lists. Do you know what a linked list is?",
       "choices": [
         {
           "label": "Yes, I know linked lists",
@@ -811,7 +811,7 @@
     },
     {
       "stepId": "loop-check-ts",
-      "mentorSays": "To solve this problem, we'll need to use loops. Do you know what a loop is in TypeScript?",
+      "mentorSays": "To solve this lesson, we'll need to use loops. Do you know what a loop is in TypeScript?",
       "choices": [
         {
           "label": "Yes, I know loops",
@@ -888,7 +888,7 @@
     },
     {
       "stepId": "final",
-      "mentorSays": "🎉 Well done! You've successfully implemented the Remove Nth Node From End solution!\n\n**Time Complexity:** O(n)\n- We traverse the list once with the first pointer\n- Then we traverse the remaining part with both pointers\n- Total: one pass through the list\n- n is the length of the list\n\n**Space Complexity:** O(1)\n- We only use a constant amount of extra space (dummy node and two pointers)\n- No additional data structures are needed\n\n**Key Takeaways:**\n1. **Two-pointer technique**: Use two pointers with a gap to find the nth node from end\n2. **Dummy node pattern**: Using a dummy node simplifies handling edge cases (removing head)\n3. **Gap of n nodes**: Move first pointer n+1 steps ahead (not n) to position second correctly\n4. **One-pass solution**: More efficient than two-pass (find length, then remove)\n5. **Edge case handling**: Dummy node makes removing the head node the same as removing any other node\n\n**Related Practice Problems:**\n- Remove Duplicates from Sorted List (LeetCode #83)\n- Remove Linked List Elements (LeetCode #203)\n- Delete Node in a Linked List (LeetCode #237)\n\nKeep practicing linked list problems - they're common in interviews!",
+      "mentorSays": "🎉 Well done! You've successfully implemented the Remove Nth Node From End solution!\n\n**Time Complexity:** O(n)\n- We traverse the list once with the first pointer\n- Then we traverse the remaining part with both pointers\n- Total: one pass through the list\n- n is the length of the list\n\n**Space Complexity:** O(1)\n- We only use a constant amount of extra space (dummy node and two pointers)\n- No additional data structures are needed\n\n**Key Takeaways:**\n1. **Two-pointer technique**: Use two pointers with a gap to find the nth node from end\n2. **Dummy node pattern**: Using a dummy node simplifies handling edge cases (removing head)\n3. **Gap of n nodes**: Move first pointer n+1 steps ahead (not n) to position second correctly\n4. **One-pass solution**: More efficient than two-pass (find length, then remove)\n5. **Edge case handling**: Dummy node makes removing the head node the same as removing any other node\n\n**Related Practice Lessons:**\n- Remove Duplicates from Sorted List (LeetCode #83)\n- Remove Linked List Elements (LeetCode #203)\n- Delete Node in a Linked List (LeetCode #237)\n\nKeep practicing linked list lessons - they're common in interviews!",
       "action": "continue"
     }
   ]

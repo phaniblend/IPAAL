@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-js-106",
     "track": "js",
-    "problemNum": 106,
+    "lessonNum": 106,
     "title": "Build CRDT lite collaborative text prototype",
     "shortName": "P106",
     "intro": {

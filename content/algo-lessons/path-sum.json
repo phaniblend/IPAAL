@@ -8,20 +8,20 @@
   "flow": [
     {
       "stepId": "title",
-      "mentorSays": "At the end of this lesson, you will be able to:\n\n1. Understand what the Path Sum problem asks for\n2. Use recursion to check if a path from root to leaf sums to target\n3. Track the current sum as we traverse the tree\n4. Handle base cases (null nodes, leaf nodes)\n5. Implement the solution step by step in your chosen language",
+      "mentorSays": "At the end of this lesson, you will be able to:\n\n1. Understand what the Path Sum lesson asks for\n2. Use recursion to check if a path from root to leaf sums to target\n3. Track the current sum as we traverse the tree\n4. Handle base cases (null nodes, leaf nodes)\n5. Implement the solution step by step in your chosen language",
       "action": "continue",
-      "next": "problem-illustration"
+      "next": "lesson-illustration"
     },
     {
-      "stepId": "problem-illustration",
-      "mentorSays": "Perfect! Now let's understand what the Path Sum problem is asking.\n\n**Problem Definition:**\nGiven the root of a binary tree and an integer `targetSum`, return `true` if the tree has a root-to-leaf path such that adding up all the values along the path equals `targetSum`.\n\nA leaf is a node with no children.\n\n**Key Observations:**\n- We need to find a path from root to a leaf (not any node)\n- The sum of all values on the path must equal targetSum\n- We traverse from root to leaf, accumulating the sum\n- A leaf has no children (both left and right are null)\n\n**Example 1:**\nTree:\n    5\n   / \\\n  4   8\n /   / \\\n11  13  4\n/ \\      \\\n7  2      1\n\ntargetSum = 22\n\nPath: 5 -> 4 -> 11 -> 2\nSum: 5 + 4 + 11 + 2 = 22 ✓\n\nAnswer: true\n\n**Example 2:**\nTree:\n    1\n   / \\\n  2   3\n\ntargetSum = 5\n\nPath 1: 1 -> 2, Sum = 3\nPath 2: 1 -> 3, Sum = 4\n\nNo path sums to 5.\nAnswer: false\n\n**Example 3:**\nTree: null\ntargetSum = 0\n\nEmpty tree has no paths.\nAnswer: false\n\n**Step-by-step trace for Example 1 (Recursive approach):**\n\nTree:\n    5\n   / \\\n  4   8\n /   / \\\n11  13  4\n/ \\      \\\n7  2      1\n\ntargetSum = 22\n\nWe'll use recursion with a running sum:\n- **hasPathSum(5, 22)**:\n  - Current sum = 5\n  - Remaining = 22 - 5 = 17\n  - Check left: hasPathSum(4, 17)\n  - Check right: hasPathSum(8, 17)\n  - Return left || right\n\n- **hasPathSum(4, 17)**:\n  - Current sum = 4\n  - Remaining = 17 - 4 = 13\n  - Check left: hasPathSum(11, 13)\n  - Check right: null, skip\n  - Return result from left\n\n- **hasPathSum(11, 13)**:\n  - Current sum = 11\n  - Remaining = 13 - 11 = 2\n  - Check left: hasPathSum(7, 2) = false\n  - Check right: hasPathSum(2, 2) = true ✓\n  - Return false || true = true\n\n- **hasPathSum(2, 2)**:\n  - Current sum = 2\n  - Remaining = 2 - 2 = 0\n  - This is a leaf (both children null)\n  - Remaining == 0, return true ✓\n\n**Key Insight:**\nWe subtract the current node's value from targetSum as we go down. When we reach a leaf, if the remaining sum is 0, we found a valid path!\n\n**What makes this tricky:**\n1. Understanding that we need a root-to-leaf path (not root-to-any-node)\n2. Tracking the remaining sum as we traverse\n3. Handling the base case: leaf node with remaining sum == 0\n4. Returning true if ANY path works (left OR right)\n\n**Common pitfalls:**\n- Not checking that we're at a leaf (checking any node)\n- Not handling null root correctly\n- Not using OR (||) to check left or right paths\n- Off-by-one errors in sum calculation",
+      "stepId": "lesson-illustration",
+      "mentorSays": "Perfect! Now let's understand what the Path Sum lesson is asking.\n\n**Lesson Definition:**\nGiven the root of a binary tree and an integer `targetSum`, return `true` if the tree has a root-to-leaf path such that adding up all the values along the path equals `targetSum`.\n\nA leaf is a node with no children.\n\n**Key Observations:**\n- We need to find a path from root to a leaf (not any node)\n- The sum of all values on the path must equal targetSum\n- We traverse from root to leaf, accumulating the sum\n- A leaf has no children (both left and right are null)\n\n**Example 1:**\nTree:\n    5\n   / \\\n  4   8\n /   / \\\n11  13  4\n/ \\      \\\n7  2      1\n\ntargetSum = 22\n\nPath: 5 -> 4 -> 11 -> 2\nSum: 5 + 4 + 11 + 2 = 22 ✓\n\nAnswer: true\n\n**Example 2:**\nTree:\n    1\n   / \\\n  2   3\n\ntargetSum = 5\n\nPath 1: 1 -> 2, Sum = 3\nPath 2: 1 -> 3, Sum = 4\n\nNo path sums to 5.\nAnswer: false\n\n**Example 3:**\nTree: null\ntargetSum = 0\n\nEmpty tree has no paths.\nAnswer: false\n\n**Step-by-step trace for Example 1 (Recursive approach):**\n\nTree:\n    5\n   / \\\n  4   8\n /   / \\\n11  13  4\n/ \\      \\\n7  2      1\n\ntargetSum = 22\n\nWe'll use recursion with a running sum:\n- **hasPathSum(5, 22)**:\n  - Current sum = 5\n  - Remaining = 22 - 5 = 17\n  - Check left: hasPathSum(4, 17)\n  - Check right: hasPathSum(8, 17)\n  - Return left || right\n\n- **hasPathSum(4, 17)**:\n  - Current sum = 4\n  - Remaining = 17 - 4 = 13\n  - Check left: hasPathSum(11, 13)\n  - Check right: null, skip\n  - Return result from left\n\n- **hasPathSum(11, 13)**:\n  - Current sum = 11\n  - Remaining = 13 - 11 = 2\n  - Check left: hasPathSum(7, 2) = false\n  - Check right: hasPathSum(2, 2) = true ✓\n  - Return false || true = true\n\n- **hasPathSum(2, 2)**:\n  - Current sum = 2\n  - Remaining = 2 - 2 = 0\n  - This is a leaf (both children null)\n  - Remaining == 0, return true ✓\n\n**Key Insight:**\nWe subtract the current node's value from targetSum as we go down. When we reach a leaf, if the remaining sum is 0, we found a valid path!\n\n**What makes this tricky:**\n1. Understanding that we need a root-to-leaf path (not root-to-any-node)\n2. Tracking the remaining sum as we traverse\n3. Handling the base case: leaf node with remaining sum == 0\n4. Returning true if ANY path works (left OR right)\n\n**Common pitfalls:**\n- Not checking that we're at a leaf (checking any node)\n- Not handling null root correctly\n- Not using OR (||) to check left or right paths\n- Off-by-one errors in sum calculation",
       "example": "Example 1:\nTree:\n    5\n   / \\\n  4   8\n /   / \\\n11  13  4\n/ \\      \\\n7  2      1\n\ntargetSum = 22\nPath: 5->4->11->2, Sum = 22\nAnswer: true\n\nExample 2:\nTree:\n    1\n   / \\\n  2   3\n\ntargetSum = 5\nNo path sums to 5\nAnswer: false",
       "action": "continue",
       "next": "thinking-challenge"
     },
     {
       "stepId": "thinking-challenge",
-      "mentorSays": "Now that you understand what the problem wants, here's the real question:\n\nHow would YOU check if there's a root-to-leaf path that sums to targetSum?\n\nThink about it for a moment. What approach feels natural to you?",
+      "mentorSays": "Now that you understand what the lesson wants, here's the real question:\n\nHow would YOU check if there's a root-to-leaf path that sums to targetSum?\n\nThink about it for a moment. What approach feels natural to you?",
       "choices": [
         {
           "label": "Use recursion - subtract current value from targetSum, check at leaf",
@@ -51,7 +51,7 @@
     },
     {
       "stepId": "explore-recursive",
-      "mentorSays": "Excellent choice! Recursion is the most elegant solution for this problem. Here's the core idea:\n\n**The Algorithm:**\n1. **Base case 1**: If root is null, return false (no path exists)\n2. **Base case 2**: If root is a leaf (both children null) AND targetSum == root.val, return true\n3. **Recursive case**: \n   - Subtract root.val from targetSum\n   - Recursively check left subtree: hasPathSum(root.left, targetSum - root.val)\n   - Recursively check right subtree: hasPathSum(root.right, targetSum - root.val)\n   - Return left || right (true if either path works)\n\n**Why it works**:\n- We subtract the current node's value from targetSum as we go down\n- When we reach a leaf, if remaining sum equals the leaf's value, we found a path\n- We check both left and right subtrees, returning true if either has a valid path\n\n**Key insight**: Instead of tracking a running sum, we subtract from targetSum! This simplifies the logic.\n\nLet's trace with tree:\n    5\n   / \\\n  4   8\n\ntargetSum = 9\n\n- **hasPathSum(5, 9)**:\n  - Not a leaf, subtract: remaining = 9 - 5 = 4\n  - Left: hasPathSum(4, 4) = true\n  - Right: hasPathSum(8, 4) = false\n  - Return true || false = true ✓\n\n- **hasPathSum(4, 4)**:\n  - Is a leaf (both children null)\n  - targetSum == root.val (4 == 4), return true ✓\n\nThis is O(n) time (visit each node once) and O(h) space (recursion stack)! Now let's code it step by step.",
+      "mentorSays": "Excellent choice! Recursion is the most elegant solution for this lesson. Here's the core idea:\n\n**The Algorithm:**\n1. **Base case 1**: If root is null, return false (no path exists)\n2. **Base case 2**: If root is a leaf (both children null) AND targetSum == root.val, return true\n3. **Recursive case**: \n   - Subtract root.val from targetSum\n   - Recursively check left subtree: hasPathSum(root.left, targetSum - root.val)\n   - Recursively check right subtree: hasPathSum(root.right, targetSum - root.val)\n   - Return left || right (true if either path works)\n\n**Why it works**:\n- We subtract the current node's value from targetSum as we go down\n- When we reach a leaf, if remaining sum equals the leaf's value, we found a path\n- We check both left and right subtrees, returning true if either has a valid path\n\n**Key insight**: Instead of tracking a running sum, we subtract from targetSum! This simplifies the logic.\n\nLet's trace with tree:\n    5\n   / \\\n  4   8\n\ntargetSum = 9\n\n- **hasPathSum(5, 9)**:\n  - Not a leaf, subtract: remaining = 9 - 5 = 4\n  - Left: hasPathSum(4, 4) = true\n  - Right: hasPathSum(8, 4) = false\n  - Return true || false = true ✓\n\n- **hasPathSum(4, 4)**:\n  - Is a leaf (both children null)\n  - targetSum == root.val (4 == 4), return true ✓\n\nThis is O(n) time (visit each node once) and O(h) space (recursion stack)! Now let's code it step by step.",
       "action": "continue",
       "next": "language-selection"
     },
@@ -146,7 +146,7 @@
     },
     {
       "stepId": "tree-check-js",
-      "mentorSays": "To solve this problem, we'll need to work with binary trees. Do you know what a binary tree is?",
+      "mentorSays": "To solve this lesson, we'll need to work with binary trees. Do you know what a binary tree is?",
       "choices": [
         {
           "label": "Yes, I know binary trees",
@@ -167,7 +167,7 @@
     },
     {
       "stepId": "recursion-check-js",
-      "mentorSays": "To solve this problem, we'll use recursion. Do you know what recursion is in JavaScript?",
+      "mentorSays": "To solve this lesson, we'll use recursion. Do you know what recursion is in JavaScript?",
       "choices": [
         {
           "label": "Yes, I know recursion",
@@ -181,7 +181,7 @@
     },
     {
       "stepId": "recursion-explanation-js",
-      "mentorSays": "Recursion is when a function calls itself. For tree problems, we often use recursion because:\n- A tree is naturally recursive (each subtree is also a tree)\n- We can solve the problem for the whole tree by solving it for subtrees",
+      "mentorSays": "Recursion is when a function calls itself. For tree lessons, we often use recursion because:\n- A tree is naturally recursive (each subtree is also a tree)\n- We can solve the lesson for the whole tree by solving it for subtrees",
       "example": "function hasPathSum(root, targetSum) {\n  // Base cases\n  if (root === null) return false;\n  if (root.left === null && root.right === null) {\n    return targetSum === root.val;\n  }\n  \n  // Recursive calls\n  return hasPathSum(root.left, targetSum - root.val) ||\n         hasPathSum(root.right, targetSum - root.val);\n}",
       "action": "continue",
       "next": "coding-start-js"
@@ -300,7 +300,7 @@
     },
     {
       "stepId": "tree-check-python",
-      "mentorSays": "To solve this problem, we'll need to work with binary trees. Do you know what a binary tree is?",
+      "mentorSays": "To solve this lesson, we'll need to work with binary trees. Do you know what a binary tree is?",
       "choices": [
         {
           "label": "Yes, I know binary trees",
@@ -321,7 +321,7 @@
     },
     {
       "stepId": "recursion-check-python",
-      "mentorSays": "To solve this problem, we'll use recursion. Do you know what recursion is in Python?",
+      "mentorSays": "To solve this lesson, we'll use recursion. Do you know what recursion is in Python?",
       "choices": [
         {
           "label": "Yes, I know recursion",
@@ -335,7 +335,7 @@
     },
     {
       "stepId": "recursion-explanation-python",
-      "mentorSays": "Recursion is when a function calls itself. For tree problems, we often use recursion because:\n- A tree is naturally recursive (each subtree is also a tree)\n- We can solve the problem for the whole tree by solving it for subtrees",
+      "mentorSays": "Recursion is when a function calls itself. For tree lessons, we often use recursion because:\n- A tree is naturally recursive (each subtree is also a tree)\n- We can solve the lesson for the whole tree by solving it for subtrees",
       "example": "function hasPathSum(root, targetSum) {\n  // Base cases\n  if (root === null) return false;\n  if (root.left === null && root.right === null) {\n    return targetSum === root.val;\n  }\n  \n  // Recursive calls\n  return hasPathSum(root.left, targetSum - root.val) ||\n         hasPathSum(root.right, targetSum - root.val);\n}",
       "action": "continue",
       "next": "coding-start-python"
@@ -454,7 +454,7 @@
     },
     {
       "stepId": "tree-check-java",
-      "mentorSays": "To solve this problem, we'll need to work with binary trees. Do you know what a binary tree is?",
+      "mentorSays": "To solve this lesson, we'll need to work with binary trees. Do you know what a binary tree is?",
       "choices": [
         {
           "label": "Yes, I know binary trees",
@@ -475,7 +475,7 @@
     },
     {
       "stepId": "recursion-check-java",
-      "mentorSays": "To solve this problem, we'll use recursion. Do you know what recursion is in Java?",
+      "mentorSays": "To solve this lesson, we'll use recursion. Do you know what recursion is in Java?",
       "choices": [
         {
           "label": "Yes, I know recursion",
@@ -489,7 +489,7 @@
     },
     {
       "stepId": "recursion-explanation-java",
-      "mentorSays": "Recursion is when a function calls itself. For tree problems, we often use recursion because:\n- A tree is naturally recursive (each subtree is also a tree)\n- We can solve the problem for the whole tree by solving it for subtrees",
+      "mentorSays": "Recursion is when a function calls itself. For tree lessons, we often use recursion because:\n- A tree is naturally recursive (each subtree is also a tree)\n- We can solve the lesson for the whole tree by solving it for subtrees",
       "example": "function hasPathSum(root, targetSum) {\n  // Base cases\n  if (root === null) return false;\n  if (root.left === null && root.right === null) {\n    return targetSum === root.val;\n  }\n  \n  // Recursive calls\n  return hasPathSum(root.left, targetSum - root.val) ||\n         hasPathSum(root.right, targetSum - root.val);\n}",
       "action": "continue",
       "next": "coding-start-java"
@@ -608,7 +608,7 @@
     },
     {
       "stepId": "tree-check-cpp",
-      "mentorSays": "To solve this problem, we'll need to work with binary trees. Do you know what a binary tree is?",
+      "mentorSays": "To solve this lesson, we'll need to work with binary trees. Do you know what a binary tree is?",
       "choices": [
         {
           "label": "Yes, I know binary trees",
@@ -629,7 +629,7 @@
     },
     {
       "stepId": "recursion-check-cpp",
-      "mentorSays": "To solve this problem, we'll use recursion. Do you know what recursion is in C++?",
+      "mentorSays": "To solve this lesson, we'll use recursion. Do you know what recursion is in C++?",
       "choices": [
         {
           "label": "Yes, I know recursion",
@@ -643,7 +643,7 @@
     },
     {
       "stepId": "recursion-explanation-cpp",
-      "mentorSays": "Recursion is when a function calls itself. For tree problems, we often use recursion because:\n- A tree is naturally recursive (each subtree is also a tree)\n- We can solve the problem for the whole tree by solving it for subtrees",
+      "mentorSays": "Recursion is when a function calls itself. For tree lessons, we often use recursion because:\n- A tree is naturally recursive (each subtree is also a tree)\n- We can solve the lesson for the whole tree by solving it for subtrees",
       "example": "function hasPathSum(root, targetSum) {\n  // Base cases\n  if (root === null) return false;\n  if (root.left === null && root.right === null) {\n    return targetSum === root.val;\n  }\n  \n  // Recursive calls\n  return hasPathSum(root.left, targetSum - root.val) ||\n         hasPathSum(root.right, targetSum - root.val);\n}",
       "action": "continue",
       "next": "coding-start-cpp"
@@ -762,7 +762,7 @@
     },
     {
       "stepId": "tree-check-ts",
-      "mentorSays": "To solve this problem, we'll need to work with binary trees. Do you know what a binary tree is?",
+      "mentorSays": "To solve this lesson, we'll need to work with binary trees. Do you know what a binary tree is?",
       "choices": [
         {
           "label": "Yes, I know binary trees",
@@ -783,7 +783,7 @@
     },
     {
       "stepId": "recursion-check-ts",
-      "mentorSays": "To solve this problem, we'll use recursion. Do you know what recursion is in TypeScript?",
+      "mentorSays": "To solve this lesson, we'll use recursion. Do you know what recursion is in TypeScript?",
       "choices": [
         {
           "label": "Yes, I know recursion",
@@ -797,7 +797,7 @@
     },
     {
       "stepId": "recursion-explanation-ts",
-      "mentorSays": "Recursion is when a function calls itself. For tree problems, we often use recursion because:\n- A tree is naturally recursive (each subtree is also a tree)\n- We can solve the problem for the whole tree by solving it for subtrees",
+      "mentorSays": "Recursion is when a function calls itself. For tree lessons, we often use recursion because:\n- A tree is naturally recursive (each subtree is also a tree)\n- We can solve the lesson for the whole tree by solving it for subtrees",
       "example": "function hasPathSum(root, targetSum) {\n  // Base cases\n  if (root === null) return false;\n  if (root.left === null && root.right === null) {\n    return targetSum === root.val;\n  }\n  \n  // Recursive calls\n  return hasPathSum(root.left, targetSum - root.val) ||\n         hasPathSum(root.right, targetSum - root.val);\n}",
       "action": "continue",
       "next": "coding-start-ts"
@@ -853,7 +853,7 @@
     },
     {
       "stepId": "final",
-      "mentorSays": "🎉 Well done! You've successfully implemented the Path Sum solution!\n\n**Time Complexity:** O(n)\n- We visit each node exactly once\n- n is the number of nodes in the tree\n\n**Space Complexity:** O(h)\n- The recursion stack uses space proportional to the height of the tree\n- In the worst case (skewed tree), h = n, so O(n)\n- In the best case (balanced tree), h = log n, so O(log n)\n\n**Key Takeaways:**\n1. **Recursive approach**: Subtract current value from targetSum, check at leaf\n2. **Base cases**: Null root = false, leaf with matching sum = true\n3. **Path must be root-to-leaf**: Not just root-to-any-node\n4. **OR logic**: Return true if left OR right subtree has a valid path\n5. **Subtract instead of add**: Simplifies logic by working backwards from target\n\n**Related Practice Problems:**\n- Path Sum II (LeetCode #113) - find all paths that sum to target\n- Path Sum III (LeetCode #437) - paths don't need to start at root\n- Binary Tree Maximum Path Sum (LeetCode #124) - find maximum path sum\n\nKeep practicing tree problems - they're fundamental for interviews!",
+      "mentorSays": "🎉 Well done! You've successfully implemented the Path Sum solution!\n\n**Time Complexity:** O(n)\n- We visit each node exactly once\n- n is the number of nodes in the tree\n\n**Space Complexity:** O(h)\n- The recursion stack uses space proportional to the height of the tree\n- In the worst case (skewed tree), h = n, so O(n)\n- In the best case (balanced tree), h = log n, so O(log n)\n\n**Key Takeaways:**\n1. **Recursive approach**: Subtract current value from targetSum, check at leaf\n2. **Base cases**: Null root = false, leaf with matching sum = true\n3. **Path must be root-to-leaf**: Not just root-to-any-node\n4. **OR logic**: Return true if left OR right subtree has a valid path\n5. **Subtract instead of add**: Simplifies logic by working backwards from target\n\n**Related Practice Lessons:**\n- Path Sum II (LeetCode #113) - find all paths that sum to target\n- Path Sum III (LeetCode #437) - paths don't need to start at root\n- Binary Tree Maximum Path Sum (LeetCode #124) - find maximum path sum\n\nKeep practicing tree lessons - they're fundamental for interviews!",
       "action": "continue"
     }
   ]

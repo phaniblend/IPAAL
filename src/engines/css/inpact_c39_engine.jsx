@@ -73,7 +73,7 @@ function getOutputPreview(answer) {
 export default createINPACTEngine({
   NODES,
   sideItems,
-  problemNum: 39,
+  lessonNum: 39,
   title: "Media queries",
   shortName: "C39",
   language: "css",

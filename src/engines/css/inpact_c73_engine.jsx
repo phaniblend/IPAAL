@@ -73,7 +73,7 @@ function getOutputPreview(answer) {
 export default createINPACTEngine({
   NODES,
   sideItems,
-  problemNum: 73,
+  lessonNum: 73,
   title: "Responsive typography (clamp)",
   shortName: "C73",
   language: "css",

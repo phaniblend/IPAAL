@@ -8,4 +8,4 @@ const NODES = [
 // animation-timeline: scroll()`, feedback_correct: "✅ CSS simple; WAAPI control; respect reduced-motion; scroll-driven timeline.", feedback_wrong: "CSS vs WAAPI; reduced-motion; scroll-driven.", expected: "Animation" },
 ];
 const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }];
-export default createINPACTEngine({ NODES, sideItems, problemNum: "FE-06", title: "Animation & interaction", shortName: "FE — ANIMATION" });
+export default createINPACTEngine({ NODES, sideItems, lessonNum: "FE-06", title: "Animation & interaction", shortName: "FE — ANIMATION" });

@@ -73,7 +73,7 @@ function getOutputPreview(answer) {
 export default createINPACTEngine({
   NODES,
   sideItems,
-  problemNum: 14,
+  lessonNum: 14,
   title: "Flex shorthand and patterns",
   shortName: "C14",
   language: "css",

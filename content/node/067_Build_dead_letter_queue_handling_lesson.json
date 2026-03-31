@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-node-67",
     "track": "node",
-    "problemNum": 67,
+    "lessonNum": 67,
     "title": "Build dead letter queue handling",
     "shortName": "P67",
     "intro": {

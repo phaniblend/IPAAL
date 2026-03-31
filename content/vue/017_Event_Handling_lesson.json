@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-vue-17",
     "track": "vue",
-    "problemNum": 17,
+    "lessonNum": 17,
     "title": "Event Handling",
     "shortName": "P17",
     "intro": {

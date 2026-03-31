@@ -35,8 +35,8 @@ export default function DynamicLessonPage({
   track,
   lessonTitle,
   lessonIndex,
-  onBackToProblems,
-  onNextProblem,
+  onBackToLessons,
+  onNextLesson,
   onLessonComplete,
   onFallbackToLocal,
 }) {
@@ -154,7 +154,7 @@ export default function DynamicLessonPage({
           ? "typescript"
           : "javascript",
       skipIntroAndObjectives: true,
-      problemNumFallback:
+      lessonNumFallback:
         params.lessonIndex != null && params.lessonIndex >= 0 ? params.lessonIndex + 1 : undefined,
     });
     const withIntroAndObjectives = {
@@ -216,8 +216,8 @@ export default function DynamicLessonPage({
           </div>
         )}
         <Engine
-          onNextProblem={onNextProblem}
-          onBackToProblems={onBackToProblems}
+          onNextLesson={onNextLesson}
+          onBackToLessons={onBackToLessons}
           onLessonComplete={onLessonComplete}
         />
       </>

@@ -8,4 +8,4 @@ const NODES = [
 // const TOKEN = new InjectionToken<string>('config')`, feedback_correct: "✅ @Injectable providedIn; inject() or constructor; InjectionToken.", feedback_wrong: "providedIn: 'root'; inject service; InjectionToken for config.", expected: "DI and tokens" },
 ];
 const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }];
-export default createINPACTEngine({ NODES, sideItems, problemNum: "ANG-F03", title: "Services & DI", shortName: "ANG — DI" });
+export default createINPACTEngine({ NODES, sideItems, lessonNum: "ANG-F03", title: "Services & DI", shortName: "ANG — DI" });

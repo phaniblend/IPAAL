@@ -8,12 +8,12 @@
   "flow": [
     {
       "stepId": "title",
-      "mentorSays": "At the end of this lesson, you will be able to:\n\n1. Understand what the Find All Anagrams problem asks for\n2. Use a sliding window with hash maps to track character frequencies\n3. Compare character counts to find anagram matches\n4. Implement the solution step by step in your chosen language",
+      "mentorSays": "At the end of this lesson, you will be able to:\n\n1. Understand what the Find All Anagrams lesson asks for\n2. Use a sliding window with hash maps to track character frequencies\n3. Compare character counts to find anagram matches\n4. Implement the solution step by step in your chosen language",
       "action": "continue",
-      "next": "problem-illustration"
+      "next": "lesson-illustration"
     },
     {
-      "stepId": "problem-illustration",
+      "stepId": "lesson-illustration",
       "mentorSays": "Let's understand what we're looking for.\n\nWHAT IS AN ANAGRAM?\nAn anagram is a word formed by rearranging letters of another word.\n- 'listen' and 'silent' are anagrams (same letters, different order)\n- 'abc' and 'bca' are anagrams\n- 'abc' and 'def' are NOT anagrams (different letters)\n\nTHE PROBLEM:\nGiven a string s and a pattern p, find all starting positions where p's anagrams appear in s.\n\nEXAMPLE 1:\ns = 'cbaebabacd'\np = 'abc'\n\nLet's check each position:\n- Position 0: 'cba' - Is this an anagram of 'abc'? YES! (c, b, a = a, b, c) ✓\n- Position 1: 'bae' - Is this an anagram of 'abc'? NO (has 'e') ✗\n- Position 2: 'aeb' - Is this an anagram of 'abc'? NO (has 'e') ✗\n- Position 3: 'eba' - Is this an anagram of 'abc'? NO (has 'e') ✗\n- Position 4: 'bab' - Is this an anagram of 'abc'? NO (has 2 b's) ✗\n- Position 5: 'aba' - Is this an anagram of 'abc'? NO (has 2 a's) ✗\n- Position 6: 'bac' - Is this an anagram of 'abc'? YES! (b, a, c = a, b, c) ✓\n- Position 7: 'acd' - Not enough characters left\n- Position 8: 'cd' - Not enough characters left\n\nAnswer: [0, 6]\n\nEXAMPLE 2:\ns = 'abab'\np = 'ab'\n\n- Position 0: 'ab' - anagram of 'ab'? YES! ✓\n- Position 1: 'ba' - anagram of 'ab'? YES! ✓\n- Position 2: 'ab' - anagram of 'ab'? YES! ✓\n\nAnswer: [0, 1, 2]\n\nWHY IS THIS TRICKY?\n- We need to check EVERY position in s\n- Each check requires comparing character counts\n- Naive approach: check every substring = O(n * m * 26) - slow!\n- Smart approach: Use sliding window = O(n) - fast!\n\nWHAT MAKES IT A SLIDING WINDOW PROBLEM?\n- We're looking at substrings of fixed length (p.length)\n- We slide this 'window' across the string s\n- Instead of recounting characters each time, we update the count by:\n  - Removing the character that left the window\n  - Adding the character that entered the window\n\nThis is classic sliding window!",
       "example": "s = \"cbaebabacd\"\np = \"abc\"\n\nVisual representation:\n[ c b a ] e b a b a c d  ← Window at index 0: \"cba\" ✓\nc [ b a e ] b a b a c d  ← Window at index 1: \"bae\" ✗\nc b [ a e b ] a b a c d  ← Window at index 2: \"aeb\" ✗\n...\nc b a e b a [ b a c ] d  ← Window at index 6: \"bac\" ✓\n\nAnswer: [0, 6]",
       "action": "continue",
@@ -21,7 +21,7 @@
     },
     {
       "stepId": "thinking-challenge",
-      "mentorSays": "Now that you understand what the problem wants, here's the real question:\n\nHow would YOU find all anagrams in a string?\n\nThink about it for a moment. What approach feels natural to you?",
+      "mentorSays": "Now that you understand what the lesson wants, here's the real question:\n\nHow would YOU find all anagrams in a string?\n\nThink about it for a moment. What approach feels natural to you?",
       "choices": [
         {
           "label": "Use a sliding window with hash maps to compare character frequencies",
@@ -138,7 +138,7 @@
     },
     {
       "stepId": "array-check-js",
-      "mentorSays": "To solve this problem, we'll use arrays/lists to store results. Do you understand how arrays work in JavaScript?",
+      "mentorSays": "To solve this lesson, we'll use arrays/lists to store results. Do you understand how arrays work in JavaScript?",
       "choices": [
         {
           "label": "Yes, I know arrays",
@@ -297,7 +297,7 @@
     },
     {
       "stepId": "array-check-python",
-      "mentorSays": "To solve this problem, we'll use arrays/lists to store results. Do you understand how arrays work in Python?",
+      "mentorSays": "To solve this lesson, we'll use arrays/lists to store results. Do you understand how arrays work in Python?",
       "choices": [
         {
           "label": "Yes, I know arrays",
@@ -456,7 +456,7 @@
     },
     {
       "stepId": "array-check-java",
-      "mentorSays": "To solve this problem, we'll use arrays/lists to store results. Do you understand how arrays work in Java?",
+      "mentorSays": "To solve this lesson, we'll use arrays/lists to store results. Do you understand how arrays work in Java?",
       "choices": [
         {
           "label": "Yes, I know arrays",
@@ -615,7 +615,7 @@
     },
     {
       "stepId": "array-check-cpp",
-      "mentorSays": "To solve this problem, we'll use arrays/lists to store results. Do you understand how arrays work in C++?",
+      "mentorSays": "To solve this lesson, we'll use arrays/lists to store results. Do you understand how arrays work in C++?",
       "choices": [
         {
           "label": "Yes, I know arrays",
@@ -774,7 +774,7 @@
     },
     {
       "stepId": "array-check-ts",
-      "mentorSays": "To solve this problem, we'll use arrays/lists to store results. Do you understand how arrays work in TypeScript?",
+      "mentorSays": "To solve this lesson, we'll use arrays/lists to store results. Do you understand how arrays work in TypeScript?",
       "choices": [
         {
           "label": "Yes, I know arrays",
@@ -878,7 +878,7 @@
     },
     {
       "stepId": "final",
-      "mentorSays": "🎉 Well done! You've learned to think through the Find All Anagrams problem. You understand what the problem asks for, how to use sliding windows with hash maps to track character frequencies, and how to compare frequencies to find anagram matches.\n\nThis kind of thinking—using sliding windows with hash maps—is essential for solving many string problems. Keep practicing!",
+      "mentorSays": "🎉 Well done! You've learned to think through the Find All Anagrams lesson. You understand what the lesson asks for, how to use sliding windows with hash maps to track character frequencies, and how to compare frequencies to find anagram matches.\n\nThis kind of thinking—using sliding windows with hash maps—is essential for solving many string lessons. Keep practicing!",
       "action": "continue"
     }
   ]

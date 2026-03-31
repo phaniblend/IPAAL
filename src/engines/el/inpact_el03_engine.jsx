@@ -8,4 +8,4 @@ const NODES = [
 // Dependency map: who blocks whom; critical path`, feedback_correct: "✅ OKRs outcome + measurable; now/next/later; dependency map.", feedback_wrong: "OKRs; now/next/later; dependency mapping.", expected: "Technical roadmapping" },
 ];
 const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }];
-export default createINPACTEngine({ NODES, sideItems, problemNum: "EL-03", title: "Technical roadmapping", shortName: "EL — ROADMAP" });
+export default createINPACTEngine({ NODES, sideItems, lessonNum: "EL-03", title: "Technical roadmapping", shortName: "EL — ROADMAP" });

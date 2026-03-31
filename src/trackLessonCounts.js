@@ -21,7 +21,7 @@ import { MOBILE_ANGULAR_LESSON_COUNT } from "./mobileAngularLessons.js";
 
 const ANGULAR_EXTRA_LESSONS = 14; // QB01–QB05 (QuickBite) + ANG01–ANG09 before the shared React list
 
-/** React · JS and React · TS both have the same count (must match PROBLEM_LIST.length in LandingPage). */
+/** React · JS and React · TS both have the same count (must match LESSON_LIST.length in LandingPage). */
 const REACT_TS_LESSON_COUNT = 122;
 
 /** Fallback when reactListLength not provided (e.g. for category summary). */
@@ -29,7 +29,7 @@ const DEFAULT_REACT_LIST_LENGTH = REACT_TS_LESSON_COUNT;
 
 /**
  * @param {string} track - Track id (e.g. 'react-js', 'algo-ts', 'algorithms')
- * @param {{ reactListLength?: number }} [options] - Pass PROBLEM_LIST.length to keep in sync with LandingPage
+ * @param {{ reactListLength?: number }} [options] - Pass LESSON_LIST.length to keep in sync with LandingPage
  * @returns {number}
  */
 export function getLessonCount(track, options = {}) {

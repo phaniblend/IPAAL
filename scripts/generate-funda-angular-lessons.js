@@ -680,7 +680,7 @@ function main() {
       process.exit(1);
     }
     const lessonIndex = FUNDA_START_INDEX + i;
-    const problemNum = lessonIndex + 1;
+    const lessonNum = lessonIndex + 1;
     let steps = buildSteps(L, lessonIndex);
     // Hand-edited steps for Live Search Bar — keep when re-running this script
     if (L.file === "129_FUNDA_Live_Search_Bar_lesson.json") {
@@ -702,11 +702,11 @@ function main() {
     const config = {
       lessonId: `ai-angular-funda-${String(i + 1).padStart(2, "0")}`,
       track: "angular",
-      problemNum,
+      lessonNum,
       title: L.title,
       shortName: L.shortName,
       intro: {
-        tag: `LESSON #${problemNum}`,
+        tag: `LESSON #${lessonNum}`,
         title: L.title,
         body: L.body,
         usecase: L.usecase,

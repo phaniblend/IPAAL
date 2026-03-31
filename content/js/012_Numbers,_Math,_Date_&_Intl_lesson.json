@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-js-12",
     "track": "js",
-    "problemNum": 12,
+    "lessonNum": 12,
     "title": "Numbers, Math, Date & Intl",
     "shortName": "P12",
     "intro": {

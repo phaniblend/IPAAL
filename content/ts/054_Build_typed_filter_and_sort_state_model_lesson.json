@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-ts-54",
     "track": "ts",
-    "problemNum": 54,
+    "lessonNum": 54,
     "title": "Build typed filter and sort state model",
     "shortName": "P54",
     "intro": {

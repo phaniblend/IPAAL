@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-express-01",
     "track": "express",
-    "problemNum": 1,
+    "lessonNum": 1,
     "title": "App setup & middleware chain",
     "shortName": "P01",
     "intro": {

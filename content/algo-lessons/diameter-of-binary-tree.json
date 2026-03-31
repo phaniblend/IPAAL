@@ -8,20 +8,20 @@
   "flow": [
     {
       "stepId": "title",
-      "mentorSays": "At the end of this lesson, you will be able to:\n\n1. Understand what the Diameter of Binary Tree problem asks for\n2. Use recursion to calculate the diameter\n3. Track both height and diameter in the same traversal\n4. Understand that diameter may pass through root or not\n5. Implement the solution step by step in your chosen language",
+      "mentorSays": "At the end of this lesson, you will be able to:\n\n1. Understand what the Diameter of Binary Tree lesson asks for\n2. Use recursion to calculate the diameter\n3. Track both height and diameter in the same traversal\n4. Understand that diameter may pass through root or not\n5. Implement the solution step by step in your chosen language",
       "action": "continue",
-      "next": "problem-illustration"
+      "next": "lesson-illustration"
     },
     {
-      "stepId": "problem-illustration",
-      "mentorSays": "Perfect! Now let's understand what the Diameter of Binary Tree problem is asking.\n\n**Problem Definition:**\nGiven the root of a binary tree, return the length of the diameter of the tree.\n\nThe diameter of a binary tree is the length of the longest path between any two nodes in a tree. This path may or may not pass through the root.\n\nThe length of a path between two nodes is represented by the number of edges between them.\n\n**Key Observations:**\n- Diameter is the longest path between any two nodes\n- Path length is measured in edges (not nodes)\n- The path may or may not pass through the root\n- We need to check all possible paths\n\n**Example 1:**\nTree:\n    1\n   / \\\n  2   3\n / \\\n4   5\n\nLongest path: 4 -> 2 -> 1 -> 3 (3 edges)\nOR: 4 -> 2 -> 5 (3 edges)\n\nDiameter: 3\n\n**Example 2:**\nTree:\n    1\n   /\n  2\n\nLongest path: 1 -> 2 (1 edge)\n\nDiameter: 1\n\n**Step-by-step trace for Example 1 (Recursive approach):**\n\nTree:\n    1\n   / \\\n  2   3\n / \\\n4   5\n\nWe'll use recursion to calculate height and track diameter:\n- **diameter(1)**:\n  - Left height = diameter(2) = 2\n  - Right height = diameter(3) = 0\n  - Diameter through root = 2 + 0 = 2\n  - Max diameter = max(2, left_diameter, right_diameter)\n  - Return height = 1 + max(2, 0) = 3\n\n- **diameter(2)**:\n  - Left height = diameter(4) = 0\n  - Right height = diameter(5) = 0\n  - Diameter through root = 0 + 0 = 0\n  - Max diameter = max(0, 0, 0) = 0\n  - But actual diameter at node 2 = 1 (path 4->2->5)\n  - Return height = 1 + max(0, 0) = 1\n\n**Key Insight:**\nThe diameter at a node = left height + right height. We need to track the maximum diameter across all nodes!\n\n**What makes this tricky:**\n1. Understanding that diameter may not pass through root\n2. Calculating diameter at each node (left height + right height)\n3. Tracking the maximum diameter globally\n4. Returning height from recursion (not diameter)\n\n**Common pitfalls:**\n- Only checking diameter through root\n- Not tracking maximum diameter globally\n- Confusing height (edges) with depth (nodes)\n- Returning diameter instead of height from helper function",
+      "stepId": "lesson-illustration",
+      "mentorSays": "Perfect! Now let's understand what the Diameter of Binary Tree lesson is asking.\n\n**Lesson Definition:**\nGiven the root of a binary tree, return the length of the diameter of the tree.\n\nThe diameter of a binary tree is the length of the longest path between any two nodes in a tree. This path may or may not pass through the root.\n\nThe length of a path between two nodes is represented by the number of edges between them.\n\n**Key Observations:**\n- Diameter is the longest path between any two nodes\n- Path length is measured in edges (not nodes)\n- The path may or may not pass through the root\n- We need to check all possible paths\n\n**Example 1:**\nTree:\n    1\n   / \\\n  2   3\n / \\\n4   5\n\nLongest path: 4 -> 2 -> 1 -> 3 (3 edges)\nOR: 4 -> 2 -> 5 (3 edges)\n\nDiameter: 3\n\n**Example 2:**\nTree:\n    1\n   /\n  2\n\nLongest path: 1 -> 2 (1 edge)\n\nDiameter: 1\n\n**Step-by-step trace for Example 1 (Recursive approach):**\n\nTree:\n    1\n   / \\\n  2   3\n / \\\n4   5\n\nWe'll use recursion to calculate height and track diameter:\n- **diameter(1)**:\n  - Left height = diameter(2) = 2\n  - Right height = diameter(3) = 0\n  - Diameter through root = 2 + 0 = 2\n  - Max diameter = max(2, left_diameter, right_diameter)\n  - Return height = 1 + max(2, 0) = 3\n\n- **diameter(2)**:\n  - Left height = diameter(4) = 0\n  - Right height = diameter(5) = 0\n  - Diameter through root = 0 + 0 = 0\n  - Max diameter = max(0, 0, 0) = 0\n  - But actual diameter at node 2 = 1 (path 4->2->5)\n  - Return height = 1 + max(0, 0) = 1\n\n**Key Insight:**\nThe diameter at a node = left height + right height. We need to track the maximum diameter across all nodes!\n\n**What makes this tricky:**\n1. Understanding that diameter may not pass through root\n2. Calculating diameter at each node (left height + right height)\n3. Tracking the maximum diameter globally\n4. Returning height from recursion (not diameter)\n\n**Common pitfalls:**\n- Only checking diameter through root\n- Not tracking maximum diameter globally\n- Confusing height (edges) with depth (nodes)\n- Returning diameter instead of height from helper function",
       "example": "Example 1:\nTree:\n    1\n   / \\\n  2   3\n / \\\n4   5\n\nDiameter: 3 (path: 4->2->1->3 or 4->2->5)\n\nExample 2:\nTree:\n    1\n   /\n  2\n\nDiameter: 1 (path: 1->2)",
       "action": "continue",
       "next": "thinking-challenge"
     },
     {
       "stepId": "thinking-challenge",
-      "mentorSays": "Now that you understand what the problem wants, here's the real question:\n\nHow would YOU find the diameter of a binary tree?\n\nThink about it for a moment. What approach feels natural to you?",
+      "mentorSays": "Now that you understand what the lesson wants, here's the real question:\n\nHow would YOU find the diameter of a binary tree?\n\nThink about it for a moment. What approach feels natural to you?",
       "choices": [
         {
           "label": "Use recursion - calculate height and track diameter at each node",
@@ -51,7 +51,7 @@
     },
     {
       "stepId": "explore-recursive",
-      "mentorSays": "Excellent choice! Recursion is the most elegant solution for this problem. Here's the core idea:\n\n**The Algorithm:**\n1. **Helper function**: Calculate height and track diameter\n2. **At each node**:\n   - Calculate left height: height(node.left)\n   - Calculate right height: height(node.right)\n   - Diameter through this node = left height + right height\n   - Update global maximum diameter\n   - Return height = 1 + max(left height, right height)\n3. **Base case**: Null node returns height 0\n4. **Return maximum diameter**\n\n**Why it works**:\n- The diameter at a node = left height + right height (longest path through that node)\n- We check all nodes and track the maximum\n- The helper returns height (needed for parent's calculation)\n- We use a global variable or return both height and diameter\n\n**Key insight**: The diameter may pass through any node, not just the root! We need to check all nodes.\n\nLet's trace with tree:\n    1\n   / \\\n  2   3\n / \\\n4   5\n\n- **diameter(1)**:\n  - Left height = diameter(2) = 1\n  - Right height = diameter(3) = 0\n  - Diameter through 1 = 1 + 0 = 1\n  - Max diameter = max(1, ...) = 1\n  - Return height = 1 + max(1, 0) = 2\n\n- **diameter(2)**:\n  - Left height = diameter(4) = 0\n  - Right height = diameter(5) = 0\n  - Diameter through 2 = 0 + 0 = 0\n  - But wait, path 4->2->5 has 2 edges!\n  - Actually: left height = 1 (from 4), right height = 1 (from 5)\n  - Diameter through 2 = 1 + 1 = 2\n  - Max diameter = max(2, ...) = 2\n  - Return height = 1 + max(1, 1) = 2\n\nThis is O(n) time and O(h) space! Now let's code it step by step.",
+      "mentorSays": "Excellent choice! Recursion is the most elegant solution for this lesson. Here's the core idea:\n\n**The Algorithm:**\n1. **Helper function**: Calculate height and track diameter\n2. **At each node**:\n   - Calculate left height: height(node.left)\n   - Calculate right height: height(node.right)\n   - Diameter through this node = left height + right height\n   - Update global maximum diameter\n   - Return height = 1 + max(left height, right height)\n3. **Base case**: Null node returns height 0\n4. **Return maximum diameter**\n\n**Why it works**:\n- The diameter at a node = left height + right height (longest path through that node)\n- We check all nodes and track the maximum\n- The helper returns height (needed for parent's calculation)\n- We use a global variable or return both height and diameter\n\n**Key insight**: The diameter may pass through any node, not just the root! We need to check all nodes.\n\nLet's trace with tree:\n    1\n   / \\\n  2   3\n / \\\n4   5\n\n- **diameter(1)**:\n  - Left height = diameter(2) = 1\n  - Right height = diameter(3) = 0\n  - Diameter through 1 = 1 + 0 = 1\n  - Max diameter = max(1, ...) = 1\n  - Return height = 1 + max(1, 0) = 2\n\n- **diameter(2)**:\n  - Left height = diameter(4) = 0\n  - Right height = diameter(5) = 0\n  - Diameter through 2 = 0 + 0 = 0\n  - But wait, path 4->2->5 has 2 edges!\n  - Actually: left height = 1 (from 4), right height = 1 (from 5)\n  - Diameter through 2 = 1 + 1 = 2\n  - Max diameter = max(2, ...) = 2\n  - Return height = 1 + max(1, 1) = 2\n\nThis is O(n) time and O(h) space! Now let's code it step by step.",
       "action": "continue",
       "next": "language-selection"
     },
@@ -146,7 +146,7 @@
     },
     {
       "stepId": "tree-check-js",
-      "mentorSays": "To solve this problem, we'll need to work with binary trees. Do you know what a binary tree is?",
+      "mentorSays": "To solve this lesson, we'll need to work with binary trees. Do you know what a binary tree is?",
       "choices": [
         {
           "label": "Yes, I know binary trees",
@@ -167,7 +167,7 @@
     },
     {
       "stepId": "recursion-check-js",
-      "mentorSays": "To solve this problem, we'll use recursion. Do you know what recursion is in JavaScript?",
+      "mentorSays": "To solve this lesson, we'll use recursion. Do you know what recursion is in JavaScript?",
       "choices": [
         {
           "label": "Yes, I know recursion",
@@ -181,7 +181,7 @@
     },
     {
       "stepId": "recursion-explanation-js",
-      "mentorSays": "Recursion is when a function calls itself. For tree problems, we often use recursion because:\n- A tree is naturally recursive (each subtree is also a tree)\n- We can solve the problem for the whole tree by solving it for subtrees",
+      "mentorSays": "Recursion is when a function calls itself. For tree lessons, we often use recursion because:\n- A tree is naturally recursive (each subtree is also a tree)\n- We can solve the lesson for the whole tree by solving it for subtrees",
       "example": "function height(root, maxDiameter) {\n  if (root === null) return 0;\n  \n  // Recursive calls\n  let leftHeight = height(root.left, maxDiameter);\n  let rightHeight = height(root.right, maxDiameter);\n  \n  // Update diameter\n  maxDiameter[0] = Math.max(maxDiameter[0], leftHeight + rightHeight);\n  \n  return 1 + Math.max(leftHeight, rightHeight);\n}",
       "action": "continue",
       "next": "coding-start-js"
@@ -314,7 +314,7 @@
     },
     {
       "stepId": "tree-check-python",
-      "mentorSays": "To solve this problem, we'll need to work with binary trees. Do you know what a binary tree is?",
+      "mentorSays": "To solve this lesson, we'll need to work with binary trees. Do you know what a binary tree is?",
       "choices": [
         {
           "label": "Yes, I know binary trees",
@@ -335,7 +335,7 @@
     },
     {
       "stepId": "recursion-check-python",
-      "mentorSays": "To solve this problem, we'll use recursion. Do you know what recursion is in Python?",
+      "mentorSays": "To solve this lesson, we'll use recursion. Do you know what recursion is in Python?",
       "choices": [
         {
           "label": "Yes, I know recursion",
@@ -349,7 +349,7 @@
     },
     {
       "stepId": "recursion-explanation-python",
-      "mentorSays": "Recursion is when a function calls itself. For tree problems, we often use recursion because:\n- A tree is naturally recursive (each subtree is also a tree)\n- We can solve the problem for the whole tree by solving it for subtrees",
+      "mentorSays": "Recursion is when a function calls itself. For tree lessons, we often use recursion because:\n- A tree is naturally recursive (each subtree is also a tree)\n- We can solve the lesson for the whole tree by solving it for subtrees",
       "example": "function height(root, maxDiameter) {\n  if (root === null) return 0;\n  \n  // Recursive calls\n  let leftHeight = height(root.left, maxDiameter);\n  let rightHeight = height(root.right, maxDiameter);\n  \n  // Update diameter\n  maxDiameter[0] = Math.max(maxDiameter[0], leftHeight + rightHeight);\n  \n  return 1 + Math.max(leftHeight, rightHeight);\n}",
       "action": "continue",
       "next": "coding-start-python"
@@ -482,7 +482,7 @@
     },
     {
       "stepId": "tree-check-java",
-      "mentorSays": "To solve this problem, we'll need to work with binary trees. Do you know what a binary tree is?",
+      "mentorSays": "To solve this lesson, we'll need to work with binary trees. Do you know what a binary tree is?",
       "choices": [
         {
           "label": "Yes, I know binary trees",
@@ -503,7 +503,7 @@
     },
     {
       "stepId": "recursion-check-java",
-      "mentorSays": "To solve this problem, we'll use recursion. Do you know what recursion is in Java?",
+      "mentorSays": "To solve this lesson, we'll use recursion. Do you know what recursion is in Java?",
       "choices": [
         {
           "label": "Yes, I know recursion",
@@ -517,7 +517,7 @@
     },
     {
       "stepId": "recursion-explanation-java",
-      "mentorSays": "Recursion is when a function calls itself. For tree problems, we often use recursion because:\n- A tree is naturally recursive (each subtree is also a tree)\n- We can solve the problem for the whole tree by solving it for subtrees",
+      "mentorSays": "Recursion is when a function calls itself. For tree lessons, we often use recursion because:\n- A tree is naturally recursive (each subtree is also a tree)\n- We can solve the lesson for the whole tree by solving it for subtrees",
       "example": "function height(root, maxDiameter) {\n  if (root === null) return 0;\n  \n  // Recursive calls\n  let leftHeight = height(root.left, maxDiameter);\n  let rightHeight = height(root.right, maxDiameter);\n  \n  // Update diameter\n  maxDiameter[0] = Math.max(maxDiameter[0], leftHeight + rightHeight);\n  \n  return 1 + Math.max(leftHeight, rightHeight);\n}",
       "action": "continue",
       "next": "coding-start-java"
@@ -650,7 +650,7 @@
     },
     {
       "stepId": "tree-check-cpp",
-      "mentorSays": "To solve this problem, we'll need to work with binary trees. Do you know what a binary tree is?",
+      "mentorSays": "To solve this lesson, we'll need to work with binary trees. Do you know what a binary tree is?",
       "choices": [
         {
           "label": "Yes, I know binary trees",
@@ -671,7 +671,7 @@
     },
     {
       "stepId": "recursion-check-cpp",
-      "mentorSays": "To solve this problem, we'll use recursion. Do you know what recursion is in C++?",
+      "mentorSays": "To solve this lesson, we'll use recursion. Do you know what recursion is in C++?",
       "choices": [
         {
           "label": "Yes, I know recursion",
@@ -685,7 +685,7 @@
     },
     {
       "stepId": "recursion-explanation-cpp",
-      "mentorSays": "Recursion is when a function calls itself. For tree problems, we often use recursion because:\n- A tree is naturally recursive (each subtree is also a tree)\n- We can solve the problem for the whole tree by solving it for subtrees",
+      "mentorSays": "Recursion is when a function calls itself. For tree lessons, we often use recursion because:\n- A tree is naturally recursive (each subtree is also a tree)\n- We can solve the lesson for the whole tree by solving it for subtrees",
       "example": "function height(root, maxDiameter) {\n  if (root === null) return 0;\n  \n  // Recursive calls\n  let leftHeight = height(root.left, maxDiameter);\n  let rightHeight = height(root.right, maxDiameter);\n  \n  // Update diameter\n  maxDiameter[0] = Math.max(maxDiameter[0], leftHeight + rightHeight);\n  \n  return 1 + Math.max(leftHeight, rightHeight);\n}",
       "action": "continue",
       "next": "coding-start-cpp"
@@ -818,7 +818,7 @@
     },
     {
       "stepId": "tree-check-ts",
-      "mentorSays": "To solve this problem, we'll need to work with binary trees. Do you know what a binary tree is?",
+      "mentorSays": "To solve this lesson, we'll need to work with binary trees. Do you know what a binary tree is?",
       "choices": [
         {
           "label": "Yes, I know binary trees",
@@ -839,7 +839,7 @@
     },
     {
       "stepId": "recursion-check-ts",
-      "mentorSays": "To solve this problem, we'll use recursion. Do you know what recursion is in TypeScript?",
+      "mentorSays": "To solve this lesson, we'll use recursion. Do you know what recursion is in TypeScript?",
       "choices": [
         {
           "label": "Yes, I know recursion",
@@ -853,7 +853,7 @@
     },
     {
       "stepId": "recursion-explanation-ts",
-      "mentorSays": "Recursion is when a function calls itself. For tree problems, we often use recursion because:\n- A tree is naturally recursive (each subtree is also a tree)\n- We can solve the problem for the whole tree by solving it for subtrees",
+      "mentorSays": "Recursion is when a function calls itself. For tree lessons, we often use recursion because:\n- A tree is naturally recursive (each subtree is also a tree)\n- We can solve the lesson for the whole tree by solving it for subtrees",
       "example": "function height(root, maxDiameter) {\n  if (root === null) return 0;\n  \n  // Recursive calls\n  let leftHeight = height(root.left, maxDiameter);\n  let rightHeight = height(root.right, maxDiameter);\n  \n  // Update diameter\n  maxDiameter[0] = Math.max(maxDiameter[0], leftHeight + rightHeight);\n  \n  return 1 + Math.max(leftHeight, rightHeight);\n}",
       "action": "continue",
       "next": "coding-start-ts"
@@ -923,7 +923,7 @@
     },
     {
       "stepId": "final",
-      "mentorSays": "🎉 Well done! You've successfully implemented the Diameter of Binary Tree solution!\n\n**Time Complexity:** O(n)\n- We visit each node exactly once\n- n is the number of nodes in the tree\n\n**Space Complexity:** O(h)\n- The recursion stack uses space proportional to the height of the tree\n- In the worst case (skewed tree), h = n, so O(n)\n- In the best case (balanced tree), h = log n, so O(log n)\n\n**Key Takeaways:**\n1. **Recursive approach**: Calculate height and track diameter at each node\n2. **Diameter at node**: left height + right height (longest path through that node)\n3. **Global tracking**: Use a variable to track maximum diameter across all nodes\n4. **Height calculation**: Return height from helper (needed for parent's calculation)\n5. **May not pass through root**: Check all nodes, not just root\n\n**Related Practice Problems:**\n- Maximum Depth of Binary Tree (LeetCode #104) - find height\n- Binary Tree Maximum Path Sum (LeetCode #124) - similar pattern\n- Longest Univalue Path (LeetCode #687) - similar diameter concept\n\nKeep practicing tree problems - they're fundamental for interviews!",
+      "mentorSays": "🎉 Well done! You've successfully implemented the Diameter of Binary Tree solution!\n\n**Time Complexity:** O(n)\n- We visit each node exactly once\n- n is the number of nodes in the tree\n\n**Space Complexity:** O(h)\n- The recursion stack uses space proportional to the height of the tree\n- In the worst case (skewed tree), h = n, so O(n)\n- In the best case (balanced tree), h = log n, so O(log n)\n\n**Key Takeaways:**\n1. **Recursive approach**: Calculate height and track diameter at each node\n2. **Diameter at node**: left height + right height (longest path through that node)\n3. **Global tracking**: Use a variable to track maximum diameter across all nodes\n4. **Height calculation**: Return height from helper (needed for parent's calculation)\n5. **May not pass through root**: Check all nodes, not just root\n\n**Related Practice Lessons:**\n- Maximum Depth of Binary Tree (LeetCode #104) - find height\n- Binary Tree Maximum Path Sum (LeetCode #124) - similar pattern\n- Longest Univalue Path (LeetCode #687) - similar diameter concept\n\nKeep practicing tree lessons - they're fundamental for interviews!",
       "action": "continue"
     }
   ]

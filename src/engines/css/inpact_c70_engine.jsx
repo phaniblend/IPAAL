@@ -73,7 +73,7 @@ function getOutputPreview(answer) {
 export default createINPACTEngine({
   NODES,
   sideItems,
-  problemNum: 70,
+  lessonNum: 70,
   title: "Sticky header/footer pattern",
   shortName: "C70",
   language: "css",

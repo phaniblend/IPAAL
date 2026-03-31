@@ -25,4 +25,4 @@ const NODES = [
 ];
 
 const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }];
-export default createINPACTEngine({ NODES, sideItems, problemNum: "NODE-F12", title: "Module system", shortName: "NODE — MODULES" });
+export default createINPACTEngine({ NODES, sideItems, lessonNum: "NODE-F12", title: "Module system", shortName: "NODE — MODULES" });

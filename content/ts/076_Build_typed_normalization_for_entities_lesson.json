@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-ts-76",
     "track": "ts",
-    "problemNum": 76,
+    "lessonNum": 76,
     "title": "Build typed normalization for entities",
     "shortName": "P76",
     "intro": {

@@ -9,4 +9,4 @@ secrets.token_hex(32)
 pip audit  # or uv pip audit`, feedback_correct: "✅ Parameterised queries only; secrets for tokens; pip audit for CVEs.", feedback_wrong: "Use parameterised queries; secrets module; pip audit.", expected: "Python security" },
 ];
 const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }];
-export default createINPACTEngine({ NODES, sideItems, problemNum: "PY-F12", title: "Python security", shortName: "PY — SECURITY" });
+export default createINPACTEngine({ NODES, sideItems, lessonNum: "PY-F12", title: "Python security", shortName: "PY — SECURITY" });

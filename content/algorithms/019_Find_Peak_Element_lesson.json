@@ -3,13 +3,13 @@
   "config": {
     "lessonId": "ai-algorithms-19",
     "track": "algorithms",
-    "problemNum": 19,
+    "lessonNum": 19,
     "title": "Find Peak Element",
     "shortName": "P19",
     "intro": {
       "tag": "LESSON #19",
       "title": "Find Peak Element",
-      "body": "In this lesson, you will build a function that finds a 'peak element' in an array. A peak element is an element that is greater than or equal to its immediate neighbors. You will learn to implement a binary search algorithm to solve this problem efficiently. The main technologies involved are JavaScript arrays, conditional logic, and loop constructs. By the end, you will understand how to apply binary search to find a peak in O(log n) time.",
+      "body": "In this lesson, you will build a function that finds a 'peak element' in an array. A peak element is an element that is greater than or equal to its immediate neighbors. You will learn to implement a binary search algorithm to solve this lesson efficiently. The main technologies involved are JavaScript arrays, conditional logic, and loop constructs. By the end, you will understand how to apply binary search to find a peak in O(log n) time.",
       "usecase": "The peak finding algorithm is essential in data analysis applications where you need to identify local maximums in datasets. For example, in financial dashboards, analysts use this to spot price peaks in stock charts to inform trading decisions. In weather monitoring systems, it helps identify temperature spikes across geographic sensor data displayed on interactive maps. E-commerce platforms apply similar logic to find sales peaks during promotional periods within their analytics panels."
     },
     "objectives": [

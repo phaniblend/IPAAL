@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-node-81",
     "track": "node",
-    "problemNum": 81,
+    "lessonNum": 81,
     "title": "Build soft delete and restore endpoints",
     "shortName": "P81",
     "intro": {

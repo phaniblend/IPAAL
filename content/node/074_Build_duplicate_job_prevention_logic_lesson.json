@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-node-74",
     "track": "node",
-    "problemNum": 74,
+    "lessonNum": 74,
     "title": "Build duplicate job prevention logic",
     "shortName": "P74",
     "intro": {

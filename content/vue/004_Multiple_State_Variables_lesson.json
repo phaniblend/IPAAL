@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-vue-04",
     "track": "vue",
-    "problemNum": 4,
+    "lessonNum": 4,
     "title": "Multiple State Variables",
     "shortName": "P04",
     "intro": {

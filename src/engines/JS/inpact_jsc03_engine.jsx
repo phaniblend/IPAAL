@@ -14,4 +14,4 @@ const sideItems = [
   { label: "Step 3 — Lookaround", id: "step3" }, { label: "Step 4 — matchAll/flags", id: "step4" },
   { label: "Step 5 — ReDoS", id: "step5" },
 ];
-export default createINPACTEngine({ NODES, sideItems, problemNum: "JS-C03", title: "Regular Expressions", shortName: "JS — REGEX" });
+export default createINPACTEngine({ NODES, sideItems, lessonNum: "JS-C03", title: "Regular Expressions", shortName: "JS — REGEX" });

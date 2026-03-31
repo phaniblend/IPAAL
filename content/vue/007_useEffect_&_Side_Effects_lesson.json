@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-vue-07",
     "track": "vue",
-    "problemNum": 7,
+    "lessonNum": 7,
     "title": "useEffect & Side Effects",
     "shortName": "P07",
     "intro": {

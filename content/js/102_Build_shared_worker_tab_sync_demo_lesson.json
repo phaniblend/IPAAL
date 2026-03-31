@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-js-102",
     "track": "js",
-    "problemNum": 102,
+    "lessonNum": 102,
     "title": "Build shared worker tab sync demo",
     "shortName": "P102",
     "intro": {

@@ -8,12 +8,12 @@
   "flow": [
     {
       "stepId": "title",
-      "mentorSays": "At the end of this lesson, you will be able to:\n\n1. Understand what the Maximum Subarray problem asks for\n2. Use Kadane's algorithm to find the maximum sum subarray\n3. Track the maximum sum as we iterate through the array\n4. Implement the solution step by step in your chosen language",
+      "mentorSays": "At the end of this lesson, you will be able to:\n\n1. Understand what the Maximum Subarray lesson asks for\n2. Use Kadane's algorithm to find the maximum sum subarray\n3. Track the maximum sum as we iterate through the array\n4. Implement the solution step by step in your chosen language",
       "action": "continue",
-      "next": "problem-illustration"
+      "next": "lesson-illustration"
     },
     {
-      "stepId": "problem-illustration",
+      "stepId": "lesson-illustration",
       "mentorSays": "Maximum Subarray is solved with Kadane's Algorithm.\n\nPROBLEM:\nnums = [-2, 1, -3, 4, -1, 2, 1, -5, 4]\nFind the contiguous subarray with largest sum.\n\nBRUTE FORCE (O(n²)):\nCheck all possible subarrays:\n[-2] = -2\n[-2, 1] = -1\n[-2, 1, -3] = -4\n...\n[4, -1, 2, 1] = 6 ← MAXIMUM!\n\nBut this is slow!\n\nKADANE'S ALGORITHM (O(n)):\n\nIdea: At each element, decide:\n- Extend current subarray (add current element)\n- Start new subarray from here\n\ncurrentSum = max(nums[i], currentSum + nums[i])\nmaxSum = max(maxSum, currentSum)\n\nSTEP-BY-STEP:\n\nIndex:       0   1   2   3   4   5   6   7   8\nnums:       -2   1  -3   4  -1   2   1  -5   4\ncurrentSum: -2   1  -2   4   3   5   6   1   5\nmaxSum:     -2   1   1   4   4   5   6   6   6\n\ni=0, nums[0]=-2:\n  currentSum = -2\n  maxSum = -2\n\ni=1, nums[1]=1:\n  currentSum = max(1, -2+1) = max(1, -1) = 1\n  (Start new subarray from 1)\n  maxSum = max(-2, 1) = 1\n\ni=2, nums[2]=-3:\n  currentSum = max(-3, 1+(-3)) = max(-3, -2) = -2\n  (Extend subarray, but it's now negative)\n  maxSum = max(1, -2) = 1\n\ni=3, nums[3]=4:\n  currentSum = max(4, -2+4) = max(4, 2) = 4\n  (Start new subarray from 4)\n  maxSum = max(1, 4) = 4\n\ni=4, nums[4]=-1:\n  currentSum = max(-1, 4+(-1)) = max(-1, 3) = 3\n  (Extend subarray)\n  maxSum = max(4, 3) = 4\n\ni=5, nums[5]=2:\n  currentSum = max(2, 3+2) = max(2, 5) = 5\n  maxSum = max(4, 5) = 5\n\ni=6, nums[6]=1:\n  currentSum = max(1, 5+1) = max(1, 6) = 6\n  maxSum = max(5, 6) = 6\n\ni=7, nums[7]=-5:\n  currentSum = max(-5, 6+(-5)) = max(-5, 1) = 1\n  maxSum = max(6, 1) = 6\n\ni=8, nums[8]=4:\n  currentSum = max(4, 1+4) = max(4, 5) = 5\n  maxSum = max(6, 5) = 6\n\nANSWER: 6\n\nWHICH SUBARRAY? [4, -1, 2, 1] sums to 6\n\nWHY KADANE WORKS:\n- If current sum goes negative, starting fresh is better\n- We track the maximum sum seen so far\n- One pass through the array is enough!\n\nEDGE CASES:\n- All negative: return the maximum element\n- Empty array: return 0 or handle as error\n\nTIME: O(n)\nSPACE: O(1)",
       "example": "nums = [-2, 1, -3, 4, -1, 2, 1, -5, 4]\n\nFind maximum subarray sum:\n- [4, -1, 2, 1] (sum = 6) ✓\n\nAnswer: 6\n\nAnother example:\nnums = [1]\n\nAnswer: 1\n\nAnother example:\nnums = [5, 4, -1, 7, 8]\n\nAnswer: 23 (entire array)",
       "action": "continue",
@@ -21,7 +21,7 @@
     },
     {
       "stepId": "thinking-challenge",
-      "mentorSays": "Now that you understand what the problem wants, here's the real question:\n\nHow would YOU find the maximum subarray sum?\n\nThink about it for a moment. What approach feels natural to you?",
+      "mentorSays": "Now that you understand what the lesson wants, here's the real question:\n\nHow would YOU find the maximum subarray sum?\n\nThink about it for a moment. What approach feels natural to you?",
       "choices": [
         {
           "label": "Use Kadane's algorithm - track max sum ending at each position",
@@ -888,7 +888,7 @@
     },
     {
       "stepId": "final",
-      "mentorSays": "🎉 Well done! You've learned maximum subarray (Kadane's algorithm). You understand how to track the maximum sum ending at each position and reset when the sum becomes negative!\n\nThis is O(n) time and O(1) space - excellent for subarray problems! Keep practicing!",
+      "mentorSays": "🎉 Well done! You've learned maximum subarray (Kadane's algorithm). You understand how to track the maximum sum ending at each position and reset when the sum becomes negative!\n\nThis is O(n) time and O(1) space - excellent for subarray lessons! Keep practicing!",
       "action": "continue"
     }
   ]

@@ -8,20 +8,20 @@
   "flow": [
     {
       "stepId": "title",
-      "mentorSays": "At the end of this lesson, you will be able to:\n\n1. Understand what the Longest Repeating Character Replacement problem asks for\n2. Use a sliding window with character frequency tracking\n3. Determine when a window is valid using the replacement formula\n4. Expand and shrink the window to find the longest valid substring\n5. Implement the solution step by step in your chosen language",
+      "mentorSays": "At the end of this lesson, you will be able to:\n\n1. Understand what the Longest Repeating Character Replacement lesson asks for\n2. Use a sliding window with character frequency tracking\n3. Determine when a window is valid using the replacement formula\n4. Expand and shrink the window to find the longest valid substring\n5. Implement the solution step by step in your chosen language",
       "action": "continue",
-      "next": "problem-illustration"
+      "next": "lesson-illustration"
     },
     {
-      "stepId": "problem-illustration",
-      "mentorSays": "Perfect! Now let's understand what the Longest Repeating Character Replacement problem is asking.\n\n**Problem Definition:**\nGiven a string `s` and an integer `k`, find the length of the longest substring containing the same letter after replacing at most `k` characters.\n\n**Key Insight:**\nFor a window to be valid, we need: `windowSize - maxFrequency <= k`\nThis means: the number of characters we need to replace (windowSize - maxFrequency) must be ≤ k\n\n**Example 1:** s = \"ABAB\", k = 2\n\nWe can replace at most 2 characters to make all characters the same.\n\nLet's explore:\n- Substring \"ABAB\": We have 2 A's and 2 B's. To make all A's: replace 2 B's → need 2 replacements (≤ 2) ✓\n- Substring \"ABAB\" (all): Replace 2 B's with A's → \"AAAA\" (length 4) ✓\n- Or replace 2 A's with B's → \"BBBB\" (length 4) ✓\n\nAnswer: 4 (entire string can be made uniform with 2 replacements)\n\n**Example 2:** s = \"AABABBA\", k = 1\n\nWe can replace at most 1 character.\n\nLet's check different substrings:\n- \"AAB\" (indices 0-2): 2 A's, 1 B. Replace 1 B → \"AAA\" (length 3) ✓\n- \"AABA\" (indices 0-3): 3 A's, 1 B. Replace 1 B → \"AAAA\" (length 4) ✓\n- \"ABAB\" (indices 1-4): 2 A's, 2 B's. Need 2 replacements (1 B) → invalid (need 2, but k=1)\n- \"BABB\" (indices 2-5): 1 A, 3 B's. Replace 1 A → \"BBBB\" (length 4) ✓\n- \"ABBA\" (indices 1-4): 2 A's, 2 B's. Need 2 replacements → invalid\n\nMaximum length: 4 (from \"AABA\" or \"BABB\")\n\n**Step-by-step trace for Example 2:**\n\ns = \"AABABBA\", k = 1\n\nWe'll use a sliding window approach:\n- **Window [0-0]**: \"A\", maxFreq = 1, windowSize = 1, replacements = 1-1 = 0 ≤ 1 ✓, maxLen = 1\n- **Window [0-1]**: \"AA\", maxFreq = 2, windowSize = 2, replacements = 2-2 = 0 ≤ 1 ✓, maxLen = 2\n- **Window [0-2]**: \"AAB\", maxFreq = 2, windowSize = 3, replacements = 3-2 = 1 ≤ 1 ✓, maxLen = 3\n- **Window [0-3]**: \"AABA\", maxFreq = 3, windowSize = 4, replacements = 4-3 = 1 ≤ 1 ✓, maxLen = 4\n- **Window [0-4]**: \"AABAB\", maxFreq = 3, windowSize = 5, replacements = 5-3 = 2 > 1 ✗, shrink left\n- **Window [1-4]**: \"ABAB\", maxFreq = 2, windowSize = 4, replacements = 4-2 = 2 > 1 ✗, shrink left\n- **Window [2-4]**: \"BAB\", maxFreq = 2, windowSize = 3, replacements = 3-2 = 1 ≤ 1 ✓, maxLen = 4\n- **Window [2-5]**: \"BABB\", maxFreq = 3, windowSize = 4, replacements = 4-3 = 1 ≤ 1 ✓, maxLen = 4\n- **Window [2-6]**: \"BABBA\", maxFreq = 3, windowSize = 5, replacements = 5-3 = 2 > 1 ✗, shrink left\n\n**What makes this tricky:**\n1. The formula: `windowSize - maxFrequency <= k` determines if a window is valid\n2. We need to track the maximum frequency of any character in the current window\n3. When the window becomes invalid, we shrink it by moving the left pointer\n4. We only update maxFrequency when we add characters (optimization: we can be lazy about updating it)\n\n**Common pitfalls:**\n- Not understanding that we need to track max frequency in the current window\n- Trying to update maxFrequency when shrinking (we don't need to - it can only decrease or stay same)\n- Not realizing that we can keep maxFrequency \"stale\" - it's okay if it's slightly outdated\n- Off-by-one errors when calculating window size",
+      "stepId": "lesson-illustration",
+      "mentorSays": "Perfect! Now let's understand what the Longest Repeating Character Replacement lesson is asking.\n\n**Lesson Definition:**\nGiven a string `s` and an integer `k`, find the length of the longest substring containing the same letter after replacing at most `k` characters.\n\n**Key Insight:**\nFor a window to be valid, we need: `windowSize - maxFrequency <= k`\nThis means: the number of characters we need to replace (windowSize - maxFrequency) must be ≤ k\n\n**Example 1:** s = \"ABAB\", k = 2\n\nWe can replace at most 2 characters to make all characters the same.\n\nLet's explore:\n- Substring \"ABAB\": We have 2 A's and 2 B's. To make all A's: replace 2 B's → need 2 replacements (≤ 2) ✓\n- Substring \"ABAB\" (all): Replace 2 B's with A's → \"AAAA\" (length 4) ✓\n- Or replace 2 A's with B's → \"BBBB\" (length 4) ✓\n\nAnswer: 4 (entire string can be made uniform with 2 replacements)\n\n**Example 2:** s = \"AABABBA\", k = 1\n\nWe can replace at most 1 character.\n\nLet's check different substrings:\n- \"AAB\" (indices 0-2): 2 A's, 1 B. Replace 1 B → \"AAA\" (length 3) ✓\n- \"AABA\" (indices 0-3): 3 A's, 1 B. Replace 1 B → \"AAAA\" (length 4) ✓\n- \"ABAB\" (indices 1-4): 2 A's, 2 B's. Need 2 replacements (1 B) → invalid (need 2, but k=1)\n- \"BABB\" (indices 2-5): 1 A, 3 B's. Replace 1 A → \"BBBB\" (length 4) ✓\n- \"ABBA\" (indices 1-4): 2 A's, 2 B's. Need 2 replacements → invalid\n\nMaximum length: 4 (from \"AABA\" or \"BABB\")\n\n**Step-by-step trace for Example 2:**\n\ns = \"AABABBA\", k = 1\n\nWe'll use a sliding window approach:\n- **Window [0-0]**: \"A\", maxFreq = 1, windowSize = 1, replacements = 1-1 = 0 ≤ 1 ✓, maxLen = 1\n- **Window [0-1]**: \"AA\", maxFreq = 2, windowSize = 2, replacements = 2-2 = 0 ≤ 1 ✓, maxLen = 2\n- **Window [0-2]**: \"AAB\", maxFreq = 2, windowSize = 3, replacements = 3-2 = 1 ≤ 1 ✓, maxLen = 3\n- **Window [0-3]**: \"AABA\", maxFreq = 3, windowSize = 4, replacements = 4-3 = 1 ≤ 1 ✓, maxLen = 4\n- **Window [0-4]**: \"AABAB\", maxFreq = 3, windowSize = 5, replacements = 5-3 = 2 > 1 ✗, shrink left\n- **Window [1-4]**: \"ABAB\", maxFreq = 2, windowSize = 4, replacements = 4-2 = 2 > 1 ✗, shrink left\n- **Window [2-4]**: \"BAB\", maxFreq = 2, windowSize = 3, replacements = 3-2 = 1 ≤ 1 ✓, maxLen = 4\n- **Window [2-5]**: \"BABB\", maxFreq = 3, windowSize = 4, replacements = 4-3 = 1 ≤ 1 ✓, maxLen = 4\n- **Window [2-6]**: \"BABBA\", maxFreq = 3, windowSize = 5, replacements = 5-3 = 2 > 1 ✗, shrink left\n\n**What makes this tricky:**\n1. The formula: `windowSize - maxFrequency <= k` determines if a window is valid\n2. We need to track the maximum frequency of any character in the current window\n3. When the window becomes invalid, we shrink it by moving the left pointer\n4. We only update maxFrequency when we add characters (optimization: we can be lazy about updating it)\n\n**Common pitfalls:**\n- Not understanding that we need to track max frequency in the current window\n- Trying to update maxFrequency when shrinking (we don't need to - it can only decrease or stay same)\n- Not realizing that we can keep maxFrequency \"stale\" - it's okay if it's slightly outdated\n- Off-by-one errors when calculating window size",
       "example": "Example 1:\ns = \"ABAB\", k = 2\n\nEntire string: 2 A's, 2 B's\nReplace 2 B's → \"AAAA\" (length 4) ✓\nOr replace 2 A's → \"BBBB\" (length 4) ✓\n\nAnswer: 4\n\nExample 2:\ns = \"AABABBA\", k = 1\n\nValid substrings:\n\"AABA\" (indices 0-3): 3 A's, 1 B → replace 1 B → length 4 ✓\n\"BABB\" (indices 2-5): 1 A, 3 B's → replace 1 A → length 4 ✓\n\nAnswer: 4",
       "action": "continue",
       "next": "thinking-challenge"
     },
     {
       "stepId": "thinking-challenge",
-      "mentorSays": "Now that you understand what the problem wants, here's the real question:\n\nHow would YOU find the longest substring after replacing at most k characters?\n\nThink about it for a moment. What approach feels natural to you?",
+      "mentorSays": "Now that you understand what the lesson wants, here's the real question:\n\nHow would YOU find the longest substring after replacing at most k characters?\n\nThink about it for a moment. What approach feels natural to you?",
       "choices": [
         {
           "label": "Use a sliding window with frequency tracking, expand and shrink based on validity",
@@ -45,7 +45,7 @@
     },
     {
       "stepId": "explore-dp",
-      "mentorSays": "That's creative thinking! Dynamic programming could work, but it's more complex than needed.\n\nFor this problem, we don't need to track overlapping subproblems in the traditional DP sense. The sliding window approach is simpler and more efficient.\n\nThere's a cleaner O(n) approach using a sliding window with frequency tracking. Would you like to learn that?",
+      "mentorSays": "That's creative thinking! Dynamic programming could work, but it's more complex than needed.\n\nFor this lesson, we don't need to track overlapping subproblems in the traditional DP sense. The sliding window approach is simpler and more efficient.\n\nThere's a cleaner O(n) approach using a sliding window with frequency tracking. Would you like to learn that?",
       "action": "continue",
       "next": "explore-sliding-window"
     },
@@ -146,7 +146,7 @@
     },
     {
       "stepId": "array-check-js",
-      "mentorSays": "To solve this problem, we'll need to work with strings and objects (hash maps). Do you know what a string is in JavaScript?",
+      "mentorSays": "To solve this lesson, we'll need to work with strings and objects (hash maps). Do you know what a string is in JavaScript?",
       "choices": [
         {
           "label": "Yes, I know strings",
@@ -167,7 +167,7 @@
     },
     {
       "stepId": "loop-check-js",
-      "mentorSays": "To solve this problem, we'll need to use loops. Do you know what a loop is in JavaScript?",
+      "mentorSays": "To solve this lesson, we'll need to use loops. Do you know what a loop is in JavaScript?",
       "choices": [
         {
           "label": "Yes, I know loops",
@@ -314,7 +314,7 @@
     },
     {
       "stepId": "array-check-python",
-      "mentorSays": "To solve this problem, we'll need to work with strings and dictionaries (hash maps). Do you know what a string is in Python?",
+      "mentorSays": "To solve this lesson, we'll need to work with strings and dictionaries (hash maps). Do you know what a string is in Python?",
       "choices": [
         {
           "label": "Yes, I know strings",
@@ -335,7 +335,7 @@
     },
     {
       "stepId": "loop-check-python",
-      "mentorSays": "To solve this problem, we'll need to use loops. Do you know what a loop is in Python?",
+      "mentorSays": "To solve this lesson, we'll need to use loops. Do you know what a loop is in Python?",
       "choices": [
         {
           "label": "Yes, I know loops",
@@ -482,7 +482,7 @@
     },
     {
       "stepId": "array-check-java",
-      "mentorSays": "To solve this problem, we'll need to work with strings and hash maps. Do you know what a String is in Java?",
+      "mentorSays": "To solve this lesson, we'll need to work with strings and hash maps. Do you know what a String is in Java?",
       "choices": [
         {
           "label": "Yes, I know Strings",
@@ -503,7 +503,7 @@
     },
     {
       "stepId": "loop-check-java",
-      "mentorSays": "To solve this problem, we'll need to use loops. Do you know what a loop is in Java?",
+      "mentorSays": "To solve this lesson, we'll need to use loops. Do you know what a loop is in Java?",
       "choices": [
         {
           "label": "Yes, I know loops",
@@ -650,7 +650,7 @@
     },
     {
       "stepId": "array-check-cpp",
-      "mentorSays": "To solve this problem, we'll need to work with strings and hash maps. Do you know what a string is in C++?",
+      "mentorSays": "To solve this lesson, we'll need to work with strings and hash maps. Do you know what a string is in C++?",
       "choices": [
         {
           "label": "Yes, I know strings",
@@ -671,7 +671,7 @@
     },
     {
       "stepId": "loop-check-cpp",
-      "mentorSays": "To solve this problem, we'll need to use loops. Do you know what a loop is in C++?",
+      "mentorSays": "To solve this lesson, we'll need to use loops. Do you know what a loop is in C++?",
       "choices": [
         {
           "label": "Yes, I know loops",
@@ -818,7 +818,7 @@
     },
     {
       "stepId": "array-check-ts",
-      "mentorSays": "To solve this problem, we'll need to work with strings and objects (hash maps). Do you know what a string is in TypeScript?",
+      "mentorSays": "To solve this lesson, we'll need to work with strings and objects (hash maps). Do you know what a string is in TypeScript?",
       "choices": [
         {
           "label": "Yes, I know strings",
@@ -839,7 +839,7 @@
     },
     {
       "stepId": "loop-check-ts",
-      "mentorSays": "To solve this problem, we'll need to use loops. Do you know what a loop is in TypeScript?",
+      "mentorSays": "To solve this lesson, we'll need to use loops. Do you know what a loop is in TypeScript?",
       "choices": [
         {
           "label": "Yes, I know loops",
@@ -923,7 +923,7 @@
     },
     {
       "stepId": "final",
-      "mentorSays": "🎉 Well done! You've learned to think through the Longest Repeating Character Replacement problem. You understand what the problem asks for, how to use a sliding window with frequency tracking, and how to determine when a window is valid using the formula `windowSize - maxFrequency <= k`.\n\n**Key Takeaways:**\n1. **The Formula**: A window is valid if `windowSize - maxFrequency <= k`. This tells us how many characters we need to replace.\n2. **Sliding Window Pattern**: Expand the window by moving the right pointer, and shrink when it becomes invalid by moving the left pointer.\n3. **Frequency Tracking**: Use a hash map to count character frequencies in the current window.\n4. **Optimization**: We can keep maxFrequency slightly \"stale\" - we only update it when expanding (adding characters), not when shrinking.\n\n**Time Complexity**: O(n) - we traverse the string once with two pointers\n**Space Complexity**: O(1) - we only track at most 26 characters (for uppercase letters) or 52 (for both cases), which is constant\n\n**What to practice next:**\n- Longest Substring Without Repeating Characters (similar sliding window pattern)\n- Minimum Window Substring (more complex sliding window)\n\nThis kind of thinking—using sliding windows with frequency tracking—is essential for solving many string problems. Keep practicing!",
+      "mentorSays": "🎉 Well done! You've learned to think through the Longest Repeating Character Replacement lesson. You understand what the lesson asks for, how to use a sliding window with frequency tracking, and how to determine when a window is valid using the formula `windowSize - maxFrequency <= k`.\n\n**Key Takeaways:**\n1. **The Formula**: A window is valid if `windowSize - maxFrequency <= k`. This tells us how many characters we need to replace.\n2. **Sliding Window Pattern**: Expand the window by moving the right pointer, and shrink when it becomes invalid by moving the left pointer.\n3. **Frequency Tracking**: Use a hash map to count character frequencies in the current window.\n4. **Optimization**: We can keep maxFrequency slightly \"stale\" - we only update it when expanding (adding characters), not when shrinking.\n\n**Time Complexity**: O(n) - we traverse the string once with two pointers\n**Space Complexity**: O(1) - we only track at most 26 characters (for uppercase letters) or 52 (for both cases), which is constant\n\n**What to practice next:**\n- Longest Substring Without Repeating Characters (similar sliding window pattern)\n- Minimum Window Substring (more complex sliding window)\n\nThis kind of thinking—using sliding windows with frequency tracking—is essential for solving many string lessons. Keep practicing!",
       "action": "continue"
     }
   ]

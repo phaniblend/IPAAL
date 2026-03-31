@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-node-47",
     "track": "node",
-    "problemNum": 47,
+    "lessonNum": 47,
     "title": "Build API gateway like proxy endpoint",
     "shortName": "P47",
     "intro": {

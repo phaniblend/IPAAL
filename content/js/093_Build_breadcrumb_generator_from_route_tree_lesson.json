@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-js-93",
     "track": "js",
-    "problemNum": 93,
+    "lessonNum": 93,
     "title": "Build breadcrumb generator from route tree",
     "shortName": "P93",
     "intro": {

@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-vue-101",
     "track": "vue",
-    "problemNum": 101,
+    "lessonNum": 101,
     "title": "Nested Routes & Protected Routes",
     "shortName": "P101",
     "intro": {

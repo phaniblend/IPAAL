@@ -73,7 +73,7 @@ function getOutputPreview(answer) {
 export default createINPACTEngine({
   NODES,
   sideItems,
-  problemNum: 76,
+  lessonNum: 76,
   title: "gap in Flex and Grid",
   shortName: "C76",
   language: "css",

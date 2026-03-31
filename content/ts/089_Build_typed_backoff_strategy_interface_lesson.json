@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-ts-89",
     "track": "ts",
-    "problemNum": 89,
+    "lessonNum": 89,
     "title": "Build typed backoff strategy interface",
     "shortName": "P89",
     "intro": {

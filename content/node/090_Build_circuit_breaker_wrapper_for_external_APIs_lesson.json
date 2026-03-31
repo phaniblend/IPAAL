@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-node-90",
     "track": "node",
-    "problemNum": 90,
+    "lessonNum": 90,
     "title": "Build circuit breaker wrapper for external APIs",
     "shortName": "P90",
     "intro": {

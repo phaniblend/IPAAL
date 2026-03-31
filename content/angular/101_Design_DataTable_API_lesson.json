@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-angular-101",
     "track": "angular",
-    "problemNum": 101,
+    "lessonNum": 101,
     "title": "Design DataTable API",
     "shortName": "P101",
     "intro": {

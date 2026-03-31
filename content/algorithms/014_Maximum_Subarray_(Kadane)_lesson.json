@@ -3,13 +3,13 @@
   "config": {
     "lessonId": "ai-algorithms-14",
     "track": "algorithms",
-    "problemNum": 14,
+    "lessonNum": 14,
     "title": "Maximum Subarray (Kadane)",
     "shortName": "P14",
     "intro": {
       "tag": "LESSON #14",
       "title": "Maximum Subarray (Kadane)",
-      "body": "In this lesson, you will build a function that solves the Maximum Subarray problem using Kadane's Algorithm. You will learn to find the contiguous subarray within a one-dimensional array of numbers that has the largest sum. The core programming concept is dynamic programming, where you efficiently compute the maximum sum by iterating through the array only once. You will use fundamental JavaScript constructs like loops, variables, and conditional statements to implement the algorithm. This lesson will help you understand how to optimize solutions by avoiding unnecessary re-computation, a key skill in algorithm design.",
+      "body": "In this lesson, you will build a function that solves the Maximum Subarray lesson using Kadane's Algorithm. You will learn to find the contiguous subarray within a one-dimensional array of numbers that has the largest sum. The core programming concept is dynamic programming, where you efficiently compute the maximum sum by iterating through the array only once. You will use fundamental JavaScript constructs like loops, variables, and conditional statements to implement the algorithm. This lesson will help you understand how to optimize solutions by avoiding unnecessary re-computation, a key skill in algorithm design.",
       "usecase": "The Kadane's algorithm for finding the maximum subarray sum is essential in financial and data analysis applications. For instance, stock trading dashboards use it to identify the most profitable consecutive trading days within a given period. Data analytics platforms apply it to find periods of peak user engagement or highest sales in time-series data. Developers implement this algorithm in budgeting tools to determine the best consecutive months for investment returns, making it a practical solution for optimizing sequential data analysis in real products."
     },
     "objectives": [
@@ -28,7 +28,7 @@
         "phase": "Step 1 of 15",
         "title": "Welcome",
         "content": {
-          "body": "Welcome! Today we'll solve a classic problem: finding the maximum sum of any contiguous subarray. This is called the Maximum Subarray problem, and we'll learn Kadane's Algorithm to solve it efficiently. By the end, you'll be able to find the best segment of numbers in any array.",
+          "body": "Welcome! Today we'll solve a classic lesson: finding the maximum sum of any contiguous subarray. This is called the Maximum Subarray lesson, and we'll learn Kadane's Algorithm to solve it efficiently. By the end, you'll be able to find the best segment of numbers in any array.",
           "title": "Welcome"
         }
       },
@@ -262,7 +262,7 @@
         "phase": "Step 15 of 15",
         "title": "Done",
         "content": {
-          "body": "Congratulations! You've learned and implemented Kadane's Algorithm for the Maximum Subarray problem. Remember: we track the best sum ending at each position (currentMax) and the overall best (globalMax). This single-pass approach is much faster than checking all subarrays. Keep practicing with different arrays to solidify your understanding!",
+          "body": "Congratulations! You've learned and implemented Kadane's Algorithm for the Maximum Subarray lesson. Remember: we track the best sum ending at each position (currentMax) and the overall best (globalMax). This single-pass approach is much faster than checking all subarrays. Keep practicing with different arrays to solidify your understanding!",
           "title": "Done"
         }
       }

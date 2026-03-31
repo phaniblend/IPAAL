@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-react-js-37",
     "track": "react-js",
-    "problemNum": 37,
+    "lessonNum": 37,
     "title": "useMediaQuery",
     "shortName": "P37",
     "intro": {

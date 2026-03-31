@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-node-32",
     "track": "node",
-    "problemNum": 32,
+    "lessonNum": 32,
     "title": "Build image resize endpoint pipeline",
     "shortName": "P32",
     "intro": {

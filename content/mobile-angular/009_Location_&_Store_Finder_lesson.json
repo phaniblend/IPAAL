@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-mobile-angular-09",
     "track": "mobile-angular",
-    "problemNum": 9,
+    "lessonNum": 9,
     "title": "Location & Store Finder",
     "shortName": "P09",
     "intro": {

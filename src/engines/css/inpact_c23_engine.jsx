@@ -73,7 +73,7 @@ function getOutputPreview(answer) {
 export default createINPACTEngine({
   NODES,
   sideItems,
-  problemNum: 23,
+  lessonNum: 23,
   title: "line-clamp",
   shortName: "C23",
   language: "css",

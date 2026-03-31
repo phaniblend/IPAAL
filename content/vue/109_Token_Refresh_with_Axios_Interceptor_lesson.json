@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-vue-109",
     "track": "vue",
-    "problemNum": 109,
+    "lessonNum": 109,
     "title": "Token Refresh with Axios Interceptor",
     "shortName": "P109",
     "intro": {

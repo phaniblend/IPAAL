@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-python-06",
     "track": "python",
-    "problemNum": 6,
+    "lessonNum": 6,
     "title": "Dataclasses & Pydantic",
     "shortName": "P06",
     "intro": {

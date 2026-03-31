@@ -3,13 +3,13 @@
   "config": {
     "lessonId": "ai-algorithms-31",
     "track": "algorithms",
-    "problemNum": 31,
+    "lessonNum": 31,
     "title": "Longest Substring Without Repeating Characters",
     "shortName": "P31",
     "intro": {
       "tag": "LESSON #31",
       "title": "Longest Substring Without Repeating Characters",
-      "body": "In this lesson, you will build a function that finds the length of the longest substring without any repeating characters in a given string. You will learn the sliding window technique, a core algorithmic pattern for efficiently processing sequential data. The main constructs involved are strings, sets or maps for tracking characters, and loops to traverse the input. This beginner-friendly lesson will help you understand how to solve common string manipulation problems step by step.",
+      "body": "In this lesson, you will build a function that finds the length of the longest substring without any repeating characters in a given string. You will learn the sliding window technique, a core algorithmic pattern for efficiently processing sequential data. The main constructs involved are strings, sets or maps for tracking characters, and loops to traverse the input. This beginner-friendly lesson will help you understand how to solve common string manipulation lessons step by step.",
       "usecase": "The Longest Substring Without Repeating Characters algorithm is essential in text processing and validation, such as ensuring unique session IDs or detecting repeated patterns in user input. In real-world applications, it's used in search engines to analyze query strings for duplicate keywords, in code editors to highlight repeated variable names, and in data validation for forms to prevent duplicate entries in fields like usernames or serial numbers. This pattern helps maintain data integrity and optimize performance in systems handling large volumes of text."
     },
     "objectives": [
@@ -19,7 +19,7 @@
       "Manipulate the sliding window to expand and contract based on character repetition",
       "Integrate conditional logic to detect and handle repeating characters",
       "Configure a loop to iterate through the string and calculate maximum substring length",
-      "Apply the algorithm to solve the longest substring problem with test cases"
+      "Apply the algorithm to solve the longest substring lesson with test cases"
     ],
     "steps": [
       {

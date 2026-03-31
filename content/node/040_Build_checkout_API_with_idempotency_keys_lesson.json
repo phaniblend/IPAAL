@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-node-40",
     "track": "node",
-    "problemNum": 40,
+    "lessonNum": 40,
     "title": "Build checkout API with idempotency keys",
     "shortName": "P40",
     "intro": {

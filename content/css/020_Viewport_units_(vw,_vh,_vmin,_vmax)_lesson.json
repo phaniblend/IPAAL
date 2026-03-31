@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-css-20",
     "track": "css",
-    "problemNum": 20,
+    "lessonNum": 20,
     "title": "Viewport units (vw, vh, vmin, vmax)",
     "shortName": "P20",
     "intro": {

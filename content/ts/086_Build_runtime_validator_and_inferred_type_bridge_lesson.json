@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-ts-86",
     "track": "ts",
-    "problemNum": 86,
+    "lessonNum": 86,
     "title": "Build runtime validator and inferred type bridge",
     "shortName": "P86",
     "intro": {

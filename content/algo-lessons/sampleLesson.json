@@ -8,20 +8,20 @@
   "flow": [
     {
       "stepId": "title",
-      "mentorSays": "At the end of this lesson, you will be able to:\n\n1. Understand what the Add Two Numbers problem asks for\n2. Add two numbers represented as linked lists (digits in reverse order)\n3. Handle carry when adding digits\n4. Build a new linked list for the result\n5. Implement the solution step by step in your chosen language",
+      "mentorSays": "At the end of this lesson, you will be able to:\n\n1. Understand what the Add Two Numbers lesson asks for\n2. Add two numbers represented as linked lists (digits in reverse order)\n3. Handle carry when adding digits\n4. Build a new linked list for the result\n5. Implement the solution step by step in your chosen language",
       "action": "continue",
-      "next": "problem-illustration"
+      "next": "lesson-illustration"
     },
     {
-      "stepId": "problem-illustration",
-      "mentorSays": "Perfect! Now let's understand what the Add Two Numbers problem is asking.\n\n**Problem Definition:**\nYou are given two non-empty linked lists representing two non-negative integers. The digits are stored in reverse order, and each node contains a single digit. Add the two numbers and return the sum as a linked list.\n\n**Key Observations:**\n- Digits are stored in reverse order (least significant digit first)\n- Each node contains a single digit (0-9)\n- We need to handle carry when sum >= 10\n- We create a new linked list for the result\n\n**Example 1:**\nl1: 2 -> 4 -> 3 (represents 342)\nl2: 5 -> 6 -> 4 (represents 465)\n\nWe need to add: 342 + 465 = 807\nResult: 7 -> 0 -> 8 (represents 807)\n\n**Step-by-step trace:**\n\nl1: 2 -> 4 -> 3 (342)\nl2: 5 -> 6 -> 4 (465)\n\nCreate dummy node: dummy -> null\ncurrent = dummy\ncarry = 0\n\nStep 1: Add digits at position 0\n- l1.val = 2, l2.val = 5\n- sum = 2 + 5 + carry = 2 + 5 + 0 = 7\n- digit = 7 % 10 = 7\n- carry = 7 // 10 = 0\n- Create node(7), current.next = node(7), current = node(7)\n- l1 = l1.next (4), l2 = l2.next (6)\nResult: dummy -> 7\n\nStep 2: Add digits at position 1\n- l1.val = 4, l2.val = 6\n- sum = 4 + 6 + carry = 4 + 6 + 0 = 10\n- digit = 10 % 10 = 0\n- carry = 10 // 10 = 1\n- Create node(0), current.next = node(0), current = node(0)\n- l1 = l1.next (3), l2 = l2.next (4)\nResult: dummy -> 7 -> 0\n\nStep 3: Add digits at position 2\n- l1.val = 3, l2.val = 4\n- sum = 3 + 4 + carry = 3 + 4 + 1 = 8\n- digit = 8 % 10 = 8\n- carry = 8 // 10 = 0\n- Create node(8), current.next = node(8), current = node(8)\n- l1 = null, l2 = null\nResult: dummy -> 7 -> 0 -> 8\n\nStep 4: Both lists exhausted, carry = 0, done\n\nReturn dummy.next: 7 -> 0 -> 8 ✓\n\n**Example 2:**\nl1: 0\nl2: 0\n\n0 + 0 = 0\nResult: 0\n\n**Example 3:**\nl1: 9 -> 9 -> 9 -> 9 -> 9 -> 9 -> 9 (9999999)\nl2: 9 -> 9 -> 9 -> 9 (9999)\n\n9999999 + 9999 = 10009998\nResult: 8 -> 9 -> 9 -> 9 -> 0 -> 0 -> 0 -> 1\n\n**What makes this tricky:**\n1. Understanding reverse order (least significant digit first)\n2. Handling carry when sum >= 10\n3. Creating new nodes for the result (don't modify input lists)\n4. Handling lists of different lengths\n5. Handling final carry (if carry > 0 after both lists are done)\n\n**Common pitfalls:**\n- Forgetting to handle carry\n- Not creating a new list (modifying input lists)\n- Not handling the final carry\n- Off-by-one errors when one list is longer\n- Not handling the case where both lists are empty (but problem says non-empty)",
+      "stepId": "lesson-illustration",
+      "mentorSays": "Perfect! Now let's understand what the Add Two Numbers lesson is asking.\n\n**Lesson Definition:**\nYou are given two non-empty linked lists representing two non-negative integers. The digits are stored in reverse order, and each node contains a single digit. Add the two numbers and return the sum as a linked list.\n\n**Key Observations:**\n- Digits are stored in reverse order (least significant digit first)\n- Each node contains a single digit (0-9)\n- We need to handle carry when sum >= 10\n- We create a new linked list for the result\n\n**Example 1:**\nl1: 2 -> 4 -> 3 (represents 342)\nl2: 5 -> 6 -> 4 (represents 465)\n\nWe need to add: 342 + 465 = 807\nResult: 7 -> 0 -> 8 (represents 807)\n\n**Step-by-step trace:**\n\nl1: 2 -> 4 -> 3 (342)\nl2: 5 -> 6 -> 4 (465)\n\nCreate dummy node: dummy -> null\ncurrent = dummy\ncarry = 0\n\nStep 1: Add digits at position 0\n- l1.val = 2, l2.val = 5\n- sum = 2 + 5 + carry = 2 + 5 + 0 = 7\n- digit = 7 % 10 = 7\n- carry = 7 // 10 = 0\n- Create node(7), current.next = node(7), current = node(7)\n- l1 = l1.next (4), l2 = l2.next (6)\nResult: dummy -> 7\n\nStep 2: Add digits at position 1\n- l1.val = 4, l2.val = 6\n- sum = 4 + 6 + carry = 4 + 6 + 0 = 10\n- digit = 10 % 10 = 0\n- carry = 10 // 10 = 1\n- Create node(0), current.next = node(0), current = node(0)\n- l1 = l1.next (3), l2 = l2.next (4)\nResult: dummy -> 7 -> 0\n\nStep 3: Add digits at position 2\n- l1.val = 3, l2.val = 4\n- sum = 3 + 4 + carry = 3 + 4 + 1 = 8\n- digit = 8 % 10 = 8\n- carry = 8 // 10 = 0\n- Create node(8), current.next = node(8), current = node(8)\n- l1 = null, l2 = null\nResult: dummy -> 7 -> 0 -> 8\n\nStep 4: Both lists exhausted, carry = 0, done\n\nReturn dummy.next: 7 -> 0 -> 8 ✓\n\n**Example 2:**\nl1: 0\nl2: 0\n\n0 + 0 = 0\nResult: 0\n\n**Example 3:**\nl1: 9 -> 9 -> 9 -> 9 -> 9 -> 9 -> 9 (9999999)\nl2: 9 -> 9 -> 9 -> 9 (9999)\n\n9999999 + 9999 = 10009998\nResult: 8 -> 9 -> 9 -> 9 -> 0 -> 0 -> 0 -> 1\n\n**What makes this tricky:**\n1. Understanding reverse order (least significant digit first)\n2. Handling carry when sum >= 10\n3. Creating new nodes for the result (don't modify input lists)\n4. Handling lists of different lengths\n5. Handling final carry (if carry > 0 after both lists are done)\n\n**Common pitfalls:**\n- Forgetting to handle carry\n- Not creating a new list (modifying input lists)\n- Not handling the final carry\n- Off-by-one errors when one list is longer\n- Not handling the case where both lists are empty (but lesson says non-empty)",
       "example": "Example 1:\nl1: 2 -> 4 -> 3 (342)\nl2: 5 -> 6 -> 4 (465)\n\nResult: 7 -> 0 -> 8 (807)\n\nExample 2:\nl1: 0\nl2: 0\n\nResult: 0\n\nExample 3:\nl1: 9 -> 9 -> 9 -> 9 -> 9 -> 9 -> 9 (9999999)\nl2: 9 -> 9 -> 9 -> 9 (9999)\n\nResult: 8 -> 9 -> 9 -> 9 -> 0 -> 0 -> 0 -> 1 (10009998)",
       "action": "continue",
       "next": "thinking-challenge"
     },
     {
       "stepId": "thinking-challenge",
-      "mentorSays": "Now that you understand what the problem wants, here's the real question:\n\nHow would YOU add two numbers represented as linked lists?\n\nThink about it for a moment. What approach feels natural to you?",
+      "mentorSays": "Now that you understand what the lesson wants, here's the real question:\n\nHow would YOU add two numbers represented as linked lists?\n\nThink about it for a moment. What approach feels natural to you?",
       "choices": [
         {
           "label": "Iterate through both lists, add digits with carry, create new nodes",
@@ -39,7 +39,7 @@
     },
     {
       "stepId": "explore-convert",
-      "mentorSays": "That's a creative approach! You're thinking: \"I'll convert both linked lists to integers, add them, then convert the result back to a linked list.\"\n\nThis works for small numbers! However, there are issues:\n- Integer overflow for very large numbers (lists can have 100+ nodes)\n- The problem is designed to handle arbitrarily large numbers\n- Converting back and forth is inefficient\n\nThere's a more direct approach that handles large numbers. Would you like to learn that?",
+      "mentorSays": "That's a creative approach! You're thinking: \"I'll convert both linked lists to integers, add them, then convert the result back to a linked list.\"\n\nThis works for small numbers! However, there are issues:\n- Integer overflow for very large numbers (lists can have 100+ nodes)\n- The lesson is designed to handle arbitrarily large numbers\n- Converting back and forth is inefficient\n\nThere's a more direct approach that handles large numbers. Would you like to learn that?",
       "action": "continue",
       "next": "explore-iterative"
     },
@@ -146,7 +146,7 @@
     },
     {
       "stepId": "linked-list-check-js",
-      "mentorSays": "To solve this problem, we'll need to work with linked lists. Do you know what a linked list is?",
+      "mentorSays": "To solve this lesson, we'll need to work with linked lists. Do you know what a linked list is?",
       "choices": [
         {
           "label": "Yes, I know linked lists",
@@ -160,14 +160,14 @@
     },
     {
       "stepId": "linked-list-explanation-js",
-      "mentorSays": "A linked list is a data structure where each element (called a node) contains:\n- A value (data)\n- A pointer/reference to the next node\n\nFor example, a list 2 -> 4 -> 3 -> null means:\n- Node 2 has value 2 and points to node 4\n- Node 4 has value 4 and points to node 3\n- Node 3 has value 3 and points to null (end)\n\nIn this problem, each node represents a digit, and the list represents a number in reverse order.",
+      "mentorSays": "A linked list is a data structure where each element (called a node) contains:\n- A value (data)\n- A pointer/reference to the next node\n\nFor example, a list 2 -> 4 -> 3 -> null means:\n- Node 2 has value 2 and points to node 4\n- Node 4 has value 4 and points to node 3\n- Node 3 has value 3 and points to null (end)\n\nIn this lesson, each node represents a digit, and the list represents a number in reverse order.",
       "example": "# Node structure:\nclass ListNode:\n    def __init__(self, val=0, next=None):\n        self.val = val\n        self.next = next\n\n# Example: 2 -> 4 -> 3 -> None (represents 342)\nnode2 = ListNode(2)\nnode4 = ListNode(4)\nnode3 = ListNode(3)\nnode2.next = node4\nnode4.next = node3",
       "action": "continue",
       "next": "loop-check-js"
     },
     {
       "stepId": "loop-check-js",
-      "mentorSays": "To solve this problem, we'll need to use loops. Do you know what a loop is in JavaScript?",
+      "mentorSays": "To solve this lesson, we'll need to use loops. Do you know what a loop is in JavaScript?",
       "choices": [
         {
           "label": "Yes, I know loops",
@@ -321,7 +321,7 @@
     },
     {
       "stepId": "linked-list-check-python",
-      "mentorSays": "To solve this problem, we'll need to work with linked lists. Do you know what a linked list is?",
+      "mentorSays": "To solve this lesson, we'll need to work with linked lists. Do you know what a linked list is?",
       "choices": [
         {
           "label": "Yes, I know linked lists",
@@ -335,14 +335,14 @@
     },
     {
       "stepId": "linked-list-explanation-python",
-      "mentorSays": "A linked list is a data structure where each element (called a node) contains:\n- A value (data)\n- A pointer/reference to the next node\n\nFor example, a list 2 -> 4 -> 3 -> null means:\n- Node 2 has value 2 and points to node 4\n- Node 4 has value 4 and points to node 3\n- Node 3 has value 3 and points to null (end)\n\nIn this problem, each node represents a digit, and the list represents a number in reverse order.",
+      "mentorSays": "A linked list is a data structure where each element (called a node) contains:\n- A value (data)\n- A pointer/reference to the next node\n\nFor example, a list 2 -> 4 -> 3 -> null means:\n- Node 2 has value 2 and points to node 4\n- Node 4 has value 4 and points to node 3\n- Node 3 has value 3 and points to null (end)\n\nIn this lesson, each node represents a digit, and the list represents a number in reverse order.",
       "example": "# Node structure:\nclass ListNode:\n    def __init__(self, val=0, next=None):\n        self.val = val\n        self.next = next\n\n# Example: 2 -> 4 -> 3 -> None (represents 342)\nnode2 = ListNode(2)\nnode4 = ListNode(4)\nnode3 = ListNode(3)\nnode2.next = node4\nnode4.next = node3",
       "action": "continue",
       "next": "loop-check-python"
     },
     {
       "stepId": "loop-check-python",
-      "mentorSays": "To solve this problem, we'll need to use loops. Do you know what a loop is in Python?",
+      "mentorSays": "To solve this lesson, we'll need to use loops. Do you know what a loop is in Python?",
       "choices": [
         {
           "label": "Yes, I know loops",
@@ -496,7 +496,7 @@
     },
     {
       "stepId": "linked-list-check-java",
-      "mentorSays": "To solve this problem, we'll need to work with linked lists. Do you know what a linked list is?",
+      "mentorSays": "To solve this lesson, we'll need to work with linked lists. Do you know what a linked list is?",
       "choices": [
         {
           "label": "Yes, I know linked lists",
@@ -510,14 +510,14 @@
     },
     {
       "stepId": "linked-list-explanation-java",
-      "mentorSays": "A linked list is a data structure where each element (called a node) contains:\n- A value (data)\n- A pointer/reference to the next node\n\nFor example, a list 2 -> 4 -> 3 -> null means:\n- Node 2 has value 2 and points to node 4\n- Node 4 has value 4 and points to node 3\n- Node 3 has value 3 and points to null (end)\n\nIn this problem, each node represents a digit, and the list represents a number in reverse order.",
+      "mentorSays": "A linked list is a data structure where each element (called a node) contains:\n- A value (data)\n- A pointer/reference to the next node\n\nFor example, a list 2 -> 4 -> 3 -> null means:\n- Node 2 has value 2 and points to node 4\n- Node 4 has value 4 and points to node 3\n- Node 3 has value 3 and points to null (end)\n\nIn this lesson, each node represents a digit, and the list represents a number in reverse order.",
       "example": "# Node structure:\nclass ListNode:\n    def __init__(self, val=0, next=None):\n        self.val = val\n        self.next = next\n\n# Example: 2 -> 4 -> 3 -> None (represents 342)\nnode2 = ListNode(2)\nnode4 = ListNode(4)\nnode3 = ListNode(3)\nnode2.next = node4\nnode4.next = node3",
       "action": "continue",
       "next": "loop-check-java"
     },
     {
       "stepId": "loop-check-java",
-      "mentorSays": "To solve this problem, we'll need to use loops. Do you know what a loop is in Java?",
+      "mentorSays": "To solve this lesson, we'll need to use loops. Do you know what a loop is in Java?",
       "choices": [
         {
           "label": "Yes, I know loops",
@@ -671,7 +671,7 @@
     },
     {
       "stepId": "linked-list-check-cpp",
-      "mentorSays": "To solve this problem, we'll need to work with linked lists. Do you know what a linked list is?",
+      "mentorSays": "To solve this lesson, we'll need to work with linked lists. Do you know what a linked list is?",
       "choices": [
         {
           "label": "Yes, I know linked lists",
@@ -685,14 +685,14 @@
     },
     {
       "stepId": "linked-list-explanation-cpp",
-      "mentorSays": "A linked list is a data structure where each element (called a node) contains:\n- A value (data)\n- A pointer/reference to the next node\n\nFor example, a list 2 -> 4 -> 3 -> null means:\n- Node 2 has value 2 and points to node 4\n- Node 4 has value 4 and points to node 3\n- Node 3 has value 3 and points to null (end)\n\nIn this problem, each node represents a digit, and the list represents a number in reverse order.",
+      "mentorSays": "A linked list is a data structure where each element (called a node) contains:\n- A value (data)\n- A pointer/reference to the next node\n\nFor example, a list 2 -> 4 -> 3 -> null means:\n- Node 2 has value 2 and points to node 4\n- Node 4 has value 4 and points to node 3\n- Node 3 has value 3 and points to null (end)\n\nIn this lesson, each node represents a digit, and the list represents a number in reverse order.",
       "example": "# Node structure:\nclass ListNode:\n    def __init__(self, val=0, next=None):\n        self.val = val\n        self.next = next\n\n# Example: 2 -> 4 -> 3 -> None (represents 342)\nnode2 = ListNode(2)\nnode4 = ListNode(4)\nnode3 = ListNode(3)\nnode2.next = node4\nnode4.next = node3",
       "action": "continue",
       "next": "loop-check-cpp"
     },
     {
       "stepId": "loop-check-cpp",
-      "mentorSays": "To solve this problem, we'll need to use loops. Do you know what a loop is in C++?",
+      "mentorSays": "To solve this lesson, we'll need to use loops. Do you know what a loop is in C++?",
       "choices": [
         {
           "label": "Yes, I know loops",
@@ -846,7 +846,7 @@
     },
     {
       "stepId": "linked-list-check-ts",
-      "mentorSays": "To solve this problem, we'll need to work with linked lists. Do you know what a linked list is?",
+      "mentorSays": "To solve this lesson, we'll need to work with linked lists. Do you know what a linked list is?",
       "choices": [
         {
           "label": "Yes, I know linked lists",
@@ -860,14 +860,14 @@
     },
     {
       "stepId": "linked-list-explanation-ts",
-      "mentorSays": "A linked list is a data structure where each element (called a node) contains:\n- A value (data)\n- A pointer/reference to the next node\n\nFor example, a list 2 -> 4 -> 3 -> null means:\n- Node 2 has value 2 and points to node 4\n- Node 4 has value 4 and points to node 3\n- Node 3 has value 3 and points to null (end)\n\nIn this problem, each node represents a digit, and the list represents a number in reverse order.",
+      "mentorSays": "A linked list is a data structure where each element (called a node) contains:\n- A value (data)\n- A pointer/reference to the next node\n\nFor example, a list 2 -> 4 -> 3 -> null means:\n- Node 2 has value 2 and points to node 4\n- Node 4 has value 4 and points to node 3\n- Node 3 has value 3 and points to null (end)\n\nIn this lesson, each node represents a digit, and the list represents a number in reverse order.",
       "example": "# Node structure:\nclass ListNode:\n    def __init__(self, val=0, next=None):\n        self.val = val\n        self.next = next\n\n# Example: 2 -> 4 -> 3 -> None (represents 342)\nnode2 = ListNode(2)\nnode4 = ListNode(4)\nnode3 = ListNode(3)\nnode2.next = node4\nnode4.next = node3",
       "action": "continue",
       "next": "loop-check-ts"
     },
     {
       "stepId": "loop-check-ts",
-      "mentorSays": "To solve this problem, we'll need to use loops. Do you know what a loop is in TypeScript?",
+      "mentorSays": "To solve this lesson, we'll need to use loops. Do you know what a loop is in TypeScript?",
       "choices": [
         {
           "label": "Yes, I know loops",
@@ -958,7 +958,7 @@
     },
     {
       "stepId": "final",
-      "mentorSays": "🎉 Well done! You've successfully implemented the Add Two Numbers solution!\n\n**Time Complexity:** O(max(n, m))\n- We iterate through both lists once\n- The loop runs at most max(n, m) + 1 times (for final carry)\n- Each iteration does constant work\n\n**Space Complexity:** O(max(n, m))\n- We create a new linked list for the result\n- The result has at most max(n, m) + 1 nodes (if there's a final carry)\n- We use O(1) extra space for variables (dummy, current, carry)\n\n**Key Takeaways:**\n1. **Reverse order advantage**: Digits stored in reverse order make addition easier (process left to right)\n2. **Carry handling**: Always add carry to the sum, then calculate new carry\n3. **Create new list**: Don't modify input lists, create new nodes for result\n4. **Handle different lengths**: Use 0 when a list is exhausted\n5. **Final carry**: Continue loop until both lists are done AND carry is 0\n6. **Dummy node pattern**: Using a dummy node simplifies code (no special case for first node)\n\n**Related Practice Problems:**\n- Add Two Numbers II (LeetCode #445) - digits in normal order\n- Multiply Strings (LeetCode #43) - similar digit-by-digit approach\n- Plus One (LeetCode #66) - simpler version with array\n\nKeep practicing linked list problems - they're fundamental for interviews!",
+      "mentorSays": "🎉 Well done! You've successfully implemented the Add Two Numbers solution!\n\n**Time Complexity:** O(max(n, m))\n- We iterate through both lists once\n- The loop runs at most max(n, m) + 1 times (for final carry)\n- Each iteration does constant work\n\n**Space Complexity:** O(max(n, m))\n- We create a new linked list for the result\n- The result has at most max(n, m) + 1 nodes (if there's a final carry)\n- We use O(1) extra space for variables (dummy, current, carry)\n\n**Key Takeaways:**\n1. **Reverse order advantage**: Digits stored in reverse order make addition easier (process left to right)\n2. **Carry handling**: Always add carry to the sum, then calculate new carry\n3. **Create new list**: Don't modify input lists, create new nodes for result\n4. **Handle different lengths**: Use 0 when a list is exhausted\n5. **Final carry**: Continue loop until both lists are done AND carry is 0\n6. **Dummy node pattern**: Using a dummy node simplifies code (no special case for first node)\n\n**Related Practice Lessons:**\n- Add Two Numbers II (LeetCode #445) - digits in normal order\n- Multiply Strings (LeetCode #43) - similar digit-by-digit approach\n- Plus One (LeetCode #66) - simpler version with array\n\nKeep practicing linked list lessons - they're fundamental for interviews!",
       "action": "continue"
     }
   ]

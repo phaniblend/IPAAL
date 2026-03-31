@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-vue-16",
     "track": "vue",
-    "problemNum": 16,
+    "lessonNum": 16,
     "title": "Component Composition",
     "shortName": "P16",
     "intro": {

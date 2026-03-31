@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-node-85",
     "track": "node",
-    "problemNum": 85,
+    "lessonNum": 85,
     "title": "Build feature flag evaluation endpoint",
     "shortName": "P85",
     "intro": {

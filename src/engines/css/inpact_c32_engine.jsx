@@ -73,7 +73,7 @@ function getOutputPreview(answer) {
 export default createINPACTEngine({
   NODES,
   sideItems,
-  problemNum: 32,
+  lessonNum: 32,
   title: "@keyframes and animation",
   shortName: "C32",
   language: "css",

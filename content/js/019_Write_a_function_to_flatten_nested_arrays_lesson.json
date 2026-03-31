@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-js-19",
     "track": "js",
-    "problemNum": 19,
+    "lessonNum": 19,
     "title": "Write a function to flatten nested arrays",
     "shortName": "P19",
     "intro": {

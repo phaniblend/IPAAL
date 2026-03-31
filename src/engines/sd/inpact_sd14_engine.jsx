@@ -8,4 +8,4 @@ const NODES = [
 // Distributed: Redis INCR + TTL or sliding window in Redis`, feedback_correct: "✅ Token/leaky bucket; sliding window avoids burst; Redis for distributed.", feedback_wrong: "Token bucket; sliding window; Redis for distributed limiting.", expected: "Rate limiting" },
 ];
 const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }];
-export default createINPACTEngine({ NODES, sideItems, problemNum: "SD-14", title: "Rate limiting at scale", shortName: "SD — RATE LIMIT" });
+export default createINPACTEngine({ NODES, sideItems, lessonNum: "SD-14", title: "Rate limiting at scale", shortName: "SD — RATE LIMIT" });

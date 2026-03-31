@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-react-js-46",
     "track": "react-js",
-    "problemNum": 46,
+    "lessonNum": 46,
     "title": "useMemo for Expensive Computation",
     "shortName": "P46",
     "intro": {

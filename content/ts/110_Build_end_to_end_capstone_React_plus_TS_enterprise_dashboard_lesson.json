@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-ts-110",
     "track": "ts",
-    "problemNum": 110,
+    "lessonNum": 110,
     "title": "Build end to end capstone React plus TS enterprise dashboard",
     "shortName": "P110",
     "intro": {

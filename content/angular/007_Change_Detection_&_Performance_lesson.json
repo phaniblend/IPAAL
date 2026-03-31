@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-angular-07",
     "track": "angular",
-    "problemNum": 7,
+    "lessonNum": 7,
     "title": "Change Detection & Performance",
     "shortName": "P07",
     "intro": {

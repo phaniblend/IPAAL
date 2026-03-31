@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-js-24",
     "track": "js",
-    "problemNum": 24,
+    "lessonNum": 24,
     "title": "Write a function to sort objects by multiple keys",
     "shortName": "P24",
     "intro": {

@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-react-ts-116",
     "track": "react-ts",
-    "problemNum": 116,
+    "lessonNum": 116,
     "title": "Secure Token Rotation",
     "shortName": "P116",
     "intro": {

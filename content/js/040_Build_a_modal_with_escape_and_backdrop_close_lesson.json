@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-js-40",
     "track": "js",
-    "problemNum": 40,
+    "lessonNum": 40,
     "title": "Build a modal with escape and backdrop close",
     "shortName": "P40",
     "intro": {

@@ -10,10 +10,10 @@
       "stepId": "title",
       "mentorSays": "At the end of this lesson, you will be able to:\n\n1. Understand how heap sort works using a binary heap\n2. Build a max heap from an array\n3. Extract maximum elements and maintain heap property\n4. Implement heap sort step by step in your chosen language",
       "action": "continue",
-      "next": "problem-illustration"
+      "next": "lesson-illustration"
     },
     {
-      "stepId": "problem-illustration",
+      "stepId": "lesson-illustration",
       "mentorSays": "Perfect! Now let's understand what Heap Sort does.\n\nImagine you have an unsorted array: [5, 2, 8, 1, 9, 3]\n\nYour task: Sort it in ascending order (smallest to largest).\n\nHeap sort uses a binary heap data structure:\n1. **Build Max Heap**: Convert the array into a max heap (parent >= children)\n2. **Extract Maximum**: Repeatedly extract the maximum element (root) and place it at the end\n3. **Heapify**: After each extraction, restore the heap property\n\nLet's trace through the algorithm:\n\n**Initial**: [5, 2, 8, 1, 9, 3]\n\n**Step 1: Build Max Heap**\n- Start from the last parent node and heapify upwards\n- Heap structure: [9, 5, 8, 1, 2, 3]\n  - 9 is root (max)\n  - 5 and 8 are children of 9\n  - 1, 2 are children of 5\n  - 3 is child of 8\n\n**Step 2: Extract and Sort**\n- Extract 9 (max), swap with last element → [3, 5, 8, 1, 2, 9]\n- Heapify: [8, 5, 3, 1, 2, 9]\n- Extract 8, swap with second last → [2, 5, 3, 1, 8, 9]\n- Heapify: [5, 2, 3, 1, 8, 9]\n- Extract 5, swap → [1, 2, 3, 5, 8, 9]\n- Heapify: [3, 2, 1, 5, 8, 9]\n- Extract 3, swap → [1, 2, 3, 5, 8, 9]\n- Continue until sorted\n\n**Final**: [1, 2, 3, 5, 8, 9] (sorted!)\n\nThe key insight: a max heap always has the largest element at the root!",
       "example": "nums = [5, 2, 8, 1, 9, 3]\n\nBuild max heap: [9, 5, 8, 1, 2, 3]\n\nExtract 9 → [3, 5, 8, 1, 2, 9]\nHeapify → [8, 5, 3, 1, 2, 9]\nExtract 8 → [2, 5, 3, 1, 8, 9]\nHeapify → [5, 2, 3, 1, 8, 9]\nExtract 5 → [1, 2, 3, 5, 8, 9]\n...\n\nFinal: [1, 2, 3, 5, 8, 9]",
       "action": "continue",

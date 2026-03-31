@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-angular-86",
     "track": "angular",
-    "problemNum": 86,
+    "lessonNum": 86,
     "title": "WebSocket Hook",
     "shortName": "P86",
     "intro": {

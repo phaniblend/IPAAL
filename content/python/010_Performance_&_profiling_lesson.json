@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-python-10",
     "track": "python",
-    "problemNum": 10,
+    "lessonNum": 10,
     "title": "Performance & profiling",
     "shortName": "P10",
     "intro": {

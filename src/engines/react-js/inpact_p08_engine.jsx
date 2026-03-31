@@ -366,4 +366,4 @@ const sideItems = [
   { label: "Step 5 — Submit", id: "step5" },
 ];
 
-export default createINPACTEngine({ NODES, sideItems, problemNum: 8, title: "Forms & Validation", shortName: "FORMS & VALIDATION" });
+export default createINPACTEngine({ NODES, sideItems, lessonNum: 8, title: "Forms & Validation", shortName: "FORMS & VALIDATION" });

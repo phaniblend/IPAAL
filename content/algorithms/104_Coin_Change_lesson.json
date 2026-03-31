@@ -3,13 +3,13 @@
   "config": {
     "lessonId": "ai-algorithms-104",
     "track": "algorithms",
-    "problemNum": 104,
+    "lessonNum": 104,
     "title": "Coin Change",
     "shortName": "P104",
     "intro": {
       "tag": "LESSON #104",
       "title": "Coin Change",
-      "body": "In this lesson, you will build a function that solves the Coin Change problem, which calculates the minimum number of coins needed to make a specific amount of money given a set of coin denominations. You will learn the core concept of dynamic programming, a technique for solving complex problems by breaking them down into simpler subproblems and storing their solutions. The main technologies and constructs involved are JavaScript functions, arrays, loops, and conditional logic. By the end, you will understand how to implement an efficient algorithm to find the optimal coin combination for any given amount.",
+      "body": "In this lesson, you will build a function that solves the Coin Change lesson, which calculates the minimum number of coins needed to make a specific amount of money given a set of coin denominations. You will learn the core concept of dynamic programming, a technique for solving complex lessons by breaking them down into simpler subproblems and storing their solutions. The main technologies and constructs involved are JavaScript functions, arrays, loops, and conditional logic. By the end, you will understand how to implement an efficient algorithm to find the optimal coin combination for any given amount.",
       "usecase": "The Coin Change algorithm is essential in financial and payment systems where exact change calculation is required. Developers implement this pattern in point-of-sale systems to determine the minimum number of coins/bills needed for cash transactions, in vending machines to optimize coin dispensing, and in banking apps for currency conversion with limited denominations. It also appears in e-commerce platforms when calculating optimal coupon or reward point combinations, and in budgeting tools that help users allocate funds across different expense categories efficiently."
     },
     "objectives": [
@@ -28,7 +28,7 @@
         "phase": "Step 1 of 15",
         "title": "Welcome",
         "content": {
-          "body": "Imagine you have coins of different values and need to make exact change for an amount. How do you find the fewest coins needed? This is the classic Coin Change problem. We'll solve it using dynamic programming—a powerful technique for optimization.",
+          "body": "Imagine you have coins of different values and need to make exact change for an amount. How do you find the fewest coins needed? This is the classic Coin Change lesson. We'll solve it using dynamic programming—a powerful technique for optimization.",
           "title": "Welcome"
         }
       },
@@ -88,7 +88,7 @@
         "phase": "Step 7 of 15",
         "title": "Key idea",
         "content": {
-          "body": "Dynamic programming solves this by 'remembering solved smaller problems.' Instead of recomputing for each amount, we store answers in a table and reuse them. Focus on reuse, not formula memorization.",
+          "body": "Dynamic programming solves this by 'remembering solved smaller lessons.' Instead of recomputing for each amount, we store answers in a table and reuse them. Focus on reuse, not formula memorization.",
           "title": "Key idea",
           "visualMetaphor": "Fill a table or reuse previous results; avoid doing the same work twice."
         }
@@ -327,7 +327,7 @@
     "algorithmFamily": "dynamic-programming",
     "familyTeachingProfile": {
       "mentalModel": "Reuse answers to smaller subproblems",
-      "conceptBridge": "Introduce 'remembering solved smaller problems'; focus on reuse, not formula memorization.",
+      "conceptBridge": "Introduce 'remembering solved smaller lessons'; focus on reuse, not formula memorization.",
       "visualMetaphor": "Fill a table or reuse previous results; avoid doing the same work twice.",
       "commonConfusions": [
         "What do we store?",

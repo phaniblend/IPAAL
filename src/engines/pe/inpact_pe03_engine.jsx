@@ -468,4 +468,4 @@ const sideItems = [
   { label: "Step 5 — Shadow deploy", id: "step5" },
 ];
 
-export default createINPACTEngine({ NODES, sideItems, problemNum: "PE-03", title: "Deployment Strategies", shortName: "PE — DEPLOYMENTS" });
+export default createINPACTEngine({ NODES, sideItems, lessonNum: "PE-03", title: "Deployment Strategies", shortName: "PE — DEPLOYMENTS" });

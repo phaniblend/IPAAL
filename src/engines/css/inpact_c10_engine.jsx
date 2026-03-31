@@ -73,7 +73,7 @@ function getOutputPreview(answer) {
 export default createINPACTEngine({
   NODES,
   sideItems,
-  problemNum: 10,
+  lessonNum: 10,
   title: "flex-wrap and gap",
   shortName: "C10",
   language: "css",

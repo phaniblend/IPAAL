@@ -73,7 +73,7 @@ function getOutputPreview(answer) {
 export default createINPACTEngine({
   NODES,
   sideItems,
-  problemNum: 46,
+  lessonNum: 46,
   title: "scroll-snap",
   shortName: "C46",
   language: "css",

@@ -3,13 +3,13 @@
   "config": {
     "lessonId": "ai-algorithms-24",
     "track": "algorithms",
-    "problemNum": 24,
+    "lessonNum": 24,
     "title": "Move Zeroes (2-pointer version)",
     "shortName": "P24",
     "intro": {
       "tag": "LESSON #24",
       "title": "Move Zeroes (2-pointer version)",
-      "body": "In this lesson, you will build a function that moves all zeros in an array to the end while keeping the order of non-zero elements unchanged. You'll learn the two-pointer technique, a core algorithm pattern that uses two indices to traverse and rearrange elements efficiently. The main technologies involved are JavaScript arrays, loops, and conditional logic. This beginner-friendly approach will help you understand how to solve array manipulation problems with optimal performance.",
+      "body": "In this lesson, you will build a function that moves all zeros in an array to the end while keeping the order of non-zero elements unchanged. You'll learn the two-pointer technique, a core algorithm pattern that uses two indices to traverse and rearrange elements efficiently. The main technologies involved are JavaScript arrays, loops, and conditional logic. This beginner-friendly approach will help you understand how to solve array manipulation lessons with optimal performance.",
       "usecase": "The two-pointer technique for moving zeroes mirrors how real applications handle data filtering and organization. In e-commerce dashboards, administrators use similar logic to push out-of-stock items to the end while keeping available products visible. Content management systems apply this pattern when users want to temporarily hide certain entries without deleting them, maintaining the active items at the front. This approach is also used in data visualization tools where zero-value data points need to be grouped separately from meaningful metrics. Developers encounter this pattern whenever they need to reorganize arrays while preserving relative order of non-target elements."
     },
     "objectives": [
@@ -38,7 +38,7 @@
         "phase": "Step 2 of 16",
         "title": "What you'll learn",
         "content": {
-          "body": "By the end of this lesson, you'll be able to:\n1. Explain why moving zeros requires tracking positions\n2. Implement the two-pointer technique for rearranging arrays\n3. Walk through the algorithm step by step\n4. Write clean code that moves zeros in one pass\n5. Recognize when this pattern applies to similar problems",
+          "body": "By the end of this lesson, you'll be able to:\n1. Explain why moving zeros requires tracking positions\n2. Implement the two-pointer technique for rearranging arrays\n3. Walk through the algorithm step by step\n4. Write clean code that moves zeros in one pass\n5. Recognize when this pattern applies to similar lessons",
           "title": "What you'll learn"
         }
       },
@@ -295,7 +295,7 @@
         "phase": "Step 16 of 16",
         "title": "Done",
         "content": {
-          "body": "Congratulations! You've implemented the move zeroes algorithm using the two-pointer technique. Remember: one pointer tracks where to place non-zero elements, while the other scans through the array. This pattern of using two pointers to rearrange elements in one pass appears in many array problems. Keep practicing this mental model of 'remembering positions' as you tackle more challenges!",
+          "body": "Congratulations! You've implemented the move zeroes algorithm using the two-pointer technique. Remember: one pointer tracks where to place non-zero elements, while the other scans through the array. This pattern of using two pointers to rearrange elements in one pass appears in many array lessons. Keep practicing this mental model of 'remembering positions' as you tackle more challenges!",
           "title": "Done"
         }
       }

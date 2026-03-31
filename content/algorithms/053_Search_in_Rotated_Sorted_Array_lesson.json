@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-algorithms-53",
     "track": "algorithms",
-    "problemNum": 53,
+    "lessonNum": 53,
     "title": "Search in Rotated Sorted Array",
     "shortName": "P53",
     "intro": {

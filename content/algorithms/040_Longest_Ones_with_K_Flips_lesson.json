@@ -3,13 +3,13 @@
   "config": {
     "lessonId": "ai-algorithms-40",
     "track": "algorithms",
-    "problemNum": 40,
+    "lessonNum": 40,
     "title": "Longest Ones with K Flips",
     "shortName": "P40",
     "intro": {
       "tag": "LESSON #40",
       "title": "Longest Ones with K Flips",
-      "body": "In this lesson, you will build a function that finds the longest subarray of 1s in a binary array, allowing you to flip up to K zeros to 1s. You will learn the sliding window technique, a core algorithm pattern for efficiently solving array problems. The implementation will use basic JavaScript constructs like arrays, loops, and conditional logic. By the end, you'll understand how to track a window and adjust it dynamically to maximize the length of consecutive 1s.",
+      "body": "In this lesson, you will build a function that finds the longest subarray of 1s in a binary array, allowing you to flip up to K zeros to 1s. You will learn the sliding window technique, a core algorithm pattern for efficiently solving array lessons. The implementation will use basic JavaScript constructs like arrays, loops, and conditional logic. By the end, you'll understand how to track a window and adjust it dynamically to maximize the length of consecutive 1s.",
       "usecase": "The Longest Ones with K Flips algorithm is essential for optimizing data streaming and signal processing in real-time applications. It's commonly used in network monitoring dashboards to identify the longest consecutive sequence of successful data packets, allowing engineers to detect stable connection periods. In video streaming services, this pattern helps analyze buffering sequences to determine optimal quality settings while maintaining smooth playback. Financial trading platforms apply similar logic to track consecutive profitable trades within risk tolerance limits, helping traders identify reliable market trends."
     },
     "objectives": [
@@ -28,7 +28,7 @@
         "phase": "Step 1 of 16",
         "title": "Welcome",
         "content": {
-          "body": "Imagine you have a binary array (only 0s and 1s) and you can flip up to K zeros to ones. What's the longest contiguous subarray of ones you can create? This is a classic problem that combines array manipulation with clever counting. We'll learn how to solve it efficiently using a sliding window approach.",
+          "body": "Imagine you have a binary array (only 0s and 1s) and you can flip up to K zeros to ones. What's the longest contiguous subarray of ones you can create? This is a classic lesson that combines array manipulation with clever counting. We'll learn how to solve it efficiently using a sliding window approach.",
           "title": "Welcome"
         }
       },
@@ -136,7 +136,7 @@
         "content": {
           "body": "Remember what we have already seen. We can use a sliding window that expands and shrinks based on how many zeros we've encountered. The trick is to keep track of zeros in our current window and adjust the window boundaries to maintain at most K zeros.",
           "title": "Key idea",
-          "visualMetaphor": "Imagine a notebook where we write down what we've seen and check it in one step. For this problem, we're tracking how many zeros are in our current window - like keeping a running tally that we can quickly check and update."
+          "visualMetaphor": "Imagine a notebook where we write down what we've seen and check it in one step. For this lesson, we're tracking how many zeros are in our current window - like keeping a running tally that we can quickly check and update."
         }
       },
       {
@@ -314,7 +314,7 @@
         "phase": "Step 16 of 16",
         "title": "Done",
         "content": {
-          "body": "Congratulations! You've implemented an efficient O(n) solution for the Longest Ones with K Flips problem. Remember: the sliding window technique is powerful for contiguous subarray problems with constraints. Keep track of what matters (zero count here) and adjust your window boundaries to maintain the constraint. This approach beats checking every possible subarray!",
+          "body": "Congratulations! You've implemented an efficient O(n) solution for the Longest Ones with K Flips lesson. Remember: the sliding window technique is powerful for contiguous subarray lessons with constraints. Keep track of what matters (zero count here) and adjust your window boundaries to maintain the constraint. This approach beats checking every possible subarray!",
           "title": "Done"
         }
       }

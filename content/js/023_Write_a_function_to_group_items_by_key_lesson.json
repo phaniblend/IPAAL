@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-js-23",
     "track": "js",
-    "problemNum": 23,
+    "lessonNum": 23,
     "title": "Write a function to group items by key",
     "shortName": "P23",
     "intro": {

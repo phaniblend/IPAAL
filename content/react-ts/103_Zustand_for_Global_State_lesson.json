@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-react-ts-103",
     "track": "react-ts",
-    "problemNum": 103,
+    "lessonNum": 103,
     "title": "Zustand for Global State",
     "shortName": "P103",
     "intro": {

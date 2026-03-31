@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-ts-103",
     "track": "ts",
-    "problemNum": 103,
+    "lessonNum": 103,
     "title": "Build typed permissions DSL",
     "shortName": "P103",
     "intro": {

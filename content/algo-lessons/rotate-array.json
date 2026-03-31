@@ -10,18 +10,18 @@
       "stepId": "title",
       "mentorSays": "At the end of this lesson, you will be able to:\n\n1. Understand what it means to rotate an array to the right\n2. Use array reversal technique for efficient rotation\n3. Handle edge cases like k > array length\n4. Implement the solution step by step in your chosen language",
       "action": "continue",
-      "next": "problem-illustration"
+      "next": "lesson-illustration"
     },
     {
-      "stepId": "problem-illustration",
-      "mentorSays": "Perfect! Now let's understand what the Rotate Array problem is asking.\n\nImagine you have an array: [1, 2, 3, 4, 5, 6, 7]\n\nAnd k = 3 (rotate right by 3 positions)\n\nYour task: Rotate the array to the right by k steps.\n\n**What does 'rotate right' mean?**\nElements move to the right, and elements that go past the end wrap around to the beginning.\n\nLet's visualize:\n\nOriginal: [1, 2, 3, 4, 5, 6, 7]\n         ↑  ↑  ↑  ↑  ↑  ↑  ↑\n         0  1  2  3  4  5  6\n\nAfter rotating right by 3:\n- Element at index 4 (value 5) moves to index 0\n- Element at index 5 (value 6) moves to index 1\n- Element at index 6 (value 7) moves to index 2\n- Element at index 0 (value 1) moves to index 3\n- Element at index 1 (value 2) moves to index 4\n- Element at index 2 (value 3) moves to index 5\n- Element at index 3 (value 4) moves to index 6\n\nResult: [5, 6, 7, 1, 2, 3, 4]\n\n**Key Insight**: We can use array reversal! Reverse the entire array, then reverse the first k elements, then reverse the remaining elements.\n\nThat's what the problem wants: rotate the array to the right by k steps in-place.",
+      "stepId": "lesson-illustration",
+      "mentorSays": "Perfect! Now let's understand what the Rotate Array lesson is asking.\n\nImagine you have an array: [1, 2, 3, 4, 5, 6, 7]\n\nAnd k = 3 (rotate right by 3 positions)\n\nYour task: Rotate the array to the right by k steps.\n\n**What does 'rotate right' mean?**\nElements move to the right, and elements that go past the end wrap around to the beginning.\n\nLet's visualize:\n\nOriginal: [1, 2, 3, 4, 5, 6, 7]\n         ↑  ↑  ↑  ↑  ↑  ↑  ↑\n         0  1  2  3  4  5  6\n\nAfter rotating right by 3:\n- Element at index 4 (value 5) moves to index 0\n- Element at index 5 (value 6) moves to index 1\n- Element at index 6 (value 7) moves to index 2\n- Element at index 0 (value 1) moves to index 3\n- Element at index 1 (value 2) moves to index 4\n- Element at index 2 (value 3) moves to index 5\n- Element at index 3 (value 4) moves to index 6\n\nResult: [5, 6, 7, 1, 2, 3, 4]\n\n**Key Insight**: We can use array reversal! Reverse the entire array, then reverse the first k elements, then reverse the remaining elements.\n\nThat's what the lesson wants: rotate the array to the right by k steps in-place.",
       "example": "nums = [1, 2, 3, 4, 5, 6, 7]\nk = 3\n\nRotate right by 3:\n[5, 6, 7, 1, 2, 3, 4]\n\nAnother example:\nnums = [-1, -100, 3, 99]\nk = 2\n\nRotate right by 2:\n[3, 99, -1, -100]",
       "action": "continue",
       "next": "thinking-challenge"
     },
     {
       "stepId": "thinking-challenge",
-      "mentorSays": "Now that you understand what the problem wants, here's the real question:\n\nHow would YOU rotate the array?\n\nThink about it for a moment. What approach feels natural to you?",
+      "mentorSays": "Now that you understand what the lesson wants, here's the real question:\n\nHow would YOU rotate the array?\n\nThink about it for a moment. What approach feels natural to you?",
       "choices": [
         {
           "label": "Use array reversal: reverse all, reverse first k, reverse rest",
@@ -39,7 +39,7 @@
     },
     {
       "stepId": "explore-new-array",
-      "mentorSays": "That's a straightforward approach! You're thinking: \"I'll create a new array and copy elements in the rotated order.\"\n\nFor [1, 2, 3, 4, 5, 6, 7] with k = 3:\n- New array: copy last 3 elements [5, 6, 7], then first 4 elements [1, 2, 3, 4]\n- Result: [5, 6, 7, 1, 2, 3, 4] ✓\n\nThis works! However, it uses O(n) extra space.\n\nThe problem asks us to modify the array in-place. Would you like to learn the reversal approach that uses O(1) extra space?",
+      "mentorSays": "That's a straightforward approach! You're thinking: \"I'll create a new array and copy elements in the rotated order.\"\n\nFor [1, 2, 3, 4, 5, 6, 7] with k = 3:\n- New array: copy last 3 elements [5, 6, 7], then first 4 elements [1, 2, 3, 4]\n- Result: [5, 6, 7, 1, 2, 3, 4] ✓\n\nThis works! However, it uses O(n) extra space.\n\nThe lesson asks us to modify the array in-place. Would you like to learn the reversal approach that uses O(1) extra space?",
       "action": "continue",
       "next": "explore-reversal"
     },
@@ -146,7 +146,7 @@
     },
     {
       "stepId": "loop-check-js",
-      "mentorSays": "To solve this problem, we'll need to use loops to reverse parts of the array. Do you know what a loop is in JavaScript?",
+      "mentorSays": "To solve this lesson, we'll need to use loops to reverse parts of the array. Do you know what a loop is in JavaScript?",
       "choices": [
         {
           "label": "Yes, I know loops",
@@ -307,7 +307,7 @@
     },
     {
       "stepId": "loop-check-python",
-      "mentorSays": "To solve this problem, we'll need to use loops to reverse parts of the array. Do you know what a loop is in Python?",
+      "mentorSays": "To solve this lesson, we'll need to use loops to reverse parts of the array. Do you know what a loop is in Python?",
       "choices": [
         {
           "label": "Yes, I know loops",
@@ -468,7 +468,7 @@
     },
     {
       "stepId": "loop-check-java",
-      "mentorSays": "To solve this problem, we'll need to use loops to reverse parts of the array. Do you know what a loop is in Java?",
+      "mentorSays": "To solve this lesson, we'll need to use loops to reverse parts of the array. Do you know what a loop is in Java?",
       "choices": [
         {
           "label": "Yes, I know loops",
@@ -629,7 +629,7 @@
     },
     {
       "stepId": "loop-check-cpp",
-      "mentorSays": "To solve this problem, we'll need to use loops to reverse parts of the array. Do you know what a loop is in C++?",
+      "mentorSays": "To solve this lesson, we'll need to use loops to reverse parts of the array. Do you know what a loop is in C++?",
       "choices": [
         {
           "label": "Yes, I know loops",
@@ -783,7 +783,7 @@
     },
     {
       "stepId": "loop-check-ts",
-      "mentorSays": "To solve this problem, we'll need to use loops to reverse parts of the array. Do you know what a loop is in TypeScript?",
+      "mentorSays": "To solve this lesson, we'll need to use loops to reverse parts of the array. Do you know what a loop is in TypeScript?",
       "choices": [
         {
           "label": "Yes, I know loops",
@@ -881,7 +881,7 @@
     },
     {
       "stepId": "final",
-      "mentorSays": "🎉 Well done! You've learned to think through the Rotate Array problem. You understand what the problem asks for, how to use array reversal technique for efficient rotation, and how to handle edge cases like k > array length.\n\nThis kind of thinking—using array manipulation techniques like reversal—is essential for solving many array problems. Keep practicing!",
+      "mentorSays": "🎉 Well done! You've learned to think through the Rotate Array lesson. You understand what the lesson asks for, how to use array reversal technique for efficient rotation, and how to handle edge cases like k > array length.\n\nThis kind of thinking—using array manipulation techniques like reversal—is essential for solving many array lessons. Keep practicing!",
       "action": "continue"
     }
   ]

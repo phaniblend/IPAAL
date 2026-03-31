@@ -270,4 +270,4 @@ const sideItems = [
   { label: "Step 5 — ** and unary", id: "step5" },
 ];
 
-export default createINPACTEngine({ NODES, sideItems, problemNum: "JS-B05", title: "Operators Deep Dive", shortName: "JS — OPERATORS" });
+export default createINPACTEngine({ NODES, sideItems, lessonNum: "JS-B05", title: "Operators Deep Dive", shortName: "JS — OPERATORS" });

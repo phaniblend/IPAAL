@@ -73,7 +73,7 @@ function getOutputPreview(answer) {
 export default createINPACTEngine({
   NODES,
   sideItems,
-  problemNum: 53,
+  lessonNum: 53,
   title: "Multi-column layout (columns)",
   shortName: "C53",
   language: "css",

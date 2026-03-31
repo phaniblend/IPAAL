@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-js-59",
     "track": "js",
-    "problemNum": 59,
+    "lessonNum": 59,
     "title": "Write a timeout wrapper for promises",
     "shortName": "P59",
     "intro": {

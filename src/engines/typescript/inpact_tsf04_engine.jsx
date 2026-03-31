@@ -228,7 +228,7 @@ const sideItems = [
 export default createINPACTEngine({
   NODES,
   sideItems,
-  problemNum: "F04",
+  lessonNum: "F04",
   title: "Unions & Type Guards",
   shortName: "TS — UNIONS",
 });

@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-react-js-72",
     "track": "react-js",
-    "problemNum": 72,
+    "lessonNum": 72,
     "title": "useLayoutEffect vs useEffect",
     "shortName": "P72",
     "intro": {

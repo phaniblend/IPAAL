@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-react-ts-117",
     "track": "react-ts",
-    "problemNum": 117,
+    "lessonNum": 117,
     "title": "Form Validation with Zod + React Hook Form",
     "shortName": "P117",
     "intro": {

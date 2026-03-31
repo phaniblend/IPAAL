@@ -73,7 +73,7 @@ function getOutputPreview(answer) {
 export default createINPACTEngine({
   NODES,
   sideItems,
-  problemNum: 68,
+  lessonNum: 68,
   title: "align-self and justify-self",
   shortName: "C68",
   language: "css",

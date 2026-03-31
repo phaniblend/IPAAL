@@ -73,7 +73,7 @@ function getOutputPreview(answer) {
 export default createINPACTEngine({
   NODES,
   sideItems,
-  problemNum: 52,
+  lessonNum: 52,
   title: "Pseudo-classes :hover :focus :active",
   shortName: "C52",
   language: "css",

@@ -73,7 +73,7 @@ function getOutputPreview(answer) {
 export default createINPACTEngine({
   NODES,
   sideItems,
-  problemNum: 62,
+  lessonNum: 62,
   title: "will-change",
   shortName: "C62",
   language: "css",

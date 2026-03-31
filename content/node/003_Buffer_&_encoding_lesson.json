@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-node-03",
     "track": "node",
-    "problemNum": 3,
+    "lessonNum": 3,
     "title": "Buffer & encoding",
     "shortName": "P03",
     "intro": {

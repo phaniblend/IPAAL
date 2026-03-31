@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-fe-03",
     "track": "fe",
-    "problemNum": 3,
+    "lessonNum": 3,
     "title": "CSS architecture",
     "shortName": "P03",
     "intro": {

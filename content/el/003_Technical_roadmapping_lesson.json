@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-el-03",
     "track": "el",
-    "problemNum": 3,
+    "lessonNum": 3,
     "title": "Technical roadmapping",
     "shortName": "P03",
     "intro": {

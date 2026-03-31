@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-node-69",
     "track": "node",
-    "problemNum": 69,
+    "lessonNum": 69,
     "title": "Build delayed job execution API",
     "shortName": "P69",
     "intro": {

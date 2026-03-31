@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-vue-52",
     "track": "vue",
-    "problemNum": 52,
+    "lessonNum": 52,
     "title": "HOC withAuth",
     "shortName": "P52",
     "intro": {

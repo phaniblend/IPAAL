@@ -73,7 +73,7 @@ function getOutputPreview(answer) {
 export default createINPACTEngine({
   NODES,
   sideItems,
-  problemNum: 72,
+  lessonNum: 72,
   title: "Card grid with auto-fit",
   shortName: "C72",
   language: "css",

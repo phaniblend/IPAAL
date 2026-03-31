@@ -73,7 +73,7 @@ function getOutputPreview(answer) {
 export default createINPACTEngine({
   NODES,
   sideItems,
-  problemNum: 64,
+  lessonNum: 64,
   title: "Multiple backgrounds",
   shortName: "C64",
   language: "css",

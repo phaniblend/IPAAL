@@ -73,7 +73,7 @@ function getOutputPreview(answer) {
 export default createINPACTEngine({
   NODES,
   sideItems,
-  problemNum: 71,
+  lessonNum: 71,
   title: "Holy grail layout",
   shortName: "C71",
   language: "css",

@@ -2,13 +2,12 @@
  * Free tier & gates (unique lessons per browser, localStorage until backend APIs exist).
  *
  * Business rules (summary):
- * - 1–5: no prompt.
- * - 6: soft — "Register to save… unlock 7 more" / "I'll register later"
- * - 7: no prompt (still within 8 anonymous)
- * - 8: soft — "Last chance!…" / "I promise…"
- * - 9: hard register — "limit for anonymous… Register to access 7 more"
- * - 10–15: free after registration (7 more). 16+: $1 per new lesson (balance).
- * - Logged-out but has registered before (ever_registered): banner; 1–8 allowed; 9+ requires log in (login wall).
+ * - 1st new anonymous lesson: soft register prompt (dismissible).
+ * - 2nd new anonymous lesson: soft prompt + optional “I’ll sign up before my next lesson”.
+ * - 3rd new anonymous lesson: must register (hard gate).
+ * - After register: up to TOTAL_FREE_LESSONS free uniques total in-browser, then per-lesson pricing (balance).
+ * - Standard lesson price: $1. Student rate $0.25 only when the signed-in account email uses a U.S.-style .edu host (includes Google sign-in with .edu). Supabase users can also prove .edu via magic link.
+ * - Logged-out but has registered before (ever_registered): banner; same anonymous cap; then login wall.
  */
 
 const STORAGE_KEY_ACCESSED = "inpact_lessons_accessed";
@@ -18,16 +17,17 @@ const STORAGE_KEY_BALANCE = "inpact_balance_cents";
 const STORAGE_KEY_USER = "inpact_user";
 const STORAGE_KEY_DISMISS_COUNT = "inpact_register_dismiss_count";
 
-/** First N unique lessons with no register prompt. */
-export const FREE_LESSONS_SILENT = 5;
-/** Max unique lessons without an account (anonymous cap before lesson 9 gate). */
-export const MAX_FREE_UNREGISTERED = 8;
-/** Total free unique lessons once logged in with an account (8 anon + 7 after register). */
-export const TOTAL_FREE_LESSONS = 15;
-/** Extra free lessons after registering (copy / product). */
+/** @deprecated Use gate copy only; anonymous prompts start at lesson 1. */
+export const FREE_LESSONS_SILENT = 0;
+/** Max unique lessons without an account before the hard gate (3rd new lesson requires account). */
+export const MAX_FREE_UNREGISTERED = 2;
+/** Total free unique lessons in this browser before pay-per-lesson (includes guest previews). */
+export const TOTAL_FREE_LESSONS = 3;
+/** Extra free lessons after registering once guest slots are used (product copy). */
 export const FREE_LESSONS_AFTER_REGISTER = TOTAL_FREE_LESSONS - MAX_FREE_UNREGISTERED;
 
-export const PRICE_PER_LESSON_CENTS = 100; // $1
+export const PRICE_PER_LESSON_CENTS = 100; // $1 standard
+export const STUDENT_PRICE_PER_LESSON_CENTS = 25; // $0.25 when account email qualifies (.edu)
 /** Fund buckets: $5–$25 in steps of $5 (payment integration later). */
 export const FUND_BUCKETS_CENTS = [500, 1000, 1500, 2000, 2500];
 
@@ -129,12 +129,35 @@ export function addFundsCents(cents) {
 }
 
 /**
+ * U.S.-style academic host: the email domain must end with `.edu` (e.g. name@umich.edu, name@mail.tsu.edu).
+ * Not for .ac.uk etc. — add separate rules later if you expand regions.
+ */
+export function isEduEmail(email) {
+  if (typeof email !== "string") return false;
+  const t = email.trim().toLowerCase();
+  const at = t.lastIndexOf("@");
+  if (at <= 0 || at === t.length - 1) return false;
+  const host = t.slice(at + 1);
+  return host.endsWith(".edu");
+}
+
+/** Student lesson rate applies when the profile email we store for this session is .edu (Supabase, or Google .edu). */
+export function qualifiesForStudentPricing(user) {
+  const em = user?.emailOrPhone;
+  return Boolean(em && isEduEmail(em));
+}
+
+export function getLessonPriceCents() {
+  return qualifiesForStudentPricing(getStoredUser()) ? STUDENT_PRICE_PER_LESSON_CENTS : PRICE_PER_LESSON_CENTS;
+}
+
+/**
  * @typedef {{ loggedIn?: boolean }} LessonGateOpts
  */
 
 /**
- * Which soft prompt applies when opening the 6th or 8th unique lesson (never-registered anonymous only).
- * @returns {"six" | "eight" | null}
+ * Which soft prompt applies for the next new anonymous lesson (never-registered, not logged in).
+ * @returns {"first" | "second" | null}
  */
 export function getSoftGateKind(track, index, opts = {}) {
   const keys = getAccessedKeys();
@@ -142,17 +165,19 @@ export function getSoftGateKind(track, index, opts = {}) {
   if (keys.includes(key)) return null;
   if (isRegistered() || opts.loggedIn) return null;
   if (hasEverRegistered()) return null;
-  if (keys.length !== FREE_LESSONS_SILENT && keys.length !== MAX_FREE_UNREGISTERED - 1) return null;
-  return keys.length === FREE_LESSONS_SILENT ? "six" : "eight";
+  if (keys.length > MAX_FREE_UNREGISTERED - 1) return null;
+  if (keys.length === 0) return "first";
+  if (keys.length === 1) return "second";
+  return null;
 }
 
-/** Soft gate: lesson 6 and lesson 8 only (not lesson 7). */
+/** Soft gate: 1st and 2nd new anonymous lessons (dismissible). */
 export function mustSoftRegisterToAccess(track, index, opts = {}) {
   return getSoftGateKind(track, index, opts) != null;
 }
 
 /**
- * Hard register gate: never-registered anonymous user hitting lesson 9 (9th unique).
+ * Hard register gate: never-registered anonymous user on the 3rd new unique lesson.
  */
 export function mustHardRegisterToAccess(track, index, opts = {}) {
   const keys = getAccessedKeys();
@@ -193,18 +218,18 @@ export function canAccessLesson(track, index, opts = {}) {
     return keys.length < MAX_FREE_UNREGISTERED;
   }
   if (!isRegistered() && !opts.loggedIn) {
-    if (keys.length < FREE_LESSONS_SILENT) return true;
     if (keys.length < MAX_FREE_UNREGISTERED) return true;
     return false;
   }
   if (keys.length < TOTAL_FREE_LESSONS) return true;
-  return getBalanceCents() >= PRICE_PER_LESSON_CENTS;
+  return getBalanceCents() >= getLessonPriceCents();
 }
 
 export function deductLessonPayment() {
   const balance = getBalanceCents();
-  if (balance >= PRICE_PER_LESSON_CENTS) {
-    setBalanceCents(balance - PRICE_PER_LESSON_CENTS);
+  const price = getLessonPriceCents();
+  if (balance >= price) {
+    setBalanceCents(balance - price);
   }
 }
 
@@ -226,14 +251,14 @@ export function incrementRegisterDismissCount() {
   }
 }
 
-/** Remaining free slots out of 15 for logged-in / registered local session (UI). */
+/** Remaining free lesson slots before pay-per-lesson (logged-in / registered session, UI). */
 export function getFreeLessonsRemaining(opts = {}) {
   if (!opts.loggedIn && !isRegistered()) return null;
   const used = getAccessedCount();
   return Math.max(0, TOTAL_FREE_LESSONS - used);
 }
 
-/** Line for anonymous users: how many of 8 anonymous slots used. */
+/** Line for anonymous users: guest preview slots remaining before hard register. */
 export function getAnonymousFreeSlotsRemaining() {
   const used = getAccessedCount();
   return Math.max(0, MAX_FREE_UNREGISTERED - used);

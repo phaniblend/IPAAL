@@ -7,4 +7,4 @@ const NODES = [
 def post(bt: BackgroundTasks): bt.add_task(send_email, ...)`, feedback_correct: "✅ Path/Query; Depends(get_db); BackgroundTasks.add_task.", feedback_wrong: "Path and Query; Depends for DI; BackgroundTasks for fire-and-forget.", expected: "FastAPI" },
 ];
 const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }];
-export default createINPACTEngine({ NODES, sideItems, problemNum: "PY-F07", title: "FastAPI", shortName: "PY — FASTAPI" });
+export default createINPACTEngine({ NODES, sideItems, lessonNum: "PY-F07", title: "FastAPI", shortName: "PY — FASTAPI" });

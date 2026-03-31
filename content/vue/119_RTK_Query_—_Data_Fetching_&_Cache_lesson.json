@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-vue-119",
     "track": "vue",
-    "problemNum": 119,
+    "lessonNum": 119,
     "title": "RTK Query — Data Fetching & Cache",
     "shortName": "P119",
     "intro": {

@@ -8,18 +8,18 @@ const PACKS = {
 };
 
 /**
- * React · TS extended dives: `content/react-ts/000_deep_dives.json`. Keys like `001_Counter_App` → problemNum 1.
+ * React · TS extended dives: `content/react-ts/000_deep_dives.json`. Keys like `001_Counter_App` → lessonNum 1.
  * Optional `introductionStepId` (default `step1`) registers the dive on that step; other steps get the
- * same dive via `byProblem` fallback — unless `showDeepDiveInIntro` is true (then only the Lesson intro shows it).
+ * same dive via `byLesson` fallback — unless `showDeepDiveInIntro` is true (then only the Lesson intro shows it).
  */
-const { REACT_TS_EXTENDED_BY_PROBLEM_AND_STEP, REACT_TS_EXTENDED_BY_PROBLEM, REACT_TS_INTRO_DEEP_DIVE_BY_PROBLEM } =
+const { REACT_TS_EXTENDED_BY_LESSON_AND_STEP, REACT_TS_EXTENDED_BY_LESSON, REACT_TS_INTRO_DEEP_DIVE_BY_LESSON } =
   (() => {
     /** @type {Record<string, { id: string, label: string, deepDive: object }>} */
     const map = Object.create(null);
     /** @type {Record<number, { id: string, label: string, deepDive: object }>} */
-    const byProblem = Object.create(null);
+    const byLesson = Object.create(null);
     /** @type {Record<number, { id: string, label: string, deepDive: object }>} */
-    const introByProblem = Object.create(null);
+    const introByLesson = Object.create(null);
     for (const [key, entry] of Object.entries(reactTsExtendedDeepDives || {})) {
       const m = String(key).match(/^0*(\d+)_/);
       if (!m || !entry?.deepDive) continue;
@@ -30,7 +30,7 @@ const { REACT_TS_EXTENDED_BY_PROBLEM_AND_STEP, REACT_TS_EXTENDED_BY_PROBLEM, REA
         deepDive: entry.deepDive,
       };
       if (entry.showDeepDiveInIntro === true) {
-        introByProblem[n] = item;
+        introByLesson[n] = item;
         continue;
       }
       const stepId =
@@ -38,32 +38,32 @@ const { REACT_TS_EXTENDED_BY_PROBLEM_AND_STEP, REACT_TS_EXTENDED_BY_PROBLEM, REA
           ? entry.introductionStepId.trim()
           : "step1";
       map[`${n}::${stepId}`] = item;
-      byProblem[n] = item;
+      byLesson[n] = item;
     }
     return {
-      REACT_TS_EXTENDED_BY_PROBLEM_AND_STEP: map,
-      REACT_TS_EXTENDED_BY_PROBLEM: byProblem,
-      REACT_TS_INTRO_DEEP_DIVE_BY_PROBLEM: introByProblem,
+      REACT_TS_EXTENDED_BY_LESSON_AND_STEP: map,
+      REACT_TS_EXTENDED_BY_LESSON: byLesson,
+      REACT_TS_INTRO_DEEP_DIVE_BY_LESSON: introByLesson,
     };
   })();
 
 /**
  * @param {string} track
- * @param {number} problemNum
+ * @param {number} lessonNum
  * @param {string} stepId
  * @param {string[]|undefined} nodeIntroduces - from step JSON `introducesConcepts`, copied to node
  * @returns {{ id: string, label: string, deepDive: Record<string, string> }[]}
  */
-export function getDeepDiveConceptsForStep(track, problemNum, stepId, nodeIntroduces) {
+export function getDeepDiveConceptsForStep(track, lessonNum, stepId, nodeIntroduces) {
   const chosenPack = PACKS[track];
   const packs = chosenPack ? [chosenPack] : Object.values(PACKS).filter(Boolean);
   if (!packs.length) return [];
 
-  const pNum = problemNum == null ? null : Number(problemNum);
+  const pNum = lessonNum == null ? null : Number(lessonNum);
   const ids = new Set();
   for (const pack of packs) {
     for (const row of pack.introductions || []) {
-      const rowP = row.problemNum == null ? null : Number(row.problemNum);
+      const rowP = row.lessonNum == null ? null : Number(row.lessonNum);
       if (pNum != null && rowP === pNum && row.stepId === stepId) {
         ids.add(row.conceptId);
       }
@@ -85,8 +85,8 @@ export function getDeepDiveConceptsForStep(track, problemNum, stepId, nodeIntrod
   }
 
   if (track === "react-ts" && pNum != null && stepId) {
-    let ext = REACT_TS_EXTENDED_BY_PROBLEM_AND_STEP[`${pNum}::${stepId}`];
-    if (!ext?.deepDive) ext = REACT_TS_EXTENDED_BY_PROBLEM[pNum];
+    let ext = REACT_TS_EXTENDED_BY_LESSON_AND_STEP[`${pNum}::${stepId}`];
+    if (!ext?.deepDive) ext = REACT_TS_EXTENDED_BY_LESSON[pNum];
     if (ext?.deepDive && !out.some((o) => o.id === ext.id)) {
       out.push(ext);
     }
@@ -104,18 +104,18 @@ function normalizedLessonTitleSlug(s) {
 
 /**
  * Lesson-level deep dive (intro surfaces). Opt-in: `showDeepDiveInIntro: true` in `000_deep_dives.json`.
- * Resolves by `problemNum` first, then by matching `lessonTitle` to the key suffix (e.g. useDebounce ↔ 029_useDebounce).
+ * Resolves by `lessonNum` first, then by matching `lessonTitle` to the key suffix (e.g. useDebounce ↔ 029_useDebounce).
  *
  * @param {string} track
- * @param {number|null|undefined} problemNum - from engine config when known
- * @param {string|null|undefined} lessonTitle - e.g. list title or intro.title (covers list index ≠ problemNum)
+ * @param {number|null|undefined} lessonNum - from engine config when known
+ * @param {string|null|undefined} lessonTitle - e.g. list title or intro.title (covers list index ≠ lessonNum)
  * @returns {{ id: string, label: string, deepDive: Record<string, string> } | null}
  */
-export function getIntroDeepDiveConcept(track, problemNum, lessonTitle) {
+export function getIntroDeepDiveConcept(track, lessonNum, lessonTitle) {
   if (track !== "react-ts") return null;
-  const pNum = problemNum == null || problemNum === "" ? null : Number(problemNum);
+  const pNum = lessonNum == null || lessonNum === "" ? null : Number(lessonNum);
   if (pNum != null && !Number.isNaN(pNum)) {
-    const byNum = REACT_TS_INTRO_DEEP_DIVE_BY_PROBLEM[pNum];
+    const byNum = REACT_TS_INTRO_DEEP_DIVE_BY_LESSON[pNum];
     if (byNum?.deepDive) return byNum;
   }
   const norm = normalizedLessonTitleSlug(lessonTitle);

@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-css-10",
     "track": "css",
-    "problemNum": 10,
+    "lessonNum": 10,
     "title": "flex-wrap and gap",
     "shortName": "P10",
     "intro": {

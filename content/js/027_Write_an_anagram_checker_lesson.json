@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-js-27",
     "track": "js",
-    "problemNum": 27,
+    "lessonNum": 27,
     "title": "Write an anagram checker",
     "shortName": "P27",
     "intro": {
@@ -292,7 +292,7 @@
         ],
         "feedbackCorrect": "Nice! Proceed to the next step.",
         "feedbackPartial": "You added some comments, but try to include specific optimization approaches like sorting comparison or using Map instead of plain objects.",
-        "feedbackWrong": "The optimization discussion wasn't added. Please add a comment block discussing alternative approaches to solving the anagram problem.",
+        "feedbackWrong": "The optimization discussion wasn't added. Please add a comment block discussing alternative approaches to solving the anagram lesson.",
         "evaluation": {
           "mode": "keyword_match",
           "required": [

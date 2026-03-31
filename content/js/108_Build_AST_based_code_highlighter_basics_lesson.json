@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-js-108",
     "track": "js",
-    "problemNum": 108,
+    "lessonNum": 108,
     "title": "Build AST based code highlighter basics",
     "shortName": "P108",
     "intro": {

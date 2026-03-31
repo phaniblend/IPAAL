@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-node-28",
     "track": "node",
-    "problemNum": 28,
+    "lessonNum": 28,
     "title": "Build request logging middleware",
     "shortName": "P28",
     "intro": {

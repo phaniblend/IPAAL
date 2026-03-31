@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-ts-88",
     "track": "ts",
-    "problemNum": 88,
+    "lessonNum": 88,
     "title": "Build typed retry policy config",
     "shortName": "P88",
     "intro": {

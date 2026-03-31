@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-js-76",
     "track": "js",
-    "problemNum": 76,
+    "lessonNum": 76,
     "title": "Build route guards for auth only pages",
     "shortName": "P76",
     "intro": {

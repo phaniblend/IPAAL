@@ -26,4 +26,4 @@ app.use(cors({ origin: 'https://myapp.com' }))`,
 ];
 
 const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }];
-export default createINPACTEngine({ NODES, sideItems, problemNum: "EXP-F08", title: "Rate limiting & security", shortName: "EXP — RATE LIMIT" });
+export default createINPACTEngine({ NODES, sideItems, lessonNum: "EXP-F08", title: "Rate limiting & security", shortName: "EXP — RATE LIMIT" });

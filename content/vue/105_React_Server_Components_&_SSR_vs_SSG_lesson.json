@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-vue-105",
     "track": "vue",
-    "problemNum": 105,
+    "lessonNum": 105,
     "title": "React Server Components & SSR vs SSG",
     "shortName": "P105",
     "intro": {

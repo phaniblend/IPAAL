@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-algorithms-62",
     "track": "algorithms",
-    "problemNum": 62,
+    "lessonNum": 62,
     "title": "Detect Cycle (Floyd's Algorithm)",
     "shortName": "P62",
     "intro": {
@@ -48,7 +48,7 @@
         "phase": "Step 3 of 17",
         "title": "Try it",
         "content": {
-          "body": "Let's start with a simple cycle detection problem. Imagine you have a linked list with 3 nodes that forms a cycle. How would you check if there's a cycle?",
+          "body": "Let's start with a simple cycle detection lesson. Imagine you have a linked list with 3 nodes that forms a cycle. How would you check if there's a cycle?",
           "title": "Try it",
           "prompt": "How would you manually check if a 3-node linked list has a cycle?",
           "successMessage": "Good thinking! You probably imagined following the nodes one by one."

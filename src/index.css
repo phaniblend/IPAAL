@@ -283,6 +283,17 @@ button:focus-visible {
   padding-right: 2px;
 }
 
+/* Task row: curious cat strip sits beside task (40% column) */
+.inpact-editor-deep-dive-toolbar.inpact-editor-deep-dive-toolbar--beside-task {
+  margin-top: 0;
+  width: auto;
+  max-width: 100%;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding-right: 0;
+}
+
 /* Deep-dive / block content: inline SVG illustrations from JSON */
 .inpact-rich-svg-wrap svg {
   display: block;

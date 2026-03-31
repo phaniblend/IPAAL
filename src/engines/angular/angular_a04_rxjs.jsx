@@ -586,7 +586,7 @@ const sideItems = [
   { id: "wfs", label: "Write From Scratch" },
 ];
 
-export default function AngularA04RxJS({ onNextProblem }) {
+export default function AngularA04RxJS({ onNextLesson }) {
   const [nodeIndex, setNodeIndex] = useState(0);
   const [answers, setAnswers] = useState({});
   const [result, setResult] = useState(null);
@@ -758,7 +758,7 @@ export default function AngularA04RxJS({ onNextProblem }) {
         {allChecked && (
           <div>
             <div style={s.feedback("correct")}>{"✅ Engine ANG04 Complete — RxJS Essentials mastered.\nNext: ANG05 — NgRx State Management"}</div>
-            <div style={s.btnRow}><button style={s.btn("primary")} onClick={onNextProblem ?? next}>NEXT ENGINE →</button></div>
+            <div style={s.btnRow}><button style={s.btn("primary")} onClick={onNextLesson ?? next}>NEXT ENGINE →</button></div>
           </div>
         )}
       </div>
@@ -771,7 +771,7 @@ export default function AngularA04RxJS({ onNextProblem }) {
         <div style={{ fontSize: "48px", marginBottom: "24px" }}>🎯</div>
         <h1 style={{ ...s.h1, textAlign: "center" }}>Engine ANG04 Complete</h1>
         <p style={{ color: "#4a5568", fontSize: "13px" }}>RxJS Essentials — mastered.</p>
-        {onNextProblem && <div style={{ ...s.btnRow, justifyContent: "center", marginTop: "24px" }}><button style={s.btn("primary")} onClick={onNextProblem}>NEXT ENGINE →</button></div>}
+        {onNextLesson && <div style={{ ...s.btnRow, justifyContent: "center", marginTop: "24px" }}><button style={s.btn("primary")} onClick={onNextLesson}>NEXT ENGINE →</button></div>}
       </div>
     );
   }

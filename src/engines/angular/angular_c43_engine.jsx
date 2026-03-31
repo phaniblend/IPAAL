@@ -52,4 +52,4 @@ export class CartComponent {
 ];
 
 const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
-export default createINPACTEngine({ NODES, sideItems, problemNum: 43, title: TITLE, shortName: "A — CART CONTEXT" });
+export default createINPACTEngine({ NODES, sideItems, lessonNum: 43, title: TITLE, shortName: "A — CART CONTEXT" });

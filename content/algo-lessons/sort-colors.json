@@ -10,18 +10,18 @@
       "stepId": "title",
       "mentorSays": "At the end of this lesson, you will be able to:\n\n1. Understand how to sort an array with only 3 distinct values\n2. Use three pointers to partition the array into three sections\n3. Sort in one pass without using extra space\n4. Implement the solution step by step in your chosen language",
       "action": "continue",
-      "next": "problem-illustration"
+      "next": "lesson-illustration"
     },
     {
-      "stepId": "problem-illustration",
-      "mentorSays": "This is the famous Dutch National Flag problem!\n\n**THE PROBLEM:**\nSort an array of 0s, 1s, and 2s in-place without using extra space.\n\n**WHY IS IT CALLED DUTCH NATIONAL FLAG?**\nThe problem is named after the Dutch flag which has three colors: red (0), white (1), and blue (2).\n\n**EXAMPLE: Detailed Walkthrough**\n\nArray: [2, 0, 2, 1, 1, 0]\n\n**THREE-POINTER APPROACH:**\n\nWe use THREE pointers:\n- **left**: Boundary for 0s (red) - everything to the left is 0\n- **mid**: Current element being examined\n- **right**: Boundary for 2s (blue) - everything to the right is 2\n\n**INITIAL STATE:**\n[2, 0, 2, 1, 1, 0]\n ^           ^  ^\nleft        mid right\n\n**STEP-BY-STEP TRACE:**\n\nStep 1: nums[mid] = 2 (blue)\n- Swap with right: [0, 0, 2, 1, 1, 2]\n- Move right backward: right = 4\n- DON'T move mid (need to check swapped element)\n[0, 0, 2, 1, 1, 2]\n ^     ^     ^\nleft  mid  right\n\nStep 2: nums[mid] = 2 (blue)\n- Swap with right: [0, 0, 1, 1, 2, 2]\n- Move right backward: right = 3\n- DON'T move mid\n[0, 0, 1, 1, 2, 2]\n ^     ^  ^\nleft  mid right\n\nStep 3: nums[mid] = 1 (white)\n- Already in middle section\n- Just move mid forward: mid = 3\n[0, 0, 1, 1, 2, 2]\n ^        ^  ^\nleft     mid right\n\nStep 4: nums[mid] = 1 (white)\n- Already in middle section\n- Just move mid forward: mid = 4\n[0, 0, 1, 1, 2, 2]\n ^           ^  ^\nleft        mid right\n\nStep 5: mid > right, STOP\n\n**FINAL RESULT:** [0, 0, 1, 1, 2, 2] ✓ SORTED!\n\n**THREE REGIONS:**\n- **Left of 'left'**: All 0s (red) ✓\n- **Between 'left' and 'mid'**: All 1s (white) ✓\n- **Between 'mid' and 'right'**: Unsorted (being processed)\n- **Right of 'right'**: All 2s (blue) ✓\n\n**THE ALGORITHM:**\n\nWHILE mid <= right:\n  IF nums[mid] == 0:\n    Swap with left\n    Move left and mid forward\n  ELSE IF nums[mid] == 1:\n    Just move mid forward (already in correct region)\n  ELSE (nums[mid] == 2):\n    Swap with right\n    Move right backward\n    DON'T move mid (need to check swapped element)\n\n**KEY INSIGHT:**\n- When we swap with right, we don't know what we swapped in\n- So we DON'T move mid - we need to check the new element\n- When we swap with left, we know it's 0, so we can move both\n\n**TIME COMPLEXITY:** O(n) - single pass through array\n**SPACE COMPLEXITY:** O(1) - only three pointers, in-place\n\n**WHY IT'S EFFICIENT:**\n- Single pass algorithm\n- No extra space needed\n- Optimal for this specific problem",
+      "stepId": "lesson-illustration",
+      "mentorSays": "This is the famous Dutch National Flag lesson!\n\n**THE PROBLEM:**\nSort an array of 0s, 1s, and 2s in-place without using extra space.\n\n**WHY IS IT CALLED DUTCH NATIONAL FLAG?**\nThe lesson is named after the Dutch flag which has three colors: red (0), white (1), and blue (2).\n\n**EXAMPLE: Detailed Walkthrough**\n\nArray: [2, 0, 2, 1, 1, 0]\n\n**THREE-POINTER APPROACH:**\n\nWe use THREE pointers:\n- **left**: Boundary for 0s (red) - everything to the left is 0\n- **mid**: Current element being examined\n- **right**: Boundary for 2s (blue) - everything to the right is 2\n\n**INITIAL STATE:**\n[2, 0, 2, 1, 1, 0]\n ^           ^  ^\nleft        mid right\n\n**STEP-BY-STEP TRACE:**\n\nStep 1: nums[mid] = 2 (blue)\n- Swap with right: [0, 0, 2, 1, 1, 2]\n- Move right backward: right = 4\n- DON'T move mid (need to check swapped element)\n[0, 0, 2, 1, 1, 2]\n ^     ^     ^\nleft  mid  right\n\nStep 2: nums[mid] = 2 (blue)\n- Swap with right: [0, 0, 1, 1, 2, 2]\n- Move right backward: right = 3\n- DON'T move mid\n[0, 0, 1, 1, 2, 2]\n ^     ^  ^\nleft  mid right\n\nStep 3: nums[mid] = 1 (white)\n- Already in middle section\n- Just move mid forward: mid = 3\n[0, 0, 1, 1, 2, 2]\n ^        ^  ^\nleft     mid right\n\nStep 4: nums[mid] = 1 (white)\n- Already in middle section\n- Just move mid forward: mid = 4\n[0, 0, 1, 1, 2, 2]\n ^           ^  ^\nleft        mid right\n\nStep 5: mid > right, STOP\n\n**FINAL RESULT:** [0, 0, 1, 1, 2, 2] ✓ SORTED!\n\n**THREE REGIONS:**\n- **Left of 'left'**: All 0s (red) ✓\n- **Between 'left' and 'mid'**: All 1s (white) ✓\n- **Between 'mid' and 'right'**: Unsorted (being processed)\n- **Right of 'right'**: All 2s (blue) ✓\n\n**THE ALGORITHM:**\n\nWHILE mid <= right:\n  IF nums[mid] == 0:\n    Swap with left\n    Move left and mid forward\n  ELSE IF nums[mid] == 1:\n    Just move mid forward (already in correct region)\n  ELSE (nums[mid] == 2):\n    Swap with right\n    Move right backward\n    DON'T move mid (need to check swapped element)\n\n**KEY INSIGHT:**\n- When we swap with right, we don't know what we swapped in\n- So we DON'T move mid - we need to check the new element\n- When we swap with left, we know it's 0, so we can move both\n\n**TIME COMPLEXITY:** O(n) - single pass through array\n**SPACE COMPLEXITY:** O(1) - only three pointers, in-place\n\n**WHY IT'S EFFICIENT:**\n- Single pass algorithm\n- No extra space needed\n- Optimal for this specific lesson",
       "example": "nums = [2, 0, 2, 1, 1, 0]\n\nThree pointers: left=0, current=0, right=5\n\nStep 1: nums[0]=2 → swap with nums[5], right-- → [0, 0, 2, 1, 1, 2]\nStep 2: nums[0]=0 → swap with nums[0], left++, current++ → [0, 0, 2, 1, 1, 2]\nStep 3: nums[1]=0 → swap with nums[1], left++, current++ → [0, 0, 2, 1, 1, 2]\nStep 4: nums[2]=2 → swap with nums[4], right-- → [0, 0, 1, 1, 2, 2]\nStep 5-6: nums[2-3]=1 → keep, current++\n\nFinal: [0, 0, 1, 1, 2, 2]",
       "action": "continue",
       "next": "thinking-challenge"
     },
     {
       "stepId": "thinking-challenge",
-      "mentorSays": "Now that you understand what the problem wants, here's the real question:\n\nHow would YOU sort an array with only 0s, 1s, and 2s?\n\nThink about it for a moment. What approach feels natural to you?",
+      "mentorSays": "Now that you understand what the lesson wants, here's the real question:\n\nHow would YOU sort an array with only 0s, 1s, and 2s?\n\nThink about it for a moment. What approach feels natural to you?",
       "choices": [
         {
           "label": "Use three pointers: left for 0s, current to scan, right for 2s",
@@ -45,7 +45,7 @@
     },
     {
       "stepId": "explore-standard-sort",
-      "mentorSays": "Standard sorting algorithms like quicksort or merge sort work, but they're O(n log n) time. Since we only have 3 distinct values, we can do better!\n\nLet's learn the three pointers approach, which is O(n) time and O(1) space - perfect for this problem!",
+      "mentorSays": "Standard sorting algorithms like quicksort or merge sort work, but they're O(n log n) time. Since we only have 3 distinct values, we can do better!\n\nLet's learn the three pointers approach, which is O(n) time and O(1) space - perfect for this lesson!",
       "action": "continue",
       "next": "explore-three-pointers"
     },
@@ -167,14 +167,14 @@
     },
     {
       "stepId": "in-place-explanation-js",
-      "mentorSays": "In-place means we modify the original array without creating a new one. This is required for this problem!\n\n// NOT in-place (creates new array):\nlet sorted = [...arr].sort();\n\n// In-place (modifies original):\n[arr[i], arr[j]] = [arr[j], arr[i]];\n\nGot it?",
+      "mentorSays": "In-place means we modify the original array without creating a new one. This is required for this lesson!\n\n// NOT in-place (creates new array):\nlet sorted = [...arr].sort();\n\n// In-place (modifies original):\n[arr[i], arr[j]] = [arr[j], arr[i]];\n\nGot it?",
       "example": "// NOT in-place (creates new array):\nlet sorted = [...arr].sort();\n\n// In-place (modifies original):\n[arr[i], arr[j]] = [arr[j], arr[i]];",
       "action": "continue",
       "next": "coding-start-js"
     },
     {
       "stepId": "three-pointers-explanation-js",
-      "mentorSays": "This problem uses THREE pointers: left (boundary for 0s), mid (current element), right (boundary for 2s). We partition the array into three sections.\n\n// Three pointers:\nlet left = 0;   // boundary for 0s\nlet mid = 0;    // current element\nlet right = nums.length - 1;  // boundary for 2s\n\n// Partition: [0s | 1s | unsorted | 2s]\n//              left   mid       right\n\nGot it?",
+      "mentorSays": "This lesson uses THREE pointers: left (boundary for 0s), mid (current element), right (boundary for 2s). We partition the array into three sections.\n\n// Three pointers:\nlet left = 0;   // boundary for 0s\nlet mid = 0;    // current element\nlet right = nums.length - 1;  // boundary for 2s\n\n// Partition: [0s | 1s | unsorted | 2s]\n//              left   mid       right\n\nGot it?",
       "example": "// Three pointers:\nlet left = 0;   // boundary for 0s\nlet mid = 0;    // current element\nlet right = nums.length - 1;  // boundary for 2s\n\n// Partition: [0s | 1s | unsorted | 2s]\n//              left   mid       right",
       "action": "continue",
       "next": "coding-start-js"
@@ -328,14 +328,14 @@
     },
     {
       "stepId": "in-place-explanation-python",
-      "mentorSays": "In-place means we modify the original array without creating a new one. This is required for this problem!\n\n# NOT in-place (creates new list):\nsorted_arr = sorted(arr)\n\n# In-place (modifies original):\narr[i], arr[j] = arr[j], arr[i]\n\nGot it?",
+      "mentorSays": "In-place means we modify the original array without creating a new one. This is required for this lesson!\n\n# NOT in-place (creates new list):\nsorted_arr = sorted(arr)\n\n# In-place (modifies original):\narr[i], arr[j] = arr[j], arr[i]\n\nGot it?",
       "example": "# NOT in-place (creates new list):\nsorted_arr = sorted(arr)\n\n# In-place (modifies original):\narr[i], arr[j] = arr[j], arr[i]",
       "action": "continue",
       "next": "coding-start-python"
     },
     {
       "stepId": "three-pointers-explanation-python",
-      "mentorSays": "This problem uses THREE pointers: left (boundary for 0s), mid (current element), right (boundary for 2s). We partition the array into three sections.\n\n# Three pointers:\nleft = 0   # boundary for 0s\nmid = 0    # current element\nright = len(nums) - 1  # boundary for 2s\n\n# Partition: [0s | 1s | unsorted | 2s]\n#              left   mid       right\n\nGot it?",
+      "mentorSays": "This lesson uses THREE pointers: left (boundary for 0s), mid (current element), right (boundary for 2s). We partition the array into three sections.\n\n# Three pointers:\nleft = 0   # boundary for 0s\nmid = 0    # current element\nright = len(nums) - 1  # boundary for 2s\n\n# Partition: [0s | 1s | unsorted | 2s]\n#              left   mid       right\n\nGot it?",
       "example": "# Three pointers:\nleft = 0   # boundary for 0s\nmid = 0    # current element\nright = len(nums) - 1  # boundary for 2s\n\n# Partition: [0s | 1s | unsorted | 2s]\n#              left   mid       right",
       "action": "continue",
       "next": "coding-start-python"
@@ -489,14 +489,14 @@
     },
     {
       "stepId": "in-place-explanation-java",
-      "mentorSays": "In-place means we modify the original array without creating a new one. This is required for this problem!\n\n// NOT in-place (creates new array):\nint[] sorted = Arrays.copyOf(arr, arr.length);\nArrays.sort(sorted);\n\n// In-place (modifies original):\nint temp = arr[i];\narr[i] = arr[j];\narr[j] = temp;\n\nGot it?",
+      "mentorSays": "In-place means we modify the original array without creating a new one. This is required for this lesson!\n\n// NOT in-place (creates new array):\nint[] sorted = Arrays.copyOf(arr, arr.length);\nArrays.sort(sorted);\n\n// In-place (modifies original):\nint temp = arr[i];\narr[i] = arr[j];\narr[j] = temp;\n\nGot it?",
       "example": "// NOT in-place (creates new array):\nint[] sorted = Arrays.copyOf(arr, arr.length);\nArrays.sort(sorted);\n\n// In-place (modifies original):\nint temp = arr[i];\narr[i] = arr[j];\narr[j] = temp;",
       "action": "continue",
       "next": "coding-start-java"
     },
     {
       "stepId": "three-pointers-explanation-java",
-      "mentorSays": "This problem uses THREE pointers: left (boundary for 0s), mid (current element), right (boundary for 2s). We partition the array into three sections.\n\n// Three pointers:\nint left = 0;   // boundary for 0s\nint mid = 0;    // current element\nint right = nums.length - 1;  // boundary for 2s\n\n// Partition: [0s | 1s | unsorted | 2s]\n//              left   mid       right\n\nGot it?",
+      "mentorSays": "This lesson uses THREE pointers: left (boundary for 0s), mid (current element), right (boundary for 2s). We partition the array into three sections.\n\n// Three pointers:\nint left = 0;   // boundary for 0s\nint mid = 0;    // current element\nint right = nums.length - 1;  // boundary for 2s\n\n// Partition: [0s | 1s | unsorted | 2s]\n//              left   mid       right\n\nGot it?",
       "example": "// Three pointers:\nint left = 0;   // boundary for 0s\nint mid = 0;    // current element\nint right = nums.length - 1;  // boundary for 2s\n\n// Partition: [0s | 1s | unsorted | 2s]\n//              left   mid       right",
       "action": "continue",
       "next": "coding-start-java"
@@ -650,14 +650,14 @@
     },
     {
       "stepId": "in-place-explanation-cpp",
-      "mentorSays": "In-place means we modify the original array without creating a new one. This is required for this problem!\n\n// NOT in-place (creates new vector):\nvector<int> sorted = arr;\nsort(sorted.begin(), sorted.end());\n\n// In-place (modifies original):\nswap(arr[i], arr[j]);\n\nGot it?",
+      "mentorSays": "In-place means we modify the original array without creating a new one. This is required for this lesson!\n\n// NOT in-place (creates new vector):\nvector<int> sorted = arr;\nsort(sorted.begin(), sorted.end());\n\n// In-place (modifies original):\nswap(arr[i], arr[j]);\n\nGot it?",
       "example": "// NOT in-place (creates new vector):\nvector<int> sorted = arr;\nsort(sorted.begin(), sorted.end());\n\n// In-place (modifies original):\nswap(arr[i], arr[j]);",
       "action": "continue",
       "next": "coding-start-cpp"
     },
     {
       "stepId": "three-pointers-explanation-cpp",
-      "mentorSays": "This problem uses THREE pointers: left (boundary for 0s), mid (current element), right (boundary for 2s). We partition the array into three sections.\n\n// Three pointers:\nint left = 0;   // boundary for 0s\nint mid = 0;    // current element\nint right = nums.size() - 1;  // boundary for 2s\n\n// Partition: [0s | 1s | unsorted | 2s]\n//              left   mid       right\n\nGot it?",
+      "mentorSays": "This lesson uses THREE pointers: left (boundary for 0s), mid (current element), right (boundary for 2s). We partition the array into three sections.\n\n// Three pointers:\nint left = 0;   // boundary for 0s\nint mid = 0;    // current element\nint right = nums.size() - 1;  // boundary for 2s\n\n// Partition: [0s | 1s | unsorted | 2s]\n//              left   mid       right\n\nGot it?",
       "example": "// Three pointers:\nint left = 0;   // boundary for 0s\nint mid = 0;    // current element\nint right = nums.size() - 1;  // boundary for 2s\n\n// Partition: [0s | 1s | unsorted | 2s]\n//              left   mid       right",
       "action": "continue",
       "next": "coding-start-cpp"
@@ -811,14 +811,14 @@
     },
     {
       "stepId": "in-place-explanation-ts",
-      "mentorSays": "In-place means we modify the original array without creating a new one. This is required for this problem!\n\n// NOT in-place (creates new array):\nlet sorted = [...arr].sort();\n\n// In-place (modifies original):\n[arr[i], arr[j]] = [arr[j], arr[i]];\n\nGot it?",
+      "mentorSays": "In-place means we modify the original array without creating a new one. This is required for this lesson!\n\n// NOT in-place (creates new array):\nlet sorted = [...arr].sort();\n\n// In-place (modifies original):\n[arr[i], arr[j]] = [arr[j], arr[i]];\n\nGot it?",
       "example": "// NOT in-place (creates new array):\nlet sorted = [...arr].sort();\n\n// In-place (modifies original):\n[arr[i], arr[j]] = [arr[j], arr[i]];",
       "action": "continue",
       "next": "coding-start-ts"
     },
     {
       "stepId": "three-pointers-explanation-ts",
-      "mentorSays": "This problem uses THREE pointers: left (boundary for 0s), mid (current element), right (boundary for 2s). We partition the array into three sections.\n\n// Three pointers:\nlet left = 0;   // boundary for 0s\nlet mid = 0;    // current element\nlet right = nums.length - 1;  // boundary for 2s\n\n// Partition: [0s | 1s | unsorted | 2s]\n//              left   mid       right\n\nGot it?",
+      "mentorSays": "This lesson uses THREE pointers: left (boundary for 0s), mid (current element), right (boundary for 2s). We partition the array into three sections.\n\n// Three pointers:\nlet left = 0;   // boundary for 0s\nlet mid = 0;    // current element\nlet right = nums.length - 1;  // boundary for 2s\n\n// Partition: [0s | 1s | unsorted | 2s]\n//              left   mid       right\n\nGot it?",
       "example": "// Three pointers:\nlet left = 0;   // boundary for 0s\nlet mid = 0;    // current element\nlet right = nums.length - 1;  // boundary for 2s\n\n// Partition: [0s | 1s | unsorted | 2s]\n//              left   mid       right",
       "action": "continue",
       "next": "coding-start-ts"

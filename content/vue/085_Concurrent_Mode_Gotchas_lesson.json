@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-vue-85",
     "track": "vue",
-    "problemNum": 85,
+    "lessonNum": 85,
     "title": "Concurrent Mode Gotchas",
     "shortName": "P85",
     "intro": {

@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-ts-80",
     "track": "ts",
-    "problemNum": 80,
+    "lessonNum": 80,
     "title": "Build typed feature flag variants",
     "shortName": "P80",
     "intro": {

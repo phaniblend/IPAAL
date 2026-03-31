@@ -8,4 +8,4 @@ const NODES = [
 // Read replica: scale reads; eventual consistency`, feedback_correct: "✅ Automated backup + WAL; PgBouncer pools connections; replicas for read scale.", feedback_wrong: "Backup and PITR; PgBouncer; read replicas.", expected: "DB operations" },
 ];
 const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }];
-export default createINPACTEngine({ NODES, sideItems, problemNum: "PE-07", title: "Database operations", shortName: "PE — DB" });
+export default createINPACTEngine({ NODES, sideItems, lessonNum: "PE-07", title: "Database operations", shortName: "PE — DB" });

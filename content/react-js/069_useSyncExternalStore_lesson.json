@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-react-js-69",
     "track": "react-js",
-    "problemNum": 69,
+    "lessonNum": 69,
     "title": "useSyncExternalStore",
     "shortName": "P69",
     "intro": {

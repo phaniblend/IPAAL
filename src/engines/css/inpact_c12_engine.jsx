@@ -73,7 +73,7 @@ function getOutputPreview(answer) {
 export default createINPACTEngine({
   NODES,
   sideItems,
-  problemNum: 12,
+  lessonNum: 12,
   title: "align-items and align-content",
   shortName: "C12",
   language: "css",

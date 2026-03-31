@@ -45,7 +45,7 @@ const sideItems = [
 export default createINPACTEngine({
   NODES,
   sideItems,
-  problemNum: 120,
+  lessonNum: 120,
   title: "Creating RTK Endpoints (from zero)",
   shortName: "RTK ENDPOINTS",
 });

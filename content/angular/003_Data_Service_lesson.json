@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-angular-03",
     "track": "angular",
-    "problemNum": 3,
+    "lessonNum": 3,
     "title": "Data Service",
     "shortName": "P03",
     "intro": {

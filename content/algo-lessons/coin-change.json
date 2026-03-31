@@ -8,20 +8,20 @@
   "flow": [
     {
       "stepId": "title",
-      "mentorSays": "At the end of this lesson, you will be able to:\n\n1. Understand what the Coin Change problem asks for\n2. Use dynamic programming to find the minimum coins needed\n3. Build the solution by considering each coin denomination\n4. Implement the solution step by step in your chosen language",
+      "mentorSays": "At the end of this lesson, you will be able to:\n\n1. Understand what the Coin Change lesson asks for\n2. Use dynamic programming to find the minimum coins needed\n3. Build the solution by considering each coin denomination\n4. Implement the solution step by step in your chosen language",
       "action": "continue",
-      "next": "problem-illustration"
+      "next": "lesson-illustration"
     },
     {
-      "stepId": "problem-illustration",
-      "mentorSays": "The Coin Change problem is a classic DP optimization problem.\n\nPROBLEM:\nGiven coins = [1, 2, 5] and amount = 11\nWhat's the MINIMUM number of coins to make 11?\n\nGREEDY APPROACH (DOESN'T WORK):\nStart with largest coin:\n11 = 5 + 5 + 1 → 3 coins\n\nIs this optimal? Let's verify with DP.\n\nDP TABLE CONSTRUCTION:\nWe build dp[i] = minimum coins needed to make amount i\n\nInitialize:\ndp[0] = 0 (0 coins for amount 0)\ndp[1..11] = Infinity (unknown initially)\n\nFor each amount from 1 to 11:\n  For each coin:\n    If coin <= amount:\n      dp[amount] = min(dp[amount], dp[amount-coin] + 1)\n\nStep by step:\ndp[1]: coins=[1] → dp[1] = dp[0] + 1 = 1\ndp[2]: coins=[1,2] → dp[2] = min(dp[1]+1, dp[0]+1) = min(2, 1) = 1\ndp[3]: coins=[1,2] → dp[3] = min(dp[2]+1, dp[1]+1) = min(2, 2) = 2\ndp[4]: coins=[1,2] → dp[4] = min(dp[3]+1, dp[2]+1) = min(3, 2) = 2\ndp[5]: coins=[1,2,5] → dp[5] = min(dp[4]+1, dp[3]+1, dp[0]+1) = min(3, 3, 1) = 1\ndp[6]: coins=[1,2,5] → dp[6] = min(dp[5]+1, dp[4]+1, dp[1]+1) = min(2, 3, 2) = 2\n...\ndp[11]: coins=[1,2,5] → dp[11] = min(dp[10]+1, dp[9]+1, dp[6]+1)\n                                = min(3, 3, 3) = 3\n\nFINAL DP TABLE:\nAmount:  0  1  2  3  4  5  6  7  8  9 10 11\nCoins:   0  1  1  2  2  1  2  2  3  3  2  3\n\nAnswer: 3 coins (5 + 5 + 1)\n\nWHY GREEDY DOESN'T ALWAYS WORK:\nExample: coins = [1, 3, 4], amount = 6\nGreedy: 6 = 4 + 1 + 1 → 3 coins\nDP: 6 = 3 + 3 → 2 coins ✓ (optimal!)\n\nThis shows why we need DP, not greedy.\n\nTIME: O(amount × coins.length)\nSPACE: O(amount)",
+      "stepId": "lesson-illustration",
+      "mentorSays": "The Coin Change lesson is a classic DP optimization lesson.\n\nPROBLEM:\nGiven coins = [1, 2, 5] and amount = 11\nWhat's the MINIMUM number of coins to make 11?\n\nGREEDY APPROACH (DOESN'T WORK):\nStart with largest coin:\n11 = 5 + 5 + 1 → 3 coins\n\nIs this optimal? Let's verify with DP.\n\nDP TABLE CONSTRUCTION:\nWe build dp[i] = minimum coins needed to make amount i\n\nInitialize:\ndp[0] = 0 (0 coins for amount 0)\ndp[1..11] = Infinity (unknown initially)\n\nFor each amount from 1 to 11:\n  For each coin:\n    If coin <= amount:\n      dp[amount] = min(dp[amount], dp[amount-coin] + 1)\n\nStep by step:\ndp[1]: coins=[1] → dp[1] = dp[0] + 1 = 1\ndp[2]: coins=[1,2] → dp[2] = min(dp[1]+1, dp[0]+1) = min(2, 1) = 1\ndp[3]: coins=[1,2] → dp[3] = min(dp[2]+1, dp[1]+1) = min(2, 2) = 2\ndp[4]: coins=[1,2] → dp[4] = min(dp[3]+1, dp[2]+1) = min(3, 2) = 2\ndp[5]: coins=[1,2,5] → dp[5] = min(dp[4]+1, dp[3]+1, dp[0]+1) = min(3, 3, 1) = 1\ndp[6]: coins=[1,2,5] → dp[6] = min(dp[5]+1, dp[4]+1, dp[1]+1) = min(2, 3, 2) = 2\n...\ndp[11]: coins=[1,2,5] → dp[11] = min(dp[10]+1, dp[9]+1, dp[6]+1)\n                                = min(3, 3, 3) = 3\n\nFINAL DP TABLE:\nAmount:  0  1  2  3  4  5  6  7  8  9 10 11\nCoins:   0  1  1  2  2  1  2  2  3  3  2  3\n\nAnswer: 3 coins (5 + 5 + 1)\n\nWHY GREEDY DOESN'T ALWAYS WORK:\nExample: coins = [1, 3, 4], amount = 6\nGreedy: 6 = 4 + 1 + 1 → 3 coins\nDP: 6 = 3 + 3 → 2 coins ✓ (optimal!)\n\nThis shows why we need DP, not greedy.\n\nTIME: O(amount × coins.length)\nSPACE: O(amount)",
       "example": "coins = [1, 3, 4]\namount = 6\n\nFind minimum coins:\n- 2 coins of 3 (sum = 6) ✓\n\nAnswer: 2\n\nAnother example:\ncoins = [1, 2, 5]\namount = 11\n\nAnswer: 3 (5 + 5 + 1)\n\nAnother example:\ncoins = [2]\namount = 3\n\nAnswer: -1 (impossible to make 3 with only 2s)",
       "action": "continue",
       "next": "thinking-challenge"
     },
     {
       "stepId": "thinking-challenge",
-      "mentorSays": "Now that you understand what the problem wants, here's the real question:\n\nHow would YOU find the minimum number of coins?\n\nThink about it for a moment. What approach feels natural to you?",
+      "mentorSays": "Now that you understand what the lesson wants, here's the real question:\n\nHow would YOU find the minimum number of coins?\n\nThink about it for a moment. What approach feels natural to you?",
       "choices": [
         {
           "label": "Use dynamic programming to track minimum coins for each amount",
@@ -223,7 +223,7 @@
     },
     {
       "stepId": "coding-impossible-case-js",
-      "mentorSays": "Let's handle the case when the amount can't be made.\n\nIf dp[amount] is still Infinity after filling the table, it means we couldn't make that amount with the given coins.\n\nIn this case, we return -1 as specified in the problem.",
+      "mentorSays": "Let's handle the case when the amount can't be made.\n\nIf dp[amount] is still Infinity after filling the table, it means we couldn't make that amount with the given coins.\n\nIn this case, we return -1 as specified in the lesson.",
       "example": "// Check if amount is impossible\nif (dp[amount] === Infinity) {\n  return -1;\n}\nreturn dp[amount];",
       "action": "continue",
       "next": "coding-return-js"
@@ -391,7 +391,7 @@
     },
     {
       "stepId": "coding-impossible-case-python",
-      "mentorSays": "Let's handle the case when the amount can't be made.\n\nIf dp[amount] is still Infinity after filling the table, it means we couldn't make that amount with the given coins.\n\nIn this case, we return -1 as specified in the problem.",
+      "mentorSays": "Let's handle the case when the amount can't be made.\n\nIf dp[amount] is still Infinity after filling the table, it means we couldn't make that amount with the given coins.\n\nIn this case, we return -1 as specified in the lesson.",
       "example": "// Check if amount is impossible\nif (dp[amount] === Infinity) {\n  return -1;\n}\nreturn dp[amount];",
       "action": "continue",
       "next": "coding-return-python"
@@ -559,7 +559,7 @@
     },
     {
       "stepId": "coding-impossible-case-java",
-      "mentorSays": "Let's handle the case when the amount can't be made.\n\nIf dp[amount] is still Infinity after filling the table, it means we couldn't make that amount with the given coins.\n\nIn this case, we return -1 as specified in the problem.",
+      "mentorSays": "Let's handle the case when the amount can't be made.\n\nIf dp[amount] is still Infinity after filling the table, it means we couldn't make that amount with the given coins.\n\nIn this case, we return -1 as specified in the lesson.",
       "example": "// Check if amount is impossible\nif (dp[amount] === Infinity) {\n  return -1;\n}\nreturn dp[amount];",
       "action": "continue",
       "next": "coding-return-java"
@@ -727,7 +727,7 @@
     },
     {
       "stepId": "coding-impossible-case-cpp",
-      "mentorSays": "Let's handle the case when the amount can't be made.\n\nIf dp[amount] is still Infinity after filling the table, it means we couldn't make that amount with the given coins.\n\nIn this case, we return -1 as specified in the problem.",
+      "mentorSays": "Let's handle the case when the amount can't be made.\n\nIf dp[amount] is still Infinity after filling the table, it means we couldn't make that amount with the given coins.\n\nIn this case, we return -1 as specified in the lesson.",
       "example": "// Check if amount is impossible\nif (dp[amount] === Infinity) {\n  return -1;\n}\nreturn dp[amount];",
       "action": "continue",
       "next": "coding-return-cpp"
@@ -895,7 +895,7 @@
     },
     {
       "stepId": "coding-impossible-case-ts",
-      "mentorSays": "Let's handle the case when the amount can't be made.\n\nIf dp[amount] is still Infinity after filling the table, it means we couldn't make that amount with the given coins.\n\nIn this case, we return -1 as specified in the problem.",
+      "mentorSays": "Let's handle the case when the amount can't be made.\n\nIf dp[amount] is still Infinity after filling the table, it means we couldn't make that amount with the given coins.\n\nIn this case, we return -1 as specified in the lesson.",
       "example": "// Check if amount is impossible\nif (dp[amount] === Infinity) {\n  return -1;\n}\nreturn dp[amount];",
       "action": "continue",
       "next": "coding-return-ts"
@@ -916,7 +916,7 @@
     },
     {
       "stepId": "final",
-      "mentorSays": "🎉 Well done! You've learned coin change. You understand how to use dynamic programming to find the minimum coins needed to make an amount!\n\nThis is O(amount × coins) time and O(amount) space - excellent for optimization problems! Keep practicing!",
+      "mentorSays": "🎉 Well done! You've learned coin change. You understand how to use dynamic programming to find the minimum coins needed to make an amount!\n\nThis is O(amount × coins) time and O(amount) space - excellent for optimization lessons! Keep practicing!",
       "action": "continue"
     }
   ]

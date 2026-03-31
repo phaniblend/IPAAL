@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-ts-82",
     "track": "ts",
-    "problemNum": 82,
+    "lessonNum": 82,
     "title": "Build type safe i18n key lookup",
     "shortName": "P82",
     "intro": {

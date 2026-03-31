@@ -73,7 +73,7 @@ function getOutputPreview(answer) {
 export default createINPACTEngine({
   NODES,
   sideItems,
-  problemNum: 63,
+  lessonNum: 63,
   title: "mix-blend-mode",
   shortName: "C63",
   language: "css",

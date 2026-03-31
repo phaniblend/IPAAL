@@ -8,4 +8,4 @@ const NODES = [
 // Checklist: auth, input, crypto, secrets, deps`, feedback_correct: "✅ STRIDE categories; threat model assets/attackers; checklist for reviews.", feedback_wrong: "STRIDE; threat modelling; security checklist.", expected: "Pen testing mindset" },
 ];
 const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }];
-export default createINPACTEngine({ NODES, sideItems, problemNum: "SEC-06", title: "Penetration testing mindset", shortName: "SEC — PENTEST" });
+export default createINPACTEngine({ NODES, sideItems, lessonNum: "SEC-06", title: "Penetration testing mindset", shortName: "SEC — PENTEST" });

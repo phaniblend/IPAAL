@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-js-79",
     "track": "js",
-    "problemNum": 79,
+    "lessonNum": 79,
     "title": "Build memoization utility with cache size limit",
     "shortName": "P79",
     "intro": {

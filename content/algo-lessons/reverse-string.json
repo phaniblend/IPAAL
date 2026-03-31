@@ -8,20 +8,20 @@
   "flow": [
     {
       "stepId": "title",
-      "mentorSays": "At the end of this lesson, you will be able to:\n\n1. Understand what the Reverse String problem asks for\n2. Use two pointers to reverse a string in-place\n3. Swap characters efficiently\n4. Implement the solution step by step in your chosen language",
+      "mentorSays": "At the end of this lesson, you will be able to:\n\n1. Understand what the Reverse String lesson asks for\n2. Use two pointers to reverse a string in-place\n3. Swap characters efficiently\n4. Implement the solution step by step in your chosen language",
       "action": "continue",
-      "next": "problem-illustration"
+      "next": "lesson-illustration"
     },
     {
-      "stepId": "problem-illustration",
-      "mentorSays": "Perfect! Now let's understand what the Reverse String problem is asking.\n\n**Problem Definition:**\nGiven an array of characters, reverse the string in-place (modify the original array without using extra space).\n\n**Important:** The input is an array of characters (not a string), and you must modify it in-place. You cannot create a new array.\n\n**Example 1:** s = [\"h\", \"e\", \"l\", \"l\", \"o\"]\n\nYour task: Reverse the array so it becomes [\"o\", \"l\", \"l\", \"e\", \"h\"]\n\n**Step-by-step trace using two pointers:**\n\nInitial: [\"h\", \"e\", \"l\", \"l\", \"o\"]\nleft = 0, right = 4\n\n- **Step 1**: Swap s[0]='h' and s[4]='o'\n  - Result: [\"o\", \"e\", \"l\", \"l\", \"h\"]\n  - left = 1, right = 3\n\n- **Step 2**: Swap s[1]='e' and s[3]='l'\n  - Result: [\"o\", \"l\", \"l\", \"e\", \"h\"]\n  - left = 2, right = 2\n\n- **Done!** left >= right, so we stop\n\nFinal: [\"o\", \"l\", \"l\", \"e\", \"h\"] ✓\n\n**Example 2:** s = [\"H\", \"a\", \"n\", \"n\", \"a\", \"h\"]\n\nInitial: [\"H\", \"a\", \"n\", \"n\", \"a\", \"h\"]\nleft = 0, right = 5\n\n- **Step 1**: Swap s[0]='H' and s[5]='h' → [\"h\", \"a\", \"n\", \"n\", \"a\", \"H\"]\n  - left = 1, right = 4\n\n- **Step 2**: Swap s[1]='a' and s[4]='a' → [\"h\", \"a\", \"n\", \"n\", \"a\", \"H\"]\n  - left = 2, right = 3\n\n- **Step 3**: Swap s[2]='n' and s[3]='n' → [\"h\", \"a\", \"n\", \"n\", \"a\", \"H\"]\n  - left = 3, right = 2\n\n- **Done!** left > right, stop\n\nFinal: [\"h\", \"a\", \"n\", \"n\", \"a\", \"H\"] ✓\n\n**What makes this tricky:**\n1. Must modify in-place (no extra array)\n2. Handling odd vs even length strings (middle character doesn't need swapping)\n3. Off-by-one errors when stopping condition (left < right vs left <= right)\n4. Understanding that swapping is symmetric (swap left and right, then move both inward)\n\n**Common pitfalls:**\n- Creating a new array (violates in-place requirement)\n- Swapping the same element twice (when left == right)\n- Using wrong loop condition (should be left < right, not left <= right)\n- Forgetting to move pointers after swapping",
+      "stepId": "lesson-illustration",
+      "mentorSays": "Perfect! Now let's understand what the Reverse String lesson is asking.\n\n**Lesson Definition:**\nGiven an array of characters, reverse the string in-place (modify the original array without using extra space).\n\n**Important:** The input is an array of characters (not a string), and you must modify it in-place. You cannot create a new array.\n\n**Example 1:** s = [\"h\", \"e\", \"l\", \"l\", \"o\"]\n\nYour task: Reverse the array so it becomes [\"o\", \"l\", \"l\", \"e\", \"h\"]\n\n**Step-by-step trace using two pointers:**\n\nInitial: [\"h\", \"e\", \"l\", \"l\", \"o\"]\nleft = 0, right = 4\n\n- **Step 1**: Swap s[0]='h' and s[4]='o'\n  - Result: [\"o\", \"e\", \"l\", \"l\", \"h\"]\n  - left = 1, right = 3\n\n- **Step 2**: Swap s[1]='e' and s[3]='l'\n  - Result: [\"o\", \"l\", \"l\", \"e\", \"h\"]\n  - left = 2, right = 2\n\n- **Done!** left >= right, so we stop\n\nFinal: [\"o\", \"l\", \"l\", \"e\", \"h\"] ✓\n\n**Example 2:** s = [\"H\", \"a\", \"n\", \"n\", \"a\", \"h\"]\n\nInitial: [\"H\", \"a\", \"n\", \"n\", \"a\", \"h\"]\nleft = 0, right = 5\n\n- **Step 1**: Swap s[0]='H' and s[5]='h' → [\"h\", \"a\", \"n\", \"n\", \"a\", \"H\"]\n  - left = 1, right = 4\n\n- **Step 2**: Swap s[1]='a' and s[4]='a' → [\"h\", \"a\", \"n\", \"n\", \"a\", \"H\"]\n  - left = 2, right = 3\n\n- **Step 3**: Swap s[2]='n' and s[3]='n' → [\"h\", \"a\", \"n\", \"n\", \"a\", \"H\"]\n  - left = 3, right = 2\n\n- **Done!** left > right, stop\n\nFinal: [\"h\", \"a\", \"n\", \"n\", \"a\", \"H\"] ✓\n\n**What makes this tricky:**\n1. Must modify in-place (no extra array)\n2. Handling odd vs even length strings (middle character doesn't need swapping)\n3. Off-by-one errors when stopping condition (left < right vs left <= right)\n4. Understanding that swapping is symmetric (swap left and right, then move both inward)\n\n**Common pitfalls:**\n- Creating a new array (violates in-place requirement)\n- Swapping the same element twice (when left == right)\n- Using wrong loop condition (should be left < right, not left <= right)\n- Forgetting to move pointers after swapping",
       "example": "Example 1:\ns = [\"h\", \"e\", \"l\", \"l\", \"o\"]\n\nStep 1: Swap 'h' and 'o' → [\"o\", \"e\", \"l\", \"l\", \"h\"]\nStep 2: Swap 'e' and 'l' → [\"o\", \"l\", \"l\", \"e\", \"h\"]\n\nResult: [\"o\", \"l\", \"l\", \"e\", \"h\"]\n\nExample 2:\ns = [\"H\", \"a\", \"n\", \"n\", \"a\", \"h\"]\n\nStep 1: Swap 'H' and 'h' → [\"h\", \"a\", \"n\", \"n\", \"a\", \"H\"]\nStep 2: Swap 'a' and 'a' → [\"h\", \"a\", \"n\", \"n\", \"a\", \"H\"]\nStep 3: Swap 'n' and 'n' → [\"h\", \"a\", \"n\", \"n\", \"a\", \"H\"]\n\nResult: [\"h\", \"a\", \"n\", \"n\", \"a\", \"H\"]",
       "action": "continue",
       "next": "thinking-challenge"
     },
     {
       "stepId": "thinking-challenge",
-      "mentorSays": "Now that you understand what the problem wants, here's the real question:\n\nHow would YOU reverse a string?\n\nThink about it for a moment. What approach feels natural to you?",
+      "mentorSays": "Now that you understand what the lesson wants, here's the real question:\n\nHow would YOU reverse a string?\n\nThink about it for a moment. What approach feels natural to you?",
       "choices": [
         {
           "label": "Use two pointers from both ends, swap while moving inward",
@@ -39,13 +39,13 @@
     },
     {
       "stepId": "explore-new-array",
-      "mentorSays": "That's a straightforward approach! You're thinking: \"I'll create a new array and copy characters in reverse order.\"\n\nThis works! However, the problem asks us to modify the array in-place (without creating a new array). Also, using extra space makes it less efficient.\n\nThere's a more space-efficient O(1) approach using two pointers. Would you like to learn that?",
+      "mentorSays": "That's a straightforward approach! You're thinking: \"I'll create a new array and copy characters in reverse order.\"\n\nThis works! However, the lesson asks us to modify the array in-place (without creating a new array). Also, using extra space makes it less efficient.\n\nThere's a more space-efficient O(1) approach using two pointers. Would you like to learn that?",
       "action": "continue",
       "next": "explore-two-pointers"
     },
     {
       "stepId": "explore-builtin",
-      "mentorSays": "That's practical! Many languages have built-in reverse functions.\n\nHowever, the problem asks us to reverse in-place, and understanding the two pointers approach helps with many other problems.\n\nWould you like to learn the two pointers approach?",
+      "mentorSays": "That's practical! Many languages have built-in reverse functions.\n\nHowever, the lesson asks us to reverse in-place, and understanding the two pointers approach helps with many other lessons.\n\nWould you like to learn the two pointers approach?",
       "action": "continue",
       "next": "explore-two-pointers"
     },
@@ -146,7 +146,7 @@
     },
     {
       "stepId": "string-check-js",
-      "mentorSays": "To solve this problem, we'll need to work with arrays of characters (strings). Do you know what an array is in JavaScript?",
+      "mentorSays": "To solve this lesson, we'll need to work with arrays of characters (strings). Do you know what an array is in JavaScript?",
       "choices": [
         {
           "label": "Yes, I know arrays",
@@ -167,7 +167,7 @@
     },
     {
       "stepId": "loop-check-js",
-      "mentorSays": "To solve this problem, we'll need to use loops. Do you know what a loop is in JavaScript?",
+      "mentorSays": "To solve this lesson, we'll need to use loops. Do you know what a loop is in JavaScript?",
       "choices": [
         {
           "label": "Yes, I know loops",
@@ -307,7 +307,7 @@
     },
     {
       "stepId": "string-check-python",
-      "mentorSays": "To solve this problem, we'll need to work with lists of characters. Do you know what a list is in Python?",
+      "mentorSays": "To solve this lesson, we'll need to work with lists of characters. Do you know what a list is in Python?",
       "choices": [
         {
           "label": "Yes, I know lists",
@@ -328,7 +328,7 @@
     },
     {
       "stepId": "loop-check-python",
-      "mentorSays": "To solve this problem, we'll need to use loops. Do you know what a loop is in Python?",
+      "mentorSays": "To solve this lesson, we'll need to use loops. Do you know what a loop is in Python?",
       "choices": [
         {
           "label": "Yes, I know loops",
@@ -454,7 +454,7 @@
     },
     {
       "stepId": "string-check-java",
-      "mentorSays": "To solve this problem, we'll need to work with arrays of characters. Do you know what an array is in Java?",
+      "mentorSays": "To solve this lesson, we'll need to work with arrays of characters. Do you know what an array is in Java?",
       "choices": [
         {
           "label": "Yes, I know arrays",
@@ -475,7 +475,7 @@
     },
     {
       "stepId": "loop-check-java",
-      "mentorSays": "To solve this problem, we'll need to use loops. Do you know what a loop is in Java?",
+      "mentorSays": "To solve this lesson, we'll need to use loops. Do you know what a loop is in Java?",
       "choices": [
         {
           "label": "Yes, I know loops",
@@ -615,7 +615,7 @@
     },
     {
       "stepId": "string-check-cpp",
-      "mentorSays": "To solve this problem, we'll need to work with vectors of characters. Do you know what a vector is in C++?",
+      "mentorSays": "To solve this lesson, we'll need to work with vectors of characters. Do you know what a vector is in C++?",
       "choices": [
         {
           "label": "Yes, I know vectors",
@@ -636,7 +636,7 @@
     },
     {
       "stepId": "loop-check-cpp",
-      "mentorSays": "To solve this problem, we'll need to use loops. Do you know what a loop is in C++?",
+      "mentorSays": "To solve this lesson, we'll need to use loops. Do you know what a loop is in C++?",
       "choices": [
         {
           "label": "Yes, I know loops",
@@ -776,7 +776,7 @@
     },
     {
       "stepId": "string-check-ts",
-      "mentorSays": "To solve this problem, we'll need to work with arrays of characters. Do you know what an array is in TypeScript?",
+      "mentorSays": "To solve this lesson, we'll need to work with arrays of characters. Do you know what an array is in TypeScript?",
       "choices": [
         {
           "label": "Yes, I know arrays",
@@ -797,7 +797,7 @@
     },
     {
       "stepId": "loop-check-ts",
-      "mentorSays": "To solve this problem, we'll need to use loops. Do you know what a loop is in TypeScript?",
+      "mentorSays": "To solve this lesson, we'll need to use loops. Do you know what a loop is in TypeScript?",
       "choices": [
         {
           "label": "Yes, I know loops",
@@ -874,7 +874,7 @@
     },
     {
       "stepId": "final",
-      "mentorSays": "🎉 Well done! You've learned to think through the Reverse String problem. You understand what the problem asks for, how to use two pointers to reverse a string in-place, and how to swap characters efficiently.\n\n**Key Takeaways:**\n1. **Two Pointers from Ends**: Start with pointers at both ends, swap characters, then move inward.\n2. **In-Place Modification**: We modify the original array without creating a new one, using O(1) extra space.\n3. **Loop Condition**: Use left < right (not <=) to avoid swapping the middle element twice for odd-length strings.\n4. **Swap Pattern**: Save left in temp, copy right to left, then copy temp to right.\n\n**Time Complexity**: O(n) - we traverse half the array (n/2 swaps)\n**Space Complexity**: O(1) - we only use a few variables (left, right, temp)\n\n**What to practice next:**\n- Valid Palindrome (similar two-pointer technique)\n- Reverse Words in a String (builds on reverse technique)\n\nThis kind of thinking—using two pointers to swap elements—is essential for solving many array and string problems. Keep practicing!",
+      "mentorSays": "🎉 Well done! You've learned to think through the Reverse String lesson. You understand what the lesson asks for, how to use two pointers to reverse a string in-place, and how to swap characters efficiently.\n\n**Key Takeaways:**\n1. **Two Pointers from Ends**: Start with pointers at both ends, swap characters, then move inward.\n2. **In-Place Modification**: We modify the original array without creating a new one, using O(1) extra space.\n3. **Loop Condition**: Use left < right (not <=) to avoid swapping the middle element twice for odd-length strings.\n4. **Swap Pattern**: Save left in temp, copy right to left, then copy temp to right.\n\n**Time Complexity**: O(n) - we traverse half the array (n/2 swaps)\n**Space Complexity**: O(1) - we only use a few variables (left, right, temp)\n\n**What to practice next:**\n- Valid Palindrome (similar two-pointer technique)\n- Reverse Words in a String (builds on reverse technique)\n\nThis kind of thinking—using two pointers to swap elements—is essential for solving many array and string lessons. Keep practicing!",
       "action": "continue"
     }
   ]

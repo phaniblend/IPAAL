@@ -73,7 +73,7 @@ function getOutputPreview(answer) {
 export default createINPACTEngine({
   NODES,
   sideItems,
-  problemNum: 95,
+  lessonNum: 95,
   title: "Scroll-driven animations",
   shortName: "C95",
   language: "css",

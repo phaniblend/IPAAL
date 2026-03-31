@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-react-js-29",
     "track": "react-js",
-    "problemNum": 29,
+    "lessonNum": 29,
     "title": "useDebounce",
     "shortName": "P29",
     "intro": {

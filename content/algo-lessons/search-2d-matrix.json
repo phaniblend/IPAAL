@@ -8,20 +8,20 @@
   "flow": [
     {
       "stepId": "title",
-      "mentorSays": "At the end of this lesson, you will be able to:\n\n1. Understand what the Search a 2D Matrix problem asks for\n2. Treat a 2D matrix as a 1D sorted array\n3. Convert between 1D and 2D indices\n4. Use binary search to find the target\n5. Implement the solution step by step in your chosen language",
+      "mentorSays": "At the end of this lesson, you will be able to:\n\n1. Understand what the Search a 2D Matrix lesson asks for\n2. Treat a 2D matrix as a 1D sorted array\n3. Convert between 1D and 2D indices\n4. Use binary search to find the target\n5. Implement the solution step by step in your chosen language",
       "action": "continue",
-      "next": "problem-illustration"
+      "next": "lesson-illustration"
     },
     {
-      "stepId": "problem-illustration",
-      "mentorSays": "Perfect! Now let's understand what the Search a 2D Matrix problem is asking.\n\n**Problem Definition:**\nWrite an efficient algorithm that searches for a value `target` in an `m x n` integer matrix `matrix`. This matrix has the following properties:\n- Integers in each row are sorted from left to right\n- The first integer of each row is greater than the last integer of the previous row\n\n**Key Observations:**\n- Each row is sorted\n- Rows are sorted (first element of row i > last element of row i-1)\n- This means the entire matrix can be treated as one sorted array!\n- We can use binary search on the flattened matrix\n\n**Example 1:**\nmatrix = [\n  [1,  3,  5,  7],\n  [10, 11, 16, 20],\n  [23, 30, 34, 60]\n]\ntarget = 3\n\nTreat as 1D: [1, 3, 5, 7, 10, 11, 16, 20, 23, 30, 34, 60]\nTarget 3 is at index 1 in 1D, which is row 0, col 1.\nAnswer: true\n\n**Example 2:**\nSame matrix, target = 13\n\nTarget 13 is not in the matrix.\nAnswer: false\n\n**Step-by-step trace for Example 1 (Binary search approach):**\n\nmatrix = [[1,3,5,7], [10,11,16,20], [23,30,34,60]]\ntarget = 3\nrows = 3, cols = 4\n\nTreat as 1D array of length 12:\n- **left = 0, right = 11**\n- **mid = 5**: Convert to 2D: row = 5 // 4 = 1, col = 5 % 4 = 1, matrix[1][1] = 11\n  - 11 > 3, search left: right = 4\n- **mid = 2**: Convert to 2D: row = 2 // 4 = 0, col = 2 % 4 = 2, matrix[0][2] = 5\n  - 5 > 3, search left: right = 1\n- **mid = 0**: Convert to 2D: row = 0 // 4 = 0, col = 0 % 4 = 0, matrix[0][0] = 1\n  - 1 < 3, search right: left = 1\n- **mid = 1**: Convert to 2D: row = 1 // 4 = 0, col = 1 % 4 = 1, matrix[0][1] = 3\n  - 3 == 3, Found! Return true ✓\n\n**Key Insight:**\nWe can treat the 2D matrix as a 1D sorted array:\n- 1D index → 2D: row = index // cols, col = index % cols\n- 2D → 1D: index = row * cols + col\n- Then use standard binary search!\n\n**What makes this tricky:**\n1. Converting between 1D and 2D indices\n2. Understanding that the matrix is essentially one sorted array\n3. Getting the row and column counts correctly\n4. The index conversion formula\n\n**Common pitfalls:**\n- Using wrong conversion formula (row = mid / cols instead of mid // cols)\n- Not handling empty matrix\n- Off-by-one errors in index calculation\n- Confusing rows and columns",
+      "stepId": "lesson-illustration",
+      "mentorSays": "Perfect! Now let's understand what the Search a 2D Matrix lesson is asking.\n\n**Lesson Definition:**\nWrite an efficient algorithm that searches for a value `target` in an `m x n` integer matrix `matrix`. This matrix has the following properties:\n- Integers in each row are sorted from left to right\n- The first integer of each row is greater than the last integer of the previous row\n\n**Key Observations:**\n- Each row is sorted\n- Rows are sorted (first element of row i > last element of row i-1)\n- This means the entire matrix can be treated as one sorted array!\n- We can use binary search on the flattened matrix\n\n**Example 1:**\nmatrix = [\n  [1,  3,  5,  7],\n  [10, 11, 16, 20],\n  [23, 30, 34, 60]\n]\ntarget = 3\n\nTreat as 1D: [1, 3, 5, 7, 10, 11, 16, 20, 23, 30, 34, 60]\nTarget 3 is at index 1 in 1D, which is row 0, col 1.\nAnswer: true\n\n**Example 2:**\nSame matrix, target = 13\n\nTarget 13 is not in the matrix.\nAnswer: false\n\n**Step-by-step trace for Example 1 (Binary search approach):**\n\nmatrix = [[1,3,5,7], [10,11,16,20], [23,30,34,60]]\ntarget = 3\nrows = 3, cols = 4\n\nTreat as 1D array of length 12:\n- **left = 0, right = 11**\n- **mid = 5**: Convert to 2D: row = 5 // 4 = 1, col = 5 % 4 = 1, matrix[1][1] = 11\n  - 11 > 3, search left: right = 4\n- **mid = 2**: Convert to 2D: row = 2 // 4 = 0, col = 2 % 4 = 2, matrix[0][2] = 5\n  - 5 > 3, search left: right = 1\n- **mid = 0**: Convert to 2D: row = 0 // 4 = 0, col = 0 % 4 = 0, matrix[0][0] = 1\n  - 1 < 3, search right: left = 1\n- **mid = 1**: Convert to 2D: row = 1 // 4 = 0, col = 1 % 4 = 1, matrix[0][1] = 3\n  - 3 == 3, Found! Return true ✓\n\n**Key Insight:**\nWe can treat the 2D matrix as a 1D sorted array:\n- 1D index → 2D: row = index // cols, col = index % cols\n- 2D → 1D: index = row * cols + col\n- Then use standard binary search!\n\n**What makes this tricky:**\n1. Converting between 1D and 2D indices\n2. Understanding that the matrix is essentially one sorted array\n3. Getting the row and column counts correctly\n4. The index conversion formula\n\n**Common pitfalls:**\n- Using wrong conversion formula (row = mid / cols instead of mid // cols)\n- Not handling empty matrix\n- Off-by-one errors in index calculation\n- Confusing rows and columns",
       "example": "Example 1:\nmatrix = [[1,3,5,7], [10,11,16,20], [23,30,34,60]]\ntarget = 3\nAnswer: true\n\nExample 2:\nSame matrix, target = 13\nAnswer: false",
       "action": "continue",
       "next": "thinking-challenge"
     },
     {
       "stepId": "thinking-challenge",
-      "mentorSays": "Now that you understand what the problem wants, here's the real question:\n\nHow would YOU search for a target in a 2D sorted matrix?\n\nThink about it for a moment. What approach feels natural to you?",
+      "mentorSays": "Now that you understand what the lesson wants, here's the real question:\n\nHow would YOU search for a target in a 2D sorted matrix?\n\nThink about it for a moment. What approach feels natural to you?",
       "choices": [
         {
           "label": "Treat matrix as 1D array, use binary search with index conversion",
@@ -146,7 +146,7 @@
     },
     {
       "stepId": "array-check-js",
-      "mentorSays": "To solve this problem, we'll need to work with 2D arrays (matrices). Do you know what a 2D array is in JavaScript?",
+      "mentorSays": "To solve this lesson, we'll need to work with 2D arrays (matrices). Do you know what a 2D array is in JavaScript?",
       "choices": [
         {
           "label": "Yes, I know 2D arrays",
@@ -167,7 +167,7 @@
     },
     {
       "stepId": "loop-check-js",
-      "mentorSays": "To solve this problem, we'll need to use loops. Do you know what a loop is in JavaScript?",
+      "mentorSays": "To solve this lesson, we'll need to use loops. Do you know what a loop is in JavaScript?",
       "choices": [
         {
           "label": "Yes, I know loops",
@@ -307,7 +307,7 @@
     },
     {
       "stepId": "array-check-python",
-      "mentorSays": "To solve this problem, we'll need to work with 2D arrays (matrices). Do you know what a 2D array is in Python?",
+      "mentorSays": "To solve this lesson, we'll need to work with 2D arrays (matrices). Do you know what a 2D array is in Python?",
       "choices": [
         {
           "label": "Yes, I know 2D arrays",
@@ -328,7 +328,7 @@
     },
     {
       "stepId": "loop-check-python",
-      "mentorSays": "To solve this problem, we'll need to use loops. Do you know what a loop is in Python?",
+      "mentorSays": "To solve this lesson, we'll need to use loops. Do you know what a loop is in Python?",
       "choices": [
         {
           "label": "Yes, I know loops",
@@ -468,7 +468,7 @@
     },
     {
       "stepId": "array-check-java",
-      "mentorSays": "To solve this problem, we'll need to work with 2D arrays (matrices). Do you know what a 2D array is in Java?",
+      "mentorSays": "To solve this lesson, we'll need to work with 2D arrays (matrices). Do you know what a 2D array is in Java?",
       "choices": [
         {
           "label": "Yes, I know 2D arrays",
@@ -489,7 +489,7 @@
     },
     {
       "stepId": "loop-check-java",
-      "mentorSays": "To solve this problem, we'll need to use loops. Do you know what a loop is in Java?",
+      "mentorSays": "To solve this lesson, we'll need to use loops. Do you know what a loop is in Java?",
       "choices": [
         {
           "label": "Yes, I know loops",
@@ -629,7 +629,7 @@
     },
     {
       "stepId": "array-check-cpp",
-      "mentorSays": "To solve this problem, we'll need to work with 2D arrays (matrices). Do you know what a 2D array is in C++?",
+      "mentorSays": "To solve this lesson, we'll need to work with 2D arrays (matrices). Do you know what a 2D array is in C++?",
       "choices": [
         {
           "label": "Yes, I know 2D arrays",
@@ -650,7 +650,7 @@
     },
     {
       "stepId": "loop-check-cpp",
-      "mentorSays": "To solve this problem, we'll need to use loops. Do you know what a loop is in C++?",
+      "mentorSays": "To solve this lesson, we'll need to use loops. Do you know what a loop is in C++?",
       "choices": [
         {
           "label": "Yes, I know loops",
@@ -790,7 +790,7 @@
     },
     {
       "stepId": "array-check-ts",
-      "mentorSays": "To solve this problem, we'll need to work with 2D arrays (matrices). Do you know what a 2D array is in TypeScript?",
+      "mentorSays": "To solve this lesson, we'll need to work with 2D arrays (matrices). Do you know what a 2D array is in TypeScript?",
       "choices": [
         {
           "label": "Yes, I know 2D arrays",
@@ -811,7 +811,7 @@
     },
     {
       "stepId": "loop-check-ts",
-      "mentorSays": "To solve this problem, we'll need to use loops. Do you know what a loop is in TypeScript?",
+      "mentorSays": "To solve this lesson, we'll need to use loops. Do you know what a loop is in TypeScript?",
       "choices": [
         {
           "label": "Yes, I know loops",
@@ -888,7 +888,7 @@
     },
     {
       "stepId": "final",
-      "mentorSays": "🎉 Well done! You've successfully implemented the Search a 2D Matrix solution!\n\n**Time Complexity:** O(log(m*n))\n- We use binary search on the flattened matrix\n- The search space is m*n elements\n- Binary search takes O(log(m*n)) time\n\n**Space Complexity:** O(1)\n- We only use a constant amount of extra space (left, right, mid, row, col variables)\n- No additional data structures are needed\n\n**Key Takeaways:**\n1. **Treat as 1D**: The matrix is essentially one sorted array when flattened\n2. **Index conversion**: row = mid // cols, col = mid % cols\n3. **Binary search**: Use standard binary search on the flattened array\n4. **Efficient**: O(log(m*n)) is much better than O(m*n) or O(m log n)\n5. **Matrix properties**: The sorted row and column properties enable this approach\n\n**Related Practice Problems:**\n- Search a 2D Matrix II (LeetCode #240) - different matrix properties\n- Find Peak Element (LeetCode #162) - binary search variant\n- Sqrt(x) (LeetCode #69) - binary search on answer\n\nKeep practicing binary search problems - they're common in interviews!",
+      "mentorSays": "🎉 Well done! You've successfully implemented the Search a 2D Matrix solution!\n\n**Time Complexity:** O(log(m*n))\n- We use binary search on the flattened matrix\n- The search space is m*n elements\n- Binary search takes O(log(m*n)) time\n\n**Space Complexity:** O(1)\n- We only use a constant amount of extra space (left, right, mid, row, col variables)\n- No additional data structures are needed\n\n**Key Takeaways:**\n1. **Treat as 1D**: The matrix is essentially one sorted array when flattened\n2. **Index conversion**: row = mid // cols, col = mid % cols\n3. **Binary search**: Use standard binary search on the flattened array\n4. **Efficient**: O(log(m*n)) is much better than O(m*n) or O(m log n)\n5. **Matrix properties**: The sorted row and column properties enable this approach\n\n**Related Practice Lessons:**\n- Search a 2D Matrix II (LeetCode #240) - different matrix properties\n- Find Peak Element (LeetCode #162) - binary search variant\n- Sqrt(x) (LeetCode #69) - binary search on answer\n\nKeep practicing binary search lessons - they're common in interviews!",
       "action": "continue"
     }
   ]

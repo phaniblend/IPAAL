@@ -29,4 +29,4 @@ res.redirect(302, '/')`,
 ];
 
 const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }];
-export default createINPACTEngine({ NODES, sideItems, problemNum: "EXP-F03", title: "Request & Response", shortName: "EXP — REQ RES" });
+export default createINPACTEngine({ NODES, sideItems, lessonNum: "EXP-F03", title: "Request & Response", shortName: "EXP — REQ RES" });

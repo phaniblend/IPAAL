@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-angular-31",
     "track": "angular",
-    "problemNum": 31,
+    "lessonNum": 31,
     "title": "Lifting State Up",
     "shortName": "P31",
     "intro": {

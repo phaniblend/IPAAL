@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-react-js-47",
     "track": "react-js",
-    "problemNum": 47,
+    "lessonNum": 47,
     "title": "useCallback for Stable References",
     "shortName": "P47",
     "intro": {

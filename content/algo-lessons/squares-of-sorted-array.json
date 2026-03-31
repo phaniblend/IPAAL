@@ -8,20 +8,20 @@
   "flow": [
     {
       "stepId": "title",
-      "mentorSays": "At the end of this lesson, you will be able to:\n\n1. Understand what the Squares of Sorted Array problem asks for\n2. Use two pointers to handle negative numbers efficiently\n3. Build the result array from the end (largest to smallest)\n4. Implement the solution step by step in your chosen language",
+      "mentorSays": "At the end of this lesson, you will be able to:\n\n1. Understand what the Squares of Sorted Array lesson asks for\n2. Use two pointers to handle negative numbers efficiently\n3. Build the result array from the end (largest to smallest)\n4. Implement the solution step by step in your chosen language",
       "action": "continue",
-      "next": "problem-illustration"
+      "next": "lesson-illustration"
     },
     {
-      "stepId": "problem-illustration",
-      "mentorSays": "Perfect! Now let's understand what the Squares of Sorted Array problem is asking.\n\n**Problem Definition:**\nGiven a sorted array of integers (which can include negative numbers), return an array of the squares of each number, sorted in non-decreasing order.\n\n**Key Insight:**\nSince the original array is sorted, the largest squares will be at the ends (either the most negative or most positive numbers). We can use two pointers to build the result from the end!\n\n**Example 1:** nums = [-4, -1, 0, 3, 10]\n\nYour task:\n1. Square each number: [16, 1, 0, 9, 100]\n2. Sort the squares: [0, 1, 9, 16, 100]\n\n**Step-by-step trace using two pointers:**\n\nnums = [-4, -1, 0, 3, 10]\nresult = [_, _, _, _, _]\n\n- **Initial**: left=0 (-4, square=16), right=4 (10, square=100), resultIndex=4\n- **Step 1**: Compare 16 and 100 → 100 is larger → Place 100 at result[4], resultIndex=3, right=3\n- **Step 2**: Compare 16 and 9 → 16 is larger → Place 16 at result[3], resultIndex=2, left=1\n- **Step 3**: Compare 1 and 9 → 9 is larger → Place 9 at result[2], resultIndex=1, right=2\n- **Step 4**: Compare 1 and 0 → 1 is larger → Place 1 at result[1], resultIndex=0, left=2\n- **Step 5**: Place 0 at result[0]\n\nResult: [0, 1, 9, 16, 100] ✓\n\n**Example 2:** nums = [-7, -3, 2, 3, 11]\n\nSquares: [49, 9, 4, 9, 121]\n\nUsing two pointers:\n- **Initial**: left=0 (-7, square=49), right=4 (11, square=121), resultIndex=4\n- **Step 1**: Compare 49 and 121 → 121 is larger → Place 121 at result[4], resultIndex=3, right=3\n- **Step 2**: Compare 49 and 9 → 49 is larger → Place 49 at result[3], resultIndex=2, left=1\n- **Step 3**: Compare 9 and 9 → Equal → Place 9 at result[2], resultIndex=1, right=2\n- **Step 4**: Compare 9 and 4 → 9 is larger → Place 9 at result[1], resultIndex=0, left=2\n- **Step 5**: Place 4 at result[0]\n\nResult: [4, 9, 9, 49, 121] ✓\n\n**What makes this tricky:**\n1. The array is sorted, but after squaring, negative numbers can become larger than positive ones\n2. The largest squares are always at the ends (most negative or most positive)\n3. We need to build the result from the end (largest to smallest) to avoid extra space\n\n**Common pitfalls:**\n- Squaring and then sorting (O(n log n) instead of O(n))\n- Building from the start instead of the end (requires finding the split point)\n- Not handling the case where all numbers are negative or all positive\n- Off-by-one errors when moving pointers",
+      "stepId": "lesson-illustration",
+      "mentorSays": "Perfect! Now let's understand what the Squares of Sorted Array lesson is asking.\n\n**Lesson Definition:**\nGiven a sorted array of integers (which can include negative numbers), return an array of the squares of each number, sorted in non-decreasing order.\n\n**Key Insight:**\nSince the original array is sorted, the largest squares will be at the ends (either the most negative or most positive numbers). We can use two pointers to build the result from the end!\n\n**Example 1:** nums = [-4, -1, 0, 3, 10]\n\nYour task:\n1. Square each number: [16, 1, 0, 9, 100]\n2. Sort the squares: [0, 1, 9, 16, 100]\n\n**Step-by-step trace using two pointers:**\n\nnums = [-4, -1, 0, 3, 10]\nresult = [_, _, _, _, _]\n\n- **Initial**: left=0 (-4, square=16), right=4 (10, square=100), resultIndex=4\n- **Step 1**: Compare 16 and 100 → 100 is larger → Place 100 at result[4], resultIndex=3, right=3\n- **Step 2**: Compare 16 and 9 → 16 is larger → Place 16 at result[3], resultIndex=2, left=1\n- **Step 3**: Compare 1 and 9 → 9 is larger → Place 9 at result[2], resultIndex=1, right=2\n- **Step 4**: Compare 1 and 0 → 1 is larger → Place 1 at result[1], resultIndex=0, left=2\n- **Step 5**: Place 0 at result[0]\n\nResult: [0, 1, 9, 16, 100] ✓\n\n**Example 2:** nums = [-7, -3, 2, 3, 11]\n\nSquares: [49, 9, 4, 9, 121]\n\nUsing two pointers:\n- **Initial**: left=0 (-7, square=49), right=4 (11, square=121), resultIndex=4\n- **Step 1**: Compare 49 and 121 → 121 is larger → Place 121 at result[4], resultIndex=3, right=3\n- **Step 2**: Compare 49 and 9 → 49 is larger → Place 49 at result[3], resultIndex=2, left=1\n- **Step 3**: Compare 9 and 9 → Equal → Place 9 at result[2], resultIndex=1, right=2\n- **Step 4**: Compare 9 and 4 → 9 is larger → Place 9 at result[1], resultIndex=0, left=2\n- **Step 5**: Place 4 at result[0]\n\nResult: [4, 9, 9, 49, 121] ✓\n\n**What makes this tricky:**\n1. The array is sorted, but after squaring, negative numbers can become larger than positive ones\n2. The largest squares are always at the ends (most negative or most positive)\n3. We need to build the result from the end (largest to smallest) to avoid extra space\n\n**Common pitfalls:**\n- Squaring and then sorting (O(n log n) instead of O(n))\n- Building from the start instead of the end (requires finding the split point)\n- Not handling the case where all numbers are negative or all positive\n- Off-by-one errors when moving pointers",
       "example": "Example 1:\nnums = [-4, -1, 0, 3, 10]\n\nStep-by-step:\nleft=0 (-4²=16), right=4 (10²=100) → Place 100\nleft=0 (-4²=16), right=3 (3²=9) → Place 16\nleft=1 (-1²=1), right=3 (3²=9) → Place 9\nleft=1 (-1²=1), right=2 (0²=0) → Place 1\nleft=2 (0²=0) → Place 0\n\nResult: [0, 1, 9, 16, 100]\n\nExample 2:\nnums = [-7, -3, 2, 3, 11]\n\nStep-by-step:\nleft=0 (-7²=49), right=4 (11²=121) → Place 121\nleft=0 (-7²=49), right=3 (3²=9) → Place 49\nleft=1 (-3²=9), right=3 (3²=9) → Place 9\nleft=1 (-3²=9), right=2 (2²=4) → Place 9\nleft=2 (2²=4) → Place 4\n\nResult: [4, 9, 9, 49, 121]",
       "action": "continue",
       "next": "thinking-challenge"
     },
     {
       "stepId": "thinking-challenge",
-      "mentorSays": "Now that you understand what the problem wants, here's the real question:\n\nHow would YOU square and sort the array?\n\nThink about it for a moment. What approach feels natural to you?",
+      "mentorSays": "Now that you understand what the lesson wants, here's the real question:\n\nHow would YOU square and sort the array?\n\nThink about it for a moment. What approach feels natural to you?",
       "choices": [
         {
           "label": "Square all numbers, then sort",
@@ -152,7 +152,7 @@
     },
     {
       "stepId": "array-check-js",
-      "mentorSays": "To solve this problem, we'll need to work with arrays. Do you know what an array is in JavaScript?",
+      "mentorSays": "To solve this lesson, we'll need to work with arrays. Do you know what an array is in JavaScript?",
       "choices": [
         {
           "label": "Yes, I know arrays",
@@ -173,7 +173,7 @@
     },
     {
       "stepId": "loop-check-js",
-      "mentorSays": "To solve this problem, we'll need to use loops. Do you know what a loop is in JavaScript?",
+      "mentorSays": "To solve this lesson, we'll need to use loops. Do you know what a loop is in JavaScript?",
       "choices": [
         {
           "label": "Yes, I know loops",
@@ -320,7 +320,7 @@
     },
     {
       "stepId": "array-check-python",
-      "mentorSays": "To solve this problem, we'll need to work with lists. Do you know what a list is in Python?",
+      "mentorSays": "To solve this lesson, we'll need to work with lists. Do you know what a list is in Python?",
       "choices": [
         {
           "label": "Yes, I know lists",
@@ -341,7 +341,7 @@
     },
     {
       "stepId": "loop-check-python",
-      "mentorSays": "To solve this problem, we'll need to use loops. Do you know what a loop is in Python?",
+      "mentorSays": "To solve this lesson, we'll need to use loops. Do you know what a loop is in Python?",
       "choices": [
         {
           "label": "Yes, I know loops",
@@ -481,7 +481,7 @@
     },
     {
       "stepId": "array-check-java",
-      "mentorSays": "To solve this problem, we'll need to work with arrays. Do you know what an array is in Java?",
+      "mentorSays": "To solve this lesson, we'll need to work with arrays. Do you know what an array is in Java?",
       "choices": [
         {
           "label": "Yes, I know arrays",
@@ -502,7 +502,7 @@
     },
     {
       "stepId": "loop-check-java",
-      "mentorSays": "To solve this problem, we'll need to use loops. Do you know what a loop is in Java?",
+      "mentorSays": "To solve this lesson, we'll need to use loops. Do you know what a loop is in Java?",
       "choices": [
         {
           "label": "Yes, I know loops",
@@ -642,7 +642,7 @@
     },
     {
       "stepId": "array-check-cpp",
-      "mentorSays": "To solve this problem, we'll need to work with vectors (arrays). Do you know what a vector is in C++?",
+      "mentorSays": "To solve this lesson, we'll need to work with vectors (arrays). Do you know what a vector is in C++?",
       "choices": [
         {
           "label": "Yes, I know vectors",
@@ -663,7 +663,7 @@
     },
     {
       "stepId": "loop-check-cpp",
-      "mentorSays": "To solve this problem, we'll need to use loops. Do you know what a loop is in C++?",
+      "mentorSays": "To solve this lesson, we'll need to use loops. Do you know what a loop is in C++?",
       "choices": [
         {
           "label": "Yes, I know loops",
@@ -803,7 +803,7 @@
     },
     {
       "stepId": "array-check-ts",
-      "mentorSays": "To solve this problem, we'll need to work with arrays. Do you know what an array is in TypeScript?",
+      "mentorSays": "To solve this lesson, we'll need to work with arrays. Do you know what an array is in TypeScript?",
       "choices": [
         {
           "label": "Yes, I know arrays",
@@ -824,7 +824,7 @@
     },
     {
       "stepId": "loop-check-ts",
-      "mentorSays": "To solve this problem, we'll need to use loops. Do you know what a loop is in TypeScript?",
+      "mentorSays": "To solve this lesson, we'll need to use loops. Do you know what a loop is in TypeScript?",
       "choices": [
         {
           "label": "Yes, I know loops",
@@ -901,7 +901,7 @@
     },
     {
       "stepId": "final",
-      "mentorSays": "🎉 Well done! You've learned to think through the Squares of Sorted Array problem. You understand what the problem asks for, how to use two pointers to handle negative numbers efficiently, and how to build the result array from the end.\n\n**Key Takeaways:**\n1. **Two Pointers from Ends**: Since the array is sorted, the largest squares are at the ends. We compare squares at both ends and place the larger one.\n2. **Build from End**: By building the result from the end (largest to smallest), we avoid needing extra space or finding a split point.\n3. **Handle Negatives**: Negative numbers can have larger squares than positive numbers, so we compare squares, not the original values.\n\n**Time Complexity**: O(n) - we traverse the array once\n**Space Complexity**: O(n) - we need a result array of size n\n\n**What to practice next:**\n- Merge Sorted Arrays (similar two-pointer technique)\n- Valid Palindrome (two pointers from ends)\n\nThis kind of thinking—using two pointers to build results from the end—is essential for solving many array problems. Keep practicing!",
+      "mentorSays": "🎉 Well done! You've learned to think through the Squares of Sorted Array lesson. You understand what the lesson asks for, how to use two pointers to handle negative numbers efficiently, and how to build the result array from the end.\n\n**Key Takeaways:**\n1. **Two Pointers from Ends**: Since the array is sorted, the largest squares are at the ends. We compare squares at both ends and place the larger one.\n2. **Build from End**: By building the result from the end (largest to smallest), we avoid needing extra space or finding a split point.\n3. **Handle Negatives**: Negative numbers can have larger squares than positive numbers, so we compare squares, not the original values.\n\n**Time Complexity**: O(n) - we traverse the array once\n**Space Complexity**: O(n) - we need a result array of size n\n\n**What to practice next:**\n- Merge Sorted Arrays (similar two-pointer technique)\n- Valid Palindrome (two pointers from ends)\n\nThis kind of thinking—using two pointers to build results from the end—is essential for solving many array lessons. Keep practicing!",
       "action": "continue"
     }
   ]

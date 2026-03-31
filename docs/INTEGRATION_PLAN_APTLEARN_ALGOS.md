@@ -36,9 +36,9 @@ Session: mentor routes expect `req.session` (e.g. `lessonId`, `currentStepId`). 
 
 | Action | Path |
 |--------|------|
-| Add | Track **Algorithms** | New track in `LandingPage.jsx`; when selected, list comes from `GET /api/mentor/lessons` (not PROBLEM_LIST). |
+| Add | Track **Algorithms** | New track in `LandingPage.jsx`; when selected, list comes from `GET /api/mentor/lessons` (not LESSON_LIST). |
 | Add | `src/learn-algo/LearnAlgoPage.jsx` | Step-through UI: POST start → show step (mentorSays, choices, example); on Continue/choice → POST next; repeat until `done: true`. |
-| Modify | `App.jsx` | When track is `algorithms` and a lesson is selected, render `LearnAlgoPage` with `lessonId` (and optional `onBackToProblems`). Use same `lessonList` / `selectedLessonItem` pattern; for algorithms `lessonList` is from mentor API. |
+| Modify | `App.jsx` | When track is `algorithms` and a lesson is selected, render `LearnAlgoPage` with `lessonId` (and optional `onBackToLessons`). Use same `lessonList` / `selectedLessonItem` pattern; for algorithms `lessonList` is from mentor API. |
 
 ### 2.3 Lesson JSON format (unchanged)
 Keep the APT Learn format so existing algorithm JSON works as-is:
@@ -57,7 +57,7 @@ Keep the APT Learn format so existing algorithm JSON works as-is:
 
 2. **Frontend**
    - Add “Algorithms” track; when selected, fetch `GET /api/mentor/lessons` and show cards (id, title, difficulty, etc.).
-   - On card click, set `selectedLessonItem` to `{ id, title, ... }` and a flag (e.g. `problemIndex` sentinel or `viewMode: 'learnAlgo'`) so App renders `LearnAlgoPage`.
+   - On card click, set `selectedLessonItem` to `{ id, title, ... }` and a flag (e.g. `lessonIndex` sentinel or `viewMode: 'learnAlgo'`) so App renders `LearnAlgoPage`.
    - `LearnAlgoPage`: call `POST /api/mentor/start` with `{ lessonId }`, then render current step (mentorSays, example, choices); “Continue” or choice → `POST /api/mentor/next` with `{ lessonId, currentStepId, choiceLabel? }`; when response is `{ done: true }`, show “Lesson complete” and a button back to list.
 
 3. **No change**

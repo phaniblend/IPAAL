@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-node-78",
     "track": "node",
-    "problemNum": 78,
+    "lessonNum": 78,
     "title": "Build multi tenant context resolver middleware",
     "shortName": "P78",
     "intro": {

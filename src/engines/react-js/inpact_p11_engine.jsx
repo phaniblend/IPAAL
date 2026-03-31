@@ -89,4 +89,4 @@ const sideItems = [
   { label: "Step 3", id: "step3" },
 ];
 
-export default createINPACTEngine({ NODES, sideItems, problemNum: 11, title: "Reusable Button", shortName: "REUSABLE BUTTON" });
+export default createINPACTEngine({ NODES, sideItems, lessonNum: 11, title: "Reusable Button", shortName: "REUSABLE BUTTON" });

@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-angular-85",
     "track": "angular",
-    "problemNum": 85,
+    "lessonNum": 85,
     "title": "Polling Hook",
     "shortName": "P85",
     "intro": {

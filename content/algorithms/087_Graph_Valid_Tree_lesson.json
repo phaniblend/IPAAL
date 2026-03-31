@@ -3,13 +3,13 @@
   "config": {
     "lessonId": "ai-algorithms-87",
     "track": "algorithms",
-    "problemNum": 87,
+    "lessonNum": 87,
     "title": "Graph Valid Tree",
     "shortName": "P87",
     "intro": {
       "tag": "LESSON #87",
       "title": "Graph Valid Tree",
-      "body": "In this lesson, you will build a function that determines whether a given graph is a valid tree. You will learn the core concept of using Depth-First Search (DFS) to detect cycles and ensure connectivity in an undirected graph. The main technologies involved include JavaScript arrays, objects for adjacency lists, and recursion or iteration for traversal. By the end, you will understand how to apply graph theory fundamentals to solve a common algorithmic problem.",
+      "body": "In this lesson, you will build a function that determines whether a given graph is a valid tree. You will learn the core concept of using Depth-First Search (DFS) to detect cycles and ensure connectivity in an undirected graph. The main technologies involved include JavaScript arrays, objects for adjacency lists, and recursion or iteration for traversal. By the end, you will understand how to apply graph theory fundamentals to solve a common algorithmic lesson.",
       "usecase": "The Graph Valid Tree algorithm is essential in network infrastructure and dependency management systems. Network administrators use it to validate that all devices in a corporate network are properly connected without creating loops that could cause broadcast storms. In software build systems, this algorithm ensures dependency graphs form valid trees without circular dependencies that would break compilation. Database administrators apply it to verify that hierarchical data structures maintain proper parent-child relationships without orphaned records or cycles."
     },
     "objectives": [

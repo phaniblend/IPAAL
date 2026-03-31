@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-react-ts-66",
     "track": "react-ts",
-    "problemNum": 66,
+    "lessonNum": 66,
     "title": "Generic useFetch<T>",
     "shortName": "P66",
     "intro": {

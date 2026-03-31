@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-js-50",
     "track": "js",
-    "problemNum": 50,
+    "lessonNum": 50,
     "title": "Build drag and drop list reordering",
     "shortName": "P50",
     "intro": {

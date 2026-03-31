@@ -8,4 +8,4 @@ const NODES = [
 // Upload: type check, size limit, virus scan, store outside webroot`, feedback_correct: "✅ ReDoS: safe regex; prototype: sanitise; upload: validate and isolate.", feedback_wrong: "ReDoS; prototype pollution; file upload validation.", expected: "Input validation" },
 ];
 const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }];
-export default createINPACTEngine({ NODES, sideItems, problemNum: "SEC-03", title: "Input validation & data integrity", shortName: "SEC — VALIDATION" });
+export default createINPACTEngine({ NODES, sideItems, lessonNum: "SEC-03", title: "Input validation & data integrity", shortName: "SEC — VALIDATION" });

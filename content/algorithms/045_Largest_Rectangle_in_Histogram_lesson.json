@@ -3,13 +3,13 @@
   "config": {
     "lessonId": "ai-algorithms-45",
     "track": "algorithms",
-    "problemNum": 45,
+    "lessonNum": 45,
     "title": "Largest Rectangle in Histogram",
     "shortName": "P45",
     "intro": {
       "tag": "LESSON #45",
       "title": "Largest Rectangle in Histogram",
-      "body": "In this lesson, you will build a function that finds the largest rectangular area that can be formed within a histogram, which is represented by an array of bar heights. You will learn the core concept of using a stack data structure to efficiently track indices and calculate areas in a single pass through the histogram. The main technologies involved are JavaScript arrays, loops, and stack operations like push and pop. By the end, you will understand how to apply this algorithm to solve a classic problem in computational geometry.",
+      "body": "In this lesson, you will build a function that finds the largest rectangular area that can be formed within a histogram, which is represented by an array of bar heights. You will learn the core concept of using a stack data structure to efficiently track indices and calculate areas in a single pass through the histogram. The main technologies involved are JavaScript arrays, loops, and stack operations like push and pop. By the end, you will understand how to apply this algorithm to solve a classic lesson in computational geometry.",
       "usecase": "The Largest Rectangle in Histogram algorithm is essential for analyzing and visualizing data in real-world applications. For example, in financial dashboards, it can be used to calculate the maximum area under stock price histograms over time, helping identify optimal trading windows. In UI design, it assists in dynamically sizing responsive layout panels or grid cells to maximize content display within constrained spaces. Developers apply this pattern to optimize space allocation in data visualization tools, charting libraries, and any interface requiring efficient rectangular area computations from sequential height data."
     },
     "objectives": [
@@ -17,7 +17,7 @@
       "Construct a stack-based solution to optimize the rectangle area calculation",
       "Manipulate array indices to track heights and boundaries in the histogram",
       "Initialize and update variables to store maximum area during iteration",
-      "Apply the optimized algorithm to solve the largest rectangle problem efficiently",
+      "Apply the optimized algorithm to solve the largest rectangle lesson efficiently",
       "Integrate boundary handling for edge cases in the histogram array"
     ],
     "steps": [
@@ -27,7 +27,7 @@
         "phase": "Step 1 of 17",
         "title": "Welcome",
         "content": {
-          "body": "Welcome to the Largest Rectangle in Histogram problem! This is a classic challenge where we find the largest rectangular area that can be formed within a histogram. Today, we'll learn how to solve it efficiently using a clever data structure approach.",
+          "body": "Welcome to the Largest Rectangle in Histogram lesson! This is a classic challenge where we find the largest rectangular area that can be formed within a histogram. Today, we'll learn how to solve it efficiently using a clever data structure approach.",
           "title": "Welcome"
         }
       },
@@ -37,7 +37,7 @@
         "phase": "Step 2 of 17",
         "title": "What you'll learn",
         "content": {
-          "body": "By the end of this lesson, you'll be able to:\n1. Explain why a brute force approach is inefficient for this problem.\n2. Apply a stack-based approach to track histogram bars efficiently.\n3. Implement the algorithm to calculate the maximum rectangular area.\n4. Identify when to push and pop elements from the stack during processing.\n5. Walk through the algorithm step-by-step with example histograms.",
+          "body": "By the end of this lesson, you'll be able to:\n1. Explain why a brute force approach is inefficient for this lesson.\n2. Apply a stack-based approach to track histogram bars efficiently.\n3. Implement the algorithm to calculate the maximum rectangular area.\n4. Identify when to push and pop elements from the stack during processing.\n5. Walk through the algorithm step-by-step with example histograms.",
           "title": "What you'll learn"
         }
       },
@@ -309,7 +309,7 @@
         "phase": "Step 17 of 17",
         "title": "Done",
         "content": {
-          "body": "Congratulations! You've implemented an efficient solution for the Largest Rectangle in Histogram problem. Remember the key insights:\n1. We use a stack to remember bars we've seen that could still form larger rectangles\n2. When we encounter a shorter bar, we calculate areas for all taller bars in the stack\n3. Each bar is pushed and popped exactly once, making this O(n) efficient\n4. The stack helps us avoid re-scanning the histogram multiple times\n\nThis pattern of using a stack to track elements and process them when conditions change appears in many algorithm problems!",
+          "body": "Congratulations! You've implemented an efficient solution for the Largest Rectangle in Histogram lesson. Remember the key insights:\n1. We use a stack to remember bars we've seen that could still form larger rectangles\n2. When we encounter a shorter bar, we calculate areas for all taller bars in the stack\n3. Each bar is pushed and popped exactly once, making this O(n) efficient\n4. The stack helps us avoid re-scanning the histogram multiple times\n\nThis pattern of using a stack to track elements and process them when conditions change appears in many algorithm lessons!",
           "title": "Done"
         }
       }

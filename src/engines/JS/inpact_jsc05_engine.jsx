@@ -14,4 +14,4 @@ const sideItems = [
   { label: "Step 3 — replacer/reviver", id: "step3" }, { label: "Step 4 — structuredClone", id: "step4" },
   { label: "Step 5 — Collator/ListFormat", id: "step5" },
 ];
-export default createINPACTEngine({ NODES, sideItems, problemNum: "JS-C05", title: "Dates, Intl & Serialization", shortName: "JS — DATES & INTL" });
+export default createINPACTEngine({ NODES, sideItems, lessonNum: "JS-C05", title: "Dates, Intl & Serialization", shortName: "JS — DATES & INTL" });

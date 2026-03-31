@@ -64,7 +64,7 @@ export function buildPedagogyUserPayload(lesson) {
       title: c.title,
       shortName: c.shortName,
       track: c.track,
-      problemNum: c.problemNum,
+      lessonNum: c.lessonNum,
       intro: {
         tag: intro.tag,
         title: intro.title,

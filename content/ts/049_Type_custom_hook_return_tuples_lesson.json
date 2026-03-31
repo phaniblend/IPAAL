@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-ts-49",
     "track": "ts",
-    "problemNum": 49,
+    "lessonNum": 49,
     "title": "Type custom hook return tuples",
     "shortName": "P49",
     "intro": {

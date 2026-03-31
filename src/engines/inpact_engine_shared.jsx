@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo, useContext, useRef } from "react";
+import { useState, useEffect, useMemo, useCallback, useContext, useRef } from "react";
 import CodeEditor from "./CodeEditor";
 import MultiFileEditor from "./MultiFileEditor";
 import { LessonValidationContext } from "../ai-lessons/lessonValidationContext.jsx";
@@ -8,6 +8,9 @@ import AngularTabbedEditor from "./angular/AngularTabbedEditor";
 import { mergeAngularTsWithHtml, mergeAngularCssIntoTS, splitAngularSeed } from "./angular/angularTabMerge.js";
 import LessonEditorOutputTabs from "./LessonEditorOutputTabs";
 import RichLearnerText from "./RichLearnerText";
+import { inferReactTsAnalogousExample } from "./reactTsAnalogousExamples.js";
+import { mergeSnippetIntoEmptyReactExportDefaultBody } from "./mergeReactExampleSnippet.js";
+import { fetchStepExample } from "../ai-lessons/fetchStepExample.js";
 
 if (typeof document !== "undefined" && !document.getElementById("dm-sans-font")) {
   const link = document.createElement("link");
@@ -165,8 +168,9 @@ function buildExampleWithStarterContext(answerShape, node, baseCode) {
   const paal = node.paal || "";
   const hint = node.hint || "";
   const ctxText = `${paal}\n${hint}`;
-  const wantsContext =
-    PLACEMENT_OR_INSERT_HINT_RE.test(ctxText) || exampleSnippetLooksFragmentary(baseCode);
+  // Learners want the pattern, not the whole "code built so far" copied above.
+  // Only include surrounding starter when we explicitly have placement/insert wording.
+  const wantsContext = PLACEMENT_OR_INSERT_HINT_RE.test(ctxText);
   if (!wantsContext) return baseCode;
   const seed = node.seed_code;
   if (answerShape === "multi-file" && seed && typeof seed === "object" && !Array.isArray(seed)) {
@@ -181,6 +185,8 @@ function buildExampleWithStarterContext(answerShape, node, baseCode) {
     return `// File: ${key} — surrounding starter (edit your file to match the task)\n${snippet}\n\n${baseCode.trim()}`;
   }
   if (answerShape !== "multi-file" && typeof seed === "string" && seed.trim()) {
+    const merged = mergeSnippetIntoEmptyReactExportDefaultBody(seed, baseCode);
+    if (merged) return merged;
     let snippet = snippetAroundAnchor(seed, baseCode, paal);
     if (!snippet) {
       const max = 1600;
@@ -189,6 +195,119 @@ function buildExampleWithStarterContext(answerShape, node, baseCode) {
     return `// Surrounding starter\n${snippet}\n\n${baseCode.trim()}`;
   }
   return baseCode;
+}
+
+function stripAnalogousHeadingComment(code) {
+  if (typeof code !== "string") return code;
+  const lines = code.split("\n");
+  const filtered = lines.filter((l) => !/^\s*\/\/\s*Analogous example\s*:?\s*$/i.test(l));
+  return filtered.join("\n").trim();
+}
+
+function stripToRelevantToggleFunction(node, code) {
+  if (typeof code !== "string" || !code.trim()) return code;
+
+  const paal = String(node?.paal || "");
+  const hint = String(node?.hint || "");
+  const expected = String(node?.expected || "");
+  const text = `${paal}\n${hint}\n${expected}`.toLowerCase();
+
+  // Only do this for steps that are asking for a toggle/flip function,
+  // and explicitly avoid wiring events yet.
+  const looksLikeToggleTask = /\b(toggle|flip|visibility|visible|shown)\b/.test(text) && /=>/.test(text);
+  const mentionsNoOnClickYet =
+    /\b(do\s*not|without|no)\b[\s\S]{0,120}\bon(click)?\b/.test(text) ||
+    /\b(next\s*step|wire)\b/.test(text);
+  if (!looksLikeToggleTask || !mentionsNoOnClickYet) return code;
+
+  // Prefer extracting a `const xxx = () => setY(...prev => !prev...)` line.
+  const mConst = code.match(
+    /(^|\n)(const\s+[A-Za-z_$][\w$]*\s*=\s*\(\)\s*=>\s*set[A-Za-z_$][\w$]*\(\s*\(?[A-Za-z_$][\w$]*\)?\s*=>\s*![A-Za-z_$][\w$]*\s*\)\s*;?\s*)/m
+  );
+  if (mConst && mConst[2]) return mConst[2].trim();
+
+  // Fallback: extract a `function foo(...) { ... setX(... => !...) ... }` block.
+  const mFn = code.match(
+    /(function\s+[A-Za-z_$][\w$]*\s*\([^)]*\)\s*\{\s*[\s\S]*?\bset[A-Za-z_$][\w$]*\([\s\S]*?=>[\s\S]*?![\s\S]*?\)\s*;?[\s\S]*?\})/m
+  );
+  if (mFn && mFn[1]) return mFn[1].trim();
+
+  return code;
+}
+
+/** Synchronous example resolution + whether to hit /api/lessons/step-example first (React TS, no curated snippet). */
+function resolveQuestionStepExample(answerShape, node, shortName) {
+  if (node?.type !== "question") {
+    return { primarySyncEntry: null, localFallbackEntry: null, preferServerFetch: false };
+  }
+  const isReactTsTrack = typeof shortName === "string" && /^\s*TS\s+[—-]/i.test(shortName);
+  let primarySyncEntry = null;
+
+  const curatedRaw =
+    (typeof node.ai_example_code === "string" && node.ai_example_code.trim()) ||
+    (typeof node.analogousExample === "string" && node.analogousExample.trim()) ||
+    "";
+  if (curatedRaw) {
+    const base = curatedRaw;
+    const wrapped = buildExampleWithStarterContext(answerShape, node, base);
+    const meta = node.ai_example_meta;
+    const deepseekMerge =
+      meta &&
+      typeof meta === "object" &&
+      meta.exampleOrigin === "deepseek" &&
+      typeof meta.fetchedAfter === "string";
+    primarySyncEntry = {
+      // Never expose AI/server origin to learners.
+      label: "EXAMPLE",
+      code: stripToRelevantToggleFunction(node, stripAnalogousHeadingComment(wrapped)),
+    };
+  } else if (node.example_code) {
+    const wrapped = buildExampleWithStarterContext(answerShape, node, node.example_code);
+    primarySyncEntry = {
+      label:
+        wrapped !== node.example_code
+          ? "EXAMPLE (starter context + pattern — adapt to your code)"
+          : "EXAMPLE (similar pattern — not the exact answer)",
+      code: stripToRelevantToggleFunction(node, stripAnalogousHeadingComment(wrapped)),
+    };
+  } else if (node.expected && node.expected.includes("\n")) {
+    const wrapped = buildExampleWithStarterContext(answerShape, node, node.expected);
+    primarySyncEntry = {
+      label: wrapped !== node.expected ? "EXPECTED (with starter context)" : "EXPECTED",
+      code: stripToRelevantToggleFunction(node, stripAnalogousHeadingComment(wrapped)),
+    };
+  }
+
+  let localFallbackEntry = null;
+  if (isReactTsTrack) {
+    const inferred = inferReactTsAnalogousExample(node);
+    if (inferred) {
+      const wrapped = buildExampleWithStarterContext(answerShape, node, inferred);
+      localFallbackEntry = {
+        label:
+          wrapped !== inferred
+            ? "EXAMPLE (starter context + pattern — adapt to your code)"
+            : "EXAMPLE (similar pattern — not the exact answer)",
+        code: stripAnalogousHeadingComment(wrapped),
+      };
+    }
+  }
+  if (!localFallbackEntry && typeof node.seed_code === "string" && node.seed_code.trim()) {
+    localFallbackEntry = {
+      label: "EXAMPLE",
+      code: stripToRelevantToggleFunction(node, stripAnalogousHeadingComment(node.seed_code)),
+    };
+  }
+  if (!localFallbackEntry && node.expected) {
+    localFallbackEntry = { label: "EXPECTED", code: stripToRelevantToggleFunction(node, node.expected) };
+  }
+
+  const preferServerFetch =
+    isReactTsTrack &&
+    !primarySyncEntry &&
+    !!(node.paal && String(node.paal).trim());
+
+  return { primarySyncEntry, localFallbackEntry, preferServerFetch };
 }
 
 function evaluate(node, answer) {
@@ -206,7 +325,7 @@ export default function createINPACTEngine(config) {
   const {
     NODES,
     sideItems,
-    problemNum,
+    lessonNum,
     title,
     shortName,
     language,
@@ -223,16 +342,20 @@ export default function createINPACTEngine(config) {
   } = config;
   const lessonIntro = configLessonIntro ?? configIntro ?? null;
   const lessonObjectives = configLessonObjectives ?? (Array.isArray(configObjectives) ? configObjectives : null);
-  const pad = String(problemNum).padStart(2, "0");
+  const pad = String(lessonNum).padStart(2, "0");
 
-  return function INPACTEngine({ onNextProblem, onLessonComplete }) {
+  return function INPACTEngine({ onNextLesson, onLessonComplete }) {
     const [nodeIndex, setNodeIndex] = useState(0);
     const [answer, setAnswer] = useState("");
-    const [mainTab, setMainTab] = useState("editor");
+    const [mainTab, setMainTab] = useState("lesson");
+    const [editorWorkspaceOpen, setEditorWorkspaceOpen] = useState(false);
     const [result, setResult] = useState(null);
     const [attempts, setAttempts] = useState(0);
     const [showHint, setShowHint] = useState(false);
     const [showExampleModal, setShowExampleModal] = useState(false);
+    const [exampleModalPayload, setExampleModalPayload] = useState(null);
+    const [exampleModalLoading, setExampleModalLoading] = useState(false);
+    const [exampleModalFetchError, setExampleModalFetchError] = useState(null);
     const [exampleModalOffset, setExampleModalOffset] = useState({ x: 0, y: 0 });
     const [exampleModalDragging, setExampleModalDragging] = useState(false);
     const exampleModalDragRef = useRef(null);
@@ -256,6 +379,14 @@ export default function createINPACTEngine(config) {
     const lessonValidationCtx = useContext(LessonValidationContext);
     const node = NODES[nodeIndex];
     const firstQuestionNodeIndex = useMemo(() => NODES.findIndex((n) => n?.type === "question"), [NODES]);
+    const questionNodes = useMemo(() => NODES.filter((n) => n?.type === "question"), [NODES]);
+    const codingStepIndex = node?.type === "question" ? questionNodes.findIndex((n) => n.id === node.id) : -1;
+    const codingStepNum = codingStepIndex >= 0 ? codingStepIndex + 1 : nodeIndex + 1;
+    const codingStepTotal = questionNodes.length > 0 ? questionNodes.length : NODES.length;
+    const stepExampleResolution = useMemo(
+      () => resolveQuestionStepExample(answerShape, node, shortName),
+      [answerShape, node, shortName]
+    );
     const multiFilePlaceholderClearOnFirstStepOnly =
       answerShape === "multi-file" && firstQuestionNodeIndex >= 0 && nodeIndex === firstQuestionNodeIndex;
     const progress = NODES.length <= 1 ? 0 : Math.min(100, Math.round((nodeIndex / (NODES.length - 1)) * 100));
@@ -310,6 +441,72 @@ export default function createINPACTEngine(config) {
     }, [onAskMentor, lessonValidationCtx]);
 
     useEffect(() => {
+      setExampleModalPayload(null);
+      setExampleModalLoading(false);
+      setExampleModalFetchError(null);
+      setShowExampleModal(false);
+    }, [nodeIndex, node?.id]);
+
+    const openStepExampleModal = useCallback(() => {
+      setExampleModalOffset({ x: 0, y: 0 });
+      setExampleModalFetchError(null);
+      setShowExampleModal(true);
+      const { primarySyncEntry, localFallbackEntry, preferServerFetch } = stepExampleResolution;
+      const track = lessonValidationCtx?.track;
+      if (!preferServerFetch || !track) {
+        setExampleModalPayload(primarySyncEntry ?? localFallbackEntry);
+        setExampleModalLoading(false);
+        return;
+      }
+      setExampleModalPayload(null);
+      setExampleModalLoading(true);
+      const lessonKey =
+        lessonValidationCtx.lessonKey ??
+        `${track}:${lessonValidationCtx.lessonIndex ?? ""}:${lessonValidationCtx.lessonTitle ?? ""}`;
+      const seedCode =
+        typeof node?.seed_code === "string"
+          ? node.seed_code
+          : node?.seed_code && typeof node.seed_code === "object"
+            ? JSON.stringify(node.seed_code)
+            : "";
+      fetchStepExample({
+        lessonKey,
+        track,
+        lessonIndex: lessonValidationCtx.lessonIndex,
+        lessonTitle: lessonValidationCtx.lessonTitle ?? title,
+        stepId: node?.id,
+        paal: node?.paal,
+        hint: node?.hint || "",
+        seedCode,
+        language: language || node?.language || "typescript",
+        lessonDisplayTitle: title,
+      })
+        .then((data) => {
+          const meta = data.meta && typeof data.meta === "object" ? data.meta : {};
+          const fromCache = data.cacheHit === true;
+          const label =
+            data.source === "lesson-json"
+              ? "EXAMPLE (lesson JSON — content file)"
+              : fromCache
+                ? "EXAMPLE (server cache — shared for all learners)"
+                : "EXAMPLE (AI — stored on server for all learners)";
+          setExampleModalPayload({
+            label: "EXAMPLE",
+            code: stripAnalogousHeadingComment(String(data.code || "").trim()),
+          });
+        })
+        .catch((err) => {
+          setExampleModalFetchError(err instanceof Error ? err.message : String(err));
+          setExampleModalPayload(primarySyncEntry ?? localFallbackEntry);
+        })
+        .finally(() => setExampleModalLoading(false));
+    }, [stepExampleResolution, lessonValidationCtx, title, language, node?.id, node?.seed_code, node?.paal, node?.hint]);
+
+    useEffect(() => {
+      if (node?.type !== "question") setEditorWorkspaceOpen(false);
+    }, [node?.type]);
+
+    useEffect(() => {
       setResult(null);
       setAttempts(0);
       setShowHint(false);
@@ -325,7 +522,7 @@ export default function createINPACTEngine(config) {
       setChecking(false);
       setAiFeedback("");
       setValidationFallbackNote("");
-      setMainTab("editor");
+      setMainTab("lesson");
       if (node?.type === "question") {
         let initialCode = "";
         if (node.id && passedCodeByStepId[node.id]) {
@@ -347,8 +544,9 @@ export default function createINPACTEngine(config) {
             } else if (answerShape === "multi-file") {
               const seed = node.starter_code || node.seed_code || "";
               initialCode = seedCodeToMultiFileAnswer(seed);
-            } else if (node.starter_code) {
-              initialCode = node.starter_code;
+            } else {
+              const seed = node.starter_code || node.seed_code || "";
+              if (seed) initialCode = seed;
             }
           }
         }
@@ -650,37 +848,118 @@ export default function createINPACTEngine(config) {
               <RichLearnerText style={{ fontSize: "15px", color: "#334155", lineHeight: "1.6" }} text={item} />
             </div>
           ))}
-          <div style={s.btnRow}><button type="button" className="inpact-btn-primary" style={s.btn("primary")} onClick={next}>LET'S BUILD →</button></div>
+          <div style={s.btnRow}>
+            <button
+              type="button"
+              className="inpact-btn-primary"
+              style={s.btn("primary")}
+              onClick={() => {
+                next();
+                setEditorWorkspaceOpen(true);
+              }}
+            >
+              LET&apos;S BUILD →
+            </button>
+          </div>
         </div>
       );
     }
 
-    const stepNum = nodeIndex + 1;
-    const totalSteps = NODES.length;
-
-    function renderEditorBlockScrollable() {
+    function renderEditorBlockScrollable(fillAvailable = false) {
       const codeForCursor = answerShape === "css-tabs" ? (parsedCssTabs?.css || "") : answerShape === "angular-tabs" ? (parsedAngularTabs?.ts || "") : (answer || "");
       const stepLineIndex = codeForCursor.split("\n").findIndex((l) => l.includes("// Step"));
       const cursorAtStartOfLine = node.cursorAtStartOfLine ?? (stepLineIndex >= 0 ? stepLineIndex + 2 : undefined);
+      const showEditorCursorHint =
+        answerShape !== "css-tabs" &&
+        answerShape !== "angular-tabs" &&
+        answerShape !== "multi-file" &&
+        (cursorAtStartOfLine != null || node.cursorLine != null);
       return (
         <>
-          <div style={{ display: "flex", alignItems: "center", gap: "16px", flexWrap: "wrap", marginBottom: "6px" }}>
-            <span style={{ fontSize: "11px", color: "#0891b2", fontWeight: 600 }}>Step {stepNum} of {totalSteps}</span>
-            {stepNum > 1 && (
+          <div style={{ display: "flex", alignItems: "center", gap: "16px", flexWrap: "wrap", marginBottom: fillAvailable ? "2px" : "6px" }}>
+            <span style={{ fontSize: "11px", color: "#0891b2", fontWeight: 600 }}>Step {codingStepNum} of {codingStepTotal}</span>
+            {codingStepIndex > 0 && (
               <>
                 <span style={{ fontSize: "11px", color: "#64748b" }}>·</span>
                 <span style={{ fontSize: "11px", color: "#0891b2", fontWeight: 600, letterSpacing: "0.05em" }}>CODE BUILT SO FAR — edit below</span>
               </>
             )}
           </div>
-          {cursorAtStartOfLine != null && answerShape !== "css-tabs" && answerShape !== "angular-tabs" && answerShape !== "multi-file" && <div style={{ fontSize: "10px", color: "#64748b", marginBottom: "6px" }}>Type your code below the comment.</div>}
+          {showEditorCursorHint && <div style={{ fontSize: "10px", color: "#64748b", marginBottom: fillAvailable ? "2px" : "6px" }}>Type your code where the cursor is placed.</div>}
           {answerShape === "angular-tabs" && (
-            <div style={{ fontSize: "12px", color: "#0e7490", marginBottom: "8px", padding: "8px 12px", background: "rgba(8,145,178,0.08)", border: "1px solid rgba(8,145,178,0.25)", borderRadius: "6px", lineHeight: 1.5 }}>
+            <div style={{ fontSize: "12px", color: "#0e7490", marginBottom: fillAvailable ? "4px" : "8px", padding: fillAvailable ? "6px 10px" : "8px 12px", background: "rgba(8,145,178,0.08)", border: "1px solid rgba(8,145,178,0.25)", borderRadius: "6px", lineHeight: 1.5 }}>
               <strong>Tip:</strong> Use <code style={{ background: "rgba(0,0,0,0.06)", padding: "2px 6px", borderRadius: "4px", fontSize: "11px" }}>{"template: `" + "`"}</code> in the TypeScript tab and put your markup in the <strong>HTML</strong> tab; put CSS in the <strong>CSS</strong> tab. All three merge when you click Check.
             </div>
           )}
-          <div style={{ borderRadius: "10px", overflow: "hidden", border: "1px solid #e2e8f0", marginBottom: "4px", height: "480px", minHeight: "480px", width: "100%", maxWidth: "100%" }}>
-            {answerShape === "css-tabs" ? (
+          <div
+            style={
+              fillAvailable
+                ? {
+                    borderRadius: "10px",
+                    overflow: "hidden",
+                    border: "1px solid #e2e8f0",
+                    marginBottom: "4px",
+                    flex: 1,
+                    minHeight: "200px",
+                    width: "100%",
+                    maxWidth: "100%",
+                    display: "flex",
+                    flexDirection: "column",
+                  }
+                : {
+                    borderRadius: "10px",
+                    overflow: "hidden",
+                    border: "1px solid #e2e8f0",
+                    marginBottom: "4px",
+                    height: "480px",
+                    minHeight: "480px",
+                    width: "100%",
+                    maxWidth: "100%",
+                  }
+            }
+          >
+            {fillAvailable ? (
+              <div style={{ flex: 1, minHeight: 0, position: "relative", display: "flex", flexDirection: "column" }}>
+                {answerShape === "css-tabs" ? (
+                  <CssTabsEditor
+                    key={node?.id}
+                    value={parsedCssTabs || { html: "", css: "" }}
+                    onChange={(v) => setAnswer(JSON.stringify(v))}
+                    height="100%"
+                  />
+                ) : answerShape === "angular-tabs" ? (
+                  <AngularTabbedEditor
+                    key={node?.id}
+                    value={parsedAngularTabs || { ts: "", html: "", css: "" }}
+                    onChange={(v) => setAnswer(JSON.stringify(v))}
+                    height="100%"
+                    placeholder={angularPlaceholder}
+                  />
+                ) : answerShape === "multi-file" ? (
+                  <MultiFileEditor
+                    key={node?.id}
+                    value={answer}
+                    onChange={setAnswer}
+                    height="100%"
+                    defaultFileName={(node?.language || language || "typescript").includes("ts") ? "App.tsx" : "App.jsx"}
+                    language={language || node.language || "typescript"}
+                    focusBaselineByFile={multiFileFocusBaseline}
+                    placeholderByFile={multiFilePlaceholderByFile}
+                    clearPlaceholderOnFirstFocus={multiFilePlaceholderClearOnFirstStepOnly}
+                  />
+                ) : (
+                  <CodeEditor
+                    key={node?.id}
+                    value={answer}
+                    onChange={setAnswer}
+                    height="100%"
+                    cursorAtEndOfLine={cursorAtStartOfLine == null ? node.cursorLine : undefined}
+                    cursorAtStartOfLine={cursorAtStartOfLine}
+                    language={language || node.language || "javascript"}
+                  />
+                )}
+              </div>
+            ) : answerShape === "css-tabs" ? (
               <CssTabsEditor
                 key={node?.id}
                 value={parsedCssTabs || { html: "", css: "" }}
@@ -723,37 +1002,13 @@ export default function createINPACTEngine(config) {
           : answerShape === "multi-file"
             ? Object.values(parsedMultiFile?.files || {}).some((v) => String(v || "").trim())
             : answer.trim();
-      // Priority: example_code → multiline expected → seed_code (string) → short expected
-      const exampleEntry = node.example_code
-        ? (() => {
-            const wrapped = buildExampleWithStarterContext(answerShape, node, node.example_code);
-            return {
-              label:
-                wrapped !== node.example_code
-                  ? "EXAMPLE (starter context + pattern — adapt to your code)"
-                  : "EXAMPLE (similar pattern — not the exact answer)",
-              code: wrapped,
-            };
-          })()
-        : (node.expected && node.expected.includes("\n"))
-          ? (() => {
-              const wrapped = buildExampleWithStarterContext(answerShape, node, node.expected);
-              return {
-                label: wrapped !== node.expected ? "EXPECTED (with starter context)" : "EXPECTED",
-                code: wrapped,
-              };
-            })()
-          : typeof node.seed_code === "string" && node.seed_code.trim()
-            ? { label: "EXAMPLE", code: node.seed_code }
-            : node.expected
-              ? { label: "EXPECTED", code: node.expected }
-              : null;
-      const exampleContent = exampleEntry ? (
-        <>
-          <div style={{ ...s.paalLabel, marginBottom: "6px" }}>{exampleEntry.label}</div>
-          <div style={s.expectedBox}>{exampleEntry.code}</div>
-        </>
-      ) : null;
+      const hasExampleButton =
+        node?.type === "question" &&
+        !!(
+          stepExampleResolution.primarySyncEntry ||
+          stepExampleResolution.preferServerFetch ||
+          stepExampleResolution.localFallbackEntry
+        );
       const hasHintOrFeedback = node.hint || fbMsg;
       return (
         <>
@@ -761,15 +1016,8 @@ export default function createINPACTEngine(config) {
             {result !== "correct" ? (
               <>
                 <button type="button" className={`inpact-btn-primary ${checking ? "inpact-btn-checking" : ""}`} style={s.btn("primary")} onClick={submit} disabled={!canSubmit || checking}>{checking ? "Checking..." : "CHECK MY CODE"}</button>
-                {exampleContent && (
-                  <button
-                    type="button"
-                    style={s.btn("secondary")}
-                    onClick={() => {
-                      setExampleModalOffset({ x: 0, y: 0 });
-                      setShowExampleModal(true);
-                    }}
-                  >
+                {hasExampleButton && (
+                  <button type="button" style={s.btn("secondary")} onClick={openStepExampleModal}>
                     SHOW ME AN EXAMPLE
                   </button>
                 )}
@@ -825,12 +1073,12 @@ export default function createINPACTEngine(config) {
               </>
             )}
           </div>
-          {showExampleModal && exampleContent && (
+          {showExampleModal && (
             <div
               style={{
                 position: "fixed",
                 inset: 0,
-                zIndex: 10000,
+                zIndex: 11010,
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
@@ -875,9 +1123,24 @@ export default function createINPACTEngine(config) {
                   }}
                   title="Drag to move"
                 >
-                  <div id="example-modal-title" style={{ ...s.paalLabel, marginBottom: 0 }}>{exampleEntry.label}</div>
+                  <div id="example-modal-title" style={{ ...s.paalLabel, marginBottom: 0 }}>
+                    {exampleModalLoading ? "Loading example…" : exampleModalPayload?.label || "EXAMPLE"}
+                  </div>
                 </div>
-                <div style={s.expectedBox}>{exampleEntry.code}</div>
+                {exampleModalFetchError ? (
+                  <div style={{ fontSize: "12px", color: "#b45309", marginBottom: "10px", lineHeight: 1.5 }}>
+                    Could not load this example right now — showing the local pattern.
+                  </div>
+                ) : null}
+                <div style={s.expectedBox}>
+                  {exampleModalLoading ? (
+                    <div style={{ padding: "20px", color: "#64748b", fontSize: "13px" }}>
+                      Loading example…
+                    </div>
+                  ) : (
+                    exampleModalPayload?.code ?? ""
+                  )}
+                </div>
                 <div style={{ marginTop: "20px", display: "flex", justifyContent: "flex-end" }}>
                   <button type="button" className="inpact-btn-primary" style={s.btn("primary")} onClick={() => setShowExampleModal(false)}>Close</button>
                 </div>
@@ -889,7 +1152,7 @@ export default function createINPACTEngine(config) {
               style={{
                 position: "fixed",
                 inset: 0,
-                zIndex: 10000,
+                zIndex: 11010,
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
@@ -968,7 +1231,7 @@ export default function createINPACTEngine(config) {
               style={{
                 position: "fixed",
                 inset: 0,
-                zIndex: 10001,
+                zIndex: 11011,
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
@@ -1038,16 +1301,33 @@ export default function createINPACTEngine(config) {
       );
     }
 
-    function renderEditorContent() {
+    function renderEditorContent({ fillViewport = false } = {}) {
       const rawFb = result === "correct" ? node.feedback_correct : result === "partial" ? node.feedback_partial : result === "wrong" ? node.feedback_wrong : null;
       const staticFbMsg = typeof rawFb === "function" ? rawFb(answer) : rawFb;
       const fbMsg = aiFeedback || staticFbMsg;
       return (
         <div style={{ display: "flex", flexDirection: "column", flex: 1, minHeight: 0, width: "100%", maxWidth: "100%", overflowX: "hidden" }}>
-          <div style={{ flex: 1, minHeight: 0, overflowY: "auto", overflowX: "hidden", maxWidth: "100%" }}>
-            {renderEditorBlockScrollable()}
+          <div
+            style={{
+              flex: 1,
+              minHeight: 0,
+              overflowY: fillViewport ? "hidden" : "auto",
+              overflowX: "hidden",
+              maxWidth: "100%",
+              display: fillViewport ? "flex" : "block",
+              flexDirection: fillViewport ? "column" : undefined,
+            }}
+          >
+            {renderEditorBlockScrollable(fillViewport)}
           </div>
-          <div style={{ flexShrink: 0, paddingTop: "20px", marginTop: "8px", borderTop: "1px solid #e2e8f0" }}>
+          <div
+            style={{
+              flexShrink: 0,
+              paddingTop: fillViewport ? "10px" : "20px",
+              marginTop: fillViewport ? "4px" : "8px",
+              borderTop: "1px solid #e2e8f0",
+            }}
+          >
             {validationFallbackNote ? (
               <RichLearnerText
                 text={validationFallbackNote}
@@ -1072,9 +1352,9 @@ export default function createINPACTEngine(config) {
       return (
         <div style={s.completeBanner}>
           <div style={{ fontSize: "48px", marginBottom: "24px" }}>🎯</div>
-          <h1 style={{ ...s.h1, textAlign: "center" }}>Problem #{problemNum} Complete</h1>
+          <h1 style={{ ...s.h1, textAlign: "center" }}>Lesson #{lessonNum} Complete</h1>
           <p style={{ color: "#4a5568", fontSize: "13px" }}>{title} done. Ready for the Next Lesson.</p>
-          {onNextProblem && <div style={s.btnRow}><button type="button" className="inpact-btn-primary" style={s.btn("primary")} onClick={onNextProblem}>Next Lesson →</button></div>}
+          {onNextLesson && <div style={s.btnRow}><button type="button" className="inpact-btn-primary" style={s.btn("primary")} onClick={onNextLesson}>Next Lesson →</button></div>}
         </div>
       );
     }
@@ -1118,7 +1398,7 @@ export default function createINPACTEngine(config) {
                 mainTab={mainTab}
                 setMainTab={setMainTab}
                 lessonTrack={lessonValidationCtx?.track}
-                problemNum={problemNum}
+                lessonNum={lessonNum}
                 taskInstructionPulseNonce={taskInstructionPulseNonce}
                 answer={answer}
                 previewCode={answerShape === "multi-file" ? getMultiFilePreviewCode(answer) : undefined}
@@ -1132,8 +1412,13 @@ export default function createINPACTEngine(config) {
                 } : undefined)}
                 lessonIntro={lessonIntro}
                 lessonObjectives={lessonObjectives}
+                useEditorWorkspaceModal
+                editorWorkspaceOpen={editorWorkspaceOpen}
+                onOpenEditorWorkspace={() => setEditorWorkspaceOpen(true)}
+                onCloseEditorWorkspace={() => setEditorWorkspaceOpen(false)}
+                editorWorkspaceTitle={`${title} · Step ${codingStepNum} of ${codingStepTotal}`}
               >
-                {renderEditorContent()}
+                {renderEditorContent({ fillViewport: true })}
               </LessonEditorOutputTabs>
             ) : (
               renderNode()

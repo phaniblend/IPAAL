@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-js-37",
     "track": "js",
-    "problemNum": 37,
+    "lessonNum": 37,
     "title": "Build a shopping cart quantity manager",
     "shortName": "P37",
     "intro": {

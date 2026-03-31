@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-angular-59",
     "track": "angular",
-    "problemNum": 59,
+    "lessonNum": 59,
     "title": "Lazy Loading Routes",
     "shortName": "P59",
     "intro": {

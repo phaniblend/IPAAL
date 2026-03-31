@@ -8,4 +8,4 @@ const NODES = [
 // Alert fatigue: fewer, actionable, runbooks`, feedback_correct: "✅ Sampling for cost; cardinality from high-card labels; fewer actionable alerts.", feedback_wrong: "Trace sampling; cardinality; alert fatigue.", expected: "Observability" },
 ];
 const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }];
-export default createINPACTEngine({ NODES, sideItems, problemNum: "PE-12", title: "Observability at scale", shortName: "PE — OBSERVABILITY" });
+export default createINPACTEngine({ NODES, sideItems, lessonNum: "PE-12", title: "Observability at scale", shortName: "PE — OBSERVABILITY" });

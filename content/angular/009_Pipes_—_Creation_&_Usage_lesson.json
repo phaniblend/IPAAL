@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-angular-09",
     "track": "angular",
-    "problemNum": 9,
+    "lessonNum": 9,
     "title": "Pipes — Creation & Usage",
     "shortName": "P09",
     "intro": {

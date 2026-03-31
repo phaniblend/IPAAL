@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-node-37",
     "track": "node",
-    "problemNum": 37,
+    "lessonNum": 37,
     "title": "Build cart API with add remove update",
     "shortName": "P37",
     "intro": {

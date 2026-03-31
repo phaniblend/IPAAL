@@ -8,4 +8,4 @@ const NODES = [
 // Presence: heartbeat + last_seen; Redis sorted set`, feedback_correct: "✅ WebSocket bidirectional; SSE one-way; pub/sub scale with partitions; presence via heartbeat.", feedback_wrong: "WebSocket vs SSE; scale pub/sub; presence with heartbeats.", expected: "Real-time" },
 ];
 const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }];
-export default createINPACTEngine({ NODES, sideItems, problemNum: "SD-12", title: "Real-time systems", shortName: "SD — REALTIME" });
+export default createINPACTEngine({ NODES, sideItems, lessonNum: "SD-12", title: "Real-time systems", shortName: "SD — REALTIME" });

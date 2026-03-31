@@ -113,7 +113,7 @@ export const httpContract = {
 ─── OFFSET PAGINATION (simple but broken at scale) ───────────────
   GET /posts?page=3&limit=20  →  OFFSET 40 LIMIT 20
 
-  Problems:
+  Lessons:
   ❌ OFFSET n scans and discards n rows — O(n) cost grows with depth
   ❌ Page drift: if items are inserted/deleted between pages,
      the same item appears on two pages OR is skipped
@@ -425,4 +425,4 @@ const sideItems = [
   { label: "Step 5 — Idempotency", id: "step5" },
 ];
 
-export default createINPACTEngine({ NODES, sideItems, problemNum: "SD-04", title: "API Design", shortName: "SD — API DESIGN" });
+export default createINPACTEngine({ NODES, sideItems, lessonNum: "SD-04", title: "API Design", shortName: "SD — API DESIGN" });

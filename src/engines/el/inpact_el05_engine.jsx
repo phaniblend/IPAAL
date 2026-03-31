@@ -8,4 +8,4 @@ const NODES = [
 // Sustainable: error budget, blameless, reduce toil`, feedback_correct: "✅ Rotation with backup; reduce noise for fatigue; error budget + blameless.", feedback_wrong: "On-call design; alert fatigue; sustainable reliability.", expected: "On-call culture" },
 ];
 const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }];
-export default createINPACTEngine({ NODES, sideItems, problemNum: "EL-05", title: "On-call & incident culture", shortName: "EL — ONCALL" });
+export default createINPACTEngine({ NODES, sideItems, lessonNum: "EL-05", title: "On-call & incident culture", shortName: "EL — ONCALL" });

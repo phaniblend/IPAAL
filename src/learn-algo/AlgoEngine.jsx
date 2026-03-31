@@ -20,7 +20,7 @@ const wrapStyle = {
   padding: "48px",
 };
 
-export default function AlgoEngine({ lessonId, lessonTitle, onNextProblem }) {
+export default function AlgoEngine({ lessonId, lessonTitle, onNextLesson }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [lesson, setLesson] = useState(null);
@@ -46,7 +46,7 @@ export default function AlgoEngine({ lessonId, lessonTitle, onNextProblem }) {
     return {
       NODES,
       sideItems,
-      problemNum: 1,
+      lessonNum: 1,
       title: lesson.title || lessonTitle,
       shortName: lesson.id || lessonId,
     };
@@ -73,5 +73,5 @@ export default function AlgoEngine({ lessonId, lessonTitle, onNextProblem }) {
   }
   if (!Engine) return null;
 
-  return <Engine onNextProblem={onNextProblem} />;
+  return <Engine onNextLesson={onNextLesson} />;
 }

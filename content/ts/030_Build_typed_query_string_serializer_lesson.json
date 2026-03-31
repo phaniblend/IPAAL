@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-ts-30",
     "track": "ts",
-    "problemNum": 30,
+    "lessonNum": 30,
     "title": "Build typed query string serializer",
     "shortName": "P30",
     "intro": {

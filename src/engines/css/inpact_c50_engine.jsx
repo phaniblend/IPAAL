@@ -73,7 +73,7 @@ function getOutputPreview(answer) {
 export default createINPACTEngine({
   NODES,
   sideItems,
-  problemNum: 50,
+  lessonNum: 50,
   title: "contain and content-visibility",
   shortName: "C50",
   language: "css",

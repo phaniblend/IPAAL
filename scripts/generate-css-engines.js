@@ -98,7 +98,7 @@ const NODES = [
 ];
 
 const sideItems = [
-  { id: "intro", label: "Problem" },
+  { id: "intro", label: "Lesson" },
   { id: "objectives", label: "Objectives" },
   { id: "step1", label: "Step 1" },
   { id: "step2", label: "Step 2" },
@@ -120,7 +120,7 @@ function getOutputPreview(answer) {
 export default createINPACTEngine({
   NODES,
   sideItems,
-  problemNum: ${num},
+  lessonNum: ${num},
   title: "${esc(title)}",
   shortName: "${shortName}",
   language: "css",

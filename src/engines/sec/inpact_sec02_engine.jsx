@@ -462,4 +462,4 @@ const sideItems = [
   { label: "Step 5 — Zero Trust", id: "step5" },
 ];
 
-export default createINPACTEngine({ NODES, sideItems, problemNum: "SEC-02", title: "Auth Architecture & Secrets Management", shortName: "SEC — AUTH ARCH" });
+export default createINPACTEngine({ NODES, sideItems, lessonNum: "SEC-02", title: "Auth Architecture & Secrets Management", shortName: "SEC — AUTH ARCH" });

@@ -8,20 +8,20 @@
   "flow": [
     {
       "stepId": "title",
-      "mentorSays": "At the end of this lesson, you will be able to:\n\n1. Understand what the Count Subarrays of Size K problem asks for\n2. Convert average comparisons to sum comparisons efficiently\n3. Use a sliding window of fixed size to count subarrays\n4. Handle edge cases like k=1, k=n, and negative numbers\n5. Implement the solution step by step in your chosen language",
+      "mentorSays": "At the end of this lesson, you will be able to:\n\n1. Understand what the Count Subarrays of Size K lesson asks for\n2. Convert average comparisons to sum comparisons efficiently\n3. Use a sliding window of fixed size to count subarrays\n4. Handle edge cases like k=1, k=n, and negative numbers\n5. Implement the solution step by step in your chosen language",
       "action": "continue",
-      "next": "problem-illustration"
+      "next": "lesson-illustration"
     },
     {
-      "stepId": "problem-illustration",
-      "mentorSays": "Perfect! Now let's understand what the Count Subarrays of Size K problem is asking.\n\n**Problem Definition:**\nGiven an integer array `nums`, an integer `k`, and an integer `threshold`, return the number of contiguous subarrays of size `k` whose average is greater than or equal to `threshold`.\n\n**Key Insight:**\nSince all subarrays have the same length `k`, checking if `average >= threshold` is equivalent to checking if `sum >= k * threshold`. This avoids floating-point division!\n\n**Example 1:** nums = [2, 2, 2, 2, 5, 5, 5, 8], k = 3, threshold = 4\n\nWe need to find subarrays of size 3 where average >= 4.\nSince average >= 4 means sum >= 3 * 4 = 12, we check for sum >= 12.\n\nLet's check each subarray of size 3:\n- [2, 2, 2] → sum = 6, avg = 2.0 < 4 ✗\n- [2, 2, 2] → sum = 6, avg = 2.0 < 4 ✗ (overlapping, different position)\n- [2, 2, 5] → sum = 9, avg = 3.0 < 4 ✗\n- [2, 5, 5] → sum = 12, avg = 4.0 >= 4 ✓\n- [5, 5, 5] → sum = 15, avg = 5.0 >= 4 ✓\n- [5, 5, 8] → sum = 18, avg = 6.0 >= 4 ✓\n\nCount: 3\n\n**Example 2:** nums = [11, 13, 17, 23, 29, 31, 7, 5, 2, 3], k = 3, threshold = 5\n\nWe check for sum >= 3 * 5 = 15.\n\nSubarrays of size 3:\n- [11, 13, 17] → sum = 41 >= 15 ✓\n- [13, 17, 23] → sum = 53 >= 15 ✓\n- [17, 23, 29] → sum = 69 >= 15 ✓\n- [23, 29, 31] → sum = 83 >= 15 ✓\n- [29, 31, 7] → sum = 67 >= 15 ✓\n- [31, 7, 5] → sum = 43 >= 15 ✓\n- [7, 5, 2] → sum = 14 < 15 ✗\n- [5, 2, 3] → sum = 10 < 15 ✗\n\nCount: 6\n\n**What makes this tricky:**\n1. The conversion from average to sum: `avg >= threshold` → `sum >= k * threshold`\n2. All subarrays have the same length, so we can use a fixed-size sliding window\n3. Edge cases: k=1 (single elements), k=n (entire array), negative numbers\n\n**Common pitfalls:**\n- Using floating-point division for averages (can cause precision issues)\n- Recalculating the entire sum for each window (inefficient)\n- Off-by-one errors when sliding the window\n- Not handling the case where k > nums.length (should return 0)",
+      "stepId": "lesson-illustration",
+      "mentorSays": "Perfect! Now let's understand what the Count Subarrays of Size K lesson is asking.\n\n**Lesson Definition:**\nGiven an integer array `nums`, an integer `k`, and an integer `threshold`, return the number of contiguous subarrays of size `k` whose average is greater than or equal to `threshold`.\n\n**Key Insight:**\nSince all subarrays have the same length `k`, checking if `average >= threshold` is equivalent to checking if `sum >= k * threshold`. This avoids floating-point division!\n\n**Example 1:** nums = [2, 2, 2, 2, 5, 5, 5, 8], k = 3, threshold = 4\n\nWe need to find subarrays of size 3 where average >= 4.\nSince average >= 4 means sum >= 3 * 4 = 12, we check for sum >= 12.\n\nLet's check each subarray of size 3:\n- [2, 2, 2] → sum = 6, avg = 2.0 < 4 ✗\n- [2, 2, 2] → sum = 6, avg = 2.0 < 4 ✗ (overlapping, different position)\n- [2, 2, 5] → sum = 9, avg = 3.0 < 4 ✗\n- [2, 5, 5] → sum = 12, avg = 4.0 >= 4 ✓\n- [5, 5, 5] → sum = 15, avg = 5.0 >= 4 ✓\n- [5, 5, 8] → sum = 18, avg = 6.0 >= 4 ✓\n\nCount: 3\n\n**Example 2:** nums = [11, 13, 17, 23, 29, 31, 7, 5, 2, 3], k = 3, threshold = 5\n\nWe check for sum >= 3 * 5 = 15.\n\nSubarrays of size 3:\n- [11, 13, 17] → sum = 41 >= 15 ✓\n- [13, 17, 23] → sum = 53 >= 15 ✓\n- [17, 23, 29] → sum = 69 >= 15 ✓\n- [23, 29, 31] → sum = 83 >= 15 ✓\n- [29, 31, 7] → sum = 67 >= 15 ✓\n- [31, 7, 5] → sum = 43 >= 15 ✓\n- [7, 5, 2] → sum = 14 < 15 ✗\n- [5, 2, 3] → sum = 10 < 15 ✗\n\nCount: 6\n\n**What makes this tricky:**\n1. The conversion from average to sum: `avg >= threshold` → `sum >= k * threshold`\n2. All subarrays have the same length, so we can use a fixed-size sliding window\n3. Edge cases: k=1 (single elements), k=n (entire array), negative numbers\n\n**Common pitfalls:**\n- Using floating-point division for averages (can cause precision issues)\n- Recalculating the entire sum for each window (inefficient)\n- Off-by-one errors when sliding the window\n- Not handling the case where k > nums.length (should return 0)",
       "example": "Example 1:\nnums = [2, 2, 2, 2, 5, 5, 5, 8]\nk = 3, threshold = 4\n\nCheck: sum >= 3 * 4 = 12\n\nSubarrays:\n[2,2,2] → sum=6 ✗\n[2,2,5] → sum=9 ✗\n[2,5,5] → sum=12 ✓\n[5,5,5] → sum=15 ✓\n[5,5,8] → sum=18 ✓\n\nAnswer: 3\n\nExample 2:\nnums = [11, 13, 17, 23, 29, 31, 7, 5, 2, 3]\nk = 3, threshold = 5\n\nCheck: sum >= 15\n\nFirst 6 subarrays have sum >= 15\nLast 2 subarrays have sum < 15\n\nAnswer: 6",
       "action": "continue",
       "next": "thinking-challenge"
     },
     {
       "stepId": "thinking-challenge",
-      "mentorSays": "Now that you understand what the problem wants, here's the real question:\n\nHow would YOU count subarrays of size k with average >= threshold?\n\nThink about it for a moment. What approach feels natural to you?",
+      "mentorSays": "Now that you understand what the lesson wants, here's the real question:\n\nHow would YOU count subarrays of size k with average >= threshold?\n\nThink about it for a moment. What approach feels natural to you?",
       "choices": [
         {
           "label": "Use a sliding window of fixed size k, check sum >= k*threshold for each",
@@ -146,7 +146,7 @@
     },
     {
       "stepId": "array-check-js",
-      "mentorSays": "To solve this problem, we'll need to work with arrays. Do you know what an array is in JavaScript?",
+      "mentorSays": "To solve this lesson, we'll need to work with arrays. Do you know what an array is in JavaScript?",
       "choices": [
         {
           "label": "Yes, I know arrays",
@@ -167,7 +167,7 @@
     },
     {
       "stepId": "loop-check-js",
-      "mentorSays": "To solve this problem, we'll need to use loops. Do you know what a loop is in JavaScript?",
+      "mentorSays": "To solve this lesson, we'll need to use loops. Do you know what a loop is in JavaScript?",
       "choices": [
         {
           "label": "Yes, I know loops",
@@ -307,7 +307,7 @@
     },
     {
       "stepId": "array-check-python",
-      "mentorSays": "To solve this problem, we'll need to work with lists. Do you know what a list is in Python?",
+      "mentorSays": "To solve this lesson, we'll need to work with lists. Do you know what a list is in Python?",
       "choices": [
         {
           "label": "Yes, I know lists",
@@ -328,7 +328,7 @@
     },
     {
       "stepId": "loop-check-python",
-      "mentorSays": "To solve this problem, we'll need to use loops. Do you know what a loop is in Python?",
+      "mentorSays": "To solve this lesson, we'll need to use loops. Do you know what a loop is in Python?",
       "choices": [
         {
           "label": "Yes, I know loops",
@@ -468,7 +468,7 @@
     },
     {
       "stepId": "array-check-java",
-      "mentorSays": "To solve this problem, we'll need to work with arrays. Do you know what an array is in Java?",
+      "mentorSays": "To solve this lesson, we'll need to work with arrays. Do you know what an array is in Java?",
       "choices": [
         {
           "label": "Yes, I know arrays",
@@ -489,7 +489,7 @@
     },
     {
       "stepId": "loop-check-java",
-      "mentorSays": "To solve this problem, we'll need to use loops. Do you know what a loop is in Java?",
+      "mentorSays": "To solve this lesson, we'll need to use loops. Do you know what a loop is in Java?",
       "choices": [
         {
           "label": "Yes, I know loops",
@@ -629,7 +629,7 @@
     },
     {
       "stepId": "array-check-cpp",
-      "mentorSays": "To solve this problem, we'll need to work with vectors (arrays). Do you know what a vector is in C++?",
+      "mentorSays": "To solve this lesson, we'll need to work with vectors (arrays). Do you know what a vector is in C++?",
       "choices": [
         {
           "label": "Yes, I know vectors",
@@ -650,7 +650,7 @@
     },
     {
       "stepId": "loop-check-cpp",
-      "mentorSays": "To solve this problem, we'll need to use loops. Do you know what a loop is in C++?",
+      "mentorSays": "To solve this lesson, we'll need to use loops. Do you know what a loop is in C++?",
       "choices": [
         {
           "label": "Yes, I know loops",
@@ -790,7 +790,7 @@
     },
     {
       "stepId": "array-check-ts",
-      "mentorSays": "To solve this problem, we'll need to work with arrays. Do you know what an array is in TypeScript?",
+      "mentorSays": "To solve this lesson, we'll need to work with arrays. Do you know what an array is in TypeScript?",
       "choices": [
         {
           "label": "Yes, I know arrays",
@@ -811,7 +811,7 @@
     },
     {
       "stepId": "loop-check-ts",
-      "mentorSays": "To solve this problem, we'll need to use loops. Do you know what a loop is in TypeScript?",
+      "mentorSays": "To solve this lesson, we'll need to use loops. Do you know what a loop is in TypeScript?",
       "choices": [
         {
           "label": "Yes, I know loops",
@@ -888,7 +888,7 @@
     },
     {
       "stepId": "final",
-      "mentorSays": "🎉 Well done! You've learned to think through the Count Subarrays of Size K problem. You understand what the problem asks for, how to convert average comparisons to sum comparisons efficiently, and how to use a sliding window of fixed size to count subarrays.\n\n**Key Takeaways:**\n1. **Average to Sum Conversion**: For fixed-size windows, `average >= threshold` is equivalent to `sum >= k * threshold`. This avoids floating-point precision issues!\n2. **Sliding Window Pattern**: Maintain a window of fixed size k, efficiently update the sum by removing one element and adding another.\n3. **Edge Cases**: Handle k > nums.length, k = 1, k = n, and negative numbers.\n\n**Time Complexity**: O(n) - we traverse the array once\n**Space Complexity**: O(1) - we only use a few variables\n\n**What to practice next:**\n- Maximum Average Subarray (similar sliding window with fixed size)\n- Minimum Size Subarray Sum (sliding window with variable size)\n\nThis kind of thinking—using sliding windows with fixed size—is essential for solving many array problems. Keep practicing!",
+      "mentorSays": "🎉 Well done! You've learned to think through the Count Subarrays of Size K lesson. You understand what the lesson asks for, how to convert average comparisons to sum comparisons efficiently, and how to use a sliding window of fixed size to count subarrays.\n\n**Key Takeaways:**\n1. **Average to Sum Conversion**: For fixed-size windows, `average >= threshold` is equivalent to `sum >= k * threshold`. This avoids floating-point precision issues!\n2. **Sliding Window Pattern**: Maintain a window of fixed size k, efficiently update the sum by removing one element and adding another.\n3. **Edge Cases**: Handle k > nums.length, k = 1, k = n, and negative numbers.\n\n**Time Complexity**: O(n) - we traverse the array once\n**Space Complexity**: O(1) - we only use a few variables\n\n**What to practice next:**\n- Maximum Average Subarray (similar sliding window with fixed size)\n- Minimum Size Subarray Sum (sliding window with variable size)\n\nThis kind of thinking—using sliding windows with fixed size—is essential for solving many array lessons. Keep practicing!",
       "action": "continue"
     }
   ]

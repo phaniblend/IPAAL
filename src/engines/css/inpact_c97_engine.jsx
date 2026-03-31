@@ -73,7 +73,7 @@ function getOutputPreview(answer) {
 export default createINPACTEngine({
   NODES,
   sideItems,
-  problemNum: 97,
+  lessonNum: 97,
   title: "Container query units (cqw, cqh)",
   shortName: "C97",
   language: "css",

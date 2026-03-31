@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-vue-71",
     "track": "vue",
-    "problemNum": 71,
+    "lessonNum": 71,
     "title": "useDeferredValue",
     "shortName": "P71",
     "intro": {

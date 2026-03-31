@@ -3,13 +3,13 @@
   "config": {
     "lessonId": "ai-algorithms-71",
     "track": "algorithms",
-    "problemNum": 71,
+    "lessonNum": 71,
     "title": "Maximum Depth of Binary Tree",
     "shortName": "P71",
     "intro": {
       "tag": "LESSON #71",
       "title": "Maximum Depth of Binary Tree",
-      "body": "In this lesson, you will build a function to find the maximum depth of a binary tree, which is the number of nodes along the longest path from the root node down to the farthest leaf node. The core programming concept used is recursion, where the function calls itself to traverse the tree's left and right subtrees. The main technologies involved are JavaScript functions, conditional statements, and tree node objects. You'll learn how to handle base cases for empty trees and recursively compute depth. By the end, you'll understand how to apply recursion to solve tree-based problems efficiently.",
+      "body": "In this lesson, you will build a function to find the maximum depth of a binary tree, which is the number of nodes along the longest path from the root node down to the farthest leaf node. The core programming concept used is recursion, where the function calls itself to traverse the tree's left and right subtrees. The main technologies involved are JavaScript functions, conditional statements, and tree node objects. You'll learn how to handle base cases for empty trees and recursively compute depth. By the end, you'll understand how to apply recursion to solve tree-based lessons efficiently.",
       "usecase": "Finding the maximum depth of a binary tree is essential for optimizing data structures in real-world applications like file systems and UI component trees. For example, in a content management system, a nested folder hierarchy can be represented as a binary tree, and calculating its maximum depth helps determine the deepest level of subfolders for efficient navigation and storage management. Similarly, in a React application, the component tree's depth impacts rendering performance, and understanding tree depth aids in debugging and optimizing re-renders. This algorithm is also used in game development for AI decision trees, where evaluating the deepest possible move sequence is crucial for strategic planning."
     },
     "objectives": [

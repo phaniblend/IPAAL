@@ -277,4 +277,4 @@ const sideItems = [
   { label: "Step 5 — Bug review", id: "step5" },
 ];
 
-export default createINPACTEngine({ NODES, sideItems, problemNum: "JS-F14", title: "Type Coercion, Equality & Truthy/Falsy", shortName: "JS — COERCION" });
+export default createINPACTEngine({ NODES, sideItems, lessonNum: "JS-F14", title: "Type Coercion, Equality & Truthy/Falsy", shortName: "JS — COERCION" });

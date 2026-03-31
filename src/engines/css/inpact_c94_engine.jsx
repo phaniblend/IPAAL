@@ -73,7 +73,7 @@ function getOutputPreview(answer) {
 export default createINPACTEngine({
   NODES,
   sideItems,
-  problemNum: 94,
+  lessonNum: 94,
   title: "Safe area insets",
   shortName: "C94",
   language: "css",

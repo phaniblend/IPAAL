@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-js-45",
     "track": "js",
-    "problemNum": 45,
+    "lessonNum": 45,
     "title": "Build a sortable and filterable table",
     "shortName": "P45",
     "intro": {

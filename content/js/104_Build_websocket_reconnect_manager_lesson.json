@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-js-104",
     "track": "js",
-    "problemNum": 104,
+    "lessonNum": 104,
     "title": "Build websocket reconnect manager",
     "shortName": "P104",
     "intro": {

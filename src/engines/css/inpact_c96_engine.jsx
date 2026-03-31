@@ -73,7 +73,7 @@ function getOutputPreview(answer) {
 export default createINPACTEngine({
   NODES,
   sideItems,
-  problemNum: 96,
+  lessonNum: 96,
   title: "View transitions (View Transitions API)",
   shortName: "C96",
   language: "css",

@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-react-ts-22",
     "track": "react-ts",
-    "problemNum": 22,
+    "lessonNum": 22,
     "title": "Lifting State Up",
     "shortName": "P22",
     "intro": {

@@ -12,10 +12,10 @@ import { lessonConfigSchema } from "../schema.js";
  */
 export async function generateLessonPreviewMock({ track, lessonTitle, lessonIndex }) {
   await new Promise((r) => setTimeout(r, 300));
-  const problemNum = lessonIndex + 1;
+  const lessonNum = lessonIndex + 1;
   return {
     intro: {
-      tag: `LESSON #${problemNum}`,
+      tag: `LESSON #${lessonNum}`,
       title: lessonTitle,
       body: `This is a mock lesson for "${lessonTitle}" on track ${track}. You'll build it step by step.`,
       usecase: "Mock lesson for testing the pipeline.",
@@ -39,17 +39,17 @@ export async function generateLessonPreviewMock({ track, lessonTitle, lessonInde
 export async function generateLessonMock({ track, lessonTitle, lessonIndex }) {
   await new Promise((r) => setTimeout(r, 800));
 
-  const problemNum = lessonIndex + 1;
-  const pad = String(problemNum).padStart(2, "0");
+  const lessonNum = lessonIndex + 1;
+  const pad = String(lessonNum).padStart(2, "0");
 
   const config = {
     lessonId: `ai-${track}-${pad}`,
     track,
-    problemNum,
+    lessonNum,
     title: lessonTitle,
     shortName: `P${pad}`,
     intro: {
-      tag: `LESSON #${problemNum}`,
+      tag: `LESSON #${lessonNum}`,
       title: lessonTitle,
       body: `This is a mock AI-generated lesson for "${lessonTitle}" on track ${track}. Build the steps as described.`,
       usecase: "Mock lesson for testing the AI pipeline and shared renderer.",

@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-css-98",
     "track": "css",
-    "problemNum": 98,
+    "lessonNum": 98,
     "title": "Nesting (@nest / &)",
     "shortName": "P98",
     "intro": {

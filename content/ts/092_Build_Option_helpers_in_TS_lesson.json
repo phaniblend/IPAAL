@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-ts-92",
     "track": "ts",
-    "problemNum": 92,
+    "lessonNum": 92,
     "title": "Build Option helpers in TS",
     "shortName": "P92",
     "intro": {

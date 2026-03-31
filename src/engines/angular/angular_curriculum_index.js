@@ -1,5 +1,5 @@
 // Angular curriculum: 100 lessons replicating React P01–P100 in Angular (signals, standalone, templates).
-// Order must match Angular list in LandingPage.jsx (ANG01–ANG09 then React PROBLEM_LIST).
+// Order must match Angular list in LandingPage.jsx (ANG01–ANG09 then React LESSON_LIST).
 import AngularC01 from "./angular_c01_engine.jsx";
 import AngularC02 from "./angular_c02_engine.jsx";
 import AngularC03 from "./angular_c03_engine.jsx";

@@ -8,20 +8,20 @@
   "flow": [
     {
       "stepId": "title",
-      "mentorSays": "At the end of this lesson, you will be able to:\n\n1. Understand what the Longest Substring with At Most K Distinct Characters problem asks for\n2. Use a sliding window with hash map to track distinct characters\n3. Expand and shrink the window to maintain at most K distinct characters\n4. Implement the solution step by step in your chosen language",
+      "mentorSays": "At the end of this lesson, you will be able to:\n\n1. Understand what the Longest Substring with At Most K Distinct Characters lesson asks for\n2. Use a sliding window with hash map to track distinct characters\n3. Expand and shrink the window to maintain at most K distinct characters\n4. Implement the solution step by step in your chosen language",
       "action": "continue",
-      "next": "problem-illustration"
+      "next": "lesson-illustration"
     },
     {
-      "stepId": "problem-illustration",
-      "mentorSays": "Perfect! Now let's understand what the Longest Substring with At Most K Distinct Characters problem is asking.\n\n**Problem Definition:**\nGiven a string `s` and an integer `k`, return the length of the longest substring that contains at most `k` distinct characters.\n\n**Key Observations:**\n- We're finding the longest substring (not subarray)\n- \"At most K\" means we can have 1, 2, ..., or K distinct characters\n- Substrings must be contiguous\n- This is similar to Fruit Into Baskets, but with K instead of 2\n\n**Example 1:** s = \"eceba\", k = 2\n\nWe need to find the longest substring with at most 2 distinct characters.\n\nLet's check substrings:\n- \"ece\" → distinct = {e, c} = 2 ≤ 2 ✓, length = 3\n- \"eceb\" → distinct = {e, c, b} = 3 > 2 ✗\n- \"ceba\" → distinct = {c, e, b} = 3 > 2 ✗\n- \"eba\" → distinct = {e, b, a} = 3 > 2 ✗\n- \"ce\" → distinct = {c, e} = 2 ≤ 2 ✓, length = 2\n\nLongest: \"ece\" (length 3)\n\n**Example 2:** s = \"aa\", k = 1\n\nSubstrings:\n- \"aa\" → distinct = {a} = 1 ≤ 1 ✓, length = 2 ✓\n\nAnswer: 2\n\n**Example 3:** s = \"abaccc\", k = 2\n\nLet's find the longest substring with at most 2 distinct characters:\n- \"aba\" → distinct = {a, b} = 2 ≤ 2 ✓, length = 3\n- \"abac\" → distinct = {a, b, c} = 3 > 2 ✗\n- \"accc\" → distinct = {a, c} = 2 ≤ 2 ✓, length = 4 ✓\n\nAnswer: 4 (substring \"accc\")\n\n**Step-by-step trace for Example 1:**\n\ns = \"eceba\", k = 2\n\nWe'll use a sliding window approach:\n- **right = 0**: char = 'e', map = {e:1}, distinct = 1 ≤ 2 ✓, maxLen = 1\n- **right = 1**: char = 'c', map = {e:1, c:1}, distinct = 2 ≤ 2 ✓, maxLen = 2\n- **right = 2**: char = 'e', map = {e:2, c:1}, distinct = 2 ≤ 2 ✓, maxLen = 3\n- **right = 3**: char = 'b', map = {e:2, c:1, b:1}, distinct = 3 > 2 ✗, shrink left\n  - **left = 0**: remove 'e', map = {e:1, c:1, b:1}, distinct = 3 > 2, continue\n  - **left = 1**: remove 'c', map = {e:1, b:1}, distinct = 2 ≤ 2 ✓, maxLen = 3\n- **right = 4**: char = 'a', map = {e:1, b:1, a:1}, distinct = 3 > 2 ✗, shrink left\n  - **left = 2**: remove 'e', map = {b:1, a:1}, distinct = 2 ≤ 2 ✓, maxLen = 3\n\nAnswer: 3\n\n**What makes this tricky:**\n1. Understanding that \"at most K\" means we can have 1 to K distinct characters\n2. When we have K+1 distinct characters, we need to shrink from the left\n3. We need to track character frequencies, not just presence\n4. When a character's frequency reaches 0, remove it from the map\n\n**Common pitfalls:**\n- Not understanding that we need to track frequencies (not just characters)\n- Shrinking incorrectly when we have K+1 distinct characters\n- Not removing characters from the map when frequency reaches 0\n- Off-by-one errors when calculating window size",
+      "stepId": "lesson-illustration",
+      "mentorSays": "Perfect! Now let's understand what the Longest Substring with At Most K Distinct Characters lesson is asking.\n\n**Lesson Definition:**\nGiven a string `s` and an integer `k`, return the length of the longest substring that contains at most `k` distinct characters.\n\n**Key Observations:**\n- We're finding the longest substring (not subarray)\n- \"At most K\" means we can have 1, 2, ..., or K distinct characters\n- Substrings must be contiguous\n- This is similar to Fruit Into Baskets, but with K instead of 2\n\n**Example 1:** s = \"eceba\", k = 2\n\nWe need to find the longest substring with at most 2 distinct characters.\n\nLet's check substrings:\n- \"ece\" → distinct = {e, c} = 2 ≤ 2 ✓, length = 3\n- \"eceb\" → distinct = {e, c, b} = 3 > 2 ✗\n- \"ceba\" → distinct = {c, e, b} = 3 > 2 ✗\n- \"eba\" → distinct = {e, b, a} = 3 > 2 ✗\n- \"ce\" → distinct = {c, e} = 2 ≤ 2 ✓, length = 2\n\nLongest: \"ece\" (length 3)\n\n**Example 2:** s = \"aa\", k = 1\n\nSubstrings:\n- \"aa\" → distinct = {a} = 1 ≤ 1 ✓, length = 2 ✓\n\nAnswer: 2\n\n**Example 3:** s = \"abaccc\", k = 2\n\nLet's find the longest substring with at most 2 distinct characters:\n- \"aba\" → distinct = {a, b} = 2 ≤ 2 ✓, length = 3\n- \"abac\" → distinct = {a, b, c} = 3 > 2 ✗\n- \"accc\" → distinct = {a, c} = 2 ≤ 2 ✓, length = 4 ✓\n\nAnswer: 4 (substring \"accc\")\n\n**Step-by-step trace for Example 1:**\n\ns = \"eceba\", k = 2\n\nWe'll use a sliding window approach:\n- **right = 0**: char = 'e', map = {e:1}, distinct = 1 ≤ 2 ✓, maxLen = 1\n- **right = 1**: char = 'c', map = {e:1, c:1}, distinct = 2 ≤ 2 ✓, maxLen = 2\n- **right = 2**: char = 'e', map = {e:2, c:1}, distinct = 2 ≤ 2 ✓, maxLen = 3\n- **right = 3**: char = 'b', map = {e:2, c:1, b:1}, distinct = 3 > 2 ✗, shrink left\n  - **left = 0**: remove 'e', map = {e:1, c:1, b:1}, distinct = 3 > 2, continue\n  - **left = 1**: remove 'c', map = {e:1, b:1}, distinct = 2 ≤ 2 ✓, maxLen = 3\n- **right = 4**: char = 'a', map = {e:1, b:1, a:1}, distinct = 3 > 2 ✗, shrink left\n  - **left = 2**: remove 'e', map = {b:1, a:1}, distinct = 2 ≤ 2 ✓, maxLen = 3\n\nAnswer: 3\n\n**What makes this tricky:**\n1. Understanding that \"at most K\" means we can have 1 to K distinct characters\n2. When we have K+1 distinct characters, we need to shrink from the left\n3. We need to track character frequencies, not just presence\n4. When a character's frequency reaches 0, remove it from the map\n\n**Common pitfalls:**\n- Not understanding that we need to track frequencies (not just characters)\n- Shrinking incorrectly when we have K+1 distinct characters\n- Not removing characters from the map when frequency reaches 0\n- Off-by-one errors when calculating window size",
       "example": "Example 1:\ns = \"eceba\", k = 2\n\nLongest: \"ece\" → distinct = {e, c}\nAnswer: 3\n\nExample 2:\ns = \"aa\", k = 1\n\nLongest: \"aa\" → distinct = {a}\nAnswer: 2\n\nExample 3:\ns = \"abaccc\", k = 2\n\nLongest: \"accc\" → distinct = {a, c}\nAnswer: 4",
       "action": "continue",
       "next": "thinking-challenge"
     },
     {
       "stepId": "thinking-challenge",
-      "mentorSays": "Now that you understand what the problem wants, here's the real question:\n\nHow would YOU find the longest substring with at most K distinct characters?\n\nThink about it for a moment. What approach feels natural to you?",
+      "mentorSays": "Now that you understand what the lesson wants, here's the real question:\n\nHow would YOU find the longest substring with at most K distinct characters?\n\nThink about it for a moment. What approach feels natural to you?",
       "choices": [
         {
           "label": "Use a sliding window with hash map to track distinct characters",
@@ -146,7 +146,7 @@
     },
     {
       "stepId": "array-check-js",
-      "mentorSays": "To solve this problem, we'll need to work with strings. Do you know what a string is in JavaScript?",
+      "mentorSays": "To solve this lesson, we'll need to work with strings. Do you know what a string is in JavaScript?",
       "choices": [
         {
           "label": "Yes, I know strings",
@@ -167,7 +167,7 @@
     },
     {
       "stepId": "loop-check-js",
-      "mentorSays": "To solve this problem, we'll need to use loops. Do you know what a loop is in JavaScript?",
+      "mentorSays": "To solve this lesson, we'll need to use loops. Do you know what a loop is in JavaScript?",
       "choices": [
         {
           "label": "Yes, I know loops",
@@ -307,7 +307,7 @@
     },
     {
       "stepId": "array-check-python",
-      "mentorSays": "To solve this problem, we'll need to work with strings. Do you know what a string is in Python?",
+      "mentorSays": "To solve this lesson, we'll need to work with strings. Do you know what a string is in Python?",
       "choices": [
         {
           "label": "Yes, I know strings",
@@ -328,7 +328,7 @@
     },
     {
       "stepId": "loop-check-python",
-      "mentorSays": "To solve this problem, we'll need to use loops. Do you know what a loop is in Python?",
+      "mentorSays": "To solve this lesson, we'll need to use loops. Do you know what a loop is in Python?",
       "choices": [
         {
           "label": "Yes, I know loops",
@@ -468,7 +468,7 @@
     },
     {
       "stepId": "array-check-java",
-      "mentorSays": "To solve this problem, we'll need to work with strings. Do you know what a string is in Java?",
+      "mentorSays": "To solve this lesson, we'll need to work with strings. Do you know what a string is in Java?",
       "choices": [
         {
           "label": "Yes, I know strings",
@@ -489,7 +489,7 @@
     },
     {
       "stepId": "loop-check-java",
-      "mentorSays": "To solve this problem, we'll need to use loops. Do you know what a loop is in Java?",
+      "mentorSays": "To solve this lesson, we'll need to use loops. Do you know what a loop is in Java?",
       "choices": [
         {
           "label": "Yes, I know loops",
@@ -629,7 +629,7 @@
     },
     {
       "stepId": "array-check-cpp",
-      "mentorSays": "To solve this problem, we'll need to work with strings. Do you know what a string is in C++?",
+      "mentorSays": "To solve this lesson, we'll need to work with strings. Do you know what a string is in C++?",
       "choices": [
         {
           "label": "Yes, I know strings",
@@ -650,7 +650,7 @@
     },
     {
       "stepId": "loop-check-cpp",
-      "mentorSays": "To solve this problem, we'll need to use loops. Do you know what a loop is in C++?",
+      "mentorSays": "To solve this lesson, we'll need to use loops. Do you know what a loop is in C++?",
       "choices": [
         {
           "label": "Yes, I know loops",
@@ -790,7 +790,7 @@
     },
     {
       "stepId": "array-check-ts",
-      "mentorSays": "To solve this problem, we'll need to work with strings. Do you know what a string is in TypeScript?",
+      "mentorSays": "To solve this lesson, we'll need to work with strings. Do you know what a string is in TypeScript?",
       "choices": [
         {
           "label": "Yes, I know strings",
@@ -811,7 +811,7 @@
     },
     {
       "stepId": "loop-check-ts",
-      "mentorSays": "To solve this problem, we'll need to use loops. Do you know what a loop is in TypeScript?",
+      "mentorSays": "To solve this lesson, we'll need to use loops. Do you know what a loop is in TypeScript?",
       "choices": [
         {
           "label": "Yes, I know loops",
@@ -888,7 +888,7 @@
     },
     {
       "stepId": "final",
-      "mentorSays": "🎉 Well done! You've successfully implemented the Longest Substring with At Most K Distinct Characters solution!\n\n**Time Complexity:** O(n)\n- We iterate through the string once with the right pointer\n- Each character is added and removed from the window at most once\n- Even though we have a nested while loop, each character is processed at most twice (once when added, once when removed)\n\n**Space Complexity:** O(K)\n- We only use a hash map that stores at most K+1 distinct characters (since we shrink when we have K+1)\n- In the worst case, we store K+1 key-value pairs\n\n**Key Takeaways:**\n1. **Sliding window with hash map**: Use a hash map to track distinct characters and their frequencies in the current window\n2. **Shrink when invalid**: When we have more than K distinct characters, shrink from the left until we're back to K distinct\n3. **Remove characters completely**: When a character's frequency reaches 0, remove it from the map (not just set to 0)\n4. **Track maximum**: Update the maximum window size after ensuring the window is valid\n5. **Generalization**: This pattern generalizes to \"at most K distinct values\" - works for arrays, strings, etc.\n\n**Related Practice Problems:**\n- Fruit Into Baskets (LeetCode #904) - same pattern with K=2\n- Longest Substring Without Repeating Characters (LeetCode #3) - K = all unique\n- Minimum Window Substring (LeetCode #76)\n\nKeep practicing sliding window problems - they're a powerful technique for string and array problems!",
+      "mentorSays": "🎉 Well done! You've successfully implemented the Longest Substring with At Most K Distinct Characters solution!\n\n**Time Complexity:** O(n)\n- We iterate through the string once with the right pointer\n- Each character is added and removed from the window at most once\n- Even though we have a nested while loop, each character is processed at most twice (once when added, once when removed)\n\n**Space Complexity:** O(K)\n- We only use a hash map that stores at most K+1 distinct characters (since we shrink when we have K+1)\n- In the worst case, we store K+1 key-value pairs\n\n**Key Takeaways:**\n1. **Sliding window with hash map**: Use a hash map to track distinct characters and their frequencies in the current window\n2. **Shrink when invalid**: When we have more than K distinct characters, shrink from the left until we're back to K distinct\n3. **Remove characters completely**: When a character's frequency reaches 0, remove it from the map (not just set to 0)\n4. **Track maximum**: Update the maximum window size after ensuring the window is valid\n5. **Generalization**: This pattern generalizes to \"at most K distinct values\" - works for arrays, strings, etc.\n\n**Related Practice Lessons:**\n- Fruit Into Baskets (LeetCode #904) - same pattern with K=2\n- Longest Substring Without Repeating Characters (LeetCode #3) - K = all unique\n- Minimum Window Substring (LeetCode #76)\n\nKeep practicing sliding window lessons - they're a powerful technique for string and array lessons!",
       "action": "continue"
     }
   ]

@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-fe-05",
     "track": "fe",
-    "problemNum": 5,
+    "lessonNum": 5,
     "title": "Progressive Web Apps",
     "shortName": "P05",
     "intro": {

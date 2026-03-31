@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-vue-30",
     "track": "vue",
-    "problemNum": 30,
+    "lessonNum": 30,
     "title": "useLocalStorage",
     "shortName": "P30",
     "intro": {

@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-angular-124",
     "track": "angular",
-    "problemNum": 124,
+    "lessonNum": 124,
     "title": "Multi-Tab Auth Sync",
     "shortName": "P124",
     "intro": {

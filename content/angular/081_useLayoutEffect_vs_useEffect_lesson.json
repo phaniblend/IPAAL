@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-angular-81",
     "track": "angular",
-    "problemNum": 81,
+    "lessonNum": 81,
     "title": "useLayoutEffect vs useEffect",
     "shortName": "P81",
     "intro": {

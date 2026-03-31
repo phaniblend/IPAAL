@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-react-js-114",
     "track": "react-js",
-    "problemNum": 114,
+    "lessonNum": 114,
     "title": "RBAC Permission Hook",
     "shortName": "P114",
     "intro": {

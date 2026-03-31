@@ -8,20 +8,20 @@
   "flow": [
     {
       "stepId": "title",
-      "mentorSays": "At the end of this lesson, you will be able to:\n\n1. Understand what the Same Tree problem asks for\n2. Use recursion to compare two binary trees\n3. Check if trees have the same structure and values\n4. Handle base cases (null nodes)\n5. Implement the solution step by step in your chosen language",
+      "mentorSays": "At the end of this lesson, you will be able to:\n\n1. Understand what the Same Tree lesson asks for\n2. Use recursion to compare two binary trees\n3. Check if trees have the same structure and values\n4. Handle base cases (null nodes)\n5. Implement the solution step by step in your chosen language",
       "action": "continue",
-      "next": "problem-illustration"
+      "next": "lesson-illustration"
     },
     {
-      "stepId": "problem-illustration",
-      "mentorSays": "Perfect! Now let's understand what the Same Tree problem is asking.\n\n**Problem Definition:**\nGiven the roots of two binary trees `p` and `q`, write a function to check if they are the same or not.\n\nTwo binary trees are considered the same if they are structurally identical, and the nodes have the same value.\n\n**Key Observations:**\n- Trees must have the same structure (same shape)\n- Corresponding nodes must have the same values\n- Both trees being null is considered the same\n- One null and one non-null is different\n\n**Example 1:**\nTree p:\n    1\n   / \\\n  2   3\n\nTree q:\n    1\n   / \\\n  2   3\n\nBoth trees are identical in structure and values.\nAnswer: true\n\n**Example 2:**\nTree p:\n    1\n   /\n  2\n\nTree q:\n    1\n     \\\n      2\n\nDifferent structure (left child vs right child).\nAnswer: false\n\n**Example 3:**\nTree p:\n    1\n   / \\\n  2   1\n\nTree q:\n    1\n   / \\\n  1   2\n\nSame structure but different values at positions.\nAnswer: false\n\n**Step-by-step trace for Example 1 (Recursive approach):**\n\nTree p:      Tree q:\n    1           1\n   / \\         / \\\n  2   3       2   3\n\nWe'll use recursion:\n- **isSameTree(p=1, q=1)**:\n  - Both not null ✓\n  - Values equal (1 == 1) ✓\n  - Check left subtrees: isSameTree(p.left=2, q.left=2)\n  - Check right subtrees: isSameTree(p.right=3, q.right=3)\n  - Return true && true = true ✓\n\n- **isSameTree(p=2, q=2)**:\n  - Both not null ✓\n  - Values equal (2 == 2) ✓\n  - Left: isSameTree(null, null) = true\n  - Right: isSameTree(null, null) = true\n  - Return true && true = true\n\n- **isSameTree(p=3, q=3)**:\n  - Both not null ✓\n  - Values equal (3 == 3) ✓\n  - Left: isSameTree(null, null) = true\n  - Right: isSameTree(null, null) = true\n  - Return true && true = true\n\n- **isSameTree(null, null)**:\n  - Both null, return true (base case)\n\n**Key Insight:**\nTwo trees are the same if:\n1. Both roots are null (base case: return true)\n2. One is null, one is not (return false)\n3. Both have same value AND left subtrees are same AND right subtrees are same\n\n**What makes this tricky:**\n1. Handling null cases correctly\n2. Recursive thinking: trees are same if roots match AND subtrees match\n3. Understanding that structure and values must both match\n4. The base case: two null nodes are considered the same\n\n**Common pitfalls:**\n- Not handling null cases correctly\n- Only checking values without checking structure\n- Not checking both left and right subtrees\n- Returning false when both are null (should return true)",
+      "stepId": "lesson-illustration",
+      "mentorSays": "Perfect! Now let's understand what the Same Tree lesson is asking.\n\n**Lesson Definition:**\nGiven the roots of two binary trees `p` and `q`, write a function to check if they are the same or not.\n\nTwo binary trees are considered the same if they are structurally identical, and the nodes have the same value.\n\n**Key Observations:**\n- Trees must have the same structure (same shape)\n- Corresponding nodes must have the same values\n- Both trees being null is considered the same\n- One null and one non-null is different\n\n**Example 1:**\nTree p:\n    1\n   / \\\n  2   3\n\nTree q:\n    1\n   / \\\n  2   3\n\nBoth trees are identical in structure and values.\nAnswer: true\n\n**Example 2:**\nTree p:\n    1\n   /\n  2\n\nTree q:\n    1\n     \\\n      2\n\nDifferent structure (left child vs right child).\nAnswer: false\n\n**Example 3:**\nTree p:\n    1\n   / \\\n  2   1\n\nTree q:\n    1\n   / \\\n  1   2\n\nSame structure but different values at positions.\nAnswer: false\n\n**Step-by-step trace for Example 1 (Recursive approach):**\n\nTree p:      Tree q:\n    1           1\n   / \\         / \\\n  2   3       2   3\n\nWe'll use recursion:\n- **isSameTree(p=1, q=1)**:\n  - Both not null ✓\n  - Values equal (1 == 1) ✓\n  - Check left subtrees: isSameTree(p.left=2, q.left=2)\n  - Check right subtrees: isSameTree(p.right=3, q.right=3)\n  - Return true && true = true ✓\n\n- **isSameTree(p=2, q=2)**:\n  - Both not null ✓\n  - Values equal (2 == 2) ✓\n  - Left: isSameTree(null, null) = true\n  - Right: isSameTree(null, null) = true\n  - Return true && true = true\n\n- **isSameTree(p=3, q=3)**:\n  - Both not null ✓\n  - Values equal (3 == 3) ✓\n  - Left: isSameTree(null, null) = true\n  - Right: isSameTree(null, null) = true\n  - Return true && true = true\n\n- **isSameTree(null, null)**:\n  - Both null, return true (base case)\n\n**Key Insight:**\nTwo trees are the same if:\n1. Both roots are null (base case: return true)\n2. One is null, one is not (return false)\n3. Both have same value AND left subtrees are same AND right subtrees are same\n\n**What makes this tricky:**\n1. Handling null cases correctly\n2. Recursive thinking: trees are same if roots match AND subtrees match\n3. Understanding that structure and values must both match\n4. The base case: two null nodes are considered the same\n\n**Common pitfalls:**\n- Not handling null cases correctly\n- Only checking values without checking structure\n- Not checking both left and right subtrees\n- Returning false when both are null (should return true)",
       "example": "Example 1:\nTree p:      Tree q:\n    1           1\n   / \\         / \\\n  2   3       2   3\n\nSame: true\n\nExample 2:\nTree p:      Tree q:\n    1           1\n   /             \\\n  2               2\n\nSame: false (different structure)\n\nExample 3:\nTree p:      Tree q:\n    1           1\n   / \\         / \\\n  2   1       1   2\n\nSame: false (different values)",
       "action": "continue",
       "next": "thinking-challenge"
     },
     {
       "stepId": "thinking-challenge",
-      "mentorSays": "Now that you understand what the problem wants, here's the real question:\n\nHow would YOU check if two binary trees are the same?\n\nThink about it for a moment. What approach feels natural to you?",
+      "mentorSays": "Now that you understand what the lesson wants, here's the real question:\n\nHow would YOU check if two binary trees are the same?\n\nThink about it for a moment. What approach feels natural to you?",
       "choices": [
         {
           "label": "Use recursion - check roots match, then recursively check subtrees",
@@ -51,7 +51,7 @@
     },
     {
       "stepId": "explore-recursive",
-      "mentorSays": "Excellent choice! Recursion is perfect for this problem. Here's the core idea:\n\n**The Algorithm:**\n1. **Base case 1**: If both p and q are null, return true (two empty trees are the same)\n2. **Base case 2**: If one is null and the other is not, return false (different structure)\n3. **Value check**: If p.val != q.val, return false (different values)\n4. **Recursive check**: Return isSameTree(p.left, q.left) && isSameTree(p.right, q.right)\n\n**Why it works**:\n- We check if the roots match (both null, or both have same value)\n- We recursively check if left subtrees match\n- We recursively check if right subtrees match\n- All three conditions must be true for trees to be the same\n\n**Key insight**: Two trees are the same if their roots match AND their left subtrees match AND their right subtrees match!\n\nLet's trace with p = [1,2,3], q = [1,2,3]:\n\n- **isSameTree(1, 1)**:\n  - Both not null ✓\n  - Values equal (1 == 1) ✓\n  - Left: isSameTree(2, 2) = true\n  - Right: isSameTree(3, 3) = true\n  - Return true && true = true ✓\n\n- **isSameTree(2, 2)**:\n  - Both not null ✓\n  - Values equal ✓\n  - Left: isSameTree(null, null) = true\n  - Right: isSameTree(null, null) = true\n  - Return true\n\n- **isSameTree(null, null)**:\n  - Both null, return true (base case)\n\nThis is O(n) time (visit each node once) and O(h) space (recursion stack)! Now let's code it step by step.",
+      "mentorSays": "Excellent choice! Recursion is perfect for this lesson. Here's the core idea:\n\n**The Algorithm:**\n1. **Base case 1**: If both p and q are null, return true (two empty trees are the same)\n2. **Base case 2**: If one is null and the other is not, return false (different structure)\n3. **Value check**: If p.val != q.val, return false (different values)\n4. **Recursive check**: Return isSameTree(p.left, q.left) && isSameTree(p.right, q.right)\n\n**Why it works**:\n- We check if the roots match (both null, or both have same value)\n- We recursively check if left subtrees match\n- We recursively check if right subtrees match\n- All three conditions must be true for trees to be the same\n\n**Key insight**: Two trees are the same if their roots match AND their left subtrees match AND their right subtrees match!\n\nLet's trace with p = [1,2,3], q = [1,2,3]:\n\n- **isSameTree(1, 1)**:\n  - Both not null ✓\n  - Values equal (1 == 1) ✓\n  - Left: isSameTree(2, 2) = true\n  - Right: isSameTree(3, 3) = true\n  - Return true && true = true ✓\n\n- **isSameTree(2, 2)**:\n  - Both not null ✓\n  - Values equal ✓\n  - Left: isSameTree(null, null) = true\n  - Right: isSameTree(null, null) = true\n  - Return true\n\n- **isSameTree(null, null)**:\n  - Both null, return true (base case)\n\nThis is O(n) time (visit each node once) and O(h) space (recursion stack)! Now let's code it step by step.",
       "action": "continue",
       "next": "language-selection"
     },
@@ -146,7 +146,7 @@
     },
     {
       "stepId": "tree-check-js",
-      "mentorSays": "To solve this problem, we'll need to work with binary trees. Do you know what a binary tree is?",
+      "mentorSays": "To solve this lesson, we'll need to work with binary trees. Do you know what a binary tree is?",
       "choices": [
         {
           "label": "Yes, I know binary trees",
@@ -167,7 +167,7 @@
     },
     {
       "stepId": "recursion-check-js",
-      "mentorSays": "To solve this problem, we'll use recursion. Do you know what recursion is in JavaScript?",
+      "mentorSays": "To solve this lesson, we'll use recursion. Do you know what recursion is in JavaScript?",
       "choices": [
         {
           "label": "Yes, I know recursion",
@@ -181,7 +181,7 @@
     },
     {
       "stepId": "recursion-explanation-js",
-      "mentorSays": "Recursion is when a function calls itself. For tree problems, we often use recursion because:\n- A tree is naturally recursive (each subtree is also a tree)\n- We can solve the problem for the whole tree by solving it for subtrees\n\nFor example, to check if two trees are the same, we check if roots match, then recursively check if left subtrees match and right subtrees match.",
+      "mentorSays": "Recursion is when a function calls itself. For tree lessons, we often use recursion because:\n- A tree is naturally recursive (each subtree is also a tree)\n- We can solve the lesson for the whole tree by solving it for subtrees\n\nFor example, to check if two trees are the same, we check if roots match, then recursively check if left subtrees match and right subtrees match.",
       "example": "function isSameTree(p, q) {\n  // Base case: both null\n  if (p === null && q === null) return true;\n  \n  // Recursive case: check roots and subtrees\n  return p.val === q.val && \n         isSameTree(p.left, q.left) &&  // Recursive call!\n         isSameTree(p.right, q.right); // Recursive call!\n}",
       "action": "continue",
       "next": "coding-start-js"
@@ -293,7 +293,7 @@
     },
     {
       "stepId": "tree-check-python",
-      "mentorSays": "To solve this problem, we'll need to work with binary trees. Do you know what a binary tree is?",
+      "mentorSays": "To solve this lesson, we'll need to work with binary trees. Do you know what a binary tree is?",
       "choices": [
         {
           "label": "Yes, I know binary trees",
@@ -314,7 +314,7 @@
     },
     {
       "stepId": "recursion-check-python",
-      "mentorSays": "To solve this problem, we'll use recursion. Do you know what recursion is in Python?",
+      "mentorSays": "To solve this lesson, we'll use recursion. Do you know what recursion is in Python?",
       "choices": [
         {
           "label": "Yes, I know recursion",
@@ -328,7 +328,7 @@
     },
     {
       "stepId": "recursion-explanation-python",
-      "mentorSays": "Recursion is when a function calls itself. For tree problems, we often use recursion because:\n- A tree is naturally recursive (each subtree is also a tree)\n- We can solve the problem for the whole tree by solving it for subtrees\n\nFor example, to check if two trees are the same, we check if roots match, then recursively check if left subtrees match and right subtrees match.",
+      "mentorSays": "Recursion is when a function calls itself. For tree lessons, we often use recursion because:\n- A tree is naturally recursive (each subtree is also a tree)\n- We can solve the lesson for the whole tree by solving it for subtrees\n\nFor example, to check if two trees are the same, we check if roots match, then recursively check if left subtrees match and right subtrees match.",
       "example": "function isSameTree(p, q) {\n  // Base case: both null\n  if (p === null && q === null) return true;\n  \n  // Recursive case: check roots and subtrees\n  return p.val === q.val && \n         isSameTree(p.left, q.left) &&  // Recursive call!\n         isSameTree(p.right, q.right); // Recursive call!\n}",
       "action": "continue",
       "next": "coding-start-python"
@@ -440,7 +440,7 @@
     },
     {
       "stepId": "tree-check-java",
-      "mentorSays": "To solve this problem, we'll need to work with binary trees. Do you know what a binary tree is?",
+      "mentorSays": "To solve this lesson, we'll need to work with binary trees. Do you know what a binary tree is?",
       "choices": [
         {
           "label": "Yes, I know binary trees",
@@ -461,7 +461,7 @@
     },
     {
       "stepId": "recursion-check-java",
-      "mentorSays": "To solve this problem, we'll use recursion. Do you know what recursion is in Java?",
+      "mentorSays": "To solve this lesson, we'll use recursion. Do you know what recursion is in Java?",
       "choices": [
         {
           "label": "Yes, I know recursion",
@@ -475,7 +475,7 @@
     },
     {
       "stepId": "recursion-explanation-java",
-      "mentorSays": "Recursion is when a function calls itself. For tree problems, we often use recursion because:\n- A tree is naturally recursive (each subtree is also a tree)\n- We can solve the problem for the whole tree by solving it for subtrees\n\nFor example, to check if two trees are the same, we check if roots match, then recursively check if left subtrees match and right subtrees match.",
+      "mentorSays": "Recursion is when a function calls itself. For tree lessons, we often use recursion because:\n- A tree is naturally recursive (each subtree is also a tree)\n- We can solve the lesson for the whole tree by solving it for subtrees\n\nFor example, to check if two trees are the same, we check if roots match, then recursively check if left subtrees match and right subtrees match.",
       "example": "function isSameTree(p, q) {\n  // Base case: both null\n  if (p === null && q === null) return true;\n  \n  // Recursive case: check roots and subtrees\n  return p.val === q.val && \n         isSameTree(p.left, q.left) &&  // Recursive call!\n         isSameTree(p.right, q.right); // Recursive call!\n}",
       "action": "continue",
       "next": "coding-start-java"
@@ -587,7 +587,7 @@
     },
     {
       "stepId": "tree-check-cpp",
-      "mentorSays": "To solve this problem, we'll need to work with binary trees. Do you know what a binary tree is?",
+      "mentorSays": "To solve this lesson, we'll need to work with binary trees. Do you know what a binary tree is?",
       "choices": [
         {
           "label": "Yes, I know binary trees",
@@ -608,7 +608,7 @@
     },
     {
       "stepId": "recursion-check-cpp",
-      "mentorSays": "To solve this problem, we'll use recursion. Do you know what recursion is in C++?",
+      "mentorSays": "To solve this lesson, we'll use recursion. Do you know what recursion is in C++?",
       "choices": [
         {
           "label": "Yes, I know recursion",
@@ -622,7 +622,7 @@
     },
     {
       "stepId": "recursion-explanation-cpp",
-      "mentorSays": "Recursion is when a function calls itself. For tree problems, we often use recursion because:\n- A tree is naturally recursive (each subtree is also a tree)\n- We can solve the problem for the whole tree by solving it for subtrees\n\nFor example, to check if two trees are the same, we check if roots match, then recursively check if left subtrees match and right subtrees match.",
+      "mentorSays": "Recursion is when a function calls itself. For tree lessons, we often use recursion because:\n- A tree is naturally recursive (each subtree is also a tree)\n- We can solve the lesson for the whole tree by solving it for subtrees\n\nFor example, to check if two trees are the same, we check if roots match, then recursively check if left subtrees match and right subtrees match.",
       "example": "function isSameTree(p, q) {\n  // Base case: both null\n  if (p === null && q === null) return true;\n  \n  // Recursive case: check roots and subtrees\n  return p.val === q.val && \n         isSameTree(p.left, q.left) &&  // Recursive call!\n         isSameTree(p.right, q.right); // Recursive call!\n}",
       "action": "continue",
       "next": "coding-start-cpp"
@@ -734,7 +734,7 @@
     },
     {
       "stepId": "tree-check-ts",
-      "mentorSays": "To solve this problem, we'll need to work with binary trees. Do you know what a binary tree is?",
+      "mentorSays": "To solve this lesson, we'll need to work with binary trees. Do you know what a binary tree is?",
       "choices": [
         {
           "label": "Yes, I know binary trees",
@@ -755,7 +755,7 @@
     },
     {
       "stepId": "recursion-check-ts",
-      "mentorSays": "To solve this problem, we'll use recursion. Do you know what recursion is in TypeScript?",
+      "mentorSays": "To solve this lesson, we'll use recursion. Do you know what recursion is in TypeScript?",
       "choices": [
         {
           "label": "Yes, I know recursion",
@@ -769,7 +769,7 @@
     },
     {
       "stepId": "recursion-explanation-ts",
-      "mentorSays": "Recursion is when a function calls itself. For tree problems, we often use recursion because:\n- A tree is naturally recursive (each subtree is also a tree)\n- We can solve the problem for the whole tree by solving it for subtrees\n\nFor example, to check if two trees are the same, we check if roots match, then recursively check if left subtrees match and right subtrees match.",
+      "mentorSays": "Recursion is when a function calls itself. For tree lessons, we often use recursion because:\n- A tree is naturally recursive (each subtree is also a tree)\n- We can solve the lesson for the whole tree by solving it for subtrees\n\nFor example, to check if two trees are the same, we check if roots match, then recursively check if left subtrees match and right subtrees match.",
       "example": "function isSameTree(p, q) {\n  // Base case: both null\n  if (p === null && q === null) return true;\n  \n  // Recursive case: check roots and subtrees\n  return p.val === q.val && \n         isSameTree(p.left, q.left) &&  // Recursive call!\n         isSameTree(p.right, q.right); // Recursive call!\n}",
       "action": "continue",
       "next": "coding-start-ts"
@@ -818,7 +818,7 @@
     },
     {
       "stepId": "final",
-      "mentorSays": "🎉 Well done! You've successfully implemented the Same Tree solution!\n\n**Time Complexity:** O(n)\n- We visit each node exactly once\n- n is the minimum number of nodes in the two trees\n- In the worst case, we visit all nodes of both trees\n\n**Space Complexity:** O(h)\n- The recursion stack uses space proportional to the height of the tree\n- In the worst case (skewed tree), h = n, so O(n)\n- In the best case (balanced tree), h = log n, so O(log n)\n\n**Key Takeaways:**\n1. **Recursive approach**: Check if roots match, then recursively check subtrees\n2. **Base cases**: Both null = true, one null = false\n3. **Value check**: Corresponding nodes must have the same value\n4. **Structure check**: Both left and right subtrees must match\n5. **Natural recursion**: Trees are recursive structures, so recursion fits perfectly\n\n**Related Practice Problems:**\n- Symmetric Tree (LeetCode #101) - check if tree is symmetric\n- Subtree of Another Tree (LeetCode #572) - check if one tree is subtree of another\n- Maximum Depth of Binary Tree (LeetCode #104) - similar recursive pattern\n\nKeep practicing tree problems - they're fundamental for interviews!",
+      "mentorSays": "🎉 Well done! You've successfully implemented the Same Tree solution!\n\n**Time Complexity:** O(n)\n- We visit each node exactly once\n- n is the minimum number of nodes in the two trees\n- In the worst case, we visit all nodes of both trees\n\n**Space Complexity:** O(h)\n- The recursion stack uses space proportional to the height of the tree\n- In the worst case (skewed tree), h = n, so O(n)\n- In the best case (balanced tree), h = log n, so O(log n)\n\n**Key Takeaways:**\n1. **Recursive approach**: Check if roots match, then recursively check subtrees\n2. **Base cases**: Both null = true, one null = false\n3. **Value check**: Corresponding nodes must have the same value\n4. **Structure check**: Both left and right subtrees must match\n5. **Natural recursion**: Trees are recursive structures, so recursion fits perfectly\n\n**Related Practice Lessons:**\n- Symmetric Tree (LeetCode #101) - check if tree is symmetric\n- Subtree of Another Tree (LeetCode #572) - check if one tree is subtree of another\n- Maximum Depth of Binary Tree (LeetCode #104) - similar recursive pattern\n\nKeep practicing tree lessons - they're fundamental for interviews!",
       "action": "continue"
     }
   ]

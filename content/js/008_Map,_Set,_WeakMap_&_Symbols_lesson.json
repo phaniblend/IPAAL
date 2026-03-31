@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-js-08",
     "track": "js",
-    "problemNum": 8,
+    "lessonNum": 8,
     "title": "Map, Set, WeakMap & Symbols",
     "shortName": "P08",
     "intro": {

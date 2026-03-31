@@ -8,4 +8,4 @@ const NODES = [
 // BM25: TF-IDF variant for relevance score`, feedback_correct: "✅ Inverted index: term→docs; ES shards; BM25 for scoring.", feedback_wrong: "Inverted index; Elasticsearch sharding; BM25.", expected: "Search systems" },
 ];
 const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }];
-export default createINPACTEngine({ NODES, sideItems, problemNum: "SD-11", title: "Search systems", shortName: "SD — SEARCH" });
+export default createINPACTEngine({ NODES, sideItems, lessonNum: "SD-11", title: "Search systems", shortName: "SD — SEARCH" });

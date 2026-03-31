@@ -8,4 +8,4 @@ const NODES = [
 // License: GPL viral; MIT/BSD permissive; audit with license-checker`, feedback_correct: "✅ SBOM = bill of materials; audit fix / Snyk; check licenses.", feedback_wrong: "SBOM; npm audit/Snyk; license compliance.", expected: "Dependency security" },
 ];
 const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }];
-export default createINPACTEngine({ NODES, sideItems, problemNum: "SEC-05", title: "Dependency security", shortName: "SEC — DEPS" });
+export default createINPACTEngine({ NODES, sideItems, lessonNum: "SEC-05", title: "Dependency security", shortName: "SEC — DEPS" });

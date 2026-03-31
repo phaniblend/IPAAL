@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-node-77",
     "track": "node",
-    "problemNum": 77,
+    "lessonNum": 77,
     "title": "Build versioned APIs v1 and v2 with compatibility",
     "shortName": "P77",
     "intro": {

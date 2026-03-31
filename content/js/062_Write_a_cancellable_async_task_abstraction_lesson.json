@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-js-62",
     "track": "js",
-    "problemNum": 62,
+    "lessonNum": 62,
     "title": "Write a cancellable async task abstraction",
     "shortName": "P62",
     "intro": {

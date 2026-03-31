@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-js-17",
     "track": "js",
-    "problemNum": 17,
+    "lessonNum": 17,
     "title": "Write controlled input and live preview",
     "shortName": "P17",
     "intro": {

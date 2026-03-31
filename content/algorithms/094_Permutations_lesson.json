@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-algorithms-94",
     "track": "algorithms",
-    "problemNum": 94,
+    "lessonNum": 94,
     "title": "Permutations",
     "shortName": "P94",
     "intro": {
@@ -38,7 +38,7 @@
         "phase": "Step 2 of 18",
         "title": "What you'll learn",
         "content": {
-          "body": "By the end of this lesson, you'll be able to:\n1. Explain the backtracking approach to generating permutations\n2. Implement a recursive function that builds permutations\n3. Understand when and why we need to undo choices\n4. Apply backtracking to solve similar combinatorial problems",
+          "body": "By the end of this lesson, you'll be able to:\n1. Explain the backtracking approach to generating permutations\n2. Implement a recursive function that builds permutations\n3. Understand when and why we need to undo choices\n4. Apply backtracking to solve similar combinatorial lessons",
           "title": "What you'll learn"
         }
       },
@@ -336,7 +336,7 @@
         "phase": "Step 18 of 18",
         "title": "Done",
         "content": {
-          "body": "Congratulations! You've implemented a backtracking algorithm to generate all permutations. Remember: backtracking follows the pattern of try → explore → undo. This pattern is powerful for solving many combinatorial problems where you need to explore all possibilities. The key insight is that after exploring one path, you must undo your last choice to try other options.",
+          "body": "Congratulations! You've implemented a backtracking algorithm to generate all permutations. Remember: backtracking follows the pattern of try → explore → undo. This pattern is powerful for solving many combinatorial lessons where you need to explore all possibilities. The key insight is that after exploring one path, you must undo your last choice to try other options.",
           "title": "Done"
         }
       }

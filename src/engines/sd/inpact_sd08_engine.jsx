@@ -8,4 +8,4 @@ const NODES = [
 // Health check: remove unhealthy from pool`, feedback_correct: "✅ L4 transport; L7 application; consistent hashing for caches; health checks remove bad nodes.", feedback_wrong: "L4 vs L7; consistent hashing; health checks.", expected: "Load balancing" },
 ];
 const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }];
-export default createINPACTEngine({ NODES, sideItems, problemNum: "SD-08", title: "Load balancing", shortName: "SD — LB" });
+export default createINPACTEngine({ NODES, sideItems, lessonNum: "SD-08", title: "Load balancing", shortName: "SD — LB" });

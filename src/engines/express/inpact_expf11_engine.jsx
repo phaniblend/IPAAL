@@ -28,4 +28,4 @@ wss.on('connection', (ws) => {
 ];
 
 const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }];
-export default createINPACTEngine({ NODES, sideItems, problemNum: "EXP-F11", title: "WebSockets with Express", shortName: "EXP — WEBSOCKET" });
+export default createINPACTEngine({ NODES, sideItems, lessonNum: "EXP-F11", title: "WebSockets with Express", shortName: "EXP — WEBSOCKET" });

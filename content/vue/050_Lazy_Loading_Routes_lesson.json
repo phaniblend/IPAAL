@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-vue-50",
     "track": "vue",
-    "problemNum": 50,
+    "lessonNum": 50,
     "title": "Lazy Loading Routes",
     "shortName": "P50",
     "intro": {

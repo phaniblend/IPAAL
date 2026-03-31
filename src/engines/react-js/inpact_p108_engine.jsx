@@ -9,4 +9,4 @@ const NODES = [
 ];
 
 const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
-export default createINPACTEngine({ NODES, sideItems, problemNum: 108, title: "Next.js App Router Fundamentals", shortName: "NEXT.JS APP ROUTER" });
+export default createINPACTEngine({ NODES, sideItems, lessonNum: 108, title: "Next.js App Router Fundamentals", shortName: "NEXT.JS APP ROUTER" });

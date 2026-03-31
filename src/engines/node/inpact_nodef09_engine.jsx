@@ -26,4 +26,4 @@ crypto.timingSafeEqual(a, b) // same length buffers`,
 ];
 
 const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }];
-export default createINPACTEngine({ NODES, sideItems, problemNum: "NODE-F09", title: "Crypto module", shortName: "NODE — CRYPTO" });
+export default createINPACTEngine({ NODES, sideItems, lessonNum: "NODE-F09", title: "Crypto module", shortName: "NODE — CRYPTO" });

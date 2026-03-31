@@ -26,4 +26,4 @@ path.join(__dirname, 'public', 'index.html')`,
 ];
 
 const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }];
-export default createINPACTEngine({ NODES, sideItems, problemNum: "NODE-F10", title: "Path, URL & OS", shortName: "NODE — PATH" });
+export default createINPACTEngine({ NODES, sideItems, lessonNum: "NODE-F10", title: "Path, URL & OS", shortName: "NODE — PATH" });

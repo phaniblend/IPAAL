@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-fe-02",
     "track": "fe",
-    "problemNum": 2,
+    "lessonNum": 2,
     "title": "Accessibility (a11y)",
     "shortName": "P02",
     "intro": {

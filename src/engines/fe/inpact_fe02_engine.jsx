@@ -8,4 +8,4 @@ const NODES = [
 // Test: NVDA, VoiceOver; keyboard only`, feedback_correct: "✅ WCAG levels; aria-label for icons; screen reader testing.", feedback_wrong: "WCAG; ARIA; keyboard and screen reader testing.", expected: "Accessibility" },
 ];
 const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }];
-export default createINPACTEngine({ NODES, sideItems, problemNum: "FE-02", title: "Accessibility (a11y)", shortName: "FE — A11Y" });
+export default createINPACTEngine({ NODES, sideItems, lessonNum: "FE-02", title: "Accessibility (a11y)", shortName: "FE — A11Y" });

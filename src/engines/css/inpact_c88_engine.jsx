@@ -73,7 +73,7 @@ function getOutputPreview(answer) {
 export default createINPACTEngine({
   NODES,
   sideItems,
-  problemNum: 88,
+  lessonNum: 88,
   title: "list-style and counters",
   shortName: "C88",
   language: "css",

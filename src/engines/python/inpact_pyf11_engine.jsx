@@ -8,4 +8,4 @@ const NODES = [
 # twine upload dist/*`, feedback_correct: "✅ pyproject.toml [project]; uv/poetry for env; twine for PyPI.", feedback_wrong: "pyproject.toml; uv or poetry; twine upload for PyPI.", expected: "Packaging" },
 ];
 const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }];
-export default createINPACTEngine({ NODES, sideItems, problemNum: "PY-F11", title: "Packaging & environments", shortName: "PY — PACKAGING" });
+export default createINPACTEngine({ NODES, sideItems, lessonNum: "PY-F11", title: "Packaging & environments", shortName: "PY — PACKAGING" });

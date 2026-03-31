@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-ts-95",
     "track": "ts",
-    "problemNum": 95,
+    "lessonNum": 95,
     "title": "Build typed visitor pattern",
     "shortName": "P95",
     "intro": {

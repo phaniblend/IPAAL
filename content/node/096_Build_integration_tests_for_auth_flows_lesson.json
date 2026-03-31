@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-node-96",
     "track": "node",
-    "problemNum": 96,
+    "lessonNum": 96,
     "title": "Build integration tests for auth flows",
     "shortName": "P96",
     "intro": {

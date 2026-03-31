@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-js-86",
     "track": "js",
-    "problemNum": 86,
+    "lessonNum": 86,
     "title": "Build date range picker logic",
     "shortName": "P86",
     "intro": {

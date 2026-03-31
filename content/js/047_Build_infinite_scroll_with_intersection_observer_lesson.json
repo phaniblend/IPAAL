@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-js-47",
     "track": "js",
-    "problemNum": 47,
+    "lessonNum": 47,
     "title": "Build infinite scroll with intersection observer",
     "shortName": "P47",
     "intro": {

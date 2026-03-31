@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-react-js-24",
     "track": "react-js",
-    "problemNum": 24,
+    "lessonNum": 24,
     "title": "Simple Todo List — CRUD",
     "shortName": "JS — TODO LIST",
     "intro": {

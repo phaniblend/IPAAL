@@ -390,4 +390,4 @@ const sideItems = [
   { label: "Step 5 — Log middleware", id: "step5" },
 ];
 
-export default createINPACTEngine({ NODES, sideItems, problemNum: "PE-01", title: "Observability — Logs, Metrics & Traces", shortName: "PE — OBSERVABILITY" });
+export default createINPACTEngine({ NODES, sideItems, lessonNum: "PE-01", title: "Observability — Logs, Metrics & Traces", shortName: "PE — OBSERVABILITY" });

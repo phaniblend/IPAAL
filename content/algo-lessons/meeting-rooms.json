@@ -10,11 +10,11 @@
       "stepId": "title",
       "mentorSays": "At the end of this lesson, you will be able to:\n\n1. Understand what Meeting Rooms asks for\n2. Check if meetings can be attended\n3. Sort intervals by start time\n4. Check for overlaps\n5. Implement the solution step by step in your chosen language",
       "action": "continue",
-      "next": "problem-illustration"
+      "next": "lesson-illustration"
     },
     {
-      "stepId": "problem-illustration",
-      "mentorSays": "Perfect! Now let's understand what Meeting Rooms is asking.\n\n**Problem Definition:**\nGiven an array of meeting time intervals `intervals` where intervals[i] = [starti, endi], determine if a person could attend all meetings.\n\n**Example 1:** intervals = [[0,30],[5,10],[15,20]]\n[0,30] and [5,10] overlap → Cannot attend all\nAnswer: false\n\n**Example 2:** intervals = [[7,10],[2,4]]\nNo overlaps → Can attend all\nAnswer: true\n\n**Key Insight:** Sort by start time, check if any interval overlaps with next (current.end > next.start).",
+      "stepId": "lesson-illustration",
+      "mentorSays": "Perfect! Now let's understand what Meeting Rooms is asking.\n\n**Lesson Definition:**\nGiven an array of meeting time intervals `intervals` where intervals[i] = [starti, endi], determine if a person could attend all meetings.\n\n**Example 1:** intervals = [[0,30],[5,10],[15,20]]\n[0,30] and [5,10] overlap → Cannot attend all\nAnswer: false\n\n**Example 2:** intervals = [[7,10],[2,4]]\nNo overlaps → Can attend all\nAnswer: true\n\n**Key Insight:** Sort by start time, check if any interval overlaps with next (current.end > next.start).",
       "example": "Example: [[0,30],[5,10],[15,20]] → false (overlap), [[7,10],[2,4]] → true (no overlap)",
       "action": "continue",
       "next": "thinking-challenge"

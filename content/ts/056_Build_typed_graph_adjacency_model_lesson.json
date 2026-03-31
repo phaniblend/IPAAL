@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-ts-56",
     "track": "ts",
-    "problemNum": 56,
+    "lessonNum": 56,
     "title": "Build typed graph adjacency model",
     "shortName": "P56",
     "intro": {

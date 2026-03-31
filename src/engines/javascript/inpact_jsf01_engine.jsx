@@ -211,4 +211,4 @@ const sideItems = [
   { label: "Step 5 — Compose", id: "step5" },
 ];
 
-export default createINPACTEngine({ NODES, sideItems, problemNum: "JS-F01", title: "Variables & Destructuring", shortName: "JS — DESTRUCTURING" });
+export default createINPACTEngine({ NODES, sideItems, lessonNum: "JS-F01", title: "Variables & Destructuring", shortName: "JS — DESTRUCTURING" });

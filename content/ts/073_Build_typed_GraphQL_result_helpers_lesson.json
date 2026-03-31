@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-ts-73",
     "track": "ts",
-    "problemNum": 73,
+    "lessonNum": 73,
     "title": "Build typed GraphQL result helpers",
     "shortName": "P73",
     "intro": {

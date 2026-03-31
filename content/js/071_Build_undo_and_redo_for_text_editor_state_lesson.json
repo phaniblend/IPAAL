@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-js-71",
     "track": "js",
-    "problemNum": 71,
+    "lessonNum": 71,
     "title": "Build undo and redo for text editor state",
     "shortName": "P71",
     "intro": {

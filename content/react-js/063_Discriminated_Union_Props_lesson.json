@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-react-js-63",
     "track": "react-js",
-    "problemNum": 63,
+    "lessonNum": 63,
     "title": "Discriminated Union Props",
     "shortName": "P63",
     "intro": {

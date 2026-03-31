@@ -25,4 +25,4 @@ const NODES = [
 ];
 
 const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }];
-export default createINPACTEngine({ NODES, sideItems, problemNum: "NODE-F14", title: "Performance & profiling", shortName: "NODE — PROFILING" });
+export default createINPACTEngine({ NODES, sideItems, lessonNum: "NODE-F14", title: "Performance & profiling", shortName: "NODE — PROFILING" });

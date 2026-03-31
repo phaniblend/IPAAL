@@ -73,7 +73,7 @@ function getOutputPreview(answer) {
 export default createINPACTEngine({
   NODES,
   sideItems,
-  problemNum: 78,
+  lessonNum: 78,
   title: "::placeholder and ::selection",
   shortName: "C78",
   language: "css",

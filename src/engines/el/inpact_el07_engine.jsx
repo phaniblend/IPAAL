@@ -8,4 +8,4 @@ const NODES = [
 // DACI: Driver, Approver, Contributors, Informed`, feedback_correct: "✅ RFC = design doc + feedback; RACI/DACI for roles; align with PM on outcomes.", feedback_wrong: "RFC; RACI/DACI; cross-functional alignment.", expected: "Cross-functional" },
 ];
 const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }];
-export default createINPACTEngine({ NODES, sideItems, problemNum: "EL-07", title: "Cross-functional collaboration", shortName: "EL — COLLAB" });
+export default createINPACTEngine({ NODES, sideItems, lessonNum: "EL-07", title: "Cross-functional collaboration", shortName: "EL — COLLAB" });

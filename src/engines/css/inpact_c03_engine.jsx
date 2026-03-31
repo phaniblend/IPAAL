@@ -179,7 +179,7 @@ function getOutputPreview(answer) {
 export default createINPACTEngine({
   NODES,
   sideItems,
-  problemNum: 3,
+  lessonNum: 3,
   title: "Margin Collapse",
   shortName: "MARGIN COLLAPSE",
   language: "css",

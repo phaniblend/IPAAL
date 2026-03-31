@@ -73,7 +73,7 @@ function getOutputPreview(answer) {
 export default createINPACTEngine({
   NODES,
   sideItems,
-  problemNum: 79,
+  lessonNum: 79,
   title: "isolation and stacking",
   shortName: "C79",
   language: "css",

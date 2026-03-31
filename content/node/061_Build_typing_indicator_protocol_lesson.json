@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-node-61",
     "track": "node",
-    "problemNum": 61,
+    "lessonNum": 61,
     "title": "Build typing indicator protocol",
     "shortName": "P61",
     "intro": {

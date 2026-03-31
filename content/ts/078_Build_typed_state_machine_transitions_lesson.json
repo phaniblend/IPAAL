@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-ts-78",
     "track": "ts",
-    "problemNum": 78,
+    "lessonNum": 78,
     "title": "Build typed state machine transitions",
     "shortName": "P78",
     "intro": {

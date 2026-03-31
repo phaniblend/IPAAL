@@ -205,4 +205,4 @@ const sideItems = [
   { label: "Step 3 — Immutable objects", id: "step3" }, { label: "Step 4 — Immer", id: "step4" },
   { label: "Step 5 — Referential transparency", id: "step5" },
 ];
-export default createINPACTEngine({ NODES, sideItems, problemNum: "JS-D01", title: "Pure Functions & Immutability", shortName: "JS — PURE FP" });
+export default createINPACTEngine({ NODES, sideItems, lessonNum: "JS-D01", title: "Pure Functions & Immutability", shortName: "JS — PURE FP" });

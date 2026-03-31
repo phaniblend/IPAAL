@@ -3,13 +3,13 @@
   "config": {
     "lessonId": "ai-algorithms-10",
     "track": "algorithms",
-    "problemNum": 10,
+    "lessonNum": 10,
     "title": "Subarray Sum Equals K",
     "shortName": "P10",
     "intro": {
       "tag": "LESSON #10",
       "title": "Subarray Sum Equals K",
-      "body": "In this lesson, you will build a function that counts the number of contiguous subarrays within an array of integers whose sum equals a given target value, k. You will learn the core concept of using a hash map (or object) to store cumulative sums, which allows for efficient O(n) time complexity by avoiding nested loops. The main technologies involved are JavaScript arrays, objects for the hash map, and basic arithmetic operations. This approach demonstrates a common pattern in algorithm design for optimizing problems that involve subarray sums.",
+      "body": "In this lesson, you will build a function that counts the number of contiguous subarrays within an array of integers whose sum equals a given target value, k. You will learn the core concept of using a hash map (or object) to store cumulative sums, which allows for efficient O(n) time complexity by avoiding nested loops. The main technologies involved are JavaScript arrays, objects for the hash map, and basic arithmetic operations. This approach demonstrates a common pattern in algorithm design for optimizing lessons that involve subarray sums.",
       "usecase": "The 'Subarray Sum Equals K' algorithm is a core pattern for analyzing contiguous data segments in real-time systems. For instance, in a financial dashboard, it can identify periods where daily transaction sums match a target threshold, helping detect anomalies or specific performance goals. In e-commerce analytics, it can find time windows where user activity sums to a promotional target, enabling dynamic UI updates for marketing panels. This technique is essential for building interactive filters and data visualizations that require efficient, on-the-fly computation over sequences."
     },
     "objectives": [
@@ -28,7 +28,7 @@
         "phase": "Step 1 of 16",
         "title": "Welcome",
         "content": {
-          "body": "Have you ever wondered how to efficiently find all subarrays that sum to a specific number? In this lesson, we'll learn a clever technique using a hash map to solve this common problem. You'll discover how remembering what you've already seen can dramatically improve your algorithm's speed.",
+          "body": "Have you ever wondered how to efficiently find all subarrays that sum to a specific number? In this lesson, we'll learn a clever technique using a hash map to solve this common lesson. You'll discover how remembering what you've already seen can dramatically improve your algorithm's speed.",
           "title": "Welcome"
         }
       },
@@ -295,7 +295,7 @@
         "phase": "Step 16 of 16",
         "title": "Done",
         "content": {
-          "body": "Congratulations! You've implemented an efficient solution to count subarrays summing to K. Remember these key points:\n\n1. We store prefix sums as keys in our lookup structure and their frequencies as values\n2. We check the structure BEFORE adding the current prefix sum (to avoid counting the current element as matching itself)\n3. The initial {0: 1} in the map handles subarrays starting from index 0\n4. This approach transforms an O(n²) brute force solution into an O(n) efficient algorithm\n\nThis 'remember what we've already seen' pattern with hash maps is powerful for many array problems!",
+          "body": "Congratulations! You've implemented an efficient solution to count subarrays summing to K. Remember these key points:\n\n1. We store prefix sums as keys in our lookup structure and their frequencies as values\n2. We check the structure BEFORE adding the current prefix sum (to avoid counting the current element as matching itself)\n3. The initial {0: 1} in the map handles subarrays starting from index 0\n4. This approach transforms an O(n²) brute force solution into an O(n) efficient algorithm\n\nThis 'remember what we've already seen' pattern with hash maps is powerful for many array lessons!",
           "title": "Done"
         }
       }

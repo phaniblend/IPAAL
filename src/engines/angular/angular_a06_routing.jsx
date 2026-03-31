@@ -565,7 +565,7 @@ const sideItems = [
   { id: "wfs", label: "Write From Scratch" },
 ];
 
-export default function AngularA06Routing({ onNextProblem }) {
+export default function AngularA06Routing({ onNextLesson }) {
   const [nodeIndex, setNodeIndex] = useState(0);
   const [answers, setAnswers] = useState({});
   const [result, setResult] = useState(null);
@@ -730,7 +730,7 @@ export default function AngularA06Routing({ onNextProblem }) {
         {allChecked && (
           <div>
             <div style={s.feedback("correct")}>{"✅ Engine A06 Complete — Routing & Guards mastered.\nNext: Engine A07 — Change Detection & Signals"}</div>
-            <div style={s.btnRow}><button style={s.btn("primary")} onClick={onNextProblem ?? next}>NEXT ENGINE →</button></div>
+            <div style={s.btnRow}><button style={s.btn("primary")} onClick={onNextLesson ?? next}>NEXT ENGINE →</button></div>
           </div>
         )}
       </div>
@@ -743,7 +743,7 @@ export default function AngularA06Routing({ onNextProblem }) {
         <div style={{ fontSize: "48px", marginBottom: "24px" }}>🎯</div>
         <h1 style={{ ...s.h1, textAlign: "center" }}>Engine ANG06 Complete</h1>
         <p style={{ color: "#4a5568", fontSize: "13px" }}>Routing & Guards — mastered.</p>
-        {onNextProblem && <div style={{ ...s.btnRow, justifyContent: "center", marginTop: "24px" }}><button style={s.btn("primary")} onClick={onNextProblem}>NEXT ENGINE →</button></div>}
+        {onNextLesson && <div style={{ ...s.btnRow, justifyContent: "center", marginTop: "24px" }}><button style={s.btn("primary")} onClick={onNextLesson}>NEXT ENGINE →</button></div>}
       </div>
     );
   }

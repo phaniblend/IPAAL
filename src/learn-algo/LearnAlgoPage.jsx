@@ -7,7 +7,7 @@ import { useState, useEffect, useCallback } from "react";
 
 const API = "/api/mentor";
 
-export default function LearnAlgoPage({ lessonId, lessonTitle, onBackToProblems }) {
+export default function LearnAlgoPage({ lessonId, lessonTitle, onBackToLessons }) {
   const [step, setStep] = useState(null);
   const [done, setDone] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -122,7 +122,7 @@ export default function LearnAlgoPage({ lessonId, lessonTitle, onBackToProblems 
     return (
       <div style={wrapStyle}>
         <div style={headerStyle}>
-          <button type="button" style={btnPrimary} onClick={onBackToProblems}>
+          <button type="button" style={btnPrimary} onClick={onBackToLessons}>
             ← All Lessons
           </button>
           <span style={{ fontSize: "14px", color: "#64748b" }}>{lessonTitle || lessonId}</span>
@@ -141,14 +141,14 @@ export default function LearnAlgoPage({ lessonId, lessonTitle, onBackToProblems 
     return (
       <div style={wrapStyle}>
         <div style={headerStyle}>
-          <button type="button" style={btnPrimary} onClick={onBackToProblems}>
+          <button type="button" style={btnPrimary} onClick={onBackToLessons}>
             ← All Lessons
           </button>
         </div>
         <div style={cardStyle}>
           <h2 style={{ marginBottom: "12px", color: "#0f172a" }}>Lesson complete</h2>
           <p style={{ marginBottom: "20px", color: "#64748b" }}>You’ve finished this lesson.</p>
-          <button type="button" style={btnPrimary} onClick={onBackToProblems}>
+          <button type="button" style={btnPrimary} onClick={onBackToLessons}>
             Back to Algorithms
           </button>
         </div>
@@ -160,7 +160,7 @@ export default function LearnAlgoPage({ lessonId, lessonTitle, onBackToProblems 
     return (
       <div style={wrapStyle}>
         <div style={headerStyle}>
-          <button type="button" style={btnPrimary} onClick={onBackToProblems}>
+          <button type="button" style={btnPrimary} onClick={onBackToLessons}>
             ← All Lessons
           </button>
         </div>
@@ -176,7 +176,7 @@ export default function LearnAlgoPage({ lessonId, lessonTitle, onBackToProblems 
   return (
     <div style={wrapStyle}>
       <div style={headerStyle}>
-        <button type="button" style={btnPrimary} onClick={onBackToProblems}>
+        <button type="button" style={btnPrimary} onClick={onBackToLessons}>
           ← All Lessons
         </button>
         <span style={{ fontSize: "14px", color: "#64748b" }}>{lessonTitle || lessonId}</span>

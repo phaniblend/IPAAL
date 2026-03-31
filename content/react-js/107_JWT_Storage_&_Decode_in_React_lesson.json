@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-react-js-107",
     "track": "react-js",
-    "problemNum": 107,
+    "lessonNum": 107,
     "title": "JWT Storage & Decode in React",
     "shortName": "P107",
     "intro": {

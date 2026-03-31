@@ -583,7 +583,7 @@ const sideItems = [
   { id: "wfs", label: "Write From Scratch" },
 ];
 
-export default function AngularA07ChangeDetection({ onNextProblem }) {
+export default function AngularA07ChangeDetection({ onNextLesson }) {
   const [nodeIndex, setNodeIndex] = useState(0);
   const [answers, setAnswers] = useState({});
   const [result, setResult] = useState(null);
@@ -748,7 +748,7 @@ export default function AngularA07ChangeDetection({ onNextProblem }) {
         {allChecked && (
           <div>
             <div style={s.feedback("correct")}>{"✅ Engine ANG07 Complete — Change Detection & Signals mastered.\nOne engine left: ANG08 — Module Federation"}</div>
-            <div style={s.btnRow}><button style={s.btn("primary")} onClick={onNextProblem ?? next}>NEXT ENGINE →</button></div>
+            <div style={s.btnRow}><button style={s.btn("primary")} onClick={onNextLesson ?? next}>NEXT ENGINE →</button></div>
           </div>
         )}
       </div>
@@ -761,7 +761,7 @@ export default function AngularA07ChangeDetection({ onNextProblem }) {
         <div style={{ fontSize: "48px", marginBottom: "24px" }}>🎯</div>
         <h1 style={{ ...s.h1, textAlign: "center" }}>Engine ANG07 Complete</h1>
         <p style={{ color: "#4a5568", fontSize: "13px" }}>Change Detection & Signals — mastered.</p>
-        {onNextProblem && <div style={{ ...s.btnRow, justifyContent: "center", marginTop: "24px" }}><button style={s.btn("primary")} onClick={onNextProblem}>FINAL ENGINE →</button></div>}
+        {onNextLesson && <div style={{ ...s.btnRow, justifyContent: "center", marginTop: "24px" }}><button style={s.btn("primary")} onClick={onNextLesson}>FINAL ENGINE →</button></div>}
       </div>
     );
   }

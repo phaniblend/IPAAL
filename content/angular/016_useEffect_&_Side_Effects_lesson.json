@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-angular-16",
     "track": "angular",
-    "problemNum": 16,
+    "lessonNum": 16,
     "title": "useEffect & Side Effects",
     "shortName": "P16",
     "intro": {

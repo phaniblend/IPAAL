@@ -71,7 +71,7 @@ export default function StatusCard() {
     type: "question",
     phase: "Step 2 of 5",
     paal: "Write a toggle function called handleAuth that flips isLoggedIn. One click logs in, another logs out. Use the functional update form.",
-    hint: "Same toggle pattern as Problem #2 — flip the boolean using prev:\nconst handleAuth = () => setIsLoggedIn(prev => !prev)",
+    hint: "Same toggle pattern as Lesson #2 — flip the boolean using prev:\nconst handleAuth = () => setIsLoggedIn(prev => !prev)",
     example_code: `const toggle = () => setIsVisible(prev => !prev)`,
     evaluate: (ans) => {
       const a = ans.toLowerCase().replace(/\s/g, "");
@@ -270,4 +270,4 @@ const sideItems = [
   { label: "Step 5 — Full", id: "step5" },
 ];
 
-export default createINPACTEngine({ NODES, sideItems, problemNum: 5, title: "Conditional Rendering with Ternary", shortName: "TERNARY" });
+export default createINPACTEngine({ NODES, sideItems, lessonNum: 5, title: "Conditional Rendering with Ternary", shortName: "TERNARY" });

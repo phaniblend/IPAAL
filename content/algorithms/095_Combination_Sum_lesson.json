@@ -3,14 +3,14 @@
   "config": {
     "lessonId": "ai-algorithms-95",
     "track": "algorithms",
-    "problemNum": 95,
+    "lessonNum": 95,
     "title": "Combination Sum",
     "shortName": "P95",
     "intro": {
       "tag": "LESSON #95",
       "title": "Combination Sum",
-      "body": "In this lesson, you'll build a function that solves the Combination Sum problem, where you find all unique combinations of numbers from an array that sum to a target value. You'll learn the core concept of backtracking, which is a systematic way to explore all possible solutions by building combinations incrementally and undoing choices that don't lead to valid results. The main technologies involved are JavaScript arrays, recursion, and array manipulation methods. This beginner-friendly lesson will guide you through implementing the algorithm step-by-step, helping you understand how to generate and validate combinations efficiently.",
-      "usecase": "The combination sum algorithm is essential for solving resource allocation and constraint-based selection problems in real applications. In e-commerce, it helps find product bundles that match a customer's budget while maximizing value. In financial software, it identifies investment portfolios that reach target returns with available capital. Developers use this pattern in recommendation engines, shopping cart optimizers, and budget planning tools where users need to explore all possible combinations that meet specific criteria."
+      "body": "In this lesson, you'll build a function that solves the Combination Sum lesson, where you find all unique combinations of numbers from an array that sum to a target value. You'll learn the core concept of backtracking, which is a systematic way to explore all possible solutions by building combinations incrementally and undoing choices that don't lead to valid results. The main technologies involved are JavaScript arrays, recursion, and array manipulation methods. This beginner-friendly lesson will guide you through implementing the algorithm step-by-step, helping you understand how to generate and validate combinations efficiently.",
+      "usecase": "The combination sum algorithm is essential for solving resource allocation and constraint-based selection lessons in real applications. In e-commerce, it helps find product bundles that match a customer's budget while maximizing value. In financial software, it identifies investment portfolios that reach target returns with available capital. Developers use this pattern in recommendation engines, shopping cart optimizers, and budget planning tools where users need to explore all possible combinations that meet specific criteria."
     },
     "objectives": [
       "Implement a recursive backtracking function to explore candidate combinations",
@@ -28,7 +28,7 @@
         "phase": "Step 1 of 19",
         "title": "Introduction",
         "content": {
-          "body": "Welcome! Today we'll solve Combination Sum, a classic algorithm problem. You'll learn how to find all unique combinations in an array that add up to a target number. This builds on the 'remember what we've seen' approach but with a twist for combinations.",
+          "body": "Welcome! Today we'll solve Combination Sum, a classic algorithm lesson. You'll learn how to find all unique combinations in an array that add up to a target number. This builds on the 'remember what we've seen' approach but with a twist for combinations.",
           "title": "Introduction"
         }
       },

@@ -73,7 +73,7 @@ function getOutputPreview(answer) {
 export default createINPACTEngine({
   NODES,
   sideItems,
-  problemNum: 36,
+  lessonNum: 36,
   title: "Attribute selectors",
   shortName: "C36",
   language: "css",

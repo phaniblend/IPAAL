@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-vue-66",
     "track": "vue",
-    "problemNum": 66,
+    "lessonNum": 66,
     "title": "Generic useFetch<T>",
     "shortName": "P66",
     "intro": {

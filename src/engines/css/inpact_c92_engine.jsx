@@ -73,7 +73,7 @@ function getOutputPreview(answer) {
 export default createINPACTEngine({
   NODES,
   sideItems,
-  problemNum: 92,
+  lessonNum: 92,
   title: "prefers-color-scheme (dark mode)",
   shortName: "C92",
   language: "css",

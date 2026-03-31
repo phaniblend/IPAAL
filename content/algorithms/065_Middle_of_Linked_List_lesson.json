@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-algorithms-65",
     "track": "algorithms",
-    "problemNum": 65,
+    "lessonNum": 65,
     "title": "Middle of Linked List",
     "shortName": "P65",
     "intro": {

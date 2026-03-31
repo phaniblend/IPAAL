@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-js-01",
     "track": "js",
-    "problemNum": 1,
+    "lessonNum": 1,
     "title": "Variables, Destructuring & Spread",
     "shortName": "P01",
     "intro": {

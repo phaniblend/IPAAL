@@ -9,4 +9,4 @@ const NODES = [
 // HTTP_INTERCEPTORS multi-provider`, feedback_correct: "✅ http.get<T>(); interceptors via HTTP_INTERCEPTORS; retry/catchError.", feedback_wrong: "HttpClient.get; provide interceptors; pipe retry and catchError.", expected: "HttpClient" },
 ];
 const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }];
-export default createINPACTEngine({ NODES, sideItems, problemNum: "ANG-F05", title: "HTTP client", shortName: "ANG — HTTP" });
+export default createINPACTEngine({ NODES, sideItems, lessonNum: "ANG-F05", title: "HTTP client", shortName: "ANG — HTTP" });

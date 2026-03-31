@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-ts-07",
     "track": "ts",
-    "problemNum": 7,
+    "lessonNum": 7,
     "title": "Enums & Tuples — Structured Constants",
     "shortName": "P07",
     "intro": {

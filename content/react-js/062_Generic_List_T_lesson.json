@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-react-js-62",
     "track": "react-js",
-    "problemNum": 62,
+    "lessonNum": 62,
     "title": "Generic List<T>",
     "shortName": "P62",
     "intro": {

@@ -73,7 +73,7 @@ function getOutputPreview(answer) {
 export default createINPACTEngine({
   NODES,
   sideItems,
-  problemNum: 6,
+  lessonNum: 6,
   title: "Position: relative and absolute",
   shortName: "C06",
   language: "css",

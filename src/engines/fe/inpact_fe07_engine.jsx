@@ -8,4 +8,4 @@ const NODES = [
 // Version: semver; changelog; multiple apps consume`, feedback_correct: "✅ Tokens = design variables; clear API; version and document.", feedback_wrong: "Design tokens; component API; versioning.", expected: "Design systems" },
 ];
 const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }];
-export default createINPACTEngine({ NODES, sideItems, problemNum: "FE-07", title: "Design systems", shortName: "FE — DESIGN SYSTEM" });
+export default createINPACTEngine({ NODES, sideItems, lessonNum: "FE-07", title: "Design systems", shortName: "FE — DESIGN SYSTEM" });

@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-node-114",
     "track": "node",
-    "problemNum": 114,
+    "lessonNum": 114,
     "title": "Build disaster recovery simulation scripts",
     "shortName": "P114",
     "intro": {

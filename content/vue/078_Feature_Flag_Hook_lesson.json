@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-vue-78",
     "track": "vue",
-    "problemNum": 78,
+    "lessonNum": 78,
     "title": "Feature Flag Hook",
     "shortName": "P78",
     "intro": {

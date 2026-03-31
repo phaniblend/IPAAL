@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-ts-71",
     "track": "ts",
-    "problemNum": 71,
+    "lessonNum": 71,
     "title": "Build typed fetch client with endpoint map",
     "shortName": "P71",
     "intro": {

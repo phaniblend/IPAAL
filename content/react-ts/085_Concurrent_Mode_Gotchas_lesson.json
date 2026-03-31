@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-react-ts-85",
     "track": "react-ts",
-    "problemNum": 85,
+    "lessonNum": 85,
     "title": "Concurrent Mode Gotchas",
     "shortName": "P85",
     "intro": {

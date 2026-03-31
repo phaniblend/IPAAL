@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-js-96",
     "track": "js",
-    "problemNum": 96,
+    "lessonNum": 96,
     "title": "Build tiny reactive store with subscriptions",
     "shortName": "P96",
     "intro": {

@@ -94,7 +94,7 @@ CREATE INDEX idx_orders_covering ON orders(user_id) INCLUDE (status);
 --        product_id, product_name, product_price,
 --        qty, order_total, order_date)
 --
--- Problems:
+-- Lessons:
 -- Update anomaly: user_name in 1000 rows — change name → update 1000 rows
 -- Insert anomaly: can't add a user without an order
 -- Delete anomaly: delete last order → lose user data
@@ -135,7 +135,7 @@ CREATE TABLE order_items (
 -- product price can change after purchase — we need the price AT THAT MOMENT
 
 -- ── DELIBERATE DENORMALIZATION ────────────────────────────────
--- Problem: ORDER HISTORY page needs user_name + items + product_names
+-- Lesson: ORDER HISTORY page needs user_name + items + product_names
 -- 3NF requires 4 table JOINs for every page load → slow
 
 -- Solution: materialised view or summary table:
@@ -214,7 +214,7 @@ SELECT current_setting('transaction_isolation');  -- check current level`,
   },
   {
     id: "step4", type: "question", phase: "Step 4 of 5",
-    paal: "Design a sharding strategy. Compare hash sharding vs range sharding vs directory-based. Show the hot-spot problem.",
+    paal: "Design a sharding strategy. Compare hash sharding vs range sharding vs directory-based. Show the hot-spot lesson.",
     answer_keywords: ["sharding", "hash", "range", "hot spot", "shard key", "consistent hashing"],
     seed_code: `// Step 4: database sharding strategies
 
@@ -246,7 +246,7 @@ CONS: Range queries are impossible (data is scattered)
      Adding shards = resharding all data (unless consistent hashing)
 USE:  User data, session data — accessed by exact ID
 
-─── CONSISTENT HASHING (solves resharding problem) ───────────────
+─── CONSISTENT HASHING (solves resharding lesson) ───────────────
 Nodes placed on a virtual ring. Each node owns a range of the ring.
 Adding a node: only redistribute that node's neighbour's data (not all)
 Used by: DynamoDB, Cassandra, Redis Cluster
@@ -296,7 +296,7 @@ Lag:       Replicas are BEHIND the primary by milliseconds to seconds
 User updates their profile (write → primary).
 User immediately requests their profile (read → replica).
 Replica hasn't received the update yet → user sees OLD data.
-This is "read-your-writes" consistency problem.
+This is "read-your-writes" consistency lesson.
 
 ─── ROUTING STRATEGY ─────────────────────────────────────────────
 */
@@ -365,4 +365,4 @@ const sideItems = [
   { label: "Step 5 — Replication", id: "step5" },
 ];
 
-export default createINPACTEngine({ NODES, sideItems, problemNum: "SD-03", title: "Database Design", shortName: "SD — DATABASE" });
+export default createINPACTEngine({ NODES, sideItems, lessonNum: "SD-03", title: "Database Design", shortName: "SD — DATABASE" });

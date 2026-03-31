@@ -8,20 +8,20 @@
   "flow": [
     {
       "stepId": "title",
-      "mentorSays": "At the end of this lesson, you will be able to:\n\n1. Understand what the House Robber problem asks for\n2. Use dynamic programming to find maximum money\n3. Build the solution by deciding whether to rob each house\n4. Implement the solution step by step in your chosen language",
+      "mentorSays": "At the end of this lesson, you will be able to:\n\n1. Understand what the House Robber lesson asks for\n2. Use dynamic programming to find maximum money\n3. Build the solution by deciding whether to rob each house\n4. Implement the solution step by step in your chosen language",
       "action": "continue",
-      "next": "problem-illustration"
+      "next": "lesson-illustration"
     },
     {
-      "stepId": "problem-illustration",
-      "mentorSays": "The House Robber problem teaches the classic 'take or skip' DP pattern.\n\nPROBLEM:\nhouses = [2, 7, 9, 3, 1]\nWhat's the maximum money you can rob?\n\nCONSTRAINT: Can't rob adjacent houses!\n\nGREEDY APPROACH (WRONG):\nRob all odd or even indices:\n- Odd: 7 + 3 = 10\n- Even: 2 + 9 + 1 = 12\nBut is 12 optimal?\n\nDP APPROACH:\nFor each house, decide: ROB or SKIP?\n\nHouse 0 (value=2):\n  rob[0] = 2\n\nHouse 1 (value=7):\n  rob[1] = max(rob[0], 7 + 0) = max(2, 7) = 7\n  \nHouse 2 (value=9):\n  rob[2] = max(rob[1], 9 + rob[0])\n         = max(7, 9 + 2) = max(7, 11) = 11\n  \nHouse 3 (value=3):\n  rob[3] = max(rob[2], 3 + rob[1])\n         = max(11, 3 + 7) = max(11, 10) = 11\n  \nHouse 4 (value=1):\n  rob[4] = max(rob[3], 1 + rob[2])\n         = max(11, 1 + 11) = max(11, 12) = 12\n\nANSWER: 12\n\nWHICH HOUSES? Trace back:\nrob[4] = 12 came from (1 + rob[2])\n  → Robbed house 4\nrob[2] = 11 came from (9 + rob[0])\n  → Robbed house 2\nrob[0] = 2\n  → Robbed house 0\n\nHouses robbed: [0, 2, 4] → [2, 9, 1] → Total: 12 ✓\n\nDP TABLE:\nIndex:   0  1  2  3  4\nHouses:  2  7  9  3  1\nRob:     2  7  11 11 12\n\nRECURRENCE RELATION:\nrob[i] = max(\n  rob[i-1],              // Skip this house\n  nums[i] + rob[i-2]     // Rob this house\n)\n\nBASE CASES:\nrob[0] = nums[0]\nrob[1] = max(nums[0], nums[1])\n\nTIME: O(n)\nSPACE: O(n) or O(1) with optimization",
+      "stepId": "lesson-illustration",
+      "mentorSays": "The House Robber lesson teaches the classic 'take or skip' DP pattern.\n\nPROBLEM:\nhouses = [2, 7, 9, 3, 1]\nWhat's the maximum money you can rob?\n\nCONSTRAINT: Can't rob adjacent houses!\n\nGREEDY APPROACH (WRONG):\nRob all odd or even indices:\n- Odd: 7 + 3 = 10\n- Even: 2 + 9 + 1 = 12\nBut is 12 optimal?\n\nDP APPROACH:\nFor each house, decide: ROB or SKIP?\n\nHouse 0 (value=2):\n  rob[0] = 2\n\nHouse 1 (value=7):\n  rob[1] = max(rob[0], 7 + 0) = max(2, 7) = 7\n  \nHouse 2 (value=9):\n  rob[2] = max(rob[1], 9 + rob[0])\n         = max(7, 9 + 2) = max(7, 11) = 11\n  \nHouse 3 (value=3):\n  rob[3] = max(rob[2], 3 + rob[1])\n         = max(11, 3 + 7) = max(11, 10) = 11\n  \nHouse 4 (value=1):\n  rob[4] = max(rob[3], 1 + rob[2])\n         = max(11, 1 + 11) = max(11, 12) = 12\n\nANSWER: 12\n\nWHICH HOUSES? Trace back:\nrob[4] = 12 came from (1 + rob[2])\n  → Robbed house 4\nrob[2] = 11 came from (9 + rob[0])\n  → Robbed house 2\nrob[0] = 2\n  → Robbed house 0\n\nHouses robbed: [0, 2, 4] → [2, 9, 1] → Total: 12 ✓\n\nDP TABLE:\nIndex:   0  1  2  3  4\nHouses:  2  7  9  3  1\nRob:     2  7  11 11 12\n\nRECURRENCE RELATION:\nrob[i] = max(\n  rob[i-1],              // Skip this house\n  nums[i] + rob[i-2]     // Rob this house\n)\n\nBASE CASES:\nrob[0] = nums[0]\nrob[1] = max(nums[0], nums[1])\n\nTIME: O(n)\nSPACE: O(n) or O(1) with optimization",
       "example": "nums = [2, 7, 9, 3, 1]\n\nFind maximum money:\n- Rob houses 0, 2, 4: 2 + 9 + 1 = 12 ✓\n\nAnswer: 12\n\nAnother example:\nnums = [1, 2, 3, 1]\n\nAnswer: 4 (rob houses 0 and 2: 1 + 3 = 4)\n\nAnother example:\nnums = [2, 1, 1, 2]\n\nAnswer: 4 (rob houses 0 and 3: 2 + 2 = 4)",
       "action": "continue",
       "next": "thinking-challenge"
     },
     {
       "stepId": "thinking-challenge",
-      "mentorSays": "Now that you understand what the problem wants, here's the real question:\n\nHow would YOU find the maximum money?\n\nThink about it for a moment. What approach feels natural to you?",
+      "mentorSays": "Now that you understand what the lesson wants, here's the real question:\n\nHow would YOU find the maximum money?\n\nThink about it for a moment. What approach feels natural to you?",
       "choices": [
         {
           "label": "Use dynamic programming to track maximum money at each house",
@@ -143,7 +143,7 @@
       "choices": [
         {
           "label": "Yes, I know base-cases",
-          "next": "choice-problem-check-js"
+          "next": "choice-lesson-check-js"
         },
         {
           "label": "No, explain base-cases",
@@ -152,22 +152,22 @@
       ]
     },
     {
-      "stepId": "choice-problem-check-js",
-      "mentorSays": "Do you understand decision/choice problems in dynamic programming?",
+      "stepId": "choice-lesson-check-js",
+      "mentorSays": "Do you understand decision/choice lessons in dynamic programming?",
       "choices": [
         {
-          "label": "Yes, I know choice-problem",
+          "label": "Yes, I know choice-lesson",
           "next": "coding-start-js"
         },
         {
-          "label": "No, explain choice-problem",
-          "next": "choice-problem-explanation-js"
+          "label": "No, explain choice-lesson",
+          "next": "choice-lesson-explanation-js"
         }
       ]
     },
     {
-      "stepId": "choice-problem-explanation-js",
-      "mentorSays": "In choice problems, at each step you decide between options. For House Robber: OPTION 1: Rob current house → Can't rob previous. OPTION 2: Skip current house → Can rob previous. We take the maximum of these two choices!\n\n// At each house, we have TWO choices:\n// OPTION 1: Rob this house → nums[i] + dp[i-2]\n// OPTION 2: Skip this house → dp[i-1]\n\n// Take the maximum:\ndp[i] = Math.max(\n  dp[i-1],              // Skip house i\n  nums[i] + dp[i-2]     // Rob house i\n);\n\nGot it?",
+      "stepId": "choice-lesson-explanation-js",
+      "mentorSays": "In choice lessons, at each step you decide between options. For House Robber: OPTION 1: Rob current house → Can't rob previous. OPTION 2: Skip current house → Can rob previous. We take the maximum of these two choices!\n\n// At each house, we have TWO choices:\n// OPTION 1: Rob this house → nums[i] + dp[i-2]\n// OPTION 2: Skip this house → dp[i-1]\n\n// Take the maximum:\ndp[i] = Math.max(\n  dp[i-1],              // Skip house i\n  nums[i] + dp[i-2]     // Rob house i\n);\n\nGot it?",
       "example": "// At each house, we have TWO choices:\n// OPTION 1: Rob this house → nums[i] + dp[i-2]\n// OPTION 2: Skip this house → dp[i-1]\n\n// Take the maximum:\ndp[i] = Math.max(\n  dp[i-1],              // Skip house i\n  nums[i] + dp[i-2]     // Rob house i\n);",
       "action": "continue",
       "next": "coding-start-js"
@@ -304,7 +304,7 @@
       "choices": [
         {
           "label": "Yes, I know base-cases",
-          "next": "choice-problem-check-python"
+          "next": "choice-lesson-check-python"
         },
         {
           "label": "No, explain base-cases",
@@ -313,22 +313,22 @@
       ]
     },
     {
-      "stepId": "choice-problem-check-python",
-      "mentorSays": "Do you understand decision/choice problems in dynamic programming?",
+      "stepId": "choice-lesson-check-python",
+      "mentorSays": "Do you understand decision/choice lessons in dynamic programming?",
       "choices": [
         {
-          "label": "Yes, I know choice-problem",
+          "label": "Yes, I know choice-lesson",
           "next": "coding-start-python"
         },
         {
-          "label": "No, explain choice-problem",
-          "next": "choice-problem-explanation-python"
+          "label": "No, explain choice-lesson",
+          "next": "choice-lesson-explanation-python"
         }
       ]
     },
     {
-      "stepId": "choice-problem-explanation-python",
-      "mentorSays": "In choice problems, at each step you decide between options. For House Robber: OPTION 1: Rob current house → Can't rob previous. OPTION 2: Skip current house → Can rob previous. We take the maximum of these two choices!\n\n# At each house, we have TWO choices:\n# OPTION 1: Rob this house → nums[i] + dp[i-2]\n# OPTION 2: Skip this house → dp[i-1]\n\n# Take the maximum:\ndp[i] = max(\n    dp[i-1],              # Skip house i\n    nums[i] + dp[i-2]     # Rob house i\n)\n\nGot it?",
+      "stepId": "choice-lesson-explanation-python",
+      "mentorSays": "In choice lessons, at each step you decide between options. For House Robber: OPTION 1: Rob current house → Can't rob previous. OPTION 2: Skip current house → Can rob previous. We take the maximum of these two choices!\n\n# At each house, we have TWO choices:\n# OPTION 1: Rob this house → nums[i] + dp[i-2]\n# OPTION 2: Skip this house → dp[i-1]\n\n# Take the maximum:\ndp[i] = max(\n    dp[i-1],              # Skip house i\n    nums[i] + dp[i-2]     # Rob house i\n)\n\nGot it?",
       "example": "# At each house, we have TWO choices:\n# OPTION 1: Rob this house → nums[i] + dp[i-2]\n# OPTION 2: Skip this house → dp[i-1]\n\n# Take the maximum:\ndp[i] = max(\n    dp[i-1],              # Skip house i\n    nums[i] + dp[i-2]     # Rob house i\n)",
       "action": "continue",
       "next": "coding-start-python"
@@ -465,7 +465,7 @@
       "choices": [
         {
           "label": "Yes, I know base-cases",
-          "next": "choice-problem-check-java"
+          "next": "choice-lesson-check-java"
         },
         {
           "label": "No, explain base-cases",
@@ -474,22 +474,22 @@
       ]
     },
     {
-      "stepId": "choice-problem-check-java",
-      "mentorSays": "Do you understand decision/choice problems in dynamic programming?",
+      "stepId": "choice-lesson-check-java",
+      "mentorSays": "Do you understand decision/choice lessons in dynamic programming?",
       "choices": [
         {
-          "label": "Yes, I know choice-problem",
+          "label": "Yes, I know choice-lesson",
           "next": "coding-start-java"
         },
         {
-          "label": "No, explain choice-problem",
-          "next": "choice-problem-explanation-java"
+          "label": "No, explain choice-lesson",
+          "next": "choice-lesson-explanation-java"
         }
       ]
     },
     {
-      "stepId": "choice-problem-explanation-java",
-      "mentorSays": "In choice problems, at each step you decide between options. For House Robber: OPTION 1: Rob current house → Can't rob previous. OPTION 2: Skip current house → Can rob previous. We take the maximum of these two choices!\n\n// At each house, we have TWO choices:\n// OPTION 1: Rob this house → nums[i] + dp[i-2]\n// OPTION 2: Skip this house → dp[i-1]\n\n// Take the maximum:\ndp[i] = Math.max(\n    dp[i-1],              // Skip house i\n    nums[i] + dp[i-2]     // Rob house i\n);\n\nGot it?",
+      "stepId": "choice-lesson-explanation-java",
+      "mentorSays": "In choice lessons, at each step you decide between options. For House Robber: OPTION 1: Rob current house → Can't rob previous. OPTION 2: Skip current house → Can rob previous. We take the maximum of these two choices!\n\n// At each house, we have TWO choices:\n// OPTION 1: Rob this house → nums[i] + dp[i-2]\n// OPTION 2: Skip this house → dp[i-1]\n\n// Take the maximum:\ndp[i] = Math.max(\n    dp[i-1],              // Skip house i\n    nums[i] + dp[i-2]     // Rob house i\n);\n\nGot it?",
       "example": "// At each house, we have TWO choices:\n// OPTION 1: Rob this house → nums[i] + dp[i-2]\n// OPTION 2: Skip this house → dp[i-1]\n\n// Take the maximum:\ndp[i] = Math.max(\n    dp[i-1],              // Skip house i\n    nums[i] + dp[i-2]     // Rob house i\n);",
       "action": "continue",
       "next": "coding-start-java"
@@ -626,7 +626,7 @@
       "choices": [
         {
           "label": "Yes, I know base-cases",
-          "next": "choice-problem-check-cpp"
+          "next": "choice-lesson-check-cpp"
         },
         {
           "label": "No, explain base-cases",
@@ -635,22 +635,22 @@
       ]
     },
     {
-      "stepId": "choice-problem-check-cpp",
-      "mentorSays": "Do you understand decision/choice problems in dynamic programming?",
+      "stepId": "choice-lesson-check-cpp",
+      "mentorSays": "Do you understand decision/choice lessons in dynamic programming?",
       "choices": [
         {
-          "label": "Yes, I know choice-problem",
+          "label": "Yes, I know choice-lesson",
           "next": "coding-start-cpp"
         },
         {
-          "label": "No, explain choice-problem",
-          "next": "choice-problem-explanation-cpp"
+          "label": "No, explain choice-lesson",
+          "next": "choice-lesson-explanation-cpp"
         }
       ]
     },
     {
-      "stepId": "choice-problem-explanation-cpp",
-      "mentorSays": "In choice problems, at each step you decide between options. For House Robber: OPTION 1: Rob current house → Can't rob previous. OPTION 2: Skip current house → Can rob previous. We take the maximum of these two choices!\n\n// At each house, we have TWO choices:\n// OPTION 1: Rob this house → nums[i] + dp[i-2]\n// OPTION 2: Skip this house → dp[i-1]\n\n// Take the maximum:\ndp[i] = max(\n    dp[i-1],              // Skip house i\n    nums[i] + dp[i-2]     // Rob house i\n);\n\nGot it?",
+      "stepId": "choice-lesson-explanation-cpp",
+      "mentorSays": "In choice lessons, at each step you decide between options. For House Robber: OPTION 1: Rob current house → Can't rob previous. OPTION 2: Skip current house → Can rob previous. We take the maximum of these two choices!\n\n// At each house, we have TWO choices:\n// OPTION 1: Rob this house → nums[i] + dp[i-2]\n// OPTION 2: Skip this house → dp[i-1]\n\n// Take the maximum:\ndp[i] = max(\n    dp[i-1],              // Skip house i\n    nums[i] + dp[i-2]     // Rob house i\n);\n\nGot it?",
       "example": "// At each house, we have TWO choices:\n// OPTION 1: Rob this house → nums[i] + dp[i-2]\n// OPTION 2: Skip this house → dp[i-1]\n\n// Take the maximum:\ndp[i] = max(\n    dp[i-1],              // Skip house i\n    nums[i] + dp[i-2]     // Rob house i\n);",
       "action": "continue",
       "next": "coding-start-cpp"
@@ -787,7 +787,7 @@
       "choices": [
         {
           "label": "Yes, I know base-cases",
-          "next": "choice-problem-check-ts"
+          "next": "choice-lesson-check-ts"
         },
         {
           "label": "No, explain base-cases",
@@ -796,22 +796,22 @@
       ]
     },
     {
-      "stepId": "choice-problem-check-ts",
-      "mentorSays": "Do you understand decision/choice problems in dynamic programming?",
+      "stepId": "choice-lesson-check-ts",
+      "mentorSays": "Do you understand decision/choice lessons in dynamic programming?",
       "choices": [
         {
-          "label": "Yes, I know choice-problem",
+          "label": "Yes, I know choice-lesson",
           "next": "coding-start-ts"
         },
         {
-          "label": "No, explain choice-problem",
-          "next": "choice-problem-explanation-ts"
+          "label": "No, explain choice-lesson",
+          "next": "choice-lesson-explanation-ts"
         }
       ]
     },
     {
-      "stepId": "choice-problem-explanation-ts",
-      "mentorSays": "In choice problems, at each step you decide between options. For House Robber: OPTION 1: Rob current house → Can't rob previous. OPTION 2: Skip current house → Can rob previous. We take the maximum of these two choices!\n\n// At each house, we have TWO choices:\n// OPTION 1: Rob this house → nums[i] + dp[i-2]\n// OPTION 2: Skip this house → dp[i-1]\n\n// Take the maximum:\ndp[i] = Math.max(\n  dp[i-1],              // Skip house i\n  nums[i] + dp[i-2]     // Rob house i\n);\n\nGot it?",
+      "stepId": "choice-lesson-explanation-ts",
+      "mentorSays": "In choice lessons, at each step you decide between options. For House Robber: OPTION 1: Rob current house → Can't rob previous. OPTION 2: Skip current house → Can rob previous. We take the maximum of these two choices!\n\n// At each house, we have TWO choices:\n// OPTION 1: Rob this house → nums[i] + dp[i-2]\n// OPTION 2: Skip this house → dp[i-1]\n\n// Take the maximum:\ndp[i] = Math.max(\n  dp[i-1],              // Skip house i\n  nums[i] + dp[i-2]     // Rob house i\n);\n\nGot it?",
       "example": "// At each house, we have TWO choices:\n// OPTION 1: Rob this house → nums[i] + dp[i-2]\n// OPTION 2: Skip this house → dp[i-1]\n\n// Take the maximum:\ndp[i] = Math.max(\n  dp[i-1],              // Skip house i\n  nums[i] + dp[i-2]     // Rob house i\n);",
       "action": "continue",
       "next": "coding-start-ts"
@@ -888,7 +888,7 @@
     },
     {
       "stepId": "final",
-      "mentorSays": "🎉 Well done! You've learned house robber using dynamic programming. You understand how to make optimal decisions at each house by choosing between robbing or skipping!\n\nThis is O(n) time and O(n) space - excellent for optimization problems with constraints! Keep practicing!",
+      "mentorSays": "🎉 Well done! You've learned house robber using dynamic programming. You understand how to make optimal decisions at each house by choosing between robbing or skipping!\n\nThis is O(n) time and O(n) space - excellent for optimization lessons with constraints! Keep practicing!",
       "action": "continue"
     }
   ]

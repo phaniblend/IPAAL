@@ -10,11 +10,11 @@
       "stepId": "title",
       "mentorSays": "At the end of this lesson, you will be able to:\n\n1. Understand what Meeting Rooms II asks for\n2. Find minimum rooms needed\n3. Use heap/priority queue\n4. Track active meetings\n5. Implement the solution step by step in your chosen language",
       "action": "continue",
-      "next": "problem-illustration"
+      "next": "lesson-illustration"
     },
     {
-      "stepId": "problem-illustration",
-      "mentorSays": "Perfect! Now let's understand what Meeting Rooms II is asking.\n\n**Problem Definition:**\nGiven an array of meeting time intervals `intervals` where intervals[i] = [starti, endi], return the minimum number of conference rooms required.\n\n**Example 1:** intervals = [[0,30],[5,10],[15,20]]\n[0,30] overlaps with [5,10] → Need 2 rooms\nAnswer: 2\n\n**Example 2:** intervals = [[7,10],[2,4]]\nNo overlaps → Need 1 room\nAnswer: 1\n\n**Key Insight:** Sort by start time, use min heap to track end times. When new meeting starts, if earliest ending meeting is done, reuse that room.",
+      "stepId": "lesson-illustration",
+      "mentorSays": "Perfect! Now let's understand what Meeting Rooms II is asking.\n\n**Lesson Definition:**\nGiven an array of meeting time intervals `intervals` where intervals[i] = [starti, endi], return the minimum number of conference rooms required.\n\n**Example 1:** intervals = [[0,30],[5,10],[15,20]]\n[0,30] overlaps with [5,10] → Need 2 rooms\nAnswer: 2\n\n**Example 2:** intervals = [[7,10],[2,4]]\nNo overlaps → Need 1 room\nAnswer: 1\n\n**Key Insight:** Sort by start time, use min heap to track end times. When new meeting starts, if earliest ending meeting is done, reuse that room.",
       "example": "Example: [[0,30],[5,10],[15,20]] → 2 rooms, [[7,10],[2,4]] → 1 room",
       "action": "continue",
       "next": "thinking-challenge"

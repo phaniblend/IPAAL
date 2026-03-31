@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-css-41",
     "track": "css",
-    "problemNum": 41,
+    "lessonNum": 41,
     "title": "CSS custom properties (variables)",
     "shortName": "P41",
     "intro": {

@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-node-60",
     "track": "node",
-    "problemNum": 60,
+    "lessonNum": 60,
     "title": "Build online presence tracker",
     "shortName": "P60",
     "intro": {

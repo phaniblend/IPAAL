@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-react-js-53",
     "track": "react-js",
-    "problemNum": 53,
+    "lessonNum": 53,
     "title": "Render Props (MouseTracker)",
     "shortName": "P53",
     "intro": {

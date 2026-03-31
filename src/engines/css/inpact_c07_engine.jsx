@@ -73,7 +73,7 @@ function getOutputPreview(answer) {
 export default createINPACTEngine({
   NODES,
   sideItems,
-  problemNum: 7,
+  lessonNum: 7,
   title: "Position: fixed and sticky",
   shortName: "C07",
   language: "css",

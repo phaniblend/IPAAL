@@ -8,4 +8,4 @@ const NODES = [
 // Manifest: name, icons, start_url, display`, feedback_correct: "✅ SW intercepts fetch; cache strategies; manifest for install.", feedback_wrong: "Service worker; cache strategies; manifest.", expected: "PWA" },
 ];
 const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }];
-export default createINPACTEngine({ NODES, sideItems, problemNum: "FE-05", title: "Progressive Web Apps", shortName: "FE — PWA" });
+export default createINPACTEngine({ NODES, sideItems, lessonNum: "FE-05", title: "Progressive Web Apps", shortName: "FE — PWA" });

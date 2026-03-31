@@ -73,7 +73,7 @@ function getOutputPreview(answer) {
 export default createINPACTEngine({
   NODES,
   sideItems,
-  problemNum: 89,
+  lessonNum: 89,
   title: "break-inside and pagination",
   shortName: "C89",
   language: "css",

@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-angular-funda-11",
     "track": "angular",
-    "problemNum": 144,
+    "lessonNum": 144,
     "title": "FUNDA — Smart Truncate Pipe",
     "shortName": "FUNDA11",
     "intro": {

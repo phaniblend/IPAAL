@@ -8,4 +8,4 @@ const NODES = [
 observable | async  // subscribes and marks for check`, feedback_correct: "✅ OnPush on inputs/events/async pipe; markForCheck for external updates.", feedback_wrong: "OnPush reduces checks; async pipe triggers check; markForCheck when updating from outside.", expected: "Change detection" },
 ];
 const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }];
-export default createINPACTEngine({ NODES, sideItems, problemNum: "ANG-F09", title: "Change detection", shortName: "ANG — CHANGE DETECTION" });
+export default createINPACTEngine({ NODES, sideItems, lessonNum: "ANG-F09", title: "Change detection", shortName: "ANG — CHANGE DETECTION" });

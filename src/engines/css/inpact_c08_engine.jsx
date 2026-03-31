@@ -73,7 +73,7 @@ function getOutputPreview(answer) {
 export default createINPACTEngine({
   NODES,
   sideItems,
-  problemNum: 8,
+  lessonNum: 8,
   title: "z-index and stacking context",
   shortName: "C08",
   language: "css",

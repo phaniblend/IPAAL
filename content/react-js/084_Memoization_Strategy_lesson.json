@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-react-js-84",
     "track": "react-js",
-    "problemNum": 84,
+    "lessonNum": 84,
     "title": "Memoization Strategy",
     "shortName": "P84",
     "intro": {

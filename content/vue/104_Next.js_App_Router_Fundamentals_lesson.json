@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-vue-104",
     "track": "vue",
-    "problemNum": 104,
+    "lessonNum": 104,
     "title": "Next.js App Router Fundamentals",
     "shortName": "P104",
     "intro": {

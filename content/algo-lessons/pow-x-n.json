@@ -8,20 +8,20 @@
   "flow": [
     {
       "stepId": "title",
-      "mentorSays": "At the end of this lesson, you will be able to:\n\n1. Understand what the Pow(x, n) problem asks for\n2. Use fast exponentiation (binary exponentiation) to compute x^n efficiently\n3. Handle negative exponents by using 1/x\n4. Use recursion or iteration with bit manipulation\n5. Implement the solution step by step in your chosen language",
+      "mentorSays": "At the end of this lesson, you will be able to:\n\n1. Understand what the Pow(x, n) lesson asks for\n2. Use fast exponentiation (binary exponentiation) to compute x^n efficiently\n3. Handle negative exponents by using 1/x\n4. Use recursion or iteration with bit manipulation\n5. Implement the solution step by step in your chosen language",
       "action": "continue",
-      "next": "problem-illustration"
+      "next": "lesson-illustration"
     },
     {
-      "stepId": "problem-illustration",
-      "mentorSays": "Perfect! Now let's understand what the Pow(x, n) problem is asking.\n\n**Problem Definition:**\nImplement `pow(x, n)`, which calculates `x` raised to the power `n` (i.e., x^n).\n\n**Key Observations:**\n- We need to compute x raised to the power n\n- n can be negative (x^-n = 1/x^n)\n- We should use fast exponentiation for efficiency\n- Handle edge cases: n = 0 (return 1), x = 0 (return 0)\n\n**Example 1:** x = 2.00000, n = 10\n\n2^10 = 1024\nAnswer: 1024.00000\n\n**Example 2:** x = 2.10000, n = 3\n\n2.1^3 = 9.261\nAnswer: 9.26100\n\n**Example 3:** x = 2.00000, n = -2\n\n2^-2 = 1/(2^2) = 1/4 = 0.25\nAnswer: 0.25000\n\n**Step-by-step trace for Example 1 (Fast exponentiation):**\n\nx = 2, n = 10\n\nWe'll use binary exponentiation:\n- n = 10 (binary: 1010)\n- Process bits from right to left:\n  - Bit 0 (0): result = 1, x = 2^2 = 4\n  - Bit 1 (1): result = 1 * 4 = 4, x = 4^2 = 16\n  - Bit 2 (0): result = 4, x = 16^2 = 256\n  - Bit 3 (1): result = 4 * 256 = 1024, x = 256^2\n- Result: 1024 ✓\n\n**Key Insight:**\nInstead of multiplying x n times (O(n)), we can use:\n- x^n = (x^(n/2))^2 if n is even\n- x^n = x * (x^((n-1)/2))^2 if n is odd\n- This reduces to O(log n) time!\n\n**What makes this tricky:**\n1. Handling negative exponents\n2. Understanding fast exponentiation (binary exponentiation)\n3. Avoiding integer overflow\n4. Handling edge cases (n = 0, x = 0, n < 0)\n\n**Common pitfalls:**\n- Not handling negative exponents correctly\n- Using O(n) approach instead of O(log n)\n- Integer overflow for large n\n- Not handling n = 0 case",
+      "stepId": "lesson-illustration",
+      "mentorSays": "Perfect! Now let's understand what the Pow(x, n) lesson is asking.\n\n**Lesson Definition:**\nImplement `pow(x, n)`, which calculates `x` raised to the power `n` (i.e., x^n).\n\n**Key Observations:**\n- We need to compute x raised to the power n\n- n can be negative (x^-n = 1/x^n)\n- We should use fast exponentiation for efficiency\n- Handle edge cases: n = 0 (return 1), x = 0 (return 0)\n\n**Example 1:** x = 2.00000, n = 10\n\n2^10 = 1024\nAnswer: 1024.00000\n\n**Example 2:** x = 2.10000, n = 3\n\n2.1^3 = 9.261\nAnswer: 9.26100\n\n**Example 3:** x = 2.00000, n = -2\n\n2^-2 = 1/(2^2) = 1/4 = 0.25\nAnswer: 0.25000\n\n**Step-by-step trace for Example 1 (Fast exponentiation):**\n\nx = 2, n = 10\n\nWe'll use binary exponentiation:\n- n = 10 (binary: 1010)\n- Process bits from right to left:\n  - Bit 0 (0): result = 1, x = 2^2 = 4\n  - Bit 1 (1): result = 1 * 4 = 4, x = 4^2 = 16\n  - Bit 2 (0): result = 4, x = 16^2 = 256\n  - Bit 3 (1): result = 4 * 256 = 1024, x = 256^2\n- Result: 1024 ✓\n\n**Key Insight:**\nInstead of multiplying x n times (O(n)), we can use:\n- x^n = (x^(n/2))^2 if n is even\n- x^n = x * (x^((n-1)/2))^2 if n is odd\n- This reduces to O(log n) time!\n\n**What makes this tricky:**\n1. Handling negative exponents\n2. Understanding fast exponentiation (binary exponentiation)\n3. Avoiding integer overflow\n4. Handling edge cases (n = 0, x = 0, n < 0)\n\n**Common pitfalls:**\n- Not handling negative exponents correctly\n- Using O(n) approach instead of O(log n)\n- Integer overflow for large n\n- Not handling n = 0 case",
       "example": "Example 1: x = 2.0, n = 10 → 1024.0\nExample 2: x = 2.1, n = 3 → 9.261\nExample 3: x = 2.0, n = -2 → 0.25",
       "action": "continue",
       "next": "thinking-challenge"
     },
     {
       "stepId": "thinking-challenge",
-      "mentorSays": "Now that you understand what the problem wants, here's the real question:\n\nHow would YOU compute x raised to the power n efficiently?\n\nThink about it for a moment. What approach feels natural to you?",
+      "mentorSays": "Now that you understand what the lesson wants, here's the real question:\n\nHow would YOU compute x raised to the power n efficiently?\n\nThink about it for a moment. What approach feels natural to you?",
       "choices": [
         {
           "label": "Use fast exponentiation - x^n = (x^(n/2))^2 for even n",
@@ -45,7 +45,7 @@
     },
     {
       "stepId": "explore-builtin",
-      "mentorSays": "That's practical! However, the problem asks us to implement it ourselves, and using built-in functions defeats the learning purpose.\n\nThere's an elegant O(log n) approach using fast exponentiation that's commonly asked in interviews. Would you like to learn that?",
+      "mentorSays": "That's practical! However, the lesson asks us to implement it ourselves, and using built-in functions defeats the learning purpose.\n\nThere's an elegant O(log n) approach using fast exponentiation that's commonly asked in interviews. Would you like to learn that?",
       "action": "continue",
       "next": "explore-fast-exponentiation"
     },
@@ -146,7 +146,7 @@
     },
     {
       "stepId": "recursion-check-js",
-      "mentorSays": "To solve this problem, we'll use recursion. Do you know what recursion is in JavaScript?",
+      "mentorSays": "To solve this lesson, we'll use recursion. Do you know what recursion is in JavaScript?",
       "choices": [
         {
           "label": "Yes, I know recursion",
@@ -181,7 +181,7 @@
     },
     {
       "stepId": "recursion-explanation-js",
-      "mentorSays": "Recursion is when a function calls itself. For fast exponentiation, we use recursion to break down the problem:\n- x^n = (x^(n/2))^2 if n is even\n- x^n = x * (x^((n-1)/2))^2 if n is odd",
+      "mentorSays": "Recursion is when a function calls itself. For fast exponentiation, we use recursion to break down the lesson:\n- x^n = (x^(n/2))^2 if n is even\n- x^n = x * (x^((n-1)/2))^2 if n is odd",
       "example": "function myPow(x, n) {\n  if (n === 0) return 1;\n  \n  // Recursive call\n  let half = myPow(x, Math.floor(n / 2));  // Recursive call!\n  \n  if (n % 2 === 0) {\n    return half * half;\n  } else {\n    return x * half * half;\n  }\n}",
       "action": "continue",
       "next": "coding-start-js"
@@ -307,7 +307,7 @@
     },
     {
       "stepId": "recursion-check-python",
-      "mentorSays": "To solve this problem, we'll use recursion. Do you know what recursion is in Python?",
+      "mentorSays": "To solve this lesson, we'll use recursion. Do you know what recursion is in Python?",
       "choices": [
         {
           "label": "Yes, I know recursion",
@@ -342,7 +342,7 @@
     },
     {
       "stepId": "recursion-explanation-python",
-      "mentorSays": "Recursion is when a function calls itself. For fast exponentiation, we use recursion to break down the problem:\n- x^n = (x^(n/2))^2 if n is even\n- x^n = x * (x^((n-1)/2))^2 if n is odd",
+      "mentorSays": "Recursion is when a function calls itself. For fast exponentiation, we use recursion to break down the lesson:\n- x^n = (x^(n/2))^2 if n is even\n- x^n = x * (x^((n-1)/2))^2 if n is odd",
       "example": "function myPow(x, n) {\n  if (n === 0) return 1;\n  \n  // Recursive call\n  let half = myPow(x, Math.floor(n / 2));  // Recursive call!\n  \n  if (n % 2 === 0) {\n    return half * half;\n  } else {\n    return x * half * half;\n  }\n}",
       "action": "continue",
       "next": "coding-start-python"
@@ -468,7 +468,7 @@
     },
     {
       "stepId": "recursion-check-java",
-      "mentorSays": "To solve this problem, we'll use recursion. Do you know what recursion is in Java?",
+      "mentorSays": "To solve this lesson, we'll use recursion. Do you know what recursion is in Java?",
       "choices": [
         {
           "label": "Yes, I know recursion",
@@ -503,7 +503,7 @@
     },
     {
       "stepId": "recursion-explanation-java",
-      "mentorSays": "Recursion is when a function calls itself. For fast exponentiation, we use recursion to break down the problem:\n- x^n = (x^(n/2))^2 if n is even\n- x^n = x * (x^((n-1)/2))^2 if n is odd",
+      "mentorSays": "Recursion is when a function calls itself. For fast exponentiation, we use recursion to break down the lesson:\n- x^n = (x^(n/2))^2 if n is even\n- x^n = x * (x^((n-1)/2))^2 if n is odd",
       "example": "function myPow(x, n) {\n  if (n === 0) return 1;\n  \n  // Recursive call\n  let half = myPow(x, Math.floor(n / 2));  // Recursive call!\n  \n  if (n % 2 === 0) {\n    return half * half;\n  } else {\n    return x * half * half;\n  }\n}",
       "action": "continue",
       "next": "coding-start-java"
@@ -629,7 +629,7 @@
     },
     {
       "stepId": "recursion-check-cpp",
-      "mentorSays": "To solve this problem, we'll use recursion. Do you know what recursion is in C++?",
+      "mentorSays": "To solve this lesson, we'll use recursion. Do you know what recursion is in C++?",
       "choices": [
         {
           "label": "Yes, I know recursion",
@@ -664,7 +664,7 @@
     },
     {
       "stepId": "recursion-explanation-cpp",
-      "mentorSays": "Recursion is when a function calls itself. For fast exponentiation, we use recursion to break down the problem:\n- x^n = (x^(n/2))^2 if n is even\n- x^n = x * (x^((n-1)/2))^2 if n is odd",
+      "mentorSays": "Recursion is when a function calls itself. For fast exponentiation, we use recursion to break down the lesson:\n- x^n = (x^(n/2))^2 if n is even\n- x^n = x * (x^((n-1)/2))^2 if n is odd",
       "example": "function myPow(x, n) {\n  if (n === 0) return 1;\n  \n  // Recursive call\n  let half = myPow(x, Math.floor(n / 2));  // Recursive call!\n  \n  if (n % 2 === 0) {\n    return half * half;\n  } else {\n    return x * half * half;\n  }\n}",
       "action": "continue",
       "next": "coding-start-cpp"
@@ -790,7 +790,7 @@
     },
     {
       "stepId": "recursion-check-ts",
-      "mentorSays": "To solve this problem, we'll use recursion. Do you know what recursion is in TypeScript?",
+      "mentorSays": "To solve this lesson, we'll use recursion. Do you know what recursion is in TypeScript?",
       "choices": [
         {
           "label": "Yes, I know recursion",
@@ -825,7 +825,7 @@
     },
     {
       "stepId": "recursion-explanation-ts",
-      "mentorSays": "Recursion is when a function calls itself. For fast exponentiation, we use recursion to break down the problem:\n- x^n = (x^(n/2))^2 if n is even\n- x^n = x * (x^((n-1)/2))^2 if n is odd",
+      "mentorSays": "Recursion is when a function calls itself. For fast exponentiation, we use recursion to break down the lesson:\n- x^n = (x^(n/2))^2 if n is even\n- x^n = x * (x^((n-1)/2))^2 if n is odd",
       "example": "function myPow(x, n) {\n  if (n === 0) return 1;\n  \n  // Recursive call\n  let half = myPow(x, Math.floor(n / 2));  // Recursive call!\n  \n  if (n % 2 === 0) {\n    return half * half;\n  } else {\n    return x * half * half;\n  }\n}",
       "action": "continue",
       "next": "coding-start-ts"
@@ -888,7 +888,7 @@
     },
     {
       "stepId": "final",
-      "mentorSays": "🎉 Well done! You've successfully implemented the Pow(x, n) solution!\n\n**Time Complexity:** O(log n)\n- We reduce the exponent by half at each recursive call\n- This gives us O(log n) time instead of O(n)\n- Much faster than naive O(n) approach!\n\n**Space Complexity:** O(log n)\n- The recursion stack uses O(log n) space\n- Each recursive call reduces n by half\n- Can be optimized to O(1) with iterative approach\n\n**Key Takeaways:**\n1. **Fast exponentiation**: Use x^n = (x^(n/2))^2 for even n\n2. **Handle negative**: Convert negative exponent to positive using 1/x\n3. **Base case**: n = 0 returns 1\n4. **Even vs Odd**: Different formulas for even and odd exponents\n5. **Efficiency**: O(log n) is much better than O(n) for large n\n\n**Related Practice Problems:**\n- Sqrt(x) (LeetCode #69) - similar binary search concept\n- Super Pow (LeetCode #372) - power with array exponent\n- Count Good Numbers (LeetCode #1922) - similar fast exponentiation\n\nKeep practicing fast exponentiation - it's a powerful technique!",
+      "mentorSays": "🎉 Well done! You've successfully implemented the Pow(x, n) solution!\n\n**Time Complexity:** O(log n)\n- We reduce the exponent by half at each recursive call\n- This gives us O(log n) time instead of O(n)\n- Much faster than naive O(n) approach!\n\n**Space Complexity:** O(log n)\n- The recursion stack uses O(log n) space\n- Each recursive call reduces n by half\n- Can be optimized to O(1) with iterative approach\n\n**Key Takeaways:**\n1. **Fast exponentiation**: Use x^n = (x^(n/2))^2 for even n\n2. **Handle negative**: Convert negative exponent to positive using 1/x\n3. **Base case**: n = 0 returns 1\n4. **Even vs Odd**: Different formulas for even and odd exponents\n5. **Efficiency**: O(log n) is much better than O(n) for large n\n\n**Related Practice Lessons:**\n- Sqrt(x) (LeetCode #69) - similar binary search concept\n- Super Pow (LeetCode #372) - power with array exponent\n- Count Good Numbers (LeetCode #1922) - similar fast exponentiation\n\nKeep practicing fast exponentiation - it's a powerful technique!",
       "action": "continue"
     }
   ]

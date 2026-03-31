@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-vue-59",
     "track": "vue",
-    "problemNum": 59,
+    "lessonNum": 59,
     "title": "Infinite Scroll",
     "shortName": "P59",
     "intro": {

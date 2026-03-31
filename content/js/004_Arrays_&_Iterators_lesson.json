@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-js-04",
     "track": "js",
-    "problemNum": 4,
+    "lessonNum": 4,
     "title": "Arrays & Iterators",
     "shortName": "P04",
     "intro": {

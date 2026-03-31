@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-angular-21",
     "track": "angular",
-    "problemNum": 21,
+    "lessonNum": 21,
     "title": "Props Drilling",
     "shortName": "P21",
     "intro": {

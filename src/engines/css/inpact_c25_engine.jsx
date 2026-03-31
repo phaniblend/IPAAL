@@ -73,7 +73,7 @@ function getOutputPreview(answer) {
 export default createINPACTEngine({
   NODES,
   sideItems,
-  problemNum: 25,
+  lessonNum: 25,
   title: "currentColor and opacity",
   shortName: "C25",
   language: "css",

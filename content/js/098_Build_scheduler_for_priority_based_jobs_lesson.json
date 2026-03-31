@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-js-98",
     "track": "js",
-    "problemNum": 98,
+    "lessonNum": 98,
     "title": "Build scheduler for priority based jobs",
     "shortName": "P98",
     "intro": {

@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-vue-23",
     "track": "vue",
-    "problemNum": 23,
+    "lessonNum": 23,
     "title": "Controlled vs Uncontrolled",
     "shortName": "P23",
     "intro": {

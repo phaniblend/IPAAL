@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-vue-46",
     "track": "vue",
-    "problemNum": 46,
+    "lessonNum": 46,
     "title": "useMemo for Expensive Computation",
     "shortName": "P46",
     "intro": {

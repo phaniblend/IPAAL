@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-vue-05",
     "track": "vue",
-    "problemNum": 5,
+    "lessonNum": 5,
     "title": "Conditional Rendering with Ternary",
     "shortName": "P05",
     "intro": {

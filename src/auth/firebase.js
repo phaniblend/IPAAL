@@ -35,3 +35,22 @@ export async function signInWithGoogle() {
   const result = await signInWithPopup(a, provider);
   return result.user; // { displayName, email, uid, photoURL, ... }
 }
+
+/** Call on log out so Google sessions do not stay active when the user leaves. */
+export async function signOutFirebase() {
+  const a = await getFirebaseAuth();
+  if (!a) return;
+  const { signOut } = await import("firebase/auth");
+  await signOut(a);
+}
+
+/** Shape used across the app after any sign-in. */
+export function profileFromFirebaseUser(u) {
+  if (!u) return null;
+  return {
+    id: u.uid,
+    name: u.displayName || u.email?.split("@")[0] || "Learner",
+    emailOrPhone: u.email || "",
+    avatarUrl: u.photoURL || "",
+  };
+}

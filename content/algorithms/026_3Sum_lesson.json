@@ -3,14 +3,14 @@
   "config": {
     "lessonId": "ai-algorithms-26",
     "track": "algorithms",
-    "problemNum": 26,
+    "lessonNum": 26,
     "title": "3Sum",
     "shortName": "P26",
     "intro": {
       "tag": "LESSON #26",
       "title": "3Sum",
-      "body": "In this lesson, you will build a function that solves the 3Sum problem: finding all unique triplets in an array that add up to zero. You will learn the core concept of using a two-pointer technique to efficiently search for combinations without checking every possible set. The main technologies involved are JavaScript arrays, loops, and conditional logic. This is a beginner-friendly introduction to a common algorithmic pattern used in coding interviews and real-world applications.",
-      "usecase": "The 3Sum algorithm solves a fundamental pattern-matching problem that appears in many real-world applications. In e-commerce platforms, it's used to find product combinations that meet specific price targets or discount thresholds. Financial analysis tools apply it to identify investment trios that sum to target returns or risk levels. Data dashboards use similar logic to filter datasets where three metrics combine to reach critical thresholds, helping analysts spot trends and correlations."
+      "body": "In this lesson, you will build a function that solves the 3Sum lesson: finding all unique triplets in an array that add up to zero. You will learn the core concept of using a two-pointer technique to efficiently search for combinations without checking every possible set. The main technologies involved are JavaScript arrays, loops, and conditional logic. This is a beginner-friendly introduction to a common algorithmic pattern used in coding interviews and real-world applications.",
+      "usecase": "The 3Sum algorithm solves a fundamental pattern-matching lesson that appears in many real-world applications. In e-commerce platforms, it's used to find product combinations that meet specific price targets or discount thresholds. Financial analysis tools apply it to identify investment trios that sum to target returns or risk levels. Data dashboards use similar logic to filter datasets where three metrics combine to reach critical thresholds, helping analysts spot trends and correlations."
     },
     "objectives": [
       "Implement a brute-force solution to find all unique triplets that sum to zero",
@@ -28,7 +28,7 @@
         "phase": "Step 1 of 17",
         "title": "Introduction",
         "content": {
-          "body": "Welcome! Today we'll solve the 3Sum problem. You'll learn how to find three numbers in an array that add up to zero. This builds on the 'remember what we've seen' approach from Two Sum.",
+          "body": "Welcome! Today we'll solve the 3Sum lesson. You'll learn how to find three numbers in an array that add up to zero. This builds on the 'remember what we've seen' approach from Two Sum.",
           "title": "Introduction"
         }
       },
@@ -131,7 +131,7 @@
         "phase": "Step 8 of 17",
         "title": "Key idea",
         "content": {
-          "body": "Remember what we have already seen. We'll use a lookup structure (like a Set or Map) to remember values we've encountered, avoiding repeated scans. For 3Sum, we fix one number and then solve a Two Sum problem for the remaining two.",
+          "body": "Remember what we have already seen. We'll use a lookup structure (like a Set or Map) to remember values we've encountered, avoiding repeated scans. For 3Sum, we fix one number and then solve a Two Sum lesson for the remaining two.",
           "title": "Key idea",
           "visualMetaphor": "Think of a notebook where we write down numbers we've seen. For each fixed number, we check if the needed complement is already in our notebook."
         }
@@ -142,7 +142,7 @@
         "phase": "Step 9 of 17",
         "title": "The approach",
         "content": {
-          "body": "We'll sort the array first to easily skip duplicates. Then, for each number, we'll treat the rest as a Two Sum problem using a hash set.",
+          "body": "We'll sort the array first to easily skip duplicates. Then, for each number, we'll treat the rest as a Two Sum lesson using a hash set.",
           "title": "The approach",
           "showMeFirst": true,
           "illustratedExample": "Array: [-2, -1, 0, 1, 2]\nSorted: [-2, -1, 0, 1, 2]\nFix -2 → need two numbers that sum to 2. Use set: check -1 (need 3? not in set), add -1; check 0 (need 2? not in set), add 0; check 1 (need 1? not in set), add 1; check 2 (need 0? yes, in set). Found [-2, 0, 2]. Move to next fixed number."

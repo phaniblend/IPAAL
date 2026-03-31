@@ -32,4 +32,4 @@ app.post('/upload', upload.single('file'), (req, res) => { ... })`,
 ];
 
 const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }];
-export default createINPACTEngine({ NODES, sideItems, problemNum: "EXP-F07", title: "File uploads", shortName: "EXP — UPLOADS" });
+export default createINPACTEngine({ NODES, sideItems, lessonNum: "EXP-F07", title: "File uploads", shortName: "EXP — UPLOADS" });

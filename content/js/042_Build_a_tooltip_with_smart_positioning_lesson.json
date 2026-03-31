@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-js-42",
     "track": "js",
-    "problemNum": 42,
+    "lessonNum": 42,
     "title": "Build a tooltip with smart positioning",
     "shortName": "P42",
     "intro": {

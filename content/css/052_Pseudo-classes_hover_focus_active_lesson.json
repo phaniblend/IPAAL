@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-css-52",
     "track": "css",
-    "problemNum": 52,
+    "lessonNum": 52,
     "title": "Pseudo-classes :hover :focus :active",
     "shortName": "P52",
     "intro": {

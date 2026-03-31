@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-sec-03",
     "track": "sec",
-    "problemNum": 3,
+    "lessonNum": 3,
     "title": "Input validation & data integrity",
     "shortName": "P03",
     "intro": {

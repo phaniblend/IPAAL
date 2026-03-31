@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-react-ts-109",
     "track": "react-ts",
-    "problemNum": 109,
+    "lessonNum": 109,
     "title": "Token Refresh with Axios Interceptor",
     "shortName": "P109",
     "intro": {

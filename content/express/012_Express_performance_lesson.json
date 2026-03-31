@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-express-12",
     "track": "express",
-    "problemNum": 12,
+    "lessonNum": 12,
     "title": "Express performance",
     "shortName": "P12",
     "intro": {

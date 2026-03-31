@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-express-02",
     "track": "express",
-    "problemNum": 2,
+    "lessonNum": 2,
     "title": "Routing",
     "shortName": "P02",
     "intro": {

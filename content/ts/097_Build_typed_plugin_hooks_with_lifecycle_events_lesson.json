@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-ts-97",
     "track": "ts",
-    "problemNum": 97,
+    "lessonNum": 97,
     "title": "Build typed plugin hooks with lifecycle events",
     "shortName": "P97",
     "intro": {

@@ -8,20 +8,20 @@
   "flow": [
     {
       "stepId": "title",
-      "mentorSays": "At the end of this lesson, you will be able to:\n\n1. Understand what the Container With Most Water problem asks for\n2. Use two pointers to find the maximum area efficiently\n3. Understand why moving the pointer with the smaller height is optimal\n4. Implement the solution step by step in your chosen language",
+      "mentorSays": "At the end of this lesson, you will be able to:\n\n1. Understand what the Container With Most Water lesson asks for\n2. Use two pointers to find the maximum area efficiently\n3. Understand why moving the pointer with the smaller height is optimal\n4. Implement the solution step by step in your chosen language",
       "action": "continue",
-      "next": "problem-illustration"
+      "next": "lesson-illustration"
     },
     {
-      "stepId": "problem-illustration",
-      "mentorSays": "Perfect! Now let's understand what the Container With Most Water problem is asking.\n\n**Problem Definition:**\nYou have an array of heights where each index represents a vertical line at that position. The height of the line is the value at that index.\n\nYour task: Find two lines that together with the x-axis form a container that holds the most water.\n\n**How area is calculated:**\n- Area = width × min(height[left], height[right])\n- width = right_index - left_index\n- The water level is limited by the shorter line (we can't fill above it - water would spill)\n\n**Example 1:** height = [1, 8, 6, 2, 5, 4, 8, 3, 7]\n\nLet's check some key pairs:\n- Lines at index 0 (h=1) and index 8 (h=7): width=8, min(1,7)=1, area=8×1=8\n- Lines at index 1 (h=8) and index 8 (h=7): width=7, min(8,7)=7, area=7×7=49 ✓\n- Lines at index 1 (h=8) and index 6 (h=8): width=5, min(8,8)=8, area=5×8=40\n- Lines at index 2 (h=6) and index 6 (h=8): width=4, min(6,8)=6, area=4×6=24\n\nThe maximum area is 49 (from indices 1 and 8)!\n\n**Example 2:** height = [1, 1]\n\n- Lines at index 0 (h=1) and index 1 (h=1): width=1, min(1,1)=1, area=1×1=1\n\nMaximum area: 1\n\n**Step-by-step trace for Example 1 using two pointers:**\n\nheight = [1, 8, 6, 2, 5, 4, 8, 3, 7]\n\n- **Initial**: left=0 (h=1), right=8 (h=7), area=8×1=8, maxArea=8\n  - Move left (smaller height) → left=1\n- **left=1, right=8**: area=7×min(8,7)=7×7=49, maxArea=49 ✓\n  - Move right (smaller height) → right=7\n- **left=1, right=7**: area=6×min(8,3)=6×3=18, maxArea=49\n  - Move right → right=6\n- **left=1, right=6**: area=5×min(8,8)=5×8=40, maxArea=49\n  - Move left (heights equal, move either) → left=2\n- Continue until left >= right\n- **Return 49** ✓\n\n**What makes this tricky:**\n1. The area depends on both width and height, and we need to balance them\n2. Moving the wrong pointer can skip the optimal solution\n3. The key insight: always move the pointer with the smaller height\n\n**Common pitfalls:**\n- Checking all pairs (O(n²) instead of O(n))\n- Moving the pointer with larger height (misses optimal solutions)\n- Not understanding why moving the smaller height pointer is optimal\n- Off-by-one errors when calculating width",
+      "stepId": "lesson-illustration",
+      "mentorSays": "Perfect! Now let's understand what the Container With Most Water lesson is asking.\n\n**Lesson Definition:**\nYou have an array of heights where each index represents a vertical line at that position. The height of the line is the value at that index.\n\nYour task: Find two lines that together with the x-axis form a container that holds the most water.\n\n**How area is calculated:**\n- Area = width × min(height[left], height[right])\n- width = right_index - left_index\n- The water level is limited by the shorter line (we can't fill above it - water would spill)\n\n**Example 1:** height = [1, 8, 6, 2, 5, 4, 8, 3, 7]\n\nLet's check some key pairs:\n- Lines at index 0 (h=1) and index 8 (h=7): width=8, min(1,7)=1, area=8×1=8\n- Lines at index 1 (h=8) and index 8 (h=7): width=7, min(8,7)=7, area=7×7=49 ✓\n- Lines at index 1 (h=8) and index 6 (h=8): width=5, min(8,8)=8, area=5×8=40\n- Lines at index 2 (h=6) and index 6 (h=8): width=4, min(6,8)=6, area=4×6=24\n\nThe maximum area is 49 (from indices 1 and 8)!\n\n**Example 2:** height = [1, 1]\n\n- Lines at index 0 (h=1) and index 1 (h=1): width=1, min(1,1)=1, area=1×1=1\n\nMaximum area: 1\n\n**Step-by-step trace for Example 1 using two pointers:**\n\nheight = [1, 8, 6, 2, 5, 4, 8, 3, 7]\n\n- **Initial**: left=0 (h=1), right=8 (h=7), area=8×1=8, maxArea=8\n  - Move left (smaller height) → left=1\n- **left=1, right=8**: area=7×min(8,7)=7×7=49, maxArea=49 ✓\n  - Move right (smaller height) → right=7\n- **left=1, right=7**: area=6×min(8,3)=6×3=18, maxArea=49\n  - Move right → right=6\n- **left=1, right=6**: area=5×min(8,8)=5×8=40, maxArea=49\n  - Move left (heights equal, move either) → left=2\n- Continue until left >= right\n- **Return 49** ✓\n\n**What makes this tricky:**\n1. The area depends on both width and height, and we need to balance them\n2. Moving the wrong pointer can skip the optimal solution\n3. The key insight: always move the pointer with the smaller height\n\n**Common pitfalls:**\n- Checking all pairs (O(n²) instead of O(n))\n- Moving the pointer with larger height (misses optimal solutions)\n- Not understanding why moving the smaller height pointer is optimal\n- Off-by-one errors when calculating width",
       "example": "Example 1:\nheight = [1, 8, 6, 2, 5, 4, 8, 3, 7]\n\nKey pairs:\n(0,8): width=8, min(1,7)=1, area=8\n(1,8): width=7, min(8,7)=7, area=49 ✓\n(1,6): width=5, min(8,8)=8, area=40\n(2,6): width=4, min(6,8)=6, area=24\n\nMaximum: 49\n\nExample 2:\nheight = [1, 1]\n\n(0,1): width=1, min(1,1)=1, area=1\n\nMaximum: 1",
       "action": "continue",
       "next": "thinking-challenge"
     },
     {
       "stepId": "thinking-challenge",
-      "mentorSays": "Now that you understand what the problem wants, here's the real question:\n\nHow would YOU find the container with the most water?\n\nThink about it for a moment. What approach feels natural to you?",
+      "mentorSays": "Now that you understand what the lesson wants, here's the real question:\n\nHow would YOU find the container with the most water?\n\nThink about it for a moment. What approach feels natural to you?",
       "choices": [
         {
           "label": "Use two pointers from both ends, move the pointer with smaller height",
@@ -146,7 +146,7 @@
     },
     {
       "stepId": "array-check-js",
-      "mentorSays": "To solve this problem, we'll need to work with arrays. Do you know what an array is in JavaScript?",
+      "mentorSays": "To solve this lesson, we'll need to work with arrays. Do you know what an array is in JavaScript?",
       "choices": [
         {
           "label": "Yes, I know arrays",
@@ -167,7 +167,7 @@
     },
     {
       "stepId": "loop-check-js",
-      "mentorSays": "To solve this problem, we'll need to use loops. Do you know what a loop is in JavaScript?",
+      "mentorSays": "To solve this lesson, we'll need to use loops. Do you know what a loop is in JavaScript?",
       "choices": [
         {
           "label": "Yes, I know loops",
@@ -314,7 +314,7 @@
     },
     {
       "stepId": "array-check-python",
-      "mentorSays": "To solve this problem, we'll need to work with lists. Do you know what a list is in Python?",
+      "mentorSays": "To solve this lesson, we'll need to work with lists. Do you know what a list is in Python?",
       "choices": [
         {
           "label": "Yes, I know lists",
@@ -335,7 +335,7 @@
     },
     {
       "stepId": "loop-check-python",
-      "mentorSays": "To solve this problem, we'll need to use loops. Do you know what a loop is in Python?",
+      "mentorSays": "To solve this lesson, we'll need to use loops. Do you know what a loop is in Python?",
       "choices": [
         {
           "label": "Yes, I know loops",
@@ -482,7 +482,7 @@
     },
     {
       "stepId": "array-check-java",
-      "mentorSays": "To solve this problem, we'll need to work with arrays. Do you know what an array is in Java?",
+      "mentorSays": "To solve this lesson, we'll need to work with arrays. Do you know what an array is in Java?",
       "choices": [
         {
           "label": "Yes, I know arrays",
@@ -503,7 +503,7 @@
     },
     {
       "stepId": "loop-check-java",
-      "mentorSays": "To solve this problem, we'll need to use loops. Do you know what a loop is in Java?",
+      "mentorSays": "To solve this lesson, we'll need to use loops. Do you know what a loop is in Java?",
       "choices": [
         {
           "label": "Yes, I know loops",
@@ -650,7 +650,7 @@
     },
     {
       "stepId": "array-check-cpp",
-      "mentorSays": "To solve this problem, we'll need to work with vectors (arrays). Do you know what a vector is in C++?",
+      "mentorSays": "To solve this lesson, we'll need to work with vectors (arrays). Do you know what a vector is in C++?",
       "choices": [
         {
           "label": "Yes, I know vectors",
@@ -671,7 +671,7 @@
     },
     {
       "stepId": "loop-check-cpp",
-      "mentorSays": "To solve this problem, we'll need to use loops. Do you know what a loop is in C++?",
+      "mentorSays": "To solve this lesson, we'll need to use loops. Do you know what a loop is in C++?",
       "choices": [
         {
           "label": "Yes, I know loops",
@@ -818,7 +818,7 @@
     },
     {
       "stepId": "array-check-ts",
-      "mentorSays": "To solve this problem, we'll need to work with arrays. Do you know what an array is in TypeScript?",
+      "mentorSays": "To solve this lesson, we'll need to work with arrays. Do you know what an array is in TypeScript?",
       "choices": [
         {
           "label": "Yes, I know arrays",
@@ -839,7 +839,7 @@
     },
     {
       "stepId": "loop-check-ts",
-      "mentorSays": "To solve this problem, we'll need to use loops. Do you know what a loop is in TypeScript?",
+      "mentorSays": "To solve this lesson, we'll need to use loops. Do you know what a loop is in TypeScript?",
       "choices": [
         {
           "label": "Yes, I know loops",
@@ -923,7 +923,7 @@
     },
     {
       "stepId": "final",
-      "mentorSays": "🎉 Well done! You've learned to think through the Container With Most Water problem. You understand what the problem asks for, how to use two pointers to find the maximum area efficiently, and why moving the pointer with the smaller height is optimal.\n\n**Key Takeaways:**\n1. **Two Pointers from Ends**: Start with the widest container (left=0, right=end), then narrow down.\n2. **Greedy Strategy**: Always move the pointer with the smaller height. This is optimal because:\n   - Moving the larger height pointer: width decreases, height can't increase (limited by smaller) → area can only decrease\n   - Moving the smaller height pointer: width decreases, but height might increase → area might increase\n3. **Area Calculation**: Area = width × min(height[left], height[right]). Water is limited by the shorter line.\n\n**Time Complexity**: O(n) - we traverse the array once\n**Space Complexity**: O(1) - we only use a few variables\n\n**What to practice next:**\n- Trapping Rain Water (similar two-pointer problem with height constraints)\n- Valid Palindrome (two pointers from ends)\n\nThis kind of thinking—using two pointers with a greedy strategy—is essential for solving many array problems. Keep practicing!",
+      "mentorSays": "🎉 Well done! You've learned to think through the Container With Most Water lesson. You understand what the lesson asks for, how to use two pointers to find the maximum area efficiently, and why moving the pointer with the smaller height is optimal.\n\n**Key Takeaways:**\n1. **Two Pointers from Ends**: Start with the widest container (left=0, right=end), then narrow down.\n2. **Greedy Strategy**: Always move the pointer with the smaller height. This is optimal because:\n   - Moving the larger height pointer: width decreases, height can't increase (limited by smaller) → area can only decrease\n   - Moving the smaller height pointer: width decreases, but height might increase → area might increase\n3. **Area Calculation**: Area = width × min(height[left], height[right]). Water is limited by the shorter line.\n\n**Time Complexity**: O(n) - we traverse the array once\n**Space Complexity**: O(1) - we only use a few variables\n\n**What to practice next:**\n- Trapping Rain Water (similar two-pointer lesson with height constraints)\n- Valid Palindrome (two pointers from ends)\n\nThis kind of thinking—using two pointers with a greedy strategy—is essential for solving many array lessons. Keep practicing!",
       "action": "continue"
     }
   ]

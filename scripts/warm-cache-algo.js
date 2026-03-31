@@ -1,8 +1,8 @@
 /**
- * Warm cache for ALGORITHM lessons only (correct flow: problem → example → flowchart → reasoning → dry run → code from scratch).
+ * Warm cache for ALGORITHM lessons only (correct flow: lesson → example → flowchart → reasoning → dry run → code from scratch).
  * Use after clear-algo-cache.js to test a few lessons before warming all algos.
  *
- *   ALGO_LIMIT=5           — warm only first 5 problems (default: 5 for testing); 0 = all
+ *   ALGO_LIMIT=5           — warm only first 5 lessons (default: 5 for testing); 0 = all
  *   TRACK=algo-js         — warm only one track (default: all 4 algo tracks)
  *   ONLY_PENDING=true     — skip lessons already in cache
  *   WORKERS=24            — run up to 24 lessons in parallel (default: 1)
@@ -123,7 +123,7 @@ async function main() {
   const limit = process.env.ALGO_LIMIT ? parseInt(process.env.ALGO_LIMIT, 10) : 5;
   const trackFilter = process.env.TRACK || process.env.VITE_WARM_TRACK;
   console.log(`Warming ALGO cache at ${getCacheDir()}`);
-  console.log(`Tracks: ${trackFilter || ALGO_TRACKS.join(", ")} | Problems: first ${limit > 0 ? limit : ALGO_AI_NAMES.length} | Total: ${list.length} lesson(s)\n`);
+  console.log(`Tracks: ${trackFilter || ALGO_TRACKS.join(", ")} | Lessons: first ${limit > 0 ? limit : ALGO_AI_NAMES.length} | Total: ${list.length} lesson(s)\n`);
 
   const workers = Math.max(1, parseInt(process.env.WORKERS, 10) || 1);
   console.log(`Workers: ${workers}\n`);

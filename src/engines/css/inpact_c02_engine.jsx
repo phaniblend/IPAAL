@@ -169,7 +169,7 @@ function getOutputPreview(answer) {
 export default createINPACTEngine({
   NODES,
   sideItems,
-  problemNum: 2,
+  lessonNum: 2,
   title: "box-sizing: border-box",
   shortName: "BOX-SIZING",
   language: "css",

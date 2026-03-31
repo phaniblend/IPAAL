@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-ts-38",
     "track": "ts",
-    "problemNum": 38,
+    "lessonNum": 38,
     "title": "Build typed cache interface",
     "shortName": "P38",
     "intro": {

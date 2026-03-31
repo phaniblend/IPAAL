@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-sec-06",
     "track": "sec",
-    "problemNum": 6,
+    "lessonNum": 6,
     "title": "Penetration testing mindset",
     "shortName": "P06",
     "intro": {

@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-react-js-16",
     "track": "react-js",
-    "problemNum": 16,
+    "lessonNum": 16,
     "title": "Component Composition",
     "shortName": "P16",
     "intro": {

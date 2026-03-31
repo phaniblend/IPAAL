@@ -73,7 +73,7 @@ function getOutputPreview(answer) {
 export default createINPACTEngine({
   NODES,
   sideItems,
-  problemNum: 90,
+  lessonNum: 90,
   title: "mask and clip-path",
   shortName: "C90",
   language: "css",

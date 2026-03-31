@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-react-js-18",
     "track": "react-js",
-    "problemNum": 18,
+    "lessonNum": 18,
     "title": "Conditional Classes",
     "shortName": "P18",
     "intro": {

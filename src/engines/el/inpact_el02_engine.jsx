@@ -35,8 +35,8 @@ The skills:
       "Write code reviews that teach, not just critique",
       "Give the SBI feedback model: Situation, Behavior, Impact",
       "Structure a 30-60-90 day onboarding plan for new engineers",
-      "Run effective 1:1s that surface problems before they fester",
-      "Build psychological safety so engineers flag problems early",
+      "Run effective 1:1s that surface lessons before they fester",
+      "Build psychological safety so engineers flag lessons early",
       "Know when to approve despite disagreement (disagree-and-commit)",
     ],
   },
@@ -81,7 +81,7 @@ FORMULA FOR GOOD COMMENTS:
 /*
 🚨 [BLOCKING] Security: MD5 is cryptographically broken for passwords.
 
-MD5 is a fast hashing algorithm — that's the problem. A modern GPU can
+MD5 is a fast hashing algorithm — that's the lesson. A modern GPU can
 compute 10 billion MD5 hashes/second, making brute force trivial if our
 DB is ever breached.
 
@@ -272,7 +272,7 @@ const onboardingPlan = {
       'Handle an on-call shift (with buddy support)',
     ],
     check: '90-day review: are you where we hoped? What does the next 90 look like?',
-    metric: 'Working independently. Proactively spotting problems.',
+    metric: 'Working independently. Proactively spotting lessons.',
   },
 }
 
@@ -283,7 +283,7 @@ BUDDY VS MANAGER:
   Manager: goals, career, performance, workload
 
 COMMON MISTAKES:
-  ❌ Giving a new engineer a hard problem on day 3 (sink or swim)
+  ❌ Giving a new engineer a hard lesson on day 3 (sink or swim)
   ❌ No assigned buddy — left to figure it out alone
   ❌ 30-day plan with no check-in until day 30
   ❌ New engineer feels like a burden for asking questions
@@ -297,7 +297,7 @@ export { onboardingPlan }`,
   },
   {
     id: "step4", type: "question", phase: "Step 4 of 5",
-    paal: "Run effective 1:1s. Show the agenda structure, how to surface hidden problems, and what questions unlock honest conversation.",
+    paal: "Run effective 1:1s. Show the agenda structure, how to surface hidden lessons, and what questions unlock honest conversation.",
     answer_keywords: ["1:1", "one on one", "agenda", "psychological safety", "trust", "questions"],
     seed_code: `// Step 4: effective 1:1 meetings
 
@@ -309,7 +309,7 @@ WHAT 1:1s ARE NOT:
 
 WHAT 1:1s ARE:
   ✅ The primary trust-building mechanism between manager and report
-  ✅ The place where problems surface before they become crises
+  ✅ The place where lessons surface before they become crises
   ✅ Where career conversations happen
   ✅ Where you catch frustration before someone silently quits
 
@@ -326,7 +326,7 @@ const oneOnOneStructure = {
 
   // QUESTIONS THAT UNLOCK REAL CONVERSATION:
   unlockingQuestions: [
-    // Surface hidden problems:
+    // Surface hidden lessons:
     'What\'s the most frustrating thing you\'ve dealt with this week?',
     'Is there anything slowing you down that I could help remove?',
     'Is there anything you\'re worried about that we haven\'t talked about?',
@@ -370,15 +370,15 @@ PSYCHOLOGICAL SAFETY SIGNALS:
 
 BUILD IT BY:
   - Admitting your own mistakes and uncertainty publicly
-  - Rewarding the person who flagged a problem early
+  - Rewarding the person who flagged a lesson early
   - Never punishing "I don't know" — only "I didn't try to find out"
   - Saying "what would you do?" before sharing your own opinion
 */
 
 export { oneOnOneStructure }`,
-    feedback_correct: "✅ 1:1 = trust building, not status. Their agenda first. 'What's on your mind?' is the most powerful opener. Psychological safety = problems surface early.",
+    feedback_correct: "✅ 1:1 = trust building, not status. Their agenda first. 'What's on your mind?' is the most powerful opener. Psychological safety = lessons surface early.",
     feedback_partial: "1:1 format: their time (20 min, open questions), your time (10 min, context + feedback). Cadence: weekly. Never cancel twice in a row.",
-    feedback_wrong: "'What's on your mind?' opens 1:1s. Their agenda first. Surface hidden problems with specific questions. Safety = engineers share bad news early.",
+    feedback_wrong: "'What's on your mind?' opens 1:1s. Their agenda first. Surface hidden lessons with specific questions. Safety = engineers share bad news early.",
     expected: "Effective 1:1 structure and psychological safety",
   },
   {
@@ -431,7 +431,7 @@ That's my full concern. Happy to be overruled if the team disagrees."
 
 // "Trust us." / "It'll be fine." → Not a counter-argument.
 //   It's OK to say: "I hear you, and I'll commit fully.
-//   I just want to note that if we hit the N+1 problem, we should
+//   I just want to note that if we hit the N+1 lesson, we should
 //   revisit this architecture decision — can we agree on a review date?"
 
 // ── STEP 3: GENUINE COMMITMENT ─────────────────────────────────
@@ -474,4 +474,4 @@ const sideItems = [
   { label: "Step 5 — Disagree & commit", id: "step5" },
 ];
 
-export default createINPACTEngine({ NODES, sideItems, problemNum: "EL-02", title: "Code Review, Mentoring & Culture", shortName: "EL — MENTORING" });
+export default createINPACTEngine({ NODES, sideItems, lessonNum: "EL-02", title: "Code Review, Mentoring & Culture", shortName: "EL — MENTORING" });

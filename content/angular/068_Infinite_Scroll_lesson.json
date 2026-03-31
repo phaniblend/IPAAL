@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-angular-68",
     "track": "angular",
-    "problemNum": 68,
+    "lessonNum": 68,
     "title": "Infinite Scroll",
     "shortName": "P68",
     "intro": {

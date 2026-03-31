@@ -8,20 +8,20 @@
   "flow": [
     {
       "stepId": "title",
-      "mentorSays": "At the end of this lesson, you will be able to:\n\n1. Understand what the Group Anagrams problem asks for\n2. Use sorted strings as keys to group anagrams\n3. Use hash maps to efficiently group strings\n4. Implement the solution step by step in your chosen language",
+      "mentorSays": "At the end of this lesson, you will be able to:\n\n1. Understand what the Group Anagrams lesson asks for\n2. Use sorted strings as keys to group anagrams\n3. Use hash maps to efficiently group strings\n4. Implement the solution step by step in your chosen language",
       "action": "continue",
-      "next": "problem-illustration"
+      "next": "lesson-illustration"
     },
     {
-      "stepId": "problem-illustration",
-      "mentorSays": "Perfect! Now let's understand what the Group Anagrams problem is asking.\n\nImagine you have an array of strings: [\"eat\", \"tea\", \"tan\", \"ate\", \"nat\", \"bat\"]\n\nYour task: Group all anagrams together. Anagrams are words that have the same letters but in different orders.\n\nLet's identify the anagrams:\n- \"eat\", \"tea\", \"ate\" - all contain 'e', 'a', 't' (anagrams)\n- \"tan\", \"nat\" - both contain 't', 'a', 'n' (anagrams)\n- \"bat\" - unique, no anagrams\n\n**Key Insight**: If we sort the characters of each string, anagrams will have the same sorted string!\n- \"eat\" sorted → \"aet\"\n- \"tea\" sorted → \"aet\"\n- \"ate\" sorted → \"aet\"\n- \"tan\" sorted → \"ant\"\n- \"nat\" sorted → \"ant\"\n- \"bat\" sorted → \"abt\"\n\nSo we can use the sorted string as a key to group anagrams!\n\nGrouped result:\n- [\"eat\", \"tea\", \"ate\"] (key: \"aet\")\n- [\"tan\", \"nat\"] (key: \"ant\")\n- [\"bat\"] (key: \"abt\")\n\nThat's what the problem wants: group all anagrams together.",
+      "stepId": "lesson-illustration",
+      "mentorSays": "Perfect! Now let's understand what the Group Anagrams lesson is asking.\n\nImagine you have an array of strings: [\"eat\", \"tea\", \"tan\", \"ate\", \"nat\", \"bat\"]\n\nYour task: Group all anagrams together. Anagrams are words that have the same letters but in different orders.\n\nLet's identify the anagrams:\n- \"eat\", \"tea\", \"ate\" - all contain 'e', 'a', 't' (anagrams)\n- \"tan\", \"nat\" - both contain 't', 'a', 'n' (anagrams)\n- \"bat\" - unique, no anagrams\n\n**Key Insight**: If we sort the characters of each string, anagrams will have the same sorted string!\n- \"eat\" sorted → \"aet\"\n- \"tea\" sorted → \"aet\"\n- \"ate\" sorted → \"aet\"\n- \"tan\" sorted → \"ant\"\n- \"nat\" sorted → \"ant\"\n- \"bat\" sorted → \"abt\"\n\nSo we can use the sorted string as a key to group anagrams!\n\nGrouped result:\n- [\"eat\", \"tea\", \"ate\"] (key: \"aet\")\n- [\"tan\", \"nat\"] (key: \"ant\")\n- [\"bat\"] (key: \"abt\")\n\nThat's what the lesson wants: group all anagrams together.",
       "example": "strs = [\"eat\", \"tea\", \"tan\", \"ate\", \"nat\", \"bat\"]\n\nGroup anagrams:\n- \"eat\", \"tea\", \"ate\" → all have sorted form \"aet\"\n- \"tan\", \"nat\" → both have sorted form \"ant\"\n- \"bat\" → has sorted form \"abt\"\n\nAnswer: [[\"eat\", \"tea\", \"ate\"], [\"tan\", \"nat\"], [\"bat\"]]\n\nNote: The order of groups and strings within groups doesn't matter.",
       "action": "continue",
       "next": "thinking-challenge"
     },
     {
       "stepId": "thinking-challenge",
-      "mentorSays": "Now that you understand what the problem wants, here's the real question:\n\nHow would YOU group anagrams together?\n\nThink about it for a moment. What approach feels natural to you?",
+      "mentorSays": "Now that you understand what the lesson wants, here's the real question:\n\nHow would YOU group anagrams together?\n\nThink about it for a moment. What approach feels natural to you?",
       "choices": [
         {
           "label": "Sort each string and use sorted string as key in hash map",
@@ -146,7 +146,7 @@
     },
     {
       "stepId": "loop-check-js",
-      "mentorSays": "To solve this problem, we'll need to use loops. Do you know what a loop is in JavaScript?",
+      "mentorSays": "To solve this lesson, we'll need to use loops. Do you know what a loop is in JavaScript?",
       "choices": [
         {
           "label": "Yes, I know loops",
@@ -286,7 +286,7 @@
     },
     {
       "stepId": "loop-check-python",
-      "mentorSays": "To solve this problem, we'll need to use loops. Do you know what a loop is in Python?",
+      "mentorSays": "To solve this lesson, we'll need to use loops. Do you know what a loop is in Python?",
       "choices": [
         {
           "label": "Yes, I know loops",
@@ -426,7 +426,7 @@
     },
     {
       "stepId": "loop-check-java",
-      "mentorSays": "To solve this problem, we'll need to use loops. Do you know what a loop is in Java?",
+      "mentorSays": "To solve this lesson, we'll need to use loops. Do you know what a loop is in Java?",
       "choices": [
         {
           "label": "Yes, I know loops",
@@ -566,7 +566,7 @@
     },
     {
       "stepId": "loop-check-cpp",
-      "mentorSays": "To solve this problem, we'll need to use loops. Do you know what a loop is in C++?",
+      "mentorSays": "To solve this lesson, we'll need to use loops. Do you know what a loop is in C++?",
       "choices": [
         {
           "label": "Yes, I know loops",
@@ -699,7 +699,7 @@
     },
     {
       "stepId": "loop-check-ts",
-      "mentorSays": "To solve this problem, we'll need to use loops. Do you know what a loop is in TypeScript?",
+      "mentorSays": "To solve this lesson, we'll need to use loops. Do you know what a loop is in TypeScript?",
       "choices": [
         {
           "label": "Yes, I know loops",
@@ -776,7 +776,7 @@
     },
     {
       "stepId": "final",
-      "mentorSays": "🎉 Well done! You've learned to think through the Group Anagrams problem. You understand what the problem asks for, how to use sorted strings as keys to group anagrams, and how to use hash maps efficiently.\n\nThis kind of thinking—using hash maps with sorted keys to group similar items—is essential for solving many string and array problems. Keep practicing!",
+      "mentorSays": "🎉 Well done! You've learned to think through the Group Anagrams lesson. You understand what the lesson asks for, how to use sorted strings as keys to group anagrams, and how to use hash maps efficiently.\n\nThis kind of thinking—using hash maps with sorted keys to group similar items—is essential for solving many string and array lessons. Keep practicing!",
       "action": "continue"
     }
   ]

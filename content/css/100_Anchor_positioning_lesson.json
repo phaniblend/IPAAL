@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-css-100",
     "track": "css",
-    "problemNum": 100,
+    "lessonNum": 100,
     "title": "Anchor positioning",
     "shortName": "P100",
     "intro": {

@@ -8,17 +8,17 @@
 2. User selects a **track** (e.g. "React · JS", "Angular", "CSS") via the track buttons.  
    → Stored in App state as internal id: `react-js`, `angular`, `css`, etc.
 3. User clicks a **lesson card** (e.g. "Counter App", "Todo App", "Flexbox Layout").  
-   → Card passes `(index, item)` to `onSelectProblem`; `item` has at least `title` (e.g. "Counter App").
-4. App sets `problemIndex` and `selectedLessonItem = item`.
-5. **lessonTitle** = `selectedLessonItem?.title ?? getProblemList(track)?.[problemIndex]?.title ?? "Lesson N"`.  
-   So the lesson title is always from the clicked card or the problem list for that track—**never hardcoded**.
+   → Card passes `(index, item)` to `onSelectLesson`; `item` has at least `title` (e.g. "Counter App").
+4. App sets `lessonIndex` and `selectedLessonItem = item`.
+5. **lessonTitle** = `selectedLessonItem?.title ?? getLessonList(track)?.[lessonIndex]?.title ?? "Lesson N"`.  
+   So the lesson title is always from the clicked card or the lesson list for that track—**never hardcoded**.
 6. **track** = current App `track` state (e.g. `react-js`, `angular`).
 7. Both are passed to **DynamicLessonPage** and into **generateLesson** / **generateLessonPreview**.
 
 **Relevant files:**
 
-- `src/LandingPage.jsx` — `onSelectProblem(i, item)` with `item.title`.
-- `src/App.jsx` — `handleSelectProblem(i, item)`, `lessonTitle = selectedLessonItem?.title ?? ...`, `<DynamicLessonPage track={track} lessonTitle={lessonTitle} lessonIndex={problemIndex} />`.
+- `src/LandingPage.jsx` — `onSelectLesson(i, item)` with `item.title`.
+- `src/App.jsx` — `handleSelectProblem(i, item)`, `lessonTitle = selectedLessonItem?.title ?? ...`, `<DynamicLessonPage track={track} lessonTitle={lessonTitle} lessonIndex={lessonIndex} />`.
 
 ---
 

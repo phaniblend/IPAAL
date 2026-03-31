@@ -73,7 +73,7 @@ function getOutputPreview(answer) {
 export default createINPACTEngine({
   NODES,
   sideItems,
-  problemNum: 5,
+  lessonNum: 5,
   title: "Overflow",
   shortName: "C05",
   language: "css",

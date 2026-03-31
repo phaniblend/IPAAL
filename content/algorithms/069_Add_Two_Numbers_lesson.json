@@ -3,13 +3,13 @@
   "config": {
     "lessonId": "ai-algorithms-69",
     "track": "algorithms",
-    "problemNum": 69,
+    "lessonNum": 69,
     "title": "Add Two Numbers",
     "shortName": "P69",
     "intro": {
       "tag": "LESSON #69",
       "title": "Add Two Numbers",
-      "body": "In this lesson, you will build a simple JavaScript function that adds two numbers together and returns the result. You will learn the core programming concept of function definition and how to use parameters and the return statement. The main technologies involved are JavaScript functions, arithmetic operators, and variable handling. This exercise will help you understand how to structure basic operations in code, a fundamental skill for all algorithmic problem-solving.",
+      "body": "In this lesson, you will build a simple JavaScript function that adds two numbers together and returns the result. You will learn the core programming concept of function definition and how to use parameters and the return statement. The main technologies involved are JavaScript functions, arithmetic operators, and variable handling. This exercise will help you understand how to structure basic operations in code, a fundamental skill for all algorithmic lesson-solving.",
       "usecase": "The Add Two Numbers pattern is fundamental to countless real-world applications where numerical calculations are required. In e-commerce platforms, this logic calculates total prices by adding product costs and shipping fees during checkout. Financial dashboards use it to sum revenue streams or combine investment returns across multiple accounts. Even in simple calculator apps or budgeting tools, this basic addition operation forms the core functionality that users rely on daily."
     },
     "objectives": [
@@ -38,7 +38,7 @@
         "phase": "Step 2 of 15",
         "title": "What you'll learn",
         "content": {
-          "body": "By the end of this lesson, you will be able to:\n1. Identify when to use a hashmap for pair-finding problems\n2. Implement a single-pass solution using a lookup structure\n3. Explain why checking before adding prevents duplicate work\n4. Return indices of matching pairs correctly\n5. Apply this pattern to similar array problems",
+          "body": "By the end of this lesson, you will be able to:\n1. Identify when to use a hashmap for pair-finding lessons\n2. Implement a single-pass solution using a lookup structure\n3. Explain why checking before adding prevents duplicate work\n4. Return indices of matching pairs correctly\n5. Apply this pattern to similar array lessons",
           "title": "What you'll learn"
         }
       },
@@ -279,7 +279,7 @@
         "phase": "Step 15 of 15",
         "title": "Done",
         "content": {
-          "body": "Great work! You've learned the hashmap approach for finding pairs. Remember:\n1. Store numbers as keys, indices as values in your lookup\n2. Always check if you've seen the needed number BEFORE adding the current one\n3. This single-pass solution is O(n) time and O(n) space\n\nThis 'notebook' pattern works for many problems where you need to remember what you've seen!",
+          "body": "Great work! You've learned the hashmap approach for finding pairs. Remember:\n1. Store numbers as keys, indices as values in your lookup\n2. Always check if you've seen the needed number BEFORE adding the current one\n3. This single-pass solution is O(n) time and O(n) space\n\nThis 'notebook' pattern works for many lessons where you need to remember what you've seen!",
           "title": "Done"
         }
       }

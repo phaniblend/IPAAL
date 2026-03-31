@@ -8,20 +8,20 @@
   "flow": [
     {
       "stepId": "title",
-      "mentorSays": "At the end of this lesson, you will be able to:\n\n1. Understand what the Isomorphic Strings problem asks for\n2. Use hash maps to track character mappings\n3. Check bidirectional mappings to ensure strings are isomorphic\n4. Implement the solution step by step in your chosen language",
+      "mentorSays": "At the end of this lesson, you will be able to:\n\n1. Understand what the Isomorphic Strings lesson asks for\n2. Use hash maps to track character mappings\n3. Check bidirectional mappings to ensure strings are isomorphic\n4. Implement the solution step by step in your chosen language",
       "action": "continue",
-      "next": "problem-illustration"
+      "next": "lesson-illustration"
     },
     {
-      "stepId": "problem-illustration",
-      "mentorSays": "Perfect! Now let's understand what the Isomorphic Strings problem is asking.\n\nTwo strings are isomorphic if the characters in one string can be replaced to get the other string.\n\nExample 1: s = \"egg\", t = \"add\"\n- We can map: e → a, g → d\n- So \"egg\" becomes \"add\" ✓\n- They are isomorphic!\n\nExample 2: s = \"foo\", t = \"bar\"\n- We try to map: f → b, o → a\n- But then the second 'o' in \"foo\" should map to 'a', but 't' has 'r' at that position\n- This is inconsistent! ✗\n- They are NOT isomorphic\n\nExample 3: s = \"paper\", t = \"title\"\n- Map: p → t, a → i, p → t (consistent), e → l, r → e\n- All mappings are consistent ✓\n- They are isomorphic!\n\nThat's what the problem wants: return true if s and t are isomorphic, false otherwise.",
+      "stepId": "lesson-illustration",
+      "mentorSays": "Perfect! Now let's understand what the Isomorphic Strings lesson is asking.\n\nTwo strings are isomorphic if the characters in one string can be replaced to get the other string.\n\nExample 1: s = \"egg\", t = \"add\"\n- We can map: e → a, g → d\n- So \"egg\" becomes \"add\" ✓\n- They are isomorphic!\n\nExample 2: s = \"foo\", t = \"bar\"\n- We try to map: f → b, o → a\n- But then the second 'o' in \"foo\" should map to 'a', but 't' has 'r' at that position\n- This is inconsistent! ✗\n- They are NOT isomorphic\n\nExample 3: s = \"paper\", t = \"title\"\n- Map: p → t, a → i, p → t (consistent), e → l, r → e\n- All mappings are consistent ✓\n- They are isomorphic!\n\nThat's what the lesson wants: return true if s and t are isomorphic, false otherwise.",
       "example": "s = \"egg\", t = \"add\"\n\nMapping:\ne → a\ng → d\ng → d (consistent)\n\nResult: true (isomorphic)\n\nAnother example:\ns = \"foo\", t = \"bar\"\n\nMapping:\nf → b\no → a\no → r (inconsistent! o already mapped to 'a')\n\nResult: false (not isomorphic)",
       "action": "continue",
       "next": "thinking-challenge"
     },
     {
       "stepId": "thinking-challenge",
-      "mentorSays": "Now that you understand what the problem wants, here's the real question:\n\nHow would YOU check if two strings are isomorphic?\n\nThink about it for a moment. What approach feels natural to you?",
+      "mentorSays": "Now that you understand what the lesson wants, here's the real question:\n\nHow would YOU check if two strings are isomorphic?\n\nThink about it for a moment. What approach feels natural to you?",
       "choices": [
         {
           "label": "Use two hash maps to track mappings in both directions",
@@ -146,7 +146,7 @@
     },
     {
       "stepId": "loop-check-js",
-      "mentorSays": "To solve this problem, we'll need to use loops. Do you know what a loop is in JavaScript?",
+      "mentorSays": "To solve this lesson, we'll need to use loops. Do you know what a loop is in JavaScript?",
       "choices": [
         {
           "label": "Yes, I know loops",
@@ -293,7 +293,7 @@
     },
     {
       "stepId": "loop-check-python",
-      "mentorSays": "To solve this problem, we'll need to use loops. Do you know what a loop is in Python?",
+      "mentorSays": "To solve this lesson, we'll need to use loops. Do you know what a loop is in Python?",
       "choices": [
         {
           "label": "Yes, I know loops",
@@ -440,7 +440,7 @@
     },
     {
       "stepId": "loop-check-java",
-      "mentorSays": "To solve this problem, we'll need to use loops. Do you know what a loop is in Java?",
+      "mentorSays": "To solve this lesson, we'll need to use loops. Do you know what a loop is in Java?",
       "choices": [
         {
           "label": "Yes, I know loops",
@@ -587,7 +587,7 @@
     },
     {
       "stepId": "loop-check-cpp",
-      "mentorSays": "To solve this problem, we'll need to use loops. Do you know what a loop is in C++?",
+      "mentorSays": "To solve this lesson, we'll need to use loops. Do you know what a loop is in C++?",
       "choices": [
         {
           "label": "Yes, I know loops",
@@ -734,7 +734,7 @@
     },
     {
       "stepId": "loop-check-ts",
-      "mentorSays": "To solve this problem, we'll need to use loops. Do you know what a loop is in TypeScript?",
+      "mentorSays": "To solve this lesson, we'll need to use loops. Do you know what a loop is in TypeScript?",
       "choices": [
         {
           "label": "Yes, I know loops",
@@ -818,7 +818,7 @@
     },
     {
       "stepId": "final",
-      "mentorSays": "🎉 Well done! You've learned to think through the Isomorphic Strings problem. You understand what the problem asks for, how to use hash maps to track character mappings, and how to check bidirectional consistency.\n\nThis kind of thinking—using hash maps to track mappings—is essential for solving many string problems. Keep practicing!",
+      "mentorSays": "🎉 Well done! You've learned to think through the Isomorphic Strings lesson. You understand what the lesson asks for, how to use hash maps to track character mappings, and how to check bidirectional consistency.\n\nThis kind of thinking—using hash maps to track mappings—is essential for solving many string lessons. Keep practicing!",
       "action": "continue"
     }
   ]

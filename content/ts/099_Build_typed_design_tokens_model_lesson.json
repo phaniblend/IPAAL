@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-ts-99",
     "track": "ts",
-    "problemNum": 99,
+    "lessonNum": 99,
     "title": "Build typed design tokens model",
     "shortName": "P99",
     "intro": {

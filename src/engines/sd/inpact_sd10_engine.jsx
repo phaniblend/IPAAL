@@ -8,4 +8,4 @@ const NODES = [
 // BFF: one per client; gateway: single entry`, feedback_correct: "✅ Mesh = sidecar observability/retry; saga for distributed tx; BFF per client.", feedback_wrong: "Service mesh; saga vs 2PC; BFF vs gateway.", expected: "Microservices" },
 ];
 const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }];
-export default createINPACTEngine({ NODES, sideItems, problemNum: "SD-10", title: "Microservices patterns", shortName: "SD — MICROSERVICES" });
+export default createINPACTEngine({ NODES, sideItems, lessonNum: "SD-10", title: "Microservices patterns", shortName: "SD — MICROSERVICES" });

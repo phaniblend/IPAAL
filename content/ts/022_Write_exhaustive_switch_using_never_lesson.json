@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-ts-22",
     "track": "ts",
-    "problemNum": 22,
+    "lessonNum": 22,
     "title": "Write exhaustive switch using never",
     "shortName": "P22",
     "intro": {

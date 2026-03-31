@@ -40,7 +40,7 @@ const NODES = [
     type: "objectives",
     phase: "Objectives",
     items: [
-      "Explain what Webpack Module Federation is and the problem it solves",
+      "Explain what Webpack Module Federation is and the lesson it solves",
       "Distinguish Host vs Remote — ownership and deployment boundaries",
       "Describe how shared singletons work and why Angular must be shared",
       "Sketch a Remote webpack config exposing an Angular module",
@@ -56,10 +56,10 @@ const NODES = [
     type: "question",
     phase: "Step 1 of 4",
     paal:
-      "Explain Module Federation, what problem it solves, what a Host is, and what a Remote is. Write your answer as structured code comments.",
+      "Explain Module Federation, what lesson it solves, what a Host is, and what a Remote is. Write your answer as structured code comments.",
     hint: "Focus on: independent deployments, runtime composition, no Shell rebuild, and clear ownership boundaries between apps.",
     seed_code: `// Step 1: Explain Module Federation
-// - What problem does it solve?
+// - What lesson does it solve?
 // - What is a Host?
 // - What is a Remote?
 // - Why does it matter for large teams?`,
@@ -365,7 +365,7 @@ const s = {
   }),
 };
 
-export default function AngularA08ModuleFederation({ onNextProblem }) {
+export default function AngularA08ModuleFederation({ onNextLesson }) {
   const [nodeIndex, setNodeIndex] = useState(0);
   const [answers, setAnswers] = useState({});
   const [result, setResult] = useState(null);

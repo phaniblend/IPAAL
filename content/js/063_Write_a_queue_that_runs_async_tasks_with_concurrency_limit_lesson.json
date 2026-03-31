@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-js-63",
     "track": "js",
-    "problemNum": 63,
+    "lessonNum": 63,
     "title": "Write a queue that runs async tasks with concurrency limit",
     "shortName": "P63",
     "intro": {

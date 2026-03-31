@@ -156,7 +156,7 @@ const sideItems = [
 export default createINPACTEngine({
   NODES,
   sideItems,
-  problemNum: "F01",
+  lessonNum: "F01",
   title: "Primitive Types",
   shortName: "TS — PRIMITIVES",
 });

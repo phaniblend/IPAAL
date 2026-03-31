@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-vue-111",
     "track": "vue",
-    "problemNum": 111,
+    "lessonNum": 111,
     "title": "Cookie-Based Auth Flow",
     "shortName": "P111",
     "intro": {

@@ -277,4 +277,4 @@ const sideItems = [
   { label: "Step 5 — Full", id: "step5" },
 ];
 
-export default createINPACTEngine({ NODES, sideItems, problemNum: 3, title: "Controlled Input", shortName: "CONTROLLED INPUT" });
+export default createINPACTEngine({ NODES, sideItems, lessonNum: 3, title: "Controlled Input", shortName: "CONTROLLED INPUT" });

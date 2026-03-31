@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-node-110",
     "track": "node",
-    "problemNum": 110,
+    "lessonNum": 110,
     "title": "Build billing usage aggregation pipeline",
     "shortName": "P110",
     "intro": {

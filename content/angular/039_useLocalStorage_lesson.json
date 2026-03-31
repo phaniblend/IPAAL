@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-angular-39",
     "track": "angular",
-    "problemNum": 39,
+    "lessonNum": 39,
     "title": "useLocalStorage",
     "shortName": "P39",
     "intro": {

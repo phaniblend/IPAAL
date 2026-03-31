@@ -176,7 +176,7 @@ function getOutputPreview(answer) {
 export default createINPACTEngine({
   NODES,
   sideItems,
-  problemNum: 1,
+  lessonNum: 1,
   title: "Box Model",
   shortName: "BOX MODEL",
   language: "css",

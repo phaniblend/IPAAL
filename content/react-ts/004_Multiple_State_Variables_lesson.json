@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-react-ts-04",
     "track": "react-ts",
-    "problemNum": 4,
+    "lessonNum": 4,
     "title": "Multiple State Variables",
     "shortName": "P04",
     "intro": {

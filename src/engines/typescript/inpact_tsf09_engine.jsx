@@ -249,7 +249,7 @@ const sideItems = [
 export default createINPACTEngine({
   NODES,
   sideItems,
-  problemNum: "F09",
+  lessonNum: "F09",
   title: "Typing Uncertain Output",
   shortName: "TS — UNCERTAIN OUTPUT",
 });

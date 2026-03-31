@@ -73,7 +73,7 @@ function getOutputPreview(answer) {
 export default createINPACTEngine({
   NODES,
   sideItems,
-  problemNum: 83,
+  lessonNum: 83,
   title: "text-align and vertical-align",
   shortName: "C83",
   language: "css",

@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-node-101",
     "track": "node",
-    "problemNum": 101,
+    "lessonNum": 101,
     "title": "Build chaos test for intermittent upstream failures",
     "shortName": "P101",
     "intro": {

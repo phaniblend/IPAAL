@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-ts-47",
     "track": "ts",
-    "problemNum": 47,
+    "lessonNum": 47,
     "title": "Type context values and provider props",
     "shortName": "P47",
     "intro": {

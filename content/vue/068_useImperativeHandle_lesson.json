@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-vue-68",
     "track": "vue",
-    "problemNum": 68,
+    "lessonNum": 68,
     "title": "useImperativeHandle",
     "shortName": "P68",
     "intro": {

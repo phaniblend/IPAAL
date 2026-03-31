@@ -3,13 +3,13 @@
   "config": {
     "lessonId": "ai-algorithms-41",
     "track": "algorithms",
-    "problemNum": 41,
+    "lessonNum": 41,
     "title": "Valid Parentheses",
     "shortName": "P41",
     "intro": {
       "tag": "LESSON #41",
       "title": "Valid Parentheses",
-      "body": "In this lesson, you will build a function that checks if a given string of parentheses is valid. A valid string has every opening parenthesis closed in the correct order, like '()[]{}'. You will learn to use a stack data structure to track opening brackets as you iterate through the string. The main technologies involved are JavaScript functions, arrays (acting as a stack), and loops. This exercise will help you practice problem-solving with common data structures and control flow.",
+      "body": "In this lesson, you will build a function that checks if a given string of parentheses is valid. A valid string has every opening parenthesis closed in the correct order, like '()[]{}'. You will learn to use a stack data structure to track opening brackets as you iterate through the string. The main technologies involved are JavaScript functions, arrays (acting as a stack), and loops. This exercise will help you practice lesson-solving with common data structures and control flow.",
       "usecase": "The parentheses validation algorithm is essential in code editors and IDEs, where it automatically checks for balanced brackets in real-time as developers write code. This pattern appears in form validation systems that verify nested structures like JSON configuration files or mathematical expressions in calculators. It's also critical in template engines and markup parsers that need to ensure properly closed HTML/XML tags or template directives. Understanding this algorithm helps developers build robust validation for any system requiring balanced delimiter checking."
     },
     "objectives": [
@@ -28,7 +28,7 @@
         "phase": "Step 1 of 14",
         "title": "Let's begin",
         "content": {
-          "body": "Have you ever wondered how code editors know if your parentheses are balanced? In this lesson, we'll solve the classic Valid Parentheses problem. You'll learn to use a stack data structure to check if opening and closing brackets match correctly.",
+          "body": "Have you ever wondered how code editors know if your parentheses are balanced? In this lesson, we'll solve the classic Valid Parentheses lesson. You'll learn to use a stack data structure to check if opening and closing brackets match correctly.",
           "title": "Let's begin"
         }
       },
@@ -38,7 +38,7 @@
         "phase": "Step 2 of 14",
         "title": "What you'll learn",
         "content": {
-          "body": "• Explain why a stack is perfect for matching parentheses\n• Implement a stack-based solution in JavaScript\n• Identify when to use stack vs queue for different problems\n• Handle edge cases like empty strings and mismatched brackets",
+          "body": "• Explain why a stack is perfect for matching parentheses\n• Implement a stack-based solution in JavaScript\n• Identify when to use stack vs queue for different lessons\n• Handle edge cases like empty strings and mismatched brackets",
           "title": "What you'll learn"
         }
       },
@@ -250,7 +250,7 @@
         "phase": "Step 14 of 14",
         "title": "Well done!",
         "content": {
-          "body": "You've successfully implemented the Valid Parentheses algorithm using a stack! Remember: stacks are perfect for matching problems where order matters (last in, first out). Queues would be wrong here because they're first in, first out—like a line of people. The cost of push/pop on a stack is O(1), making this solution efficient. Try testing your function with '()[]{}', '(]', and '([)]' to see it in action!",
+          "body": "You've successfully implemented the Valid Parentheses algorithm using a stack! Remember: stacks are perfect for matching lessons where order matters (last in, first out). Queues would be wrong here because they're first in, first out—like a line of people. The cost of push/pop on a stack is O(1), making this solution efficient. Try testing your function with '()[]{}', '(]', and '([)]' to see it in action!",
           "title": "Well done!"
         }
       }

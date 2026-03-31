@@ -8,4 +8,4 @@ const NODES = [
 // Game day: planned failure injection, practice response`, feedback_correct: "✅ Error budget = 1 - SLO; toil = automate; game day = planned chaos.", feedback_wrong: "Error budgets; reduce toil; game days.", expected: "SRE" },
 ];
 const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }];
-export default createINPACTEngine({ NODES, sideItems, problemNum: "PE-10", title: "SRE practices", shortName: "PE — SRE" });
+export default createINPACTEngine({ NODES, sideItems, lessonNum: "PE-10", title: "SRE practices", shortName: "PE — SRE" });

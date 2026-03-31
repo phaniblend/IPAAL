@@ -3,7 +3,7 @@
   "config": {
     "lessonId": "ai-node-73",
     "track": "node",
-    "problemNum": 73,
+    "lessonNum": 73,
     "title": "Build worker heartbeat lease mechanism",
     "shortName": "P73",
     "intro": {
