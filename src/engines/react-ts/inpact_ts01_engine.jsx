@@ -1,72 +1,268 @@
 import createINPACTEngine from "../inpact_engine_shared";
 
 const NODES = [
-  { id: "intro", type: "reveal", phase: "Lesson", content: { tag: "LESSON #1 (TypeScript)", title: "Counter App — Typed", body: "Build a simple screen that shows a number (starting at 0) and three buttons: one that increases it by 1, one that decreases it by 1, and one that resets it to 0. The user sees the number update as they click.", usecase: "You'll use this same pattern in real apps — for example, the + and − buttons that change item quantity in a shopping cart, or a reset control that clears the value." } },
-  { id: "objectives", type: "objectives", phase: "Objectives", items: ["Establish a typed component contract so the component can be used correctly and invalid props are caught at compile time.","Model the counter value as typed state so updates stay numeric and invalid assignments fail before runtime.","Wire button interactions through typed handlers so clicks produce the intended update path without loose function signatures.","Pass typed props across the boundary, deliberately observe a type mismatch, and fix it so the learner sees the compiler as a design guardrail."] },
-  { id: "step1", type: "question", phase: "Step 1 of 4", paal: "Inside the empty Counter component, define and create state for the current count, typed as a number; initialize it at 0 for display and updates in later steps.", hint: "useState<number>(0) tells TypeScript the state is always a number.", answer_keywords: ["usestate", "number", "count", "setcount"], example_code: "// Similar: state for a different concept\nconst [score, setScore] = useState<number>(0)", cursorLine: 4, cursorAtStartOfLine: 4, starter_code: `import { useState } from 'react'
-
-export default function Counter() {
-
-}`, feedback_correct: "✅ Nice work — you declared count with useState<number>(0), so TypeScript knows this piece of state is always a number and can catch mistakes before runtime.", feedback_partial: "Use useState<number>(0).", feedback_wrong: "const [count, setCount] = useState<number>(0)", expected: "const [count, setCount] = useState<number>(0)" },
-  { id: "step2jsx", type: "question", phase: "Step 2 of 4", paal: "Add the UI: return JSX that shows the live count and three buttons (+, −, Reset); render only — do not wire onClick yet.", hint: "return ( <div> <h1>{count}</h1> <button>+</button> <button>-</button> <button>Reset</button> </div> )", answer_keywords: ["return", "button", "count", "+", "-", "reset"], example_code: "return (\n  <div>\n    <h1>{count}</h1>\n    <button>+</button>\n    <button>-</button>\n    <button>Reset</button>\n  </div>\n)", cursorAtStartOfLine: 5, feedback_correct: "✅ Your JSX shows the live count and all three buttons are on screen. Next you will define the functions (increment/decrement/reset).", feedback_partial: "You need a return with JSX, {count} visible, and three buttons.", feedback_wrong: "Add a return ( ... ) with a div, something showing {count}, and three <button>s: +, -, Reset.", expected: "return ( <div> ... {count} ... three buttons </div> )" },
-  { id: "step2", type: "question", phase: "Step 3 of 4", paal: "Define functions for increment, decrement, and reset. Clicking + should add 1 to the count, clicking - should subtract 1, and clicking Reset should set the count back to 0. Increment/decrement must use functional updates so each update uses the latest count.", hint: "increment/decrement: setCount(prev => prev + 1) and setCount(prev => prev - 1); reset: setCount(0). (These functions will be used by the buttons in the next step.)", evaluate(answer) {
-      const a = (answer || "").toLowerCase().replace(/\s/g, "");
-      const hasNames = a.includes("increment") && a.includes("decrement") && a.includes("reset") && a.includes("setcount");
-      const functionalPlus = /setcount\([^)]*=>[^)]*\+1/.test(a);
-      const functionalMinus = /setcount\([^)]*=>[^)]*-1/.test(a);
-      const hasReset = /setcount\s*\(\s*0\s*\)/.test(a);
-      const hasOnClick = /onclick\s*=/.test(a);
-
-      if (hasNames && functionalPlus && functionalMinus && hasReset && !hasOnClick) return "correct";
-      if (hasNames && (functionalPlus || functionalMinus) && hasReset) return "partial";
-      return "wrong";
-    }, example_code: "// Similar: functions that update state using functional updates\nconst inc = () => setCount(prev => prev + 1)\nconst dec = () => setCount(prev => prev - 1)\nconst clear = () => setCount(0)", cursorLine: 5, feedback_correct: "✅ Functions are defined — + adds 1, - subtracts 1, and Reset sets the count back to 0. Next you’ll wire onClick on each button.", feedback_partial: "Add increment (+1), decrement (-1) using functional updates, and reset (setCount(0)); keep the buttons without onClick in this step.", feedback_wrong: "Define increment/decrement functions that call setCount(prev => prev +/- 1) and a reset function that calls setCount(0). Leave wiring for the next step.", expected: "increment/decrement/reset functions (no onClick yet)" },
-  { id: "step3", type: "question", phase: "Step 4 of 4", paal: "Wire onClick so the + button calls increment, the - button calls decrement, and Reset calls reset; export the component.", hint: "onClick={increment}, onClick={decrement}, onClick={reset} on the three buttons", answer_keywords: ["onclick", "increment", "decrement", "reset", "button", "return"], example_code: "// Similar: onClick calls your function\n<button onClick={increment}>+</button>", evaluate(answer) {
-      const code = (answer || "").toLowerCase();
-      const hasReturnJsx = /return\s*\(/.test(code) && /<button/.test(code);
-      const onClickIncrement = /onclick\s*=\s*\{\s*increment\s*\}/.test(code);
-      const onClickDecrement = /onclick\s*=\s*\{\s*decrement\s*\}/.test(code);
-      const onClickReset = /onclick\s*=\s*\{\s*reset\s*\}/.test(code);
-      const hasExport = /export\s+default/.test(code);
-      const allThreeWired = onClickIncrement && onClickDecrement && onClickReset;
-
-      if (hasExport && hasReturnJsx && allThreeWired) return "correct";
-      if (hasExport && (hasReturnJsx || onClickIncrement || onClickDecrement || onClickReset)) return "partial";
-      return "wrong";
-    }, cursorLine: 6, cursorAtStartOfLine: 12, seed_code: `import { useState } from 'react'
-
-export default function Counter() {
-  const [count, setCount] = useState<number>(0)
-  const increment = () => setCount(prev => prev + 1)
-  const decrement = () => setCount(prev => prev - 1)
-  const reset = () => setCount(0)
-
-  return (
-    <div>
-      <h1>{count}</h1>
-      <button>+</button>
-      <button>-</button>
-      <button>Reset</button>
-    </div>
-  )
-}`, solution_code: `import { useState } from 'react'
-
-export default function Counter() {
-  const [count, setCount] = useState<number>(0)
-  const increment = () => setCount(prev => prev + 1)
-  const decrement = () => setCount(prev => prev - 1)
-  const reset = () => setCount(0)
-  return (
-    <div>
-      <h1>{count}</h1>
-      <button onClick={increment}>+</button>
-      <button onClick={decrement}>-</button>
-      <button onClick={reset}>Reset</button>
-    </div>
-  )
-}`, feedback_correct: "✅ Lesson complete — onClick is wired for +, -, and Reset, and the typed counter updates as you click.", feedback_partial: "Wire onClick on all three buttons to increment/decrement/reset (export the component).", feedback_wrong: "Add onClick wiring for +, -, and Reset (calling increment/decrement/reset).", expected: "Full counter with wired onClick + typed state" },
+  {
+    "id": "intro",
+    "type": "reveal",
+    "phase": "Lesson",
+    "content": {
+      "tag": "LESSON #1 (TypeScript)",
+      "title": "Counter App — Typed",
+      "body": "Build a simple counter app with React and TypeScript. You'll learn how to add type safety to React components, manage state with useState, and handle events with proper TypeScript types.",
+      "usecase": "Counters are everywhere in real apps — from shopping carts to like buttons. Adding TypeScript ensures your state and event handlers are predictable and error-free."
+    }
+  },
+  {
+    "id": "objectives",
+    "type": "objectives",
+    "phase": "Objectives",
+    "items": [
+      "Create a typed React component with TypeScript",
+      "Use useState with explicit number type for state",
+      "Write event handlers with proper TypeScript event types",
+      "Connect event handlers to JSX buttons",
+      "Display state values in JSX with type safety"
+    ]
+  },
+  {
+    "id": "step1",
+    "type": "question",
+    "phase": "Step 1 of 7",
+    "paal": "Import the necessary dependencies from React to create a component and manage state.",
+    "hint": "Use import { ... } from 'react' syntax.",
+    "example_code": "Like importing tools from a toolbox before starting a project.",
+    "think_prompt": "What do we need to import to use React components and state hooks in TypeScript?",
+    "mc_options": [
+      "Only React because useState is built into React",
+      "React and useState separately because TypeScript requires explicit imports",
+      "React and useState from 'react' because useState is a named export"
+    ],
+    "mc_correct_option": "React and useState from 'react' because useState is a named export",
+    "mc_anchor": "Import React and the useState hook from the 'react' package.",
+    "why_this_matters": "React provides the core library and hooks like useState for managing component state. TypeScript works seamlessly with React's type definitions.",
+    "answer_keywords": [
+      "import",
+      "React",
+      "useState",
+      "'react'"
+    ],
+    "seed_code": "",
+    "starter_code": "",
+    "feedback_correct": "Perfect! You've imported the essential React building blocks.",
+    "feedback_partial": "You're close. Remember to import both React and useState.",
+    "feedback_wrong": "Let's start with the basics: import React and useState from 'react'.",
+    "expected": "A clean import statement at the top of your file."
+  },
+  {
+    "id": "step2",
+    "type": "question",
+    "phase": "Step 2 of 7",
+    "paal": "Define a function component that will serve as our counter app. Use TypeScript to specify it's a React function component.",
+    "hint": "Use const with React.FC type and arrow function syntax.",
+    "example_code": "Like declaring a specialized worker with a specific job description.",
+    "think_prompt": "How should we define a React function component in TypeScript?",
+    "mc_options": [
+      "As a regular JavaScript function without types",
+      "Using React.FC type for function components",
+      "Using function declaration with explicit return type"
+    ],
+    "mc_correct_option": "Using React.FC type for function components",
+    "mc_anchor": "Create a function component using React.FC type annotation.",
+    "why_this_matters": "Components are the building blocks of React apps. TypeScript helps define what props a component expects and what it returns.",
+    "answer_keywords": [
+      "React.FC",
+      "=>",
+      "()"
+    ],
+    "seed_code": "",
+    "starter_code": "",
+    "feedback_correct": "Great! You've created a properly typed React component.",
+    "feedback_partial": "Almost there. Make sure to use React.FC for TypeScript typing.",
+    "feedback_wrong": "Let's define the component: use React.FC type with an arrow function.",
+    "expected": "A typed React function component definition."
+  },
+  {
+    "id": "step3",
+    "type": "question",
+    "phase": "Step 3 of 7",
+    "paal": "Inside your component, declare state to track the current count. Choose an appropriate TypeScript type and initialize it to the starting value.",
+    "hint": "Use useState with angle brackets to specify the type.",
+    "example_code": "Like reserving a parking spot specifically for cars (not trucks or motorcycles).",
+    "think_prompt": "How do we add type safety to useState for a counter that stores numbers?",
+    "mc_options": [
+      "useState() without type - TypeScript will infer it",
+      "useState<number>(0) with explicit generic type",
+      "useState(0 as number) with type assertion"
+    ],
+    "mc_correct_option": "useState<number>(0) with explicit generic type",
+    "mc_anchor": "Initialize state with useState and a starting value.",
+    "why_this_matters": "State makes components interactive. TypeScript ensures your state variable always holds the expected type of value.",
+    "answer_keywords": [
+      "useState<number>",
+      "useState<number>(0"
+    ],
+    "seed_code": "",
+    "starter_code": "",
+    "feedback_correct": "Excellent! Your state is now type-safe for counter values.",
+    "feedback_partial": "Good start. Think about what this state represents: the counter's current value should be initialized to the starting value with the right type.",
+    "feedback_wrong": "Pause and think: the counter's current value needs a type appropriate for arithmetic (not a string) and be initialized to the starting value.",
+    "expected": "A typed useState hook call inside the component."
+  },
+  {
+    "id": "step4",
+    "type": "question",
+    "phase": "Step 4 of 7",
+    "paal": "Create a function that will handle incrementing the counter. Focus on the logic rather than event parameters.",
+    "hint": "The function should update the state using the setter from useState.",
+    "example_code": "Like programming a remote control button to increase the volume.",
+    "think_prompt": "What's the best way to type a click handler function for a button?",
+    "mc_options": [
+      "Don't type it - TypeScript will infer from usage",
+      "Use (event: React.MouseEvent) => void",
+      "Use () => void since we don't need the event object"
+    ],
+    "mc_correct_option": "Use () => void since we don't need the event object",
+    "mc_anchor": "Write a function that increases the count by 1.",
+    "why_this_matters": "Event handlers need proper typing to prevent runtime errors. TypeScript helps catch event-related bugs during development.",
+    "answer_keywords": [
+      "=>",
+      "set",
+      "+",
+      "1"
+    ],
+    "seed_code": "",
+    "starter_code": "",
+    "feedback_correct": "Perfect! You've created a handler that safely updates state.",
+    "feedback_partial": "You're close. Make sure your function calls the state setter.",
+    "feedback_wrong": "Let's create the handler: a function that calls setCount with count + 1.",
+    "expected": "A function that increments the state value."
+  },
+  {
+    "id": "step5",
+    "type": "question",
+    "phase": "Step 5 of 7",
+    "paal": "Create another handler function for decreasing the counter. Follow the same pattern as the increment handler.",
+    "hint": "This function should also use the state setter.",
+    "example_code": "Like adding a volume down button to match the volume up button.",
+    "think_prompt": "Should the decrement handler have the same type as increment?",
+    "mc_options": [
+      "No, it needs different typing because it decreases",
+      "Yes, both are simple click handlers without event parameters",
+      "Maybe, depends on if we prevent negative numbers"
+    ],
+    "mc_correct_option": "Yes, both are simple click handlers without event parameters",
+    "mc_anchor": "Write a function that decreases the count by 1.",
+    "why_this_matters": "Complete apps need multiple interactions. Consistent handler patterns make code predictable and maintainable.",
+    "answer_keywords": [
+      "=>",
+      "set",
+      "-",
+      "1"
+    ],
+    "seed_code": "",
+    "starter_code": "",
+    "feedback_correct": "Great! Now you have both increment and decrement handlers.",
+    "feedback_partial": "Almost. Make sure this function decreases the count.",
+    "feedback_wrong": "Let's add the decrement handler: similar to increment but subtracting 1.",
+    "expected": "A second handler function for decrementing."
+  },
+  {
+    "id": "step6",
+    "type": "question",
+    "phase": "Step 6 of 7",
+    "paal": "Make your component return the visual interface: display the current count and provide buttons to change it.",
+    "hint": "Use a div to wrap everything, display the state variable, and add button elements.",
+    "example_code": "Like arranging furniture in a room so people can interact with it.",
+    "think_prompt": "What should our counter's JSX display?",
+    "mc_options": [
+      "Only the current count number",
+      "The count plus one button",
+      "The count plus both increment and decrement buttons"
+    ],
+    "mc_correct_option": "The count plus both increment and decrement buttons",
+    "mc_anchor": "Return JSX showing the count and two buttons.",
+    "why_this_matters": "JSX defines what users see. TypeScript validates that your JSX is syntactically correct and properly typed.",
+    "answer_keywords": [
+      "return",
+      "div",
+      "{",
+      "}",
+      "button"
+    ],
+    "seed_code": "",
+    "starter_code": "",
+    "feedback_correct": "Perfect! Your UI structure is ready for interaction.",
+    "feedback_partial": "Good structure. Make sure to display the count value.",
+    "feedback_wrong": "Let's build the UI: show the count and add button elements.",
+    "expected": "JSX that displays the counter value and buttons."
+  },
+  {
+    "id": "step7",
+    "type": "question",
+    "phase": "Step 7 of 7",
+    "paal": "Make the buttons interactive by connecting them to your handler functions. Pass the function references, don't call them.",
+    "hint": "Use onClick prop with curly braces.",
+    "example_code": "Like plugging a controller into a game console.",
+    "think_prompt": "How do we connect our handler functions to button clicks?",
+    "mc_options": [
+      "onClick={incrementHandler()} with parentheses",
+      "onClick={incrementHandler} without parentheses",
+      "onClick=\"incrementHandler\" as a string"
+    ],
+    "mc_correct_option": "onClick={incrementHandler} without parentheses",
+    "mc_anchor": "Attach the handler functions to button click events.",
+    "why_this_matters": "Event wiring brings interactivity to life. TypeScript ensures event handlers receive correct event types.",
+    "answer_keywords": [
+      "onClick",
+      "={",
+      "}"
+    ],
+    "seed_code": "",
+    "starter_code": "",
+    "feedback_correct": "Excellent! Your counter app is now fully interactive and type-safe!",
+    "feedback_partial": "Almost there. Make sure you're passing the function, not calling it.",
+    "feedback_wrong": "Let's connect the handlers: onClick={handlerFunction} (no parentheses).",
+    "expected": "Buttons with onClick handlers attached."
+  }
 ];
 
-const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2jsx" }, { label: "Step 3", id: "step2" }, { label: "Step 4", id: "step3" }];
+const sideItems = [
+  {
+    "label": "Lesson",
+    "id": "intro"
+  },
+  {
+    "label": "Objectives",
+    "id": "objectives"
+  },
+  {
+    "label": "Step 1",
+    "id": "step1"
+  },
+  {
+    "label": "Step 2",
+    "id": "step2"
+  },
+  {
+    "label": "Step 3",
+    "id": "step3"
+  },
+  {
+    "label": "Step 4",
+    "id": "step4"
+  },
+  {
+    "label": "Step 5",
+    "id": "step5"
+  },
+  {
+    "label": "Step 6",
+    "id": "step6"
+  },
+  {
+    "label": "Step 7",
+    "id": "step7"
+  }
+];
 
-export default createINPACTEngine({ NODES, sideItems, lessonNum: 1, title: "Counter App (TypeScript)", shortName: "TS — COUNTER" });
+export default createINPACTEngine({ NODES, sideItems, lessonNum: 1, title: "Counter App (TypeScript)", shortName: "TS — COUNTER APP" });
