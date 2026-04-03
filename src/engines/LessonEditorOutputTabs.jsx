@@ -382,17 +382,17 @@ function generateTemplatePreview(code) {
 const lessonStyles = {
   wrap: { maxWidth: "640px" },
   lessonScroll: { maxHeight: "calc(100vh - 220px)", overflowY: "auto", overflowX: "hidden" },
-  phase: { fontSize: "10px", letterSpacing: "3px", color: "#0891b2", marginBottom: "16px" },
-  badge: { display: "inline-block", fontSize: "10px", fontWeight: 700, letterSpacing: "0.2em", color: "#b45309", marginBottom: "12px", background: "rgba(245,158,11,0.15)", padding: "6px 12px", borderRadius: "6px", border: "1px solid rgba(245,158,11,0.4)" },
-  card: { background: "#ffffff", border: "1px solid #e2e8f0", borderLeft: "4px solid #0891b2", borderRadius: "12px", padding: "24px 28px", marginBottom: "24px", boxShadow: "0 1px 3px rgba(0,0,0,0.06)" },
-  paalLabel: { fontSize: "10px", color: "#0891b2", letterSpacing: "2px", marginBottom: "10px", fontWeight: 600 },
+  phase: { fontSize: "10px", letterSpacing: "3px", color: "#f28a8a", marginBottom: "16px" },
+  badge: { display: "inline-block", fontSize: "10px", fontWeight: 700, letterSpacing: "0.2em", color: "#64748b", marginBottom: "12px", padding: "0" },
+  card: { background: "#ffffff", border: "1px solid #e2e8f0", borderLeft: "4px solid #f28a8a", borderRadius: "12px", padding: "24px 28px", marginBottom: "24px", boxShadow: "0 1px 3px rgba(0,0,0,0.06)" },
+  paalLabel: { fontSize: "10px", color: "#f28a8a", letterSpacing: "2px", marginBottom: "10px", fontWeight: 600 },
   paalText: { fontSize: "16px", color: "#334155", lineHeight: "1.75", whiteSpace: "pre-wrap" },
   taskCard: { background: "rgba(245,158,11,0.1)", border: "1px solid rgba(245,158,11,0.35)", borderLeft: "4px solid #f59e0b", borderRadius: "10px", padding: "18px 22px", marginTop: "20px", marginBottom: "24px" },
   taskLabel: { fontSize: "10px", fontWeight: 700, letterSpacing: "0.15em", color: "#b45309", marginBottom: "8px" },
   taskText: { fontSize: "15px", color: "#422006", lineHeight: "1.65", whiteSpace: "pre-wrap" },
   editorTaskWrap: { width: "100%", marginBottom: "4px", flexShrink: 0, boxSizing: "border-box" },
-  editorTaskBox: { background: "#ffffff", border: "1px solid #e2e8f0", borderLeft: "4px solid #0891b2", borderRadius: "8px", padding: "8px 12px", boxShadow: "0 1px 2px rgba(0,0,0,0.04)" },
-  editorTaskLabel: { fontSize: "9px", color: "#0891b2", letterSpacing: "0.12em", marginBottom: "2px", fontWeight: 700 },
+  editorTaskBox: { background: "#ffffff", border: "1px solid #e2e8f0", borderLeft: "4px solid #f28a8a", borderRadius: "8px", padding: "8px 12px", boxShadow: "0 1px 2px rgba(0,0,0,0.04)" },
+  editorTaskLabel: { fontSize: "9px", color: "#f28a8a", letterSpacing: "0.12em", marginBottom: "2px", fontWeight: 700 },
   editorTaskText: { fontSize: "13px", color: "#334155", lineHeight: "1.45", whiteSpace: "pre-wrap" },
   cta: { marginTop: "28px", padding: "14px 20px", background: "rgba(8,145,178,0.08)", border: "1px solid rgba(8,145,178,0.25)", borderRadius: "8px", fontSize: "13px", color: "#0e7490", lineHeight: "1.6", display: "flex", alignItems: "center", gap: "10px", flexWrap: "wrap" },
   tabBar: { display: "flex", gap: "6px", marginBottom: "4px", borderBottom: "none", paddingBottom: "0", flexShrink: 0 },
@@ -484,6 +484,86 @@ export function EditorTaskBlock({
 const introNodeFromNodes = (nodes) => nodes?.find((n) => n.type === "reveal" && (n.id === "intro" || n.phase === "Lesson")) || nodes?.find((n) => n.type === "reveal");
 const objectivesNodeFromNodes = (nodes) => nodes?.find((n) => n.type === "objectives");
 
+/** Same PROGRESS affordance as the main lesson sidebar, embedded beside the code editor. */
+function EditorProgressRail({ items, activeNodeIndex, completedIds, onSelectIndex }) {
+  if (!Array.isArray(items) || items.length === 0 || typeof onSelectIndex !== "function") return null;
+  const doneSet = new Set(Array.isArray(completedIds) ? completedIds : []);
+  const railStyles = {
+    wrap: {
+      width: "220px",
+      flexShrink: 0,
+      background: "#f1f5f9",
+      borderRight: "1px solid #e2e8f0",
+      padding: "12px 0",
+      overflowY: "auto",
+      overflowX: "hidden",
+      boxSizing: "border-box",
+      alignSelf: "stretch",
+      minHeight: 0,
+    },
+    label: { fontSize: "10px", fontWeight: 700, letterSpacing: "0.15em", color: "#64748b", padding: "0 16px 10px", marginBottom: "2px" },
+    row: (isActive, isDone) => ({
+      padding: "10px 16px",
+      display: "flex",
+      alignItems: "center",
+      gap: "10px",
+      cursor: "pointer",
+      background: isActive ? "#e0f2fe" : "transparent",
+      borderLeft: isActive ? "3px solid #0891b2" : "3px solid transparent",
+      marginLeft: 0,
+    }),
+    dot: (isActive, isDone) => ({
+      width: "10px",
+      height: "10px",
+      borderRadius: "50%",
+      flexShrink: 0,
+      ...(isDone
+        ? { background: "#10b981" }
+        : isActive
+          ? { background: "#0891b2" }
+          : { background: "transparent", border: "2px solid #94a3b8" }),
+    }),
+    text: (isActive, isDone) => ({
+      fontSize: "12px",
+      color: isDone ? "#059669" : isActive ? "#0f172a" : "#64748b",
+      lineHeight: 1.35,
+      fontWeight: isActive ? 600 : 400,
+    }),
+  };
+  return (
+    <nav
+      className="inpact-editor-progress-rail"
+      aria-label="Lesson progress"
+      data-tour-id="editor-progress-rail"
+      style={railStyles.wrap}
+    >
+        <div style={railStyles.label}>PROGRESS</div>
+        {items.map((item, i) => {
+          const isActive = activeNodeIndex === i;
+          const isDone = doneSet.has(item.id);
+          return (
+            <div
+              key={item.id}
+              style={railStyles.row(isActive, isDone)}
+              onClick={() => onSelectIndex(i)}
+              role="button"
+              tabIndex={0}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault();
+                  onSelectIndex(i);
+                }
+              }}
+            >
+              <div style={railStyles.dot(isActive, isDone)} aria-hidden />
+              <div style={railStyles.text(isActive, isDone)}>{item.label}</div>
+            </div>
+          );
+        })}
+    </nav>
+  );
+}
+
 export default function LessonEditorOutputTabs({
   node,
   nodes,
@@ -507,6 +587,8 @@ export default function LessonEditorOutputTabs({
   onOpenEditorWorkspace,
   onCloseEditorWorkspace,
   editorWorkspaceTitle = "",
+  /** When editor workspace (or inline editor) is shown, optional PROGRESS rail; indices align with lesson nodes. */
+  editorProgress = null,
   children,
 }) {
   const lessonValidationCtx = useContext(LessonValidationContext);
@@ -604,12 +686,28 @@ export default function LessonEditorOutputTabs({
 
   return (
     <>
+      <style>
+        {`
+          .inpact-editor-progress-rail { width: 220px; }
+          @media (max-width: 700px) {
+            .inpact-editor-progress-row { flex-direction: column !important; align-items: stretch !important; }
+            .inpact-editor-progress-rail {
+              width: 100% !important;
+              max-height: min(36vh, 200px);
+              border-right: none !important;
+              border-bottom: 1px solid #e2e8f0;
+              flex-shrink: 0;
+            }
+          }
+        `}
+      </style>
       {!tabsInSidebar && (
         <div style={{ ...lessonStyles.tabBar, alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: "8px" }}>
           <div style={{ display: "flex", gap: "6px" }}>
             <button
               type="button"
               style={lessonStyles.tab(useEditorWorkspaceModal ? !editorWorkspaceOpen : mainTab === "lesson")}
+              data-tour-id="tab-lesson"
               onClick={() => {
                 if (useEditorWorkspaceModal) {
                   onCloseEditorWorkspace?.();
@@ -622,6 +720,7 @@ export default function LessonEditorOutputTabs({
             <button
               type="button"
               style={lessonStyles.tab(useEditorWorkspaceModal ? editorWorkspaceOpen : mainTab === "editor")}
+              data-tour-id="tab-editor"
               onClick={() => {
                 if (useEditorWorkspaceModal) onOpenEditorWorkspace?.();
                 else setMainTab("editor");
@@ -634,29 +733,22 @@ export default function LessonEditorOutputTabs({
             <button
               type="button"
               style={{ ...lessonStyles.tab(false), borderColor: "#a89880", color: "#6b5c4c", fontSize: "11px" }}
+              data-tour-id="reading-button"
               onClick={() => setShowReadingModal(true)}
               title="Skim the lesson like a book — steps, code, and explanations"
             >
               📖 Reading
-            </button>
-            <button
-              type="button"
-              style={{ ...lessonStyles.tab(false), borderColor: "#0891b2", color: "#0891b2", fontSize: "11px" }}
-              onClick={openOutputModal}
-            >
-              🖥️ Preview
             </button>
           </div>
         </div>
       )}
       {(useEditorWorkspaceModal || mainTab === "lesson") && (
         <div ref={lessonScrollRef} style={lessonStyles.lessonScroll}>
-          <div style={lessonStyles.wrap}>
-            <div style={lessonStyles.badge}>📖 LESSON</div>
+            <div style={lessonStyles.wrap}>
             {(lessonContent.title || lessonContent.body || lessonContent.usecase) && (
               <div style={lessonStyles.card}>
                 <div style={lessonStyles.paalLabel}>TOPICS & CONCEPTS</div>
-                {lessonContent.tag && <div style={{ fontSize: "11px", color: "#7c3aed", marginBottom: "8px" }}>{lessonContent.tag}</div>}
+                {lessonContent.tag && <div style={{ fontSize: "11px", color: "#f28a8a", marginBottom: "8px" }}>{lessonContent.tag}</div>}
                 {lessonContent.title && <div style={{ fontSize: "18px", fontWeight: 600, color: "#0f172a", marginBottom: "12px" }}>{lessonContent.title}</div>}
                 {introDeepDiveConcept ? (
                   <div style={{ marginBottom: "16px" }}>
@@ -696,7 +788,7 @@ export default function LessonEditorOutputTabs({
               <span>
                 {useEditorWorkspaceModal ? (
                   <>
-                    Open the <strong style={{ color: "#0891b2" }}>Editor</strong> tab or use the <strong style={{ color: "#0891b2" }}>Open editor</strong> button to code in full screen, then <strong style={{ color: "#0891b2" }}>Preview</strong> to run output.
+                    Open the <strong style={{ color: "#0891b2" }}>Editor</strong> tab to code in full screen, then <strong style={{ color: "#0891b2" }}>Preview</strong> to run output.
                   </>
                 ) : (
                   <>
@@ -710,6 +802,16 @@ export default function LessonEditorOutputTabs({
       )}
       {!useEditorWorkspaceModal && mainTab === "editor" && (
         <div style={{ display: "flex", flexDirection: "column", flex: 1, minHeight: 0, width: "100%", maxWidth: "100%", overflow: "hidden" }}>
+          <div style={{ marginBottom: "4px", flexShrink: 0 }}>
+            <button
+              type="button"
+              style={{ ...lessonStyles.tab(false), borderColor: "#0891b2", color: "#0891b2", fontSize: "11px" }}
+              data-tour-id="preview-button"
+              onClick={openOutputModal}
+            >
+              🖥️ Preview
+            </button>
+          </div>
           {showTaskInEditor && (
             <EditorTaskBlock
               node={node}
@@ -718,8 +820,39 @@ export default function LessonEditorOutputTabs({
               onOpenDeepDive={setDeepDiveConcept}
             />
           )}
-          <div style={{ flex: 1, minHeight: 0, display: "flex", flexDirection: "column", minWidth: 0, maxWidth: "100%", overflow: "hidden" }}>
-            {children}
+          <div
+            className={editorProgress ? "inpact-editor-progress-row" : undefined}
+            style={{
+              flex: 1,
+              minHeight: 0,
+              display: "flex",
+              flexDirection: editorProgress ? "row" : "column",
+              alignItems: editorProgress ? "stretch" : undefined,
+              minWidth: 0,
+              maxWidth: "100%",
+              overflow: "hidden",
+            }}
+          >
+            {editorProgress ? (
+              <EditorProgressRail
+                items={editorProgress.items}
+                activeNodeIndex={editorProgress.activeNodeIndex}
+                completedIds={editorProgress.completedIds}
+                onSelectIndex={editorProgress.onSelectIndex}
+              />
+            ) : null}
+            <div
+              style={{
+                flex: 1,
+                minWidth: 0,
+                minHeight: 0,
+                display: "flex",
+                flexDirection: "column",
+                overflow: "hidden",
+              }}
+            >
+              {children}
+            </div>
           </div>
         </div>
       )}
@@ -776,6 +909,7 @@ export default function LessonEditorOutputTabs({
                 <button
                   type="button"
                   onClick={() => onCloseEditorWorkspace?.()}
+                  data-tour-id="editor-close"
                   style={{
                     flexShrink: 0,
                     padding: "8px 16px",
@@ -812,36 +946,53 @@ export default function LessonEditorOutputTabs({
                     />
                   </div>
                 )}
-                <div style={{ flex: 1, minHeight: 0, display: "flex", flexDirection: "column", overflow: "hidden" }}>
-                  {children}
+                <div
+                  className={editorProgress ? "inpact-editor-progress-row" : undefined}
+                  style={{
+                    flex: 1,
+                    minHeight: 0,
+                    display: "flex",
+                    flexDirection: editorProgress ? "row" : "column",
+                    alignItems: editorProgress ? "stretch" : undefined,
+                    overflow: "hidden",
+                  }}
+                >
+                  {editorProgress ? (
+                    <EditorProgressRail
+                      items={editorProgress.items}
+                      activeNodeIndex={editorProgress.activeNodeIndex}
+                      completedIds={editorProgress.completedIds}
+                      onSelectIndex={editorProgress.onSelectIndex}
+                    />
+                  ) : null}
+                  <div
+                    style={{
+                      flex: 1,
+                      minWidth: 0,
+                      minHeight: 0,
+                      display: "flex",
+                      flexDirection: "column",
+                      overflow: "hidden",
+                    }}
+                  >
+                    <div style={{ flexShrink: 0, marginBottom: "4px" }}>
+                      <button
+                        type="button"
+                        style={{ ...lessonStyles.tab(false), borderColor: "#0891b2", color: "#0891b2", fontSize: "11px" }}
+                        data-tour-id="preview-button"
+                        onClick={openOutputModal}
+                      >
+                        🖥️ Preview
+                      </button>
+                    </div>
+                    <div style={{ flex: 1, minHeight: 0, display: "flex", flexDirection: "column", overflow: "hidden" }}>
+                      {children}
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-          {!editorWorkspaceOpen && (
-            <button
-              type="button"
-              style={{
-                position: "fixed",
-                bottom: "max(24px, env(safe-area-inset-bottom, 0px))",
-                right: "max(24px, env(safe-area-inset-right, 0px))",
-                zIndex: 10018,
-                padding: "14px 22px",
-                borderRadius: "999px",
-                border: "none",
-                background: "#00d4ff",
-                color: "#052545",
-                fontWeight: 700,
-                fontSize: "13px",
-                cursor: "pointer",
-                boxShadow: "0 10px 30px rgba(15, 23, 42, 0.2)",
-                fontFamily: "'DM Sans', sans-serif",
-              }}
-              onClick={() => onOpenEditorWorkspace?.()}
-            >
-              Open editor
-            </button>
-          )}
         </>
       )}
       <ReadingModeModal

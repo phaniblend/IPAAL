@@ -7,6 +7,7 @@ import CssTabsEditor from "./css/CssTabsEditor";
 import AngularTabbedEditor from "./angular/AngularTabbedEditor";
 import { mergeAngularTsWithHtml, mergeAngularCssIntoTS, splitAngularSeed } from "./angular/angularTabMerge.js";
 import LessonEditorOutputTabs from "./LessonEditorOutputTabs";
+import InterfaceTour from "./InterfaceTour";
 import RichLearnerText from "./RichLearnerText";
 import { inferReactTsAnalogousExample } from "./reactTsAnalogousExamples.js";
 import { mergeSnippetIntoEmptyReactExportDefaultBody } from "./mergeReactExampleSnippet.js";
@@ -75,6 +76,36 @@ function mergeMultiFileForValidation(answer) {
   const entries = Object.entries(parsed.files);
   if (entries.length === 0) return "";
   return entries.map(([name, code]) => `// FILE: ${name}\n${code}`).join("\n\n");
+}
+
+function ensureReactJsxScaffoldForStep(node, code, lang) {
+  if (typeof code !== "string" || !code.trim()) return code;
+  const languageTag = String(lang || node?.language || "").toLowerCase();
+  const isReactLike =
+    languageTag.includes("react") ||
+    languageTag.includes("tsx") ||
+    languageTag.includes("jsx") ||
+    languageTag.includes("typescript") ||
+    languageTag.includes("javascript");
+  if (!isReactLike) return code;
+  const text = `${node?.paal || ""}\n${node?.hint || ""}\n${node?.expected || ""}`.toLowerCase();
+  const needsUiScaffold =
+    /\b(jsx|return|render|onclick|onchange|oninput|button|input|form|handler|wire)\b/.test(text);
+  if (!needsUiScaffold) return code;
+  const alreadyHasJsx = /return\s*\(\s*<[\w]/m.test(code) || /<[A-Za-z][\w-]*[\s>]/.test(code);
+  if (alreadyHasJsx) return code;
+
+  const scaffold = text.includes("input")
+    ? `  return (\n    <div>\n      <input />\n      <p></p>\n    </div>\n  );\n`
+    : `  return (\n    <div>\n      <button></button>\n      <span></span>\n    </div>\n  );\n`;
+
+  const fnMatch = code.match(/export\s+default\s+function\s+\w+\s*\([^)]*\)\s*\{[\s\S]*\}\s*$/m);
+  if (!fnMatch) return code;
+  const fnBlock = fnMatch[0];
+  const insertAt = fnBlock.lastIndexOf("}");
+  if (insertAt < 0) return code;
+  const updatedFn = `${fnBlock.slice(0, insertAt)}\n${scaffold}${fnBlock.slice(insertAt)}`;
+  return code.replace(fnBlock, updatedFn);
 }
 
 function getMultiFilePreviewCode(answer) {
@@ -242,12 +273,43 @@ function resolveQuestionStepExample(answerShape, node, shortName) {
   }
   const isReactTsTrack = typeof shortName === "string" && /^\s*TS\s+[—-]/i.test(shortName);
   let primarySyncEntry = null;
+  // For React-TS, prefer local deterministic inference rules over generated snippets
+  // so "Show me an example" always follows our pedagogy constraints.
+  const preferInferredForReactTs = isReactTsTrack;
+
+  function looksLikeCodeSnippet(exampleCode) {
+    if (typeof exampleCode !== "string") return false;
+    const t = exampleCode.trim();
+    if (!t) return false;
+    const lowered = t.toLowerCase();
+    // Heuristic reject: common natural-language lead-ins from analogies.
+    if (/^like\s+/i.test(t) || /^example[:\s]/i.test(lowered) || /^before\s+/i.test(lowered)) return false;
+    // Accept if it contains typical code tokens.
+    return (
+      /\bconst\b/.test(t) ||
+      /\bfunction\b/.test(t) ||
+      /\breturn\b/.test(t) ||
+      /\buseState\b/.test(t) ||
+      /\bonClick\b/.test(t) ||
+      /\bonChange\b/.test(t) ||
+      /=>/.test(t) ||
+      /<\s*[A-Za-z]/.test(t) ||
+      /\bReact\./.test(t) ||
+      /:\s*React\./.test(t)
+    );
+  }
+
+  const taskTextForExample = `${node?.paal || ""}\n${node?.hint || ""}\n${node?.expected || ""}\n${node?.think_prompt || ""}\n${node?.instruction || ""}`
+    .toLowerCase();
+  // For import-focused steps, always prefer inferred/analogous import patterns.
+  // Otherwise learners may see the exact required hook import line via `node.analogousExample`/`node.example_code`.
+  const isImportFocusedTask = /\bimport\b/.test(taskTextForExample) && /\breact\b/.test(taskTextForExample);
 
   const curatedRaw =
     (typeof node.ai_example_code === "string" && node.ai_example_code.trim()) ||
     (typeof node.analogousExample === "string" && node.analogousExample.trim()) ||
     "";
-  if (curatedRaw) {
+  if (!preferInferredForReactTs && !isImportFocusedTask && curatedRaw && looksLikeCodeSnippet(curatedRaw)) {
     const base = curatedRaw;
     const wrapped = buildExampleWithStarterContext(answerShape, node, base);
     const meta = node.ai_example_meta;
@@ -261,19 +323,13 @@ function resolveQuestionStepExample(answerShape, node, shortName) {
       label: "EXAMPLE",
       code: stripToRelevantToggleFunction(node, stripAnalogousHeadingComment(wrapped)),
     };
-  } else if (node.example_code) {
+  } else if (!preferInferredForReactTs && !isImportFocusedTask && node.example_code && looksLikeCodeSnippet(node.example_code)) {
     const wrapped = buildExampleWithStarterContext(answerShape, node, node.example_code);
     primarySyncEntry = {
       label:
         wrapped !== node.example_code
           ? "EXAMPLE (starter context + pattern — adapt to your code)"
           : "EXAMPLE (similar pattern — not the exact answer)",
-      code: stripToRelevantToggleFunction(node, stripAnalogousHeadingComment(wrapped)),
-    };
-  } else if (node.expected && node.expected.includes("\n")) {
-    const wrapped = buildExampleWithStarterContext(answerShape, node, node.expected);
-    primarySyncEntry = {
-      label: wrapped !== node.expected ? "EXPECTED (with starter context)" : "EXPECTED",
       code: stripToRelevantToggleFunction(node, stripAnalogousHeadingComment(wrapped)),
     };
   }
@@ -298,9 +354,6 @@ function resolveQuestionStepExample(answerShape, node, shortName) {
       code: stripToRelevantToggleFunction(node, stripAnalogousHeadingComment(node.seed_code)),
     };
   }
-  if (!localFallbackEntry && node.expected) {
-    localFallbackEntry = { label: "EXPECTED", code: stripToRelevantToggleFunction(node, node.expected) };
-  }
 
   const preferServerFetch =
     isReactTsTrack &&
@@ -312,13 +365,132 @@ function resolveQuestionStepExample(answerShape, node, shortName) {
 
 function evaluate(node, answer) {
   if (node.evaluate) return node.evaluate(answer);
-  const lower = (answer || "").toLowerCase().replace(/\s/g, "");
+  const raw = String(answer || "");
+  const lower = raw.toLowerCase().replace(/\s/g, "");
+  const identifierWhitelist = new Set([
+    "usestate",
+    "useeffect",
+    "useref",
+    "onclick",
+    "onchange",
+    "return",
+    "button",
+    "input",
+    "export",
+    "default",
+    "div",
+    "span",
+    "p",
+    "map",
+    "length",
+    "target",
+    "value",
+    "string",
+    "number",
+    "boolean",
+  ]);
+  const isIdentifierOnly = (kw) => /^[a-zA-Z_$][\w$]*$/.test(kw);
+  const keywordSatisfied = (kw) => {
+    const k = String(kw || "").toLowerCase().replace(/\s/g, "");
+    if (!k) return true;
+    if (k.includes("onclick")) return /onClick\s*=\s*\{/.test(raw);
+    if (k.includes("onchange")) return /onChange\s*=\s*\{/.test(raw);
+    if (k.includes("usestate<string>")) return /useState\s*<\s*string\s*>/i.test(raw);
+    if (k.includes("usestate<number>")) {
+      // If the keyword also specifies an initial `0`, check both generic + initializer.
+      if (k.includes("(0") || k.includes("0)")) return /useState\s*<\s*number\s*>\s*\(\s*0\s*\)/i.test(raw);
+      return /useState\s*<\s*number\s*>/i.test(raw);
+    }
+    if (k.includes("usestate<boolean>")) return /useState\s*<\s*boolean\s*>/i.test(raw);
+    if (k.includes("react.changeevent<input")) return /React\.ChangeEvent\s*<\s*HTMLInputElement\s*>/i.test(raw);
+    if (isIdentifierOnly(k) && !identifierWhitelist.has(k)) return true; // never force learner naming
+    return lower.includes(k);
+  };
   const keywords = node.answer_keywords || [];
-  const hits = keywords.filter((kw) => lower.includes(kw.toLowerCase().replace(/\s/g, "")));
+  const hits = keywords.filter((kw) => keywordSatisfied(kw));
   const ratio = keywords.length ? hits.length / keywords.length : 0;
   if (ratio >= 0.8) return "correct";
   if (ratio >= 0.5) return "partial";
   return "wrong";
+}
+
+function stripCodeLikeFragments(text) {
+  if (typeof text !== "string") return "";
+  let t = text;
+  t = t.replace(/```[\s\S]*?```/g, "");
+  t = t.replace(/`[^`]*`/g, "the relevant part");
+  t = t.replace(/<[^>]+>/g, "a UI element");
+  t = t.replace(/\b(import|export|const|let|var|function|return|class)\b/gi, "");
+  t = t.replace(/\b(useState|useEffect|useRef|onClick|onChange|set[A-Z]\w*)\b/g, "the required pattern");
+  t = t.replace(/\[[^\]]*\]|\{[^}]*\}|\([^)]*\)/g, "");
+  t = t.replace(/[=;<>]/g, " ");
+  if (
+    /(\bconst\b|\bimport\b|\breturn\b|=>|\{|\}|;|<|>|\(|\)|\[[^\]]*\])/.test(t) ||
+    /\buseState\b/i.test(text)
+  ) {
+    // If still code-like, drop it fully.
+    t = "";
+  }
+  t = t.replace(/\s+/g, " ").trim();
+  return t;
+}
+
+function buildHintOnlyGuidance(node) {
+  const task = stripCodeLikeFragments(node?.paal || "");
+  const hint = stripCodeLikeFragments(node?.hint || "");
+  const parts = [];
+  if (task) parts.push(`Task focus: ${task}`);
+  if (hint) parts.push(`Guidance: ${hint}`);
+  if (parts.length === 0) parts.push("Review the task requirements, then validate your solution step-by-step.");
+  return parts.join("\n\n");
+}
+
+function buildFeedbackOnlyGuidance(text) {
+  const cleaned = stripCodeLikeFragments(text || "");
+  if (!cleaned) {
+    return "Feedback: review the task requirements, verify behavior step-by-step, and ensure type correctness.";
+  }
+  return `Feedback: ${cleaned}`;
+}
+
+function buildAnalogousExample(node, fallbackCode = "") {
+  const text = `${node?.paal || ""}\n${node?.hint || ""}\n${node?.expected || ""}`.toLowerCase();
+  // Word-boundary regex checks to avoid false triggers like "ControlledInput"
+  // matching both "input" and "controlled" via substring `includes()`.
+  const hasOnChange = /\bonchange\b/.test(text) || /\bonchange\s*=\s*\{/.test(text);
+  const hasControlledInputPhrase = /\bcontrolled\s+input\b/.test(text);
+  const hasStandaloneInputWord = /\binput\b/.test(text);
+  if (
+    text.includes("functional update") ||
+    (/\bincrement\b/.test(text) && /\bdecrement\b/.test(text)) ||
+    (/\bsetcount\b/.test(text) && /\bprev\b/.test(text))
+  ) {
+    return `// Analogous pattern (not your exact answer)
+const [value, setValue] = useState<number>(1);
+
+const double = () => {
+  setValue((prev) => prev * 2);
+};
+
+const halve = () => {
+  setValue((prev) => Math.max(0, Math.floor(prev / 2)));
+};`;
+  }
+  if (hasStandaloneInputWord && (hasOnChange || hasControlledInputPhrase)) {
+    return `// Analogous pattern (not your exact answer)
+const [query, setQuery] = useState<string>("");
+
+const handleQueryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  setQuery(e.target.value);
+};`;
+  }
+  if (typeof fallbackCode === "string" && fallbackCode.trim()) {
+    return fallbackCode.trim();
+  }
+  return `// Analogous pattern
+// 1) define typed state
+// 2) define handler with clear intent
+// 3) wire handler in JSX`;
 }
 
 export default function createINPACTEngine(config) {
@@ -352,6 +524,8 @@ export default function createINPACTEngine(config) {
     const [result, setResult] = useState(null);
     const [attempts, setAttempts] = useState(0);
     const [showHint, setShowHint] = useState(false);
+    const [showTaskModal, setShowTaskModal] = useState(false);
+    const [thinkSelection, setThinkSelection] = useState(null);
     const [showExampleModal, setShowExampleModal] = useState(false);
     const [exampleModalPayload, setExampleModalPayload] = useState(null);
     const [exampleModalLoading, setExampleModalLoading] = useState(false);
@@ -370,6 +544,7 @@ export default function createINPACTEngine(config) {
     const [mentorLoading, setMentorLoading] = useState(false);
     const [mentorError, setMentorError] = useState("");
     const [checking, setChecking] = useState(false);
+    const [tourLaunchNonce, setTourLaunchNonce] = useState(0);
     const [completedNodes, setCompletedNodes] = useState([]);
     const [passedCodeByStepId, setPassedCodeByStepId] = useState({});
     const [aiFeedback, setAiFeedback] = useState("");
@@ -451,56 +626,16 @@ export default function createINPACTEngine(config) {
       setExampleModalOffset({ x: 0, y: 0 });
       setExampleModalFetchError(null);
       setShowExampleModal(true);
-      const { primarySyncEntry, localFallbackEntry, preferServerFetch } = stepExampleResolution;
-      const track = lessonValidationCtx?.track;
-      if (!preferServerFetch || !track) {
-        setExampleModalPayload(primarySyncEntry ?? localFallbackEntry);
-        setExampleModalLoading(false);
-        return;
-      }
-      setExampleModalPayload(null);
-      setExampleModalLoading(true);
-      const lessonKey =
-        lessonValidationCtx.lessonKey ??
-        `${track}:${lessonValidationCtx.lessonIndex ?? ""}:${lessonValidationCtx.lessonTitle ?? ""}`;
-      const seedCode =
-        typeof node?.seed_code === "string"
-          ? node.seed_code
-          : node?.seed_code && typeof node.seed_code === "object"
-            ? JSON.stringify(node.seed_code)
-            : "";
-      fetchStepExample({
-        lessonKey,
-        track,
-        lessonIndex: lessonValidationCtx.lessonIndex,
-        lessonTitle: lessonValidationCtx.lessonTitle ?? title,
-        stepId: node?.id,
-        paal: node?.paal,
-        hint: node?.hint || "",
-        seedCode,
-        language: language || node?.language || "typescript",
-        lessonDisplayTitle: title,
-      })
-        .then((data) => {
-          const meta = data.meta && typeof data.meta === "object" ? data.meta : {};
-          const fromCache = data.cacheHit === true;
-          const label =
-            data.source === "lesson-json"
-              ? "EXAMPLE (lesson JSON — content file)"
-              : fromCache
-                ? "EXAMPLE (server cache — shared for all learners)"
-                : "EXAMPLE (AI — stored on server for all learners)";
-          setExampleModalPayload({
-            label: "EXAMPLE",
-            code: stripAnalogousHeadingComment(String(data.code || "").trim()),
-          });
-        })
-        .catch((err) => {
-          setExampleModalFetchError(err instanceof Error ? err.message : String(err));
-          setExampleModalPayload(primarySyncEntry ?? localFallbackEntry);
-        })
-        .finally(() => setExampleModalLoading(false));
-    }, [stepExampleResolution, lessonValidationCtx, title, language, node?.id, node?.seed_code, node?.paal, node?.hint]);
+      setExampleModalLoading(false);
+      const fallbackCode =
+        stepExampleResolution?.primarySyncEntry?.code ||
+        stepExampleResolution?.localFallbackEntry?.code ||
+        "";
+      setExampleModalPayload({
+        label: "ANALOGOUS EXAMPLE",
+        code: buildAnalogousExample(node, fallbackCode),
+      });
+    }, [node, stepExampleResolution]);
 
     useEffect(() => {
       if (node?.type !== "question") setEditorWorkspaceOpen(false);
@@ -510,6 +645,8 @@ export default function createINPACTEngine(config) {
       setResult(null);
       setAttempts(0);
       setShowHint(false);
+      setShowTaskModal(node?.type === "question");
+      setThinkSelection(null);
       setShowExampleModal(false);
       setExampleModalOffset({ x: 0, y: 0 });
       setFeedbackModalOffset({ x: 0, y: 0 });
@@ -549,6 +686,15 @@ export default function createINPACTEngine(config) {
               if (seed) initialCode = seed;
             }
           }
+        }
+        if (
+          answerShape !== "css-tabs" &&
+          answerShape !== "angular-tabs" &&
+          answerShape !== "multi-file" &&
+          typeof initialCode === "string" &&
+          initialCode.trim()
+        ) {
+          initialCode = ensureReactJsxScaffoldForStep(node, initialCode, language || node?.language || "");
         }
         setAnswer(initialCode);
         if (answerShape === "multi-file" && multiFilePlaceholderClearOnFirstStepOnly) {
@@ -805,12 +951,12 @@ export default function createINPACTEngine(config) {
       sideItemDot: (a, d) => ({ width: "10px", height: "10px", borderRadius: "50%", flexShrink: 0, ...(d ? { background: "#10b981" } : a ? { background: "#0891b2" } : { background: "transparent", border: "2px solid #94a3b8" }) }),
       sideItemText: (a, d) => ({ fontSize: "13px", color: d ? "#059669" : a ? "#0f172a" : "#64748b", lineHeight: 1.35, fontWeight: (a ? 600 : 400) }),
       main: { flex: 1, padding: "4px 20px 24px 20px", paddingLeft: "96px", minWidth: "75vw", maxWidth: "75vw", minHeight: 0, display: "flex", flexDirection: "column", overflowX: "hidden", boxSizing: "border-box" },
-      phase: { fontSize: "10px", letterSpacing: "3px", color: "#0891b2", marginBottom: "16px" },
-      tag: { fontSize: "11px", color: "#7c3aed", fontWeight: "600", letterSpacing: "0.15em", marginBottom: "12px" },
+      phase: { fontSize: "10px", letterSpacing: "3px", color: "#f28a8a", marginBottom: "16px" },
+      tag: { fontSize: "11px", color: "#f28a8a", fontWeight: "600", letterSpacing: "0.15em", marginBottom: "12px" },
       h1: { fontSize: "28px", fontWeight: "400", color: "#0f172a", marginBottom: "32px", lineHeight: "1.2" },
       pre: { fontSize: "13px", lineHeight: "1.8", color: "#475569", background: "#f1f5f9", border: "1px solid #e2e8f0", borderRadius: "8px", padding: "24px", whiteSpace: "pre-wrap", marginBottom: "32px" },
-      paalBox: { background: "#f1f5f9", border: "1px solid #e2e8f0", borderLeft: "3px solid #0891b2", borderRadius: "8px", padding: "20px 24px", marginBottom: "24px" },
-      paalLabel: { fontSize: "10px", color: "#0891b2", letterSpacing: "2px", marginBottom: "10px" },
+      paalBox: { background: "#f1f5f9", border: "1px solid #e2e8f0", borderLeft: "3px solid #f28a8a", borderRadius: "8px", padding: "20px 24px", marginBottom: "24px" },
+      paalLabel: { fontSize: "10px", color: "#f28a8a", letterSpacing: "2px", marginBottom: "10px" },
       paalText: { fontSize: "16px", color: "#334155", lineHeight: "1.6", whiteSpace: "pre-wrap" },
       btnRow: { display: "flex", gap: "12px", marginTop: "4px", flexWrap: "wrap" },
       btn: (v) => ({ padding: "14px 32px", borderRadius: "16px", cursor: "pointer", fontSize: "14px", fontWeight: "600", letterSpacing: "0.02em", background: v === "primary" ? "#00D2FF" : v === "ghost" ? "transparent" : "#e0f2fe", color: v === "primary" ? "#00334E" : v === "ghost" ? "#64748b" : "#0f172a", border: v === "ghost" ? "1px solid #cbd5e1" : v === "secondary" ? "1px solid #bae6fd" : "none" }),
@@ -818,7 +964,106 @@ export default function createINPACTEngine(config) {
       hintBox: { marginTop: "12px", padding: "12px 16px", background: "rgba(124,58,237,0.08)", border: "1px solid #7c3aed", borderRadius: "6px", fontSize: "11px", color: "#6d28d9", lineHeight: "1.7" },
       expectedBox: { marginTop: "12px", padding: "16px", background: "#f1f5f9", border: "1px solid #e2e8f0", borderRadius: "6px", fontSize: "12px", color: "#475569", whiteSpace: "pre-wrap", lineHeight: "1.7" },
       completeBanner: { textAlign: "center", padding: "60px 20px" },
+      helpTourBtn: {
+        position: "fixed",
+        right: "16px",
+        top: "62px",
+        zIndex: 12040,
+        padding: "8px 12px",
+        borderRadius: "999px",
+        border: "1px solid #bae6fd",
+        background: "#e0f2fe",
+        color: "#075985",
+        fontSize: "12px",
+        fontWeight: 700,
+        cursor: "pointer",
+      },
     };
+
+    const interfaceTourSteps = useMemo(
+      () => [
+        {
+          selector: '[data-tour-id="tab-lesson"]',
+          text: "Lesson tab shows the concept explanation and context before you code.",
+          action: { type: "open-lesson" },
+        },
+        {
+          selector: '[data-tour-id="tab-editor"]',
+          text: "Editor opens your coding workspace. Click it any time to continue coding.",
+          action: { type: "open-lesson" },
+        },
+        {
+          selector: '[data-tour-id="reading-button"]',
+          text: "Reading opens a book-like view to review all lesson steps quickly.",
+          action: { type: "open-lesson" },
+        },
+        {
+          selector: '[data-tour-id="preview-button"]',
+          text: "Preview opens a live output modal from inside the editor so you can quickly validate what your code renders.",
+          action: { type: "open-editor" },
+        },
+        {
+          selector: '[data-tour-id="deep-dive-button"]',
+          text: "Hungry for more? Deep-dive opens short concept guides that zoom out beyond this single step.",
+          action: { type: "open-editor" },
+        },
+        {
+          selector: '[data-tour-id="editor-close"]',
+          text: "Use Close to return from editor workspace back to the lesson page.",
+          action: { type: "open-editor" },
+        },
+        {
+          selector: '[data-tour-id="check-code-button"]',
+          text: "Check my code validates your solution for the current step.",
+          action: { type: "open-editor" },
+        },
+        {
+          selector: '[data-tour-id="show-example-button"]',
+          text: "Show me an example gives a pattern-style reference to guide your solution.",
+          action: { type: "open-editor" },
+        },
+        {
+          selector: '[data-tour-id="show-hint-button"]',
+          text: "Show hint gives a gentle nudge when you’re stuck, without revealing the full solution.",
+          action: { type: "open-editor" },
+        },
+        {
+          selector: '[data-tour-id="view-hint-feedback-button"]',
+          text: "View hint & feedback gathers your hints and code feedback in one place so you can learn from each attempt.",
+          action: { type: "open-editor" },
+        },
+        {
+          selector: '[data-tour-id="ask-mentor-button"]',
+          text: "Ask mentor lets you chat with a mentor-style assistant about this exact step, in your own words.",
+          action: { type: "open-editor" },
+        },
+        {
+          selector: '[data-tour-id="help-tour-button"]',
+          text: "Use the Help: Tour button any time you’d like to replay this walkthrough.",
+          action: { type: "open-editor" },
+        },
+      ],
+      []
+    );
+
+    const handleTourAction = useCallback(
+      (action) => {
+        if (!action || typeof action !== "object") return;
+        if (node?.type !== "question" && firstQuestionNodeIndex >= 0) {
+          setNodeIndex(firstQuestionNodeIndex);
+        }
+        if (action.type === "open-lesson") {
+          setMainTab("lesson");
+          setEditorWorkspaceOpen(false);
+          return;
+        }
+        if (action.type === "open-editor") {
+          setMainTab("editor");
+          setEditorWorkspaceOpen(true);
+        }
+      },
+      [node?.type, firstQuestionNodeIndex]
+    );
 
     function renderReveal() {
       const c = node.content;
@@ -826,7 +1071,7 @@ export default function createINPACTEngine(config) {
       return (
         <div>
           <div style={revealPadding}>
-            <div style={s.phase}>{node.phase}</div>
+            {node.phase && node.phase !== "Lesson" && <div style={s.phase}>{node.phase}</div>}
             {c.tag && <div style={s.tag}>{c.tag}</div>}
             <h1 style={s.h1}>{c.title}</h1>
             <RichLearnerText text={c.body} style={s.pre} />
@@ -840,7 +1085,7 @@ export default function createINPACTEngine(config) {
     function renderObjectives() {
       return (
         <div>
-          <div style={s.phase}>{node.phase}</div>
+          {node.phase && node.phase !== "Lesson" && <div style={s.phase}>{node.phase}</div>}
           <h1 style={s.h1}>After completing this Lesson, you'll be able to:</h1>
           {node.items.map((item, i) => (
             <div key={i} style={{ display: "flex", gap: "16px", padding: "14px 0", borderBottom: "1px solid #e2e8f0" }}>
@@ -855,6 +1100,7 @@ export default function createINPACTEngine(config) {
               style={s.btn("primary")}
               onClick={() => {
                 next();
+                setMainTab("editor");
                 setEditorWorkspaceOpen(true);
               }}
             >
@@ -881,7 +1127,7 @@ export default function createINPACTEngine(config) {
             {codingStepIndex > 0 && (
               <>
                 <span style={{ fontSize: "11px", color: "#64748b" }}>·</span>
-                <span style={{ fontSize: "11px", color: "#0891b2", fontWeight: 600, letterSpacing: "0.05em" }}>CODE BUILT SO FAR — edit below</span>
+                <span style={{ fontSize: "11px", color: "#0891b2", fontWeight: 600, letterSpacing: "0.05em" }}>write your code in the editor below</span>
               </>
             )}
           </div>
@@ -1002,28 +1248,23 @@ export default function createINPACTEngine(config) {
           : answerShape === "multi-file"
             ? Object.values(parsedMultiFile?.files || {}).some((v) => String(v || "").trim())
             : answer.trim();
-      const hasExampleButton =
-        node?.type === "question" &&
-        !!(
-          stepExampleResolution.primarySyncEntry ||
-          stepExampleResolution.preferServerFetch ||
-          stepExampleResolution.localFallbackEntry
-        );
+      const hasExampleButton = node?.type === "question";
       const hasHintOrFeedback = node.hint || fbMsg;
       return (
         <>
           <div style={s.btnRow}>
             {result !== "correct" ? (
               <>
-                <button type="button" className={`inpact-btn-primary ${checking ? "inpact-btn-checking" : ""}`} style={s.btn("primary")} onClick={submit} disabled={!canSubmit || checking}>{checking ? "Checking..." : "CHECK MY CODE"}</button>
+                <button type="button" data-tour-id="check-code-button" className={`inpact-btn-primary ${checking ? "inpact-btn-checking" : ""}`} style={s.btn("primary")} onClick={submit} disabled={!canSubmit || checking}>{checking ? "Checking..." : "CHECK MY CODE"}</button>
                 {hasExampleButton && (
-                  <button type="button" style={s.btn("secondary")} onClick={openStepExampleModal}>
+                  <button type="button" data-tour-id="show-example-button" style={s.btn("secondary")} onClick={openStepExampleModal}>
                     SHOW ME AN EXAMPLE
                   </button>
                 )}
                 {attempts > 0 && !showHint && (
                   <button
                     type="button"
+                    data-tour-id="show-hint-button"
                     style={s.btn("secondary")}
                     onClick={() => {
                       setShowHint(true);
@@ -1037,6 +1278,7 @@ export default function createINPACTEngine(config) {
                 {hasHintOrFeedback && (
                   <button
                     type="button"
+                    data-tour-id="view-hint-feedback-button"
                     style={s.btn("secondary")}
                     onClick={() => {
                       setFeedbackModalOffset({ x: 0, y: 0 });
@@ -1047,7 +1289,7 @@ export default function createINPACTEngine(config) {
                   </button>
                 )}
                 {onAskMentorResolved && (
-                  <button type="button" style={s.btn("secondary")} onClick={() => { setShowMentorModal(true); setMentorError(""); }}>Ask mentor</button>
+                  <button type="button" data-tour-id="ask-mentor-button" style={s.btn("secondary")} onClick={() => { setShowMentorModal(true); setMentorError(""); }}>Ask mentor</button>
                 )}
               </>
             ) : (
@@ -1058,6 +1300,7 @@ export default function createINPACTEngine(config) {
                 {hasHintOrFeedback && !showFeedbackModal && (
                   <button
                     type="button"
+                    data-tour-id="view-hint-feedback-button"
                     style={s.btn("secondary")}
                     onClick={() => {
                       setFeedbackModalOffset({ x: 0, y: 0 });
@@ -1068,7 +1311,7 @@ export default function createINPACTEngine(config) {
                   </button>
                 )}
                 {onAskMentorResolved && (
-                  <button type="button" style={s.btn("secondary")} onClick={() => { setShowMentorModal(true); setMentorError(""); }}>Ask mentor</button>
+                  <button type="button" data-tour-id="ask-mentor-button" style={s.btn("secondary")} onClick={() => { setShowMentorModal(true); setMentorError(""); }}>Ask mentor</button>
                 )}
               </>
             )}
@@ -1199,12 +1442,7 @@ export default function createINPACTEngine(config) {
                 >
                   <div id="feedback-modal-title" style={{ fontSize: "12px", fontWeight: 700, letterSpacing: "0.05em", color: "#64748b", marginBottom: 0 }}>HINT & FEEDBACK</div>
                 </div>
-                {node.hint && (
-                  <div style={{ ...s.hintBox, marginBottom: fbMsg ? "16px" : 0 }}>
-                    <span aria-hidden>💡 </span>
-                    <RichLearnerText as="span" text={node.hint} variant="hint" style={{ display: "inline" }} />
-                  </div>
-                )}
+                {null /* Intentionally no purple hint block in this modal; we show only feedback. */}
                 {fbMsg && (
                   <div style={s.feedback(result)}>
                     <RichLearnerText text={fbMsg} variant="feedback" />
@@ -1297,6 +1535,244 @@ export default function createINPACTEngine(config) {
               </div>
             </div>
           )}
+          {showTaskModal && node?.type === "question" ? (
+            <div
+              style={{
+                position: "fixed",
+                inset: 0,
+                zIndex: 11009,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                background: "rgba(15, 23, 42, 0.5)",
+                padding: "24px",
+                boxSizing: "border-box",
+              }}
+              onClick={() => setShowTaskModal(false)}
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby="task-modal-title"
+            >
+              {(() => {
+                const hasThink =
+                  typeof node?.think_prompt === "string" &&
+                  Array.isArray(node?.mc_options) &&
+                  node.mc_options.length >= 2 &&
+                  typeof node?.mc_correct_option === "string";
+
+                const selected = hasThink ? thinkSelection : null;
+                const isCorrect = hasThink && selected != null && selected === node.mc_correct_option;
+
+                if (!hasThink) {
+                  return (
+                    <div
+                      style={{
+                        background: "#ffffff",
+                        borderRadius: "12px",
+                        padding: "24px",
+                        maxWidth: "640px",
+                        width: "100%",
+                        maxHeight: "80vh",
+                        overflowY: "auto",
+                        boxShadow: "0 20px 60px rgba(0,0,0,0.2)",
+                        border: "1px solid #e2e8f0",
+                      }}
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      <div id="task-modal-title" style={{ ...s.paalLabel, marginBottom: "10px" }}>
+                        TASK
+                      </div>
+                      <div style={s.expectedBox}>
+                        <RichLearnerText text={node.paal || ""} variant="task" />
+                      </div>
+                      {node.hint ? (
+                        <div style={{ ...s.hintBox, marginTop: "14px" }}>
+                          <span aria-hidden>💡 </span>
+                          <RichLearnerText as="span" text={buildHintOnlyGuidance(node)} variant="hint" style={{ display: "inline" }} />
+                        </div>
+                      ) : null}
+                      <div style={{ marginTop: "20px", display: "flex", justifyContent: "flex-end" }}>
+                        <button
+                          type="button"
+                          className="inpact-btn-primary"
+                          style={s.btn("primary")}
+                          onClick={() => setShowTaskModal(false)}
+                        >
+                          Continue to editor
+                        </button>
+                      </div>
+                    </div>
+                  );
+                }
+
+                const whyMatters = node.why_this_matters || "";
+                const thinkPrompt = node.think_prompt || "";
+                const options = node.mc_options || [];
+                const anchor = node.mc_anchor || (isCorrect ? node.feedback_correct : node.feedback_wrong) || "";
+
+                return (
+                  <div
+                    style={{
+                      background: "#ffffff",
+                      borderRadius: "12px",
+                      padding: "18px",
+                      maxWidth: "920px",
+                      width: "100%",
+                      maxHeight: "80vh",
+                      overflowY: "auto",
+                      boxShadow: "0 20px 60px rgba(0,0,0,0.2)",
+                      border: "1px solid #e2e8f0",
+                    }}
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    <div
+                      style={{
+                        marginBottom: "14px",
+                        padding: "10px 14px",
+                        borderRadius: "8px",
+                        border: "1px solid rgba(242,138,138,0.9)",
+                        background: "#f28a8a",
+                        color: "#0f172a",
+                        fontSize: "18px",
+                        lineHeight: 1.35,
+                        fontWeight: 500,
+                      }}
+                    >
+                      Pause before coding: Answer the quick thinking prompt first
+                    </div>
+
+                    {whyMatters ? (
+                      <div style={{ marginBottom: "12px" }}>
+                        <div style={{ fontSize: "10px", letterSpacing: "2px", color: "#0891b2", marginBottom: "8px", fontWeight: 800 }}>
+                          WHY THIS MATTERS
+                        </div>
+                        <div style={{ fontSize: "14px", color: "#475569", lineHeight: 1.6 }}>{whyMatters}</div>
+                      </div>
+                    ) : null}
+
+                    <div style={{ marginBottom: "12px" }}>
+                      <div style={{ fontSize: "10px", letterSpacing: "3px", color: "#0891b2", marginBottom: "10px", fontWeight: 800 }}>
+                        THINK
+                      </div>
+                      <div style={s.expectedBox}>
+                        <RichLearnerText
+                          text={thinkPrompt}
+                          variant="task"
+                          style={{ fontSize: "19px", lineHeight: 1.55, fontWeight: 700, color: "#0f172a" }}
+                        />
+                      </div>
+                    </div>
+
+                    <div style={{ display: "flex", flexDirection: "column", gap: "12px", marginBottom: "16px" }}>
+                      {options.map((opt, idx) => {
+                        const checked = selected != null;
+                        const optIsCorrect = checked && opt === node.mc_correct_option;
+                        const optIsWrongSel = checked && opt === selected && !optIsCorrect;
+                        return (
+                          <button
+                            key={`${opt}-${idx}`}
+                            type="button"
+                            onClick={() => setThinkSelection(opt)}
+                            style={{
+                              textAlign: "left",
+                              padding: "13px 16px",
+                              borderRadius: "12px",
+                              border: optIsCorrect
+                                ? "2px solid rgba(16,185,129,0.9)"
+                                : optIsWrongSel
+                                  ? "2px solid rgba(239,68,68,0.9)"
+                                  : selected === opt
+                                    ? "2px solid rgba(8,145,178,0.75)"
+                                    : "1px solid #dbeafe",
+                              background: optIsCorrect
+                                ? "rgba(16,185,129,0.08)"
+                                : optIsWrongSel
+                                  ? "rgba(239,68,68,0.06)"
+                                  : selected === opt
+                                    ? "rgba(8,145,178,0.04)"
+                                    : "#f8fafc",
+                              cursor: "pointer",
+                              color: "#0f172a",
+                              boxShadow:
+                                optIsCorrect || optIsWrongSel || selected === opt
+                                  ? "0 4px 10px rgba(15,23,42,0.08)"
+                                  : "0 1px 3px rgba(15,23,42,0.06)",
+                              fontSize: "14px",
+                              fontWeight: 500,
+                              transition: "background 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease",
+                            }}
+                          >
+                            {opt}
+                          </button>
+                        );
+                      })}
+                    </div>
+
+                    {selected != null ? (
+                      <div style={{ marginBottom: "14px" }}>
+                        <div
+                          style={{
+                            fontSize: "12px",
+                            padding: "10px 12px",
+                            borderRadius: "10px",
+                            background: isCorrect ? "rgba(16,185,129,0.08)" : "rgba(239,68,68,0.06)",
+                            border: `1px solid ${isCorrect ? "rgba(16,185,129,0.35)" : "rgba(239,68,68,0.25)"}`,
+                            color: isCorrect ? "#059669" : "#dc2626",
+                            lineHeight: 1.5,
+                            fontWeight: 700,
+                          }}
+                        >
+                          {isCorrect ? "Correct" : "Not quite"}: {anchor}
+                        </div>
+                      </div>
+                    ) : null}
+
+                    <div style={{ marginTop: "6px" }}>
+                      <div style={{ fontSize: "10px", letterSpacing: "2px", color: "#0891b2", marginBottom: "10px", fontWeight: 800 }}>
+                        NOW CODE
+                      </div>
+                      <div style={{ display: "flex", flexWrap: "wrap", gap: "10px" }}>
+                        <button
+                          type="button"
+                          className="inpact-btn-primary"
+                          style={s.btn("primary")}
+                          disabled={!isCorrect}
+                          onClick={() => {
+                            setShowTaskModal(false);
+                            setMainTab("editor");
+                          }}
+                        >
+                          Continue to editor
+                        </button>
+                        <button
+                          type="button"
+                          className="inpact-btn-primary"
+                          style={s.btn("ghost")}
+                          onClick={() => {
+                            setShowTaskModal(false);
+                            setShowMentorModal(true);
+                          }}
+                        >
+                          Need help?
+                        </button>
+                        <button
+                          type="button"
+                          className="inpact-btn-primary"
+                          style={s.btn("secondary")}
+                          onClick={() => {
+                            setShowTaskModal(false);
+                            openStepExampleModal();
+                          }}
+                        >
+                          Show me a simpler version
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })()}
+            </div>
+          ) : null}
         </>
       );
     }
@@ -1304,7 +1780,7 @@ export default function createINPACTEngine(config) {
     function renderEditorContent({ fillViewport = false } = {}) {
       const rawFb = result === "correct" ? node.feedback_correct : result === "partial" ? node.feedback_partial : result === "wrong" ? node.feedback_wrong : null;
       const staticFbMsg = typeof rawFb === "function" ? rawFb(answer) : rawFb;
-      const fbMsg = aiFeedback || staticFbMsg;
+      const fbMsg = buildFeedbackOnlyGuidance(aiFeedback || staticFbMsg || "");
       return (
         <div style={{ display: "flex", flexDirection: "column", flex: 1, minHeight: 0, width: "100%", maxWidth: "100%", overflowX: "hidden" }}>
           <div
@@ -1371,6 +1847,14 @@ export default function createINPACTEngine(config) {
 
     return (
       <div style={s.wrap}>
+        <button
+          type="button"
+          data-tour-id="help-tour-button"
+          style={s.helpTourBtn}
+          onClick={() => setTourLaunchNonce((v) => v + 1)}
+        >
+          Help: Tour
+        </button>
         <style>{`
           @media (max-width: 768px) {
             .inpact-sidebar { display: none !important; }
@@ -1417,6 +1901,12 @@ export default function createINPACTEngine(config) {
                 onOpenEditorWorkspace={() => setEditorWorkspaceOpen(true)}
                 onCloseEditorWorkspace={() => setEditorWorkspaceOpen(false)}
                 editorWorkspaceTitle={`${title} · Step ${codingStepNum} of ${codingStepTotal}`}
+                editorProgress={{
+                  items: sideItems,
+                  activeNodeIndex: nodeIndex,
+                  completedIds: completedNodes,
+                  onSelectIndex: setNodeIndex,
+                }}
               >
                 {renderEditorContent({ fillViewport: true })}
               </LessonEditorOutputTabs>
@@ -1425,6 +1915,13 @@ export default function createINPACTEngine(config) {
             )}
           </div>
         </div>
+        <InterfaceTour
+          steps={interfaceTourSteps}
+          onRequestAction={handleTourAction}
+          forceStartNonce={tourLaunchNonce}
+          lessonKey={`${lessonNum}:${title}`}
+          helpSelector='[data-tour-id="help-tour-button"]'
+        />
       </div>
     );
   };
