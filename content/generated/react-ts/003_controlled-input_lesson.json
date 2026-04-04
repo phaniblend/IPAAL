@@ -65,39 +65,39 @@
         "type": "question",
         "phase": "Step 2 of 6",
         "title": "Define the component",
-        "instruction": "Declare a functional component named ControlledInput with explicit React.FC type.",
-        "hint": "Start with 'const ControlledInput: React.FC = () => { }'.",
-        "analogousExample": "const MyButton: React.FC = () => { return <button>Click</button>; };",
+        "instruction": "Declare a functional component named ControlledInput with an explicit JSX.Element return type.",
+        "hint": "Start with 'const ControlledInput = (): JSX.Element => { }'.",
+        "analogousExample": "const MyButton = (): JSX.Element => { return <button>Click</button>; };",
         "whyThisMatters": "Every React component needs a function definition to hold our logic and JSX.",
         "thinkPrompt": {
           "question": "What's the correct way to define a functional component in TypeScript?",
           "options": [
             "function MyComponent() { ... }",
-            "const MyComponent: React.FC = () => { ... }",
+            "const MyComponent = (): JSX.Element => { ... }",
             "const MyComponent = () => { ... }"
           ],
-          "correctAnswer": "const MyComponent: React.FC = () => { ... }",
+          "correctAnswer": "const MyComponent = (): JSX.Element => { ... }",
           "allowGuessing": true,
           "confidenceMessage": "Don't worry — just guess."
         },
-        "anchor": "Use React.FC for explicit typing in TypeScript.",
+        "anchor": "Use an explicit JSX.Element return type for the component function.",
         "simplerVersion": "const ControlledInput = () => { };",
         "seedCode": "",
         "expectedOutcome": "Component skeleton is created.",
         "successCriteria": [
           "component defined",
-          "uses React.FC",
+          "uses JSX.Element return type",
           "returns something (even null)"
         ],
         "feedbackCorrect": "Perfect! The component is ready.",
-        "feedbackPartial": "Close — make sure you're using React.FC for TypeScript.",
-        "feedbackWrong": "Let's define a component with React.FC.",
+        "feedbackPartial": "Close — make sure you're using JSX.Element for TypeScript.",
+        "feedbackWrong": "Let's define a component with JSX.Element.",
         "evaluation": {
           "mode": "keyword_match",
           "required": [
             "const",
             "ControlledInput",
-            "React.FC",
+            "JSX.Element",
             "=>"
           ]
         }

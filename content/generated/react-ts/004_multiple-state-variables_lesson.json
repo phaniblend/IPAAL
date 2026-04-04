@@ -65,38 +65,38 @@
         "type": "question",
         "phase": "Step 2 of 6",
         "title": "Create the component skeleton",
-        "instruction": "Define a functional component named CounterDashboard that returns an empty div for now. Use React.FC type annotation.",
-        "hint": "Start with 'const CounterDashboard: React.FC = () => { return <div></div>; };'",
-        "analogousExample": "const UserProfile: React.FC = () => { return <section></section>; };",
+        "instruction": "Define a functional component named CounterDashboard that returns an empty div for now, with an explicit JSX.Element return type.",
+        "hint": "Start with 'const CounterDashboard = (): JSX.Element => { return <div></div>; };'",
+        "analogousExample": "const UserProfile = (): JSX.Element => { return <section></section>; };",
         "whyThisMatters": "Components are the building blocks of React. TypeScript requires us to specify that this function returns JSX.Element.",
         "thinkPrompt": {
           "question": "How do we define a functional component with TypeScript that returns JSX?",
           "options": [
-            "const MyComponent: React.FC = () => { return <div>Hello</div>; };",
+            "const MyComponent = (): JSX.Element => { return <div>Hello</div>; };",
             "function MyComponent() { return <div>Hello</div>; }",
             "const MyComponent = () => <div>Hello</div>;"
           ],
-          "correctAnswer": "const MyComponent: React.FC = () => { return <div>Hello</div>; };",
+          "correctAnswer": "const MyComponent = (): JSX.Element => { return <div>Hello</div>; };",
           "allowGuessing": true,
           "confidenceMessage": "Don't worry — just guess."
         },
-        "anchor": "React.FC is the TypeScript type for functional components, ensuring proper typing.",
+        "anchor": "An explicit JSX.Element return type documents what the component renders.",
         "simplerVersion": "",
         "seedCode": "",
         "expectedOutcome": "A component function with proper TypeScript typing that returns JSX.",
         "successCriteria": [
           "Component uses const declaration",
-          "Has React.FC type annotation",
+          "Has explicit JSX.Element return type",
           "Returns JSX element"
         ],
         "feedbackCorrect": "Great! You've created a properly typed React component skeleton.",
-        "feedbackPartial": "Almost! Make sure you're using React.FC and returning JSX.",
-        "feedbackWrong": "Let's review: const ComponentName: React.FC = () => { return <div></div>; };",
+        "feedbackPartial": "Almost! Make sure you're using JSX.Element and returning JSX.",
+        "feedbackWrong": "Let's review: const ComponentName = (): JSX.Element => { return <div></div>; };",
         "evaluation": {
           "mode": "keyword_match",
           "required": [
             "CounterDashboard",
-            "React.FC",
+            "JSX.Element",
             "return",
             "<div"
           ]

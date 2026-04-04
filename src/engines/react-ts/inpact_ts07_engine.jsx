@@ -64,22 +64,22 @@ const NODES = [
     "type": "question",
     "phase": "Step 2 of 7",
     "paal": "Create a function component named EffectDemo with proper TypeScript typing that returns an empty fragment for now.",
-    "hint": "Use React.FC type annotation and return <> </> as initial JSX.",
-    "example_code": "const DataFetcher: React.FC = () => { return <div>Loading...</div> }",
+    "hint": "Use an explicit `: JSX.Element` return type and return <> </> as initial JSX.",
+    "example_code": "const DataFetcher = (): JSX.Element => { return <div>Loading...</div> }",
     "think_prompt": "What's the correct TypeScript type for a React function component that takes no props?",
     "mc_options": [
-      "const MyComponent: React.FC = () => { ... }",
+      "const MyComponent = (): JSX.Element => { ... }",
       "const MyComponent: Function = () => { ... }",
       "const MyComponent = () => { ... }"
     ],
-    "mc_correct_option": "const MyComponent: React.FC = () => { ... }",
-    "mc_anchor": "React.FC (Function Component) is the standard TypeScript type for React components, providing better type checking and IntelliSense.",
+    "mc_correct_option": "const MyComponent = (): JSX.Element => { ... }",
+    "mc_anchor": "Modern React + TypeScript favors an explicit JSX.Element return type on the function instead of JSX.Element.",
     "why_this_matters": "Every React component needs a function definition that returns JSX. TypeScript requires us to explicitly declare the component's type, which helps catch errors early.",
     "answer_keywords": [
       "const",
       "EffectDemo",
       ":",
-      "React.FC",
+      "JSX.Element",
       "=",
       "()",
       "=>",
@@ -93,7 +93,7 @@ const NODES = [
     "starter_code": "",
     "feedback_correct": "Great! You've created a properly typed React component foundation.",
     "feedback_partial": "Almost there! Make sure to include the TypeScript type annotation.",
-    "feedback_wrong": "Let's review: We need a const with React.FC type that returns JSX.",
+    "feedback_wrong": "Let's review: We need a const with JSX.Element type that returns JSX.",
     "expected": "A typed React component skeleton that can be expanded."
   },
   {

@@ -6,7 +6,7 @@
         "file": "inpact_ts01_engine.jsx",
         "title": "Counter App — Typed",
         "objectives": [
-          "Define a functional component using React.FC with a typed props interface",
+          "Define a functional component with an explicit JSX.Element return type and typed props (avoid React.FC)",
           "Declare state with an explicit type parameter via useState<number>",
           "Type event handler functions as () => void and wire them to onClick props",
           "Pass props from App.tsx and trigger a compiler error by mismatching types — then fix it"
@@ -20,7 +20,7 @@
           "Declare a boolean state variable using useState<boolean>",
           "Type a toggle handler as () => void and bind it to an onClick prop",
           "Use a boolean state variable to conditionally return JSX via a ternary expression",
-          "Define a VisibilityProps interface and apply it to React.FC<VisibilityProps>"
+          "Define a VisibilityProps interface and type the component with explicit JSX.Element (avoid React.FC)"
         ]
       },
       {
@@ -116,7 +116,7 @@
         "file": "inpact_ts11_engine.jsx",
         "title": "Card Component — Typed",
         "objectives": [
-          "Define a CardProps interface with required and optional fields and apply it to React.FC<CardProps>",
+          "Define a CardProps interface with required and optional fields and type the component with `({ ... }: CardProps): JSX.Element`",
           "Use the children prop typed as React.ReactNode to compose arbitrary content inside the card",
           "Apply conditional rendering using the && operator to show optional sections only when props are defined",
           "Use the ?? nullish coalescing operator to supply fallback values for optional string props"
@@ -152,7 +152,7 @@
           "Declare the children prop explicitly typed as React.ReactNode in a custom interface",
           "Use React.PropsWithChildren<T> utility type to compose children with custom props",
           "Render the children prop inside a wrapper component to implement a layout slot pattern",
-          "Apply React.FC<React.PropsWithChildren<CustomProps>> and confirm children type inference"
+          "Type children with PropsWithChildren (or explicit ReactNode) and JSX.Element return type"
         ]
       },
       {
@@ -160,7 +160,7 @@
         "file": "inpact_ts15_engine.jsx",
         "title": "TypeScript Interface for Props — Typed",
         "objectives": [
-          "Define a TypeScript interface to describe a component's prop contract and apply it to React.FC<T>",
+          "Define a TypeScript interface for props and apply it with an explicit JSX.Element return type",
           "Use a string literal union type to constrain a prop to a finite set of allowed values",
           "Extend one interface from another using the extends keyword to share common prop fields",
           "Declare an index signature in an interface to type a props object with dynamic keys"
@@ -567,7 +567,7 @@
         "file": "inpact_ts52_engine.jsx",
         "title": "HOC withAuth — Typed",
         "objectives": [
-          "Write a higher-order component withAuth<P>(Component: React.ComponentType<P>): React.FC<P> with a generic type parameter",
+          "Write a higher-order component withAuth<P>(Component: React.ComponentType<P>): React.ComponentType<P> with a generic type parameter",
           "Read authentication state from a typed context inside the HOC and redirect unauthenticated users",
           "Spread the original props typed as P onto the wrapped Component to pass through all existing props",
           "Apply the HOC at the export site and confirm the wrapped component retains its full typed prop surface"
@@ -623,7 +623,7 @@
         "title": "Recursive TreeView — Typed",
         "objectives": [
           "Define a TreeNode interface with id, label, and an optional children: TreeNode[] recursive field",
-          "Write a TreeNode component typed as React.FC<{ node: TreeNode }> that calls itself for each child node",
+          "Write a TreeNode component typed as `({ node }: { node: TreeNode }): JSX.Element` that calls itself for each child node",
           "Declare a useState<Set<string>> to track expanded node IDs and update it in a typed toggle handler",
           "Use the && operator to conditionally render children only when a node's ID is in the expanded set"
         ]

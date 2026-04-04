@@ -67,11 +67,11 @@ const NODES = [
     "think_prompt": "What TypeScript return type should a React component function have?",
     "mc_options": [
       "JSX.Element",
-      "React.FC (FunctionComponent)",
-      "Either JSX.Element or React.FC are valid"
+      "void",
+      "string"
     ],
-    "mc_correct_option": "Either JSX.Element or React.FC are valid",
-    "mc_anchor": "TypeScript accepts both explicit JSX.Element return type or React.FC interface for components.",
+    "mc_correct_option": "JSX.Element",
+    "mc_anchor": "A component that renders JSX should use an explicit JSX.Element return type on the function (or on a function declaration).",
     "why_this_matters": "Every React component needs a proper function signature that defines its interface and return type.",
     "answer_keywords": [
       "ToggleVisibility",
@@ -81,8 +81,8 @@ const NODES = [
     "seed_code": "",
     "starter_code": "",
     "feedback_correct": "Great! You've established the component's foundation with a clear TypeScript return type.",
-    "feedback_partial": "Almost there. Make sure your component has an explicit TypeScript return type such as JSX.Element or React.FC.",
-    "feedback_wrong": "Let's revisit. We need a function component with an explicit TypeScript return type (for example JSX.Element or React.FC).",
+    "feedback_partial": "Almost there. Give the component an explicit TypeScript return type: JSX.Element.",
+    "feedback_wrong": "Let's revisit. Define the component so it explicitly returns JSX.Element (e.g. function ToggleVisibility(): JSX.Element { ... } or const ToggleVisibility = (): JSX.Element => ...).",
     "expected": "A component function is defined with proper TypeScript typing."
   },
   {

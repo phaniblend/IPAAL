@@ -20,7 +20,7 @@
         "Model a boolean state variable using useState<boolean> so state, refs, or values keep a predictable shape as the feature evolves, and data shape and updates remain explicit throughout the lesson.",
         "Type a toggle handler as () => void and bind it to an onClick prop so invalid interactions are rejected by the compiler instead of leaking into runtime.",
         "Use a boolean state variable to conditionally return JSX via a ternary expression so the pattern drives visible behavior, and the rendered branch clearly follows the current state.",
-        "Establish a VisibilityProps interface and apply it to React.FC<VisibilityProps> so the contract is explicit and incorrect usage is caught early."
+        "Establish a VisibilityProps interface and type the component as `(props: VisibilityProps) => JSX.Element` (or destructure props) with an explicit JSX.Element return — avoid React.FC in new code."
       ]
     },
     {
@@ -116,7 +116,7 @@
       "file": "inpact_ts11_engine.jsx",
       "title": "Card Component — Typed",
       "objectives": [
-        "Establish a CardProps interface with required and optional fields and apply it to React.FC<CardProps> so the contract is explicit and incorrect usage is caught early.",
+        "Establish a CardProps interface with required and optional fields and type the component with `({ ... }: CardProps): JSX.Element` — avoid React.FC in new code.",
         "Use the children prop typed as React.ReactNode to compose arbitrary content inside the card so the pattern drives visible behavior and can be verified in the UI, runtime, or compiler.",
         "Apply conditional rendering using the && operator to show optional sections only when props are defined so the learner sees how a typed pattern changes behavior, reuse, or safety in practice.",
         "Use the ?? nullish coalescing operator to supply fallback values for optional string props so the pattern drives visible behavior and can be verified in the UI, runtime, or compiler."
@@ -152,7 +152,7 @@
         "Model the children prop explicitly typed as React.ReactNode in a custom interface so state, refs, or values keep a predictable shape as the feature evolves.",
         "Use react.PropsWithChildren<T> utility type to compose children with custom props so the pattern drives visible behavior and can be verified in the UI, runtime, or compiler.",
         "Render the children prop inside a wrapper component to implement a layout slot pattern so the learner can connect the typed data shape to the final UI output.",
-        "Apply react.FC<React.PropsWithChildren<CustomProps>> and confirm children type inference so the learner sees how a typed pattern changes behavior, reuse, or safety in practice."
+        "Type children with React.PropsWithChildren<CustomProps> (or explicit `children: ReactNode`) and an explicit JSX.Element return — avoid React.FC in new code."
       ]
     },
     {
@@ -160,7 +160,7 @@
       "file": "inpact_ts15_engine.jsx",
       "title": "TypeScript Interface for Props — Typed",
       "objectives": [
-        "Establish a TypeScript interface to describe a component's prop contract and apply it to React.FC<T> so the contract is explicit and incorrect usage is caught early.",
+        "Establish a TypeScript interface to describe a component's prop contract and apply it with an explicit JSX.Element return type on the function — avoid React.FC in new code.",
         "Use a string literal union type to constrain a prop to a finite set of allowed values so the pattern drives visible behavior and can be verified in the UI, runtime, or compiler.",
         "Extend one interface from another using the extends keyword to share common prop fields so reuse does not weaken the contract or blur responsibility.",
         "Model an index signature in an interface to type a props object with dynamic keys so state, refs, or values keep a predictable shape as the feature evolves."
@@ -567,7 +567,7 @@
       "file": "inpact_ts52_engine.jsx",
       "title": "HOC withAuth — Typed",
       "objectives": [
-        "Write a higher-order component withAuth<P>(Component: React.ComponentType<P>): React.FC<P> with a generic type parameter so the abstraction solves a concrete UI lesson and exposes a reliable typed contract.",
+        "Write a higher-order component withAuth<P>(Component: React.ComponentType<P>): React.ComponentType<P> with a generic type parameter so the abstraction solves a concrete UI lesson and exposes a reliable typed contract.",
         "Read authentication state from a typed context inside the HOC and redirect unauthenticated users so the learner can explain what runtime information is driving the next decision.",
         "Spread the original props typed as P onto the wrapped Component to pass through all existing props so reusable wrappers preserve native behavior without losing type clarity.",
         "Apply the HOC at the export site and confirm the wrapped component retains its full typed prop surface so the learner sees how a typed pattern changes behavior, reuse, or safety in practice."
@@ -623,7 +623,7 @@
       "title": "Recursive TreeView — Typed",
       "objectives": [
         "Establish a TreeNode interface with id, label, and an optional children: TreeNode[] recursive field so the contract is explicit and incorrect usage is caught early.",
-        "Write a TreeNode component typed as React.FC<{ node: TreeNode }> that calls itself for each child node so the abstraction solves a concrete UI lesson and exposes a reliable typed contract.",
+        "Write a TreeNode component typed as `({ node }: { node: TreeNode }): JSX.Element` that calls itself for each child node so the abstraction solves a concrete UI lesson and exposes a reliable typed contract.",
         "Model a useState<Set<string>> to track expanded node IDs and update it in a typed toggle handler so state, refs, or values keep a predictable shape as the feature evolves, and data shape and updates remain explicit throughout the lesson.",
         "Use the && operator to conditionally render children only when a node's ID is in the expanded set so the pattern drives visible behavior, and the UI exposes only the branch that matches the current state."
       ]

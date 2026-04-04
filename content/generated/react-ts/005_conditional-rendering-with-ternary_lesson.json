@@ -66,8 +66,8 @@
         "phase": "Step 2 of 5",
         "title": "Define the component with TypeScript",
         "instruction": "Create a functional component called UserStatus that returns a div element. Use TypeScript to type it as a React functional component.",
-        "hint": "Use the React.FC type or function declaration with return type.",
-        "analogousExample": "const MyComponent: React.FC = () => { return <div>Hello</div>; };",
+        "hint": "Use an explicit JSX.Element return type (or a function declaration with return type).",
+        "analogousExample": "const MyComponent = (): JSX.Element => { return <div>Hello</div>; };",
         "whyThisMatters": "TypeScript requires explicit type annotations for function components to ensure type safety throughout your application.",
         "thinkPrompt": {
           "question": "What's the main benefit of typing React components with TypeScript?",
@@ -98,7 +98,7 @@
             "UserStatus",
             "return",
             "<div>",
-            "React.FC",
+            "JSX.Element",
             "=>"
           ]
         }

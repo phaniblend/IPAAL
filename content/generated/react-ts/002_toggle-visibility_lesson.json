@@ -73,25 +73,25 @@
           "question": "What TypeScript return type should a React component function have?",
           "options": [
             "JSX.Element",
-            "React.FC (FunctionComponent)",
-            "Either JSX.Element or React.FC are valid"
+            "void",
+            "string"
           ],
-          "correctAnswer": "Either JSX.Element or React.FC are valid",
+          "correctAnswer": "JSX.Element",
           "allowGuessing": true,
           "confidenceMessage": "Don't worry — just guess."
         },
-        "anchor": "TypeScript accepts both explicit JSX.Element return type or React.FC interface for components.",
+        "anchor": "A component that renders JSX should use an explicit JSX.Element return type on the function (or on a function declaration).",
         "simplerVersion": "function ToggleVisibility() { return <div></div>; }",
         "seedCode": "",
         "expectedOutcome": "A component function is defined with proper TypeScript typing.",
         "successCriteria": [
           "Component is named ToggleVisibility",
-          "Has an explicit TypeScript return type (for example JSX.Element or React.FC)",
+          "Has an explicit TypeScript return type (JSX.Element)",
           "Has empty JSX return for now"
         ],
         "feedbackCorrect": "Great! You've established the component's foundation with a clear TypeScript return type.",
-        "feedbackPartial": "Almost there. Make sure your component has an explicit TypeScript return type such as JSX.Element or React.FC.",
-        "feedbackWrong": "Let's revisit. We need a function component with an explicit TypeScript return type (for example JSX.Element or React.FC).",
+        "feedbackPartial": "Almost there. Give the component an explicit TypeScript return type: JSX.Element.",
+        "feedbackWrong": "Let's revisit. Define the component so it explicitly returns JSX.Element (e.g. function ToggleVisibility(): JSX.Element { ... } or const ToggleVisibility = (): JSX.Element => ...).",
         "evaluation": {
           "mode": "keyword_match",
           "required": [

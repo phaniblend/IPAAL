@@ -69,39 +69,39 @@
         "phase": "Step 2 of 7",
         "title": "Define component skeleton",
         "instruction": "Create a function component named EffectDemo with proper TypeScript typing that returns an empty fragment for now.",
-        "hint": "Use React.FC type annotation and return <> </> as initial JSX.",
-        "analogousExample": "const DataFetcher: React.FC = () => { return <div>Loading...</div> }",
+        "hint": "Use an explicit `: JSX.Element` return type and return <> </> as initial JSX.",
+        "analogousExample": "const DataFetcher = (): JSX.Element => { return <div>Loading...</div> }",
         "whyThisMatters": "Every React component needs a function definition that returns JSX. TypeScript requires us to explicitly declare the component's type, which helps catch errors early.",
         "thinkPrompt": {
           "question": "What's the correct TypeScript type for a React function component that takes no props?",
           "options": [
-            "const MyComponent: React.FC = () => { ... }",
+            "const MyComponent = (): JSX.Element => { ... }",
             "const MyComponent: Function = () => { ... }",
             "const MyComponent = () => { ... }"
           ],
-          "correctAnswer": "const MyComponent: React.FC = () => { ... }",
+          "correctAnswer": "const MyComponent = (): JSX.Element => { ... }",
           "allowGuessing": true,
           "confidenceMessage": "Don't worry — just guess."
         },
-        "anchor": "React.FC (Function Component) is the standard TypeScript type for React components, providing better type checking and IntelliSense.",
+        "anchor": "Modern React + TypeScript favors an explicit JSX.Element return type on the function instead of JSX.Element.",
         "simplerVersion": "const App = () => { return <></> }",
         "seedCode": "",
         "expectedOutcome": "A typed React component skeleton that can be expanded.",
         "successCriteria": [
           "Component is defined as a const",
-          "Uses React.FC type annotation",
+          "Uses explicit JSX.Element return type annotation",
           "Returns JSX (empty fragment)"
         ],
         "feedbackCorrect": "Great! You've created a properly typed React component foundation.",
         "feedbackPartial": "Almost there! Make sure to include the TypeScript type annotation.",
-        "feedbackWrong": "Let's review: We need a const with React.FC type that returns JSX.",
+        "feedbackWrong": "Let's review: We need a const with JSX.Element type that returns JSX.",
         "evaluation": {
           "mode": "keyword_match",
           "required": [
             "const",
             "EffectDemo",
             ":",
-            "React.FC",
+            "JSX.Element",
             "=",
             "()",
             "=>",
