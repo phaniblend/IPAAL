@@ -1,3 +1,8 @@
+/**
+ * 🔒 LOCKED — React · TS lesson 4 — Multiple State Variables (TypeScript).
+ * Do not change steps, copy, or evaluation without explicit product/content sign-off.
+ * Generated mirror: content/generated/react-ts/004_multiple-state-variables_lesson.json
+ */
 import createINPACTEngine from "../inpact_engine_shared";
 
 const NODES = [
