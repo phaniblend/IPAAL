@@ -29,17 +29,17 @@
         "analogousExample": "import { useState } from 'react';",
         "whyThisMatters": "React provides the useState hook for managing component state, which is essential for tracking conditions that determine what gets rendered.",
         "thinkPrompt": {
-          "question": "Why do we need to import useState from React when using TypeScript?",
+          "question": "In a typical React app using ES modules, why must you import useState from the 'react' package?",
           "options": [
-            "Because TypeScript requires explicit imports for all React features",
-            "Because useState is a named export from the 'react' package, not automatically available",
-            "Because React components won't compile without importing useState"
+            "Because React injects hooks globally, so import is optional",
+            "Because useState is a named export from the 'react' package — it is not a global",
+            "Because JSX automatically loads useState the first time you call it"
           ],
-          "correctAnswer": "Because useState is a named export from the 'react' package, not automatically available",
+          "correctAnswer": "Because useState is a named export from the 'react' package — it is not a global",
           "allowGuessing": true,
           "confidenceMessage": "Don't worry — just guess."
         },
-        "anchor": "Correct! useState must be explicitly imported because it's a named export from React.",
+        "anchor": "Hooks like useState live on the react package; you import the ones you use, like any other module API.",
         "simplerVersion": "You need to import the tools before you can use them.",
         "seedCode": "",
         "expectedOutcome": "The component should have access to React and useState.",
