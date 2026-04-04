@@ -9,14 +9,14 @@
     "intro": {
       "tag": "LESSON #8 (TypeScript)",
       "title": "Forms & Validation — Typed",
-      "body": "Forms are the primary way users interact with your application. TypeScript ensures your form data is predictable and validated at compile time, preventing runtime errors and improving developer experience.",
-      "usecase": "You're building a sign-up form for a new service. Users need to provide their name, email, and password with real-time validation feedback."
+      "body": "You’ll build a small sign-up flow: typed state, controlled inputs, and validation the user sees right away—not after submit.",
+      "usecase": "Sign-up and profile forms are everywhere; getting state, events, and validation right here carries directly into production apps."
     },
     "objectives": [
-      "Create typed form state with useState",
-      "Handle input changes with TypeScript event types",
-      "Implement real-time validation with error state",
-      "Conditionally render validation feedback"
+      "Model form data with a TypeScript interface and object state",
+      "Type change handlers with ChangeEvent<HTMLInputElement>",
+      "Wire controlled inputs (value + onChange) to that state",
+      "Show inline validation errors as the user types"
     ],
     "steps": [
       {
@@ -24,32 +24,32 @@
         "type": "question",
         "phase": "Step 1 of 8",
         "title": "Import React and useState",
-        "instruction": "Import React and the useState hook from the react package.",
-        "hint": "You need two imports: React and useState from 'react'.",
-        "analogousExample": "import React, { useEffect } from 'react';",
-        "whyThisMatters": "React provides the foundation for building components, and useState lets us manage form state that changes over time.",
+        "instruction": "At the top of the file, import React and the useState hook from the `react` package.",
+        "hint": "Use a single import: default `React` plus the named hook `useState` from `'react'`.",
+        "analogousExample": "import React, { useMemo } from 'react';",
+        "whyThisMatters": "React comes with built-in tools called hooks that help you manage things like state, side effects, and shared logic.Your job isn't to build state management from scratch — it's to know which hook to reach for and bring it in. Imports are how you claim that work.",
         "thinkPrompt": {
-          "question": "What's the primary purpose of useState in a form component?",
+          "question": "You're building a form component that needs to remember what the user is typing. React has a hook for exactly this. Which one do you reach for?",
           "options": [
-            "To handle form submission to a server",
-            "To manage and update form field values as the user types",
-            "To style form elements dynamically"
+            "useEffect — runs side effects after render",
+            "useRef — grabs a direct reference to a DOM element",
+            "useState — holds and updates a value between renders"
           ],
-          "correctAnswer": "To manage and update form field values as the user types",
+          "correctAnswer": "useState — holds and updates a value between renders",
           "allowGuessing": true,
           "confidenceMessage": "Don't worry — just guess."
         },
-        "anchor": "useState tracks form field values as they change, enabling reactive updates.",
+        "anchor": "For values that change as the user types, `useState` is the hook: it stores state and triggers re-renders when you update it—exactly what controlled inputs need.",
         "simplerVersion": "import React from 'react';",
         "seedCode": "",
-        "expectedOutcome": "The component will have access to React and useState.",
+        "expectedOutcome": "A valid import line that brings in `React` and `useState`.",
         "successCriteria": [
           "React is imported",
           "useState is imported"
         ],
-        "feedbackCorrect": "Perfect! You've imported the essential React tools.",
-        "feedbackPartial": "You're close. Check if you imported both React and useState.",
-        "feedbackWrong": "Remember to import both React and useState from 'react'.",
+        "feedbackCorrect": "Good—`React` and `useState` are in place. Next you’ll define the `FormState` interface for your fields.",
+        "feedbackPartial": "You still need both: default `React` and named `useState` from `'react'`.",
+        "feedbackWrong": "Add: `import React, { useState } from 'react'` (or equivalent with both names from `'react'`).",
         "evaluation": {
           "mode": "keyword_match",
           "required": [
@@ -65,51 +65,11 @@
         "id": "step2",
         "type": "question",
         "phase": "Step 2 of 8",
-        "title": "Define the component",
-        "instruction": "Create a functional component named SignUpForm that returns JSX.Element.",
-        "hint": "Use the function keyword or arrow function with proper TypeScript return type.",
-        "analogousExample": "const MyComponent = (): JSX.Element => { return <div>Hello</div>; };",
-        "whyThisMatters": "Every React form needs a component container. TypeScript ensures our component has proper typing from the start.",
-        "thinkPrompt": {
-          "question": "What TypeScript type should a functional component return?",
-          "options": [
-            "JSX.Element",
-            "string",
-            "HTMLElement"
-          ],
-          "correctAnswer": "JSX.Element",
-          "allowGuessing": true,
-          "confidenceMessage": "Don't worry — just guess."
-        },
-        "anchor": "Functional components in TypeScript typically return JSX.Element.",
-        "simplerVersion": "function MyComponent() { return <div>Hello</div>; }",
-        "seedCode": "",
-        "expectedOutcome": "A component skeleton ready for form logic.",
-        "successCriteria": [
-          "Component is defined",
-          "Returns JSX.Element type"
-        ],
-        "feedbackCorrect": "Great! Your component is properly typed.",
-        "feedbackPartial": "Almost there. Make sure your component returns JSX.Element.",
-        "feedbackWrong": "Create a function component that returns JSX.Element.",
-        "evaluation": {
-          "mode": "keyword_match",
-          "required": [
-            "SignUpForm",
-            "JSX.Element",
-            "return"
-          ]
-        }
-      },
-      {
-        "id": "step3",
-        "type": "question",
-        "phase": "Step 3 of 8",
         "title": "Define form state interface",
-        "instruction": "Inside the component (before any logic), define an interface for the form state with name, email, and password fields, all typed as strings.",
-        "hint": "Create an interface with three string properties.",
+        "instruction": "Below your imports, define a `FormState` interface at **module scope** with `name`, `email`, and `password`, each typed as `string`. Declare it outside any component—not inside a function body.",
+        "hint": "Use `interface FormState { … }` below the import line; field names should match the input `name` attributes you’ll use later. You’ll add `SignUpForm` in the next step.",
         "analogousExample": "interface User { id: number; username: string; };",
-        "whyThisMatters": "TypeScript interfaces document the shape of your form data, making it clear what fields exist and their expected types.",
+        "whyThisMatters": "In TypeScript, an interface describes the shape of your data — what fields exist and what type each field is. Think of it as a contract: anything that uses this data must follow the same rules. Instead of describing the shape every time you use it, you define it once and reference it by name everywhere.",
         "thinkPrompt": {
           "question": "Why define an interface for form state instead of using inline types?",
           "options": [
@@ -122,18 +82,18 @@
           "allowGuessing": true,
           "confidenceMessage": "Don't worry — just guess."
         },
-        "anchor": "Correct: Without a named interface, you'd have to duplicate { email: string; password: string } in your useState, your submit handler, and anywhere else that touches that data. One rename breaks everything. The interface creates a single contract — change it once, TypeScript catches every mismatch automatically.",
+        "anchor": "One named interface is the shared contract: state, handlers, and future props can all reference FormState instead of repeating or drifting inline shapes. At module scope it is defined once, easy to export, and matches typical TypeScript project layout.",
         "simplerVersion": "type FormData = { field1: string; field2: string; };",
         "seedCode": "",
-        "expectedOutcome": "A typed interface describing the form's data structure.",
+        "expectedOutcome": "A module-level `FormState` interface with your three string fields.",
         "successCriteria": [
-          "Interface is defined",
+          "Interface is defined at module scope (below imports), not inside a component body",
           "Has name, email, password properties",
           "All properties are string type"
         ],
-        "feedbackCorrect": "Excellent! Your interface clearly defines the form structure.",
-        "feedbackPartial": "Check that all three fields are present and typed as strings.",
-        "feedbackWrong": "Define an interface with name, email, and password as string properties.",
+        "feedbackCorrect": "Good—`FormState` is at module scope and names the three fields you’ll bind to inputs and state.",
+        "feedbackPartial": "Declare `interface FormState` with `name`, `email`, and `password` as `string`—at file level, not inside a component.",
+        "feedbackWrong": "Add `interface FormState { name: string; email: string; password: string; }` below your imports (not inside a component).",
         "evaluation": {
           "mode": "keyword_match",
           "required": [
@@ -146,14 +106,54 @@
         }
       },
       {
+        "id": "step3",
+        "type": "question",
+        "phase": "Step 3 of 8",
+        "title": "Define the component",
+        "instruction": "Define a component named `SignUpForm` that renders JSX and declares an explicit return type of `JSX.Element`. Place it **below** your `FormState` interface.",
+        "hint": "Either an arrow component `const SignUpForm = (): JSX.Element => …` or `function SignUpForm(): JSX.Element { … }` works.",
+        "analogousExample": "const MyComponent = (): JSX.Element => { return <div>Hello</div>; };",
+        "whyThisMatters": "The component is the shell: everything else (state, handlers, inputs) will live inside it.",
+        "thinkPrompt": {
+          "question": "What TypeScript type should a functional component return?",
+          "options": [
+            "JSX.Element",
+            "string",
+            "HTMLElement"
+          ],
+          "correctAnswer": "JSX.Element",
+          "allowGuessing": true,
+          "confidenceMessage": "Don't worry — just guess."
+        },
+        "anchor": "`JSX.Element` is what you actually return from `<form>…</form>`—so the signature matches the UI.",
+        "simplerVersion": "function MyComponent() { return <div>Hello</div>; }",
+        "seedCode": "",
+        "expectedOutcome": "A typed `SignUpForm` component you can add hooks and JSX inside.",
+        "successCriteria": [
+          "Component is defined",
+          "Returns JSX.Element type"
+        ],
+        "feedbackCorrect": "Nice—`SignUpForm` is declared with a clear `JSX.Element` return. You can add state and markup next.",
+        "feedbackPartial": "Check the name `SignUpForm` and an explicit `: JSX.Element` (or equivalent) on the function.",
+        "feedbackWrong": "Declare `SignUpForm` so it returns JSX and type the return as `JSX.Element`.",
+        "evaluation": {
+          "mode": "keyword_match",
+          "required": [
+            "SignUpForm",
+            "JSX.Element",
+            "return"
+          ]
+        }
+      },
+      {
         "id": "step4",
         "type": "question",
         "phase": "Step 4 of 8",
         "title": "Initialize form state",
-        "instruction": "Use useState to create form state, typed with your interface, initialized with empty strings for all fields.",
-        "hint": "Call useState with an object containing empty string values.",
+        "instruction": "Create state with `useState<FormState>` and initialize `{ name: '', email: '', password: '' }`.",
+        "hint": "Destructure as `[formState, setFormState]`—the initial object must satisfy `FormState`.",
         "analogousExample": "const [count, setCount] = useState<number>(0);",
-        "whyThisMatters": "useState with proper typing ensures your form starts with valid initial values and prevents type errors during updates.",
+        "whyThisMatters": "Typed `useState` means every update must produce a full `FormState` object (or you spread from `prev`).",
         "thinkPrompt": {
           "question": "What should the initial form state typically be?",
           "options": [
@@ -165,18 +165,18 @@
           "allowGuessing": true,
           "confidenceMessage": "Don't worry — just guess."
         },
-        "anchor": "Form state should initialize with values that match the interface structure.",
+        "anchor": "Empty strings (or other defaults) should still satisfy `FormState`—no missing keys.",
         "simplerVersion": "const [value, setValue] = useState('');",
         "seedCode": "",
-        "expectedOutcome": "Typed form state with empty initial values.",
+        "expectedOutcome": "`formState` / `setFormState` typed as `FormState`, all fields initially `''`.",
         "successCriteria": [
           "useState is called",
           "State is typed with the interface",
           "Initial value has all three fields as empty strings"
         ],
-        "feedbackCorrect": "Perfect! Your form state is properly typed and initialized.",
-        "feedbackPartial": "Make sure you're using your interface to type the state.",
-        "feedbackWrong": "Use useState with your interface type and initialize all fields as empty strings.",
+        "feedbackCorrect": "Good—starting from empty strings matches typical sign-up defaults and pairs with controlled inputs.",
+        "feedbackPartial": "Use `useState<FormState>` and an initial object with `name`, `email`, and `password` set to `''`.",
+        "feedbackWrong": "Try: `const [formState, setFormState] = useState<FormState>({ name: '', email: '', password: '' });`.",
         "evaluation": {
           "mode": "keyword_match",
           "required": [
@@ -194,10 +194,10 @@
         "type": "question",
         "phase": "Step 5 of 8",
         "title": "Create the form JSX structure",
-        "instruction": "In the component's return statement, create a form element with three input fields for name, email, and password.",
-        "hint": "Use <form> with <input> elements inside.",
+        "instruction": "Return a `<form>` with three inputs: name (text), email (`type=\"email\"`), and password (`type=\"password\"`). Give each input a `name` that matches your state keys.",
+        "hint": "Semantic types (`email`, `password`) help browsers and accessibility; `name` will pair with your handler.",
         "analogousExample": "<form><input type='text' /><button>Submit</button></form>",
-        "whyThisMatters": "The visual structure provides users with input fields to interact with. Semantic HTML improves accessibility.",
+        "whyThisMatters": "You’re laying out the fields you’ll control with `value` / `onChange` in the next steps.",
         "thinkPrompt": {
           "question": "Which HTML element should wrap related form inputs?",
           "options": [
@@ -209,18 +209,18 @@
           "allowGuessing": true,
           "confidenceMessage": "Don't worry — just guess."
         },
-        "anchor": "The <form> element semantically groups inputs and handles submission events.",
+        "anchor": "`<form>` groups related controls; native behavior (e.g. Enter to submit) and assistive tech expect it.",
         "simplerVersion": "<div><input /><input /></div>",
         "seedCode": "",
-        "expectedOutcome": "Basic form structure with three input fields.",
+        "expectedOutcome": "A `<form>` containing three labeled inputs ready to wire to state.",
         "successCriteria": [
           "Returns a form element",
           "Contains three input elements",
           "Inputs have appropriate types (text, email, password)"
         ],
-        "feedbackCorrect": "Great! Your form structure is semantically correct.",
-        "feedbackPartial": "Make sure you're using <form> and three <input> elements.",
-        "feedbackWrong": "Return a <form> with three <input> elements for name, email, and password.",
+        "feedbackCorrect": "Good—three inputs with sensible `type`s and `name`s set you up for one shared change handler.",
+        "feedbackPartial": "Wrap fields in `<form>` and include three `<input>` elements with `text`, `email`, and `password` as appropriate.",
+        "feedbackWrong": "Return `<form>…</form>` with three inputs; use `name=\"name\"`, `name=\"email\"`, `name=\"password\"` (or consistent names matching state).",
         "evaluation": {
           "mode": "keyword_match",
           "required": [
@@ -238,10 +238,10 @@
         "type": "question",
         "phase": "Step 6 of 8",
         "title": "Create change handler",
-        "instruction": "Create a handleChange function that updates the corresponding form field when any input changes.",
-        "hint": "The function should accept a ChangeEvent<HTMLInputElement> and update state using the input's name and value.",
-        "analogousExample": "const handleInput = (e: ChangeEvent<HTMLInputElement>) => { setValue(e.target.value); };",
-        "whyThisMatters": "Event handlers connect user input to state updates. TypeScript ensures we handle events with proper typing.",
+        "instruction": "Add a `handleChange` that takes `ChangeEvent<HTMLInputElement>` and updates `formState` using `e.target.name` and `e.target.value` (spread the previous state so other fields stay intact).",
+        "hint": "`setFormState(prev => ({ ...prev, [e.target.name]: e.target.value }))` keeps one handler for all named inputs.",
+        "analogousExample": "// Object state — update one key; handler is wired to inputs with name= matching state keys; preserve the rest\nconst handleNameInput = (e: ChangeEvent<HTMLInputElement>) => {\n  setFormState(prev => ({ ...prev, [e.target.name]: e.target.value }));\n};",
+        "whyThisMatters": "One typed handler can serve every field as long as `name` matches a key on `FormState`.",
         "thinkPrompt": {
           "question": "What TypeScript type should we use for input change events?",
           "options": [
@@ -253,18 +253,18 @@
           "allowGuessing": true,
           "confidenceMessage": "Don't worry — just guess."
         },
-        "anchor": "ChangeEvent<HTMLInputElement> provides type-safe access to the input's value property.",
-        "simplerVersion": "function handleChange(e) { setText(e.target.value); }",
+        "anchor": "`ChangeEvent<HTMLInputElement>` narrows `target` to an input so `value` and `name` are available with correct types.",
+        "simplerVersion": "setFormState(prev => ({ ...prev, name: e.target.value })) // one field only",
         "seedCode": "",
-        "expectedOutcome": "A typed change handler function.",
+        "expectedOutcome": "A `handleChange` that updates the matching `FormState` key without dropping the others.",
         "successCriteria": [
           "Function is defined",
           "Accepts ChangeEvent<HTMLInputElement> parameter",
           "Updates form state using e.target.name and e.target.value"
         ],
-        "feedbackCorrect": "Excellent! Your handler is properly typed and functional.",
-        "feedbackPartial": "Check that your handler uses e.target.name to update the correct field.",
-        "feedbackWrong": "Create a function that accepts ChangeEvent<HTMLInputElement> and updates state based on e.target.name and e.target.value.",
+        "feedbackCorrect": "Good—typed event + dynamic key update is the usual pattern for multi-field forms.",
+        "feedbackPartial": "Ensure the parameter type is `ChangeEvent<HTMLInputElement>` and state updates use both `e.target.name` and `e.target.value`.",
+        "feedbackWrong": "Define `handleChange` with `ChangeEvent<HTMLInputElement>` and merge `e.target.value` into state under `[e.target.name]`.",
         "evaluation": {
           "mode": "keyword_match",
           "required": [
@@ -280,10 +280,10 @@
         "type": "question",
         "phase": "Step 7 of 8",
         "title": "Connect inputs to state and handler",
-        "instruction": "Wire each input to display the corresponding form state value and call your change handler on input events.",
-        "hint": "Add value and onChange attributes to each input.",
+        "instruction": "Make each input controlled: set `value` from `formState` and `onChange={handleChange}`. Keep `name` aligned with your state keys (`name`, `email`, `password`).",
+        "hint": "Pattern per field: `value={formState.email}` and `name=\"email\"` (and likewise for the others).",
         "analogousExample": "<input value={text} onChange={handleTextChange} />",
-        "whyThisMatters": "Two-way binding ensures the input displays current state and updates state on change, creating a controlled component.",
+        "whyThisMatters": "Controlled inputs let validation and UI stay in sync because every keystroke flows through React state.",
         "thinkPrompt": {
           "question": "What two attributes create a controlled input in React?",
           "options": [
@@ -295,18 +295,18 @@
           "allowGuessing": true,
           "confidenceMessage": "Don't worry — just guess."
         },
-        "anchor": "value binds input to state, onChange updates state when user types.",
+        "anchor": "`value` shows what’s in state; `onChange` writes user input back—together they keep a single source of truth.",
         "simplerVersion": "<input value={data} onChange={updateData} />",
         "seedCode": "",
-        "expectedOutcome": "Inputs that display and update form state.",
+        "expectedOutcome": "Three controlled inputs reading from and writing to `formState`.",
         "successCriteria": [
           "Inputs have value attributes bound to form state",
           "Inputs have onChange attributes bound to handleChange",
           "Each input has a name attribute matching its field"
         ],
-        "feedbackCorrect": "Perfect! Your form is now fully controlled.",
-        "feedbackPartial": "Make sure each input has both value and onChange attributes.",
-        "feedbackWrong": "Add value={formState.field} and onChange={handleChange} to each input, with matching name attributes.",
+        "feedbackCorrect": "Nice—state drives what’s on screen, and typing flows back through `handleChange`.",
+        "feedbackPartial": "Each input needs `value={…}`, `onChange={handleChange}`, and a `name` that matches a `FormState` key.",
+        "feedbackWrong": "Bind `value` to `formState.<field>`, pass `onChange={handleChange}`, and set `name` to the same key string.",
         "evaluation": {
           "mode": "keyword_match",
           "required": [
@@ -321,10 +321,10 @@
         "type": "question",
         "phase": "Step 8 of 8",
         "title": "Add real-time validation",
-        "instruction": "Add validation that displays an error message if the email doesn't contain '@' or if the password is less than 6 characters.",
-        "hint": "Create validation logic and conditionally render error messages near the inputs.",
-        "analogousExample": "{password.length < 6 && <p>Password too short</p>}",
-        "whyThisMatters": "Immediate feedback helps users correct errors before submission, improving user experience.",
+        "instruction": "Show inline errors as the user types: if email doesn’t include `'@'`, or password has fewer than 6 characters, render a short message (e.g. under that field).",
+        "hint": "Derive booleans from `formState.email` / `formState.password` and use `&&` or a ternary to show `<p>` (or similar) only when invalid.",
+        "analogousExample": "{!email.includes('@') && <p>Invalid email</p>}\n{pwd.length < 6 && <p>Password too short</p>}",
+        "whyThisMatters": "Because inputs are controlled, you can recompute validity on every render from current state.",
         "thinkPrompt": {
           "question": "When should validation typically run in a form?",
           "options": [
@@ -336,18 +336,18 @@
           "allowGuessing": true,
           "confidenceMessage": "Don't worry — just guess."
         },
-        "anchor": "Real-time validation provides immediate feedback, reducing user frustration.",
+        "anchor": "Validating while typing surfaces problems before submit—users fix issues in context.",
         "simplerVersion": "{error && <div>{error}</div>}",
         "seedCode": "",
-        "expectedOutcome": "Conditional error messages based on input validity.",
+        "expectedOutcome": "Visible, inline feedback for email format and password length.",
         "successCriteria": [
           "Email validation checks for '@'",
           "Password validation checks length >= 6",
           "Error messages conditionally render"
         ],
-        "feedbackCorrect": "Excellent! Your form now provides helpful validation feedback.",
-        "feedbackPartial": "Make sure your validation runs on each change and messages appear conditionally.",
-        "feedbackWrong": "Add validation that shows errors when email lacks '@' or password is too short.",
+        "feedbackCorrect": "Good—you’re reflecting rules in the UI as state changes, which is how most product forms behave.",
+        "feedbackPartial": "Check both rules: email must include `@`; password `length` must be at least 6. Show messages when they fail.",
+        "feedbackWrong": "Conditionally render errors when `!formState.email.includes('@')` or `formState.password.length < 6` (or equivalent).",
         "evaluation": {
           "mode": "keyword_match",
           "required": [
