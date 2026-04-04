@@ -13,7 +13,7 @@
   - `002_toggle-visibility_lesson.json`
   - `003_controlled-input_lesson.json`
 - Do **not** add lesson **004+** generated JSON files on `production`.
-- **Do not develop directly on `production`.** When promoting work: merge or cherry-pick from `main`, then ensure generated-lesson paths above match this policy (remove `004_*` … if they were merged in).
+- **Do not develop directly on `production`.** When promoting work: merge `main` into `production`, then **remove** any `content/generated/react-ts/004_*` and higher so only `001_*`–`003_*` remain (same as running `git rm` on those files and committing). Future merges from `main` will reintroduce 004+ until you delete them again on `production`.
 
 ## Locked React · TS lessons (001–003)
 
