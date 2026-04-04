@@ -8,20 +8,22 @@
 
 ## `production` (stable / learner-facing snapshot)
 
-- Contains the same application code as **`main`**, but **`content/generated/react-ts/` is intentionally minimal**: only the **first three** React · TS lessons that are fully tested and **locked**:
+- Contains the same application code as **`main`**, but **`content/generated/react-ts/` is intentionally minimal**: only the **first four** React · TS lessons that are fully tested and **locked**:
   - `001_counter-app_lesson.json`
   - `002_toggle-visibility_lesson.json`
   - `003_controlled-input_lesson.json`
-- Do **not** add lesson **004+** generated JSON files on `production`.
-- **Do not develop directly on `production`.** When promoting work: merge `main` into `production`, then **remove** any `content/generated/react-ts/004_*` and higher so only `001_*`–`003_*` remain (same as running `git rm` on those files and committing). Future merges from `main` will reintroduce 004+ until you delete them again on `production`.
+  - `004_multiple-state-variables_lesson.json`
+- Do **not** add lesson **005+** generated JSON files on `production`.
+- **Do not develop directly on `production`.** When promoting work: merge `main` into `production`, then **remove** any `content/generated/react-ts/005_*` and higher so only `001_*`–`004_*` remain (same as running `git rm` on those files and committing). Future merges from `main` will reintroduce 005+ until you delete them again on `production`.
 
-## Locked React · TS lessons (001–003)
+## Locked React · TS lessons (001–004)
 
 Engines (source of truth for the app UI):
 
 - `src/engines/react-ts/inpact_ts01_engine.jsx` — Counter  
 - `src/engines/react-ts/inpact_ts02_engine.jsx` — Toggle visibility  
 - `src/engines/react-ts/inpact_ts03_engine.jsx` — Controlled input  
+- `src/engines/react-ts/inpact_ts04_engine.jsx` — Multiple state variables  
 
 Treat edits to these as **content/product** changes; coordinate before changing steps or evaluation.
 
