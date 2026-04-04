@@ -1,3 +1,8 @@
+/**
+ * 🔒 LOCKED — React · TS lesson 2 — Toggle visibility (TypeScript).
+ * Do not change steps, copy, or evaluation without explicit product/content sign-off.
+ * Generated mirror: content/generated/react-ts/002_toggle-visibility_lesson.json
+ */
 import createINPACTEngine from "../inpact_engine_shared";
 
 const NODES = [
