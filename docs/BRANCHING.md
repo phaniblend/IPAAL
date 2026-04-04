@@ -8,17 +8,18 @@
 
 ## `production` (stable / learner-facing snapshot)
 
-- Contains the same application code as **`main`**, but **`content/generated/react-ts/` is intentionally minimal**: only the **first six** React · TS lessons that are fully tested and **locked**:
+- Contains the same application code as **`main`**, but **`content/generated/react-ts/` is intentionally minimal**: only the **first seven** React · TS lessons that are fully tested and **locked**:
   - `001_counter-app_lesson.json`
   - `002_toggle-visibility_lesson.json`
   - `003_controlled-input_lesson.json`
   - `004_multiple-state-variables_lesson.json`
   - `005_conditional-rendering-with-ternary_lesson.json`
   - `006_list-rendering-with-map_lesson.json`
-- Do **not** add lesson **007+** generated JSON files on `production`.
-- **Do not develop directly on `production`.** When promoting work: merge `main` into `production`, then **remove** any `content/generated/react-ts/007_*` and higher so only `001_*`–`006_*` remain (same as running `git rm` on those files and committing). Future merges from `main` will reintroduce 007+ until you delete them again on `production`.
+  - `007_useeffect-side-effects_lesson.json`
+- Do **not** add lesson **008+** generated JSON files on `production`.
+- **Do not develop directly on `production`.** When promoting work: merge `main` into `production`, then **remove** any `content/generated/react-ts/008_*` and higher so only `001_*`–`007_*` remain (same as running `git rm` on those files and committing). Future merges from `main` will reintroduce 008+ until you delete them again on `production`.
 
-## Locked React · TS lessons (001–006)
+## Locked React · TS lessons (001–007)
 
 Engines (source of truth for the app UI):
 
@@ -28,6 +29,7 @@ Engines (source of truth for the app UI):
 - `src/engines/react-ts/inpact_ts04_engine.jsx` — Multiple state variables  
 - `src/engines/react-ts/inpact_ts05_engine.jsx` — Conditional rendering with ternary  
 - `src/engines/react-ts/inpact_ts06_engine.jsx` — List rendering with map  
+- `src/engines/react-ts/inpact_ts07_engine.jsx` — useEffect and side effects  
 
 Treat edits to these as **content/product** changes; coordinate before changing steps or evaluation.
 
