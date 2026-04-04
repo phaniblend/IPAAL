@@ -281,6 +281,15 @@ const [secretDup, setSecretDup] = useState<string>('')
     (/\bvalue=\{/.test(hint) && /\bonchange\b/.test(t)) ||
     /\bchangeevent\b.*htmlinputelement|\bonchange=.*target\.value/.test(t)
   ) {
+    if (/\bparagraph\b/.test(t) || /\bdisplay\s+the\s+current\b/.test(t) || /\bbelow\s+to\s+display\b/.test(t)) {
+      return `<div>
+  <input
+    value={caption}
+    onChange={(e) => setCaption(e.target.value)}
+  />
+  <p>Current: {caption}</p>
+</div>`;
+    }
     return `<input
   value={caption}
   onChange={(e) => setCaption(e.target.value)}

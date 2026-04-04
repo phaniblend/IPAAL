@@ -3,6 +3,7 @@ import CodeEditor from "./CodeEditor";
 import MultiFileEditor from "./MultiFileEditor";
 import { LessonValidationContext } from "../ai-lessons/lessonValidationContext.jsx";
 import { fetchLessonCodeValidation } from "../ai-lessons/clientLessonValidation.js";
+import { fetchFeedbackAnnotate } from "../ai-lessons/clientFeedbackAnnotate.js";
 import CssTabsEditor from "./css/CssTabsEditor";
 import AngularTabbedEditor from "./angular/AngularTabbedEditor";
 import { mergeAngularTsWithHtml, mergeAngularCssIntoTS, splitAngularSeed } from "./angular/angularTabMerge.js";
@@ -273,9 +274,6 @@ function resolveQuestionStepExample(answerShape, node, shortName) {
   }
   const isReactTsTrack = typeof shortName === "string" && /^\s*TS\s+[—-]/i.test(shortName);
   let primarySyncEntry = null;
-  // For React-TS, prefer local deterministic inference rules over generated snippets
-  // so "Show me an example" always follows our pedagogy constraints.
-  const preferInferredForReactTs = isReactTsTrack;
 
   function looksLikeCodeSnippet(exampleCode) {
     if (typeof exampleCode !== "string") return false;
@@ -288,14 +286,29 @@ function resolveQuestionStepExample(answerShape, node, shortName) {
     return (
       /\bconst\b/.test(t) ||
       /\bfunction\b/.test(t) ||
+      /\blet\b/.test(t) ||
+      /\bvar\b/.test(t) ||
       /\breturn\b/.test(t) ||
       /\buseState\b/.test(t) ||
       /\bonClick\b/.test(t) ||
       /\bonChange\b/.test(t) ||
+      /\binterface\b/.test(t) ||
+      /\bclass\b/.test(t) ||
+      /\btype\s+[A-Za-z_$][\w$]*\s*=/.test(t) ||
+      /\bstruct\b/.test(t) ||
+      /\bwhile\s*\(/.test(t) ||
+      /\bfor\s*\(/.test(t) ||
       /=>/.test(t) ||
       /<\s*[A-Za-z]/.test(t) ||
       /\bReact\./.test(t) ||
-      /:\s*React\./.test(t)
+      /:\s*React\./.test(t) ||
+      // Framework-agnostic algorithm snippets (linked lists, nodes, pseudocode shapes)
+      /\bListNode\b/.test(t) ||
+      /\bTreeNode\b/.test(t) ||
+      /\{\s*value\s*:/.test(t) ||
+      /\{\s*val\s*:/.test(t) ||
+      /\bnext\s*:\s*/.test(t) ||
+      /\|\s*null/.test(t)
     );
   }
 
@@ -308,8 +321,11 @@ function resolveQuestionStepExample(answerShape, node, shortName) {
   const curatedRaw =
     (typeof node.ai_example_code === "string" && node.ai_example_code.trim()) ||
     (typeof node.analogousExample === "string" && node.analogousExample.trim()) ||
+    (typeof node.example_code === "string" && node.example_code.trim()) ||
     "";
-  if (!preferInferredForReactTs && !isImportFocusedTask && curatedRaw && looksLikeCodeSnippet(curatedRaw)) {
+  // React-TS: use authored snippets when present. Import-only steps still skip so learners
+  // see an analogous import shape (see inferReactTsAnalogousExample) instead of the exact line.
+  if (!isImportFocusedTask && curatedRaw && looksLikeCodeSnippet(curatedRaw)) {
     const base = curatedRaw;
     const wrapped = buildExampleWithStarterContext(answerShape, node, base);
     const meta = node.ai_example_meta;
@@ -318,18 +334,13 @@ function resolveQuestionStepExample(answerShape, node, shortName) {
       typeof meta === "object" &&
       meta.exampleOrigin === "deepseek" &&
       typeof meta.fetchedAfter === "string";
+    const label = deepseekMerge
+      ? "EXAMPLE"
+      : wrapped !== base
+        ? "EXAMPLE (starter context + pattern — adapt to your code)"
+        : "EXAMPLE (similar pattern — not the exact answer)";
     primarySyncEntry = {
-      // Never expose AI/server origin to learners.
-      label: "EXAMPLE",
-      code: stripToRelevantToggleFunction(node, stripAnalogousHeadingComment(wrapped)),
-    };
-  } else if (!preferInferredForReactTs && !isImportFocusedTask && node.example_code && looksLikeCodeSnippet(node.example_code)) {
-    const wrapped = buildExampleWithStarterContext(answerShape, node, node.example_code);
-    primarySyncEntry = {
-      label:
-        wrapped !== node.example_code
-          ? "EXAMPLE (starter context + pattern — adapt to your code)"
-          : "EXAMPLE (similar pattern — not the exact answer)",
+      label,
       code: stripToRelevantToggleFunction(node, stripAnalogousHeadingComment(wrapped)),
     };
   }
@@ -403,6 +414,8 @@ function evaluate(node, answer) {
     }
     if (k.includes("usestate<boolean>")) return /useState\s*<\s*boolean\s*>/i.test(raw);
     if (k.includes("react.changeevent<input")) return /React\.ChangeEvent\s*<\s*HTMLInputElement\s*>/i.test(raw);
+    // Lesson copy often used literal `{value}`; learners may use input, caption, etc. Accept any `{...}` in <p>.
+    if (k === "{value}") return /<p\b[^>]*>[\s\S]*\{[^}]+\}/.test(raw);
     if (isIdentifierOnly(k) && !identifierWhitelist.has(k)) return true; // never force learner naming
     return lower.includes(k);
   };
@@ -419,9 +432,11 @@ function stripCodeLikeFragments(text) {
   let t = text;
   t = t.replace(/```[\s\S]*?```/g, "");
   t = t.replace(/`[^`]*`/g, "the relevant part");
-  t = t.replace(/<[^>]+>/g, "a UI element");
+  // JSX/HTML tags only — do not strip TypeScript generics like React.ChangeEvent<HTMLInputElement>
+  t = t.replace(/<\/?[a-z][a-z0-9]*\b[^>]*>/gi, "a UI element");
   t = t.replace(/\b(import|export|const|let|var|function|return|class)\b/gi, "");
-  t = t.replace(/\b(useState|useEffect|useRef|onClick|onChange|set[A-Z]\w*)\b/g, "the required pattern");
+  t = t.replace(/\b(useState|useEffect|useRef|onClick|set[A-Z]\w*)\b/g, "the required pattern");
+  t = t.replace(/\bonChange\b/g, "the change handler");
   t = t.replace(/\[[^\]]*\]|\{[^}]*\}|\([^)]*\)/g, "");
   t = t.replace(/[=;<>]/g, " ");
   if (
@@ -455,6 +470,66 @@ function buildFeedbackOnlyGuidance(text) {
 
 function buildAnalogousExample(node, fallbackCode = "") {
   const text = `${node?.paal || ""}\n${node?.hint || ""}\n${node?.expected || ""}`.toLowerCase();
+  const taskFull = `${node?.paal || ""}\n${node?.hint || ""}\n${node?.expected || ""}\n${node?.think_prompt || ""}`.toLowerCase();
+  const looksReactUiStep =
+    /\busestate\b/.test(taskFull) ||
+    /\bjsx\b/.test(taskFull) ||
+    /\bonclick\b/.test(taskFull) ||
+    /\bonchange\b/.test(taskFull) ||
+    /<\s*[a-z]/.test(taskFull);
+  const looksAlgoLinkedList =
+    !looksReactUiStep &&
+    (/\blinked\s*list\b/.test(taskFull) ||
+      /\blist\s*node\b/.test(taskFull) ||
+      (/\bnode\b/.test(taskFull) && /\bnext\b/.test(taskFull) && /\bcarry\b/.test(taskFull)) ||
+      (/\bdummy\b/.test(taskFull) && /\bcarry\b/.test(taskFull)));
+  // Framework-agnostic linked-list addition pattern (no React); used when fallback is empty.
+  if (looksAlgoLinkedList) {
+    if (/\bnode\s*model\b|\bdefine\s+the\s+node\b|\bvalue\s+field\b.*\bnext\b/.test(taskFull)) {
+      return `// Analogous node shape (adapt names to your language)
+class ListNode {
+  constructor(val, next = null) {
+    this.val = val;
+    this.next = next;
+  }
+}`;
+    }
+    if (
+      (/\bdummy\b/.test(taskFull) || /\bconstruct\b.*\bpointer/.test(taskFull) || /\btail\b/.test(taskFull)) &&
+      /carry/.test(taskFull)
+    ) {
+      return `const dummy = new ListNode(0);
+let tail = dummy;
+let carry = 0;`;
+    }
+    if (/%|modulo|floor|carry|digit/.test(taskFull) && /sum|add/.test(taskFull)) {
+      return `const sum = a + b + carry;
+const digit = sum % 10;
+carry = Math.floor(sum / 10);`;
+    }
+    if (/append|\.next\s*=|tail\s*=/.test(taskFull)) {
+      return `tail.next = new ListNode(digit);
+tail = tail.next;`;
+    }
+    if (/loop|while|until|either\s+list|dummy\.next/.test(taskFull)) {
+      return `while (p !== null || q !== null || carry !== 0) {
+  // read digits, build sum, append node, advance
+}
+return dummy.next;`;
+    }
+    if (/test|\[9,9\]|validate/.test(taskFull)) {
+      return `// Example assertion shape (adapt to your test runner)
+// add([9,9], [1]) -> [0,0,1]`;
+    }
+    return `// Carry-and-pointer pattern (language-agnostic)
+// 1) dummy head + tail + carry
+// 2) while lists or carry remain: sum digits + carry, append digit node
+// 3) return dummy.next`;
+  }
+  // Prefer resolved lesson snippet (curated example_code / server merge) before generic heuristics.
+  if (typeof fallbackCode === "string" && fallbackCode.trim()) {
+    return fallbackCode.trim();
+  }
   // Word-boundary regex checks to avoid false triggers like "ControlledInput"
   // matching both "input" and "controlled" via substring `includes()`.
   const hasOnChange = /\bonchange\b/.test(text) || /\bonchange\s*=\s*\{/.test(text);
@@ -477,6 +552,21 @@ const halve = () => {
 };`;
   }
   if (hasStandaloneInputWord && (hasOnChange || hasControlledInputPhrase)) {
+    if (/\bparagraph\b/.test(text) || /\bdisplay\s+the\s+current\b/.test(text) || /\bbelow\s+to\s+display\b/.test(text)) {
+      return `// Analogous pattern (not your exact answer)
+const [label, setLabel] = useState<string>("");
+
+const handleLabelChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  setLabel(e.target.value);
+};
+
+return (
+  <div>
+    <input value={label} onChange={handleLabelChange} />
+    <p>Current: {label}</p>
+  </div>
+);`;
+    }
     return `// Analogous pattern (not your exact answer)
 const [query, setQuery] = useState<string>("");
 
@@ -484,13 +574,28 @@ const handleQueryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
   setQuery(e.target.value);
 };`;
   }
-  if (typeof fallbackCode === "string" && fallbackCode.trim()) {
-    return fallbackCode.trim();
+  // Last resort: avoid React-specific bullets when the step is not a UI lesson.
+  if (!looksReactUiStep) {
+    return `// Analogous pattern (sketch the idea; use your own identifiers)
+// 1) model the data structure your algorithm needs
+// 2) initialize loop state (pointers, accumulators)
+// 3) update state each iteration until termination
+// 4) return or validate the result`;
   }
   return `// Analogous pattern
 // 1) define typed state
 // 2) define handler with clear intent
 // 3) wire handler in JSX`;
+}
+
+function pickDefaultLanguageOption(languagePickerOptions, languageFromConfig) {
+  if (!languagePickerOptions?.length) return null;
+  const tag = String(languageFromConfig || "typescript").toLowerCase();
+  return (
+    languagePickerOptions.find((o) => o.id === tag) ||
+    languagePickerOptions.find((o) => tag === o.monacoLanguage) ||
+    languagePickerOptions[0]
+  );
 }
 
 export default function createINPACTEngine(config) {
@@ -511,6 +616,8 @@ export default function createINPACTEngine(config) {
     onValidateCode: configOnValidateCode,
     onAskMentor,
     validateWithAI = true,
+    codeValidationProfile,
+    languagePickerOptions = null,
   } = config;
   const lessonIntro = configLessonIntro ?? configIntro ?? null;
   const lessonObjectives = configLessonObjectives ?? (Array.isArray(configObjectives) ? configObjectives : null);
@@ -540,10 +647,17 @@ export default function createINPACTEngine(config) {
     const [taskInstructionPulseNonce, setTaskInstructionPulseNonce] = useState(0);
     const [showMentorModal, setShowMentorModal] = useState(false);
     const [mentorDraft, setMentorDraft] = useState("");
-    const [mentorReply, setMentorReply] = useState("");
+    /** Multi-turn mentor chat for this step: { role: 'user' | 'assistant', content: string } */
+    const [mentorThread, setMentorThread] = useState([]);
     const [mentorLoading, setMentorLoading] = useState(false);
     const [mentorError, setMentorError] = useState("");
     const [checking, setChecking] = useState(false);
+    const [feedbackAnnotateLoading, setFeedbackAnnotateLoading] = useState(false);
+    const [feedbackAnnotateError, setFeedbackAnnotateError] = useState("");
+    const [feedbackAnnotatedCode, setFeedbackAnnotatedCode] = useState(null);
+    const [languagePickerChoice, setLanguagePickerChoice] = useState(() =>
+      pickDefaultLanguageOption(languagePickerOptions, language)
+    );
     const [tourLaunchNonce, setTourLaunchNonce] = useState(0);
     const [completedNodes, setCompletedNodes] = useState([]);
     const [passedCodeByStepId, setPassedCodeByStepId] = useState({});
@@ -553,6 +667,10 @@ export default function createINPACTEngine(config) {
     const [multiFileFocusBaseline, setMultiFileFocusBaseline] = useState(null);
     const lessonValidationCtx = useContext(LessonValidationContext);
     const node = NODES[nodeIndex];
+    const editorMonacoLanguage = useMemo(
+      () => languagePickerChoice?.monacoLanguage || language || node?.language || "javascript",
+      [languagePickerChoice, language, node?.language]
+    );
     const firstQuestionNodeIndex = useMemo(() => NODES.findIndex((n) => n?.type === "question"), [NODES]);
     const questionNodes = useMemo(() => NODES.filter((n) => n?.type === "question"), [NODES]);
     const codingStepIndex = node?.type === "question" ? questionNodes.findIndex((n) => n.id === node.id) : -1;
@@ -580,14 +698,23 @@ export default function createINPACTEngine(config) {
       if (configOnValidateCode) return configOnValidateCode;
       if (validateWithAI === false) return undefined;
       if (!lessonValidationCtx?.track) return undefined;
+      const langForApi = languagePickerChoice?.id || language;
       return async (n, userCode) =>
         fetchLessonCodeValidation({
           track: lessonValidationCtx.track,
           node: n,
           userCode,
-          language: language || undefined,
+          language: langForApi || undefined,
+          codeValidationProfile: codeValidationProfile === "algorithm" ? "algorithm" : undefined,
         });
-    }, [configOnValidateCode, validateWithAI, lessonValidationCtx, language]);
+    }, [
+      configOnValidateCode,
+      validateWithAI,
+      lessonValidationCtx,
+      language,
+      languagePickerChoice,
+      codeValidationProfile,
+    ]);
 
     const onAskMentorResolved = useMemo(() => {
       if (onAskMentor) return onAskMentor;
@@ -595,13 +722,15 @@ export default function createINPACTEngine(config) {
       const lessonKey =
         lessonValidationCtx.lessonKey ??
         `${lessonValidationCtx.track}:${lessonValidationCtx.lessonIndex ?? ""}:${lessonValidationCtx.lessonTitle ?? ""}`;
-      return async (n, userMessage) => {
+      return async (n, userMessage, priorTurns = []) => {
+        const history = Array.isArray(priorTurns) ? priorTurns : [];
         const res = await fetch("/api/lessons/mentor", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             step: { id: n.id, instruction: n.paal, paal: n.paal },
             userMessage: String(userMessage).trim(),
+            history,
             track: lessonValidationCtx.track,
             lessonKey,
           }),
@@ -653,12 +782,15 @@ export default function createINPACTEngine(config) {
       setShowFeedbackModal(false);
       setShowMentorModal(false);
       setMentorDraft("");
-      setMentorReply("");
+      setMentorThread([]);
       setMentorError("");
       setMentorLoading(false);
       setChecking(false);
       setAiFeedback("");
       setValidationFallbackNote("");
+      setFeedbackAnnotateLoading(false);
+      setFeedbackAnnotateError("");
+      setFeedbackAnnotatedCode(null);
       setMainTab("lesson");
       if (node?.type === "question") {
         let initialCode = "";
@@ -839,8 +971,12 @@ export default function createINPACTEngine(config) {
       let res = "wrong";
       let feedbackFromAi = "";
       const hasDeclarativeKeywords = Array.isArray(node.answer_keywords) && node.answer_keywords.length > 0;
+      const useKeywordOnlyWithoutAi =
+        hasDeclarativeKeywords &&
+        codeValidationProfile !== "algorithm" &&
+        !(languagePickerOptions?.length > 0);
       try {
-        if (onValidateCodeResolved && node?.type === "question" && hasDeclarativeKeywords) {
+        if (onValidateCodeResolved && node?.type === "question" && useKeywordOnlyWithoutAi) {
           // JSON lessons ship evaluation.required → answer_keywords. Grading with AI here
           // repeatedly produced "rename to match seed" false negatives; keywords are intentionally name-agnostic.
           res = keywordRes;
@@ -890,8 +1026,10 @@ export default function createINPACTEngine(config) {
       setMentorLoading(true);
       setMentorError("");
       try {
-        const reply = await onAskMentorResolved(node, msg);
-        setMentorReply(typeof reply === "string" ? reply : String(reply ?? ""));
+        const reply = await onAskMentorResolved(node, msg, mentorThread);
+        const replyText = typeof reply === "string" ? reply : String(reply ?? "");
+        setMentorThread((prev) => [...prev, { role: "user", content: msg }, { role: "assistant", content: replyText }]);
+        setMentorDraft("");
       } catch (e) {
         setMentorError(e && typeof e.message === "string" ? e.message : "Mentor unavailable");
       } finally {
@@ -1123,6 +1261,36 @@ export default function createINPACTEngine(config) {
       return (
         <>
           <div style={{ display: "flex", alignItems: "center", gap: "16px", flexWrap: "wrap", marginBottom: fillAvailable ? "2px" : "6px" }}>
+            {languagePickerOptions?.length > 0 && languagePickerChoice && (
+              <label
+                data-tour-id="code-language-picker"
+                style={{ display: "flex", alignItems: "center", gap: "8px", fontSize: "11px", color: "#475569", fontWeight: 500 }}
+              >
+                <span style={{ letterSpacing: "0.04em", textTransform: "uppercase", fontSize: "10px", color: "#64748b" }}>Code in</span>
+                <select
+                  value={languagePickerChoice.id}
+                  onChange={(e) => {
+                    const opt = languagePickerOptions.find((o) => o.id === e.target.value);
+                    if (opt) setLanguagePickerChoice(opt);
+                  }}
+                  style={{
+                    fontSize: "11px",
+                    padding: "4px 10px",
+                    borderRadius: "6px",
+                    border: "1px solid #cbd5e1",
+                    background: "#fff",
+                    color: "#0f172a",
+                    cursor: "pointer",
+                  }}
+                >
+                  {languagePickerOptions.map((o) => (
+                    <option key={o.id} value={o.id}>
+                      {o.label}
+                    </option>
+                  ))}
+                </select>
+              </label>
+            )}
             <span style={{ fontSize: "11px", color: "#0891b2", fontWeight: 600 }}>Step {codingStepNum} of {codingStepTotal}</span>
             {codingStepIndex > 0 && (
               <>
@@ -1187,8 +1355,8 @@ export default function createINPACTEngine(config) {
                     value={answer}
                     onChange={setAnswer}
                     height="100%"
-                    defaultFileName={(node?.language || language || "typescript").includes("ts") ? "App.tsx" : "App.jsx"}
-                    language={language || node.language || "typescript"}
+                    defaultFileName={editorMonacoLanguage.includes("ts") ? "App.tsx" : "App.jsx"}
+                    language={editorMonacoLanguage}
                     focusBaselineByFile={multiFileFocusBaseline}
                     placeholderByFile={multiFilePlaceholderByFile}
                     clearPlaceholderOnFirstFocus={multiFilePlaceholderClearOnFirstStepOnly}
@@ -1201,7 +1369,7 @@ export default function createINPACTEngine(config) {
                     height="100%"
                     cursorAtEndOfLine={cursorAtStartOfLine == null ? node.cursorLine : undefined}
                     cursorAtStartOfLine={cursorAtStartOfLine}
-                    language={language || node.language || "javascript"}
+                    language={editorMonacoLanguage}
                   />
                 )}
               </div>
@@ -1226,21 +1394,29 @@ export default function createINPACTEngine(config) {
                 value={answer}
                 onChange={setAnswer}
                 height="480px"
-                defaultFileName={(node?.language || language || "typescript").includes("ts") ? "App.tsx" : "App.jsx"}
-                language={language || node.language || "typescript"}
+                defaultFileName={editorMonacoLanguage.includes("ts") ? "App.tsx" : "App.jsx"}
+                language={editorMonacoLanguage}
                 focusBaselineByFile={multiFileFocusBaseline}
                 placeholderByFile={multiFilePlaceholderByFile}
                 clearPlaceholderOnFirstFocus={multiFilePlaceholderClearOnFirstStepOnly}
               />
             ) : (
-              <CodeEditor key={node?.id} value={answer} onChange={setAnswer} height="480px" cursorAtEndOfLine={cursorAtStartOfLine == null ? node.cursorLine : undefined} cursorAtStartOfLine={cursorAtStartOfLine} language={language || node.language || "javascript"} />
+              <CodeEditor
+                key={node?.id}
+                value={answer}
+                onChange={setAnswer}
+                height="480px"
+                cursorAtEndOfLine={cursorAtStartOfLine == null ? node.cursorLine : undefined}
+                cursorAtStartOfLine={cursorAtStartOfLine}
+                language={editorMonacoLanguage}
+              />
             )}
           </div>
         </>
       );
     }
 
-    function renderEditorBlockButtons(fbMsg) {
+    function renderEditorBlockButtons(fbMsg, feedbackPlainForAnnotate = "") {
       const canSubmit = answerShape === "css-tabs"
         ? (parsedCssTabs?.css?.trim())
         : answerShape === "angular-tabs"
@@ -1403,7 +1579,12 @@ export default function createINPACTEngine(config) {
                 padding: "24px",
                 boxSizing: "border-box",
               }}
-              onClick={() => setShowFeedbackModal(false)}
+              onClick={() => {
+                setShowFeedbackModal(false);
+                setFeedbackAnnotateLoading(false);
+                setFeedbackAnnotateError("");
+                setFeedbackAnnotatedCode(null);
+              }}
               role="dialog"
               aria-modal="true"
               aria-labelledby="feedback-modal-title"
@@ -1413,7 +1594,7 @@ export default function createINPACTEngine(config) {
                   background: "#ffffff",
                   borderRadius: "12px",
                   padding: "24px",
-                  maxWidth: "520px",
+                  maxWidth: feedbackAnnotatedCode ? "min(92vw, 760px)" : "520px",
                   width: "100%",
                   maxHeight: "80vh",
                   overflowY: "auto",
@@ -1448,13 +1629,109 @@ export default function createINPACTEngine(config) {
                     <RichLearnerText text={fbMsg} variant="feedback" />
                   </div>
                 )}
-                <div style={{ marginTop: "20px", display: "flex", justifyContent: "flex-end" }}>
+                {result !== "correct" &&
+                  getMergedCodeForKeywordEval().trim() &&
+                  (stripCodeLikeFragments(feedbackPlainForAnnotate).trim() ||
+                    stripCodeLikeFragments(node?.hint || "").trim()) && (
+                    <div style={{ marginTop: "14px" }}>
+                      <button
+                        type="button"
+                        data-tour-id="feedback-map-to-code-button"
+                        className="inpact-btn-primary"
+                        style={s.btn("secondary")}
+                        disabled={feedbackAnnotateLoading}
+                        onClick={async () => {
+                          setFeedbackAnnotateError("");
+                          setFeedbackAnnotateLoading(true);
+                          try {
+                            const userCode = getMergedCodeForKeywordEval();
+                            const fb =
+                              stripCodeLikeFragments(feedbackPlainForAnnotate).trim() ||
+                              stripCodeLikeFragments(node?.hint || "").trim() ||
+                              "Review your code against the step task.";
+                            const data = await fetchFeedbackAnnotate({
+                              instruction: node?.paal || node?.instruction || "",
+                              feedback: fb,
+                              hint: node?.hint || "",
+                              userCode,
+                              language: editorMonacoLanguage,
+                            });
+                            setFeedbackAnnotatedCode(data.annotatedCode ?? "");
+                          } catch (e) {
+                            setFeedbackAnnotatedCode(null);
+                            setFeedbackAnnotateError(
+                              e && typeof e.message === "string" ? e.message : "Could not map feedback to your code."
+                            );
+                          } finally {
+                            setFeedbackAnnotateLoading(false);
+                          }
+                        }}
+                      >
+                        {feedbackAnnotateLoading ? "Preparing…" : "Annotate my code with this feedback"}
+                      </button>
+                      <p style={{ fontSize: "11px", color: "#64748b", margin: "8px 0 0", lineHeight: 1.45 }}>
+                        Adds brief inline comments at the relevant lines (and small corrections where needed) so the feedback connects directly to your submission.
+                      </p>
+                    </div>
+                  )}
+                {feedbackAnnotateError ? (
+                  <div
+                    style={{
+                      marginTop: "12px",
+                      fontSize: "12px",
+                      color: "#b45309",
+                      padding: "10px 12px",
+                      background: "rgba(245,158,11,0.12)",
+                      borderRadius: "8px",
+                      lineHeight: 1.5,
+                    }}
+                  >
+                    {feedbackAnnotateError}
+                  </div>
+                ) : null}
+                {feedbackAnnotatedCode != null && feedbackAnnotatedCode !== "" ? (
+                  <div style={{ marginTop: "16px" }}>
+                    <div
+                      style={{
+                        fontSize: "10px",
+                        fontWeight: 700,
+                        letterSpacing: "0.08em",
+                        color: "#64748b",
+                        marginBottom: "8px",
+                      }}
+                    >
+                      YOUR CODE, ANNOTATED
+                    </div>
+                    <pre
+                      style={{
+                        margin: 0,
+                        padding: "12px 14px",
+                        borderRadius: "10px",
+                        background: "#f1f5f9",
+                        border: "1px solid #e2e8f0",
+                        fontSize: "12px",
+                        lineHeight: 1.5,
+                        overflowX: "auto",
+                        fontFamily:
+                          'ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace',
+                        whiteSpace: "pre-wrap",
+                        wordBreak: "break-word",
+                      }}
+                    >
+                      {feedbackAnnotatedCode}
+                    </pre>
+                  </div>
+                ) : null}
+                <div style={{ marginTop: "20px", display: "flex", justifyContent: "flex-end", gap: "10px", flexWrap: "wrap" }}>
                   <button
                     type="button"
                     className="inpact-btn-primary"
                     style={s.btn("primary")}
                     onClick={() => {
                       setShowFeedbackModal(false);
+                      setFeedbackAnnotateLoading(false);
+                      setFeedbackAnnotateError("");
+                      setFeedbackAnnotatedCode(null);
                       if (result === "correct") next();
                     }}
                   >
@@ -1487,9 +1764,9 @@ export default function createINPACTEngine(config) {
                   background: "#ffffff",
                   borderRadius: "12px",
                   padding: "24px",
-                  maxWidth: "520px",
+                  maxWidth: "580px",
                   width: "100%",
-                  maxHeight: "80vh",
+                  maxHeight: "85vh",
                   overflowY: "auto",
                   boxShadow: "0 20px 60px rgba(0,0,0,0.2)",
                   border: "1px solid #e2e8f0",
@@ -1497,11 +1774,57 @@ export default function createINPACTEngine(config) {
                 onClick={(e) => e.stopPropagation()}
               >
                 <div id="mentor-modal-title" style={{ fontSize: "12px", fontWeight: 700, letterSpacing: "0.05em", color: "#64748b", marginBottom: "8px" }}>ASK YOUR MENTOR</div>
-                <p style={{ fontSize: "13px", color: "#475569", lineHeight: 1.5, margin: "0 0 16px" }}>Ask about this step in your own words. You will get a short explanation or hint tailored to the instruction above.</p>
+                <p style={{ fontSize: "13px", color: "#475569", lineHeight: 1.5, margin: "0 0 16px" }}>
+                  Ask about this step in your own words. You can send follow-up questions; the mentor keeps context for this step until you move on or clear the chat.
+                </p>
+                <div
+                  style={{
+                    maxHeight: "min(40vh, 320px)",
+                    overflowY: "auto",
+                    border: "1px solid #e2e8f0",
+                    borderRadius: "8px",
+                    padding: "10px 12px",
+                    marginBottom: "12px",
+                    background: "#f8fafc",
+                  }}
+                  aria-label="Mentor conversation"
+                >
+                  {mentorThread.length === 0 ? (
+                    <div style={{ fontSize: "12px", color: "#94a3b8", fontStyle: "italic" }}>Your messages and the mentor&apos;s replies will appear here.</div>
+                  ) : (
+                    mentorThread.map((turn, i) => (
+                      <div
+                        key={`${turn.role}-${i}`}
+                        style={{
+                          marginBottom: i < mentorThread.length - 1 ? "14px" : 0,
+                          textAlign: turn.role === "user" ? "right" : "left",
+                        }}
+                      >
+                        <div style={{ fontSize: "10px", fontWeight: 700, letterSpacing: "0.06em", color: "#64748b", marginBottom: "4px" }}>
+                          {turn.role === "user" ? "You" : "Mentor"}
+                        </div>
+                        <div
+                          style={{
+                            display: "inline-block",
+                            textAlign: "left",
+                            maxWidth: "100%",
+                            padding: "10px 12px",
+                            borderRadius: "8px",
+                            background: turn.role === "user" ? "#e0f2fe" : "#ffffff",
+                            border: turn.role === "user" ? "1px solid #bae6fd" : "1px solid #e2e8f0",
+                            boxSizing: "border-box",
+                          }}
+                        >
+                          <RichLearnerText text={turn.content} style={{ fontSize: "13px", color: "#334155", lineHeight: 1.55, whiteSpace: "pre-wrap" }} />
+                        </div>
+                      </div>
+                    ))
+                  )}
+                </div>
                 <textarea
                   value={mentorDraft}
                   onChange={(e) => setMentorDraft(e.target.value)}
-                  placeholder="What would you like help with?"
+                  placeholder={mentorThread.length ? "Ask a follow-up…" : "What would you like help with?"}
                   rows={4}
                   style={{
                     width: "100%",
@@ -1517,10 +1840,18 @@ export default function createINPACTEngine(config) {
                   }}
                 />
                 {mentorError ? <div style={{ fontSize: "12px", color: "#dc2626", marginBottom: "8px" }}>{mentorError}</div> : null}
-                {mentorReply ? (
-                  <RichLearnerText text={mentorReply} style={{ ...s.expectedBox, marginTop: "4px" }} />
-                ) : null}
-                <div style={{ marginTop: "16px", display: "flex", justifyContent: "flex-end", gap: "12px", flexWrap: "wrap" }}>
+                <div style={{ marginTop: "16px", display: "flex", justifyContent: "flex-end", gap: "12px", flexWrap: "wrap", alignItems: "center" }}>
+                  <button
+                    type="button"
+                    style={{ ...s.btn("ghost"), marginRight: "auto" }}
+                    disabled={mentorThread.length === 0 || mentorLoading}
+                    onClick={() => {
+                      setMentorThread([]);
+                      setMentorError("");
+                    }}
+                  >
+                    Clear chat
+                  </button>
                   <button type="button" style={s.btn("ghost")} onClick={() => setShowMentorModal(false)}>Close</button>
                   <button
                     type="button"
@@ -1780,7 +2111,8 @@ export default function createINPACTEngine(config) {
     function renderEditorContent({ fillViewport = false } = {}) {
       const rawFb = result === "correct" ? node.feedback_correct : result === "partial" ? node.feedback_partial : result === "wrong" ? node.feedback_wrong : null;
       const staticFbMsg = typeof rawFb === "function" ? rawFb(answer) : rawFb;
-      const fbMsg = buildFeedbackOnlyGuidance(aiFeedback || staticFbMsg || "");
+      const feedbackPlainForAnnotate = String(aiFeedback || staticFbMsg || "").trim();
+      const fbMsg = buildFeedbackOnlyGuidance(feedbackPlainForAnnotate);
       return (
         <div style={{ display: "flex", flexDirection: "column", flex: 1, minHeight: 0, width: "100%", maxWidth: "100%", overflowX: "hidden" }}>
           <div
@@ -1818,7 +2150,7 @@ export default function createINPACTEngine(config) {
                 }}
               />
             ) : null}
-            {renderEditorBlockButtons(fbMsg)}
+            {renderEditorBlockButtons(fbMsg, feedbackPlainForAnnotate)}
           </div>
         </div>
       );

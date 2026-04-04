@@ -30,6 +30,9 @@ function learnerPreviewCoachHint(message) {
   if (m.includes("expected a component")) {
     return "Name your root component **`App`** (or match the lesson) and use **`export default`** when the step asks for it.";
   }
+  if (m.includes("app is not defined")) {
+    return "The preview looks for your component name (e.g. **`const ControlledInput: React.FC = …`**). If you see this error after a refresh, the preview may not have detected the name — use the lesson’s **`React.FC`** component name or **`export default function App`**.";
+  }
   if (m.includes("is not defined")) {
     return "Check **spelling**, **imports**, and **capitalization** against the lesson example.";
   }
@@ -195,9 +198,11 @@ function generateReactPreview(code) {
     return `<!DOCTYPE html><html><body style="background:#f0f4f8;padding:24px;font-family:system-ui,sans-serif;color:#64748b;font-size:14px">Write your React component in the Editor tab to see a live preview here.</body></html>`;
   }
 
-  // Find the main component name from the source code
+  // Find the main component name from the source code (must handle `const X: React.FC = () =>` — not only `const X =`)
   const nameMatch =
     code.match(/(?:export\s+default\s+)?function\s+([A-Z][a-zA-Z0-9]*)\s*[({]/) ||
+    code.match(/(?:const|let|var)\s+([A-Z][a-zA-Z0-9]*)\s*:\s*(?:React\.)?FC\b/) ||
+    code.match(/(?:const|let|var)\s+([A-Z][a-zA-Z0-9]*)\s*=\s*\(/) ||
     code.match(/(?:const|let|var)\s+([A-Z][a-zA-Z0-9]*)\s*=/) ||
     code.match(/export\s+default\s+([A-Z][a-zA-Z0-9]*)/);
   const componentName = nameMatch ? nameMatch[1] : "App";

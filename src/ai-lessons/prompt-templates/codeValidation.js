@@ -15,7 +15,8 @@ export const UNIVERSAL_VALIDATION_DISCIPLINE = `Universal (all tracks):
 export const INCREMENTAL_UI_BUILD_PHASES = `Incremental UI lessons (React/TS and similar): many steps follow phases (1) imports, (2) state/types/stubs, (3) return JSX layout only, (4) handler functions only, (5) wire onClick/onChange/etc. and conditional render or export.
 - If this step forbids onClick or says "no click handler yet", do not require or mention onClick as missing.
 - If this step is handlers-only, do not require wiring to JSX.
-- In feedback, say **button**, **input**, or **form field** — avoid vague "control" when you mean a clickable button or a specific element.`;
+- In feedback, say **button**, **input**, or **form field** — avoid vague "control" when you mean a clickable button or a specific element.
+- Controlled-input lessons: do **not** require HTML \`pattern=\`, regex validation, or \`maxLength\` unless the step text explicitly asks for them. Teaching \`value\` + \`onChange\` is enough.`;
 
 export const STEP_SCOPE_AND_DEPENDENCIES = `Step scope & dependency order (code submissions):
 - The learner's code is one submission for **this step**. The starter/seed may already include prior steps — treat seed + learner code as one unit. Judge only whether **this step's** instruction and success criteria are met; do not fail for omitting work reserved for a later step.

@@ -36,7 +36,7 @@ Reference engines: `el/inpact_el01_engine.jsx`, `typescript/inpact_tsf01_engine.
 | PE          | pe/           | inpact_pe_index.js       | ✅ pe01–pe12. |
 | SEC         | sec/          | inpact_sec_index.js      | ✅ sec01–sec06. |
 | React (JS)  | react-js/     | (LandingPage LESSON_LIST) | 🔒 **p01, p02 locked** (do not edit). p03–p05 finalized (body + usecase). Rest: apply same rules. |
-| React (TS)  | react-ts/     | (LandingPage LESSON_LIST) | ✅ ts01 (Counter) updated to content rules. Rest: apply same. |
+| React (TS)  | react-ts/     | (LandingPage LESSON_LIST) | 🔒 **ts03 (Controlled Input) locked** — do not edit without explicit approval. ✅ ts01 (Counter) updated to content rules. Rest: apply same. |
 | Angular     | angular/      | angular_curriculum_index, inpact_angf_index | 🔄 Mix of angular_* and inpact_angf*; align to one naming + pattern. |
 | Vue         | vue/          | inpact_vue_index, inpact_vuef_index | 🔄 Align all to NODES/sideItems/createINPACTEngine. |
 | CSS         | css/          | inpact_css_index.js      | ✅ Uses language/answerShape/getOutputPreview where needed. |
