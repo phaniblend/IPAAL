@@ -8,16 +8,17 @@
 
 ## `production` (stable / learner-facing snapshot)
 
-- Contains the same application code as **`main`**, but **`content/generated/react-ts/` is intentionally minimal**: only the **first five** React · TS lessons that are fully tested and **locked**:
+- Contains the same application code as **`main`**, but **`content/generated/react-ts/` is intentionally minimal**: only the **first six** React · TS lessons that are fully tested and **locked**:
   - `001_counter-app_lesson.json`
   - `002_toggle-visibility_lesson.json`
   - `003_controlled-input_lesson.json`
   - `004_multiple-state-variables_lesson.json`
   - `005_conditional-rendering-with-ternary_lesson.json`
-- Do **not** add lesson **006+** generated JSON files on `production`.
-- **Do not develop directly on `production`.** When promoting work: merge `main` into `production`, then **remove** any `content/generated/react-ts/006_*` and higher so only `001_*`–`005_*` remain (same as running `git rm` on those files and committing). Future merges from `main` will reintroduce 006+ until you delete them again on `production`.
+  - `006_list-rendering-with-map_lesson.json`
+- Do **not** add lesson **007+** generated JSON files on `production`.
+- **Do not develop directly on `production`.** When promoting work: merge `main` into `production`, then **remove** any `content/generated/react-ts/007_*` and higher so only `001_*`–`006_*` remain (same as running `git rm` on those files and committing). Future merges from `main` will reintroduce 007+ until you delete them again on `production`.
 
-## Locked React · TS lessons (001–005)
+## Locked React · TS lessons (001–006)
 
 Engines (source of truth for the app UI):
 
@@ -26,6 +27,7 @@ Engines (source of truth for the app UI):
 - `src/engines/react-ts/inpact_ts03_engine.jsx` — Controlled input  
 - `src/engines/react-ts/inpact_ts04_engine.jsx` — Multiple state variables  
 - `src/engines/react-ts/inpact_ts05_engine.jsx` — Conditional rendering with ternary  
+- `src/engines/react-ts/inpact_ts06_engine.jsx` — List rendering with map  
 
 Treat edits to these as **content/product** changes; coordinate before changing steps or evaluation.
 
