@@ -61,29 +61,29 @@ const NODES = [
     "id": "step2",
     "type": "question",
     "phase": "Step 2 of 6",
-    "paal": "Define a functional component named CounterDashboard that returns an empty div for now. Use React.FC type annotation.",
-    "hint": "Start with 'const CounterDashboard: React.FC = () => { return <div></div>; };'",
-    "example_code": "const UserProfile: React.FC = () => { return <section></section>; };",
+    "paal": "Define a functional component named CounterDashboard that returns an empty div for now, with an explicit JSX.Element return type.",
+    "hint": "Start with 'const CounterDashboard = (): JSX.Element => { return <div></div>; };'",
+    "example_code": "const UserProfile = (): JSX.Element => { return <section></section>; };",
     "think_prompt": "How do we define a functional component with TypeScript that returns JSX?",
     "mc_options": [
-      "const MyComponent: React.FC = () => { return <div>Hello</div>; };",
+      "const MyComponent = (): JSX.Element => { return <div>Hello</div>; };",
       "function MyComponent() { return <div>Hello</div>; }",
       "const MyComponent = () => <div>Hello</div>;"
     ],
-    "mc_correct_option": "const MyComponent: React.FC = () => { return <div>Hello</div>; };",
-    "mc_anchor": "React.FC is the TypeScript type for functional components, ensuring proper typing.",
+    "mc_correct_option": "const MyComponent = (): JSX.Element => { return <div>Hello</div>; };",
+    "mc_anchor": "An explicit JSX.Element return type documents what the component renders.",
     "why_this_matters": "Components are the building blocks of React. TypeScript requires us to specify that this function returns JSX.Element.",
     "answer_keywords": [
       "CounterDashboard",
-      "React.FC",
+      "JSX.Element",
       "return",
       "<div"
     ],
     "seed_code": "",
     "starter_code": "",
     "feedback_correct": "Great! You've created a properly typed React component skeleton.",
-    "feedback_partial": "Almost! Make sure you're using React.FC and returning JSX.",
-    "feedback_wrong": "Let's review: const ComponentName: React.FC = () => { return <div></div>; };",
+    "feedback_partial": "Almost! Make sure you're using JSX.Element and returning JSX.",
+    "feedback_wrong": "Let's review: const ComponentName = (): JSX.Element => { return <div></div>; };",
     "expected": "A component function with proper TypeScript typing that returns JSX."
   },
   {

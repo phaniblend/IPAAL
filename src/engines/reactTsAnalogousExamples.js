@@ -100,14 +100,15 @@ const [tally, dispatchTally] = useReducer(tallyReducer, 0)`;
 // boxRef.current?.focus()`;
   }
 
-  // Function component definition (React.FC).
+  // Function component definition (explicit JSX.Element return type — avoid React.FC in new code).
   // Used for steps like "Create a function component... Type it as a React function component."
   if (
     /\bfunction\s+component\b/.test(t) ||
     /\bfunctional\s+component\b/.test(t) ||
-    /\breac?t\.fc\b/.test(t)
+    /\breac?t\.fc\b/.test(t) ||
+    /\bjsx\.element\b/.test(t)
   ) {
-    return `const Scoreboard: React.FC = () => {\n  return <div />;\n};`;
+    return `const Scoreboard = (): JSX.Element => {\n  return <div />;\n};`;
   }
 
   // JSX structure step for toggle UI: provide a concrete code-shaped pattern,
@@ -362,10 +363,10 @@ const [secretDup, setSecretDup] = useState<string>('')
     return `<button type="button">{isShown ? "Hide" : "Show"}</button>`;
   }
 
-  // Props / FC
+  // Props + explicit return type (avoid React.FC)
   if (/\binterface\b.*props|react\.fc<|react\.functionalcomponent/.test(text)) {
     return `type BannerProps = { label: string }
-export const Banner: React.FC<BannerProps> = ({ label }) => <header>{label}</header>`;
+export const Banner = ({ label }: BannerProps): JSX.Element => <header>{label}</header>`;
   }
 
   // List / keys

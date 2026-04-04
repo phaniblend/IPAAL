@@ -6,7 +6,7 @@
         "file": "inpact_ts01_engine.tsx",
         "title": "Counter App — Typed",
         "objectives": [
-          "Define a functional component using `React.FC` with a typed props interface",
+          "Define a functional component with an explicit JSX.Element return type and typed props (avoid React.FC)",
           "Declare state with an explicit type parameter via `useState<number>`",
           "Type event handlers as `() => void` and wire them to `onClick` props"
         ]

@@ -62,8 +62,8 @@ const NODES = [
     "type": "question",
     "phase": "Step 2 of 5",
     "paal": "Create a functional component called UserStatus that returns a div element. Use TypeScript to type it as a React functional component.",
-    "hint": "Use the React.FC type or function declaration with return type.",
-    "example_code": "const MyComponent: React.FC = () => { return <div>Hello</div>; };",
+    "hint": "Use an explicit JSX.Element return type (or a function declaration with return type).",
+    "example_code": "const MyComponent = (): JSX.Element => { return <div>Hello</div>; };",
     "think_prompt": "What's the main benefit of typing React components with TypeScript?",
     "mc_options": [
       "It makes the code run faster",
@@ -77,7 +77,7 @@ const NODES = [
       "UserStatus",
       "return",
       "<div>",
-      "React.FC",
+      "JSX.Element",
       "=>"
     ],
     "seed_code": "",

@@ -63,27 +63,27 @@ const NODES = [
     "type": "question",
     "phase": "Step 2 of 7",
     "paal": "Define a function component that will serve as our counter app. Use TypeScript to specify it's a React function component.",
-    "hint": "Use const with React.FC type and arrow function syntax.",
+    "hint": "Use const, arrow function, and an explicit `: JSX.Element` return type.",
     "example_code": "Like declaring a specialized worker with a specific job description.",
     "think_prompt": "How should we define a React function component in TypeScript?",
     "mc_options": [
       "As a regular JavaScript function without types",
-      "Using React.FC type for function components",
+      "Using an explicit JSX.Element return type on the function",
       "Using function declaration with explicit return type"
     ],
-    "mc_correct_option": "Using React.FC type for function components",
-    "mc_anchor": "Create a function component using React.FC type annotation.",
+    "mc_correct_option": "Using an explicit JSX.Element return type on the function",
+    "mc_anchor": "Create a function component with an explicit JSX.Element return type on the function.",
     "why_this_matters": "Components are the building blocks of React apps. TypeScript helps define what props a component expects and what it returns.",
     "answer_keywords": [
-      "React.FC",
+      "JSX.Element",
       "=>",
       "()"
     ],
     "seed_code": "",
     "starter_code": "",
     "feedback_correct": "Great! You've created a properly typed React component.",
-    "feedback_partial": "Almost there. Make sure to use React.FC for TypeScript typing.",
-    "feedback_wrong": "Let's define the component: use React.FC type with an arrow function.",
+    "feedback_partial": "Almost there. Add an explicit JSX.Element return type on your component function.",
+    "feedback_wrong": "Let's define the component: use an arrow function and an explicit `: JSX.Element` return type.",
     "expected": "A typed React function component definition."
   },
   {

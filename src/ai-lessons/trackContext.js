@@ -24,8 +24,8 @@ const REACT_VALIDATION_EXTRA = `React/JSX: onClick={handler} passes only the syn
 
 const DEFAULT_SYNTAX_TS = `Use TypeScript only. All code must be valid TypeScript/TSX: use type annotations or rely on correct inference; prefer interfaces/types for props and state where appropriate. No plain JavaScript without types unless the step explicitly allows it.`;
 const DEFAULT_VALIDATION_TS = `Validate as TypeScript/TSX. Expect type-safe code. Accept idiomatic TypeScript (explicit or inferred types). Do not wrongly reject inferred typing when it is correct.
-- Component return type: When the step asks to "create a functional component named X that returns a JSX element" (or similar), accept BOTH function ComponentName() { return <...> } and function ComponentName(): JSX.Element { return <...> }. Do NOT require an explicit : JSX.Element or React.FC unless the step explicitly asks for it. Inferred return type from return <...> is valid TypeScript. Mark as "correct" when the component has the required name and returns JSX, whether or not the learner added a return type annotation.
-- React.FC<Props> without using props: If the step only asks to type the component as React.FC<SomeProps> (or FC<SomeProps>) and to return fixed JSX (e.g. a static <h1>), accept \`const C: React.FC<SomeProps> = () => { ... }\` with no parameter. Do not require a props argument or destructuring unless the step asks to use or display those props.
+- Component return type: When the step asks to "create a functional component named X that returns a JSX element" (or similar), accept BOTH function ComponentName() { return <...> } and function ComponentName(): JSX.Element { return <...> }, and arrow forms like \`const X = (): JSX.Element => { ... }\`. Prefer explicit \`: JSX.Element\` (or \`JSX.Element | null\` when needed) on the function; avoid \`React.FC\` in new code. Do NOT require an explicit return type unless the step explicitly asks for it. Inferred return type from return <...> is valid TypeScript. Mark as "correct" when the component has the required name and returns JSX when inference or explicit typing is satisfied.
+- Props without using them in the body: If the step types props (e.g. \`SomeProps\`) but does not ask to read props in JSX yet, accept \`const C = (_props: SomeProps): JSX.Element => { return <h1>...</h1>; }\` or \`const C = (): JSX.Element => { ... }\` when props are unused, unless the step requires a parameter. Do not require \`React.FC<SomeProps>\`.
 - Do not accept plain JavaScript that ignores types when the lesson is TypeScript, except for the component shape above (creating a component that returns JSX is valid with or without explicit return type).
 - When the step asks to define an interface or type, it must be at module level (outside any component or function); defining it inside the component is incorrect — mark wrong or partial and give pinpointing feedback (where it is, that it must be outside, and what to do).
 ${EXECUTION_CORRECTNESS_COMMON}
@@ -35,6 +35,8 @@ ${EXECUTION_CORRECTNESS_COMMON}
 const CHECKLIST_PYTHON_LANG = `Python 3: meaningful indentation; imports, def/class, and colons must be valid. Required imports or names from the step must appear. Call sites must match each def’s required parameters (after skipping self and defaulted parameters).`;
 
 const CHECKLIST_JAVA_LANG = `Java: valid compilation-level syntax for the lesson; packages/imports, generics, and modifiers when specified. Method and constructor calls must pass every required argument.`;
+
+const CHECKLIST_CPP_LANG = `C++: valid syntax for the standard you assume (C++17+ unless the step says otherwise); headers, classes, pointers/references, and memory usage must match the step. Call sites must pass every required argument implied by declarations.`;
 
 const CHECKLIST_VUE_LANG = `Vue: template, script, and style (if any) must work together; template event bindings must call defined methods with correct argument counts.`;
 
@@ -158,6 +160,14 @@ const TRACK_CONTEXT_MAP = {
     syntaxRules: "Algorithm lessons: teach the pattern/concept in Java. Use classes/methods, arrays/collections; valid Java syntax. Prefer Java 11+ style.",
     validationRules: `Validate as Java. Accept valid Java only. Do not require a specific IDE or build tool.\n${EXECUTION_CORRECTNESS_COMMON}\n${CHECKLIST_JAVA_LANG}\n${CHECKLIST_ALGO_LANG}`,
   },
+  "algo-cpp": {
+    framework: "Algorithms",
+    language: "C++",
+    fileMode: "CPP",
+    syntaxRules:
+      "Algorithm lessons: teach the pattern/concept in C++. Use classes, structs, pointers or references as appropriate; valid ISO C++ syntax.",
+    validationRules: `Validate as C++. Accept valid C++ only. Do not require a specific compiler vendor.\n${EXECUTION_CORRECTNESS_COMMON}\n${CHECKLIST_CPP_LANG}\n${CHECKLIST_ALGO_LANG}`,
+  },
   css: {
     framework: "CSS",
     language: "CSS",
@@ -221,6 +231,87 @@ export function getTrackContext(track) {
 export function getLanguageForValidation(track) {
   const ctx = getTrackContext(track);
   return ctx.language.toLowerCase().replace(/\s/g, "");
+}
+
+/** API / picker value → canonical id used for algorithm validation routing. */
+export function normalizeValidationLanguage(input) {
+  if (input == null || input === "") return null;
+  const s = String(input)
+    .trim()
+    .toLowerCase()
+    .replace(/\s+/g, "");
+  const map = {
+    js: "javascript",
+    javascript: "javascript",
+    ts: "typescript",
+    tsx: "typescript",
+    typescript: "typescript",
+    py: "python",
+    python: "python",
+    java: "java",
+    cpp: "cpp",
+    "c++": "cpp",
+    cxx: "cpp",
+  };
+  return map[s] ?? null;
+}
+
+const ALGO_RULE_TRACK_BY_LANG = {
+  javascript: "algo-js",
+  typescript: "algo-ts",
+  python: "algo-python",
+  java: "algo-java",
+  cpp: "algo-cpp",
+};
+
+/**
+ * Build { language, framework, validationRules } for AI validation prompts, plus guard hints.
+ * @param {{ track?: string, explicitLanguage?: string, codeValidationProfile?: "algorithm" }} opts
+ * @returns {{ languageOrContext: string|{ language: string, framework: string, validationRules: string }, validationLanguageForGuards: string|undefined, skipFrameworkGuards: boolean }}
+ */
+export function getValidationPromptContext(opts) {
+  const { track, explicitLanguage, codeValidationProfile } = opts;
+  const trackCtx = track ? getTrackContext(track) : null;
+
+  if (codeValidationProfile === "algorithm") {
+    const norm =
+      normalizeValidationLanguage(explicitLanguage) ||
+      (track ? normalizeValidationLanguage(getLanguageForValidation(track)) : null) ||
+      "typescript";
+    const ruleTrack = ALGO_RULE_TRACK_BY_LANG[norm];
+    if (!ruleTrack) {
+      throw new Error(`Unsupported algorithm validation language: ${explicitLanguage || norm}`);
+    }
+    const ctx = getTrackContext(ruleTrack);
+    return {
+      languageOrContext: {
+        language: ctx.language.toLowerCase().replace(/\s/g, ""),
+        framework: ctx.framework,
+        validationRules: ctx.validationRules,
+      },
+      validationLanguageForGuards: norm,
+      skipFrameworkGuards: true,
+    };
+  }
+
+  if (trackCtx && track) {
+    return {
+      languageOrContext: {
+        language: getLanguageForValidation(track),
+        framework: trackCtx.framework,
+        validationRules: trackCtx.validationRules,
+      },
+      validationLanguageForGuards: normalizeValidationLanguage(getLanguageForValidation(track)) || undefined,
+      skipFrameworkGuards: false,
+    };
+  }
+
+  const lang = normalizeValidationLanguage(explicitLanguage) || "javascript";
+  return {
+    languageOrContext: lang,
+    validationLanguageForGuards: lang,
+    skipFrameworkGuards: false,
+  };
 }
 
 export default getTrackContext;

@@ -67,35 +67,35 @@
         "phase": "Step 2 of 7",
         "title": "Define the component function",
         "instruction": "Define a function component that will serve as our counter app. Use TypeScript to specify it's a React function component.",
-        "hint": "Use const with React.FC type and arrow function syntax.",
+        "hint": "Use const, arrow function, and an explicit `: JSX.Element` return type.",
         "analogousExample": "Like declaring a specialized worker with a specific job description.",
         "whyThisMatters": "Components are the building blocks of React apps. TypeScript helps define what props a component expects and what it returns.",
         "thinkPrompt": {
           "question": "How should we define a React function component in TypeScript?",
           "options": [
             "As a regular JavaScript function without types",
-            "Using React.FC type for function components",
+            "Using an explicit JSX.Element return type on the function",
             "Using function declaration with explicit return type"
           ],
-          "correctAnswer": "Using React.FC type for function components",
+          "correctAnswer": "Using an explicit JSX.Element return type on the function",
           "allowGuessing": true,
           "confidenceMessage": "Don't worry — just guess."
         },
-        "anchor": "Create a function component using React.FC type annotation.",
+        "anchor": "Create a function component with an explicit JSX.Element return type on the function.",
         "simplerVersion": "Create the main component container for your app.",
         "seedCode": "",
         "expectedOutcome": "A typed React function component definition.",
         "successCriteria": [
-          "Component uses React.FC type",
+          "Component uses an explicit JSX.Element return type",
           "Component is defined as a function"
         ],
         "feedbackCorrect": "Great! You've created a properly typed React component.",
-        "feedbackPartial": "Almost there. Make sure to use React.FC for TypeScript typing.",
-        "feedbackWrong": "Let's define the component: use React.FC type with an arrow function.",
+        "feedbackPartial": "Almost there. Add an explicit JSX.Element return type on your component function.",
+        "feedbackWrong": "Let's define the component: use an arrow function and an explicit `: JSX.Element` return type.",
         "evaluation": {
           "mode": "keyword_match",
           "required": [
-            "React.FC",
+            "JSX.Element",
             "=>",
             "()"
           ]

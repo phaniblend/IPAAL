@@ -61,29 +61,29 @@ const NODES = [
     "id": "step2",
     "type": "question",
     "phase": "Step 2 of 6",
-    "paal": "Declare a functional component named ControlledInput with explicit React.FC type.",
-    "hint": "Start with 'const ControlledInput: React.FC = () => { }'.",
-    "example_code": "const MyButton: React.FC = () => { return <button>Click</button>; };",
+    "paal": "Declare a functional component named ControlledInput with an explicit JSX.Element return type.",
+    "hint": "Start with 'const ControlledInput = (): JSX.Element => { }'.",
+    "example_code": "const MyButton = (): JSX.Element => { return <button>Click</button>; };",
     "think_prompt": "What's the correct way to define a functional component in TypeScript?",
     "mc_options": [
       "function MyComponent() { ... }",
-      "const MyComponent: React.FC = () => { ... }",
+      "const MyComponent = (): JSX.Element => { ... }",
       "const MyComponent = () => { ... }"
     ],
-    "mc_correct_option": "const MyComponent: React.FC = () => { ... }",
-    "mc_anchor": "Use React.FC for explicit typing in TypeScript.",
+    "mc_correct_option": "const MyComponent = (): JSX.Element => { ... }",
+    "mc_anchor": "Use an explicit JSX.Element return type for the component function.",
     "why_this_matters": "Every React component needs a function definition to hold our logic and JSX.",
     "answer_keywords": [
       "const",
       "ControlledInput",
-      "React.FC",
+      "JSX.Element",
       "=>"
     ],
     "seed_code": "",
     "starter_code": "",
     "feedback_correct": "Perfect! The component is ready.",
-    "feedback_partial": "Close — make sure you're using React.FC for TypeScript.",
-    "feedback_wrong": "Let's define a component with React.FC.",
+    "feedback_partial": "Close — make sure you're using JSX.Element for TypeScript.",
+    "feedback_wrong": "Let's define a component with JSX.Element.",
     "expected": "Component skeleton is created."
   },
   {
