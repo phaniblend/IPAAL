@@ -1,3 +1,8 @@
+/**
+ * 🔒 LOCKED — React · TS lesson 5 — Conditional Rendering with Ternary (TypeScript).
+ * Do not change steps, copy, or evaluation without explicit product/content sign-off.
+ * Generated mirror: content/generated/react-ts/005_conditional-rendering-with-ternary_lesson.json
+ */
 import createINPACTEngine from "../inpact_engine_shared";
 
 const NODES = [
@@ -146,7 +151,7 @@ const NODES = [
     "phase": "Step 5 of 5",
     "paal": "In your component's return statement, use a ternary operator to show 'Online' with green text when the state is true, and 'Offline' with red text when false. Connect your toggle handler to a button.",
     "hint": "Use condition ? 'Online' : 'Offline' and style with inline styles or CSS classes.",
-    "example_code": "{isVisible ? <ShowMessage /> : <HideMessage />}",
+    "example_code": "return (\n  <div>\n    <p style={{ color: flag ? \"green\" : \"red\" }}>\n      {flag ? \"On\" : \"Off\"}\n    </p>\n    <button type=\"button\" onClick={handleFlip}>Toggle</button>\n  </div>\n);",
     "think_prompt": "Why use a ternary operator instead of an if-else statement in JSX?",
     "mc_options": [
       "Ternary operators are faster than if-else",

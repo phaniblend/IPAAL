@@ -194,7 +194,7 @@
         "title": "Implement conditional rendering with ternary",
         "instruction": "In your component's return statement, use a ternary operator to show 'Online' with green text when the state is true, and 'Offline' with red text when false. Connect your toggle handler to a button.",
         "hint": "Use condition ? 'Online' : 'Offline' and style with inline styles or CSS classes.",
-        "analogousExample": "{isVisible ? <ShowMessage /> : <HideMessage />}",
+        "analogousExample": "return (\n  <div>\n    <p style={{ color: flag ? \"green\" : \"red\" }}>\n      {flag ? \"On\" : \"Off\"}\n    </p>\n    <button type=\"button\" onClick={handleFlip}>Toggle</button>\n  </div>\n);",
         "whyThisMatters": "The ternary operator lets you conditionally render different JSX in a concise, readable way while maintaining TypeScript type safety.",
         "thinkPrompt": {
           "question": "Why use a ternary operator instead of an if-else statement in JSX?",
