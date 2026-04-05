@@ -2,8 +2,6 @@ import { useState, useEffect, useRef } from "react";
 import InpactLogo from "./components/InpactLogo.jsx";
 import { getLessonCount, TRACK_LABELS } from "./trackLessonCounts.js";
 import { REACT_TS_LIVE_LESSON_COUNT } from "./reactTsLiveScope.js";
-import { FUNDA_ANGULAR_LESSONS } from "./angularFundaLessons.js";
-import { MOBILE_ANGULAR_LESSONS } from "./mobileAngularLessons.js";
 
 // Must match ENGINES order in App.jsx (p01…p100 minus 10/16/17/88, then p101–p110, p113–p125, p126–p127; React TS adds TS120–TS122).
 export const LESSON_LIST = [
@@ -51,28 +49,6 @@ const REACT_GRID_GROUPS = [
   { key: "state", title: "State & interaction", start: 21, end: 27 },
   { key: "hooks", title: "Hooks & utilities", start: 27, end: 30 },
 ];
-
-/** Angular track lesson order — must match App.jsx lessonList for next/prev and content indices. */
-export function buildAngularLessonList() {
-  return [
-    { title: "Project Scaffold", shortName: "QB01" },
-    { title: "App Shell & Navigation", shortName: "QB02" },
-    { title: "Orders List Page", shortName: "QB03" },
-    { title: "Capacitor GPS + Nearby Restaurants", shortName: "QB04" },
-    { title: "Push Notifications", shortName: "QB05" },
-    { title: "Status Card", shortName: "ANG01" },
-    { title: "Search Form", shortName: "ANG02" },
-    { title: "Data Service", shortName: "ANG03" },
-    { title: "Real-Time Board", shortName: "ANG04" },
-    { title: "Board State", shortName: "ANG05" },
-    { title: "Portal Navigation", shortName: "ANG06" },
-    { title: "Change Detection & Performance", shortName: "ANG07" },
-    { title: "Micro-Frontend Architecture", shortName: "ANG08" },
-    { title: "Pipes — Creation & Usage", shortName: "ANG09" },
-    ...LESSON_LIST.map((title) => ({ title })),
-    ...FUNDA_ANGULAR_LESSONS.map(({ title, shortName }) => ({ title, shortName })),
-  ];
-}
 
 if (typeof document !== "undefined" && !document.getElementById("dm-sans-font")) {
   const link = document.createElement("link");
@@ -241,19 +217,11 @@ export default function LandingPage({ track, onSelectLesson, onStartFree, lesson
   const [showDownChevron, setShowDownChevron] = useState(false);
 
   // lessonList: null = use LESSON_LIST (100 React lessons); array = curriculum (TSF/JSF: title, shortName, why)
-  let list =
+  const list =
     lessonList ??
     (track === "react-ts"
       ? LESSON_LIST_REACT_TS_LIVE.map((title) => ({ title }))
       : LESSON_LIST.map((title) => ({ title })));
-
-  // Angular track: QuickBite (QB01–QB05), then ANG01–ANG09, then React list, then FUNDA
-  if (track === "angular") {
-    list = buildAngularLessonList();
-  }
-  if (track === "mobile-angular") {
-    list = MOBILE_ANGULAR_LESSONS.map((x) => ({ ...x }));
-  }
 
   const lessonCount = getLessonCount(track, {
     reactListLength: track === "react-ts" ? REACT_TS_LIVE_LESSON_COUNT : LESSON_LIST.length,

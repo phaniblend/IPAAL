@@ -1,9 +1,0 @@
-import createINPACTEngine from "../inpact_engine_shared";
-import { aiLessonToEngineConfig } from "../../ai-lessons/adapters/normalizeToEngineConfig.js";
-import raw from "../../../content/react-ts/029_useDebounce_lesson.json";
-
-const lesson = raw.config;
-const engineConfig = aiLessonToEngineConfig(lesson, { track: "react-ts", language: "typescript" });
-
-const INPACTEngineTS29 = createINPACTEngine(engineConfig);
-export default INPACTEngineTS29;
