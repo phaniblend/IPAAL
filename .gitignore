@@ -30,4 +30,18 @@ dist-ssr
 
 cache/
 
+# React-TS generated lesson JSON mirrors: commit only when a lesson is locked for production.
+# When you lock lesson N, add: !content/generated/react-ts/0NN_*.json (three-digit prefix).
+content/generated/react-ts/*.json
+!content/generated/react-ts/001_*.json
+!content/generated/react-ts/002_*.json
+!content/generated/react-ts/003_*.json
+!content/generated/react-ts/004_*.json
+!content/generated/react-ts/005_*.json
+!content/generated/react-ts/006_*.json
+!content/generated/react-ts/007_*.json
+!content/generated/react-ts/008_*.json
+!content/generated/react-ts/009_*.json
+!content/generated/react-ts/010_*.json
+
 .cursor/
