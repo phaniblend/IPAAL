@@ -33,6 +33,11 @@ const DEFAULT_REACT_LIST_LENGTH = REACT_TS_LESSON_COUNT;
  * @returns {number}
  */
 export function getLessonCount(track, options = {}) {
+  // When the app passes an explicit React · TS catalog length (e.g. live build with locked lessons only),
+  // use it as-is instead of clamping to the full REACT_TS_LESSON_COUNT floor.
+  if (track === "react-ts" && options.reactListLength != null) {
+    return options.reactListLength;
+  }
   const reactLen = options.reactListLength ?? DEFAULT_REACT_LIST_LENGTH;
   const reactCount = Math.max(reactLen, REACT_TS_LESSON_COUNT);
 

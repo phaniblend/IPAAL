@@ -1,6 +1,7 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import InpactLogo from "./components/InpactLogo.jsx";
 import { getLessonCount, TRACK_LABELS } from "./trackLessonCounts.js";
+import { REACT_TS_LIVE_LESSON_COUNT } from "./reactTsLiveScope.js";
 import { FUNDA_ANGULAR_LESSONS } from "./angularFundaLessons.js";
 import { MOBILE_ANGULAR_LESSONS } from "./mobileAngularLessons.js";
 
@@ -35,6 +36,9 @@ export const LESSON_LIST = [
   "Query Building in RTK",
   "Redux Toolkit: Writing Your First createAsyncThunk",
 ];
+
+/** Titles for the React · TS live hosting build (🔒 locked engines only). Same order as LESSON_LIST indices 0…N-1. */
+export const LESSON_LIST_REACT_TS_LIVE = LESSON_LIST.slice(0, REACT_TS_LIVE_LESSON_COUNT);
 
 /**
  * Groupings for the lessons grid (React · JS / React · TS / Vue) — indices align with LESSON_LIST.
@@ -233,9 +237,15 @@ const LP = {
 export default function LandingPage({ track, onSelectLesson, onStartFree, lessonList, freeLessonsHint }) {
   const [hover, setHover] = useState(null);
   const [howItWorksOpen, setHowItWorksOpen] = useState(false);
+  const architectureHeaderRef = useRef(null);
+  const [showDownChevron, setShowDownChevron] = useState(false);
 
   // lessonList: null = use LESSON_LIST (100 React lessons); array = curriculum (TSF/JSF: title, shortName, why)
-  let list = lessonList ?? LESSON_LIST.map((title) => ({ title }));
+  let list =
+    lessonList ??
+    (track === "react-ts"
+      ? LESSON_LIST_REACT_TS_LIVE.map((title) => ({ title }))
+      : LESSON_LIST.map((title) => ({ title })));
 
   // Angular track: QuickBite (QB01–QB05), then ANG01–ANG09, then React list, then FUNDA
   if (track === "angular") {
@@ -245,7 +255,9 @@ export default function LandingPage({ track, onSelectLesson, onStartFree, lesson
     list = MOBILE_ANGULAR_LESSONS.map((x) => ({ ...x }));
   }
 
-  const lessonCount = getLessonCount(track, { reactListLength: LESSON_LIST.length });
+  const lessonCount = getLessonCount(track, {
+    reactListLength: track === "react-ts" ? REACT_TS_LIVE_LESSON_COUNT : LESSON_LIST.length,
+  });
 
   const wrap = {
     width: "100%",
@@ -360,6 +372,27 @@ export default function LandingPage({ track, onSelectLesson, onStartFree, lesson
     };
   }, [howItWorksOpen]);
 
+  // Show a subtle animated downward chevron under the logo only when the
+  // "The Architecture of Thought" header is currently NOT visible in the viewport.
+  useEffect(() => {
+    const el = architectureHeaderRef.current;
+    if (!el) return;
+    if (typeof IntersectionObserver === "undefined") {
+      setShowDownChevron(true);
+      return;
+    }
+    const obs = new IntersectionObserver(
+      (entries) => {
+        const entry = entries?.[0];
+        if (!entry) return;
+        setShowDownChevron(!entry.isIntersecting);
+      },
+      { threshold: 0.01 }
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, []);
+
   return (
     <div style={wrap}>
       <style>
@@ -424,6 +457,18 @@ export default function LandingPage({ track, onSelectLesson, onStartFree, lesson
             .lp-lesson-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
             .lp-lesson-grid > div { aspect-ratio: 3 / 2 !important; padding: 8px 6px !important; border-radius: 8px !important; }
           }
+          .lp-scroll-chevron {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            pointer-events: none;
+            animation: lp-chev-bounce 1.3s ease-in-out infinite;
+          }
+          @keyframes lp-chev-bounce {
+            0%, 100% { transform: translateY(0); opacity: 0.7; }
+            50% { transform: translateY(7px); opacity: 1; }
+          }
         `}
       </style>
 
@@ -432,6 +477,24 @@ export default function LandingPage({ track, onSelectLesson, onStartFree, lesson
           <div className="lp-hero-brand">
             <div style={logoWrap}>
               <InpactLogo height="clamp(180px, 32vw, 380px)" />
+              {showDownChevron ? (
+                <div
+                  className="lp-scroll-chevron"
+                  aria-hidden="true"
+                  title="Scroll down"
+                  style={{ marginTop: "6px" }}
+                >
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                      d="M7 10l5 5 5-5"
+                      stroke="#00D2FF"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                </div>
+              ) : null}
             </div>
             <p
               className="lp-punchline-abs"
@@ -441,7 +504,9 @@ export default function LandingPage({ track, onSelectLesson, onStartFree, lesson
               
             </p>
           </div>
-          <h1 style={{ ...LP.h1, marginTop: "10px" }}>The Architecture of Thought</h1>
+          <h1 ref={architectureHeaderRef} style={{ ...LP.h1, marginTop: "10px" }}>
+            The Architecture of Thought
+          </h1>
           <div
             style={{
               display: "flex",

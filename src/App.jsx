@@ -1,6 +1,6 @@
 import { useState, useEffect, useLayoutEffect, useMemo, useCallback, useRef } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
-import LandingPage, { LESSON_LIST, buildAngularLessonList } from './LandingPage'
+import LandingPage, { LESSON_LIST, LESSON_LIST_REACT_TS_LIVE, buildAngularLessonList } from './LandingPage'
 import { getLessonCount } from './trackLessonCounts.js'
 import { MOBILE_ANGULAR_LESSONS } from './mobileAngularLessons.js'
 import { TS_FUNDAMENTALS_CURRICULUM } from './engines/typescript/inpact_tsf_index'
@@ -177,36 +177,7 @@ import INPACTEngineP27 from './engines/react-js/inpact_p27_engine'
 import INPACTEngineP28 from './engines/react-js/inpact_p28_engine'
 import INPACTEngineP29 from './engines/react-js/inpact_p29_engine'
 import INPACTEngineP30 from './engines/react-js/inpact_p30_engine'
-import INPACTEngineTS01 from './engines/react-ts/inpact_ts01_engine'
-import INPACTEngineTS02 from './engines/react-ts/inpact_ts02_engine'
-import INPACTEngineTS03 from './engines/react-ts/inpact_ts03_engine'
-import INPACTEngineTS04 from './engines/react-ts/inpact_ts04_engine'
-import INPACTEngineTS05 from './engines/react-ts/inpact_ts05_engine'
-import INPACTEngineTS06 from './engines/react-ts/inpact_ts06_engine'
-import INPACTEngineTS07 from './engines/react-ts/inpact_ts07_engine'
-import INPACTEngineTS08 from './engines/react-ts/inpact_ts08_engine'
-import INPACTEngineTS09 from './engines/react-ts/inpact_ts09_engine'
-import INPACTEngineTS10 from './engines/react-ts/inpact_ts10_engine'
-import INPACTEngineTS11 from './engines/react-ts/inpact_ts11_engine'
-import INPACTEngineTS12 from './engines/react-ts/inpact_ts12_engine'
-import INPACTEngineTS13 from './engines/react-ts/inpact_ts13_engine'
-import INPACTEngineTS14 from './engines/react-ts/inpact_ts14_engine'
-import INPACTEngineTS15 from './engines/react-ts/inpact_ts15_engine'
-import INPACTEngineTS16 from './engines/react-ts/inpact_ts16_engine'
-import INPACTEngineTS17 from './engines/react-ts/inpact_ts17_engine'
-import INPACTEngineTS18 from './engines/react-ts/inpact_ts18_engine'
-import INPACTEngineTS19 from './engines/react-ts/inpact_ts19_engine'
-import INPACTEngineTS20 from './engines/react-ts/inpact_ts20_engine'
-import INPACTEngineTS21 from './engines/react-ts/inpact_ts21_engine'
-import INPACTEngineTS22 from './engines/react-ts/inpact_ts22_engine'
-import INPACTEngineTS23 from './engines/react-ts/inpact_ts23_engine'
-import INPACTEngineTS24 from './engines/react-ts/inpact_ts24_engine'
-import INPACTEngineTS25 from './engines/react-ts/inpact_ts25_engine'
-import INPACTEngineTS26 from './engines/react-ts/inpact_ts26_engine'
-import INPACTEngineTS27 from './engines/react-ts/inpact_ts27_engine'
-import INPACTEngineTS28 from './engines/react-ts/inpact_ts28_engine'
-import INPACTEngineTS29 from './engines/react-ts/inpact_ts29_engine'
-import INPACTEngineTS30 from './engines/react-ts/inpact_ts30_engine'
+import { ENGINES_TS } from './engines/react-ts/enginesTsLocked'
 import INPACTEngineP31 from './engines/react-js/inpact_p31_engine'
 import INPACTEngineP32 from './engines/react-js/inpact_p32_engine'
 import INPACTEngineP33 from './engines/react-js/inpact_p33_engine'
@@ -301,79 +272,6 @@ import INPACTEngineP124 from './engines/react-js/inpact_p124_engine'
 import INPACTEngineP125 from './engines/react-js/inpact_p125_engine'
 import INPACTEngineP126 from './engines/react-js/inpact_p126_engine'
 import INPACTEngineP127 from './engines/react-js/inpact_p127_engine'
-import INPACTEngineTS120 from './engines/react-ts/inpact_ts120_engine'
-import INPACTEngineTS121 from './engines/react-ts/inpact_ts121_engine'
-import INPACTEngineTS122 from './engines/react-ts/inpact_ts122_engine'
-import INPACTEngineTS31 from './engines/react-ts/inpact_ts31_engine'
-import INPACTEngineTS32 from './engines/react-ts/inpact_ts32_engine'
-import INPACTEngineTS33 from './engines/react-ts/inpact_ts33_engine'
-import INPACTEngineTS34 from './engines/react-ts/inpact_ts34_engine'
-import INPACTEngineTS35 from './engines/react-ts/inpact_ts35_engine'
-import INPACTEngineTS36 from './engines/react-ts/inpact_ts36_engine'
-import INPACTEngineTS37 from './engines/react-ts/inpact_ts37_engine'
-import INPACTEngineTS38 from './engines/react-ts/inpact_ts38_engine'
-import INPACTEngineTS39 from './engines/react-ts/inpact_ts39_engine'
-import INPACTEngineTS40 from './engines/react-ts/inpact_ts40_engine'
-import INPACTEngineTS41 from './engines/react-ts/inpact_ts41_engine'
-import INPACTEngineTS42 from './engines/react-ts/inpact_ts42_engine'
-import INPACTEngineTS43 from './engines/react-ts/inpact_ts43_engine'
-import INPACTEngineTS44 from './engines/react-ts/inpact_ts44_engine'
-import INPACTEngineTS45 from './engines/react-ts/inpact_ts45_engine'
-import INPACTEngineTS46 from './engines/react-ts/inpact_ts46_engine'
-import INPACTEngineTS47 from './engines/react-ts/inpact_ts47_engine'
-import INPACTEngineTS48 from './engines/react-ts/inpact_ts48_engine'
-import INPACTEngineTS49 from './engines/react-ts/inpact_ts49_engine'
-import INPACTEngineTS50 from './engines/react-ts/inpact_ts50_engine'
-import INPACTEngineTS51 from './engines/react-ts/inpact_ts51_engine'
-import INPACTEngineTS52 from './engines/react-ts/inpact_ts52_engine'
-import INPACTEngineTS53 from './engines/react-ts/inpact_ts53_engine'
-import INPACTEngineTS54 from './engines/react-ts/inpact_ts54_engine'
-import INPACTEngineTS55 from './engines/react-ts/inpact_ts55_engine'
-import INPACTEngineTS56 from './engines/react-ts/inpact_ts56_engine'
-import INPACTEngineTS57 from './engines/react-ts/inpact_ts57_engine'
-import INPACTEngineTS58 from './engines/react-ts/inpact_ts58_engine'
-import INPACTEngineTS59 from './engines/react-ts/inpact_ts59_engine'
-import INPACTEngineTS60 from './engines/react-ts/inpact_ts60_engine'
-import INPACTEngineTS61 from './engines/react-ts/inpact_ts61_engine'
-import INPACTEngineTS62 from './engines/react-ts/inpact_ts62_engine'
-import INPACTEngineTS63 from './engines/react-ts/inpact_ts63_engine'
-import INPACTEngineTS64 from './engines/react-ts/inpact_ts64_engine'
-import INPACTEngineTS65 from './engines/react-ts/inpact_ts65_engine'
-import INPACTEngineTS66 from './engines/react-ts/inpact_ts66_engine'
-import INPACTEngineTS67 from './engines/react-ts/inpact_ts67_engine'
-import INPACTEngineTS68 from './engines/react-ts/inpact_ts68_engine'
-import INPACTEngineTS69 from './engines/react-ts/inpact_ts69_engine'
-import INPACTEngineTS70 from './engines/react-ts/inpact_ts70_engine'
-import INPACTEngineTS71 from './engines/react-ts/inpact_ts71_engine'
-import INPACTEngineTS72 from './engines/react-ts/inpact_ts72_engine'
-import INPACTEngineTS73 from './engines/react-ts/inpact_ts73_engine'
-import INPACTEngineTS74 from './engines/react-ts/inpact_ts74_engine'
-import INPACTEngineTS75 from './engines/react-ts/inpact_ts75_engine'
-import INPACTEngineTS76 from './engines/react-ts/inpact_ts76_engine'
-import INPACTEngineTS77 from './engines/react-ts/inpact_ts77_engine'
-import INPACTEngineTS78 from './engines/react-ts/inpact_ts78_engine'
-import INPACTEngineTS79 from './engines/react-ts/inpact_ts79_engine'
-import INPACTEngineTS80 from './engines/react-ts/inpact_ts80_engine'
-import INPACTEngineTS81 from './engines/react-ts/inpact_ts81_engine'
-import INPACTEngineTS82 from './engines/react-ts/inpact_ts82_engine'
-import INPACTEngineTS83 from './engines/react-ts/inpact_ts83_engine'
-import INPACTEngineTS84 from './engines/react-ts/inpact_ts84_engine'
-import INPACTEngineTS85 from './engines/react-ts/inpact_ts85_engine'
-import INPACTEngineTS86 from './engines/react-ts/inpact_ts86_engine'
-import INPACTEngineTS87 from './engines/react-ts/inpact_ts87_engine'
-import INPACTEngineTS88 from './engines/react-ts/inpact_ts88_engine'
-import INPACTEngineTS89 from './engines/react-ts/inpact_ts89_engine'
-import INPACTEngineTS90 from './engines/react-ts/inpact_ts90_engine'
-import INPACTEngineTS91 from './engines/react-ts/inpact_ts91_engine'
-import INPACTEngineTS92 from './engines/react-ts/inpact_ts92_engine'
-import INPACTEngineTS93 from './engines/react-ts/inpact_ts93_engine'
-import INPACTEngineTS94 from './engines/react-ts/inpact_ts94_engine'
-import INPACTEngineTS95 from './engines/react-ts/inpact_ts95_engine'
-import INPACTEngineTS96 from './engines/react-ts/inpact_ts96_engine'
-import INPACTEngineTS97 from './engines/react-ts/inpact_ts97_engine'
-import INPACTEngineTS98 from './engines/react-ts/inpact_ts98_engine'
-import INPACTEngineTS99 from './engines/react-ts/inpact_ts99_engine'
-import INPACTEngineTS100 from './engines/react-ts/inpact_ts100_engine'
 import { ENGINES_VUE } from './engines/vue/inpact_vue_index'
 import INPACTEngineAngularA01 from './engines/angular/angular_a01_components'
 import INPACTEngineAngularA02 from './engines/angular/angular_a02_data_binding'
@@ -614,132 +512,6 @@ const ENGINES = [
   INPACTEngineP125,
   INPACTEngineP126,
   INPACTEngineP127,
-]
-
-// TypeScript track: same lesson count as React JS (ts01–ts09, ts11–ts15, ts18–ts87, ts89–ts100, then P101–P110/P113–P125/P127, TS120–TS122)
-const ENGINES_TS = [
-  INPACTEngineTS01,
-  INPACTEngineTS02,
-  INPACTEngineTS03,
-  INPACTEngineTS04,
-  INPACTEngineTS05,
-  INPACTEngineTS06,
-  INPACTEngineTS07,
-  INPACTEngineTS08,
-  INPACTEngineTS09,
-  INPACTEngineTS11,
-  INPACTEngineTS12,
-  INPACTEngineTS13,
-  INPACTEngineTS14,
-  INPACTEngineTS15,
-  INPACTEngineTS18,
-  INPACTEngineTS19,
-  INPACTEngineTS20,
-  INPACTEngineTS21,
-  INPACTEngineTS22,
-  INPACTEngineTS23,
-  INPACTEngineTS24,
-  INPACTEngineTS25,
-  INPACTEngineTS26,
-  INPACTEngineTS27,
-  INPACTEngineTS28,
-  INPACTEngineTS29,
-  INPACTEngineTS30,
-  INPACTEngineTS31,
-  INPACTEngineTS32,
-  INPACTEngineTS33,
-  INPACTEngineTS34,
-  INPACTEngineTS35,
-  INPACTEngineTS36,
-  INPACTEngineTS37,
-  INPACTEngineTS38,
-  INPACTEngineTS39,
-  INPACTEngineTS40,
-  INPACTEngineTS41,
-  INPACTEngineTS42,
-  INPACTEngineTS43,
-  INPACTEngineTS44,
-  INPACTEngineTS45,
-  INPACTEngineTS46,
-  INPACTEngineTS47,
-  INPACTEngineTS48,
-  INPACTEngineTS49,
-  INPACTEngineTS50,
-  INPACTEngineTS51,
-  INPACTEngineTS52,
-  INPACTEngineTS53,
-  INPACTEngineTS54,
-  INPACTEngineTS55,
-  INPACTEngineTS56,
-  INPACTEngineTS57,
-  INPACTEngineTS58,
-  INPACTEngineTS59,
-  INPACTEngineTS60,
-  INPACTEngineTS61,
-  INPACTEngineTS62,
-  INPACTEngineTS63,
-  INPACTEngineTS64,
-  INPACTEngineTS65,
-  INPACTEngineTS66,
-  INPACTEngineTS67,
-  INPACTEngineTS68,
-  INPACTEngineTS69,
-  INPACTEngineTS70,
-  INPACTEngineTS71,
-  INPACTEngineTS72,
-  INPACTEngineTS73,
-  INPACTEngineTS74,
-  INPACTEngineTS75,
-  INPACTEngineTS76,
-  INPACTEngineTS77,
-  INPACTEngineTS78,
-  INPACTEngineTS79,
-  INPACTEngineTS80,
-  INPACTEngineTS81,
-  INPACTEngineTS82,
-  INPACTEngineTS83,
-  INPACTEngineTS84,
-  INPACTEngineTS85,
-  INPACTEngineTS86,
-  INPACTEngineTS87,
-  INPACTEngineTS89,
-  INPACTEngineTS90,
-  INPACTEngineTS91,
-  INPACTEngineTS92,
-  INPACTEngineTS93,
-  INPACTEngineTS94,
-  INPACTEngineTS95,
-  INPACTEngineTS96,
-  INPACTEngineTS97,
-  INPACTEngineTS98,
-  INPACTEngineTS99,
-  INPACTEngineTS100,
-  INPACTEngineP101,
-  INPACTEngineP102,
-  INPACTEngineP103,
-  INPACTEngineP104,
-  INPACTEngineP105,
-  INPACTEngineP106,
-  INPACTEngineP107,
-  INPACTEngineP108,
-  INPACTEngineP109,
-  INPACTEngineP110,
-  INPACTEngineP113,
-  INPACTEngineP114,
-  INPACTEngineP115,
-  INPACTEngineP116,
-  INPACTEngineP117,
-  INPACTEngineP118,
-  INPACTEngineP119,
-  INPACTEngineP120,
-  INPACTEngineP121,
-  INPACTEngineP122,
-  INPACTEngineP123,
-  INPACTEngineP124,
-  INPACTEngineP125,
-  INPACTEngineTS120,
-  INPACTEngineTS121,
-  INPACTEngineTS122,
 ]
 
 // TypeScript Fundamentals: 10 language-first lessons (no React)
@@ -1022,6 +794,18 @@ function getLessonList(track) {
   return null // react-js and react-ts use LESSON_LIST from LandingPage (100 items)
 }
 
+/** Default catalog rows when `getLessonList` is null (React · TS live build uses locked-only titles). */
+function defaultReactFamilyLessonList(track) {
+  if (track === 'react-ts') return LESSON_LIST_REACT_TS_LIVE.map((title) => ({ title }))
+  return LESSON_LIST.map((title) => ({ title }))
+}
+
+function lessonTitleItemForReactFamily(track, index) {
+  if (track !== 'angular' && track !== 'vue' && track !== 'react-js' && track !== 'react-ts') return null
+  const titles = track === 'react-ts' ? LESSON_LIST_REACT_TS_LIVE : LESSON_LIST
+  return titles[index] != null ? { title: titles[index] } : null
+}
+
 import { AI_LESSONS_CONFIG } from './ai-lessons/config.js'
 import { ALGO_AI_NAMES } from './ai-lessons/algoAiNames.js'
 import DynamicLessonPage from './ai-lessons/DynamicLessonPage.jsx'
@@ -1162,14 +946,21 @@ export default function App() {
       if (!session?.user) return
       const u = session.user
       const profile = {
-        name: u.user_metadata?.full_name || u.email?.split('@')[0] || 'User',
+        name:
+          u.user_metadata?.full_name ||
+          u.user_metadata?.display_name ||
+          u.email?.split('@')[0] ||
+          'User',
         emailOrPhone: u.email || '',
         id: u.id,
         avatarUrl: u.user_metadata?.avatar_url || '',
       }
       setRegisteredLocal(profile)
       setUser(profile)
-      upsertProfile(u)
+      // Avoid calling supabase.* inside the auth callback lock (can stall auth); see gotrue-js #762.
+      queueMicrotask(() => {
+        void upsertProfile(u)
+      })
       setPasswordRecoveryActive(false)
       setShowRegisterModal(false)
       setShowCinematic(false)
@@ -1180,20 +971,20 @@ export default function App() {
 
     if (!isSupabaseConfigured) return undefined
 
-    /** Supabase implicit recovery uses #...type=recovery; PKCE reset links use ?code=... only (no type= in URL). */
+    /** Legacy implicit redirect puts type=recovery in the hash. Do not treat ?code= as recovery — PKCE uses code= for magic link & email confirm too. */
     const recoveryInUrl = () => {
       if (typeof window === 'undefined') return false
       const { hash, search } = window.location
-      if (hash.includes('type=recovery') || /[?&]type=recovery/.test(search)) return true
-      if (/[?&]code=/.test(search)) return true
-      return false
+      return hash.includes('type=recovery') || /[?&]type=recovery/.test(search)
     }
 
+    let passwordRecoveryFromListener = false
     let unsub = () => {}
     const authReadyTimeout = window.setTimeout(() => setAuthSessionReady(true), 10000)
     ;(async () => {
       const { data } = onAuthStateChange((event, session) => {
         if (event === 'SIGNED_OUT' || event === 'USER_DELETED') {
+          passwordRecoveryFromListener = false
           logout()
           setUser(null)
           clearStoredRedirectPath()
@@ -1201,6 +992,7 @@ export default function App() {
           return
         }
         if (event === 'PASSWORD_RECOVERY' && session?.user) {
+          passwordRecoveryFromListener = true
           setPasswordRecoveryActive(true)
           setShowRegisterModal(true)
           setShowCinematic(false)
@@ -1211,12 +1003,14 @@ export default function App() {
         }
       })
       unsub = () => data.subscription.unsubscribe()
+      // Let PASSWORD_RECOVERY (and URL exchange) run before we mirror session from getSession().
+      await new Promise((r) => setTimeout(r, 0))
       await new Promise((r) => setTimeout(r, 0))
       let session = await getSession()
-      if (session?.user && !recoveryInUrl()) syncUserFromSession(session)
+      if (session?.user && !passwordRecoveryFromListener && !recoveryInUrl()) syncUserFromSession(session)
       await new Promise((r) => setTimeout(r, 0))
       session = await getSession()
-      if (session?.user && !recoveryInUrl()) syncUserFromSession(session)
+      if (session?.user && !passwordRecoveryFromListener && !recoveryInUrl()) syncUserFromSession(session)
       window.clearTimeout(authReadyTimeout)
       setAuthSessionReady(true)
     })()
@@ -1259,6 +1053,19 @@ export default function App() {
     if (!authSessionReady) return
     const parsed = parseLessonPath(location.pathname)
     if (!parsed) return
+    if (!user?.id) {
+      const t = parsed.track
+      const i = parsed.index
+      const list = getLessonList(t)
+      const item = list?.[i] ?? lessonTitleItemForReactFamily(t, i)
+      setPendingLesson({ track: t, index: i, item })
+      savePendingLesson(t, i, item)
+      setStoredRedirectPath(buildLessonPath(t, i))
+      setRegisterModalVariant('loginWall')
+      setShowRegisterModal(true)
+      if (location.pathname !== '/register') navigate('/register', { replace: true })
+      return
+    }
     if (parsed.track !== LEARNER_FOCUS_TRACK) {
       navigate('/', { replace: true })
       return
@@ -1268,13 +1075,7 @@ export default function App() {
     const { track: t, index: i } = parsed
     setTrack(t)
     const list = getLessonList(t)
-    const item =
-      list?.[i] ??
-      (t === 'angular' || t === 'vue' || t === 'react-js' || t === 'react-ts'
-        ? LESSON_LIST[i] != null
-          ? { title: LESSON_LIST[i] }
-          : null
-        : null)
+    const item = list?.[i] ?? lessonTitleItemForReactFamily(t, i)
 
     const opts = { loggedIn: Boolean(user?.id) }
 
@@ -1365,7 +1166,7 @@ export default function App() {
     const list =
       t === 'angular'
         ? buildAngularLessonList()
-        : getLessonList(t) ?? LESSON_LIST.map((title) => ({ title }))
+        : getLessonList(t) ?? defaultReactFamilyLessonList(t)
     const title = selectedLessonItem?.title ?? list?.[idx]?.title ?? ''
     lessonOpenedAtRef.current = Date.now()
     void recordLessonStart(user.id, t, idx, title)
@@ -1397,6 +1198,15 @@ export default function App() {
 
   const handleSelectLesson = (i, item) => {
     const t = LEARNER_FOCUS_TRACK
+    if (!user?.id) {
+      setPendingLesson({ track: t, index: i, item })
+      savePendingLesson(t, i, item)
+      setStoredRedirectPath(buildLessonPath(t, i))
+      setRegisterModalVariant('loginWall')
+      setShowRegisterModal(true)
+      navigate('/register', { replace: true })
+      return
+    }
     if (mustLoginToUnlockPastAnonymousLimit(t, i, lessonGateOpts)) {
       setPendingLesson({ track: t, index: i, item })
       savePendingLesson(t, i, item)
@@ -1745,7 +1555,7 @@ export default function App() {
   const lessonList =
     effectiveTrack === 'angular'
       ? buildAngularLessonList()
-      : (getLessonList(effectiveTrack) ?? LESSON_LIST.map((title) => ({ title })))
+      : (getLessonList(effectiveTrack) ?? defaultReactFamilyLessonList(effectiveTrack))
   const engines = getEngines(effectiveTrack, lessonList?.length)
   const Engine = engines[lessonIndex]
 
