@@ -4,6 +4,7 @@
  * Run: npm run server from project root. Loads .env from project root.
  */
 
+import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
 import crypto from "crypto";
@@ -631,12 +632,34 @@ app.post("/api/lessons/generate", async (req, res) => {
   }
 });
 
+/**
+ * Production: serve Vite `dist/` from the same process as `/api` so POST /api/lessons/* works on one host.
+ * (A static-only host like Caddy often returns 405 for POST to /api.)
+ * When `dist/index.html` exists (e.g. after `npm run build`), static assets + SPA fallback are enabled.
+ */
+const distDir = path.join(rootDir, "dist");
+const distIndexHtml = path.join(distDir, "index.html");
+if (fs.existsSync(distIndexHtml)) {
+  app.use(express.static(distDir));
+  app.use((req, res, next) => {
+    if (req.method !== "GET" && req.method !== "HEAD") return next();
+    if (req.path.startsWith("/api")) return next();
+    res.sendFile(distIndexHtml, (err) => {
+      if (err) next(err);
+    });
+  });
+}
+const servingStatic = fs.existsSync(distIndexHtml);
+
 const server = app.listen(PORT, () => {
   const { apiKey, provider } = getAIOptions();
   const keyName = "DEEPSEEK_API_KEY";
   console.log(
     `AI lesson server at http://localhost:${PORT} (POST /api/lessons/intro, /objectives, /generate, /preview, /validate, /step-example, /feedback-annotate)`
   );
+  if (servingStatic) {
+    console.log(`Also serving SPA from ${distDir} (same origin as /api — use one Node service in production).`);
+  }
   console.log(`Content: ${getContentDir()} (checked before cache/API). Cache: ${getCacheDir()}. AI_PROVIDER=${provider}, ${keyName}: ${apiKey ? "set" : "NOT SET"}`);
 });
 
