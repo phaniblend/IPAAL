@@ -15,6 +15,18 @@ import { getDeepDiveConceptsForStep, getIntroDeepDiveConcept } from "../learn/co
  *   preview for Angular/other templates.
  */
 
+/** Engine / JSON may use `deepDive` or `deep_dive` on question nodes. */
+function getQuestionNodeDeepDiveObject(node) {
+  if (!node || node.type !== "question") return null;
+  const dd = node.deepDive ?? node.deep_dive;
+  if (dd && typeof dd === "object" && !Array.isArray(dd)) return dd;
+  return null;
+}
+
+function deepDiveLabelFromNode(node) {
+  return node?.deepDiveLabel ?? node?.deep_dive_label ?? node?.title ?? "Deep dive";
+}
+
 /** Map common live-preview errors to a short, actionable markdown line for learners. */
 function learnerPreviewCoachHint(message) {
   const m = String(message || "").toLowerCase();
@@ -107,7 +119,7 @@ function generateSandboxBlockedPreview() {
   <div class="box">
     <h1>Preview isn’t available for this setup</h1>
     <p>This lesson uses <strong>Redux</strong> and/or <strong>RTK Query</strong> with imports from <code>./store</code>, <code>./api</code>, or <code>react-redux</code>. The in-app preview runs a single file in an iframe and removes import lines, so the store and hooks are not defined — the browser then often shows only <code>Script error.</code></p>
-    <p>Use <strong>Check my code</strong> for validation, or run the project in your own dev environment (e.g. Vite) to see the real UI.</p>
+    <p>Use <strong>CHECK MY CODE{CTRL+SHIFT+ENTER}{ctrl+shift+enter}</strong> for validation, or run the project in your own dev environment (e.g. Vite) to see the real UI.</p>
   </div>
 </body>
 </html>`;
@@ -275,7 +287,7 @@ function generateReactPreview(code) {
         if (msg === "Script error." || msg === "Script error") {
           detail =
             (detail ? detail + " — " : "") +
-            "Browsers often hide the real line for cross-origin scripts. Missing imports after the preview strips them (Redux / RTK Query) is a common cause — use Check my code or run locally.";
+            "Browsers often hide the real line for cross-origin scripts. Missing imports after the preview strips them (Redux / RTK Query) is a common cause — use CHECK MY CODE{CTRL+SHIFT+ENTER}{ctrl+shift+enter} or run locally.";
         }
         showPreviewError("Preview error: " + msg, detail);
         return true;
@@ -472,9 +484,10 @@ export function EditorTaskBlock({
           }}
         >
           <div className="inpact-editor-deep-dive-toolbar inpact-editor-deep-dive-toolbar--beside-task">
-            {dives.map((c) => (
+            {dives.map((c, di) => (
               <DeepDiveImageButton
                 key={c.id}
+                tourAnchor={di === 0}
                 onClick={() => onOpenDeepDive(c)}
                 title={dives.length > 1 ? `Deep-dive: ${c.label || c.id}` : `Open concept guide: ${c.label || c.id}`}
               />
@@ -598,11 +611,31 @@ export default function LessonEditorOutputTabs({
 }) {
   const lessonValidationCtx = useContext(LessonValidationContext);
   const track = lessonTrack || lessonValidationCtx?.track;
-  const deepDiveConcepts = useMemo(
-    () =>
-      getDeepDiveConceptsForStep(track, lessonNum, node?.id, node?.introduces_concepts),
-    [track, lessonNum, node?.id, node?.introduces_concepts]
-  );
+  const deepDiveConcepts = useMemo(() => {
+    const dd = getQuestionNodeDeepDiveObject(node);
+    const inlineStepConcept =
+      node?.type === "question" && dd
+        ? {
+            label: deepDiveLabelFromNode(node),
+            deepDive: dd,
+          }
+        : null;
+    const introduces =
+      node?.introduces_concepts ?? node?.introducesConcepts ?? undefined;
+    return getDeepDiveConceptsForStep(track, lessonNum, node?.id, introduces, inlineStepConcept);
+  }, [
+    track,
+    lessonNum,
+    node?.id,
+    node?.introduces_concepts,
+    node?.introducesConcepts,
+    node?.type,
+    node?.deepDive,
+    node?.deep_dive,
+    node?.deepDiveLabel,
+    node?.deep_dive_label,
+    node?.title,
+  ]);
   const [deepDiveConcept, setDeepDiveConcept] = useState(null);
   const code = typeof previewCode === "string" && previewCode.trim() ? previewCode : (typeof answer === "string" ? answer : "");
   const hasOutput = typeof getOutputPreview === "function";
@@ -802,6 +835,28 @@ export default function LessonEditorOutputTabs({
                 )}
               </span>
             </div>
+            {node?.type === "question" && deepDiveConcepts.length > 0 ? (
+              <div style={{ ...lessonStyles.card, marginTop: "12px" }}>
+                <div style={lessonStyles.paalLabel}>OPTIONAL DEEP DIVE · THIS STEP</div>
+                <p style={{ margin: "0 0 12px", fontSize: "13px", color: "#64748b", lineHeight: 1.55 }}>
+                  Extra diagrams and plain-language context for this step — open anytime; same controls appear next to the task in the Editor workspace.
+                </p>
+                <div className="inpact-editor-deep-dive-toolbar">
+                  {deepDiveConcepts.map((c, di) => (
+                    <DeepDiveImageButton
+                      key={c.id}
+                      tourAnchor={di === 0}
+                      onClick={() => setDeepDiveConcept(c)}
+                      title={
+                        deepDiveConcepts.length > 1
+                          ? `Deep dive: ${c.label || c.id}`
+                          : `Open concept guide: ${c.label || c.id}`
+                      }
+                    />
+                  ))}
+                </div>
+              </div>
+            ) : null}
           </div>
         </div>
       )}

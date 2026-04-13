@@ -1,6 +1,7 @@
 import Editor from "@monaco-editor/react";
-import { useRef, useEffect, useCallback } from "react";
+import { useRef, useEffect, useCallback, useState, useMemo } from "react";
 import { configureMonacoDiagnosticsOff, MONACO_SHARED_OPTIONS } from "./monacoEditorConfig.js";
+import { registerReactSnippetPacks, SNIPPET_PACK_IDS } from "./monacoReactSnippetPacks.js";
 
 /**
  * Auto-insert a closing tag when the user types '>'.
@@ -76,6 +77,8 @@ function setupAutoCloseTags(editor, monaco) {
  *   cursorAtEndOfLine   — 1-based line number; place cursor at end of that line
  *   placeholderClearOnFocus — if set, first editor focus while value matches (trim) clears to ""
  *   focusOnMount — call editor.focus() after positioning (default true; set false when using placeholderClearOnFocus so seed text is not wiped on load)
+ *   onSubmitShortcut — Ctrl+Shift+Enter / ⌘⇧↵ (Monaco is iframe-hosted; parent window key handlers never see these keys)
+ *   snippetPacks — ['react-ts'] and/or ['react'] — which React snippet packs to merge for completions (see monacoReactSnippetPacks.js)
  */
 export default function CodeEditor({
   value = "",
@@ -86,15 +89,25 @@ export default function CodeEditor({
   cursorAtEndOfLine,
   placeholderClearOnFocus,
   focusOnMount = true,
+  onSubmitShortcut,
+  snippetPacks = [],
 }) {
   const editorRef = useRef(null);
   const monacoRef = useRef(null);
   const disposeRef = useRef(null);
+  const snippetDisposableRef = useRef(null);
   const placeholderRef = useRef(placeholderClearOnFocus);
   const onChangeRef = useRef(onChange);
+  const onSubmitShortcutRef = useRef(onSubmitShortcut);
+  const [monacoMountGen, setMonacoMountGen] = useState(0);
+  const snippetPacksKey = useMemo(
+    () => JSON.stringify([...(snippetPacks || [])].sort()),
+    [snippetPacks]
+  );
 
   placeholderRef.current = placeholderClearOnFocus;
   onChangeRef.current = onChange;
+  onSubmitShortcutRef.current = onSubmitShortcut;
 
   const applyPosition = useCallback(
     (editor) => {
@@ -126,6 +139,21 @@ export default function CodeEditor({
     if (editorRef.current) applyPosition(editorRef.current);
   }, [applyPosition]);
 
+  useEffect(() => {
+    const monaco = monacoRef.current;
+    if (!monaco) return undefined;
+    snippetDisposableRef.current?.dispose();
+    snippetDisposableRef.current = null;
+    const allowed = new Set(SNIPPET_PACK_IDS);
+    const ids = (snippetPacks || []).filter((id) => allowed.has(id));
+    if (!ids.length) return undefined;
+    snippetDisposableRef.current = registerReactSnippetPacks(monaco, ids);
+    return () => {
+      snippetDisposableRef.current?.dispose();
+      snippetDisposableRef.current = null;
+    };
+  }, [snippetPacksKey, monacoMountGen]);
+
   const handleMount = useCallback(
     (editor, monaco) => {
       editorRef.current = editor;
@@ -133,6 +161,12 @@ export default function CodeEditor({
 
       disposeRef.current?.dispose();
       const autoClose = setupAutoCloseTags(editor, monaco);
+      const submitShortcutId = editor.addCommand(
+        monaco.KeyMod.CtrlCmd | monaco.KeyMod.Shift | monaco.KeyCode.Enter,
+        () => {
+          onSubmitShortcutRef.current?.();
+        }
+      );
       const clearPlaceholder = editor.onDidFocusEditorWidget(() => {
         const ph = placeholderRef.current;
         if (ph == null || ph === "") return;
@@ -144,11 +178,21 @@ export default function CodeEditor({
       });
       disposeRef.current = {
         dispose() {
+          snippetDisposableRef.current?.dispose();
+          snippetDisposableRef.current = null;
           autoClose.dispose();
           clearPlaceholder.dispose();
+          if (submitShortcutId != null && typeof editor.removeCommand === "function") {
+            try {
+              editor.removeCommand(submitShortcutId);
+            } catch {
+              /* ignore */
+            }
+          }
         },
       };
 
+      setMonacoMountGen((g) => g + 1);
       requestAnimationFrame(() => applyPosition(editor));
     },
     [applyPosition]

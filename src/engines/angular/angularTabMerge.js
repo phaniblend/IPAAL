@@ -4,14 +4,14 @@
  * - **TS tab**: Component class and @Component decorator (may have inline template and/or styles).
  * - **HTML tab**: Template markup; on submit it is merged into TS as the `template: \`...\`` value
  *   (so the validator sees one TS file with the template). You can use inline `template: \`...\`` in TS,
- *   or `templateUrl: ""` in TS and put markup in the HTML tab — both are merged on "Check my code".
+ *   or `templateUrl: ""` in TS and put markup in the HTML tab — both are merged on "CHECK MY CODE{CTRL+SHIFT+ENTER}{ctrl+shift+enter}".
  *   If the HTML tab is empty, the engine sends the TS as-is so an inline template is validated correctly.
  * - **CSS tab**: Component styles; on submit they are merged into TS as `styles: [\`...\`]` (or
  *   replace existing styles in the decorator) so the full component is validated.
  *
  * Split (splitAngularSeed): seed code with inline template is split into TS (with template: ``)
  * and HTML for the tabbed editor. Merge (mergeAngularTsWithHtml, mergeAngularCssIntoTS): on
- * "Check my code", TS + HTML + CSS are combined into a single TS string and sent to the validator.
+ * "CHECK MY CODE{CTRL+SHIFT+ENTER}{ctrl+shift+enter}", TS + HTML + CSS are combined into a single TS string and sent to the validator.
  */
 
 /**

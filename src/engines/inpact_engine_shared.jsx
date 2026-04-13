@@ -13,6 +13,8 @@ import RichLearnerText from "./RichLearnerText";
 import { inferReactTsAnalogousExample } from "./reactTsAnalogousExamples.js";
 import { mergeSnippetIntoEmptyReactExportDefaultBody } from "./mergeReactExampleSnippet.js";
 import { fetchStepExample } from "../ai-lessons/fetchStepExample.js";
+import { SNIPPET_PACK_OPTIONS_REACT_JS, SNIPPET_PACK_OPTIONS_REACT_TS } from "./monacoReactSnippetPacks.js";
+import SnippetPackMultiselect from "./SnippetPackMultiselect.jsx";
 
 if (typeof document !== "undefined" && !document.getElementById("dm-sans-font")) {
   const link = document.createElement("link");
@@ -284,6 +286,7 @@ function resolveQuestionStepExample(answerShape, node, shortName) {
     if (/^like\s+/i.test(t) || /^example[:\s]/i.test(lowered) || /^before\s+/i.test(lowered)) return false;
     // Accept if it contains typical code tokens.
     return (
+      (/\bimport\b/.test(t) && /\bfrom\b/.test(t)) ||
       /\bconst\b/.test(t) ||
       /\bfunction\b/.test(t) ||
       /\blet\b/.test(t) ||
@@ -314,19 +317,23 @@ function resolveQuestionStepExample(answerShape, node, shortName) {
 
   const taskTextForExample = `${node?.paal || ""}\n${node?.hint || ""}\n${node?.expected || ""}\n${node?.think_prompt || ""}\n${node?.instruction || ""}`
     .toLowerCase();
-  // For import-focused steps, always prefer inferred/analogous import patterns.
-  // Otherwise learners may see the exact required hook import line via `node.analogousExample`/`node.example_code`.
+  // For import-focused steps, skip generic `example_code` as primary so learners don't see the
+  // exact required import line — unless the lesson engine sets `analogousExample` / `analog_example`.
   const isImportFocusedTask = /\bimport\b/.test(taskTextForExample) && /\breact\b/.test(taskTextForExample);
+
+  const engineAnalogousExample =
+    (typeof node.analogousExample === "string" && node.analogousExample.trim()) ||
+    (typeof node.analog_example === "string" && node.analog_example.trim()) ||
+    "";
 
   const curatedRaw =
     (typeof node.ai_example_code === "string" && node.ai_example_code.trim()) ||
     (typeof node.analogousExample === "string" && node.analogousExample.trim()) ||
+    (typeof node.analog_example === "string" && node.analog_example.trim()) ||
     (typeof node.example_code === "string" && node.example_code.trim()) ||
     "";
-  // React-TS: use authored snippets when present. Import-only steps still skip so learners
-  // see an analogous import shape (see inferReactTsAnalogousExample) instead of the exact line.
-  if (!isImportFocusedTask && curatedRaw && looksLikeCodeSnippet(curatedRaw)) {
-    const base = curatedRaw;
+
+  function applyPrimaryFromBase(base) {
     const wrapped = buildExampleWithStarterContext(answerShape, node, base);
     const meta = node.ai_example_meta;
     const deepseekMerge =
@@ -343,6 +350,13 @@ function resolveQuestionStepExample(answerShape, node, shortName) {
       label,
       code: stripToRelevantToggleFunction(node, stripAnalogousHeadingComment(wrapped)),
     };
+  }
+
+  // Import-focused: only accept curated snippet when it comes from the engine's explicit analogous field.
+  if (isImportFocusedTask && engineAnalogousExample && looksLikeCodeSnippet(engineAnalogousExample)) {
+    applyPrimaryFromBase(engineAnalogousExample);
+  } else if (!isImportFocusedTask && curatedRaw && looksLikeCodeSnippet(curatedRaw)) {
+    applyPrimaryFromBase(curatedRaw);
   }
 
   let localFallbackEntry = null;
@@ -659,12 +673,14 @@ export default function createINPACTEngine(config) {
       pickDefaultLanguageOption(languagePickerOptions, language)
     );
     const [tourLaunchNonce, setTourLaunchNonce] = useState(0);
+    const feedbackModalPrimaryBtnRef = useRef(null);
     const [completedNodes, setCompletedNodes] = useState([]);
     const [passedCodeByStepId, setPassedCodeByStepId] = useState({});
     const [aiFeedback, setAiFeedback] = useState("");
     const [validationFallbackNote, setValidationFallbackNote] = useState("");
     /** Multi-file focus-clear baseline for the first question step only (matches that step's `initialCode`). Later steps never clear on focus. */
     const [multiFileFocusBaseline, setMultiFileFocusBaseline] = useState(null);
+    const [monacoSnippetPacks, setMonacoSnippetPacks] = useState([]);
     const lessonValidationCtx = useContext(LessonValidationContext);
     const node = NODES[nodeIndex];
     const editorMonacoLanguage = useMemo(
@@ -682,8 +698,67 @@ export default function createINPACTEngine(config) {
     );
     const multiFilePlaceholderClearOnFirstStepOnly =
       answerShape === "multi-file" && firstQuestionNodeIndex >= 0 && nodeIndex === firstQuestionNodeIndex;
+    const showSnippetPicker = useMemo(
+      () =>
+        (lessonValidationCtx?.track === "react-ts" || lessonValidationCtx?.track === "react-js") &&
+        node?.type === "question" &&
+        answerShape !== "css-tabs" &&
+        answerShape !== "angular-tabs",
+      [lessonValidationCtx?.track, node?.type, answerShape]
+    );
+    const snippetPacksForEditor = useMemo(() => {
+      if (!showSnippetPicker) return [];
+      return monacoSnippetPacks;
+    }, [showSnippetPicker, monacoSnippetPacks]);
+    const snippetPackOptionsList = useMemo(() => {
+      if (lessonValidationCtx?.track === "react-ts") return SNIPPET_PACK_OPTIONS_REACT_TS;
+      if (lessonValidationCtx?.track === "react-js") return SNIPPET_PACK_OPTIONS_REACT_JS;
+      return [];
+    }, [lessonValidationCtx?.track]);
     const progress = NODES.length <= 1 ? 0 : Math.min(100, Math.round((nodeIndex / (NODES.length - 1)) * 100));
     const lessonCompleteFiredRef = useRef(false);
+
+    useEffect(() => {
+      const t = lessonValidationCtx?.track;
+      if (t !== "react-ts" && t !== "react-js") return;
+      try {
+        const json = sessionStorage.getItem(`inpact.monacoSnippetPacks.${t}`);
+        if (json) {
+          const parsed = JSON.parse(json);
+          if (Array.isArray(parsed)) {
+            const allowed = new Set(
+              (t === "react-js" ? SNIPPET_PACK_OPTIONS_REACT_JS : SNIPPET_PACK_OPTIONS_REACT_TS).map((o) => o.id)
+            );
+            const valid = parsed.filter((id) => allowed.has(id));
+            setMonacoSnippetPacks(valid.length ? valid : t === "react-ts" ? ["react-ts"] : ["react"]);
+            return;
+          }
+        }
+        const legacy = sessionStorage.getItem(`inpact.monacoSnippetPack.${t}`);
+        if (legacy === "react-ts" || legacy === "react") {
+          setMonacoSnippetPacks(legacy === "react-ts" ? ["react-ts"] : ["react"]);
+          return;
+        }
+        if (legacy === "off") {
+          setMonacoSnippetPacks([]);
+          return;
+        }
+      } catch {
+        /* ignore */
+      }
+      setMonacoSnippetPacks(t === "react-ts" ? ["react-ts"] : ["react"]);
+    }, [lessonValidationCtx?.track]);
+
+    useEffect(() => {
+      const t = lessonValidationCtx?.track;
+      if (!t || (t !== "react-ts" && t !== "react-js")) return;
+      try {
+        sessionStorage.setItem(`inpact.monacoSnippetPacks.${t}`, JSON.stringify(monacoSnippetPacks));
+      } catch {
+        /* ignore */
+      }
+    }, [lessonValidationCtx?.track, monacoSnippetPacks]);
+
     useEffect(() => {
       if (nodeIndex < NODES.length) {
         lessonCompleteFiredRef.current = false;
@@ -1072,6 +1147,100 @@ export default function createINPACTEngine(config) {
       return parseMultiFileAnswer(answer);
     }, [answer, answerShape]);
 
+    const canSubmitCode = useMemo(() => {
+      if (answerShape === "css-tabs") return Boolean(parsedCssTabs?.css?.trim());
+      if (answerShape === "angular-tabs") {
+        return Boolean(
+          parsedAngularTabs?.ts?.trim() ||
+            parsedAngularTabs?.html?.trim() ||
+            parsedAngularTabs?.css?.trim()
+        );
+      }
+      if (answerShape === "multi-file") {
+        return Object.values(parsedMultiFile?.files || {}).some((v) => String(v || "").trim());
+      }
+      return Boolean(answer.trim());
+    }, [answerShape, parsedCssTabs, parsedAngularTabs, parsedMultiFile, answer]);
+
+    const lessonKeyboardRef = useRef(null);
+
+    lessonKeyboardRef.current = {
+      showFeedbackModal,
+      showTaskModal,
+      showExampleModal,
+      showMentorModal,
+      nodeType: node?.type,
+      result,
+      checking,
+      canSubmitCode,
+      feedbackAnnotateLoading,
+      submit,
+      next,
+    };
+
+    const runSubmitShortcut = useCallback(() => {
+      const k = lessonKeyboardRef.current;
+      if (!k) return;
+      if (k.showFeedbackModal || k.showTaskModal || k.showExampleModal || k.showMentorModal) return;
+      if (k.nodeType !== "question") return;
+      if (k.result === "correct") return;
+      if (k.checking || !k.canSubmitCode) return;
+      void k.submit();
+    }, []);
+
+    useEffect(() => {
+      if (!showFeedbackModal) return undefined;
+      const id = requestAnimationFrame(() => {
+        feedbackModalPrimaryBtnRef.current?.focus();
+      });
+      return () => cancelAnimationFrame(id);
+    }, [showFeedbackModal]);
+
+    useEffect(() => {
+      function onKeyDown(e) {
+        const k = lessonKeyboardRef.current;
+        if (!k) return;
+        if (
+          k.showFeedbackModal &&
+          e.key === "Enter" &&
+          !e.repeat &&
+          !e.ctrlKey &&
+          !e.metaKey &&
+          !e.shiftKey &&
+          !e.altKey
+        ) {
+          const el = e.target;
+          if (
+            el &&
+            (el.tagName === "TEXTAREA" ||
+              (el.tagName === "INPUT" && el.type !== "button" && el.type !== "submit" && el.type !== "reset"))
+          ) {
+            return;
+          }
+          if (k.feedbackAnnotateLoading) return;
+          e.preventDefault();
+          e.stopPropagation();
+          setShowFeedbackModal(false);
+          setFeedbackAnnotateLoading(false);
+          setFeedbackAnnotateError("");
+          setFeedbackAnnotatedCode(null);
+          if (k.result === "correct") k.next();
+          return;
+        }
+        const chord = (e.ctrlKey || e.metaKey) && e.shiftKey && e.key === "Enter";
+        if (!chord || e.repeat) return;
+        if (k.showFeedbackModal || k.showTaskModal || k.showExampleModal || k.showMentorModal) return;
+        if (k.nodeType !== "question") return;
+        if (k.result === "correct") return;
+        if (k.checking || !k.canSubmitCode) return;
+        e.preventDefault();
+        e.stopPropagation();
+        void k.submit();
+      }
+      window.addEventListener("keydown", onKeyDown, true);
+      return () => window.removeEventListener("keydown", onKeyDown, true);
+    }, []);
+
     const multiFilePlaceholderByFile = useMemo(() => {
       if (answerShape !== "multi-file" || !node) return undefined;
       const seed = node.starter_code ?? node.seed_code ?? "";
@@ -1142,7 +1311,7 @@ export default function createINPACTEngine(config) {
         },
         {
           selector: '[data-tour-id="deep-dive-button"]',
-          text: "Hungry for more? Deep-dive opens short concept guides that zoom out beyond this single step.",
+          text: "Deep dive is optional reading. If the task on the left feels confusing, open it for a short, plain-language explanation of the idea behind this step—enough context to understand what you are building, without spoiling the full solution.",
           action: { type: "open-editor" },
         },
         {
@@ -1152,7 +1321,7 @@ export default function createINPACTEngine(config) {
         },
         {
           selector: '[data-tour-id="check-code-button"]',
-          text: "Check my code validates your solution for the current step.",
+          text: "CHECK MY CODE{CTRL+SHIFT+ENTER}{ctrl+shift+enter} validates your solution for the current step.",
           action: { type: "open-editor" },
         },
         {
@@ -1260,44 +1429,80 @@ export default function createINPACTEngine(config) {
         (cursorAtStartOfLine != null || node.cursorLine != null);
       return (
         <>
-          <div style={{ display: "flex", alignItems: "center", gap: "16px", flexWrap: "wrap", marginBottom: fillAvailable ? "2px" : "6px" }}>
-            {languagePickerOptions?.length > 0 && languagePickerChoice && (
-              <label
-                data-tour-id="code-language-picker"
-                style={{ display: "flex", alignItems: "center", gap: "8px", fontSize: "11px", color: "#475569", fontWeight: 500 }}
-              >
-                <span style={{ letterSpacing: "0.04em", textTransform: "uppercase", fontSize: "10px", color: "#64748b" }}>Code in</span>
-                <select
-                  value={languagePickerChoice.id}
-                  onChange={(e) => {
-                    const opt = languagePickerOptions.find((o) => o.id === e.target.value);
-                    if (opt) setLanguagePickerChoice(opt);
-                  }}
-                  style={{
-                    fontSize: "11px",
-                    padding: "4px 10px",
-                    borderRadius: "6px",
-                    border: "1px solid #cbd5e1",
-                    background: "#fff",
-                    color: "#0f172a",
-                    cursor: "pointer",
-                  }}
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "flex-start",
+              gap: "6px",
+              marginBottom: fillAvailable ? "2px" : "6px",
+              width: "100%",
+            }}
+          >
+            <div style={{ display: "flex", alignItems: "center", gap: "16px", flexWrap: "wrap", width: "100%" }}>
+              {languagePickerOptions?.length > 0 && languagePickerChoice && (
+                <label
+                  data-tour-id="code-language-picker"
+                  style={{ display: "flex", alignItems: "center", gap: "8px", fontSize: "11px", color: "#475569", fontWeight: 500 }}
                 >
-                  {languagePickerOptions.map((o) => (
-                    <option key={o.id} value={o.id}>
-                      {o.label}
-                    </option>
-                  ))}
-                </select>
-              </label>
-            )}
-            <span style={{ fontSize: "11px", color: "#0891b2", fontWeight: 600 }}>Step {codingStepNum} of {codingStepTotal}</span>
-            {codingStepIndex > 0 && (
-              <>
-                <span style={{ fontSize: "11px", color: "#64748b" }}>·</span>
-                <span style={{ fontSize: "11px", color: "#0891b2", fontWeight: 600, letterSpacing: "0.05em" }}>write your code in the editor below</span>
-              </>
-            )}
+                  <span style={{ letterSpacing: "0.04em", textTransform: "uppercase", fontSize: "10px", color: "#64748b" }}>Code in</span>
+                  <select
+                    value={languagePickerChoice.id}
+                    onChange={(e) => {
+                      const opt = languagePickerOptions.find((o) => o.id === e.target.value);
+                      if (opt) setLanguagePickerChoice(opt);
+                    }}
+                    style={{
+                      fontSize: "11px",
+                      padding: "4px 10px",
+                      borderRadius: "6px",
+                      border: "1px solid #cbd5e1",
+                      background: "#fff",
+                      color: "#0f172a",
+                      cursor: "pointer",
+                    }}
+                  >
+                    {languagePickerOptions.map((o) => (
+                      <option key={o.id} value={o.id}>
+                        {o.label}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+              )}
+              <span style={{ fontSize: "11px", color: "#0891b2", fontWeight: 600 }}>Step {codingStepNum} of {codingStepTotal}</span>
+              {codingStepIndex > 0 && (
+                <>
+                  <span style={{ fontSize: "11px", color: "#64748b" }}>·</span>
+                  <span style={{ fontSize: "11px", color: "#0891b2", fontWeight: 600, letterSpacing: "0.05em" }}>write your code in the editor below</span>
+                </>
+              )}
+            </div>
+            {showSnippetPicker && snippetPackOptionsList.length > 0 ? (
+              <div
+                style={{
+                  display: "flex",
+                  flexWrap: "wrap",
+                  alignItems: "flex-end",
+                  gap: "8px 12px",
+                  fontSize: "11px",
+                  color: "#475569",
+                  fontWeight: 500,
+                  maxWidth: "100%",
+                }}
+              >
+                <label style={{ display: "flex", flexDirection: "column", alignItems: "flex-start", gap: "6px", minWidth: 0, flex: "0 1 320px" }}>
+                  <span style={{ letterSpacing: "0.04em", textTransform: "uppercase", fontSize: "10px", color: "#64748b" }}>Snippets</span>
+                  <SnippetPackMultiselect
+                    options={snippetPackOptionsList}
+                    value={monacoSnippetPacks}
+                    onChange={setMonacoSnippetPacks}
+                    placeholder="Select snippet packs…"
+                    searchPlaceholder="Search"
+                  />
+                </label>
+              </div>
+            ) : null}
           </div>
           {showEditorCursorHint && <div style={{ fontSize: "10px", color: "#64748b", marginBottom: fillAvailable ? "2px" : "6px" }}>Type your code where the cursor is placed.</div>}
           {answerShape === "angular-tabs" && (
@@ -1360,6 +1565,8 @@ export default function createINPACTEngine(config) {
                     focusBaselineByFile={multiFileFocusBaseline}
                     placeholderByFile={multiFilePlaceholderByFile}
                     clearPlaceholderOnFirstFocus={multiFilePlaceholderClearOnFirstStepOnly}
+                    onSubmitShortcut={runSubmitShortcut}
+                    snippetPacks={snippetPacksForEditor}
                   />
                 ) : (
                   <CodeEditor
@@ -1370,6 +1577,8 @@ export default function createINPACTEngine(config) {
                     cursorAtEndOfLine={cursorAtStartOfLine == null ? node.cursorLine : undefined}
                     cursorAtStartOfLine={cursorAtStartOfLine}
                     language={editorMonacoLanguage}
+                    onSubmitShortcut={runSubmitShortcut}
+                    snippetPacks={snippetPacksForEditor}
                   />
                 )}
               </div>
@@ -1399,6 +1608,8 @@ export default function createINPACTEngine(config) {
                 focusBaselineByFile={multiFileFocusBaseline}
                 placeholderByFile={multiFilePlaceholderByFile}
                 clearPlaceholderOnFirstFocus={multiFilePlaceholderClearOnFirstStepOnly}
+                onSubmitShortcut={runSubmitShortcut}
+                snippetPacks={snippetPacksForEditor}
               />
             ) : (
               <CodeEditor
@@ -1409,6 +1620,8 @@ export default function createINPACTEngine(config) {
                 cursorAtEndOfLine={cursorAtStartOfLine == null ? node.cursorLine : undefined}
                 cursorAtStartOfLine={cursorAtStartOfLine}
                 language={editorMonacoLanguage}
+                onSubmitShortcut={runSubmitShortcut}
+                snippetPacks={snippetPacksForEditor}
               />
             )}
           </div>
@@ -1426,12 +1639,18 @@ export default function createINPACTEngine(config) {
             : answer.trim();
       const hasExampleButton = node?.type === "question";
       const hasHintOrFeedback = node.hint || fbMsg;
+      const taskModalHasThinkMcq =
+        node?.type === "question" &&
+        typeof node?.think_prompt === "string" &&
+        Array.isArray(node?.mc_options) &&
+        node.mc_options.length >= 2 &&
+        typeof node?.mc_correct_option === "string";
       return (
         <>
           <div style={s.btnRow}>
             {result !== "correct" ? (
               <>
-                <button type="button" data-tour-id="check-code-button" className={`inpact-btn-primary ${checking ? "inpact-btn-checking" : ""}`} style={s.btn("primary")} onClick={submit} disabled={!canSubmit || checking}>{checking ? "Checking..." : "CHECK MY CODE"}</button>
+                <button type="button" data-tour-id="check-code-button" className={`inpact-btn-primary ${checking ? "inpact-btn-checking" : ""}`} style={s.btn("primary")} onClick={submit} disabled={!canSubmit || checking} title="Shortcut: Ctrl+Shift+Enter (⌘⇧↵ on Mac)">{checking ? "Checking..." : "CHECK MY CODE{ctrl+shift+enter}"}</button>
                 {hasExampleButton && (
                   <button type="button" data-tour-id="show-example-button" style={s.btn("secondary")} onClick={openStepExampleModal}>
                     SHOW ME AN EXAMPLE
@@ -1724,9 +1943,12 @@ export default function createINPACTEngine(config) {
                 ) : null}
                 <div style={{ marginTop: "20px", display: "flex", justifyContent: "flex-end", gap: "10px", flexWrap: "wrap" }}>
                   <button
+                    ref={feedbackModalPrimaryBtnRef}
                     type="button"
+                    data-inpact-feedback-primary="true"
                     className="inpact-btn-primary"
                     style={s.btn("primary")}
+                    title={result === "correct" ? "Next step (Enter)" : "Close (Enter)"}
                     onClick={() => {
                       setShowFeedbackModal(false);
                       setFeedbackAnnotateLoading(false);
@@ -1879,7 +2101,10 @@ export default function createINPACTEngine(config) {
                 padding: "24px",
                 boxSizing: "border-box",
               }}
-              onClick={() => setShowTaskModal(false)}
+              onClick={() => {
+                if (taskModalHasThinkMcq) return;
+                setShowTaskModal(false);
+              }}
               role="dialog"
               aria-modal="true"
               aria-labelledby="task-modal-title"
@@ -2080,8 +2305,8 @@ export default function createINPACTEngine(config) {
                           className="inpact-btn-primary"
                           style={s.btn("ghost")}
                           onClick={() => {
-                            setShowTaskModal(false);
                             setShowMentorModal(true);
+                            setMentorError("");
                           }}
                         >
                           Need help?
@@ -2091,7 +2316,6 @@ export default function createINPACTEngine(config) {
                           className="inpact-btn-primary"
                           style={s.btn("secondary")}
                           onClick={() => {
-                            setShowTaskModal(false);
                             openStepExampleModal();
                           }}
                         >
@@ -2252,7 +2476,6 @@ export default function createINPACTEngine(config) {
           onRequestAction={handleTourAction}
           forceStartNonce={tourLaunchNonce}
           lessonKey={`${lessonNum}:${title}`}
-          helpSelector='[data-tour-id="help-tour-button"]'
         />
       </div>
     );

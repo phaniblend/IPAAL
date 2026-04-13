@@ -284,7 +284,7 @@ export default function createINPACTEngine(config) {
           <div style={s.btnRow}>
             {result !== "correct" ? (
               <>
-                <button type="button" className={`inpact-btn-primary ${checking ? "inpact-btn-checking" : ""}`} style={s.btn("primary")} onClick={submit} disabled={!canSubmit || checking}>{checking ? "Checking..." : "CHECK MY CODE"}</button>
+                <button type="button" className={`inpact-btn-primary ${checking ? "inpact-btn-checking" : ""}`} style={s.btn("primary")} onClick={submit} disabled={!canSubmit || checking}>{checking ? "Checking..." : "CHECK MY CODE{ctrl+shift+enter}"}</button>
                 {exampleContent && <button type="button" style={s.btn("secondary")} onClick={() => setShowExampleModal(true)}>SHOW ME AN EXAMPLE</button>}
                 {attempts > 0 && !showHint && <button type="button" style={s.btn("secondary")} onClick={() => { setShowHint(true); setShowFeedbackModal(true); }}>SHOW HINT</button>}
                 {hasHintOrFeedback && <button type="button" style={s.btn("secondary")} onClick={() => setShowFeedbackModal(true)}>💡 VIEW HINT & FEEDBACK</button>}
