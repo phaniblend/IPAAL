@@ -19,6 +19,7 @@ import {
   assembleLessonConfig,
 } from "../src/ai-lessons/services/realLessonService.js";
 import { validateCodeWithAI } from "../src/ai-lessons/services/codeValidationService.js";
+import { annotateFeedbackOnCode } from "../src/ai-lessons/services/feedbackAnnotateService.js";
 import { validateLessonConfig } from "../src/ai-lessons/schema.js";
 import { completeWithAI } from "../src/ai-lessons/providers/aiProvider.js";
 import { buildMentorSystemPrompt, OFF_TOPIC_PREFIX, OFF_TOPIC_FALLBACK } from "../src/ai-lessons/prompt-templates/mentorChat.js";
@@ -117,6 +118,7 @@ app.options("/api/lessons/objectives", (_req, res) => res.sendStatus(204));
 app.options("/api/lessons/validate", (_req, res) => res.sendStatus(204));
 app.options("/api/lessons/mentor", (_req, res) => res.sendStatus(204));
 app.options("/api/lessons/step-example", (_req, res) => res.sendStatus(204));
+app.options("/api/lessons/feedback-annotate", (_req, res) => res.sendStatus(204));
 
 app.use("/api/mentor", mentorSessionMiddleware, mentorRouter);
 
@@ -488,6 +490,37 @@ app.post("/api/lessons/validate", async (req, res) => {
   }
 });
 
+/** Map validation feedback onto the learner's code (inline comments) via DeepSeek. */
+app.post("/api/lessons/feedback-annotate", async (req, res) => {
+  const { apiKey, provider } = getAIOptions();
+  if (!apiKey) {
+    res.status(500).json({ error: "DEEPSEEK_API_KEY not set on server" });
+    return;
+  }
+  const { instruction, feedback, hint, userCode, language } = req.body || {};
+  if (userCode == null) {
+    res.status(400).json({ error: "Missing userCode" });
+    return;
+  }
+  try {
+    const result = await annotateFeedbackOnCode(
+      {
+        instruction: instruction != null ? String(instruction) : "",
+        feedback: feedback != null ? String(feedback) : "",
+        hint: hint != null ? String(hint) : "",
+        userCode: String(userCode),
+        language: language != null ? String(language) : "typescript",
+      },
+      { apiKey, provider }
+    );
+    res.json(result);
+  } catch (err) {
+    const message = err instanceof Error ? err.message : String(err);
+    console.error("[AI server] feedback-annotate error:", message);
+    res.status(500).json({ error: message });
+  }
+});
+
 /** Ask your mentor — step-scoped live chat with DeepSeek. Transcripts cached by (lessonKey, stepId, normalizedMessage) to reduce cost. */
 const MENTOR_CACHE_VERSION = 1;
 function normalizeMentorMessage(msg) {
@@ -602,7 +635,7 @@ const server = app.listen(PORT, () => {
   const { apiKey, provider } = getAIOptions();
   const keyName = "DEEPSEEK_API_KEY";
   console.log(
-    `AI lesson server at http://localhost:${PORT} (POST /api/lessons/intro, /objectives, /generate, /preview, /validate, /step-example)`
+    `AI lesson server at http://localhost:${PORT} (POST /api/lessons/intro, /objectives, /generate, /preview, /validate, /step-example, /feedback-annotate)`
   );
   console.log(`Content: ${getContentDir()} (checked before cache/API). Cache: ${getCacheDir()}. AI_PROVIDER=${provider}, ${keyName}: ${apiKey ? "set" : "NOT SET"}`);
 });

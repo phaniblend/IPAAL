@@ -475,11 +475,12 @@ function buildHintOnlyGuidance(node) {
 }
 
 function buildFeedbackOnlyGuidance(text) {
-  const cleaned = stripCodeLikeFragments(text || "");
-  if (!cleaned) {
-    return "Feedback: review the task requirements, verify behavior step-by-step, and ensure type correctness.";
-  }
-  return `Feedback: ${cleaned}`;
+  const raw = String(text || "").trim();
+  const cleaned = stripCodeLikeFragments(raw);
+  if (cleaned) return `Feedback: ${cleaned}`;
+  // Code-heavy AI feedback strips to empty — still show the real message for RichLearnerText + annotate.
+  if (raw) return raw;
+  return "Feedback: review the task requirements, verify behavior step-by-step, and ensure type correctness.";
 }
 
 function buildAnalogousExample(node, fallbackCode = "") {
@@ -1870,8 +1871,7 @@ export default function createINPACTEngine(config) {
                 )}
                 {result !== "correct" &&
                   getMergedCodeForKeywordEval().trim() &&
-                  (stripCodeLikeFragments(feedbackPlainForAnnotate).trim() ||
-                    stripCodeLikeFragments(node?.hint || "").trim()) && (
+                  (feedbackPlainForAnnotate.trim() || String(node?.hint || "").trim()) && (
                     <div style={{ marginTop: "14px" }}>
                       <button
                         type="button"
@@ -1885,8 +1885,8 @@ export default function createINPACTEngine(config) {
                           try {
                             const userCode = getMergedCodeForKeywordEval();
                             const fb =
-                              stripCodeLikeFragments(feedbackPlainForAnnotate).trim() ||
-                              stripCodeLikeFragments(node?.hint || "").trim() ||
+                              feedbackPlainForAnnotate.trim() ||
+                              String(node?.hint || "").trim() ||
                               "Review your code against the step task.";
                             const data = await fetchFeedbackAnnotate({
                               instruction: node?.paal || node?.instruction || "",
