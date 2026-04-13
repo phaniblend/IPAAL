@@ -8,6 +8,49 @@ function aiValidationDisabled() {
 }
 
 /**
+ * Best-effort message from a failed fetch Response (JSON error, plain text, or status).
+ * Avoids relying on res.statusText (often empty on HTTP/2).
+ * @param {Response} res
+ * @param {string} serviceLabel - short name for generic messages
+ */
+async function messageFromFailedResponse(res, serviceLabel) {
+  const status = res.status;
+  let text = "";
+  try {
+    text = await res.text();
+  } catch {
+    text = "";
+  }
+  if (text) {
+    try {
+      const j = JSON.parse(text);
+      if (j && typeof j.error === "string" && j.error.trim()) return j.error.trim();
+    } catch {
+      const plain = text.replace(/\s+/g, " ").trim();
+      if (plain && !plain.startsWith("<") && plain.length < 500) return plain;
+    }
+  }
+  if (status === 404) {
+    return `${serviceLabel} not available (404). Deploy or run the Node API so /api/lessons/feedback-annotate exists, or use Vite dev with npm run server.`;
+  }
+  if (status === 429) return "Rate limit exceeded. Please try again in a moment.";
+  if (status === 401 || status === 403) {
+    return `${serviceLabel} was rejected (${status}). Check API auth or deployment routing.`;
+  }
+  if (status === 502 || status === 503 || status === 504) {
+    return `Cannot reach the AI (${status}). The API server may be down or /api may not be proxied to Node in production.`;
+  }
+  if (status === 500) {
+    const t = text.replace(/\s+/g, " ").trim();
+    const isHtml = /^</.test(t) || /<html/i.test(t);
+    if (t && !isHtml && t.length < 600) return `Server error (500): ${t.slice(0, 320)}`;
+    return "Server error (500) while annotating. Check API logs and DEEPSEEK_API_KEY on the server.";
+  }
+  const reason = res.statusText && res.statusText.trim();
+  return reason || `${serviceLabel} request failed (${status})`;
+}
+
+/**
  * @param {{ instruction?: string, feedback: string, hint?: string, userCode: string, language?: string }} opts
  * @returns {Promise<{ annotatedCode: string }>}
  */
@@ -27,14 +70,7 @@ export async function fetchFeedbackAnnotate({ instruction, feedback, hint, userC
     }),
   });
   if (!res.ok) {
-    const err = await res.json().catch(() => ({}));
-    const msg =
-      err?.error ||
-      (res.status === 404
-        ? "Feedback annotate service not available. Run the server (npm run server) and try again."
-        : res.status === 429
-          ? "Rate limit exceeded. Please try again in a moment."
-          : res.statusText || "Feedback annotate request failed.");
+    const msg = await messageFromFailedResponse(res, "Feedback annotate");
     throw new Error(msg);
   }
   return res.json();
