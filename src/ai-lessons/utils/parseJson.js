@@ -79,6 +79,7 @@ export function parseAndValidate(raw, schema) {
  * @param {{ success: boolean, error?: string, keys?: string[] }} info
  */
 export function logStage(stage, info) {
+  if (typeof import.meta !== "undefined" && import.meta.env?.PROD) return;
   if (typeof console?.info !== "function") return;
   const msg = info.success
     ? `[AI pipeline] ${stage} ok`

@@ -1683,6 +1683,16 @@ export default function createINPACTEngine(config) {
                     💡 VIEW HINT & FEEDBACK
                   </button>
                 )}
+                {node?.type === "question" && !showTaskModal && (
+                  <button
+                    type="button"
+                    data-tour-id="think-prompt-button"
+                    style={s.btn("secondary")}
+                    onClick={() => setShowTaskModal(true)}
+                  >
+                    Think prompt
+                  </button>
+                )}
                 {onAskMentorResolved && (
                   <button type="button" data-tour-id="ask-mentor-button" style={s.btn("secondary")} onClick={() => { setShowMentorModal(true); setMentorError(""); }}>Ask mentor</button>
                 )}
@@ -1703,6 +1713,16 @@ export default function createINPACTEngine(config) {
                     }}
                   >
                     💡 VIEW HINT & FEEDBACK
+                  </button>
+                )}
+                {node?.type === "question" && !showTaskModal && (
+                  <button
+                    type="button"
+                    data-tour-id="think-prompt-button"
+                    style={s.btn("secondary")}
+                    onClick={() => setShowTaskModal(true)}
+                  >
+                    Think prompt
                   </button>
                 )}
                 {onAskMentorResolved && (
