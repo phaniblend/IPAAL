@@ -2,6 +2,8 @@
  * Browser client for POST /api/lessons/feedback-annotate (DeepSeek on server).
  */
 
+import { lessonApiUrl } from "./lessonApiUrl.js";
+
 function aiValidationDisabled() {
   if (typeof import.meta === "undefined" || !import.meta.env) return false;
   return String(import.meta.env.VITE_DISABLE_AI_VALIDATION || "").toLowerCase() === "true";
@@ -33,6 +35,9 @@ async function messageFromFailedResponse(res, serviceLabel) {
   if (status === 404) {
     return `${serviceLabel} not available (404). Deploy or run the Node API so /api/lessons/feedback-annotate exists, or use Vite dev with npm run server.`;
   }
+  if (status === 405) {
+    return `${serviceLabel}: method not allowed (405). The page host often blocks POST to /api. Rebuild with VITE_LESSON_API_BASE set to your Node API origin (where Express runs), or proxy /api to that server.`;
+  }
   if (status === 429) return "Rate limit exceeded. Please try again in a moment.";
   if (status === 401 || status === 403) {
     return `${serviceLabel} was rejected (${status}). Check API auth or deployment routing.`;
@@ -58,7 +63,7 @@ export async function fetchFeedbackAnnotate({ instruction, feedback, hint, userC
   if (aiValidationDisabled()) {
     throw new Error("AI validation disabled (VITE_DISABLE_AI_VALIDATION)");
   }
-  const res = await fetch("/api/lessons/feedback-annotate", {
+  const res = await fetch(lessonApiUrl("/api/lessons/feedback-annotate"), {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({

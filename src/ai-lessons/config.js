@@ -6,6 +6,7 @@
  *   VITE_USE_AI_LESSONS     — "true" to use AI pipeline on lesson card click
  *   VITE_DEEPSEEK_API_KEY   — DeepSeek API key (client path; server uses DEEPSEEK_API_KEY)
  *   VITE_AI_USE_MOCK_ONLY   — "true" to skip real AI and use mock only (fallback)
+ *   VITE_LESSON_API_BASE    — optional absolute origin for /api/lessons/* (avoids 405 when static host blocks POST)
  */
 
 function getEnv(name) {

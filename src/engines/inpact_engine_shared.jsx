@@ -4,6 +4,7 @@ import MultiFileEditor from "./MultiFileEditor";
 import { LessonValidationContext } from "../ai-lessons/lessonValidationContext.jsx";
 import { fetchLessonCodeValidation } from "../ai-lessons/clientLessonValidation.js";
 import { fetchFeedbackAnnotate } from "../ai-lessons/clientFeedbackAnnotate.js";
+import { lessonApiUrl } from "../ai-lessons/lessonApiUrl.js";
 import CssTabsEditor from "./css/CssTabsEditor";
 import AngularTabbedEditor from "./angular/AngularTabbedEditor";
 import { mergeAngularTsWithHtml, mergeAngularCssIntoTS, splitAngularSeed } from "./angular/angularTabMerge.js";
@@ -800,7 +801,7 @@ export default function createINPACTEngine(config) {
         `${lessonValidationCtx.track}:${lessonValidationCtx.lessonIndex ?? ""}:${lessonValidationCtx.lessonTitle ?? ""}`;
       return async (n, userMessage, priorTurns = []) => {
         const history = Array.isArray(priorTurns) ? priorTurns : [];
-        const res = await fetch("/api/lessons/mentor", {
+        const res = await fetch(lessonApiUrl("/api/lessons/mentor"), {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
