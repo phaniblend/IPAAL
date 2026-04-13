@@ -223,7 +223,7 @@ Return JSON only.
 
 ---
 
-## 6. Code validation (runtime, “Check my code”)
+## 6. Code validation (runtime, “CHECK MY CODE{CTRL+SHIFT+ENTER}{ctrl+shift+enter}”)
 
 **File:** `src/ai-lessons/prompt-templates/codeValidation.js`  
 **Used as:** `system` = `CODE_VALIDATION_SYSTEM`; `user` = built by `buildCodeValidationUserPrompt(step, userCode, language)`.

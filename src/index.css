@@ -76,7 +76,7 @@ button:focus-visible {
   }
 }
 
-/* INPACT — "Check my code" waiting state */
+/* INPACT — "CHECK MY CODE{CTRL+SHIFT+ENTER}{ctrl+shift+enter}" waiting state */
 .inpact-btn-checking {
   animation: inpact-checking-pulse 1s ease-in-out infinite;
 }

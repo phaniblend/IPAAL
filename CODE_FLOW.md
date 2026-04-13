@@ -52,13 +52,13 @@ High-level flow from landing to lesson complete and Next Lesson, in the format: 
   - Task block (from **`LessonEditorOutputTabs.jsx`**),
   - Code editor (**`CodeEditor.jsx`**),
   - Feedback section,
-  - “CHECK MY CODE” / “NEXT STEP →” (**`inpact_engine_shared.jsx`** via `renderEditorBlockButtons`).
+  - “CHECK MY CODE{ctrl+shift+enter}” / “NEXT STEP →” (**`inpact_engine_shared.jsx`** via `renderEditorBlockButtons`).
 
 So at this step: **`inpact_engine_shared.jsx`** (renderEditorContent) + **`LessonEditorOutputTabs.jsx`** (Editor tab) + **`CodeEditor.jsx`** are what the user sees.
 
 ---
 
-## 6. User clicks “CHECK MY CODE”
+## 6. User clicks “CHECK MY CODE{ctrl+shift+enter}”
 
 **→ Same view** (no new component mounted).
 
@@ -121,7 +121,7 @@ User clicks "LET'S BUILD →"
      → renderEditorContent()
      → LessonEditorOutputTabs.jsx (Editor tab) + CodeEditor.jsx
 
-User clicks "CHECK MY CODE"
+User clicks "CHECK MY CODE{ctrl+shift+enter}"
   → inpact_engine_shared.jsx submit() → same renderEditorContent(); feedback appears
 
 User clicks "NEXT STEP →" (repeated for each step)
