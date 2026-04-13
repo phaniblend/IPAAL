@@ -33,7 +33,7 @@ const NODES = [
   {
     id: "step1",
     type: "question",
-    phase: "Step 1 of 8",
+    phase: "Step 1 of 9",
     paal: "Import the dependencies needed to build a React component that fetches data and manages state — you know this pattern.",
     hint: "This lesson needs two hooks — one you've used since lesson 1, one that's new. Both are named exports from 'react'.",
     example_code: "import { useRef, useMemo } from 'react';",
@@ -90,7 +90,7 @@ const NODES = [
   {
     id: "step2",
     type: "question",
-    phase: "Step 2 of 8",
+    phase: "Step 2 of 9",
     paal: "We're going to fetch real user data from JSONPlaceholder — a free public API that returns user objects. Visit https://jsonplaceholder.typicode.com/users/1 to see the response shape, then create an interface called User that models the fields we'll use: id, name, email, and username.",
     hint: "Use the interface keyword outside the component. Check the live response at https://jsonplaceholder.typicode.com/users/1 to confirm field names and value types.",
     example_code:
@@ -152,7 +152,7 @@ const NODES = [
   {
     id: "step3",
     type: "question",
-    phase: "Step 3 of 8",
+    phase: "Step 3 of 9",
     paal: "Inside the component, declare a state variable to hold the fetched user. It should be typed using the User interface, and start as null since no data has arrived yet.",
     hint: "The initial value is null — the fetch hasn't run yet. The type needs to account for both the loaded and not-yet-loaded states.",
     example_code: "const [post, setPost] = useState<Post | null>(null);",
@@ -203,7 +203,7 @@ const NODES = [
   {
     id: "step4",
     type: "question",
-    phase: "Step 4 of 8",
+    phase: "Step 4 of 9",
     paal: "Declare a second state variable to track which user ID to fetch. Type it as a number and initialise it to 1 — this will be the control knob that drives the fetch.",
     hint: "Start at 1 because JSONPlaceholder has users with IDs 1 through 10. This value will go into the dependency array of useEffect in the next step.",
     example_code: "const [postId, setPostId] = useState<number>(1);",
@@ -252,98 +252,121 @@ const NODES = [
     },
   },
   {
-  id: "step5",
-  type: "question",
-  phase: "Step 5 of 8",
-  paal: "Add a useEffect that fetches a user from JSONPlaceholder using the current userId, updates the user state with the response, and only re-runs when userId changes.",
-  hint: "useEffect takes two arguments — a function and a dependency array. The fetch URL should include userId, and userId should be in the dependency array.",
-  example_code:
-    "useEffect(() => {\n  fetch(`https://jsonplaceholder.typicode.com/posts/${postId}`)\n    .then(res => res.json())\n    .then(data => setPost(data as Post));\n}, [postId]);",
-  think_prompt: "Which dependency array makes useEffect fetch a new user every time userId changes, but not on every render?",
-  mc_options: [
-    "useEffect(() => { fetch(...) }, ) — no array, runs on every render",
-    "useEffect(() => { fetch(...) }, []) — empty array, runs once on mount only",
-    "useEffect(() => { fetch(...) }, [userId]) — runs on mount and whenever userId changes",
-  ],
-  mc_correct_option:
-    "useEffect(() => { fetch(...) }, [userId]) — runs on mount and whenever userId changes",
-  mc_anchor:
-    "[userId] tells React: re-run this effect when userId changes. On mount userId is 1 — first fetch fires. User clicks next, userId becomes 2 — effect fires again.",
-  why_this_matters:
-    "The dependency array is what connects a state change to an automatic side effect. Without it, the effect either runs too often (no array) or never re-runs (empty array). With [userId], the fetch is perfectly coupled to the value that controls it — change userId and the right data loads automatically, with no manual wiring needed.",
-  answer_keywords: [
-    "useEffect",
-    "fetch",
-    "jsonplaceholder",
-    "userId",
-    "setUser",
-    "as User",
-    "[userId]",
-  ],
-  seed_code: "",
-  starter_code: "",
-  feedback_correct:
-    "The effect is wired — userId in the URL pulls the right user, userId in the dep array re-runs the fetch when it changes. This is the core data-fetching pattern in React.",
-  feedback_partial:
-    "Good start. Check two things: is userId in the fetch URL, and is userId in the dependency array? Both need to be true for the fetch to be dynamic.",
-  feedback_wrong:
-    "The structure is: `useEffect(() => { fetch(`https://jsonplaceholder.typicode.com/users/${userId}`).then(res => res.json()).then(data => setUser(data as User)); }, [userId]);`",
-  expected:
-    "useEffect(() => {\n  fetch(`https://jsonplaceholder.typicode.com/users/${userId}`)\n    .then(res => res.json())\n    .then(data => setUser(data as User));\n}, [userId]);",
-  analog_example:
-    "useEffect(() => {\n  fetch(`https://jsonplaceholder.typicode.com/posts/${postId}`)\n    .then(res => res.json())\n    .then(data => setPost(data as Post));\n}, [postId]); // postId in URL + dep array = re-fetches when postId changes",
-  deepDiveLabel:
-    "useEffect runs after render — but the dependency array controls which renders trigger it",
-  deepDive: {
-    hook: "<svg width='100%' viewBox='0 0 680 380' role='img' xmlns='http://www.w3.org/2000/svg'><title>useEffect dependency array behaviour</title><desc>Shows three dependency array variants and when each fires relative to renders</desc><defs><marker id='arr' viewBox='0 0 10 10' refX='8' refY='5' markerWidth='6' markerHeight='6' orient='auto-start-reverse'><path d='M2 1L8 5L2 9' fill='none' stroke='context-stroke' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/></marker></defs><text x='340' y='22' text-anchor='middle' font-size='11' font-family='sans-serif' fill='#64748b'>the dependency array controls when useEffect fires</text><line x1='40' y1='60' x2='640' y2='60' stroke='#334155' stroke-width='1' stroke-dasharray='4 4'/><text x='40' y='52' font-size='10' font-family='sans-serif' fill='#475569'>renders →</text><text x='160' y='52' font-size='10' font-family='sans-serif' fill='#475569'>mount</text><text x='340' y='52' font-size='10' font-family='sans-serif' fill='#475569'>userId changes</text><text x='520' y='52' font-size='10' font-family='sans-serif' fill='#475569'>other state changes</text><line x1='160' y1='55' x2='160' y2='65' stroke='#475569' stroke-width='1.5'/><line x1='340' y1='55' x2='340' y2='65' stroke='#475569' stroke-width='1.5'/><line x1='520' y1='55' x2='520' y2='65' stroke='#475569' stroke-width='1.5'/><rect x='30' y='80' width='200' height='44' rx='8' fill='#0f172a' stroke='#f87171' stroke-width='1.5'/><text x='130' y='98' text-anchor='middle' font-size='11' font-family='monospace' fill='#f87171'>useEffect(() => {}, )</text><text x='130' y='114' text-anchor='middle' font-size='10' font-family='sans-serif' fill='#64748b'>no array — fires every render</text><line x1='230' y1='102' x2='258' y2='102' stroke='#f87171' stroke-width='1' marker-end='url(#arr)'/><circle cx='160' cy='102' r='5' fill='#f87171'/><circle cx='340' cy='102' r='5' fill='#f87171'/><circle cx='520' cy='102' r='5' fill='#f87171'/><line x1='160' y1='97' x2='160' y2='107' stroke='#f87171' stroke-width='1.5'/><line x1='340' y1='97' x2='340' y2='107' stroke='#f87171' stroke-width='1.5'/><line x1='520' y1='97' x2='520' y2='107' stroke='#f87171' stroke-width='1.5'/><text x='260' y='98' font-size='10' font-family='sans-serif' fill='#f87171'>fires on every single render ⚠️</text><rect x='30' y='160' width='200' height='44' rx='8' fill='#1e293b' stroke='#94a3b8' stroke-width='1.5'/><text x='130' y='178' text-anchor='middle' font-size='11' font-family='monospace' fill='#94a3b8'>useEffect(() => {}, [])</text><text x='130' y='194' text-anchor='middle' font-size='10' font-family='sans-serif' fill='#64748b'>empty array — mount only</text><line x1='230' y1='182' x2='258' y2='182' stroke='#94a3b8' stroke-width='1' marker-end='url(#arr)'/><circle cx='160' cy='182' r='5' fill='#94a3b8'/><line x1='160' y1='177' x2='160' y2='187' stroke='#94a3b8' stroke-width='1.5'/><text x='260' y='178' font-size='10' font-family='sans-serif' fill='#94a3b8'>fires once on mount only ✓</text><text x='260' y='192' font-size='10' font-family='sans-serif' fill='#475569'>userId change → no re-fetch</text><rect x='30' y='240' width='200' height='44' rx='8' fill='#0f172a' stroke='#22d3ee' stroke-width='2'/><text x='130' y='258' text-anchor='middle' font-size='11' font-family='monospace' fill='#22d3ee'>useEffect(() => {}, [userId])</text><text x='130' y='274' text-anchor='middle' font-size='10' font-family='sans-serif' fill='#64748b'>value array — on mount + on change</text><line x1='230' y1='262' x2='258' y2='262' stroke='#22d3ee' stroke-width='1' marker-end='url(#arr)'/><circle cx='160' cy='262' r='5' fill='#22d3ee'/><circle cx='340' cy='262' r='5' fill='#22d3ee'/><line x1='160' y1='257' x2='160' y2='267' stroke='#22d3ee' stroke-width='1.5'/><line x1='340' y1='257' x2='340' y2='267' stroke='#22d3ee' stroke-width='1.5'/><text x='260' y='258' font-size='10' font-family='sans-serif' fill='#22d3ee'>fires on mount + when userId changes ✅</text><text x='260' y='272' font-size='10' font-family='sans-serif' fill='#475569'>other state changes → no re-fetch</text><rect x='30' y='306' width='620' height='58' rx='8' fill='#1e293b' stroke='#334155' stroke-width='1'/><text x='340' y='324' text-anchor='middle' font-size='10' font-family='sans-serif' fill='#94a3b8'>what happens inside the effect for this lesson:</text><text x='50' y='342' font-size='11' font-family='monospace' fill='#22d3ee'>fetch(`https://jsonplaceholder.typicode.com/users/${userId}`)</text><text x='50' y='357' font-size='10' font-family='sans-serif' fill='#64748b'>  userId in the URL + userId in the dep array → effect re-fetches a new user every time userId changes</text></svg>\n\nYou add a `useEffect` with a fetch inside. It works on first load — user 1 appears. You click next, `userId` becomes 2. Nothing happens. The effect doesn't re-run. The screen still shows user 1.\n\nYou added the fetch. You wired the state. But you forgot to tell React *what to watch*. That's the dependency array's job.",
-    pain: "⚠️ **Lesson:** You write `useEffect(() => { fetch(...userId...) }, [])` — empty array. User 1 loads on mount. You click next, userId becomes 2, the URL would be different — but the effect never fires again. The empty array told React: *run this once and never again*. How do you tell React to re-run the effect specifically when userId changes?",
-    mentalModel:
-      "**Mental model:** Think of the dependency array as a **watchlist you hand to React**.\n- No array: React watches nothing — effect fires after every single render, no matter what changed.\n- `[]` empty array: React watches nothing after mount — effect fires once, then goes silent forever.\n- `[userId]`: React watches `userId` specifically — effect fires on mount, then again any time `userId` is a different value from the previous render.\n- React compares each value in the array between renders using `Object.is` — like `===` for primitives. If any value changed, the effect re-runs. If none changed, it skips.\n- Two things must both be true for a dynamic fetch: `userId` in the URL (so the right data is requested) AND `userId` in the dep array (so the effect re-runs when it changes). Miss either one and the fetch is broken.",
-    discover:
-      "**Pattern — useEffect with a dynamic dep array:**\n```tsx\nuseEffect(() => {\n  fetch(`https://jsonplaceholder.typicode.com/users/${userId}`)\n    .then(res => res.json())\n    .then(data => setUser(data as User));\n}, [userId]);\n//   ^^^^^^^\n//   watched value — effect re-runs when this changes\n```\n- `${userId}` in the URL → fetch targets the right user\n- `[userId]` in the dep array → React watches this value between renders\n- fires on mount (userId = 1 → fetches user 1)\n- fires when userId changes (userId = 2 → fetches user 2)\n- does NOT fire when user state updates, isLoading changes, or anything else changes\n- `as User` → type assertion so TypeScript knows the response shape",
-    quickRules:
-      "**Quick rules:**\n- ✅ `[userId]` — fires on mount and when userId changes\n- ✅ `[]` — fires on mount only, never again — for one-time setup\n- ❌ no array — fires after every render, including renders caused by the fetch itself — infinite loop risk\n- ❌ `[user]` in the dep array — user is set *by* the effect, watching it causes the effect to trigger itself\n- every value from the component scope that's used inside the effect should be in the dep array\n- the linter rule `exhaustive-deps` will warn you if you miss one\n- dep array values are compared with `Object.is` — primitive values (number, string, boolean) compare by value, objects and arrays compare by reference",
-    watchOut:
-      "👀 **Watch out:** If you put `user` in the dependency array, you create an infinite loop — the effect runs, sets `user`, React sees `user` changed, runs the effect again, sets `user` again, forever. The effect *produces* user — it should never *watch* user. Only put values in the dep array that the effect *reads* to decide what to do, never the values it *writes* as output.",
-    dryRun:
-      "🔁 **Think:** Your effect has `[userId]` in the dep array. The user clicks Next — `userId` goes from 1 to 2. The fetch fires, completes, and `setUser(data)` is called. React re-renders because `user` changed. Does the effect fire again on this render? Why or why not? (Hint: what value did React compare between the last two renders — and did it change?)",
-    build:
-      "**Learning focus:** Write a useEffect that fetches from a dynamic URL and places the changing value in the dependency array — understanding that the dep array is a watchlist that tells React exactly which state changes should trigger the effect to re-run.",
-  },
-},
-  {
-    id: "step6",
+    id: "step5",
     type: "question",
-    phase: "Step 6 of 8",
-    paal: "Connect the increment handler to the button's click event.",
-    hint: "Add an onClick attribute to the button element.",
-    example_code: "<button onClick={submitHandler}>Submit</button>",
-    think_prompt: "How do we attach the click handler to the button in JSX?",
+    phase: "Step 5 of 9",
+    paal: "Add a useEffect that fetches a user from JSONPlaceholder using the current userId, updates the user state with the response, and only re-runs when userId changes.",
+    hint: "useEffect takes two arguments — a function and a dependency array. The fetch URL should include userId, and userId should be in the dependency array.",
+    example_code:
+      "useEffect(() => {\n  fetch(`https://jsonplaceholder.typicode.com/posts/${postId}`)\n    .then(res => res.json())\n    .then(data => setPost(data as Post));\n}, [postId]);",
+    think_prompt:
+      "Which dependency array makes useEffect fetch a new user every time userId changes, but not on every render?",
     mc_options: [
-      "<button onClick={handleClick}>",
-      "<button click={handleClick}>",
-      "<button onPress={handleClick}>",
+      "useEffect(() => { fetch(...) }, ) — no array, runs on every render",
+      "useEffect(() => { fetch(...) }, []) — empty array, runs once on mount only",
+      "useEffect(() => { fetch(...) }, [userId]) — runs on mount and whenever userId changes",
     ],
-    mc_correct_option: "<button onClick={handleClick}>",
+    mc_correct_option:
+      "useEffect(() => { fetch(...) }, [userId]) — runs on mount and whenever userId changes",
     mc_anchor:
-      "onClick is the standard React prop for handling click events. We pass the function reference, not call it immediately.",
+      "[userId] tells React: re-run this effect when userId changes. On mount userId is 1 — first fetch fires. User clicks next, userId becomes 2 — effect fires again.",
     why_this_matters:
-      "The button needs to know which function to call when clicked. JSX event attributes connect handlers to DOM events.",
-    answer_keywords: ["onClick", "=", "{", "}", ">"],
+      "The dependency array is what connects a state change to an automatic side effect. Without it, the effect either runs too often (no array) or never re-runs (empty array). With [userId], the fetch is perfectly coupled to the value that controls it — change userId and the right data loads automatically, with no manual wiring needed.",
+    answer_keywords: [
+      "useEffect",
+      "fetch",
+      "jsonplaceholder",
+      "userId",
+      "setUser",
+      "as User",
+      "[userId]",
+    ],
     seed_code: "",
     starter_code: "",
     feedback_correct:
-      "Perfect! The button now responds to clicks and updates state.",
+      "The effect is wired — userId in the URL pulls the right user, userId in the dep array re-runs the fetch when it changes. This is the core data-fetching pattern in React.",
     feedback_partial:
-      "Almost! Remember to use the correct event attribute name.",
+      "Good start. Check two things: is userId in the fetch URL, and is userId in the dependency array? Both need to be true for the fetch to be dynamic.",
     feedback_wrong:
-      "Let's review: We need to add an onClick handler to the button.",
-    expected: "Button triggers the increment function when clicked.",
+      "The structure is: `useEffect(() => { fetch(`https://jsonplaceholder.typicode.com/users/${userId}`).then(res => res.json()).then(data => setUser(data as User)); }, [userId]);`",
+    expected:
+      "useEffect(() => {\n  fetch(`https://jsonplaceholder.typicode.com/users/${userId}`)\n    .then(res => res.json())\n    .then(data => setUser(data as User));\n}, [userId]);",
+    analog_example:
+      "useEffect(() => {\n  fetch(`https://jsonplaceholder.typicode.com/posts/${postId}`)\n    .then(res => res.json())\n    .then(data => setPost(data as Post));\n}, [postId]); // postId in URL + dep array = re-fetches when postId changes",
+    deepDiveLabel:
+      "useEffect runs after render — but the dependency array controls which renders trigger it",
+    deepDive: {
+      hook: "<svg width='100%' viewBox='0 0 680 380' role='img' xmlns='http://www.w3.org/2000/svg'><title>useEffect dependency array behaviour</title><desc>Shows three dependency array variants and when each fires relative to renders</desc><defs><marker id='arr' viewBox='0 0 10 10' refX='8' refY='5' markerWidth='6' markerHeight='6' orient='auto-start-reverse'><path d='M2 1L8 5L2 9' fill='none' stroke='context-stroke' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/></marker></defs><text x='340' y='22' text-anchor='middle' font-size='11' font-family='sans-serif' fill='#64748b'>the dependency array controls when useEffect fires</text><line x1='40' y1='60' x2='640' y2='60' stroke='#334155' stroke-width='1' stroke-dasharray='4 4'/><text x='40' y='52' font-size='10' font-family='sans-serif' fill='#475569'>renders →</text><text x='160' y='52' font-size='10' font-family='sans-serif' fill='#475569'>mount</text><text x='340' y='52' font-size='10' font-family='sans-serif' fill='#475569'>userId changes</text><text x='520' y='52' font-size='10' font-family='sans-serif' fill='#475569'>other state changes</text><line x1='160' y1='55' x2='160' y2='65' stroke='#475569' stroke-width='1.5'/><line x1='340' y1='55' x2='340' y2='65' stroke='#475569' stroke-width='1.5'/><line x1='520' y1='55' x2='520' y2='65' stroke='#475569' stroke-width='1.5'/><rect x='30' y='80' width='200' height='44' rx='8' fill='#0f172a' stroke='#f87171' stroke-width='1.5'/><text x='130' y='98' text-anchor='middle' font-size='11' font-family='monospace' fill='#f87171'>useEffect(() => {}, )</text><text x='130' y='114' text-anchor='middle' font-size='10' font-family='sans-serif' fill='#64748b'>no array — fires every render</text><line x1='230' y1='102' x2='258' y2='102' stroke='#f87171' stroke-width='1' marker-end='url(#arr)'/><circle cx='160' cy='102' r='5' fill='#f87171'/><circle cx='340' cy='102' r='5' fill='#f87171'/><circle cx='520' cy='102' r='5' fill='#f87171'/><line x1='160' y1='97' x2='160' y2='107' stroke='#f87171' stroke-width='1.5'/><line x1='340' y1='97' x2='340' y2='107' stroke='#f87171' stroke-width='1.5'/><line x1='520' y1='97' x2='520' y2='107' stroke='#f87171' stroke-width='1.5'/><text x='260' y='98' font-size='10' font-family='sans-serif' fill='#f87171'>fires on every single render ⚠️</text><rect x='30' y='160' width='200' height='44' rx='8' fill='#1e293b' stroke='#94a3b8' stroke-width='1.5'/><text x='130' y='178' text-anchor='middle' font-size='11' font-family='monospace' fill='#94a3b8'>useEffect(() => {}, [])</text><text x='130' y='194' text-anchor='middle' font-size='10' font-family='sans-serif' fill='#64748b'>empty array — mount only</text><line x1='230' y1='182' x2='258' y2='182' stroke='#94a3b8' stroke-width='1' marker-end='url(#arr)'/><circle cx='160' cy='182' r='5' fill='#94a3b8'/><line x1='160' y1='177' x2='160' y2='187' stroke='#94a3b8' stroke-width='1.5'/><text x='260' y='178' font-size='10' font-family='sans-serif' fill='#94a3b8'>fires once on mount only ✓</text><text x='260' y='192' font-size='10' font-family='sans-serif' fill='#475569'>userId change → no re-fetch</text><rect x='30' y='240' width='200' height='44' rx='8' fill='#0f172a' stroke='#22d3ee' stroke-width='2'/><text x='130' y='258' text-anchor='middle' font-size='11' font-family='monospace' fill='#22d3ee'>useEffect(() => {}, [userId])</text><text x='130' y='274' text-anchor='middle' font-size='10' font-family='sans-serif' fill='#64748b'>value array — on mount + on change</text><line x1='230' y1='262' x2='258' y2='262' stroke='#22d3ee' stroke-width='1' marker-end='url(#arr)'/><circle cx='160' cy='262' r='5' fill='#22d3ee'/><circle cx='340' cy='262' r='5' fill='#22d3ee'/><line x1='160' y1='257' x2='160' y2='267' stroke='#22d3ee' stroke-width='1.5'/><line x1='340' y1='257' x2='340' y2='267' stroke='#22d3ee' stroke-width='1.5'/><text x='260' y='258' font-size='10' font-family='sans-serif' fill='#22d3ee'>fires on mount + when userId changes ✅</text><text x='260' y='272' font-size='10' font-family='sans-serif' fill='#475569'>other state changes → no re-fetch</text><rect x='30' y='306' width='620' height='58' rx='8' fill='#1e293b' stroke='#334155' stroke-width='1'/><text x='340' y='324' text-anchor='middle' font-size='10' font-family='sans-serif' fill='#94a3b8'>what happens inside the effect for this lesson:</text><text x='50' y='342' font-size='11' font-family='monospace' fill='#22d3ee'>fetch(`https://jsonplaceholder.typicode.com/users/${userId}`)</text><text x='50' y='357' font-size='10' font-family='sans-serif' fill='#64748b'>  userId in the URL + userId in the dep array → effect re-fetches a new user every time userId changes</text></svg>\n\nYou add a `useEffect` with a fetch inside. It works on first load — user 1 appears. You click next, `userId` becomes 2. Nothing happens. The effect doesn't re-run. The screen still shows user 1.\n\nYou added the fetch. You wired the state. But you forgot to tell React *what to watch*. That's the dependency array's job.",
+      pain: "⚠️ **Lesson:** You write `useEffect(() => { fetch(...userId...) }, [])` — empty array. User 1 loads on mount. You click next, userId becomes 2, the URL would be different — but the effect never fires again. The empty array told React: *run this once and never again*. How do you tell React to re-run the effect specifically when userId changes?",
+      mentalModel:
+        "**Mental model:** Think of the dependency array as a **watchlist you hand to React**.\n- No array: React watches nothing — effect fires after every single render, no matter what changed.\n- `[]` empty array: React watches nothing after mount — effect fires once, then goes silent forever.\n- `[userId]`: React watches `userId` specifically — effect fires on mount, then again any time `userId` is a different value from the previous render.\n- React compares each value in the array between renders using `Object.is` — like `===` for primitives. If any value changed, the effect re-runs. If none changed, it skips.\n- Two things must both be true for a dynamic fetch: `userId` in the URL (so the right data is requested) AND `userId` in the dep array (so the effect re-runs when it changes). Miss either one and the fetch is broken.",
+      discover:
+        "**Pattern — useEffect with a dynamic dep array:**\n```tsx\nuseEffect(() => {\n  fetch(`https://jsonplaceholder.typicode.com/users/${userId}`)\n    .then(res => res.json())\n    .then(data => setUser(data as User));\n}, [userId]);\n//   ^^^^^^^\n//   watched value — effect re-runs when this changes\n```\n- `${userId}` in the URL → fetch targets the right user\n- `[userId]` in the dep array → React watches this value between renders\n- fires on mount (userId = 1 → fetches user 1)\n- fires when userId changes (userId = 2 → fetches user 2)\n- does NOT fire when user state updates, isLoading changes, or anything else changes\n- `as User` → type assertion so TypeScript knows the response shape",
+      quickRules:
+        "**Quick rules:**\n- ✅ `[userId]` — fires on mount and when userId changes\n- ✅ `[]` — fires on mount only, never again — for one-time setup\n- ❌ no array — fires after every render, including renders caused by the fetch itself — infinite loop risk\n- ❌ `[user]` in the dep array — user is set *by* the effect, watching it causes the effect to trigger itself\n- every value from the component scope that's used inside the effect should be in the dep array\n- the linter rule `exhaustive-deps` will warn you if you miss one\n- dep array values are compared with `Object.is` — primitive values (number, string, boolean) compare by value, objects and arrays compare by reference",
+      watchOut:
+        "👀 **Watch out:** If you put `user` in the dependency array, you create an infinite loop — the effect runs, sets `user`, React sees `user` changed, runs the effect again, sets `user` again, forever. The effect *produces* user — it should never *watch* user. Only put values in the dep array that the effect *reads* to decide what to do, never the values it *writes* as output.",
+      dryRun:
+        "🔁 **Think:** Your effect has `[userId]` in the dep array. The user clicks Next — `userId` goes from 1 to 2. The fetch fires, completes, and `setUser(data)` is called. React re-renders because `user` changed. Does the effect fire again on this render? Why or why not? (Hint: what value did React compare between the last two renders — and did it change?)",
+      build:
+        "**Learning focus:** Write a useEffect that fetches from a dynamic URL and places the changing value in the dependency array — understanding that the dep array is a watchlist that tells React exactly which state changes should trigger the effect to re-run.",
+    },
   },
+{
+  id: "step6",
+  type: "question",
+  phase: "Step 6 of 9",
+  paal: "Add a Previous button that decrements the userId by 1 when clicked. Use the functional updater form.",
+  hint: "Inline arrow function on onClick — no event param needed. Use prev => prev - 1 inside the setter.",
+  example_code: "<button onClick={() => setPage(prev => prev - 1)}>Previous</button>",
+  think_prompt: "Which onClick wiring correctly decrements userId using the functional updater?",
+  mc_options: [
+    "<button onClick={setUserId(userId - 1)}>Previous</button>",
+    "<button onClick={() => setUserId(userId - 1)}>Previous</button>",
+    "<button onClick={() => setUserId(prev => prev - 1)}>Previous</button>",
+  ],
+  mc_correct_option:
+    "<button onClick={() => setUserId(prev => prev - 1)}>Previous</button>",
+  mc_anchor:
+    "Functional updater — React passes the latest queued value, not the snapshot from the current render.",
+  why_this_matters:
+    "This button is the first half of the navigation mechanism. Clicking it changes userId, which useEffect is watching, which fires a new fetch for the previous user. The button doesn't know about the fetch — it just changes a number. Everything after that is automatic.",
+  answer_keywords: ["button", "onClick", "setUserId", "prev", "prev - 1", "Previous"],
+  seed_code: "",
+  starter_code: "",
+  feedback_correct:
+    "First domino is set. Click Previous — userId drops by 1, useEffect fires, a new fetch goes out, the previous user loads.",
+  feedback_partial:
+    "Almost. Make sure you're using the functional updater form `prev => prev - 1` inside setUserId — not `userId - 1`.",
+  feedback_wrong:
+    "The pattern is: `<button onClick={() => setUserId(prev => prev - 1)}>Previous</button>` — inline arrow function, functional updater, no event param.",
+  expected:
+    "<button onClick={() => setUserId(prev => prev - 1)}>Previous</button>",
+  analog_example:
+    "<button onClick={() => setPage(prev => prev - 1)}>Previous</button>",
+  deepDiveLabel:
+    "One button, one state change — but it starts a chain that ends with a completely different user on screen",
+  deepDive: {
+    hook: "You've written click handlers before. You've written state updates before. You wrote useEffect in step 5. But this button is the first time all three connect into a single automatic chain:\n\nButton click → userId changes → useEffect sees the change → fetch fires → user state updates → UI shows new user.\n\nThe button doesn't know about the fetch. The fetch doesn't know about the button. They're connected only through the state variable that both touch — userId. That separation is intentional, and it's one of React's most powerful ideas.",
+    pain: "⚠️ **Lesson:** You wire the button as `onClick={() => setUserId(userId - 1)}`. Single clicks work perfectly. Then you click rapidly — userId should drop from 5 to 3, but it only drops to 4. Both clicks read `userId = 5` from the same render snapshot and both set it to `4`. The second update was swallowed. You've seen this trap before in the counter lesson — what's the fix?",
+    mentalModel:
+      "**Mental model:** Think of this button as **tipping the first domino in a chain**.\n- Domino 1: `setUserId(prev => prev - 1)` → React queues the update\n- Domino 2: React re-renders → `userId` is now `4`\n- Domino 3: useEffect compares — did `userId` change? Yes → effect fires\n- Domino 4: fetch runs for user 4 → response arrives\n- Domino 5: `setUser(data)` → React re-renders → new user name appears\n- The button tips domino 1. Everything after falls automatically.\n- `prev => prev - 1` vs `userId - 1`: both tip domino 1 correctly for single clicks. Under rapid clicks, `userId - 1` reads a stale snapshot and two clicks produce one update. `prev => prev - 1` reads React's latest queued value and each click produces its own update.",
+    discover:
+      "**Pattern — button that drives a fetch cycle:**\n```tsx\n<button\n  onClick={() => setUserId(prev => prev - 1)}\n>\n  Previous\n</button>\n```\n- `() => setUserId(...)` → inline arrow function — no event param, body never uses it\n- `prev => prev - 1` → functional updater — operates on React's latest queued value\n- no named handler function needed — one-liner logic belongs inline\n- clicking starts the full cycle: userId → useEffect → fetch → user → UI\n- the button has no knowledge of the fetch — it only changes a number",
+    quickRules:
+      "**Quick rules:**\n- ✅ `onClick={() => setUserId(prev => prev - 1)}` — inline, functional updater, no unused param\n- ❌ `onClick={setUserId(prev => prev - 1)}` — calls setter on render, not on click\n- ❌ `onClick={() => setUserId(userId - 1)}` — snapshot read, loses updates under rapid clicks\n- ❌ `onClick={(e) => setUserId(prev => prev - 1)}` — event param declared but never used, drop it\n- JSONPlaceholder users start at ID 1 — clicking Previous on ID 1 returns an empty response\n- in a real app you'd guard the boundary: `disabled={userId <= 1}`",
+    watchOut:
+      "👀 **Watch out:** There's no lower boundary guard yet — if userId reaches 0 or below, JSONPlaceholder returns an empty response and `setUser` gets called with unexpected data. The component won't crash, but it'll show stale or blank content. Step 9 handles the JSX display — for now, just be aware that clicking Previous when userId is already 1 will produce a broken fetch. A real app would disable the button at the boundary.",
+    dryRun:
+      "🔁 **Think:** `userId` is currently `3`. The user clicks Previous. Trace every state change and re-render from that click until the new user's name appears on screen. Name each render and which state update caused it. (Hint: there are at least three distinct renders in the chain — can you name which state variable changed to cause each one?)",
+    build:
+      "**Learning focus:** Wire a button that updates a state variable watched by useEffect — understanding that the button's only job is to change the value, and the fetch follows automatically because useEffect is watching it.",
+  },
+},
   {
     id: "step7",
     type: "question",
-    phase: "Step 7 of 8",
+    phase: "Step 7 of 9",
     paal: "Add a useEffect that logs 'Count changed' to the console and updates the document title to show the current count, running only when count changes.",
     hint: "useEffect takes a function and a dependency array. Include count in the array.",
     example_code:
