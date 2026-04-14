@@ -13,7 +13,7 @@ const NODES = [
     "content": {
       "tag": "LESSON #8 (TypeScript)",
       "title": "Forms & Validation — Typed",
-      "body": "You’ll build a small sign-up flow: typed state, controlled inputs, and validation the user sees right away—not after submit.",
+      "body": "You’ll build a small sign-up form: typed state, controlled inputs, and validation the user sees right away—not after submit.",
       "usecase": "Sign-up and profile forms are everywhere; getting state, events, and validation right here carries directly into production apps."
     }
   },

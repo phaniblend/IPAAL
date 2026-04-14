@@ -475,19 +475,6 @@ export default function LandingPage({ track, onSelectLesson, onStartFree, lesson
           <div style={{ ...subtitle, color: "#00d4ff", fontWeight: 600, letterSpacing: "0.04em", marginBottom: 0 }}>
             {TRACK_LABELS[track] ?? track} — {lessonCount} lessons
           </div>
-          {freeLessonsHint ? (
-            <div
-              role="status"
-              style={{
-                fontSize: "13px",
-                color: "#64748b",
-                marginTop: "8px",
-                lineHeight: 1.45,
-              }}
-            >
-              {freeLessonsHint}
-            </div>
-          ) : null}
         </div>
 
         {useBlueprintGroupedGrid ? (

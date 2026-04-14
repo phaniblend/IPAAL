@@ -35,6 +35,13 @@ export const REACT_TS_SNIPPETS = /** @type {MonacoSnippetItem[]} */ ([
     filterText: "useState typed",
   },
   {
+    label: "useState",
+    detail: "useState (typed)",
+    insertText: "const [${1:state}, set${2:setState}] = useState<${3:type}>(${4:initial});",
+    documentation: "Alias for usf",
+    filterText: "use state hook typed",
+  },
+  {
     label: "usfnum",
     detail: "useState number",
     insertText: "const [${1:count}, setCount] = useState<number>(${2:0});",
@@ -77,6 +84,19 @@ export const REACT_TS_SNIPPETS = /** @type {MonacoSnippetItem[]} */ ([
       "}, [${3:deps}]);",
     ].join("\n"),
     filterText: "useEffect",
+  },
+  {
+    label: "useEffect",
+    detail: "useEffect",
+    insertText: [
+      "useEffect(() => {",
+      "  ${1:// effect}",
+      "  return () => {",
+      "    ${2:// cleanup}",
+      "  };",
+      "}, [${3:deps}]);",
+    ].join("\n"),
+    filterText: "use effect hook",
   },
   {
     label: "rafc",
@@ -135,6 +155,12 @@ export const REACT_JS_SNIPPETS = /** @type {MonacoSnippetItem[]} */ ([
     filterText: "useState",
   },
   {
+    label: "useState",
+    detail: "useState",
+    insertText: "const [${1:state}, set${2:setState}] = useState(${3:initial});",
+    filterText: "use state hook",
+  },
+  {
     label: "rfc",
     detail: "Function component",
     insertText: [
@@ -160,6 +186,19 @@ export const REACT_JS_SNIPPETS = /** @type {MonacoSnippetItem[]} */ ([
       "}, [${3:deps}]);",
     ].join("\n"),
     filterText: "useEffect",
+  },
+  {
+    label: "useEffect",
+    detail: "useEffect",
+    insertText: [
+      "useEffect(() => {",
+      "  ${1:// effect}",
+      "  return () => {",
+      "    ${2:// cleanup}",
+      "  };",
+      "}, [${3:deps}]);",
+    ].join("\n"),
+    filterText: "use effect hook",
   },
   {
     label: "rafc",

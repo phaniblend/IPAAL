@@ -30,58 +30,55 @@ const NODES = [
       "Display state values in JSX with type safety",
     ],
   },
-  {
-    id: "step1",
-    type: "question",
-    phase: "Step 1 of 7",
-    title: "Import React and useState",
-    paal: "Import React and the useState hook from the 'react' package so the component can store changing data and re-render the UI.",
-    hint: "We need React to build the component and useState to give it memory that React can track.",
-    example_code:
-      "let count = 0;\ncount = count + 1; // the value changes, but React won't re-render the UI from a normal variable",
-    think_prompt:
-      "If a counter value needs to change on screen after a click, what must we bring in from the react package?",
-    mc_options: [
-      "Only React — changing a variable directly is enough to update the screen",
-      "React and useState — because the screen only re-renders when React is told state changed",
-      "Only useState — React itself is not needed if we're just using hooks",
-    ],
-    mc_correct_option:
-      "React and useState — because the screen only re-renders when React is told state changed",
-    mc_anchor:
-      "A changing value must live in React state for the UI to update, so we need React and the useState hook from the react package.",
-    why_this_matters:
-      "If a value changes in plain JavaScript, the variable updates in memory — but React does not automatically refresh the screen. For a component to re-render when data changes, that data must live in React state. useState is React's built-in tool for giving a component that kind of tracked memory. Since useState comes from the react package, we must import it by name along with React itself.",
-    answer_keywords: ["import", "React", "useState", "'react'"],
-    seed_code: "",
-    starter_code: "",
-    feedback_correct:
-      "Correct! React can only re-render when it knows the component's data changed. useState gives the component tracked state, so when the count changes, React updates the UI. That's why we import React and useState from the react package.",
-    feedback_partial:
-      "You're close. The key idea is not TypeScript — it's re-rendering. A changing value that should appear on screen must live in React state, so we need the useState hook from the react package.",
-    feedback_wrong:
-      "Not quite. A normal variable can change in JavaScript, but React will not re-render the component just because that variable changed. To update the UI after a click, the count must live in React state. useState is the React tool for that, so we import React and useState from the react package.",
-    expected: "import React, { useState } from 'react';",
-    analog_example: "import React, {useEffect} from 'react';",
-    deepDiveLabel:
-      "useState isn't part of React — so where does it actually come from?",
-    deepDive: {
-      hook: "You're pairing on a dashboard feature. Your colleague's file starts with `import React from 'react'`. Yours adds `{ useState }`. They ask: 'What's the curly brace thing? Does the package have multiple Reacts?'\n\nSame package — but React ships many tools inside it. The default export is React itself (needed for JSX). `useState` is one of dozens of named exports — hooks, types, utilities — that live alongside it. Without the curly braces, you only get the door. The braces let you name exactly which tool you're picking up off the shelf.",
-      pain: "⚠️ **Lesson:** You write `import React from 'react'` and try to call `useState(0)` — but the app crashes with *`useState is not a function`*. The package is imported. Why is the hook missing?",
-      mentalModel:
-        "**Mental model:** Think of the `react` package as a toolbox with sections.\n- The **default label** on the outside is `React` — needed for JSX, always comes along.\n- Inside are named sections: **hooks** (`useState`, `useEffect`, `useRef`…), **types** (`ReactNode`, `FC`…), **utilities** and more.\n- `import React from 'react'` grabs only the lid.\n- `{ useState }` says: also hand me this specific tool from the hooks section.\n- One import statement can grab both: `import React, { useState } from 'react'`",
-      discover:
-        "**Pattern:**\n```tsx\nimport React, { useState } from 'react';\n```\n- `React` (no braces) → the **default export** — one per module\n- `{ useState }` → a **named export** — opt-in by exact name\n- both come from the same `'react'` string — one statement, two picks\n- rule: curly braces = you know the exact name of what you want",
-      quickRules:
-        "**Quick rules:**\n- ✅ `import React, { useState } from 'react'` — one statement, two picks\n- ❌ `import { React } from 'react'` — React is a default export, no curly braces\n- ❌ `import React from 'react'` alone — useState won't exist, app crashes\n- named exports always go inside `{ }`, default export never does",
-      watchOut:
-        "👀 **Watch out:** The most common mistake is curly-bracing React itself — `import { React, useState }`. React is the default export, not a named one. Curly braces are only for the tools you're picking off the shelf by name.",
-      dryRun:
-        "🔁 **Think:** Given `import React, { useState, useEffect } from 'react'` — what would happen if you wrote `import { React } from 'react'` instead? Would it work? Why or why not? (Hint: default vs named — these are two different slots in the module.)",
-      build:
-        "**Learning focus:** Distinguish default imports from named imports, and correctly pull both `React` and `useState` from the `react` package in a single import statement.",
-    },
+{
+  id: "step1",
+  type: "question",
+  phase: "Step 1 of 7",
+  paal: "Import the dependencies needed to build a React component that manages state.",
+  hint: "useState is a named export from 'react'. Since React 17, JSX no longer needs React in scope — import only what your code directly uses.",
+  example_code: "import { useEffect } from 'react';",
+  think_prompt:
+    "Which import statement gives the component access to useState so it can track and update the counter value?",
+  mc_options: [
+    "import React from 'react'",
+    "import { useState } from 'react'",
+    "import useState from 'react'",
+  ],
+  mc_correct_option: "import { useState } from 'react'",
+  mc_anchor:
+    "useState is a named export — it lives inside curly braces. Since React 17, JSX no longer requires React to be in scope, so you only import what your code actually calls.",
+  why_this_matters:
+    "React ships many tools inside one package — hooks, types, utilities. Your job is to know which ones your file needs and import them by name. useState is the hook that gives a component tracked memory: when you call its setter, React knows to re-render. Since React 17, the JSX transform handles React itself automatically — so `import React` is no longer needed unless your code calls React directly.",
+  answer_keywords: ["import", "{", "useState", "}", "from", "'react'"],
+  seed_code: "",
+  starter_code: "",
+  feedback_correct:
+    "Exactly — useState named, curly braces, from 'react'. This is the import pattern for every hook you'll ever use.",
+  feedback_partial:
+    "Close — useState is a named export, so it needs curly braces. No default React import needed.",
+  feedback_wrong:
+    "Write: `import { useState } from 'react'` — curly braces around the hook name, no React default needed.",
+  expected: "import { useState } from 'react';",
+  analog_example: "import { useEffect } from 'react';",
+  deepDiveLabel:
+    "useState isn't part of React — so where does it actually come from?",
+  deepDive: {
+    hook: "Before React 17, every component file had to start with `import React from 'react'`. JSX compiled to `React.createElement(...)` under the hood — so if `React` wasn't in scope, the file would crash immediately, even if you never wrote `React.` anywhere yourself.\n\nReact 17 changed the compiler. The JSX transform now injects what it needs automatically — `React` no longer has to be in your file. So the import you write is just what *your code* actually calls. Nothing more.",
+    pain: "⚠️ **Lesson:** You write `import React from 'react'` and try to call `useState(0)` — the app crashes with *`useState is not a function`*. The package is imported. Why is the hook missing?",
+    mentalModel:
+      "**Mental model:** Think of the `react` package as a toolbox shelf.\n- The shelf holds many tools: `useState`, `useEffect`, `useRef`, `ReactNode`, and more.\n- Each tool is a **named export** — you pick it up by name using `{ }`.\n- Before React 17: JSX compiled to `React.createElement(...)` — so `React` had to be in scope or your component crashed.\n- React 17+: the build tool injects the JSX factory automatically — `React` no longer needs to be in your file.\n- Rule: only import what your code directly calls. `useState` is called directly — import it. `React` is handled by the build tool — leave it off unless you specifically need it.",
+    discover:
+      "**Pattern — modern named import:**\n```tsx\n// ✅ React 17+ — import only what you use\nimport { useState } from 'react';\n\n// ✅ multiple hooks — comma-separated\nimport { useState, useEffect } from 'react';\n\n// ⚠️ pre-React 17 pattern — still works but React is now unnecessary\nimport React, { useState } from 'react';\n```\n- `{ useState }` → named export — opt-in by exact name\n- `{ useState, useEffect }` → multiple named exports — comma-separated inside one pair of braces\n- no braces = default export — `React` was the default, but you rarely need it directly now\n- rule: curly braces = you know the exact name of what you want",
+    quickRules:
+      "**Quick rules:**\n- ✅ `import { useState } from 'react'` — correct, modern pattern\n- ✅ `import { useState, useEffect } from 'react'` — multiple named exports, one statement\n- ⚠️ `import React, { useState } from 'react'` — works but React is unused in React 17+ projects\n- ❌ `import useState from 'react'` — no braces, tries to grab the default export as useState, crashes\n- ❌ `import { React } from 'react'` — React is the default export, not a named one\n- named exports always go inside `{ }`, default exports never do",
+    watchOut:
+      "👀 **Watch out:** You may encounter `import React from 'react'` in older codebases or copied snippets — it's not wrong, it's pre-React 17. It still compiles because React 17+ is backwards compatible. But in a modern project linters will flag it as an unused import. The clean pattern is: named-only imports for everything your file actually calls.",
+    dryRun:
+      "🔁 **Think:** You have `import { useState, useEffect } from 'react'`. A refactor changes it to `import { React, useState } from 'react'` — removing useEffect and curly-bracing React. What two things break, and why does each one break? (Hint: one mistake loses a hook, the other mistakes a default export for a named one.)",
+    build:
+      "**Learning focus:** Import named exports from 'react' using curly braces — understanding that hooks like useState are named exports you opt into by name, that the default React import is no longer needed for JSX in React 17+ projects, and that you should only import what your file directly uses.",
   },
+},
   {
     id: "step2",
     type: "question",
