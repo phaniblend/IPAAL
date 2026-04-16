@@ -1,10 +1,34 @@
 import createINPACTEngine from "../inpact_engine_shared";
+
 const NODES = [
-  { id: "intro", type: "reveal", phase: "Lesson", content: { tag: "LESSON #52 (TypeScript)", title: "List Virtualization — Typed", body: "Windowing for 10,000 items (e.g. react-window) Use TypeScript where appropriate.", usecase: "Virtual list." } },
-  { id: "objectives", type: "objectives", phase: "Objectives", items: ["Write a higher-order component withAuth<P>(Component: React.ComponentType<P>): React.FC<P> with a generic type parameter so the abstraction solves a concrete UI lesson and exposes a reliable typed contract.","Read authentication state from a typed context inside the HOC and redirect unauthenticated users so the learner can explain what runtime information is driving the next decision.","Spread the original props typed as P onto the wrapped Component to pass through all existing props so reusable wrappers preserve native behavior without losing type clarity.","Apply the HOC at the export site and confirm the wrapped component retains its full typed prop surface so the learner sees how a typed pattern changes behavior, reuse, or safety in practice."] },
-  { id: "step1", type: "question", phase: "Step 1 of 3", paal: "Define and create the structure and typed state this lesson needs; initialize defaults appropriately.", answer_keywords: ["import", "usestate", "interface"], seed_code: "import { useState } from 'react'\n\nexport default function App() {\n  // Step 1\n}", feedback_correct: "✅ Step 1 done.", feedback_partial: "Add typed setup.", feedback_wrong: "Set up structure", expected: "Initial setup" },
-  { id: "step2", type: "question", phase: "Step 2 of 3", paal: "Implement the core behavior or UI; keep types explicit throughout.", answer_keywords: ["return", "type"], seed_code: "import { useState } from 'react'\n\nexport default function App() {\n  // Step 2\n}", feedback_correct: "✅ Step 2 done.", feedback_partial: "Core logic in place.", feedback_wrong: "Implement core", expected: "Core implementation" },
-  { id: "step3", type: "question", phase: "Step 3 of 3", paal: "Wire interactions, complete the UI, and export the typed component.", answer_keywords: ["export", "default"], seed_code: "import { useState } from 'react'\n\nexport default function App() {\n  // Step 3\n}", feedback_correct: "✅ Lesson #52 (TS) complete.", feedback_partial: "Export and finish.", feedback_wrong: "Export component", expected: "Complete" },
+  {
+    id: "intro",
+    type: "reveal",
+    phase: "Lesson",
+    content: {
+      tag: "React TypeScript",
+      title: "Lesson 52",
+      body: "Temporarily cleared lesson content.",
+      usecase: "Placeholder engine to keep app compilation stable.",
+    },
+  },
+  {
+    id: "objectives",
+    type: "objectives",
+    phase: "Objectives",
+    items: ["This lesson is intentionally empty for now."],
+  },
 ];
-const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
-export default createINPACTEngine({ NODES, sideItems, lessonNum: 52, title: "List Virtualization (TS)", shortName: "TS — LIST VIRTUALIZATIO" });
+
+const sideItems = [
+  { label: "Lesson", id: "intro" },
+  { label: "Objectives", id: "objectives" },
+];
+
+export default createINPACTEngine({
+  NODES,
+  sideItems,
+  lessonNum: 52,
+  title: "Lesson 52",
+  shortName: "TS - L52",
+});

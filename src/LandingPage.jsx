@@ -3,49 +3,30 @@ import InpactLogo from "./components/InpactLogo.jsx";
 import { getLessonCount, TRACK_LABELS } from "./trackLessonCounts.js";
 import { FUNDA_ANGULAR_LESSONS } from "./angularFundaLessons.js";
 import { MOBILE_ANGULAR_LESSONS } from "./mobileAngularLessons.js";
+import { isReduxRtkLessonIndex, REDUX_LANDING_SUBSECTIONS } from "./reduxRtkLessonIndices.js";
+import { LESSON_LIST as REACT_TS_LESSON_LIST } from "./reactTsCurriculum.js";
 
 // Must match ENGINES order in App.jsx (p01…p100 minus 10/16/17/88, then p101–p110, p113–p125, p126–p127; React TS adds TS120–TS122).
-export const LESSON_LIST = [
-  "Counter App", "Toggle Visibility", "Controlled Input", "Multiple State Variables",
-  "Conditional Rendering with Ternary", "List Rendering with map()", "useEffect & Side Effects", "Forms & Validation",
-  "Color Picker", "Reusable Button", "Card Component",
-  "Props Drilling", "Default Props", "Children Prop",
-  "PropTypes / TypeScript Interface", "Component Composition", "Event Handling",
-  "Conditional Classes", "Inline Styles", "CSS Modules", "Styled Component Pattern",
-  "Lifting State Up", "Controlled vs Uncontrolled", "Simple Todo List", "Star Rating Component",
-  "Accordion", "Image Gallery",
-  "useFetch", "useDebounce", "useLocalStorage", "useToggle", "useWindowSize", "usePrevious", "useClickOutside", "useKeyPress", "useOnlineStatus", "useMediaQuery",
-  "Theme Context", "Auth Context", "Cart Context", "Notification Context", "Context Performance", "useReducer vs useState", "Compound Component (Tabs)",
-  "Unnecessary Re-renders", "useMemo for Expensive Computation", "useCallback for Stable References", "React.memo", "List Virtualization", "Lazy Loading Routes", "Image Lazy Loading",
-  "HOC withAuth", "Render Props (MouseTracker)", "Controlled DatePicker", "Portal", "Error Boundary", "Recursive TreeView", "Pagination", "Infinite Scroll", "Debounced Search", "Multi-Step Form",
-  "Generic List<T>", "Discriminated Union Props", "useRef Typing", "Event Typing", "Generic useFetch<T>", "Utility Types",
-  "useImperativeHandle", "useSyncExternalStore", "useTransition", "useDeferredValue", "useLayoutEffect vs useEffect",
-  "Mini Redux", "Optimistic UI", "Request Deduplication", "Polling Hook", "WebSocket Hook", "Feature Flag Hook", "Undo/Redo", "Form Library from Scratch", "Component Library Theming", "Micro-frontend Shell",
-  "Race Condition Fix", "Memoization Strategy", "Concurrent Mode Gotchas", "Memory Leak Hunt",
-  "Test useFetch", "Test Async Component", "Test User Interactions", "Test Context", "Test Error Boundary",
-  "Design DataTable API", "Design Auth Flow", "Design Notification System", "Design Permission System", "Design Real-Time Dashboard",
-  // New lessons 101–110, 113–125
-  "useId & Stable IDs", "forwardRef & Exposing DOM Nodes", "AbortController & Cleanup in useEffect",
-  "React Router Basics", "Nested Routes & Protected Routes", "TanStack Query Basics", "Zustand for Global State",
-  "Next.js App Router Fundamentals", "React Server Components & SSR vs SSG", "Accessibility (a11y) Fundamentals",
-  "JWT Storage & Decode in React", "Session Timeout Hook", "Token Refresh with Axios Interceptor", "Role-Based Route Protection", "Cookie-Based Auth Flow",
-  "Zustand Persist Middleware", "OAuth2 PKCE Flow in a SPA", "RBAC Permission Hook", "Multi-Tab Auth Sync", "Secure Token Rotation",
-  "Form Validation with Zod + React Hook Form", "Redux Toolkit — createSlice & createAsyncThunk", "RTK Query — Data Fetching & Cache",
-  "Creating RTK Endpoints (from zero)",
-  "Query Building in RTK",
-  "Redux Toolkit: Writing Your First createAsyncThunk",
-];
+export const LESSON_LIST = REACT_TS_LESSON_LIST;
 
 /**
  * Groupings for the lessons grid (React · JS / React · TS / Vue) — indices align with LESSON_LIST.
  * Lesson numbers in the UI are index + 1 (01 … N).
+ * Redux ∪ RTK lessons are omitted here; see `reduxRtkLessonIndices.js` and the Redux block below.
  */
 const REACT_GRID_GROUPS = [
-  { key: "foundations", title: "Foundations", start: 0, end: 8 },
-  { key: "core", title: "Core patterns", start: 8, end: 15 },
-  { key: "component", title: "Component design", start: 15, end: 21 },
-  { key: "state", title: "State & interaction", start: 21, end: 27 },
-  { key: "hooks", title: "Hooks & utilities", start: 27, end: 30 },
+  { key: "tier1", title: "Tier 1 — JSX + TypeScript Foundations", start: 0, end: 21 },
+  { key: "tier2", title: "Tier 2 — Hooks + Async", start: 21, end: 41 },
+  { key: "tier3", title: "Tier 3 — Performance", start: 41, end: 51 },
+  { key: "tier4", title: "Tier 4 — State Architecture", start: 51, end: 72 },
+  { key: "tier5", title: "Tier 5 — Component Patterns", start: 72, end: 83 },
+  { key: "tier6", title: "Tier 6 — Forms at Scale", start: 83, end: 92 },
+  { key: "tier7", title: "Tier 7 — Routing", start: 92, end: 98 },
+  { key: "tier8", title: "Tier 8 — Auth + Security", start: 98, end: 107 },
+  { key: "tier9", title: "Tier 9 — Data Patterns", start: 107, end: 115 },
+  { key: "tier10", title: "Tier 10 — UX Patterns", start: 115, end: 126 },
+  { key: "tier11", title: "Tier 11 — Accessibility", start: 126, end: 130 },
+  { key: "tier12", title: "Tier 12 — Testing", start: 130, end: 138 },
 ];
 
 /** Angular track lesson order — must match App.jsx lessonList for next/prev and content indices. */
@@ -180,6 +161,17 @@ const LP = {
     color: "#0f172a",
     margin: "0 0 6px",
     letterSpacing: "0.02em",
+  },
+  /** Major split: React curriculum vs Redux (Toolkit & RTK) */
+  trackSectionHeading: {
+    fontSize: "13px",
+    letterSpacing: "0.12em",
+    textTransform: "uppercase",
+    color: "#64748b",
+    marginBottom: "16px",
+    fontWeight: 600,
+    textAlign: "center",
+    width: "100%",
   },
   modalOverlay: {
     position: "fixed",
@@ -340,6 +332,22 @@ export default function LandingPage({ track, onSelectLesson, onStartFree, lesson
   /** Full blueprint sections + deep bucket — only when list follows LESSON_LIST order (default React/Vue). */
   const useBlueprintGroupedGrid = showReactBlueprint && !lessonList;
 
+  const reactDeepIndices = [];
+  for (let idx = 30; idx < list.length; idx++) {
+    if (!isReduxRtkLessonIndex(idx)) reactDeepIndices.push(idx);
+  }
+
+  const showReduxLandingSection = REDUX_LANDING_SUBSECTIONS.some((sub) =>
+    sub.indices.some((idx) => idx < list.length),
+  );
+
+  const reactSectionTitle =
+    track === "react-ts"
+      ? "React + TypeScript"
+      : track === "react-js"
+        ? "React + JavaScript"
+        : "Vue";
+
   const startFirstLesson = () => {
     if (list.length === 0) return;
     if (onStartFree) onStartFree(0, list[0]);
@@ -479,19 +487,89 @@ export default function LandingPage({ track, onSelectLesson, onStartFree, lesson
 
         {useBlueprintGroupedGrid ? (
           <div id="inpact-lesson-grid">
-            {REACT_GRID_GROUPS.map((group) => {
-              const end = Math.min(group.end, list.length);
-              if (group.start >= list.length) return null;
-              const slice = list.slice(group.start, end);
-              if (slice.length === 0) return null;
-              return (
-                <section key={group.key} style={LP.categorySection} aria-labelledby={`lp-cat-${group.key}`}>
-                  <h3 id={`lp-cat-${group.key}`} style={LP.categoryHeading}>
-                    {group.title}
+            <section aria-labelledby="lp-react-curriculum-heading" style={{ marginBottom: "4px" }}>
+              <h2 id="lp-react-curriculum-heading" style={LP.trackSectionHeading}>
+                {reactSectionTitle}
+              </h2>
+              {REACT_GRID_GROUPS.map((group) => {
+                const end = Math.min(group.end, list.length);
+                if (group.start >= list.length) return null;
+                const slice = list.slice(group.start, end);
+                if (slice.length === 0) return null;
+                return (
+                  <section key={group.key} style={LP.categorySection} aria-labelledby={`lp-cat-${group.key}`}>
+                    <h3 id={`lp-cat-${group.key}`} style={LP.categoryHeading}>
+                      {group.title}
+                    </h3>
+                    <div className="lp-lesson-grid">
+                      {slice.map((item, j) => {
+                        const i = group.start + j;
+                        return (
+                          <div
+                            key={i}
+                            style={card(i)}
+                            onClick={() => onSelectLesson(i, item)}
+                            onMouseEnter={() => setHover(i)}
+                            onMouseLeave={() => setHover(null)}
+                            role="button"
+                            tabIndex={0}
+                            onKeyDown={(e) => {
+                              if (e.key === "Enter" || e.key === " ") {
+                                e.preventDefault();
+                                onSelectLesson(i, item);
+                              }
+                            }}
+                          >
+                            <div style={cardNum}>
+                              {item.shortName ? item.shortName : item.id || String(i + 1).padStart(2, "0")}
+                            </div>
+                            <div style={cardTitle}>{item.title}</div>
+                            {(item.why || item.pattern || item.difficulty) && (
+                              <div
+                                style={{
+                                  fontSize: "10px",
+                                  color: "#64748b",
+                                  marginTop: "6px",
+                                  lineHeight: 1.35,
+                                  textAlign: "center",
+                                  display: "-webkit-box",
+                                  WebkitLineClamp: 2,
+                                  WebkitBoxOrient: "vertical",
+                                  overflow: "hidden",
+                                  maxWidth: "100%",
+                                }}
+                              >
+                                {item.why || [item.pattern, item.difficulty].filter(Boolean).join(" · ")}
+                              </div>
+                            )}
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </section>
+                );
+              })}
+
+              {reactDeepIndices.length > 0 && (
+                <section style={LP.categorySection} aria-labelledby="lp-cat-deep">
+                  <h3 id="lp-cat-deep" style={LP.categoryHeading}>
+                    The deep end
                   </h3>
+                  <p
+                    style={{
+                      fontSize: "12px",
+                      color: "#64748b",
+                      margin: "0 0 10px",
+                      lineHeight: 1.45,
+                      textAlign: "center",
+                    }}
+                  >
+                    Advanced patterns through the rest of the React track. Lessons whose primary focus is Redux or RTK
+                    Query are grouped in the section below (including Mini Redux).
+                  </p>
                   <div className="lp-lesson-grid">
-                    {slice.map((item, j) => {
-                      const i = group.start + j;
+                    {reactDeepIndices.map((i) => {
+                      const item = list[i];
                       return (
                         <div
                           key={i}
@@ -535,60 +613,74 @@ export default function LandingPage({ track, onSelectLesson, onStartFree, lesson
                     })}
                   </div>
                 </section>
-              );
-            })}
+              )}
+            </section>
 
-            {list.length > 30 && (
-              <section style={LP.categorySection} aria-labelledby="lp-cat-deep">
-                <h3 id="lp-cat-deep" style={LP.categoryHeading}>
-                  The deep end (31–{lessonCount})
-                </h3>
-                <div className="lp-lesson-grid">
-                  {list.slice(30).map((item, j) => {
-                    const i = 30 + j;
+            {showReduxLandingSection && (
+              <>
+                <hr style={{ ...LP.hr, margin: "28px auto 20px", maxWidth: "960px" }} />
+                <section aria-labelledby="lp-redux-curriculum-heading" style={{ marginBottom: "4px" }}>
+                  <h2 id="lp-redux-curriculum-heading" style={LP.trackSectionHeading}>
+                    Redux ∪ RTK
+                  </h2>
+                  {REDUX_LANDING_SUBSECTIONS.map((group) => {
+                    const indices = group.indices.filter((idx) => idx < list.length);
+                    if (indices.length === 0) return null;
                     return (
-                      <div
-                        key={i}
-                        style={card(i)}
-                        onClick={() => onSelectLesson(i, item)}
-                        onMouseEnter={() => setHover(i)}
-                        onMouseLeave={() => setHover(null)}
-                        role="button"
-                        tabIndex={0}
-                        onKeyDown={(e) => {
-                          if (e.key === "Enter" || e.key === " ") {
-                            e.preventDefault();
-                            onSelectLesson(i, item);
-                          }
-                        }}
-                      >
-                        <div style={cardNum}>
-                          {item.shortName ? item.shortName : item.id || String(i + 1).padStart(2, "0")}
+                      <section key={group.key} style={LP.categorySection} aria-labelledby={`lp-cat-${group.key}`}>
+                        <h3 id={`lp-cat-${group.key}`} style={LP.categoryHeading}>
+                          {group.title}
+                        </h3>
+                        <div className="lp-lesson-grid">
+                          {indices.map((i) => {
+                            const item = list[i];
+                            return (
+                              <div
+                                key={i}
+                                style={card(i)}
+                                onClick={() => onSelectLesson(i, item)}
+                                onMouseEnter={() => setHover(i)}
+                                onMouseLeave={() => setHover(null)}
+                                role="button"
+                                tabIndex={0}
+                                onKeyDown={(e) => {
+                                  if (e.key === "Enter" || e.key === " ") {
+                                    e.preventDefault();
+                                    onSelectLesson(i, item);
+                                  }
+                                }}
+                              >
+                                <div style={cardNum}>
+                                  {item.shortName ? item.shortName : item.id || String(i + 1).padStart(2, "0")}
+                                </div>
+                                <div style={cardTitle}>{item.title}</div>
+                                {(item.why || item.pattern || item.difficulty) && (
+                                  <div
+                                    style={{
+                                      fontSize: "10px",
+                                      color: "#64748b",
+                                      marginTop: "6px",
+                                      lineHeight: 1.35,
+                                      textAlign: "center",
+                                      display: "-webkit-box",
+                                      WebkitLineClamp: 2,
+                                      WebkitBoxOrient: "vertical",
+                                      overflow: "hidden",
+                                      maxWidth: "100%",
+                                    }}
+                                  >
+                                    {item.why || [item.pattern, item.difficulty].filter(Boolean).join(" · ")}
+                                  </div>
+                                )}
+                              </div>
+                            );
+                          })}
                         </div>
-                        <div style={cardTitle}>{item.title}</div>
-                        {(item.why || item.pattern || item.difficulty) && (
-                          <div
-                            style={{
-                              fontSize: "10px",
-                              color: "#64748b",
-                              marginTop: "6px",
-                              lineHeight: 1.35,
-                              textAlign: "center",
-                              display: "-webkit-box",
-                              WebkitLineClamp: 2,
-                              WebkitBoxOrient: "vertical",
-                              overflow: "hidden",
-                              maxWidth: "100%",
-                            }}
-                          >
-                            {item.why || [item.pattern, item.difficulty].filter(Boolean).join(" · ")}
-                          </div>
-                        )}
-                      </div>
+                      </section>
                     );
                   })}
-                </div>
-              </section>
+                </section>
+              </>
             )}
           </div>
         ) : (
@@ -769,8 +861,11 @@ export default function LandingPage({ track, onSelectLesson, onStartFree, lesson
                   <p style={LP.blueprintBlock}>28 · useFetch · 29 · useDebounce · 30 · useLocalStorage</p>
                   <p style={LP.deepEnd}>Scale first → Optimize next → Architect next</p>
                   <p style={{ ...LP.blueprintBlock, marginBottom: 0 }}>
-                    <strong style={LP.strong}>The deep end (31–{lessonCount})</strong> — advanced patterns, performance,
-                    testing, auth, data libraries, and architecture. Browse the full list below.
+                    <strong style={LP.strong}>The deep end</strong> — advanced patterns, performance, testing, auth, and
+                    architecture (see the first grid block).{" "}
+                    <strong style={LP.strong}>Redux ∪ RTK</strong> — Mini Redux (lesson 73), then Redux Toolkit, RTK
+                    Query, and guided RTK lessons (lessons 118–{lessonCount}); see the second block. Lesson 43 stays in the
+                    React track (useReducer vs useState — not the Redux library).
                   </p>
                 </>
               ) : (

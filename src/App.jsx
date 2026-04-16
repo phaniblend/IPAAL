@@ -1,6 +1,7 @@
 import { useState, useEffect, useLayoutEffect, useMemo, useCallback, useRef } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import LandingPage, { LESSON_LIST, buildAngularLessonList } from './LandingPage'
+import { getLessonPrereqs } from './reactTsCurriculum.js'
 import { getLessonCount } from './trackLessonCounts.js'
 import { MOBILE_ANGULAR_LESSONS } from './mobileAngularLessons.js'
 import { TS_FUNDAMENTALS_CURRICULUM } from './engines/typescript/inpact_tsf_index'
@@ -276,34 +277,30 @@ import INPACTEngineP97 from './engines/react-js/inpact_p97_engine'
 import INPACTEngineP98 from './engines/react-js/inpact_p98_engine'
 import INPACTEngineP99 from './engines/react-js/inpact_p99_engine'
 import INPACTEngineP100 from './engines/react-js/inpact_p100_engine'
-import INPACTEngineP101 from './engines/react-js/inpact_p101_engine'
-import INPACTEngineP102 from './engines/react-js/inpact_p102_engine'
-import INPACTEngineP103 from './engines/react-js/inpact_p103_engine'
-import INPACTEngineP104 from './engines/react-js/inpact_p104_engine'
-import INPACTEngineP105 from './engines/react-js/inpact_p105_engine'
-import INPACTEngineP106 from './engines/react-js/inpact_p106_engine'
-import INPACTEngineP107 from './engines/react-js/inpact_p107_engine'
-import INPACTEngineP108 from './engines/react-js/inpact_p108_engine'
-import INPACTEngineP109 from './engines/react-js/inpact_p109_engine'
-import INPACTEngineP110 from './engines/react-js/inpact_p110_engine'
-import INPACTEngineP113 from './engines/react-js/inpact_p113_engine'
-import INPACTEngineP114 from './engines/react-js/inpact_p114_engine'
-import INPACTEngineP115 from './engines/react-js/inpact_p115_engine'
-import INPACTEngineP116 from './engines/react-js/inpact_p116_engine'
-import INPACTEngineP117 from './engines/react-js/inpact_p117_engine'
-import INPACTEngineP118 from './engines/react-js/inpact_p118_engine'
-import INPACTEngineP119 from './engines/react-js/inpact_p119_engine'
-import INPACTEngineP120 from './engines/react-js/inpact_p120_engine'
-import INPACTEngineP121 from './engines/react-js/inpact_p121_engine'
-import INPACTEngineP122 from './engines/react-js/inpact_p122_engine'
-import INPACTEngineP123 from './engines/react-js/inpact_p123_engine'
-import INPACTEngineP124 from './engines/react-js/inpact_p124_engine'
-import INPACTEngineP125 from './engines/react-js/inpact_p125_engine'
 import INPACTEngineP126 from './engines/react-js/inpact_p126_engine'
 import INPACTEngineP127 from './engines/react-js/inpact_p127_engine'
 import INPACTEngineTS120 from './engines/react-ts/inpact_ts120_engine'
 import INPACTEngineTS121 from './engines/react-ts/inpact_ts121_engine'
 import INPACTEngineTS122 from './engines/react-ts/inpact_ts122_engine'
+import INPACTEngineTS101 from './engines/react-ts/inpact_ts101_engine'
+import INPACTEngineTS102 from './engines/react-ts/inpact_ts102_engine'
+import INPACTEngineTS103 from './engines/react-ts/inpact_ts103_engine'
+import INPACTEngineTS104 from './engines/react-ts/inpact_ts104_engine'
+import INPACTEngineTS105 from './engines/react-ts/inpact_ts105_engine'
+import INPACTEngineTS106 from './engines/react-ts/inpact_ts106_engine'
+import INPACTEngineTS107 from './engines/react-ts/inpact_ts107_engine'
+import INPACTEngineTS108 from './engines/react-ts/inpact_ts108_engine'
+import INPACTEngineTS109 from './engines/react-ts/inpact_ts109_engine'
+import INPACTEngineTS110 from './engines/react-ts/inpact_ts110_engine'
+import INPACTEngineTS111 from './engines/react-ts/inpact_ts111_engine'
+import INPACTEngineTS112 from './engines/react-ts/inpact_ts112_engine'
+import INPACTEngineTS113 from './engines/react-ts/inpact_ts113_engine'
+import INPACTEngineTS114 from './engines/react-ts/inpact_ts114_engine'
+import INPACTEngineTS115 from './engines/react-ts/inpact_ts115_engine'
+import INPACTEngineTS116 from './engines/react-ts/inpact_ts116_engine'
+import INPACTEngineTS117 from './engines/react-ts/inpact_ts117_engine'
+import INPACTEngineTS118 from './engines/react-ts/inpact_ts118_engine'
+import INPACTEngineTS119 from './engines/react-ts/inpact_ts119_engine'
 import INPACTEngineTS31 from './engines/react-ts/inpact_ts31_engine'
 import INPACTEngineTS32 from './engines/react-ts/inpact_ts32_engine'
 import INPACTEngineTS33 from './engines/react-ts/inpact_ts33_engine'
@@ -589,34 +586,11 @@ const ENGINES = [
   INPACTEngineP98,
   INPACTEngineP99,
   INPACTEngineP100,
-  INPACTEngineP101,
-  INPACTEngineP102,
-  INPACTEngineP103,
-  INPACTEngineP104,
-  INPACTEngineP105,
-  INPACTEngineP106,
-  INPACTEngineP107,
-  INPACTEngineP108,
-  INPACTEngineP109,
-  INPACTEngineP110,
-  INPACTEngineP113,
-  INPACTEngineP114,
-  INPACTEngineP115,
-  INPACTEngineP116,
-  INPACTEngineP117,
-  INPACTEngineP118,
-  INPACTEngineP119,
-  INPACTEngineP120,
-  INPACTEngineP121,
-  INPACTEngineP122,
-  INPACTEngineP123,
-  INPACTEngineP124,
-  INPACTEngineP125,
   INPACTEngineP126,
   INPACTEngineP127,
 ]
 
-// TypeScript track: same lesson count as React JS (ts01–ts09, ts11–ts15, ts18–ts87, ts89–ts100, then P101–P110/P113–P125/P127, TS120–TS122)
+// TypeScript track: import only inpact_ts01_engine to inpact_ts122_engine.
 const ENGINES_TS = [
   INPACTEngineTS01,
   INPACTEngineTS02,
@@ -627,11 +601,14 @@ const ENGINES_TS = [
   INPACTEngineTS07,
   INPACTEngineTS08,
   INPACTEngineTS09,
+  INPACTEngineTS10,
   INPACTEngineTS11,
   INPACTEngineTS12,
   INPACTEngineTS13,
   INPACTEngineTS14,
   INPACTEngineTS15,
+  INPACTEngineTS16,
+  INPACTEngineTS17,
   INPACTEngineTS18,
   INPACTEngineTS19,
   INPACTEngineTS20,
@@ -714,29 +691,25 @@ const ENGINES_TS = [
   INPACTEngineTS98,
   INPACTEngineTS99,
   INPACTEngineTS100,
-  INPACTEngineP101,
-  INPACTEngineP102,
-  INPACTEngineP103,
-  INPACTEngineP104,
-  INPACTEngineP105,
-  INPACTEngineP106,
-  INPACTEngineP107,
-  INPACTEngineP108,
-  INPACTEngineP109,
-  INPACTEngineP110,
-  INPACTEngineP113,
-  INPACTEngineP114,
-  INPACTEngineP115,
-  INPACTEngineP116,
-  INPACTEngineP117,
-  INPACTEngineP118,
-  INPACTEngineP119,
-  INPACTEngineP120,
-  INPACTEngineP121,
-  INPACTEngineP122,
-  INPACTEngineP123,
-  INPACTEngineP124,
-  INPACTEngineP125,
+  INPACTEngineTS101,
+  INPACTEngineTS102,
+  INPACTEngineTS103,
+  INPACTEngineTS104,
+  INPACTEngineTS105,
+  INPACTEngineTS106,
+  INPACTEngineTS107,
+  INPACTEngineTS108,
+  INPACTEngineTS109,
+  INPACTEngineTS110,
+  INPACTEngineTS111,
+  INPACTEngineTS112,
+  INPACTEngineTS113,
+  INPACTEngineTS114,
+  INPACTEngineTS115,
+  INPACTEngineTS116,
+  INPACTEngineTS117,
+  INPACTEngineTS118,
+  INPACTEngineTS119,
   INPACTEngineTS120,
   INPACTEngineTS121,
   INPACTEngineTS122,
@@ -1527,6 +1500,53 @@ export default function App() {
   }
 
   const lessonPathFromUrl = parseLessonPath(location.pathname)
+  const prereqTrack = (lessonIndex != null && lessonTrack != null) ? lessonTrack : track
+  const prereqPanel = (() => {
+    if (prereqTrack !== 'react-ts') return null
+    if (lessonIndex == null) return null
+    const lessonNumber = lessonIndex + 1
+    const prereqNumbers = getLessonPrereqs(lessonNumber)
+    if (!Array.isArray(prereqNumbers) || prereqNumbers.length === 0) return null
+    return (
+      <div
+        style={{
+          marginTop: '58px',
+          marginBottom: '10px',
+          marginInline: '12px',
+          padding: '12px 14px',
+          border: '1px solid #f59e0b',
+          borderRadius: '10px',
+          background: '#fffbeb',
+          color: '#7c2d12',
+          fontFamily: "'DM Sans', sans-serif",
+        }}
+      >
+        <div style={{ fontWeight: 700, marginBottom: '6px', fontSize: '13px' }}>
+          Recommended prerequisites (strongly advised)
+        </div>
+        <div style={{ fontSize: '12px', lineHeight: 1.45 }}>
+          Complete these first for the best learning flow:
+        </div>
+        <div style={{ marginTop: '8px', display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
+          {prereqNumbers.map((n) => (
+            <span
+              key={n}
+              style={{
+                fontSize: '11px',
+                padding: '4px 8px',
+                borderRadius: '999px',
+                border: '1px solid #fdba74',
+                background: '#fff7ed',
+                color: '#9a3412',
+              }}
+            >
+              {String(n).padStart(2, '0')} · {LESSON_LIST[n - 1] ?? `Lesson ${n}`}
+            </span>
+          ))}
+        </div>
+      </div>
+    )
+  })()
   if (!authSessionReady && !lessonPathFromUrl) {
     return (
       <div
@@ -1905,6 +1925,7 @@ export default function App() {
             </div>
           </div>
         </div>
+        {prereqPanel}
         <LessonValidationContext.Provider
           value={{
             track: effectiveTrack,
@@ -2061,6 +2082,7 @@ export default function App() {
           )}
         </div>
       </div>
+      {prereqPanel}
       <LessonValidationContext.Provider
         value={{
           track: effectiveTrack,

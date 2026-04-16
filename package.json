@@ -31,6 +31,7 @@
     "clear-algo-cache": "node scripts/clear-algo-cache.js",
     "clear-react-ts-cache": "node scripts/clear-react-ts-cache.js",
     "refresh-react-ts": "node scripts/refresh-react-ts-and-export.js",
+    "fetch-react-ts-redone": "node scripts/fetch-react-ts-redone-gemini.js",
     "warm-cache-algo": "node scripts/warm-cache-algo.js",
     "build-lessons-to-warm": "node scripts/build-lessons-to-warm.js",
     "warm-angular-quickbite": "node scripts/warm-angular-quickbite-only.js",

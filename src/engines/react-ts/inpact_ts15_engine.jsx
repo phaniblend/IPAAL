@@ -1,10 +1,34 @@
 import createINPACTEngine from "../inpact_engine_shared";
+
 const NODES = [
-  { id: "intro", type: "reveal", phase: "Lesson", content: { tag: "LESSON #15 (TypeScript)", title: "Children Prop — Typed", body: "Container that wraps children. Type props as { children: React.ReactNode }.", usecase: "React.ReactNode is the standard type for children in TS." } },
-  { id: "objectives", type: "objectives", phase: "Objectives", items: ["Establish a TypeScript interface to describe a component's prop contract and apply it to React.FC<T> so the contract is explicit and incorrect usage is caught early.","Use a string literal union type to constrain a prop to a finite set of allowed values so the pattern drives visible behavior and can be verified in the UI, runtime, or compiler.","Extend one interface from another using the extends keyword to share common prop fields so reuse does not weaken the contract or blur responsibility.","Model an index signature in an interface to type a props object with dynamic keys so state, refs, or values keep a predictable shape as the feature evolves."] },
-  { id: "step1", type: "question", phase: "Step 1 of 3", paal: "Define a container prop type for children; render children inside a wrapper element.", answer_keywords: ["interface", "children", "reactnode"], seed_code: "interface ContainerProps { children: React.ReactNode }\n\nexport default function Container({ children }: ContainerProps) {\n  return <div>{children}</div>\n}", feedback_correct: "✅ Children typed.", feedback_partial: "interface with children: React.ReactNode.", feedback_wrong: "ContainerProps { children: React.ReactNode }", expected: "Interface and div" },
-  { id: "step2", type: "question", phase: "Step 2 of 3", paal: "Style the wrapper (layout, spacing, border); use a typed style object if helpful.", answer_keywords: ["style", "maxwidth", "padding"], seed_code: "interface ContainerProps { children: React.ReactNode }\n\nexport default function Container({ children }: ContainerProps) {\n  return <div style={{ maxWidth: '600px', padding: 24, border: '1px solid #333', borderRadius: 8 }}>{children}</div>\n}", feedback_correct: "✅ Styled container.", feedback_partial: "style with maxWidth and padding.", feedback_wrong: "style object", expected: "Div with style: maxWidth, padding, border (React.CSSProperties if needed)." },
-  { id: "step3", type: "question", phase: "Step 3 of 3", paal: "Export the container so callers can nest arbitrary content inside it.", answer_keywords: ["export"], seed_code: "interface ContainerProps { children: React.ReactNode }\n\nexport default function Container({ children }: ContainerProps) {\n  return <div style={{ maxWidth: '600px', padding: 24, border: '1px solid #333', borderRadius: 8 }}>{children}</div>\n}", feedback_correct: "✅ Children Prop with TypeScript complete.", feedback_partial: "Export.", feedback_wrong: "export default", expected: "Export Container. Usage: <Container><h1>Hi</h1></Container>." },
+  {
+    id: "intro",
+    type: "reveal",
+    phase: "Lesson",
+    content: {
+      tag: "React TypeScript",
+      title: "Lesson 15",
+      body: "Temporarily cleared lesson content.",
+      usecase: "Placeholder engine to keep app compilation stable.",
+    },
+  },
+  {
+    id: "objectives",
+    type: "objectives",
+    phase: "Objectives",
+    items: ["This lesson is intentionally empty for now."],
+  },
 ];
-const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
-export default createINPACTEngine({ NODES, sideItems, lessonNum: 15, title: "Children Prop (TS)", shortName: "TS — CONTAINER" });
+
+const sideItems = [
+  { label: "Lesson", id: "intro" },
+  { label: "Objectives", id: "objectives" },
+];
+
+export default createINPACTEngine({
+  NODES,
+  sideItems,
+  lessonNum: 15,
+  title: "Lesson 15",
+  shortName: "TS - L15",
+});

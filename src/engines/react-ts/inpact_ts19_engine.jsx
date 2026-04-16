@@ -1,10 +1,34 @@
 import createINPACTEngine from "../inpact_engine_shared";
+
 const NODES = [
-  { id: "intro", type: "reveal", phase: "Lesson", content: { tag: "LESSON #19 (TypeScript)", title: "Component Composition — Typed", body: "PageLayout with header, sidebar, main, footer slots. Type each slot as React.ReactNode.", usecase: "Typing slot props as ReactNode is standard for layout components." } },
-  { id: "objectives", type: "objectives", phase: "Objectives", items: ["Model a style object typed as React.CSSProperties and apply it to a JSX element's style prop so state, refs, or values keep a predictable shape as the feature evolves.","Build a dynamic style object by merging a base React.CSSProperties object with state-derived values so multiple typed pieces work together as one coherent UI pattern.","Use a CSS custom property (CSS variable) via React.CSSProperties to pass runtime values to CSS so the pattern drives visible behavior and can be verified in the UI, runtime, or compiler.","Type a component prop as React.CSSProperties and merge it with internal styles using object spread so invalid interactions are rejected by the compiler instead of leaking into runtime."] },
-  { id: "step1", type: "question", phase: "Step 1 of 3", paal: "Define a layout contract with four ReactNode slots; render header, sidebar, main, and footer regions.", answer_keywords: ["interface", "reactnode", "header", "sidebar", "main", "footer"], seed_code: "interface PageLayoutProps { header: React.ReactNode; sidebar: React.ReactNode; main: React.ReactNode; footer: React.ReactNode }\n\nexport default function PageLayout({ header, sidebar, main, footer }: PageLayoutProps) {\n  return (\n    <div>\n      <header>{header}</header>\n      <div><aside>{sidebar}</aside><main>{main}</main></div>\n      <footer>{footer}</footer>\n    </div>\n  )\n}", feedback_correct: "✅ Layout props typed.", feedback_partial: "interface with four ReactNode props.", feedback_wrong: "PageLayoutProps with header, sidebar, main, footer", expected: "Interface and four regions" },
-  { id: "step2", type: "question", phase: "Step 2 of 3", paal: "Lay out regions with flex (column page, row for sidebar + main); give sidebar width and let main grow.", answer_keywords: ["style", "flex", "display"], seed_code: "interface PageLayoutProps { header: React.ReactNode; sidebar: React.ReactNode; main: React.ReactNode; footer: React.ReactNode }\n\nexport default function PageLayout({ header, sidebar, main, footer }: PageLayoutProps) {\n  return (\n    <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>\n      <header style={{ padding: 16 }}>{header}</header>\n      <div style={{ display: 'flex', flex: 1 }}>\n        <aside style={{ width: 200, padding: 16 }}>{sidebar}</aside>\n        <main style={{ flex: 1, padding: 16 }}>{main}</main>\n      </div>\n      <footer style={{ padding: 16 }}>{footer}</footer>\n    </div>\n  )\n}", feedback_correct: "✅ Styled layout.", feedback_partial: "Flex layout for regions.", feedback_wrong: "display flex", expected: "Flex layout: column for page, flex for sidebar+main; sidebar width, main flex 1." },
-  { id: "step3", type: "question", phase: "Step 3 of 3", paal: "Export the layout so callers pass content into each slot.", answer_keywords: ["export"], seed_code: "interface PageLayoutProps { header: React.ReactNode; sidebar: React.ReactNode; main: React.ReactNode; footer: React.ReactNode }\n\nexport default function PageLayout({ header, sidebar, main, footer }: PageLayoutProps) {\n  return (\n    <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>\n      <header style={{ padding: 16 }}>{header}</header>\n      <div style={{ display: 'flex', flex: 1 }}>\n        <aside style={{ width: 200, padding: 16 }}>{sidebar}</aside>\n        <main style={{ flex: 1, padding: 16 }}>{main}</main>\n      </div>\n      <footer style={{ padding: 16 }}>{footer}</footer>\n    </div>\n  )\n}", feedback_correct: "✅ Component Composition with TypeScript complete.", feedback_partial: "Export.", feedback_wrong: "export default", expected: "Export PageLayout. Usage: header, sidebar, main, footer props." },
+  {
+    id: "intro",
+    type: "reveal",
+    phase: "Lesson",
+    content: {
+      tag: "React TypeScript",
+      title: "Lesson 19",
+      body: "Temporarily cleared lesson content.",
+      usecase: "Placeholder engine to keep app compilation stable.",
+    },
+  },
+  {
+    id: "objectives",
+    type: "objectives",
+    phase: "Objectives",
+    items: ["This lesson is intentionally empty for now."],
+  },
 ];
-const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
-export default createINPACTEngine({ NODES, sideItems, lessonNum: 19, title: "Component Composition (TS)", shortName: "TS — PAGE LAYOUT" });
+
+const sideItems = [
+  { label: "Lesson", id: "intro" },
+  { label: "Objectives", id: "objectives" },
+];
+
+export default createINPACTEngine({
+  NODES,
+  sideItems,
+  lessonNum: 19,
+  title: "Lesson 19",
+  shortName: "TS - L19",
+});
