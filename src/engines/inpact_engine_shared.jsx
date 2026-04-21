@@ -1,4 +1,5 @@
 import { useState, useEffect, useMemo, useCallback, useContext, useRef } from "react";
+import { createPortal } from "react-dom";
 import CodeEditor from "./CodeEditor";
 import MultiFileEditor from "./MultiFileEditor";
 import { LessonValidationContext } from "../ai-lessons/lessonValidationContext.jsx";
@@ -16,6 +17,30 @@ import { mergeSnippetIntoEmptyReactExportDefaultBody } from "./mergeReactExample
 import { fetchStepExample } from "../ai-lessons/fetchStepExample.js";
 import { SNIPPET_PACK_OPTIONS_REACT_JS, SNIPPET_PACK_OPTIONS_REACT_TS } from "./monacoReactSnippetPacks.js";
 import SnippetPackMultiselect from "./SnippetPackMultiselect.jsx";
+
+/** Persisted preference for lesson step rail (left sidebar) visibility. */
+const LESSON_SIDEBAR_COLLAPSED_KEY = "inpact-lesson-sidebar-collapsed";
+
+/** React · TS lesson 1 intro: full interface tour vs. recap (final step only). */
+const LESSON1_INTERFACE_TOUR_PREF_KEY = "inpact.reactTs.lesson1.interfaceTourPref";
+
+function readLesson1InterfaceTourPref() {
+  if (typeof window === "undefined") return "";
+  try {
+    return window.localStorage.getItem(LESSON1_INTERFACE_TOUR_PREF_KEY) || "";
+  } catch {
+    return "";
+  }
+}
+
+function writeLesson1InterfaceTourPref(value) {
+  if (typeof window === "undefined") return;
+  try {
+    window.localStorage.setItem(LESSON1_INTERFACE_TOUR_PREF_KEY, value);
+  } catch {
+    /* ignore */
+  }
+}
 
 if (typeof document !== "undefined" && !document.getElementById("dm-sans-font")) {
   const link = document.createElement("link");
@@ -110,6 +135,47 @@ function ensureReactJsxScaffoldForStep(node, code, lang) {
   if (insertAt < 0) return code;
   const updatedFn = `${fnBlock.slice(0, insertAt)}\n${scaffold}${fnBlock.slice(insertAt)}`;
   return code.replace(fnBlock, updatedFn);
+}
+
+/**
+ * When a question step's editor content comes only from starter/seed (no saved answer, no carry-forward),
+ * that string is cleared on first focus if unchanged — same idea as MultiFileEditor's placeholder.
+ */
+function computeSingleFileSeedPlaceholderBaseline({
+  node,
+  nodeIndex,
+  NODES,
+  passedCodeByStepId,
+  answerShape,
+  language,
+}) {
+  if (node?.type !== "question") return undefined;
+  if (answerShape === "css-tabs" || answerShape === "angular-tabs" || answerShape === "multi-file") {
+    return undefined;
+  }
+  let initialCode = "";
+  let loadedFromPassOrCarry = false;
+  if (node.id && passedCodeByStepId[node.id]) {
+    initialCode = passedCodeByStepId[node.id];
+    loadedFromPassOrCarry = true;
+  } else {
+    for (let i = nodeIndex - 1; i >= 0; i--) {
+      const prev = NODES[i];
+      if (prev?.type === "question" && prev.id && passedCodeByStepId[prev.id]) {
+        initialCode = passedCodeByStepId[prev.id];
+        loadedFromPassOrCarry = true;
+        break;
+      }
+    }
+    if (initialCode === "") {
+      const seed = node.starter_code || node.seed_code || "";
+      if (seed) initialCode = seed;
+    }
+  }
+  if (loadedFromPassOrCarry) return undefined;
+  if (typeof initialCode !== "string" || !initialCode.trim()) return undefined;
+  const afterScaffold = ensureReactJsxScaffoldForStep(node, initialCode, language || node?.language || "");
+  return String(afterScaffold).trim() ? afterScaffold : undefined;
 }
 
 function getMultiFilePreviewCode(answer) {
@@ -675,7 +741,16 @@ export default function createINPACTEngine(config) {
       pickDefaultLanguageOption(languagePickerOptions, language)
     );
     const [tourLaunchNonce, setTourLaunchNonce] = useState(0);
+    /** While the interface tour is open, suppress the think/task gate modal so tour targets remain interactive. */
+    const [interfaceTourOpen, setInterfaceTourOpen] = useState(false);
+    /** Starting step for the next forced tour launch (React · TS lesson 1 recap vs. full walkthrough). */
+    const [lesson1TourStartIndex, setLesson1TourStartIndex] = useState(0);
+    const [lesson1TourPrefSnapshot, setLesson1TourPrefSnapshot] = useState("");
+    const lesson1IntroTourFiredRef = useRef(false);
+    /** When the interface tour jumps to the first question node, skip one auto-open of the think/task modal. */
+    const skipAutoTaskModalOnceRef = useRef(false);
     const feedbackModalPrimaryBtnRef = useRef(null);
+    const mainScrollRef = useRef(null);
     const [completedNodes, setCompletedNodes] = useState([]);
     const [passedCodeByStepId, setPassedCodeByStepId] = useState({});
     const [aiFeedback, setAiFeedback] = useState("");
@@ -683,13 +758,69 @@ export default function createINPACTEngine(config) {
     /** Multi-file focus-clear baseline for the first question step only (matches that step's `initialCode`). Later steps never clear on focus. */
     const [multiFileFocusBaseline, setMultiFileFocusBaseline] = useState(null);
     const [monacoSnippetPacks, setMonacoSnippetPacks] = useState([]);
+    const [sidebarCollapsed, setSidebarCollapsed] = useState(() => {
+      try {
+        return typeof localStorage !== "undefined" && localStorage.getItem(LESSON_SIDEBAR_COLLAPSED_KEY) === "true";
+      } catch {
+        return false;
+      }
+    });
     const lessonValidationCtx = useContext(LessonValidationContext);
+    /** When the engine runs outside `LessonValidationContext` (e.g. some embeds), infer React · TS lesson 1 for tour gating only. */
+    const inferredReactTsLesson1 =
+      Number(lessonNum) === 1 &&
+      !lessonValidationCtx?.track &&
+      (String(language || "").toLowerCase().includes("typescript") ||
+        /jsx|react|shipment|tsx|typescript/i.test(`${title || ""} ${shortName || ""}`));
+    const effectiveTourTrack = lessonValidationCtx?.track ?? (inferredReactTsLesson1 ? "react-ts" : undefined);
     const node = NODES[nodeIndex];
+    /** Mount tab chrome on intro/objectives so lesson-1 interface tour targets exist before the first coding step. */
+    const useReactTsLesson1TabsShell = useMemo(
+      () =>
+        effectiveTourTrack === "react-ts" &&
+        Number(lessonNum) === 1 &&
+        (node?.type === "reveal" || node?.type === "objectives"),
+      [effectiveTourTrack, lessonNum, node?.type]
+    );
+    const firstQuestionNodeIndex = useMemo(() => NODES.findIndex((n) => n?.type === "question"), [NODES]);
+    const hasEngineIntroReveal = useMemo(
+      () => NODES.some((n) => n?.id === "intro" && n?.type === "reveal"),
+      [NODES]
+    );
+    /** Lesson 1 Lesson/Objectives screens (before first coding step) — auto interface tour entry. */
+    const isReactTsLesson1PreQuestion = useMemo(
+      () =>
+        effectiveTourTrack === "react-ts" &&
+        Number(lessonNum) === 1 &&
+        firstQuestionNodeIndex > 0 &&
+        nodeIndex < firstQuestionNodeIndex &&
+        (node?.type === "reveal" || node?.type === "objectives"),
+      [effectiveTourTrack, lessonNum, firstQuestionNodeIndex, nodeIndex, node?.type]
+    );
+    /** Static lesson: intro/objectives. AI dynamic lesson (no intro node): first question step after AI overview. */
+    const isReactTsLesson1TourEntry = useMemo(
+      () =>
+        effectiveTourTrack === "react-ts" &&
+        Number(lessonNum) === 1 &&
+        (isReactTsLesson1PreQuestion ||
+          (!hasEngineIntroReveal &&
+            firstQuestionNodeIndex >= 0 &&
+            nodeIndex === firstQuestionNodeIndex &&
+            node?.type === "question")),
+      [
+        effectiveTourTrack,
+        lessonNum,
+        isReactTsLesson1PreQuestion,
+        hasEngineIntroReveal,
+        firstQuestionNodeIndex,
+        nodeIndex,
+        node?.type,
+      ]
+    );
     const editorMonacoLanguage = useMemo(
       () => languagePickerChoice?.monacoLanguage || language || node?.language || "javascript",
       [languagePickerChoice, language, node?.language]
     );
-    const firstQuestionNodeIndex = useMemo(() => NODES.findIndex((n) => n?.type === "question"), [NODES]);
     const questionNodes = useMemo(() => NODES.filter((n) => n?.type === "question"), [NODES]);
     const codingStepIndex = node?.type === "question" ? questionNodes.findIndex((n) => n.id === node.id) : -1;
     const codingStepNum = codingStepIndex >= 0 ? codingStepIndex + 1 : nodeIndex + 1;
@@ -700,6 +831,18 @@ export default function createINPACTEngine(config) {
     );
     const multiFilePlaceholderClearOnFirstStepOnly =
       answerShape === "multi-file" && firstQuestionNodeIndex >= 0 && nodeIndex === firstQuestionNodeIndex;
+    const singleFilePlaceholderClearOnFocus = useMemo(
+      () =>
+        computeSingleFileSeedPlaceholderBaseline({
+          node,
+          nodeIndex,
+          NODES,
+          passedCodeByStepId,
+          answerShape,
+          language: language || node?.language || "",
+        }),
+      [node, nodeIndex, NODES, passedCodeByStepId, answerShape, language]
+    );
     const showSnippetPicker = useMemo(
       () =>
         (lessonValidationCtx?.track === "react-ts" || lessonValidationCtx?.track === "react-js") &&
@@ -719,6 +862,25 @@ export default function createINPACTEngine(config) {
     }, [lessonValidationCtx?.track]);
     const progress = NODES.length <= 1 ? 0 : Math.min(100, Math.round((nodeIndex / (NODES.length - 1)) * 100));
     const lessonCompleteFiredRef = useRef(false);
+
+    useEffect(() => {
+      try {
+        localStorage.setItem(LESSON_SIDEBAR_COLLAPSED_KEY, sidebarCollapsed ? "true" : "false");
+      } catch {
+        /* ignore */
+      }
+    }, [sidebarCollapsed]);
+
+    useEffect(() => {
+      const onL1 = effectiveTourTrack === "react-ts" && Number(lessonNum) === 1;
+      if (onL1) {
+        setLesson1TourPrefSnapshot(readLesson1InterfaceTourPref());
+      } else {
+        setLesson1TourPrefSnapshot("");
+        lesson1IntroTourFiredRef.current = false;
+        setLesson1TourStartIndex(0);
+      }
+    }, [effectiveTourTrack, lessonNum]);
 
     useEffect(() => {
       const t = lessonValidationCtx?.track;
@@ -851,7 +1013,14 @@ export default function createINPACTEngine(config) {
       setResult(null);
       setAttempts(0);
       setShowHint(false);
-      setShowTaskModal(node?.type === "question");
+      if (interfaceTourOpen) {
+        setShowTaskModal(false);
+      } else if (skipAutoTaskModalOnceRef.current) {
+        skipAutoTaskModalOnceRef.current = false;
+        setShowTaskModal(false);
+      } else {
+        setShowTaskModal(node?.type === "question");
+      }
       setThinkSelection(null);
       setShowExampleModal(false);
       setExampleModalOffset({ x: 0, y: 0 });
@@ -914,7 +1083,12 @@ export default function createINPACTEngine(config) {
       } else {
         setMultiFileFocusBaseline(null);
       }
-    }, [nodeIndex, passedCodeByStepId, multiFilePlaceholderClearOnFirstStepOnly]);
+    }, [nodeIndex, passedCodeByStepId, multiFilePlaceholderClearOnFirstStepOnly, interfaceTourOpen]);
+
+    useEffect(() => {
+      if (!interfaceTourOpen) return;
+      setShowTaskModal(false);
+    }, [interfaceTourOpen]);
 
     function handleExampleModalPointerDown(e) {
       if (e.pointerType === "mouse" && e.button !== 0) return;
@@ -1289,21 +1463,29 @@ export default function createINPACTEngine(config) {
       },
     };
 
+    /** Dismiss running tour when these stack above it (task modal uses z-index only). */
+    const tourDismissForStackingModals = showExampleModal || showFeedbackModal || showMentorModal;
+
     const interfaceTourSteps = useMemo(
       () => [
         {
-          selector: '[data-tour-id="tab-lesson"]',
-          text: "Lesson tab shows the concept explanation and context before you code.",
+          selector: ".inpact-help-tour-button[data-tour-id=\"help-tour-button\"]",
+          text: "This short walkthrough highlights the main workspace controls. You can replay it any time from Help: Tour. Next, we open the Editor so the tour matches the layout you use while coding.",
+          action: { type: "noop" },
+        },
+        {
+          selector: '.inpact-main-tabs-row [data-tour-id="tab-editor"]',
+          text: "The tour switches to match each control. Editor is your full-screen workspace for code, Preview, checks, and help—use it whenever you are building the step.",
           action: { type: "open-lesson" },
         },
         {
-          selector: '[data-tour-id="tab-editor"]',
-          text: "Editor opens your coding workspace. Click it any time to continue coding.",
+          selector: '.inpact-main-tabs-row [data-tour-id="tab-lesson"]',
+          text: "Lesson holds the write-up, objectives, and optional deep dives. Open Lesson when you want that context—then return to Editor to code.",
           action: { type: "open-lesson" },
         },
         {
           selector: '[data-tour-id="reading-button"]',
-          text: "Reading opens a book-like view to review all lesson steps quickly.",
+          text: "Reading opens a book-like view to skim every step in this lesson. It lives in the top tab row; we switch to Lesson so the main view matches what you are reading about.",
           action: { type: "open-lesson" },
         },
         {
@@ -1312,13 +1494,9 @@ export default function createINPACTEngine(config) {
           action: { type: "open-editor" },
         },
         {
-          selector: '[data-tour-id="deep-dive-button"]',
-          text: "Deep dive is optional reading. If the task on the left feels confusing, open it for a short, plain-language explanation of the idea behind this step—enough context to understand what you are building, without spoiling the full solution.",
-          action: { type: "open-editor" },
-        },
-        {
-          selector: '[data-tour-id="editor-close"]',
-          text: "Use Close to return from editor workspace back to the lesson page.",
+          selector:
+            '[data-inpact-editor-workspace="open"] .inpact-editor-task-deep-dive-host[data-tour-id="deep-dive-editor-button"]',
+          text: "Want to go deeper? This opens an optional explanation focused on this step-helping you understand why it matters, without spoiling the solution.",
           action: { type: "open-editor" },
         },
         {
@@ -1332,13 +1510,8 @@ export default function createINPACTEngine(config) {
           action: { type: "open-editor" },
         },
         {
-          selector: '[data-tour-id="show-hint-button"]',
-          text: "Show hint gives a gentle nudge when you’re stuck, without revealing the full solution.",
-          action: { type: "open-editor" },
-        },
-        {
           selector: '[data-tour-id="view-hint-feedback-button"]',
-          text: "View hint & feedback gathers your hints and code feedback in one place so you can learn from each attempt.",
+          text: "View hint & feedback gathers hints and code feedback in one place so you can learn from each attempt.",
           action: { type: "open-editor" },
         },
         {
@@ -1347,17 +1520,75 @@ export default function createINPACTEngine(config) {
           action: { type: "open-editor" },
         },
         {
-          selector: '[data-tour-id="help-tour-button"]',
-          text: "Use the Help: Tour button any time you’d like to replay this walkthrough.",
-          action: { type: "open-editor" },
+          selector: ".inpact-help-tour-button[data-tour-id=\"help-tour-button\"]",
+          text: "You can reopen this interface walkthrough at any time from Help: Tour in the header—use it whenever you want a refresher on where each control lives.",
+          action: { type: "noop" },
         },
       ],
       []
     );
 
+    const interfaceTourStepCount = interfaceTourSteps.length;
+
+    useEffect(() => {
+      if (!isReactTsLesson1TourEntry) {
+        lesson1IntroTourFiredRef.current = false;
+        return undefined;
+      }
+      if (lesson1IntroTourFiredRef.current) return undefined;
+      const pref = readLesson1InterfaceTourPref();
+      lesson1IntroTourFiredRef.current = true;
+      const last = Math.max(0, interfaceTourStepCount - 1);
+      const startIdx = pref === "recapOnly" ? last : 0;
+      setLesson1TourStartIndex(startIdx);
+      const t = window.setTimeout(() => {
+        setTourLaunchNonce((n) => n + 1);
+      }, 0);
+      return () => {
+        window.clearTimeout(t);
+        lesson1IntroTourFiredRef.current = false;
+      };
+    }, [isReactTsLesson1TourEntry, interfaceTourStepCount]);
+
+    useEffect(() => {
+      const host = mainScrollRef.current;
+      if (!host) return;
+      const onLessonSurface =
+        node?.type === "reveal" ||
+        node?.type === "objectives" ||
+        (node?.type === "question" && mainTab === "lesson");
+      if (!onLessonSurface) return;
+      const id = requestAnimationFrame(() => {
+        host.scrollTo({ top: 0, behavior: "instant" });
+      });
+      return () => cancelAnimationFrame(id);
+    }, [node?.id, node?.type, mainTab]);
+
+    const skipLesson1InterfaceTourToRecap = useCallback(() => {
+      writeLesson1InterfaceTourPref("recapOnly");
+      setLesson1TourPrefSnapshot("recapOnly");
+      const last = Math.max(0, interfaceTourSteps.length - 1);
+      setLesson1TourStartIndex(last);
+      setTourLaunchNonce((v) => v + 1);
+    }, [interfaceTourSteps.length]);
+
+    const handleLesson1TourLastStepDone = useCallback(() => {
+      if (effectiveTourTrack !== "react-ts" || Number(lessonNum) !== 1) return;
+      writeLesson1InterfaceTourPref("completed");
+      setLesson1TourPrefSnapshot("completed");
+    }, [effectiveTourTrack, lessonNum]);
+
     const handleTourAction = useCallback(
       (action) => {
         if (!action || typeof action !== "object") return;
+        // Never stack the tour under the think / task gate modal (or block the tour card on Close).
+        setShowTaskModal(false);
+        /** First tour step runs on Lesson intro where Editor tabs are not mounted yet — do not jump to a coding step. */
+        if (action.type === "noop") return;
+        const jumpToQuestionForTour = node?.type !== "question" && firstQuestionNodeIndex >= 0;
+        if (jumpToQuestionForTour) {
+          skipAutoTaskModalOnceRef.current = true;
+        }
         if (node?.type !== "question" && firstQuestionNodeIndex >= 0) {
           setNodeIndex(firstQuestionNodeIndex);
         }
@@ -1579,6 +1810,8 @@ export default function createINPACTEngine(config) {
                     cursorAtEndOfLine={cursorAtStartOfLine == null ? node.cursorLine : undefined}
                     cursorAtStartOfLine={cursorAtStartOfLine}
                     language={editorMonacoLanguage}
+                    placeholderClearOnFocus={singleFilePlaceholderClearOnFocus}
+                    focusOnMount={!singleFilePlaceholderClearOnFocus}
                     onSubmitShortcut={runSubmitShortcut}
                     snippetPacks={snippetPacksForEditor}
                   />
@@ -1622,6 +1855,8 @@ export default function createINPACTEngine(config) {
                 cursorAtEndOfLine={cursorAtStartOfLine == null ? node.cursorLine : undefined}
                 cursorAtStartOfLine={cursorAtStartOfLine}
                 language={editorMonacoLanguage}
+                placeholderClearOnFocus={singleFilePlaceholderClearOnFocus}
+                focusOnMount={!singleFilePlaceholderClearOnFocus}
                 onSubmitShortcut={runSubmitShortcut}
                 snippetPacks={snippetPacksForEditor}
               />
@@ -2109,7 +2344,7 @@ export default function createINPACTEngine(config) {
               </div>
             </div>
           )}
-          {showTaskModal && node?.type === "question" ? (
+          {showTaskModal && !interfaceTourOpen && node?.type === "question" ? (
             <div
               style={{
                 position: "fixed",
@@ -2422,13 +2657,25 @@ export default function createINPACTEngine(config) {
       }
     }
 
+    const showLesson1TourSkipBar =
+      isReactTsLesson1TourEntry &&
+      lesson1TourPrefSnapshot !== "completed" &&
+      lesson1TourPrefSnapshot !== "recapOnly";
+    const interfaceTourInitialStepIndex =
+      effectiveTourTrack === "react-ts" && Number(lessonNum) === 1 ? lesson1TourStartIndex : 0;
+
     return (
       <div style={s.wrap}>
         <button
           type="button"
+          className="inpact-help-tour-button"
           data-tour-id="help-tour-button"
           style={s.helpTourBtn}
-          onClick={() => setTourLaunchNonce((v) => v + 1)}
+          title="Replay the interface walkthrough"
+          onClick={() => {
+            setLesson1TourStartIndex(0);
+            setTourLaunchNonce((v) => v + 1);
+          }}
         >
           Help: Tour
         </button>
@@ -2439,26 +2686,99 @@ export default function createINPACTEngine(config) {
           }
         `}</style>
         <div style={s.body}>
-          <div className="inpact-sidebar" style={s.sidebar}>
-            <div style={s.sidebarLabel}>PROGRESS</div>
-            {sideItems.map((item, i) => {
-              const isActive = NODES[nodeIndex]?.id === item.id || (nodeIndex >= NODES.length && i === sideItems.length - 1);
-              const isDone = completedNodes.includes(item.id);
-              return (
-                <div key={item.id} style={s.sideItem(isActive, isDone)} onClick={() => setNodeIndex(i)} role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); setNodeIndex(i); } }}>
-                  <div style={s.sideItemDot(isActive, isDone)} /><div style={s.sideItemText(isActive, isDone)}>{item.label}</div>
+          <div
+            className="inpact-sidebar"
+            style={{
+              ...s.sidebar,
+              width: sidebarCollapsed ? 48 : 240,
+              minWidth: sidebarCollapsed ? 48 : 240,
+              transition: "width 0.2s ease, min-width 0.2s ease",
+              padding: sidebarCollapsed ? "12px 0" : "20px 0",
+              display: "flex",
+              flexDirection: "column",
+              boxSizing: "border-box",
+            }}
+          >
+            {sidebarCollapsed ? (
+              <button
+                type="button"
+                aria-expanded={false}
+                aria-label="Expand lesson steps"
+                title="Show steps"
+                onClick={() => setSidebarCollapsed(false)}
+                style={{
+                  alignSelf: "stretch",
+                  minHeight: "140px",
+                  margin: "0 6px",
+                  border: "1px solid #bae6fd",
+                  borderRadius: "8px",
+                  background: "#e0f2fe",
+                  color: "#075985",
+                  cursor: "pointer",
+                  fontSize: "11px",
+                  fontWeight: 700,
+                  letterSpacing: "0.12em",
+                  writingMode: "vertical-rl",
+                  textOrientation: "mixed",
+                  padding: "12px 6px",
+                  fontFamily: "'DM Sans', sans-serif",
+                }}
+              >
+                STEPS ›
+              </button>
+            ) : (
+              <>
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    gap: "8px",
+                    padding: "0 12px 10px 16px",
+                    flexShrink: 0,
+                  }}
+                >
+                  <div style={{ ...s.sidebarLabel, padding: 0, marginBottom: 0 }}>PROGRESS</div>
+                  <button
+                    type="button"
+                    aria-expanded={true}
+                    aria-label="Collapse lesson steps"
+                    title="Hide steps"
+                    onClick={() => setSidebarCollapsed(true)}
+                    style={{
+                      border: "1px solid #cbd5e1",
+                      background: "#ffffff",
+                      borderRadius: "6px",
+                      padding: "4px 8px",
+                      cursor: "pointer",
+                      fontSize: "14px",
+                      lineHeight: 1,
+                      color: "#64748b",
+                    }}
+                  >
+                    ‹
+                  </button>
                 </div>
-              );
-            })}
+                {sideItems.map((item, i) => {
+                  const isActive = NODES[nodeIndex]?.id === item.id || (nodeIndex >= NODES.length && i === sideItems.length - 1);
+                  const isDone = completedNodes.includes(item.id);
+                  return (
+                    <div key={item.id} style={s.sideItem(isActive, isDone)} onClick={() => setNodeIndex(i)} role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); setNodeIndex(i); } }}>
+                      <div style={s.sideItemDot(isActive, isDone)} /><div style={s.sideItemText(isActive, isDone)}>{item.label}</div>
+                    </div>
+                  );
+                })}
+              </>
+            )}
           </div>
-          <div className="inpact-main" style={{ ...s.main, overflowY: "auto" }}>
-            {node?.type === "question" ? (
+          <div ref={mainScrollRef} className="inpact-main" style={{ ...s.main, overflowY: "auto" }}>
+            {node?.type === "question" || useReactTsLesson1TabsShell ? (
               <LessonEditorOutputTabs
                 node={node}
                 nodes={NODES}
                 mainTab={mainTab}
                 setMainTab={setMainTab}
-                lessonTrack={lessonValidationCtx?.track}
+                lessonTrack={lessonValidationCtx?.track ?? effectiveTourTrack}
                 lessonNum={lessonNum}
                 taskInstructionPulseNonce={taskInstructionPulseNonce}
                 answer={answer}
@@ -2473,11 +2793,38 @@ export default function createINPACTEngine(config) {
                 } : undefined)}
                 lessonIntro={lessonIntro}
                 lessonObjectives={lessonObjectives}
+                omitObjectivesFromLessonTab={node?.type === "reveal" && node?.id === "intro"}
+                preQuestionFooter={
+                  useReactTsLesson1TabsShell && node?.type === "reveal" ? (
+                    <div style={s.btnRow}>
+                      <button type="button" className="inpact-btn-primary" style={s.btn("primary")} onClick={next}>
+                        CONTINUE →
+                      </button>
+                    </div>
+                  ) : useReactTsLesson1TabsShell && node?.type === "objectives" ? (
+                    <div style={s.btnRow}>
+                      <button
+                        type="button"
+                        className="inpact-btn-primary"
+                        style={s.btn("primary")}
+                        onClick={() => {
+                          next();
+                          setMainTab("editor");
+                          setEditorWorkspaceOpen(true);
+                        }}
+                      >
+                        LET&apos;S BUILD →
+                      </button>
+                    </div>
+                  ) : null
+                }
                 useEditorWorkspaceModal
                 editorWorkspaceOpen={editorWorkspaceOpen}
                 onOpenEditorWorkspace={() => setEditorWorkspaceOpen(true)}
                 onCloseEditorWorkspace={() => setEditorWorkspaceOpen(false)}
-                editorWorkspaceTitle={`${title} · Step ${codingStepNum} of ${codingStepTotal}`}
+                editorWorkspaceTitle={
+                  node?.type === "question" ? `${title} · Step ${codingStepNum} of ${codingStepTotal}` : title
+                }
                 editorProgress={{
                   items: sideItems,
                   activeNodeIndex: nodeIndex,
@@ -2485,7 +2832,27 @@ export default function createINPACTEngine(config) {
                   onSelectIndex: setNodeIndex,
                 }}
               >
-                {renderEditorContent({ fillViewport: true })}
+                {node?.type === "question" ? (
+                  renderEditorContent({ fillViewport: true })
+                ) : (
+                  <div
+                    style={{
+                      flex: 1,
+                      minHeight: "min(40vh, 360px)",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      padding: "28px 20px",
+                      color: "#64748b",
+                      fontSize: "14px",
+                      lineHeight: 1.6,
+                      textAlign: "center",
+                      boxSizing: "border-box",
+                    }}
+                  >
+                    Open <strong style={{ color: "#0891b2" }}>Editor</strong> after you start Step 1 — the workspace preview opens here for the interface tour and for coding.
+                  </div>
+                )}
               </LessonEditorOutputTabs>
             ) : (
               renderNode()
@@ -2497,7 +2864,60 @@ export default function createINPACTEngine(config) {
           onRequestAction={handleTourAction}
           forceStartNonce={tourLaunchNonce}
           lessonKey={`${lessonNum}:${title}`}
+          blockTour={tourDismissForStackingModals}
+          initialStepIndex={interfaceTourInitialStepIndex}
+          onOpenChange={setInterfaceTourOpen}
+          onLastStepDone={handleLesson1TourLastStepDone}
         />
+        {showLesson1TourSkipBar
+          ? createPortal(
+              <div
+                role="region"
+                aria-label="Interface tour options"
+                style={{
+                  position: "fixed",
+                  left: "50%",
+                  bottom: "20px",
+                  transform: "translateX(-50%)",
+                  zIndex: 12180,
+                  maxWidth: "min(520px, calc(100vw - 32px))",
+                  padding: "12px 16px",
+                  borderRadius: "12px",
+                  background: "#f8fafc",
+                  border: "1px solid #e2e8f0",
+                  boxShadow: "0 12px 32px rgba(15, 23, 42, 0.18)",
+                  fontFamily: "'DM Sans', sans-serif",
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "10px",
+                  alignItems: "stretch",
+                }}
+              >
+                <p style={{ margin: 0, fontSize: "13px", lineHeight: 1.55, color: "#334155" }}>
+                  If you have used this workspace before, you can skip the full guided tour. You will still see a short
+                  recap that points to Help: Tour so you know how to reopen the walkthrough later.
+                </p>
+                <button
+                  type="button"
+                  onClick={skipLesson1InterfaceTourToRecap}
+                  style={{
+                    alignSelf: "flex-end",
+                    padding: "8px 14px",
+                    fontSize: "13px",
+                    fontWeight: 600,
+                    borderRadius: "8px",
+                    border: "1px solid #bae6fd",
+                    background: "#e0f2fe",
+                    color: "#075985",
+                    cursor: "pointer",
+                  }}
+                >
+                  Skip full tour — show recap only
+                </button>
+              </div>,
+              document.body
+            )
+          : null}
       </div>
     );
   };

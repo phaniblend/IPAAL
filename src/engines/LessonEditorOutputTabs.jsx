@@ -424,6 +424,8 @@ export function EditorTaskBlock({
   taskInstructionPulseNonce = 0,
   deepDiveConcepts = [],
   onOpenDeepDive,
+  /** When true, host gets `data-tour-id="deep-dive-editor-button"` (omit when modal workspace is closed so the id is not duplicated). */
+  tourAnchorEditorDeepDive = false,
 }) {
   const paal = node?.paal || "";
   const markerMatch = paal.match(/your\s+(?:task|turn)\s*:/i);
@@ -483,11 +485,13 @@ export function EditorTaskBlock({
             boxSizing: "border-box",
           }}
         >
-          <div className="inpact-editor-deep-dive-toolbar inpact-editor-deep-dive-toolbar--beside-task">
+          <div
+            className="inpact-editor-deep-dive-toolbar inpact-editor-deep-dive-toolbar--beside-task inpact-editor-task-deep-dive-host"
+            {...(tourAnchorEditorDeepDive ? { "data-tour-id": "deep-dive-editor-button" } : {})}
+          >
             {dives.map((c, di) => (
               <DeepDiveImageButton
                 key={c.id}
-                tourAnchor={di === 0}
                 onClick={() => onOpenDeepDive(c)}
                 title={dives.length > 1 ? `Deep-dive: ${c.label || c.id}` : `Open concept guide: ${c.label || c.id}`}
               />
@@ -607,6 +611,10 @@ export default function LessonEditorOutputTabs({
   editorWorkspaceTitle = "",
   /** When editor workspace (or inline editor) is shown, optional PROGRESS rail; indices align with lesson nodes. */
   editorProgress = null,
+  /** Hide the objectives block on the Lesson tab (e.g. intro reveal should mirror legacy single-screen intro). */
+  omitObjectivesFromLessonTab = false,
+  /** Extra controls after the Lesson tab CTA (e.g. CONTINUE / LET'S BUILD on React · TS lesson 1 shell). */
+  preQuestionFooter = null,
   children,
 }) {
   const lessonValidationCtx = useContext(LessonValidationContext);
@@ -648,7 +656,7 @@ export default function LessonEditorOutputTabs({
   const lessonScrollRef = useRef(null);
   const previewIframeRef = useRef(null);
   const introNode = introNodeFromNodes(nodes);
-  const objectivesNode = objectivesNodeFromNodes(nodes);
+  const objectivesNode = omitObjectivesFromLessonTab ? null : objectivesNodeFromNodes(nodes);
   const lessonContent = introNode?.content || (lessonIntro && { tag: lessonIntro.tag, title: lessonIntro.title, body: lessonIntro.body, usecase: lessonIntro.usecase }) || {};
   const objectives = objectivesNode?.items || (Array.isArray(lessonObjectives) ? lessonObjectives : []);
   const introDeepDiveConcept = useMemo(
@@ -740,7 +748,10 @@ export default function LessonEditorOutputTabs({
         `}
       </style>
       {!tabsInSidebar && (
-        <div style={{ ...lessonStyles.tabBar, alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: "8px" }}>
+        <div
+          className="inpact-main-tabs-row"
+          style={{ ...lessonStyles.tabBar, alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: "8px" }}
+        >
           <div style={{ display: "flex", gap: "6px" }}>
             <button
               type="button"
@@ -835,33 +846,64 @@ export default function LessonEditorOutputTabs({
                 )}
               </span>
             </div>
+            {preQuestionFooter}
             {node?.type === "question" && deepDiveConcepts.length > 0 ? (
               <div style={{ ...lessonStyles.card, marginTop: "12px" }}>
-                <div style={lessonStyles.paalLabel}>OPTIONAL DEEP DIVE · THIS STEP</div>
-                <p style={{ margin: "0 0 12px", fontSize: "13px", color: "#64748b", lineHeight: 1.55 }}>
-                  Extra diagrams and plain-language context for this step — open anytime; same controls appear next to the task in the Editor workspace.
-                </p>
-                <div className="inpact-editor-deep-dive-toolbar">
-                  {deepDiveConcepts.map((c, di) => (
-                    <DeepDiveImageButton
-                      key={c.id}
-                      tourAnchor={di === 0}
-                      onClick={() => setDeepDiveConcept(c)}
-                      title={
-                        deepDiveConcepts.length > 1
-                          ? `Deep dive: ${c.label || c.id}`
-                          : `Open concept guide: ${c.label || c.id}`
-                      }
-                    />
-                  ))}
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "flex-start",
+                    justifyContent: "space-between",
+                    gap: "14px",
+                    flexWrap: "wrap",
+                    marginBottom: "10px",
+                  }}
+                >
+                  <div style={{ flex: "1 1 180px", minWidth: 0 }}>
+                    <div style={lessonStyles.paalLabel}>OPTIONAL DEEP DIVE · THIS STEP</div>
+                    <div
+                      style={{
+                        marginTop: "6px",
+                        fontSize: "11px",
+                        fontWeight: 700,
+                        letterSpacing: "0.08em",
+                        color: "#0e7490",
+                      }}
+                    >
+                      Hungry for more?
+                    </div>
+                  </div>
+                  <div
+                    className="inpact-editor-deep-dive-toolbar inpact-deep-dive-lesson-toolbar"
+                    data-tour-id="deep-dive-lesson-button"
+                    style={{ flexShrink: 0, marginLeft: "auto", alignSelf: "flex-start" }}
+                  >
+                    {deepDiveConcepts.map((c, di) => (
+                      <DeepDiveImageButton
+                        key={c.id}
+                        onClick={() => setDeepDiveConcept(c)}
+                        title={
+                          deepDiveConcepts.length > 1
+                            ? `Deep dive: ${c.label || c.id}`
+                            : `Open concept guide: ${c.label || c.id}`
+                        }
+                      />
+                    ))}
+                  </div>
                 </div>
+                <p style={{ margin: "0 0 0", fontSize: "13px", color: "#64748b", lineHeight: 1.55 }}>
+                  Extra diagrams and plain-language context for this step — open anytime; the same strip appears next to the task in the Editor workspace.
+                </p>
               </div>
             ) : null}
           </div>
         </div>
       )}
       {!useEditorWorkspaceModal && mainTab === "editor" && (
-        <div style={{ display: "flex", flexDirection: "column", flex: 1, minHeight: 0, width: "100%", maxWidth: "100%", overflow: "hidden" }}>
+        <div
+          className="inpact-inline-editor-root"
+          style={{ display: "flex", flexDirection: "column", flex: 1, minHeight: 0, width: "100%", maxWidth: "100%", overflow: "hidden" }}
+        >
           <div style={{ marginBottom: "4px", flexShrink: 0 }}>
             <button
               type="button"
@@ -878,6 +920,7 @@ export default function LessonEditorOutputTabs({
               taskInstructionPulseNonce={taskInstructionPulseNonce}
               deepDiveConcepts={deepDiveConcepts}
               onOpenDeepDive={setDeepDiveConcept}
+              tourAnchorEditorDeepDive
             />
           )}
           <div
@@ -935,6 +978,7 @@ export default function LessonEditorOutputTabs({
               role="dialog"
               aria-modal="true"
               aria-label="Editor workspace"
+              data-inpact-editor-workspace={editorWorkspaceOpen ? "open" : "closed"}
               onClick={(e) => e.stopPropagation()}
               style={{
                 position: "absolute",
@@ -1003,6 +1047,7 @@ export default function LessonEditorOutputTabs({
                       taskInstructionPulseNonce={taskInstructionPulseNonce}
                       deepDiveConcepts={deepDiveConcepts}
                       onOpenDeepDive={setDeepDiveConcept}
+                      tourAnchorEditorDeepDive={editorWorkspaceOpen}
                     />
                   </div>
                 )}
