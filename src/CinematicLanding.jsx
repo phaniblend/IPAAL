@@ -364,7 +364,7 @@ export default function CinematicLanding({ onEnterLessons }) {
           <button type="button" className="cin-cta-btn" onClick={() => onEnterLessons?.()}>
             Start doing — it&apos;s free →
           </button>
-          <p className="cin-cta-sub">You're 122 lessons away from writing React like a professional. Start doing.</p>
+          <p className="cin-cta-sub">You're 138 lessons away from writing React like a professional. Start doing.</p>
         </div>
       </div>
     </div>
