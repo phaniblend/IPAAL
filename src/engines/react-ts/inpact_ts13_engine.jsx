@@ -1,34 +1,170 @@
+// ============================================================
+// LESSON 13 — Event Handling: Click
+// ============================================================
 import createINPACTEngine from "../inpact_engine_shared";
 
-const NODES = [
-  {
-    id: "intro",
-    type: "reveal",
-    phase: "Lesson",
-    content: {
-      tag: "React TypeScript",
-      title: "Lesson 13",
-      body: "Temporarily cleared lesson content.",
-      usecase: "Placeholder engine to keep app compilation stable.",
-    },
-  },
-  {
-    id: "objectives",
-    type: "objectives",
-    phase: "Objectives",
-    items: ["This lesson is intentionally empty for now."],
-  },
-];
-
-const sideItems = [
-  { label: "Lesson", id: "intro" },
-  { label: "Objectives", id: "objectives" },
-];
-
 export default createINPACTEngine({
-  NODES,
-  sideItems,
+  NODES: [
+    { id: "intro", type: "reveal", phase: "Lesson", content: { tag: "LESSON #13 (React Events)", title: "Event Handling — Click", body: "User interactions are the entry point to all state changes in React. A button click, a card selection, a dismiss action — all begin with an event handler. In this lesson you'll wire click handlers, understand the SyntheticEvent type, stop event propagation, and learn the difference between passing a handler and calling one.", usecase: "A shipment row is clickable to open a detail panel. Inside the row, a 'remove' button should delete the shipment without opening the panel. Both rely on click events — but the remove button must stop the click from bubbling to the row. Getting this right is what separates clean interactive lists from broken ones." } },
+    { id: "prereqs", type: "prereqs", phase: "Prerequisites", items: [{ lesson: 1, label: "JSX — The Full Language", reason: "Click handlers are JSX attributes — onClick. You need to know how JSX attributes accept function values and how JSX expressions work before wiring event handlers." }, { lesson: 5, label: "Props — Typing What a Component Receives", reason: "This lesson accepts an onClick callback prop typed as () => void. You need to know how to type function props before accepting and calling them." }] },
+    { id: "objectives", type: "objectives", phase: "Objectives", items: ["Wire a click handler to a JSX element using the onClick attribute", "Type a click handler that receives a MouseEvent parameter", "Stop event propagation to prevent a child click from triggering a parent handler", "Distinguish between passing a handler reference and calling it immediately", "Accept and call an onClick callback prop from a parent"] },
+    {
+      id: "step1", type: "question", phase: "Step 1 of 5",
+      paal: "Add an onClick handler to ShipmentCard that logs the shipmentId to the console when the card is clicked.",
+      hint: "onClick expects a function. Use an arrow wrapper `() => console.log(...)` so the log runs on click, not on render.",
+      example_code: `<div onClick={() => console.log(item.id)}>`,
+      think_prompt: "The handler needs to reference shipmentId, which is in scope from the props. How do you capture it inside the click handler?",
+      mc_options: ["onClick={console.log(shipmentId)}", "onClick={() => console.log(shipmentId)}", "onClick={console.log}"],
+      mc_correct_option: "onClick={() => console.log(shipmentId)}",
+      mc_anchor: "An arrow wrapper captures shipmentId from the closure and calls console.log when the click fires. `onClick={console.log(shipmentId)}` evaluates console.log(shipmentId) during render — not on click. `onClick={console.log}` passes the click event object to console.log — you'd see the event object, not the shipmentId.",
+      why_this_matters: "Capturing a value from the component's scope inside an event handler is the most common event handling pattern in React — it's how buttons know which item they belong to, how delete handlers know which row to remove, and how navigation handlers know where to go.",
+      answer_keywords: ["onClick", "() =>", "console.log", "shipmentId"],
+      seed_code: `interface ShipmentCardProps { shipmentId: string; }`,
+      starter_code: `interface ShipmentCardProps { shipmentId: string; }\n\nconst ShipmentCard = ({ shipmentId }: ShipmentCardProps): JSX.Element => {\n  return (\n    // add onClick here to log shipmentId\n    <div>\n      <p>{shipmentId}</p>\n    </div>\n  );\n};`,
+      feedback_correct: "Exactly — the arrow function captures shipmentId from the closure and runs on click, not on render.",
+      feedback_partial: "Close — make sure you're wrapping in an arrow function `() => console.log(shipmentId)`, not calling console.log directly in the attribute.",
+      feedback_wrong: "The pattern: `onClick={() => console.log(shipmentId)}` — arrow wrapper ensures it runs on click.",
+      expected: `interface ShipmentCardProps { shipmentId: string; }\n\nconst ShipmentCard = ({ shipmentId }: ShipmentCardProps): JSX.Element => {\n  return (\n    <div onClick={() => console.log(shipmentId)}>\n      <p>{shipmentId}</p>\n    </div>\n  );\n};`,
+      analog_example: `<tr onClick={() => console.log(row.id)}>`,
+      deepDiveLabel: "onClick captures shipmentId — but what type does the event object have?",
+      deepDive: {
+        hook: "You add `(event) => console.log(event.target)` to your onClick. TypeScript errors — event is implicitly any. You add a type annotation. But what type?",
+        pain: "⚠️ **Lesson:** What is the TypeScript type for the event object passed to React's onClick handler — and where does it come from?",
+        mentalModel: "React wraps native browser events in SyntheticEvent objects. For click events on div and button elements, the specific type is `React.MouseEvent<HTMLDivElement>` or `React.MouseEvent<HTMLButtonElement>`. The generic parameter is the element type.\n```tsx\n// ✅ typed event handler\nconst handleClick = (event: React.MouseEvent<HTMLDivElement>) => {\n  console.log(event.target, event.clientX, event.clientY);\n};\n```",
+        discover: "```tsx\n// Common React event types\nonClick: React.MouseEvent<HTMLElement>\nonChange: React.ChangeEvent<HTMLInputElement>\nonSubmit: React.FormEvent<HTMLFormElement>\nonKeyDown: React.KeyboardEvent<HTMLElement>\nonFocus: React.FocusEvent<HTMLElement>\n```",
+        quickRules: "- ✅ `React.MouseEvent<HTMLDivElement>` for click on div\n- ✅ `React.ChangeEvent<HTMLInputElement>` for input change\n- ❌ `Event` (native) — React uses SyntheticEvent, not native\n- ❌ `any` — defeats TypeScript safety",
+        watchOut: "👀 **Watch out:** React's SyntheticEvent pools events for performance — accessing event properties asynchronously (inside setTimeout) may find them nullified. Call `event.persist()` if you need the event after the handler returns.",
+        dryRun: "🔁 **Think:** You write `onClick={(e: React.MouseEvent<HTMLDivElement>) => console.log(e.currentTarget.id)}`. You click the div which has `id='card-001'`. What logs to the console?",
+        build: "**Learning focus:** Wire click handlers — understanding the SyntheticEvent type system for typed event handling."
+      }
+    },
+    {
+      id: "step2", type: "question", phase: "Step 2 of 5",
+      paal: "Add a 'remove' button inside ShipmentCard. The button's click handler should call onRemove(shipmentId). It must stop the click from bubbling to the card's onClick.",
+      hint: "Call event.stopPropagation() inside the button's handler before calling onRemove. Without it, clicking the button also triggers the card's onClick.",
+      example_code: `<button onClick={e => { e.stopPropagation(); onDelete(id); }}>Delete</button>`,
+      think_prompt: "The remove button is inside the card div. When you click the button, the event bubbles up to the div. How do you stop the button click from also triggering the card's click handler?",
+      mc_options: ["onClick={e => onRemove(shipmentId)}", "onClick={e => { e.stopPropagation(); onRemove(shipmentId); }}", "onClick={e => { e.preventDefault(); onRemove(shipmentId); }}"],
+      mc_correct_option: "onClick={e => { e.stopPropagation(); onRemove(shipmentId); }}",
+      mc_anchor: "stopPropagation() stops the event from bubbling up the DOM tree — the button's click is handled, but the card's onClick never fires. preventDefault() stops the browser's default action for the event (like following a link or submitting a form) — it does NOT stop bubbling.",
+      why_this_matters: "Nested click handlers without stopPropagation cause double-firing bugs — the button click is handled AND the parent click is triggered. In a shipment list, removing an item while also opening its detail panel is exactly the kind of confusing behaviour this prevents.",
+      answer_keywords: ["stopPropagation", "onRemove", "shipmentId"],
+      seed_code: `interface ShipmentCardProps { shipmentId: string; onRemove: (id: string) => void; }`,
+      starter_code: `interface ShipmentCardProps { shipmentId: string; onRemove: (id: string) => void; }\n\nconst ShipmentCard = ({ shipmentId, onRemove }: ShipmentCardProps): JSX.Element => {\n  return (\n    <div onClick={() => console.log('card clicked', shipmentId)}>\n      <p>{shipmentId}</p>\n      {/* add remove button here — stop propagation */}\n    </div>\n  );\n};`,
+      feedback_correct: "Exactly — stopPropagation() prevents the button's click from reaching the card div. Only the button handler fires.",
+      feedback_partial: "Close — check that you're calling e.stopPropagation() (not e.preventDefault()) and that it's called before onRemove.",
+      feedback_wrong: "Add `<button onClick={e => { e.stopPropagation(); onRemove(shipmentId); }}>Remove</button>` — stopPropagation before the callback call.",
+      expected: `interface ShipmentCardProps { shipmentId: string; onRemove: (id: string) => void; }\n\nconst ShipmentCard = ({ shipmentId, onRemove }: ShipmentCardProps): JSX.Element => {\n  return (\n    <div onClick={() => console.log('card clicked', shipmentId)}>\n      <p>{shipmentId}</p>\n      <button onClick={e => { e.stopPropagation(); onRemove(shipmentId); }}>Remove</button>\n    </div>\n  );\n};`,
+      analog_example: `<button onClick={e => { e.stopPropagation(); onDelete(item.id); }}>Delete</button>`,
+      deepDiveLabel: "stopPropagation stops bubbling — but what is the event bubble path exactly?",
+      deepDive: {
+        hook: "You click a button. The event fires on the button. It bubbles to the div. It bubbles to the section. It bubbles to body. It bubbles to document. React handles onClick at the document (or root) level by default — which is why stopPropagation works even though React attaches the listeners differently from the DOM.",
+        pain: "⚠️ **Lesson:** Events bubble from target → parent → grandparent → document. If you click a button inside a div, both onClick handlers fire in order — button first, div second. What does stopPropagation do to this sequence?",
+        mentalModel: "stopPropagation tells the event: 'stop travelling up the tree after this handler'. The button's handler runs. The div's handler does not. Grandparent handlers do not.\n\npreventDefault tells the event: 'don't do the browser default for this event type'. For a form submit, it prevents page reload. For an anchor link, it prevents navigation. It does NOT stop bubbling.",
+        discover: "```tsx\n// ✅ stop bubbling — parent handlers don't fire\nonClick={e => { e.stopPropagation(); doSomething(); }}\n\n// ✅ prevent default — browser action doesn't happen, bubbling still occurs\nonSubmit={e => { e.preventDefault(); handleSubmit(); }}\n\n// ✅ both — useful for form submission that also has a parent click handler\nonSubmit={e => { e.preventDefault(); e.stopPropagation(); handleSubmit(); }}\n```",
+        quickRules: "- ✅ stopPropagation: stop parent handlers from firing\n- ✅ preventDefault: stop browser default action (link navigation, form submit)\n- ❌ confusing the two — common bug source\n- stopPropagation does NOT preventDefault and vice versa",
+        watchOut: "👀 **Watch out:** stopPropagation can interfere with global click handlers (modals that close on outside click, tooltips that dismiss on click). If a modal doesn't close when you click inside it, a stopPropagation somewhere in the child tree is the likely culprit.",
+        dryRun: "🔁 **Think:** You click the Remove button. Without stopPropagation: list the handlers that fire in order. With stopPropagation in the button's handler: list the handlers that fire.",
+        build: "**Learning focus:** Use stopPropagation to prevent nested click events from triggering parent handlers — understanding the event bubble path and the distinction from preventDefault."
+      }
+    },
+    {
+      id: "step3", type: "question", phase: "Step 3 of 5",
+      paal: "Extract the card's click handler to a named function handleCardClick inside the component. The handler should receive a MouseEvent and log the event's currentTarget tagName.",
+      hint: "Named handlers are defined with const inside the component body. Their type annotation uses React.MouseEvent<HTMLDivElement> for a click on a div.",
+      example_code: `const handleClick = (event: React.MouseEvent<HTMLDivElement>) => {\n  console.log(event.currentTarget.tagName);\n};`,
+      think_prompt: "What's the difference between event.target and event.currentTarget — and which one gives you the element the handler is attached to?",
+      mc_options: ["const handleCardClick = (event) => { console.log(event.currentTarget.tagName); }", "const handleCardClick = (event: React.MouseEvent<HTMLDivElement>) => { console.log(event.currentTarget.tagName); }", "const handleCardClick = () => { console.log(event.currentTarget.tagName); }"],
+      mc_correct_option: "const handleCardClick = (event: React.MouseEvent<HTMLDivElement>) => { console.log(event.currentTarget.tagName); }",
+      mc_anchor: "The typed parameter is required for TypeScript to know event has MouseEvent properties. `event` without annotation is implicitly any. The third option references event as a global — it doesn't exist outside the handler scope.",
+      why_this_matters: "Named handlers keep complex event logic readable and testable. A named handleCardClick is easier to unit test, easier to pass as a reference, and easier to read in the JSX than a multi-line arrow function inline.",
+      answer_keywords: ["handleCardClick", "React.MouseEvent", "HTMLDivElement", "currentTarget", "tagName"],
+      seed_code: `interface ShipmentCardProps { shipmentId: string; }`,
+      starter_code: `interface ShipmentCardProps { shipmentId: string; }\n\nconst ShipmentCard = ({ shipmentId }: ShipmentCardProps): JSX.Element => {\n  // define handleCardClick here — typed MouseEvent, logs currentTarget.tagName\n\n  return (\n    <div onClick={handleCardClick}>\n      <p>{shipmentId}</p>\n    </div>\n  );\n};`,
+      feedback_correct: "Exactly — a named handler with the correct type annotation. onClick={handleCardClick} passes the reference; React calls it with the event when the user clicks.",
+      feedback_partial: "Close — make sure the event parameter is typed as `React.MouseEvent<HTMLDivElement>`. Without the annotation TypeScript infers any.",
+      feedback_wrong: "Define `const handleCardClick = (event: React.MouseEvent<HTMLDivElement>) => { console.log(event.currentTarget.tagName); }` inside the component. Then `onClick={handleCardClick}` on the div.",
+      expected: `interface ShipmentCardProps { shipmentId: string; }\n\nconst ShipmentCard = ({ shipmentId }: ShipmentCardProps): JSX.Element => {\n  const handleCardClick = (event: React.MouseEvent<HTMLDivElement>) => {\n    console.log(event.currentTarget.tagName);\n  };\n\n  return (\n    <div onClick={handleCardClick}>\n      <p>{shipmentId}</p>\n    </div>\n  );\n};`,
+      analog_example: `const handleRowClick = (event: React.MouseEvent<HTMLTableRowElement>) => {\n  console.log(event.currentTarget.dataset.id);\n};`,
+      deepDiveLabel: "event.target vs event.currentTarget — what's the difference?",
+      deepDive: {
+        hook: "Your card has a p tag inside the div. The handler is on the div. The user clicks the p text. You log event.target.tagName — it logs 'P'. You log event.currentTarget.tagName — it logs 'DIV'. They're different elements.",
+        pain: "⚠️ **Lesson:** event.target is the element the user actually clicked. event.currentTarget is the element the handler is attached to. When are they different — and which should you use?",
+        mentalModel: "**event.target**: the deepest element the event originated from (the element the user clicked).\n**event.currentTarget**: the element whose event listener is currently executing.\n\nThey're the same when you click directly on the element with the handler. They differ when you click a child — the event bubbles up, target stays on the child, currentTarget updates to each element as the event traverses.\n\nFor 'what did the user click' — target. For 'what element handles this event' — currentTarget.",
+        discover: "```tsx\n// User clicks the <p> inside the <div>\nconst handleClick = (e: React.MouseEvent<HTMLDivElement>) => {\n  console.log(e.target);        // <p> — where the click originated\n  console.log(e.currentTarget); // <div> — where the handler is attached\n};\n```",
+        quickRules: "- ✅ currentTarget — reliable reference to the element with the handler\n- ✅ target — useful when you need to know exactly what was clicked\n- ❌ target when you want currentTarget — type may be wrong (target is EventTarget, not HTMLDivElement)",
+        watchOut: "👀 **Watch out:** TypeScript types event.target as EventTarget — the broadest event target type. You can't access DOM-specific properties like .value or .tagName without a type assertion or type guard. event.currentTarget has the specific type from the generic parameter — HTMLDivElement, HTMLButtonElement etc.",
+        dryRun: "🔁 **Think:** A div has onClick. Inside the div is a span with text. The user clicks the span text. In the handler: what is event.target, what is event.currentTarget?",
+        build: "**Learning focus:** Define typed named event handlers inside the component — understanding the difference between event.target (click origin) and event.currentTarget (handler element)."
+      }
+    },
+    {
+      id: "step4", type: "question", phase: "Step 4 of 5",
+      paal: "Accept an onSelect callback prop typed as (shipmentId: string) => void. Call it inside the card's click handler.",
+      hint: "The prop type is `(shipmentId: string) => void` — a function that receives a string and whose return value is ignored. Call it inside the handler with `onSelect(shipmentId)`.",
+      example_code: `interface CardProps { onSelect: (id: string) => void; }\nconst handleClick = () => { onSelect(itemId); };`,
+      think_prompt: "onSelect is a function prop the parent provides. Where does it get called — inside the handler, inside the JSX, or inside the return?",
+      mc_options: ["onClick={onSelect}", "onClick={() => onSelect(shipmentId)}", "onClick={onSelect(shipmentId)}"],
+      mc_correct_option: "onClick={() => onSelect(shipmentId)}",
+      mc_anchor: "`onClick={() => onSelect(shipmentId)}` is an arrow function that calls onSelect with shipmentId when clicked. `onClick={onSelect}` passes onSelect directly — React would call it with the MouseEvent, not with shipmentId. `onClick={onSelect(shipmentId)}` calls onSelect during render and passes its return value (undefined) as the handler.",
+      why_this_matters: "Callback props are how parent components respond to child events — a ShipmentList parent can handle onSelect to update which shipment is displayed in the detail panel. The arrow wrapper is what lets you pass custom arguments (shipmentId) rather than the raw event.",
+      answer_keywords: ["onSelect", "(shipmentId: string) => void", "onClick", "() =>"],
+      seed_code: `interface ShipmentCardProps { shipmentId: string; onSelect: (shipmentId: string) => void; }`,
+      starter_code: `interface ShipmentCardProps { shipmentId: string; onSelect: (shipmentId: string) => void; }\n\nconst ShipmentCard = ({ shipmentId, onSelect }: ShipmentCardProps): JSX.Element => {\n  return (\n    // wire onClick to call onSelect(shipmentId)\n    <div>\n      <p>{shipmentId}</p>\n    </div>\n  );\n};`,
+      feedback_correct: "Exactly — the arrow wrapper calls onSelect with shipmentId on click. The parent receives the specific ID it needs to update its state.",
+      feedback_partial: "Close — make sure you're wrapping in an arrow function `() => onSelect(shipmentId)`, not passing onSelect directly (which would receive the event instead of the ID).",
+      feedback_wrong: "`onClick={() => onSelect(shipmentId)}` — the arrow wrapper passes shipmentId to onSelect on click.",
+      expected: `interface ShipmentCardProps { shipmentId: string; onSelect: (shipmentId: string) => void; }\n\nconst ShipmentCard = ({ shipmentId, onSelect }: ShipmentCardProps): JSX.Element => {\n  return (\n    <div onClick={() => onSelect(shipmentId)}>\n      <p>{shipmentId}</p>\n    </div>\n  );\n};`,
+      analog_example: `<tr onClick={() => onRowSelect(row.id)}>`,
+      deepDiveLabel: "() => onSelect(shipmentId) creates a new function on every render — is that a problem?",
+      deepDive: {
+        hook: "A colleague mentions that `onClick={() => onSelect(shipmentId)}` creates a new function on every render — is that a performance problem?",
+        pain: "⚠️ **Lesson:** Inline arrow functions in JSX create a new function reference on every render. When does that matter — and when does it not?",
+        mentalModel: "For most components, it doesn't matter at all. A new function reference is cheap to create — it's a few bytes of memory and a nanosecond of allocation.\n\nIt DOES matter when:\n1. The function is passed as a prop to a memoized component (React.memo) — the new reference causes the memoized component to re-render even when data hasn't changed.\n2. The function is a dependency of useEffect or useMemo — the new reference triggers the effect or recomputation on every render.\n\nFor non-memoized components (most components), inline arrow functions are fine. useCallback (Lesson 44) is the solution when memoization is needed.",
+        discover: "```tsx\n// ✅ inline arrow — fine for non-memoized components\n<div onClick={() => onSelect(shipmentId)}>\n\n// ✅ useCallback — stable reference for memoized children\nconst handleSelect = useCallback(() => onSelect(shipmentId), [onSelect, shipmentId]);\n<MemoizedCard onClick={handleSelect} />\n```",
+        quickRules: "- ✅ inline arrow: fine for most use cases\n- ✅ useCallback: when passing to memoized components or as effect dependency\n- ❌ premature useCallback: adds complexity without benefit for non-memoized components\n- measure before optimizing",
+        watchOut: "👀 **Watch out:** useCallback does not prevent re-renders of the component it's defined in — it only stabilizes the function reference passed to children. If a parent re-renders, all its code including useCallback runs. useCallback just returns the same function reference if dependencies haven't changed.",
+        dryRun: "🔁 **Think:** ShipmentCard is wrapped in React.memo. The parent re-renders because unrelated state changed. `onClick={() => onSelect(shipmentId)}` creates a new function. Does ShipmentCard re-render?",
+        build: "**Learning focus:** Call callback props inside arrow function event handlers — understanding when inline arrow functions are fine and when useCallback is needed."
+      }
+    },
+    {
+      id: "step5", type: "question", phase: "Step 5 of 5",
+      paal: "Add a disabled prop (boolean). When disabled is true, the onClick handler should not call onSelect. Implement this without changing the JSX onClick attribute.",
+      hint: "Guard inside the handler: `if (disabled) return;` before calling onSelect. Alternatively, pass undefined conditionally to onClick.",
+      example_code: `const handleClick = () => {\n  if (disabled) return;\n  onSelect(shipmentId);\n};`,
+      think_prompt: "Should you guard inside the handler or conditionally attach the onClick attribute? What's the tradeoff?",
+      mc_options: ["onClick={disabled ? undefined : () => onSelect(shipmentId)}", "const handleClick = () => { if (disabled) return; onSelect(shipmentId); }; // then onClick={handleClick}", "Add the disabled attribute directly to the div"],
+      mc_correct_option: "const handleClick = () => { if (disabled) return; onSelect(shipmentId); }; // then onClick={handleClick}",
+      mc_anchor: "Guarding inside the handler is clean and testable — the handler exists but exits early when disabled. The conditional onClick also works but attaches/detaches the handler on every render. The native `disabled` attribute only works on form elements (button, input, select) — it has no effect on div.",
+      why_this_matters: "Disabled state that doesn't visually disable — via cursor-not-allowed CSS — but blocks action via handler guard is a common pattern for interactable elements that aren't native form controls. The guard keeps the handler logic self-contained.",
+      answer_keywords: ["disabled", "if", "return", "handleClick"],
+      seed_code: `interface ShipmentCardProps { shipmentId: string; onSelect: (id: string) => void; disabled: boolean; }`,
+      starter_code: `interface ShipmentCardProps { shipmentId: string; onSelect: (id: string) => void; disabled: boolean; }\n\nconst ShipmentCard = ({ shipmentId, onSelect, disabled }: ShipmentCardProps): JSX.Element => {\n  // define handleClick — guard if disabled, then call onSelect\n\n  return (\n    <div onClick={handleClick} className={disabled ? 'card--disabled' : ''}>\n      <p>{shipmentId}</p>\n    </div>\n  );\n};`,
+      feedback_correct: "Exactly — the early return guard prevents onSelect from firing when disabled. The click handler still exists; it just exits immediately.",
+      feedback_partial: "Close — make sure the `if (disabled) return;` guard is at the top of handleClick, before the onSelect call.",
+      feedback_wrong: "`const handleClick = () => { if (disabled) return; onSelect(shipmentId); };` — guard first, then action.",
+      expected: `interface ShipmentCardProps { shipmentId: string; onSelect: (id: string) => void; disabled: boolean; }\n\nconst ShipmentCard = ({ shipmentId, onSelect, disabled }: ShipmentCardProps): JSX.Element => {\n  const handleClick = () => {\n    if (disabled) return;\n    onSelect(shipmentId);\n  };\n\n  return (\n    <div onClick={handleClick} className={disabled ? 'card--disabled' : ''}>\n      <p>{shipmentId}</p>\n    </div>\n  );\n};`,
+      analog_example: `const handleSelect = () => {\n  if (isLocked) return;\n  onSelect(rowId);\n};`,
+      deepDiveLabel: "Guard inside handler vs conditional onClick attribute — which is more React-idiomatic?",
+      deepDive: {
+        hook: "Both `onClick={disabled ? undefined : handleClick}` and an early return inside handleClick produce the same UI result. A colleague prefers the conditional attribute. You prefer the guard. Who's right?",
+        pain: "⚠️ **Lesson:** What are the tradeoffs between guarding inside the handler vs conditionally attaching the onClick attribute?",
+        mentalModel: "**Guard inside handler**: handler always exists, logic is self-contained, easy to test independently, easy to add additional guards.\n\n**Conditional onClick**: no handler function created when disabled (micro-optimization), intent is visible at the JSX level, but logic is split between JSX and elsewhere.\n\nBoth are idiomatic. Guard inside handler is more common when there are multiple conditions; conditional onClick is more common for simple enabled/disabled toggling on non-form elements.",
+        discover: "```tsx\n// ✅ guard inside handler — self-contained, testable\nconst handleClick = () => {\n  if (disabled || isLoading) return;\n  if (!hasPermission) { showAlert(); return; }\n  onSelect(id);\n};\n\n// ✅ conditional attribute — intent at JSX level\n<div onClick={disabled ? undefined : () => onSelect(id)}>\n\n// ✅ native disabled — only for form elements\n<button disabled={disabled} onClick={() => onSelect(id)}>Select</button>\n// Native disabled: browser prevents click AND applies :disabled CSS styles\n```",
+        quickRules: "- ✅ guard inside handler for multiple conditions or complex logic\n- ✅ conditional onClick for simple single-condition enable/disable\n- ✅ native disabled attribute for form elements (button, input) — browser handles it\n- ❌ native disabled on div/span — no effect\n- native disabled gives free :disabled CSS, cursor-not-allowed, and focus prevention",
+        watchOut: "👀 **Watch out:** If you guard inside the handler but the element still looks clickable, add visual feedback — `className={disabled ? 'card--disabled' : ''}` with CSS `cursor: not-allowed; opacity: 0.5`. Users expect disabled elements to look disabled.",
+        dryRun: "🔁 **Think:** disabled is true. The user clicks the card. handleClick fires. `if (disabled) return` executes. Does onSelect get called? Does the click event bubble to parent elements?",
+        build: "**Learning focus:** Guard against disabled state inside the handler — and know when native disabled (form elements) vs handler guard (custom elements) is the right choice."
+      }
+    }
+  ],
+  sideItems: [
+    { label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" },
+    { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" },
+    { label: "Step 3", id: "step3" }, { label: "Step 4", id: "step4" }, { label: "Step 5", id: "step5" }
+  ],
   lessonNum: 13,
-  title: "Lesson 13",
-  shortName: "TS - L13",
+  title: "Event Handling — Click",
+  shortName: "EVENTS — CLICK",
 });

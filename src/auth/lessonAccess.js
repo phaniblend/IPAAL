@@ -160,69 +160,36 @@ export function getLessonPriceCents() {
  * @returns {"first" | "second" | null}
  */
 export function getSoftGateKind(track, index, opts = {}) {
-  const keys = getAccessedKeys();
-  const key = lessonKey(track, index);
-  if (keys.includes(key)) return null;
-  if (isRegistered() || opts.loggedIn) return null;
-  if (hasEverRegistered()) return null;
-  if (keys.length > MAX_FREE_UNREGISTERED - 1) return null;
-  if (keys.length === 0) return "first";
-  if (keys.length === 1) return "second";
+  // App is fully free: disable all signup prompts.
   return null;
 }
 
 /** Soft gate: 1st and 2nd new anonymous lessons (dismissible). */
 export function mustSoftRegisterToAccess(track, index, opts = {}) {
-  return getSoftGateKind(track, index, opts) != null;
+  return false;
 }
 
 /**
  * Hard register gate: never-registered anonymous user on the 3rd new unique lesson.
  */
 export function mustHardRegisterToAccess(track, index, opts = {}) {
-  const keys = getAccessedKeys();
-  const key = lessonKey(track, index);
-  if (keys.includes(key)) return false;
-  if (opts.loggedIn || isRegistered()) return false;
-  if (hasEverRegistered()) return false;
-  return keys.length >= MAX_FREE_UNREGISTERED;
+  return false;
 }
 
 /**
  * Returning user: registered before, logged out — must log in to open lesson 9+ (new unique past 8).
  */
 export function mustLoginToUnlockPastAnonymousLimit(track, index, opts = {}) {
-  const keys = getAccessedKeys();
-  const key = lessonKey(track, index);
-  if (keys.includes(key)) return false;
-  if (opts.loggedIn || isRegistered()) return false;
-  if (!hasEverRegistered()) return false;
-  return keys.length >= MAX_FREE_UNREGISTERED;
+  return false;
 }
 
 /** Registered user past free tier opening a new lesson — needs balance (mock until payment). */
 export function mustPayToAccess(track, index, opts = {}) {
-  const keys = getAccessedKeys();
-  const key = lessonKey(track, index);
-  if (keys.includes(key)) return false;
-  if (!isRegistered() && !opts.loggedIn) return false;
-  return keys.length >= TOTAL_FREE_LESSONS;
+  return false;
 }
 
 export function canAccessLesson(track, index, opts = {}) {
-  const keys = getAccessedKeys();
-  const key = lessonKey(track, index);
-  if (keys.includes(key)) return true;
-  if (mustLoginToUnlockPastAnonymousLimit(track, index, opts)) return false;
-  if (!opts.loggedIn && !isRegistered() && hasEverRegistered()) {
-    return keys.length < MAX_FREE_UNREGISTERED;
-  }
-  if (!isRegistered() && !opts.loggedIn) {
-    if (keys.length < MAX_FREE_UNREGISTERED) return true;
-    return false;
-  }
-  if (keys.length < TOTAL_FREE_LESSONS) return true;
-  return getBalanceCents() >= getLessonPriceCents();
+  return true;
 }
 
 export function deductLessonPayment() {

@@ -1551,10 +1551,6 @@ export default function createINPACTEngine(config) {
       }
       if (lesson1IntroTourFiredRef.current) return undefined;
       const pref = readLesson1InterfaceTourPref();
-      if (pref === "completed") {
-        lesson1IntroTourFiredRef.current = true;
-        return undefined;
-      }
       lesson1IntroTourFiredRef.current = true;
       const last = Math.max(0, interfaceTourStepCount - 1);
       const startIdx = pref === "recapOnly" ? last : 0;
@@ -1590,8 +1586,8 @@ export default function createINPACTEngine(config) {
 
     const handleLesson1TourLastStepDone = useCallback(() => {
       if (effectiveTourTrack !== "react-ts" || Number(lessonNum) !== 1) return;
-      writeLesson1InterfaceTourPref("completed");
-      setLesson1TourPrefSnapshot("completed");
+      // Keep lesson 1 tour always auto-eligible; never persist "completed".
+      setLesson1TourPrefSnapshot("");
     }, [effectiveTourTrack, lessonNum]);
 
     const handleTourAction = useCallback(
@@ -2679,7 +2675,6 @@ export default function createINPACTEngine(config) {
 
     const showLesson1TourSkipBar =
       isReactTsLesson1TourEntry &&
-      lesson1TourPrefSnapshot !== "completed" &&
       lesson1TourPrefSnapshot !== "recapOnly";
     const interfaceTourInitialStepIndex =
       effectiveTourTrack === "react-ts" && Number(lessonNum) === 1 ? lesson1TourStartIndex : 0;
