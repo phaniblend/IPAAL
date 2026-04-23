@@ -766,13 +766,18 @@ export default function createINPACTEngine(config) {
       }
     });
     const lessonValidationCtx = useContext(LessonValidationContext);
+    /** Non-empty only — `""` is truthy enough to kill `??` fallback yet still fails `=== "react-ts"` and blocked the L1 tour. */
+    const lessonCtxTrack =
+      typeof lessonValidationCtx?.track === "string" && lessonValidationCtx.track.trim() !== ""
+        ? lessonValidationCtx.track.trim()
+        : undefined;
     /** When the engine runs outside `LessonValidationContext` (e.g. some embeds), infer React · TS lesson 1 for tour gating only. */
     const inferredReactTsLesson1 =
       Number(lessonNum) === 1 &&
-      !lessonValidationCtx?.track &&
+      !lessonCtxTrack &&
       (String(language || "").toLowerCase().includes("typescript") ||
         /jsx|react|shipment|tsx|typescript/i.test(`${title || ""} ${shortName || ""}`));
-    const effectiveTourTrack = lessonValidationCtx?.track ?? (inferredReactTsLesson1 ? "react-ts" : undefined);
+    const effectiveTourTrack = lessonCtxTrack ?? (inferredReactTsLesson1 ? "react-ts" : undefined);
     const node = NODES[nodeIndex];
     /** Mount tab chrome on intro/objectives so lesson-1 interface tour targets exist before the first coding step. */
     const useReactTsLesson1TabsShell = useMemo(
@@ -1165,7 +1170,11 @@ export default function createINPACTEngine(config) {
         setPassedCodeByStepId((prev) => ({ ...prev, [node.id]: answer }));
       }
       if (node?.id) setCompletedNodes((p) => (p.includes(node.id) ? p : [...p, node.id]));
-      setNodeIndex((i) => Math.min(i + 1, NODES.length));
+      setNodeIndex((i) => {
+        let j = i + 1;
+        while (j < NODES.length && NODES[j]?.type === "prereqs") j += 1;
+        return Math.min(j, NODES.length);
+      });
     }
 
     function getMergedCodeForKeywordEval() {
@@ -1515,6 +1524,11 @@ export default function createINPACTEngine(config) {
           action: { type: "open-editor" },
         },
         {
+          selector: '[data-inpact-editor-workspace="open"] [data-tour-id="think-prompt-button"]',
+          text: "Think prompt opens a short guided reflection for this step—use it when you want to think through the problem before you write code.",
+          action: { type: "open-editor" },
+        },
+        {
           selector: '[data-tour-id="ask-mentor-button"]',
           text: "Ask mentor lets you chat with a mentor-style assistant about this exact step, in your own words.",
           action: { type: "open-editor" },
@@ -1537,15 +1551,17 @@ export default function createINPACTEngine(config) {
       }
       if (lesson1IntroTourFiredRef.current) return undefined;
       const pref = readLesson1InterfaceTourPref();
+      if (pref === "completed") {
+        lesson1IntroTourFiredRef.current = true;
+        return undefined;
+      }
       lesson1IntroTourFiredRef.current = true;
       const last = Math.max(0, interfaceTourStepCount - 1);
       const startIdx = pref === "recapOnly" ? last : 0;
       setLesson1TourStartIndex(startIdx);
-      const t = window.setTimeout(() => {
-        setTourLaunchNonce((n) => n + 1);
-      }, 0);
+      // Sync bump: dev Strict Mode clears setTimeout(0) before it runs, so the tour never opened.
+      setTourLaunchNonce((n) => n + 1);
       return () => {
-        window.clearTimeout(t);
         lesson1IntroTourFiredRef.current = false;
       };
     }, [isReactTsLesson1TourEntry, interfaceTourStepCount]);
@@ -1606,15 +1622,17 @@ export default function createINPACTEngine(config) {
     );
 
     function renderReveal() {
-      const c = node.content;
+      const c = node?.content && typeof node.content === "object" ? node.content : {};
+      const revealTitle = typeof c.title === "string" && c.title.trim() ? c.title : title || "Lesson";
+      const revealBody = typeof c.body === "string" ? c.body : "";
       const revealPadding = { paddingLeft: "44px" };
       return (
         <div>
           <div style={revealPadding}>
             {node.phase && node.phase !== "Lesson" && <div style={s.phase}>{node.phase}</div>}
             {c.tag && <div style={s.tag}>{c.tag}</div>}
-            <h1 style={s.h1}>{c.title}</h1>
-            <RichLearnerText text={c.body} style={s.pre} />
+            <h1 style={s.h1}>{revealTitle}</h1>
+            <RichLearnerText text={revealBody} style={s.pre} />
           </div>
           {c.usecase && <div style={{ ...revealPadding, background: "rgba(8,145,178,0.08)", border: "1px solid rgba(8,145,178,0.25)", borderLeft: "3px solid #0891b2", borderRadius: "8px", padding: "16px 20px", marginBottom: "28px" }}><div style={{ fontSize: "10px", letterSpacing: "2px", color: "#0891b2", marginBottom: "8px" }}>💡 WHY THIS MATTERS</div><RichLearnerText text={c.usecase} variant="muted" style={{ fontSize: "14px", color: "#475569", lineHeight: "1.7" }} /></div>}
           <div style={s.btnRow}><button type="button" className="inpact-btn-primary" style={s.btn("primary")} onClick={next}>CONTINUE →</button></div>
@@ -1623,11 +1641,12 @@ export default function createINPACTEngine(config) {
     }
 
     function renderObjectives() {
+      const objectiveItems = Array.isArray(node?.items) ? node.items : [];
       return (
         <div>
           {node.phase && node.phase !== "Lesson" && <div style={s.phase}>{node.phase}</div>}
           <h1 style={s.h1}>After completing this Lesson, you'll be able to:</h1>
-          {node.items.map((item, i) => (
+          {objectiveItems.map((item, i) => (
             <div key={i} style={{ display: "flex", gap: "16px", padding: "14px 0", borderBottom: "1px solid #e2e8f0" }}>
               <div style={{ fontSize: "11px", color: "#0891b2", flexShrink: 0, minWidth: "20px" }}>{String(i + 1).padStart(2, "0")}</div>
               <RichLearnerText style={{ fontSize: "15px", color: "#334155", lineHeight: "1.6" }} text={item} />
@@ -1638,6 +1657,7 @@ export default function createINPACTEngine(config) {
               type="button"
               className="inpact-btn-primary"
               style={s.btn("primary")}
+              data-inpact-lesson-lets-build="true"
               onClick={() => {
                 next();
                 setMainTab("editor");
@@ -2778,7 +2798,7 @@ export default function createINPACTEngine(config) {
                 nodes={NODES}
                 mainTab={mainTab}
                 setMainTab={setMainTab}
-                lessonTrack={lessonValidationCtx?.track ?? effectiveTourTrack}
+                lessonTrack={lessonCtxTrack ?? effectiveTourTrack}
                 lessonNum={lessonNum}
                 taskInstructionPulseNonce={taskInstructionPulseNonce}
                 answer={answer}
@@ -2807,6 +2827,7 @@ export default function createINPACTEngine(config) {
                         type="button"
                         className="inpact-btn-primary"
                         style={s.btn("primary")}
+                        data-inpact-lesson-lets-build="true"
                         onClick={() => {
                           next();
                           setMainTab("editor");

@@ -1,16 +1,27 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 
-/** Above editor workspace (10020) and app chrome (~10k), below lesson modals (11009+), reading/deep-dive (11040+). */
-const OVERLAY_Z = 10028;
-const TOOLTIP_Z = 10029;
+/** Above lesson chrome and Help: Tour (~12040); spotlight just under card. */
+const OVERLAY_Z = 12130;
+const TOOLTIP_Z = 12160;
 const TOOLTIP_MAX_W = 380;
-/** Keep tooltip clear of fixed “Help: Tour” (top-right, z-index ~12040 — above this card). */
+/** Keep tooltip clear of fixed “Help: Tour” (top-right). */
 const RESERVE_TOP_RIGHT_FOR_HELP_PX = 140;
+
+const HELP_TOUR_SELECTOR = '.inpact-help-tour-button[data-tour-id="help-tour-button"]';
+const SKIP_END_MESSAGE =
+  "No worries—you can reopen this interface walkthrough any time from Help: Tour when you want a refresher on where each control lives.";
+
+/** Stable reference — inline `{ … }` each render would change `displayStep` identity and loop `useLayoutEffect` → WSOD. */
+const SKIP_HELP_NUDGE_STEP = Object.freeze({
+  selector: HELP_TOUR_SELECTOR,
+  text: SKIP_END_MESSAGE,
+  action: { type: "noop" },
+});
 
 function isTourTargetVisible(el) {
   if (!(el instanceof Element)) return false;
-  if (el.closest?.("[data-inpact-editor-workspace=\"closed\"]")) return false;
+  if (el.closest?.('[data-inpact-editor-workspace="closed"]')) return false;
   let n = el;
   while (n && n instanceof Element) {
     const st = window.getComputedStyle(n);
@@ -65,7 +76,7 @@ function queryTourTargetElement(selector) {
  * - blockTour: when true, closes the tour (e.g. example / feedback / mentor dialogs stacked above it)
  * - initialStepIndex: starting step when forceStartNonce fires (0 … steps.length-1)
  * - onOpenChange: notifies parent when the tour opens or closes
- * - onLastStepDone: called when the learner finishes the final step (Done) or skips on the last step
+ * - onLastStepDone: called when the learner taps Done on the final real step (Skip uses a Help nudge instead)
  */
 export default function InterfaceTour({
   steps = [],
@@ -82,14 +93,19 @@ export default function InterfaceTour({
   const [box, setBox] = useState(null);
   const [missing, setMissing] = useState(false);
   const prevLessonKeyRef = useRef(null);
+  /** After Skip (any step): one-shot spotlight on Help with reassurance copy. */
+  const [skipHelpNudge, setSkipHelpNudge] = useState(false);
+  const [cardOffset, setCardOffset] = useState({ x: 0, y: 0 });
+  const [cardDragging, setCardDragging] = useState(false);
+  const cardDragRef = useRef(null);
 
   useEffect(() => {
     if (forceStartNonce <= 0) return undefined;
     const id = requestAnimationFrame(() => {
-      // Clear stale geometry from the previous run (e.g. last step = Help) so we never
-      // position the first frame off-screen or under the fixed Help button (higher z-index).
       setBox(null);
       setMissing(false);
+      setSkipHelpNudge(false);
+      setCardOffset({ x: 0, y: 0 });
       const last = Math.max(0, steps.length - 1);
       const raw =
         typeof initialStepIndex === "number" && Number.isFinite(initialStepIndex)
@@ -106,6 +122,7 @@ export default function InterfaceTour({
     prevLessonKeyRef.current = lessonKey;
     if (prev === null || prev === lessonKey) return undefined;
     const id = requestAnimationFrame(() => {
+      setSkipHelpNudge(false);
       setOpen(false);
     });
     return () => cancelAnimationFrame(id);
@@ -113,6 +130,7 @@ export default function InterfaceTour({
 
   useEffect(() => {
     if (!blockTour) return undefined;
+    setSkipHelpNudge(false);
     setOpen(false);
   }, [blockTour]);
 
@@ -120,17 +138,24 @@ export default function InterfaceTour({
     if (!open) setBox(null);
   }, [open]);
 
-  const step = steps[index];
+  useEffect(() => {
+    if (!open) return;
+    setCardOffset({ x: 0, y: 0 });
+  }, [open, index]);
+
   const total = steps.length;
+  const baseStep = open && total > 0 ? steps[Math.min(Math.max(0, index), total - 1)] : null;
+  const displayStep = skipHelpNudge ? SKIP_HELP_NUDGE_STEP : baseStep;
+
   const isLast = index >= total - 1;
 
   const measureStep = useCallback(() => {
-    if (!step?.selector) {
+    if (!displayStep?.selector) {
       setBox(null);
       setMissing(true);
       return;
     }
-    const el = queryTourTargetElement(step.selector);
+    const el = queryTourTargetElement(displayStep.selector);
     if (el) {
       el.scrollIntoView({ block: "nearest", behavior: "instant" });
       const r = el.getBoundingClientRect();
@@ -142,11 +167,11 @@ export default function InterfaceTour({
     }
     setBox(null);
     setMissing(true);
-  }, [step]);
+  }, [displayStep]);
 
   useLayoutEffect(() => {
-    if (!open || !step) return undefined;
-    onRequestAction?.(step.action);
+    if (!open || !displayStep) return undefined;
+    onRequestAction?.(displayStep.action);
     let cancelled = false;
     const run = () => {
       if (!cancelled) measureStep();
@@ -161,7 +186,7 @@ export default function InterfaceTour({
       clearTimeout(t2);
       clearTimeout(t3);
     };
-  }, [open, index, step, onRequestAction, measureStep]);
+  }, [open, index, displayStep, skipHelpNudge, onRequestAction, measureStep]);
 
   useEffect(() => {
     if (!open) return undefined;
@@ -177,19 +202,27 @@ export default function InterfaceTour({
   useEffect(() => {
     if (!open) return undefined;
     const onKey = (e) => {
-      if (e.key === "Escape") setOpen(false);
+      if (e.key !== "Escape") return;
+      if (skipHelpNudge) {
+        setSkipHelpNudge(false);
+        setOpen(false);
+        return;
+      }
+      setSkipHelpNudge(true);
+      setCardOffset({ x: 0, y: 0 });
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [open]);
+  }, [open, skipHelpNudge]);
 
   useEffect(() => {
     onOpenChange?.(open);
   }, [open, onOpenChange]);
 
-  if (!open || !step || total === 0) return null;
+  if (!open || total === 0 || !displayStep) return null;
 
   const goNext = () => {
+    if (skipHelpNudge) return;
     if (isLast) {
       onLastStepDone?.();
       setOpen(false);
@@ -201,21 +234,17 @@ export default function InterfaceTour({
       return {
         left: "50%",
         top: "50%",
-        // Nudge left so the card clears fixed “Help: Tour” (top-right) while still centered-ish.
         transform: "translate(calc(-50% - min(56px, 8vw)), -50%)",
         maxWidth: TOOLTIP_MAX_W,
       };
     }
     const margin = 16;
-    /** Gap between tooltip and spotlight target (px). */
     const gap = 10;
-    /** Estimated max tooltip height for placement (card can grow; keep conservative). */
     const approxH = 260;
     let left = box.left + box.width / 2 - TOOLTIP_MAX_W / 2;
     const maxLeft = window.innerWidth - TOOLTIP_MAX_W - margin - RESERVE_TOP_RIGHT_FOR_HELP_PX;
     left = Math.max(margin, Math.min(left, maxLeft));
 
-    // Prefer tooltip *above* the feature: bottom edge `gap` px above target top.
     const fitsAbove = box.top - gap - approxH >= margin;
     if (fitsAbove) {
       return {
@@ -226,7 +255,6 @@ export default function InterfaceTour({
         transform: "none",
       };
     }
-    // Not enough room above viewport: place below target with same gap.
     return {
       left,
       top: box.bottom + gap,
@@ -235,6 +263,12 @@ export default function InterfaceTour({
       transform: "none",
     };
   })();
+
+  const { transform: tooltipBaseTransform = "none", ...tooltipPosWithoutTransform } = tooltipPos;
+  const cardTransform =
+    tooltipBaseTransform === "none"
+      ? `translate(${cardOffset.x}px, ${cardOffset.y}px)`
+      : `${tooltipBaseTransform} translate(${cardOffset.x}px, ${cardOffset.y}px)`;
 
   const spotlight =
     box && !missing ? (
@@ -265,6 +299,57 @@ export default function InterfaceTour({
       />
     );
 
+  function handleCardPointerDown(e) {
+    if (e.pointerType === "mouse" && e.button !== 0) return;
+    if (e.target.closest?.("button")) return;
+    e.preventDefault();
+    setCardDragging(true);
+    cardDragRef.current = {
+      id: e.pointerId,
+      sx: e.clientX,
+      sy: e.clientY,
+      ox: cardOffset.x,
+      oy: cardOffset.y,
+    };
+    e.currentTarget.setPointerCapture(e.pointerId);
+  }
+
+  function handleCardPointerMove(e) {
+    const d = cardDragRef.current;
+    if (!d || e.pointerId !== d.id) return;
+    setCardOffset({
+      x: d.ox + (e.clientX - d.sx),
+      y: d.oy + (e.clientY - d.sy),
+    });
+  }
+
+  function handleCardPointerUp(e) {
+    const d = cardDragRef.current;
+    if (!d || e.pointerId !== d.id) return;
+    setCardDragging(false);
+    try {
+      e.currentTarget.releasePointerCapture(e.pointerId);
+    } catch {
+      /* ignore */
+    }
+    cardDragRef.current = null;
+  }
+
+  const closeTourFully = () => {
+    setSkipHelpNudge(false);
+    setCardOffset({ x: 0, y: 0 });
+    setOpen(false);
+  };
+
+  const handleSkip = () => {
+    if (skipHelpNudge) {
+      closeTourFully();
+      return;
+    }
+    setSkipHelpNudge(true);
+    setCardOffset({ x: 0, y: 0 });
+  };
+
   const card = (
     <div
       role="dialog"
@@ -279,51 +364,93 @@ export default function InterfaceTour({
         boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.35)",
         border: "1px solid #e2e8f0",
         pointerEvents: "auto",
-        ...tooltipPos,
+        touchAction: "none",
+        ...tooltipPosWithoutTransform,
+        transform: cardTransform,
       }}
     >
+      <div
+        role="presentation"
+        onPointerDown={handleCardPointerDown}
+        onPointerMove={handleCardPointerMove}
+        onPointerUp={handleCardPointerUp}
+        onPointerCancel={handleCardPointerUp}
+        style={{
+          cursor: cardDragging ? "grabbing" : "grab",
+          margin: "-6px -8px 10px -8px",
+          padding: "6px 8px",
+          borderRadius: "8px",
+          userSelect: "none",
+          touchAction: "none",
+          background: "linear-gradient(180deg, #f8fafc 0%, #ffffff 55%)",
+          borderBottom: "1px solid #e2e8f0",
+        }}
+        title="Drag to move"
+      >
+        <div style={{ fontSize: "11px", fontWeight: 700, letterSpacing: "0.12em", color: "#64748b" }}>
+          {skipHelpNudge ? "INTERFACE TOUR" : "WALKTHROUGH"}
+        </div>
+      </div>
       <p id="inpact-tour-title" style={{ margin: "0 0 14px", fontSize: "15px", lineHeight: 1.55, color: "#0f172a" }}>
-        {step.text}
+        {displayStep.text}
       </p>
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "12px", flexWrap: "wrap" }}>
         <span style={{ fontSize: "11px", color: "#94a3b8" }}>
-          {index + 1} / {total}
+          {skipHelpNudge ? "Tip" : `${index + 1} / ${total}`}
         </span>
         <div style={{ display: "flex", gap: "8px" }}>
-          <button
-            type="button"
-            onClick={() => {
-              if (isLast) onLastStepDone?.();
-              setOpen(false);
-            }}
-            style={{
-              padding: "8px 14px",
-              fontSize: "13px",
-              borderRadius: "8px",
-              border: "1px solid #cbd5e1",
-              background: "#fff",
-              color: "#475569",
-              cursor: "pointer",
-            }}
-          >
-            Skip
-          </button>
-          <button
-            type="button"
-            onClick={goNext}
-            style={{
-              padding: "8px 14px",
-              fontSize: "13px",
-              borderRadius: "8px",
-              border: "none",
-              background: "#0891b2",
-              color: "#fff",
-              fontWeight: 600,
-              cursor: "pointer",
-            }}
-          >
-            {isLast ? "Done" : "Next"}
-          </button>
+          {skipHelpNudge ? (
+            <button
+              type="button"
+              onClick={closeTourFully}
+              style={{
+                padding: "8px 14px",
+                fontSize: "13px",
+                borderRadius: "8px",
+                border: "none",
+                background: "#0891b2",
+                color: "#fff",
+                fontWeight: 600,
+                cursor: "pointer",
+              }}
+            >
+              Got it
+            </button>
+          ) : (
+            <>
+              <button
+                type="button"
+                onClick={handleSkip}
+                style={{
+                  padding: "8px 14px",
+                  fontSize: "13px",
+                  borderRadius: "8px",
+                  border: "1px solid #cbd5e1",
+                  background: "#fff",
+                  color: "#475569",
+                  cursor: "pointer",
+                }}
+              >
+                Skip
+              </button>
+              <button
+                type="button"
+                onClick={goNext}
+                style={{
+                  padding: "8px 14px",
+                  fontSize: "13px",
+                  borderRadius: "8px",
+                  border: "none",
+                  background: "#0891b2",
+                  color: "#fff",
+                  fontWeight: 600,
+                  cursor: "pointer",
+                }}
+              >
+                {isLast ? "Done" : "Next"}
+              </button>
+            </>
+          )}
         </div>
       </div>
     </div>
