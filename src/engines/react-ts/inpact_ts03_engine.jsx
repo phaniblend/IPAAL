@@ -1,5 +1,25 @@
 import createINPACTEngine from "../inpact_engine_shared";
 
+function evaluateUtilityAlias(answer, utilityName, sourceTypeName, requiredTokens = []) {
+  const raw = String(answer || "");
+  const normalized = raw.replace(/\s+/g, " ").trim();
+  const strictPattern = new RegExp(
+    `\\btype\\s+[A-Za-z_$][\\w$]*\\s*=\\s*${utilityName}\\s*<\\s*${sourceTypeName}\\b`,
+    "i"
+  );
+  const hasRequiredTokens = requiredTokens.every((token) =>
+    new RegExp(`\\b${token.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\b`, "i").test(normalized)
+  );
+  if (strictPattern.test(normalized) && hasRequiredTokens) return "correct";
+
+  const loosePattern = new RegExp(
+    `\\btype\\s+[A-Za-z_$][\\w$]*\\b[\\s\\S]*\\b${utilityName}\\s*<\\s*${sourceTypeName}\\b`,
+    "i"
+  );
+  if (loosePattern.test(normalized)) return "partial";
+  return "wrong";
+}
+
 const NODES = [
 {
   id: "intro",
@@ -46,6 +66,8 @@ const NODES = [
   id: "step1",
   type: "question",
   phase: "Step 1 of 5",
+  strictLocalValidation: true,
+  evaluate: (answer) => evaluateUtilityAlias(answer, "Partial", "ShipmentRecord"),
   paal: "Create a ShipmentFilterParams type using Partial<ShipmentRecord> — a filter form where the user can fill in any combination of fields, but none are required.",
   hint: "Partial wraps an existing type and makes every field optional. You don't redefine the fields — you transform the whole shape in one line.",
   example_code: `type OrderFilterParams = Partial<OrderRecord>;`,
@@ -144,6 +166,8 @@ type ShipmentFilterParams = Partial<ShipmentRecord>;`,
   id: "step2",
   type: "question",
   phase: "Step 2 of 5",
+  strictLocalValidation: true,
+  evaluate: (answer) => evaluateUtilityAlias(answer, "Pick", "ShipmentRecord", ["status", "destination"]),
   paal: "Create a ShipmentSummary type using Pick<ShipmentRecord, ...> that extracts only the status and destination fields — a lightweight shape for list views that don't need the full record.",
   hint: "Pick takes two arguments — the source type and a union of the field names you want to keep, as string literals.",
   example_code: `type OrderPreview = Pick<OrderRecord, 'status' | 'deliveryDate'>;`,
@@ -251,6 +275,8 @@ type ShipmentSummary = Pick<ShipmentRecord, 'status' | 'destination'>;`,
   id: "step3",
   type: "question",
   phase: "Step 3 of 5",
+  strictLocalValidation: true,
+  evaluate: (answer) => evaluateUtilityAlias(answer, "Omit", "ShipmentRecord", ["id", "createdAt", "updatedAt"]),
   paal: "Create a ShipmentCreateInput type using Omit<ShipmentRecord, ...> that removes the three readonly audit fields — id, createdAt, and updatedAt — leaving only the fields the user actually fills in.",
   hint: "Omit is the inverse of Pick — you name the fields to remove, not the fields to keep.",
   example_code: `type OrderCreateInput = Omit<OrderRecord, 'id' | 'createdAt' | 'updatedAt'>;`,
@@ -364,6 +390,8 @@ type ShipmentCreateInput = Omit<ShipmentRecord, 'id' | 'createdAt' | 'updatedAt'
   id: "step4",
   type: "question",
   phase: "Step 4 of 5",
+  strictLocalValidation: true,
+  evaluate: (answer) => evaluateUtilityAlias(answer, "Readonly", "ShipmentFilterParams"),
   paal: "Create a FrozenFilterParams type using Readonly<ShipmentFilterParams> — a frozen snapshot of the filter state that gets passed to the API call and must not be mutated.",
   hint: "Readonly wraps an existing type and adds the readonly modifier to every top-level field.",
   example_code: `type FrozenOrderFilter = Readonly<OrderFilterParams>;`,
@@ -480,8 +508,8 @@ type FrozenFilterParams = Readonly<ShipmentFilterParams>;`,
   id: "step5",
   type: "question",
   phase: "Step 5 of 5",
-  paal: "Build the ShipmentFilterPanel component — accept FrozenFilterParams as props, destructure the fields, and render the active filter values. Use optional chaining to safely access nested fields that may not be present.",
-  hint: "Fields on FrozenFilterParams are optional — they may be undefined. Optional chaining ?. lets you reach into a nested field without crashing when the parent is undefined.",
+  paal: "Build ShipmentFilterPanel that accepts FrozenFilterParams as props. It should display the active status filter and the active destination city. When either value is missing, show a meaningful fallback label instead of leaving it blank.",
+  hint: "Required for pass: (1) component typed with `FrozenFilterParams`, (2) destructure `status` and `destination`, (3) render `<p>{status ?? 'All statuses'}</p>` and `<p>{destination?.city ?? 'All cities'}</p>`.",
   example_code: `const OrderFilterPanel = ({ status, delivery }: FrozenOrderFilter): JSX.Element => {
   return (
     <div>
@@ -556,15 +584,15 @@ type ShipmentCreateInput = Omit<ShipmentRecord, 'id' | 'createdAt' | 'updatedAt'
 
 type FrozenFilterParams = Readonly<ShipmentFilterParams>;
 
-// define ShipmentFilterPanel component here
-// destructure status and destination from FrozenFilterParams
-// render status and destination?.city safely`,
+// Build ShipmentFilterPanel here
+// It receives filter state as props and renders two values:
+// the current status filter and the current destination city`,
   feedback_correct:
     "Exactly — optional chaining on destination?.city returns undefined safely instead of crashing. The component handles the absence of a filter value without an error.",
   feedback_partial:
     "Close — check that you're using optional chaining ?. on the nested destination field. Writing destination.city directly will crash when destination is undefined.",
   feedback_wrong:
-    "The pattern is: destructure `{ status, destination }` from `FrozenFilterParams` in the signature, then use `{destination?.city}` in JSX — the ?. returns undefined instead of throwing when destination is not set.",
+    "Check that your props are destructured from FrozenFilterParams. Then think about what happens when destination was never set — can you safely access .city on something that might not exist?",
   expected: `interface BaseRecord {
   readonly id: string;
   readonly createdAt: string;

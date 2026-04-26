@@ -1398,7 +1398,14 @@ export default function createINPACTEngine(config) {
         codeValidationProfile !== "algorithm" &&
         !(languagePickerOptions?.length > 0);
       try {
-        if (onValidateCodeResolved && node?.type === "question" && useKeywordOnlyWithoutAi) {
+        const strictLocalValidation =
+          node?.type === "question" &&
+          (node?.strictLocalValidation === true || node?.localValidationOnly === true);
+        if (strictLocalValidation && keywordRes !== "correct") {
+          // For syntax-critical steps, do not allow AI to upgrade local wrong/partial to correct.
+          res = keywordRes;
+          setAiFeedback("");
+        } else if (onValidateCodeResolved && node?.type === "question" && useKeywordOnlyWithoutAi) {
           // JSON lessons ship evaluation.required → answer_keywords. Grading with AI here
           // repeatedly produced "rename to match seed" false negatives; keywords are intentionally name-agnostic.
           res = keywordRes;

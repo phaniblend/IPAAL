@@ -266,7 +266,7 @@ export default function InterfaceTour({
 
   if (!open || total === 0 || !displayStep) return null;
   // Revisit recap should appear only in the final highlighted state (no interim card).
-  if (skipHelpNudge && !box && !missing) return null;
+  if (skipHelpNudge && !box) return null;
 
   const goNext = () => {
     if (skipHelpNudge) return;

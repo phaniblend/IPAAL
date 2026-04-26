@@ -129,6 +129,26 @@ function getAIOptions() {
   return { apiKey, provider: "deepseek" };
 }
 
+function summarizeDeepSeekError(err) {
+  const message = err instanceof Error ? err.message : String(err || "");
+  const status = typeof err?.status === "number" ? err.status : null;
+  const lower = message.toLowerCase();
+  const isAuth = status === 401 || status === 403 || /\b(invalid api key|unauthorized|forbidden)\b/i.test(message);
+  const isQuota = /\b(insufficient|quota|credit|billing|balance)\b/i.test(message);
+  const isRateLimit = status === 429 || /\b429|rate limit|too many requests\b/i.test(lower);
+  const isServer = status != null && status >= 500;
+  const category = isAuth
+    ? "auth-invalid-or-revoked-key"
+    : isQuota
+      ? "quota-or-credits-exhausted"
+      : isRateLimit
+        ? "rate-limited"
+        : isServer
+          ? "deepseek-server-error"
+          : "unknown";
+  return { status, category, message };
+}
+
 function getLessonParams(req) {
   const { track, lessonTitle, lessonIndex, learnerLevel, lessonGoal, realWorldUseCase } = req.body || {};
   if (track == null || lessonTitle == null || lessonIndex == null) {
@@ -494,14 +514,25 @@ app.post("/api/lessons/validate", async (req, res) => {
 /** Map validation feedback onto the learner's code (inline comments) via DeepSeek. */
 app.post("/api/lessons/feedback-annotate", async (req, res) => {
   const { apiKey, provider } = getAIOptions();
-  if (!apiKey) {
-    res.status(500).json({ error: "DEEPSEEK_API_KEY not set on server" });
-    return;
-  }
   const { instruction, feedback, hint, userCode, language } = req.body || {};
   if (userCode == null) {
     res.status(400).json({ error: "Missing userCode" });
     return;
+  }
+  if (!apiKey) {
+    console.warn(
+      `[AI server] feedback-annotate fallback: missing API key. env(DEEPSEEK_API_KEY)=${
+        process.env.DEEPSEEK_API_KEY ? "set" : "NOT SET"
+      }, env(VITE_DEEPSEEK_API_KEY)=${process.env.VITE_DEEPSEEK_API_KEY ? "set" : "NOT SET"}`
+    );
+    const fb = String(feedback || "").trim();
+    const h = String(hint || "").trim();
+    const base = fb || h || "Review the step requirements and add the missing required pattern.";
+    const safe = base.replace(/\r?\n+/g, " ").trim();
+    return res.json({
+      annotatedCode: `// Feedback: ${safe}\n// Focus: add the missing required pattern for this step.\n${String(userCode)}`,
+      note: "fallback-without-ai-key",
+    });
   }
   try {
     const result = await annotateFeedbackOnCode(
@@ -516,9 +547,21 @@ app.post("/api/lessons/feedback-annotate", async (req, res) => {
     );
     res.json(result);
   } catch (err) {
-    const message = err instanceof Error ? err.message : String(err);
-    console.error("[AI server] feedback-annotate error:", message);
-    res.status(500).json({ error: message });
+    const summary = summarizeDeepSeekError(err);
+    console.error(
+      `[AI server] feedback-annotate error: category=${summary.category}, status=${
+        summary.status ?? "n/a"
+      }, message=${summary.message}`
+    );
+    const userSafeMessage =
+      summary.category === "auth-invalid-or-revoked-key"
+        ? "DeepSeek rejected the API key (401/403). Key may be invalid or revoked."
+        : summary.category === "quota-or-credits-exhausted"
+          ? "DeepSeek quota/credits appear exhausted. Check account balance/billing."
+          : summary.category === "rate-limited"
+            ? "DeepSeek rate limit hit (429). Please retry in a moment."
+            : summary.message;
+    res.status(500).json({ error: userSafeMessage });
   }
 });
 
