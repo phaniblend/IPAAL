@@ -48,7 +48,7 @@ const NODES = [
   readonly timestamp: string;
 }`,
   think_prompt:
-    "Every record in an enterprise app — orders, users, invoices — shares the same tracking fields from the database. What TypeScript keyword prevents those fields from being accidentally overwritten after the API response arrives?",
+    "In a TypeScript interface, what keyword do you place before each field name (like id, createdAt, updatedAt) so those fields cannot be reassigned after the API data is loaded?",
   mc_options: [
     "interface BaseRecord { id: string; createdAt: string; updatedAt: string }",
     "interface BaseRecord { readonly id: string; readonly createdAt: string; readonly updatedAt: string }",
