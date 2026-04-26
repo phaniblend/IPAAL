@@ -1,4 +1,4 @@
-import { useRef, useEffect, useState, useContext, useMemo } from "react";
+import { useRef, useEffect, useLayoutEffect, useState, useContext, useMemo } from "react";
 import RichLearnerText from "./RichLearnerText";
 import ReadingModeModal from "./ReadingModeModal";
 import DeepDiveModal from "./DeepDiveModal";
@@ -404,8 +404,8 @@ const lessonStyles = {
   card: { background: "#ffffff", border: "1px solid #e2e8f0", borderLeft: "4px solid #f28a8a", borderRadius: "12px", padding: "24px 28px", marginBottom: "24px", boxShadow: "0 1px 3px rgba(0,0,0,0.06)" },
   paalLabel: { fontSize: "10px", color: "#f28a8a", letterSpacing: "2px", marginBottom: "10px", fontWeight: 600 },
   paalText: { fontSize: "16px", color: "#334155", lineHeight: "1.75", whiteSpace: "pre-wrap" },
-  taskCard: { background: "rgba(245,158,11,0.1)", border: "1px solid rgba(245,158,11,0.35)", borderLeft: "4px solid #f59e0b", borderRadius: "10px", padding: "18px 22px", marginTop: "20px", marginBottom: "24px" },
-  taskLabel: { fontSize: "10px", fontWeight: 700, letterSpacing: "0.15em", color: "#b45309", marginBottom: "8px" },
+  taskCard: { background: "rgba(255,107,107,0.12)", border: "1px solid rgba(255,107,107,0.45)", borderLeft: "4px solid #FF6B6B", borderRadius: "10px", padding: "18px 22px", marginTop: "20px", marginBottom: "24px" },
+  taskLabel: { fontSize: "10px", fontWeight: 700, letterSpacing: "0.15em", color: "#124559", marginBottom: "8px" },
   taskText: { fontSize: "15px", color: "#422006", lineHeight: "1.65", whiteSpace: "pre-wrap" },
   editorTaskWrap: { width: "100%", marginBottom: "4px", flexShrink: 0, boxSizing: "border-box" },
   editorTaskBox: { background: "#ffffff", border: "1px solid #e2e8f0", borderLeft: "4px solid #f28a8a", borderRadius: "8px", padding: "8px 12px", boxShadow: "0 1px 2px rgba(0,0,0,0.04)" },
@@ -654,6 +654,7 @@ export default function LessonEditorOutputTabs({
   const [previewCoach, setPreviewCoach] = useState(null);
   const [showReadingModal, setShowReadingModal] = useState(false);
   const lessonScrollRef = useRef(null);
+  const lessonObjectivesAnchorRef = useRef(null);
   const previewIframeRef = useRef(null);
   const introNode = introNodeFromNodes(nodes);
   const objectivesNode = omitObjectivesFromLessonTab ? null : objectivesNodeFromNodes(nodes);
@@ -675,14 +676,39 @@ export default function LessonEditorOutputTabs({
           ? generateTemplatePreview(code)
           : null;
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const showLessonMain = useEditorWorkspaceModal || mainTab === "lesson";
     if (!showLessonMain) return;
-    const el = lessonScrollRef.current;
-    if (!el) return;
-    const id = requestAnimationFrame(() => { el.scrollTop = 0; });
+    const scrollEl = lessonScrollRef.current;
+    if (!scrollEl) return;
+    const run = () => {
+      if (node?.type === "objectives" && objectives.length > 0) {
+        const anchor = lessonObjectivesAnchorRef.current;
+        if (anchor) {
+          const sRect = scrollEl.getBoundingClientRect();
+          const aRect = anchor.getBoundingClientRect();
+          const delta = aRect.top - sRect.top - 8;
+          scrollEl.scrollTop = Math.max(0, scrollEl.scrollTop + delta);
+          const lets = scrollEl.querySelector("[data-inpact-lesson-lets-build]");
+          if (lets instanceof HTMLElement) {
+            const sRect2 = scrollEl.getBoundingClientRect();
+            const bRect = lets.getBoundingClientRect();
+            if (bRect.bottom > sRect2.bottom - 12) {
+              const bump = bRect.bottom - sRect2.bottom + 12;
+              scrollEl.scrollTop = Math.min(
+                scrollEl.scrollHeight - scrollEl.clientHeight,
+                scrollEl.scrollTop + bump
+              );
+            }
+          }
+          return;
+        }
+      }
+      scrollEl.scrollTop = 0;
+    };
+    const id = requestAnimationFrame(run);
     return () => cancelAnimationFrame(id);
-  }, [mainTab, useEditorWorkspaceModal, node?.id]);
+  }, [mainTab, useEditorWorkspaceModal, node?.id, node?.type, objectives.length]);
 
   useEffect(() => {
     if (!useEditorWorkspaceModal || !editorWorkspaceOpen) return undefined;
@@ -781,7 +807,7 @@ export default function LessonEditorOutputTabs({
           <div style={{ display: "flex", gap: "6px", flexWrap: "wrap" }}>
             <button
               type="button"
-              style={{ ...lessonStyles.tab(false), borderColor: "#a89880", color: "#6b5c4c", fontSize: "11px" }}
+              style={{ ...lessonStyles.tab(false), borderColor: "#00C49A", color: "#124559", fontSize: "11px" }}
               data-tour-id="reading-button"
               onClick={() => setShowReadingModal(true)}
               title="Skim the lesson like a book — steps, code, and explanations"
@@ -821,7 +847,7 @@ export default function LessonEditorOutputTabs({
               </div>
             )}
             {objectives.length > 0 && (
-              <div style={lessonStyles.card}>
+              <div ref={node?.type === "objectives" ? lessonObjectivesAnchorRef : undefined} style={lessonStyles.card}>
                 <div style={lessonStyles.paalLabel}>LEARNING OBJECTIVES</div>
                 <ul style={{ margin: 0, paddingLeft: "20px", color: "#334155", lineHeight: 1.85, fontSize: "15px" }}>
                   {objectives.map((item, i) => (
@@ -1150,14 +1176,14 @@ export default function LessonEditorOutputTabs({
                 style={{
                   flexShrink: 0,
                   padding: "12px 16px",
-                  background: "linear-gradient(180deg, #fffbeb 0%, #fef3c7 100%)",
+                  background: "linear-gradient(180deg, #EAFBFF 0%, #ffffff 100%)",
                   borderBottom: "1px solid #fcd34d",
                   fontSize: "13px",
-                  color: "#78350f",
+                  color: "#124559",
                   lineHeight: 1.55,
                 }}
               >
-                <div style={{ fontWeight: 700, fontSize: "10px", letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: "6px", color: "#b45309" }}>
+                <div style={{ fontWeight: 700, fontSize: "10px", letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: "6px", color: "#124559" }}>
                   Learner hint
                 </div>
                 {learnerPreviewCoachHint(previewCoach.message) ? (

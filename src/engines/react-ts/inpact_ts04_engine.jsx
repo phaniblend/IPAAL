@@ -1,8 +1,3 @@
-/**
- * 🔒 LOCKED — React · TS lesson 4 — Multiple State Variables (TypeScript).
- * Do not change steps, copy, or evaluation without explicit product/content sign-off.
- * Generated mirror: content/generated/react-ts/004_multiple-state-variables_lesson.json
- */
 import createINPACTEngine from "../inpact_engine_shared";
 
 const NODES = [
@@ -17,6 +12,28 @@ const NODES = [
     usecase:
       "When data comes from an API, you often don't know the exact shape at component design time — but you know something about it. Generics let you say 'I don't know the full shape yet, but I know it has at least these fields' — and TypeScript enforces that contract at every callsite. This is the pattern behind every truly reusable data component in a real enterprise app.",
   },
+},
+{
+  id: "prereqs",
+  type: "prereqs",
+  phase: "Prerequisites",
+  items: [
+    {
+      lesson: 1,
+      label: "JSX — The Full Language",
+      reason: "The DataList component you build here maps over an array in JSX — {items.map((item) => <div key={item.id}>{renderItem(item)}</div>)} — and the renderItem function returns JSX.Element. You need to know JSX expressions, the component shell, and what JSX.Element means before the generic component you build here makes sense.",
+    },
+    {
+      lesson: 2,
+      label: "TypeScript — Interfaces + Types",
+      reason: "The type constraint T extends BaseRecord is what lets DataList use item.id as the key prop — because BaseRecord guarantees that field exists. BaseRecord was defined in Lesson 2. Without knowing what extends means and how BaseRecord is structured, the constraint in this lesson looks like magic rather than a deliberate contract.",
+    },
+    {
+      lesson: 3,
+      label: "TypeScript — Utility Types",
+      reason: "Generics and utility types are both about transforming or constraining a type rather than defining one from scratch. Lesson 3 builds that mental model — deriving a new type from an existing one in one line. The T extends BaseRecord constraint here is the same idea: you are not defining what T is, you are constraining what it must include. Without Lesson 3, this distinction between defining and constraining is much harder to grasp.",
+    },
+  ],
 },
 {
   id: "objectives",
@@ -54,13 +71,7 @@ const NODES = [
   why_this_matters:
     "A generic props interface is the foundation of every reusable data component. The T parameter is a placeholder that gets filled in at the callsite — when someone uses DataList with ShipmentRecord, TypeScript replaces every T with ShipmentRecord and checks the whole component against that shape. One interface definition, infinite reuse.",
   answer_keywords: [
-    "interface",
-    "DataListProps",
-    "<T>",
-    "items",
-    "T[]",
-    "renderItem",
-    "JSX.Element",
+    "interface", "DataListProps", "<T>", "items", "T[]", "renderItem", "JSX.Element",
   ],
   seed_code: `interface BaseRecord {
   readonly id: string;
@@ -170,13 +181,7 @@ interface DataListProps<T> {
   why_this_matters:
     "This is the pattern behind safe API data components. When data comes from an API you don't control, you know some things about the shape — every record has an id — but not everything. T extends BaseRecord says exactly that: 'I don't know the full shape, but I know it has at least these fields.' TypeScript enforces that at every callsite — no record without an id can ever be passed to DataList.",
   answer_keywords: [
-    "interface",
-    "DataListProps",
-    "<T extends BaseRecord>",
-    "items",
-    "T[]",
-    "renderItem",
-    "JSX.Element",
+    "interface", "DataListProps", "<T extends BaseRecord>", "items", "T[]", "renderItem", "JSX.Element",
   ],
   seed_code: `interface BaseRecord {
   readonly id: string;
@@ -297,15 +302,7 @@ interface DataListProps<T extends BaseRecord> {
   why_this_matters:
     "A generic component is one definition that works for any compatible type. The type parameter on the function is what makes that possible — TypeScript resolves T differently for each callsite, checking the full type safety of each call independently. One component, many record types, zero code duplication.",
   answer_keywords: [
-    "const",
-    "DataList",
-    "<T extends BaseRecord>",
-    "DataListProps<T>",
-    "JSX.Element",
-    "=>",
-    "return",
-    "<>",
-    "</>",
+    "const", "DataList", "<T extends BaseRecord>", "DataListProps<T>", "JSX.Element", "=>", "return", "<>", "</>",
   ],
   seed_code: `interface BaseRecord {
   readonly id: string;
@@ -405,17 +402,17 @@ const DataList = <T extends BaseRecord>({
     watchOut:
       "👀 **Watch out:** The JSX ambiguity error message from TypeScript is notoriously unhelpful — it mentions JSX implicitly having type any, not 'your generic is ambiguous'. If you ever see a strange JSX error on a line that doesn't look like JSX, check whether you have a bare `<T>` on an arrow function in a .tsx file. Adding the constraint is almost always the right fix.",
     dryRun:
-      "🔁 **Think:** You have `const DataList = <T extends BaseRecord>(...)`. TypeScript resolves T as ShipmentRecord at one callsite and DriverRecord at another. Inside the component body, you access `items[0].id`. Does TypeScript allow this for both callsites — and why? (Hint: both ShipmentRecord and DriverRecord extend BaseRecord, so the constraint guarantees id exists regardless of which specific type T resolves to.)",
+      "🔁 **Think:** You write `const DataList = <T extends BaseRecord>(...)` in a .tsx file and TypeScript is happy. A teammate copies your component into a .ts file and removes the JSX. They also change the constraint to just `<T>`. Does removing `extends` cause any ambiguity in a .ts file — and does the component still work? (Hint: .ts files have no JSX parser ambiguity — the constraint is only syntactically required in .tsx.)",
     build:
-      "**Learning focus:** Define a generic arrow function component with a constrained type parameter — understanding that the constraint serves double duty in .tsx files: it's semantically correct and it disambiguates the generic syntax from JSX tags.",
+      "**Learning focus:** Define a generic arrow function component with a constrained type parameter — understanding that the constraint must be on the function itself (not inherited from the interface), and that in .tsx files the extends keyword serves double duty: semantic constraint and parser disambiguation.",
   },
 },
 {
   id: "step4",
   type: "question",
   phase: "Step 4 of 5",
-  paal: "Fill in the DataList return — map over items, use item.id as the key prop on each wrapper div, and call renderItem to produce each row's JSX.",
-  hint: "The map callback receives each item typed as T. Because T extends BaseRecord, item.id is guaranteed to exist for the key prop.",
+  paal: "Fill in the DataList return — replace the empty fragment with a div wrapping items.map(). Each mapped item should be wrapped in a div with key={item.id}, and renderItem(item) should produce the row content.",
+  hint: "items.map() returns an array of JSX elements. Each element needs a key prop — use item.id, which is guaranteed by the BaseRecord constraint.",
   example_code: `return (
   <div>
     {rows.map((row) => (
@@ -438,13 +435,7 @@ const DataList = <T extends BaseRecord>({
     "item.id is the correct key — it's stable, unique, and guaranteed by the BaseRecord constraint. The first option has no key prop at all — React will warn and reconciliation will break. The third option uses the array index as key — it works but causes subtle bugs when the list reorders or items are inserted, because index-based keys don't track identity.",
   why_this_matters:
     "The key prop is how React tracks which item is which across re-renders. A stable unique id from the database is always the right key — it survives reordering, insertion, and deletion. The BaseRecord constraint is what makes item.id available here — without it, TypeScript would error because T might not have an id field.",
-  answer_keywords: [
-    "items.map",
-    "item",
-    "key={item.id}",
-    "renderItem",
-    "div",
-  ],
+  answer_keywords: ["items.map", "item", "key={item.id}", "renderItem", "div"],
   seed_code: `interface BaseRecord {
   readonly id: string;
   readonly createdAt: string;
@@ -600,15 +591,7 @@ const DataList = <T extends BaseRecord>({
   why_this_matters:
     "Generic inference at the callsite is what makes generic components feel seamless. You write DataList as if it's a specific component for ShipmentRecord — full autocomplete, full type safety — without ever having written a ShipmentRecord-specific list component. The same DataList works identically for any record type that satisfies the BaseRecord constraint.",
   answer_keywords: [
-    "DataList",
-    "items",
-    "id",
-    "createdAt",
-    "updatedAt",
-    "status",
-    "destination",
-    "renderItem",
-    "item",
+    "DataList", "items", "id", "createdAt", "updatedAt", "status", "destination", "renderItem", "item",
   ],
   seed_code: `interface BaseRecord {
   readonly id: string;
@@ -779,39 +762,16 @@ const DataList = <T extends BaseRecord>({
       "**Learning focus:** Use a generic component at the callsite — understanding that TypeScript infers T from the items prop automatically, that inference fails for empty arrays requiring an explicit type argument, and that the inferred type flows fully into renderItem giving complete access to the resolved type's fields.",
   },
 },
-
 ];
 
 const sideItems = [
-  {
-    label: "Lesson",
-    id: "intro",
-  },
-  {
-    label: "Objectives",
-    id: "objectives",
-  },
-  {
-    label: "Step 1",
-    id: "step1",
-  },
-  {
-    label: "Step 2",
-    id: "step2",
-  },
-  {
-    label: "Step 3",
-    id: "step3",
-  },
-  {
-    label: "Step 4",
-    id: "step4",
-  },
-  {
-    label: "Step 5",
-    id: "step5",
-  },
-
+  { label: "Lesson", id: "intro" },
+  { label: "Objectives", id: "objectives" },
+  { label: "Step 1", id: "step1" },
+  { label: "Step 2", id: "step2" },
+  { label: "Step 3", id: "step3" },
+  { label: "Step 4", id: "step4" },
+  { label: "Step 5", id: "step5" },
 ];
 
 export default createINPACTEngine({

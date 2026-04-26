@@ -104,14 +104,16 @@ export default function InterfaceTour({
     const id = requestAnimationFrame(() => {
       setBox(null);
       setMissing(false);
-      setSkipHelpNudge(false);
       setCardOffset({ x: 0, y: 0 });
       const last = Math.max(0, steps.length - 1);
       const raw =
         typeof initialStepIndex === "number" && Number.isFinite(initialStepIndex)
           ? Math.trunc(initialStepIndex)
           : 0;
-      setIndex(Math.max(0, Math.min(raw, last)));
+      const startAt = Math.max(0, Math.min(raw, last));
+      // Revisit recap starts at the final step index; jump straight to the Help-tip nudge.
+      setSkipHelpNudge(startAt >= last);
+      setIndex(startAt);
       setOpen(true);
     });
     return () => cancelAnimationFrame(id);
@@ -215,11 +217,56 @@ export default function InterfaceTour({
     return () => window.removeEventListener("keydown", onKey);
   }, [open, skipHelpNudge]);
 
+  useLayoutEffect(() => {
+    if (!open || !skipHelpNudge) return undefined;
+    let cancelled = false;
+    let target = null;
+    let raf = 0;
+    let t = 0;
+    let prevBoxShadow = "";
+    let prevOutline = "";
+    let prevOutlineOffset = "";
+    let prevBorderRadius = "";
+
+    const applyHighlight = () => {
+      if (cancelled) return;
+      target = queryTourTargetElement(HELP_TOUR_SELECTOR);
+      if (!target) return;
+      prevBoxShadow = target.style.boxShadow;
+      prevOutline = target.style.outline;
+      prevOutlineOffset = target.style.outlineOffset;
+      prevBorderRadius = target.style.borderRadius;
+      target.style.boxShadow =
+        "0 0 0 8px rgba(255,255,255,0.92), 0 0 0 12px rgba(186,230,253,0.95)";
+      target.style.outline = "2px solid rgba(125,211,252,0.95)";
+      target.style.outlineOffset = "0px";
+      target.style.borderRadius = "16px";
+    };
+
+    applyHighlight();
+    raf = requestAnimationFrame(applyHighlight);
+    t = window.setTimeout(applyHighlight, 120);
+
+    return () => {
+      cancelled = true;
+      if (raf) cancelAnimationFrame(raf);
+      if (t) clearTimeout(t);
+      if (target) {
+        target.style.boxShadow = prevBoxShadow;
+        target.style.outline = prevOutline;
+        target.style.outlineOffset = prevOutlineOffset;
+        target.style.borderRadius = prevBorderRadius;
+      }
+    };
+  }, [open, skipHelpNudge]);
+
   useEffect(() => {
     onOpenChange?.(open);
   }, [open, onOpenChange]);
 
   if (!open || total === 0 || !displayStep) return null;
+  // Revisit recap should appear only in the final highlighted state (no interim card).
+  if (skipHelpNudge && !box && !missing) return null;
 
   const goNext = () => {
     if (skipHelpNudge) return;

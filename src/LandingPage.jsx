@@ -6,8 +6,9 @@ import { MOBILE_ANGULAR_LESSONS } from "./mobileAngularLessons.js";
 import { isReduxRtkLessonIndex, REDUX_LANDING_SUBSECTIONS } from "./reduxRtkLessonIndices.js";
 import { LESSON_LIST as REACT_TS_LESSON_LIST } from "./reactTsCurriculum.js";
 
-// Must match ENGINES order in App.jsx (p01…p100 minus 10/16/17/88, then p101–p110, p113–p125, p126–p127; React TS adds TS120–TS122).
-export const LESSON_LIST = REACT_TS_LESSON_LIST;
+const REACT_TS_ENABLED_LESSONS = 50;
+// Keep landing catalog aligned with enabled static engines in App.jsx.
+export const LESSON_LIST = REACT_TS_LESSON_LIST.slice(0, REACT_TS_ENABLED_LESSONS);
 
 /**
  * Groupings for the lessons grid (React · JS / React · TS / Vue) — indices align with LESSON_LIST.
@@ -26,7 +27,7 @@ const REACT_GRID_GROUPS = [
   { key: "tier9", title: "Tier 9 — Data Patterns", start: 107, end: 115 },
   { key: "tier10", title: "Tier 10 — UX Patterns", start: 115, end: 126 },
   { key: "tier11", title: "Tier 11 — Accessibility", start: 126, end: 130 },
-  { key: "tier12", title: "Tier 12 — Testing", start: 130, end: 138 },
+  { key: "tier12", title: "Tier 12 — Testing", start: 130, end: 150 },
 ];
 
 /** Angular track lesson order — must match App.jsx lessonList for next/prev and content indices. */
@@ -461,7 +462,7 @@ export default function LandingPage({ track, onSelectLesson, onStartFree, lesson
             }}
           >
             <button type="button" style={LP.btn} onClick={startFirstLesson}>
-              Start free
+              Start Here
             </button>
             <button type="button" style={LP.btnOutline} onClick={() => setHowItWorksOpen(true)}>
               How it works
@@ -771,11 +772,17 @@ export default function LandingPage({ track, onSelectLesson, onStartFree, lesson
 
             <div style={{ ...LP.section, marginBottom: "24px", maxWidth: "100%" }}>
               <div style={LP.kicker}>00 · The philosophy</div>
-              <p style={LP.quote}>&ldquo;Brain over fingers.&rdquo;</p>
+              <p style={LP.quote}>&ldquo;Brain before fingers.&rdquo;</p>
               <p style={LP.p}>
-                In a world of copy-paste solutions, we prioritize the pause. We believe in{" "}
-                <strong style={LP.strong}>Clarity before creation</strong>. You don&apos;t just learn to write React and
-                TypeScript; you learn to <strong style={LP.strong}>architect</strong> them.
+                Copy-paste can ship a demo; it cannot ship judgment. We teach you to{" "}
+                <strong style={LP.strong}>see structure first</strong>—what must stay stable, what is allowed to vary,
+                what failure modes matter in real UIs—then let React and TypeScript be the notation for a decision you
+                already made.
+              </p>
+              <p style={LP.p}>
+                <strong style={LP.strong}>Clarity, then creation.</strong> You are not collecting syntax. You are
+                practicing how to hold a problem in your head long enough to choose a shape that survives the next
+                requirement.
               </p>
               <p style={{ ...LP.p, fontWeight: 600, color: "#0f172a", marginBottom: 0 }}>Think first → Code next.</p>
             </div>
@@ -784,26 +791,27 @@ export default function LandingPage({ track, onSelectLesson, onStartFree, lesson
 
             <div style={{ ...LP.section, marginBottom: "24px", maxWidth: "100%" }}>
               <div style={LP.kicker}>01 · The learning loop</div>
-              <em style={LP.em}>A deliberate cycle designed to build thinking, not just output.</em>
+              <em style={LP.em}>A deliberate cycle for reasoning, not output volume.</em>
               <div style={LP.phase}>
-                <div style={LP.phaseTitle}>Phase 01: The Scenario (Context → Component)</div>
+                <div style={LP.phaseTitle}>Phase 01 · The scenario (context → component)</div>
                 <p style={LP.phaseBody}>
-                  Every line of code starts with a &ldquo;Why.&rdquo; You begin with a focused use case—a real-world
-                  situation where a component must perform. We identify what matters most before a single key is pressed.
+                  Every meaningful component begins as a situation: a user goal, a constraint, a risk. We start with a
+                  tight use case so &ldquo;what matters most&rdquo; is visible before the editor becomes a distraction.
                 </p>
               </div>
               <div style={LP.phase}>
-                <div style={LP.phaseTitle}>Phase 02: The Model (Break → Understand)</div>
+                <div style={LP.phaseTitle}>Phase 02 · The model (break → understand)</div>
                 <p style={LP.phaseBody}>
-                  We strip the syntax away to examine behavior. What changes? What stays? What drives the logic? You form
-                  a mental model first, then recognize the reusable pattern hiding behind the noise.
+                  We pause to separate behavior from notation. What changes when inputs change? What invariants must hold?
+                  What is the reusable idea hiding inside this one-off screen? A mental model is the real deliverable;
+                  code is evidence that the model worked.
                 </p>
               </div>
               <div style={LP.phase}>
-                <div style={LP.phaseTitle}>Phase 03: The Build (Predict → Implement)</div>
+                <div style={LP.phaseTitle}>Phase 03 · The build (predict → implement)</div>
                 <p style={LP.phaseBody}>
-                  Before the IDE opens, you predict outcomes. You anticipate what could break. By the time you write the
-                  code, it&apos;s an act of implementation, not an act of trial and error.{" "}
+                  Before typing, you predict: what should render, what should fail, what should feel obviously wrong if you
+                  misunderstand the contract. By the time you implement, coding is confirmation, not roulette.{" "}
                   <strong style={LP.strong}>Code follows understanding.</strong>
                 </p>
               </div>
@@ -813,16 +821,17 @@ export default function LandingPage({ track, onSelectLesson, onStartFree, lesson
 
             <div style={{ ...LP.section, marginBottom: "24px", maxWidth: "100%" }}>
               <div style={LP.kicker}>02 · Your digital mentor</div>
-              <h3 style={{ ...LP.h2, fontSize: "1.05rem" }}>Guidance, not answers.</h3>
+              <h3 style={{ ...LP.h2, fontSize: "1.05rem" }}>Guidance, not a vending machine for answers.</h3>
               <p style={LP.p}>
-                Stuck? A mentor is embedded in every step. They won&apos;t give you the solution, but they will sharpen
-                your trajectory.
+                Stuck is normal; staying stuck is optional. The mentor is tuned for thinking prompts—reframing, checks
+                for assumptions, and next diagnostic moves—not a polished final file that bypasses your reasoning.
               </p>
               <p style={{ ...LP.p, fontWeight: 600, color: "#0f172a", marginBottom: "12px" }}>
-                Hints → Direction → Clarity.
+                Hints → direction → clarity.
               </p>
               <p style={{ ...LP.p, fontSize: "14px", marginBottom: 0 }}>
-                In the app— inside any lesson, use &ldquo;Ask your mentor&rdquo; for step-scoped help.
+                In the app, inside any lesson, use <strong style={LP.strong}>Ask mentor</strong> for help that stays
+                scoped to the step you are on.
               </p>
             </div>
 
@@ -833,7 +842,14 @@ export default function LandingPage({ track, onSelectLesson, onStartFree, lesson
               <h3 style={{ ...LP.h2, fontSize: "1.05rem" }}>
                 The blueprint · {lessonCount} lessons
               </h3>
-              <em style={LP.em}>Our curriculum is non-linear. Pick a concept, build a block, and expand your toolkit.</em>
+              <em style={LP.em}>
+                The curriculum stays non-linear by design: you can enter where curiosity pulls you and assemble
+                competence in the order that matches a project you care about. Recommended prerequisites are not a
+                cage—they are a cognitive map: when a lesson assumes you can already see props as contracts, generics as
+                reusable constraints, or JSX as structured UI logic, we label that honestly so you choose between building
+                the missing mental model first or accepting a steeper climb. Either path is valid; only one is kind to
+                beginners.
+              </em>
 
               {showReactBlueprint ? (
                 <>

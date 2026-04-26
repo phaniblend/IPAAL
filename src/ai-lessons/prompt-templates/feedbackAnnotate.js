@@ -11,6 +11,8 @@ Rules:
 - If the issue is a wrong or incomplete line (e.g. a missing assignment, wrong expression, or a useless expression statement like \`this.next;\` without assigning), replace that line with the corrected version and add a brief trailing comment explaining what was wrong and why the fix is right. Keep the comment concise (one sentence when possible).
 - If multiple issues exist, annotate each location.
 - Do not invent new requirements beyond the feedback and step task; do not lecture. Do not change correct code unnecessarily.
+- Never suggest or apply style-only edits (spacing, tabs, indentation, formatting, quote style, trailing semicolons) unless formatting itself breaks parsing. Do not add comments like "add a space".
+- Never mention optional or non-required alternatives. Focus only on required corrections needed to pass this step.
 - For React controlled-input steps, never add or insist on \`pattern=\`, regex validation, or extra attributes unless the step task explicitly requires them.
 - If the submission is empty or not code, set "annotatedCode" to the same string you were given (or a one-line comment explaining there is no code to annotate).`;
 

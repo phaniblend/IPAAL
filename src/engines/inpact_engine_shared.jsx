@@ -400,8 +400,9 @@ function resolveQuestionStepExample(answerShape, node, shortName) {
     (typeof node.example_code === "string" && node.example_code.trim()) ||
     "";
 
-  function applyPrimaryFromBase(base) {
-    const wrapped = buildExampleWithStarterContext(answerShape, node, base);
+  function applyPrimaryFromBase(base, options = {}) {
+    const useStarterContext = options.useStarterContext !== false;
+    const wrapped = useStarterContext ? buildExampleWithStarterContext(answerShape, node, base) : base;
     const meta = node.ai_example_meta;
     const deepseekMerge =
       meta &&
@@ -421,9 +422,13 @@ function resolveQuestionStepExample(answerShape, node, shortName) {
 
   // Import-focused: only accept curated snippet when it comes from the engine's explicit analogous field.
   if (isImportFocusedTask && engineAnalogousExample && looksLikeCodeSnippet(engineAnalogousExample)) {
-    applyPrimaryFromBase(engineAnalogousExample);
+    // Engine-authored analogous examples should remain pattern-only (no starter-context merge).
+    applyPrimaryFromBase(engineAnalogousExample, { useStarterContext: false });
   } else if (!isImportFocusedTask && curatedRaw && looksLikeCodeSnippet(curatedRaw)) {
-    applyPrimaryFromBase(curatedRaw);
+    const sourceIsEngineAnalog =
+      (typeof node.analogousExample === "string" && node.analogousExample.trim() && curatedRaw === node.analogousExample.trim()) ||
+      (typeof node.analog_example === "string" && node.analog_example.trim() && curatedRaw === node.analog_example.trim());
+    applyPrimaryFromBase(curatedRaw, { useStarterContext: !sourceIsEngineAnalog });
   }
 
   let localFallbackEntry = null;
@@ -543,11 +548,49 @@ function buildHintOnlyGuidance(node) {
 
 function buildFeedbackOnlyGuidance(text) {
   const raw = String(text || "").trim();
-  const cleaned = stripCodeLikeFragments(raw);
+  const optionalAdvicePattern = /\b(you may|optional|not required|nice[-\s]?to[-\s]?have)\b/i;
+  const withoutOptionalAdvice = raw
+    .split(/(?<=[.!?])\s+|\n+/)
+    .map((part) => part.trim())
+    .filter(Boolean)
+    .filter((part) => !optionalAdvicePattern.test(part))
+    .join(" ")
+    .replace(/\s{2,}/g, " ")
+    .trim();
+  const source = withoutOptionalAdvice || raw;
+  const cleaned = stripCodeLikeFragments(source)
+    .replace(/\s+([,.;:!?])/g, "$1")
+    .replace(/([([{])\s+/g, "$1")
+    .replace(/\s+([)\]}])/g, "$1")
+    .replace(/\s{2,}/g, " ")
+    .trim();
   if (cleaned) return `Feedback: ${cleaned}`;
   // Code-heavy AI feedback strips to empty — still show the real message for RichLearnerText + annotate.
-  if (raw) return raw;
+  if (source) return source;
   return "Feedback: review the task requirements, verify behavior step-by-step, and ensure type correctness.";
+}
+
+function stripFormattingOnlyCommentsFromAnnotatedCode(annotatedCode) {
+  const text = String(annotatedCode || "");
+  if (!text) return "";
+  const formattingHint = /\b(space|spacing|tab|tabs|indent|indentation|format|formatting|semicolon|quote style|align)\b/i;
+  const cleaned = text
+    .split("\n")
+    .map((line) => {
+      const noDoubleSlash = line.replace(/\s*\/\/\s*Feedback:\s*([^\n]*)$/i, (m, msg) => (formattingHint.test(String(msg || "")) ? "" : m));
+      const noHash = noDoubleSlash.replace(/\s*#\s*Feedback:\s*([^\n]*)$/i, (m, msg) => (formattingHint.test(String(msg || "")) ? "" : m));
+      return noHash.replace(/\s+$/g, "");
+    })
+    .join("\n");
+  return cleaned.trim() ? cleaned : text;
+}
+
+function toStructureFingerprint(code) {
+  return String(code || "")
+    .replace(/\/\/.*$/gm, "")
+    .replace(/#.*$/gm, "")
+    .replace(/\s+/g, "")
+    .trim();
 }
 
 function buildAnalogousExample(node, fallbackCode = "") {
@@ -728,6 +771,13 @@ export default function createINPACTEngine(config) {
     const [showFeedbackModal, setShowFeedbackModal] = useState(false);
     const [taskInstructionPulseNonce, setTaskInstructionPulseNonce] = useState(0);
     const [showMentorModal, setShowMentorModal] = useState(false);
+    const [taskModalOffset, setTaskModalOffset] = useState({ x: 0, y: 0 });
+    const [taskModalDragging, setTaskModalDragging] = useState(false);
+    const taskModalDragRef = useRef(null);
+    const taskModalNowCodeRef = useRef(null);
+    const [mentorModalOffset, setMentorModalOffset] = useState({ x: 0, y: 0 });
+    const [mentorModalDragging, setMentorModalDragging] = useState(false);
+    const mentorModalDragRef = useRef(null);
     const [mentorDraft, setMentorDraft] = useState("");
     /** Multi-turn mentor chat for this step: { role: 'user' | 'assistant', content: string } */
     const [mentorThread, setMentorThread] = useState([]);
@@ -746,6 +796,7 @@ export default function createINPACTEngine(config) {
     /** Starting step for the next forced tour launch (React · TS lesson 1 recap vs. full walkthrough). */
     const [lesson1TourStartIndex, setLesson1TourStartIndex] = useState(0);
     const [lesson1TourPrefSnapshot, setLesson1TourPrefSnapshot] = useState("");
+    const [lesson1TourSkipBarDismissed, setLesson1TourSkipBarDismissed] = useState(false);
     const lesson1IntroTourFiredRef = useRef(false);
     /** When the interface tour jumps to the first question node, skip one auto-open of the think/task modal. */
     const skipAutoTaskModalOnceRef = useRef(false);
@@ -779,6 +830,15 @@ export default function createINPACTEngine(config) {
         /jsx|react|shipment|tsx|typescript/i.test(`${title || ""} ${shortName || ""}`));
     const effectiveTourTrack = lessonCtxTrack ?? (inferredReactTsLesson1 ? "react-ts" : undefined);
     const node = NODES[nodeIndex];
+    /** Hint/feedback modal styling: `result` resets on step change, so treat passed steps as success for tone + copy. */
+    const hasPassedCurrentQuestionStep =
+      node?.type === "question" && Boolean(node?.id && passedCodeByStepId[node.id]);
+    const lessonFeedbackVisualTone =
+      result === "correct" || result === "partial" || result === "wrong"
+        ? result
+        : hasPassedCurrentQuestionStep
+          ? "correct"
+          : "neutral";
     /** Mount tab chrome on intro/objectives so lesson-1 interface tour targets exist before the first coding step. */
     const useReactTsLesson1TabsShell = useMemo(
       () =>
@@ -867,6 +927,16 @@ export default function createINPACTEngine(config) {
     }, [lessonValidationCtx?.track]);
     const progress = NODES.length <= 1 ? 0 : Math.min(100, Math.round((nodeIndex / (NODES.length - 1)) * 100));
     const lessonCompleteFiredRef = useRef(false);
+    const taskModalHasThinkPrompt =
+      node?.type === "question" &&
+      typeof node?.think_prompt === "string" &&
+      Array.isArray(node?.mc_options) &&
+      node.mc_options.length >= 2 &&
+      typeof node?.mc_correct_option === "string";
+    const thinkSelectionIsCorrect =
+      taskModalHasThinkPrompt &&
+      thinkSelection != null &&
+      thinkSelection === node?.mc_correct_option;
 
     useEffect(() => {
       try {
@@ -880,8 +950,10 @@ export default function createINPACTEngine(config) {
       const onL1 = effectiveTourTrack === "react-ts" && Number(lessonNum) === 1;
       if (onL1) {
         setLesson1TourPrefSnapshot(readLesson1InterfaceTourPref());
+        setLesson1TourSkipBarDismissed(false);
       } else {
         setLesson1TourPrefSnapshot("");
+        setLesson1TourSkipBarDismissed(false);
         lesson1IntroTourFiredRef.current = false;
         setLesson1TourStartIndex(0);
       }
@@ -927,6 +999,17 @@ export default function createINPACTEngine(config) {
         /* ignore */
       }
     }, [lessonValidationCtx?.track, monacoSnippetPacks]);
+
+    useEffect(() => {
+      if (!showTaskModal || !thinkSelectionIsCorrect) return;
+      const id = requestAnimationFrame(() => {
+        taskModalNowCodeRef.current?.scrollIntoView({
+          behavior: "smooth",
+          block: "end",
+        });
+      });
+      return () => cancelAnimationFrame(id);
+    }, [showTaskModal, thinkSelectionIsCorrect]);
 
     useEffect(() => {
       if (nodeIndex < NODES.length) {
@@ -1024,12 +1107,18 @@ export default function createINPACTEngine(config) {
         skipAutoTaskModalOnceRef.current = false;
         setShowTaskModal(false);
       } else {
-        setShowTaskModal(node?.type === "question");
+        const revisitingCompletedQuestion =
+          node?.type === "question" &&
+          Boolean(node?.id) &&
+          completedNodes.includes(node.id);
+        setShowTaskModal(node?.type === "question" && !revisitingCompletedQuestion);
       }
       setThinkSelection(null);
       setShowExampleModal(false);
       setExampleModalOffset({ x: 0, y: 0 });
       setFeedbackModalOffset({ x: 0, y: 0 });
+      setTaskModalOffset({ x: 0, y: 0 });
+      setMentorModalOffset({ x: 0, y: 0 });
       setShowFeedbackModal(false);
       setShowMentorModal(false);
       setMentorDraft("");
@@ -1088,7 +1177,7 @@ export default function createINPACTEngine(config) {
       } else {
         setMultiFileFocusBaseline(null);
       }
-    }, [nodeIndex, passedCodeByStepId, multiFilePlaceholderClearOnFirstStepOnly, interfaceTourOpen]);
+    }, [nodeIndex, passedCodeByStepId, multiFilePlaceholderClearOnFirstStepOnly, interfaceTourOpen, node, completedNodes]);
 
     useEffect(() => {
       if (!interfaceTourOpen) return;
@@ -1165,11 +1254,84 @@ export default function createINPACTEngine(config) {
       feedbackModalDragRef.current = null;
     }
 
+    function handleTaskModalPointerDown(e) {
+      if (e.pointerType === "mouse" && e.button !== 0) return;
+      e.preventDefault();
+      setTaskModalDragging(true);
+      taskModalDragRef.current = {
+        id: e.pointerId,
+        sx: e.clientX,
+        sy: e.clientY,
+        ox: taskModalOffset.x,
+        oy: taskModalOffset.y,
+      };
+      e.currentTarget.setPointerCapture(e.pointerId);
+    }
+
+    function handleTaskModalPointerMove(e) {
+      const d = taskModalDragRef.current;
+      if (!d || e.pointerId !== d.id) return;
+      setTaskModalOffset({
+        x: d.ox + (e.clientX - d.sx),
+        y: d.oy + (e.clientY - d.sy),
+      });
+    }
+
+    function handleTaskModalPointerUp(e) {
+      const d = taskModalDragRef.current;
+      if (!d || e.pointerId !== d.id) return;
+      setTaskModalDragging(false);
+      try {
+        e.currentTarget.releasePointerCapture(e.pointerId);
+      } catch (_) {
+        /* ignore */
+      }
+      taskModalDragRef.current = null;
+    }
+
+    function handleMentorModalPointerDown(e) {
+      if (e.pointerType === "mouse" && e.button !== 0) return;
+      e.preventDefault();
+      setMentorModalDragging(true);
+      mentorModalDragRef.current = {
+        id: e.pointerId,
+        sx: e.clientX,
+        sy: e.clientY,
+        ox: mentorModalOffset.x,
+        oy: mentorModalOffset.y,
+      };
+      e.currentTarget.setPointerCapture(e.pointerId);
+    }
+
+    function handleMentorModalPointerMove(e) {
+      const d = mentorModalDragRef.current;
+      if (!d || e.pointerId !== d.id) return;
+      setMentorModalOffset({
+        x: d.ox + (e.clientX - d.sx),
+        y: d.oy + (e.clientY - d.sy),
+      });
+    }
+
+    function handleMentorModalPointerUp(e) {
+      const d = mentorModalDragRef.current;
+      if (!d || e.pointerId !== d.id) return;
+      setMentorModalDragging(false);
+      try {
+        e.currentTarget.releasePointerCapture(e.pointerId);
+      } catch (_) {
+        /* ignore */
+      }
+      mentorModalDragRef.current = null;
+    }
+
     function next() {
       if (node?.type === "question" && node?.id && result === "correct") {
         setPassedCodeByStepId((prev) => ({ ...prev, [node.id]: answer }));
       }
-      if (node?.id) setCompletedNodes((p) => (p.includes(node.id) ? p : [...p, node.id]));
+      // Only mark coding steps "done" in the rail when they were actually passed (or non-question nodes).
+      if (node?.id && (node.type !== "question" || result === "correct")) {
+        setCompletedNodes((p) => (p.includes(node.id) ? p : [...p, node.id]));
+      }
       setNodeIndex((i) => {
         let j = i + 1;
         while (j < NODES.length && NODES[j]?.type === "prereqs") j += 1;
@@ -1356,6 +1518,7 @@ export default function createINPACTEngine(config) {
       showMentorModal,
       nodeType: node?.type,
       result,
+      feedbackVisualTone: lessonFeedbackVisualTone,
       checking,
       canSubmitCode,
       feedbackAnnotateLoading,
@@ -1409,7 +1572,7 @@ export default function createINPACTEngine(config) {
           setFeedbackAnnotateLoading(false);
           setFeedbackAnnotateError("");
           setFeedbackAnnotatedCode(null);
-          if (k.result === "correct") k.next();
+          if (k.feedbackVisualTone === "correct") k.next();
           return;
         }
         const chord = (e.ctrlKey || e.metaKey) && e.shiftKey && e.key === "Enter";
@@ -1452,7 +1615,24 @@ export default function createINPACTEngine(config) {
       paalText: { fontSize: "16px", color: "#334155", lineHeight: "1.6", whiteSpace: "pre-wrap" },
       btnRow: { display: "flex", gap: "12px", marginTop: "4px", flexWrap: "wrap" },
       btn: (v) => ({ padding: "14px 32px", borderRadius: "16px", cursor: "pointer", fontSize: "14px", fontWeight: "600", letterSpacing: "0.02em", background: v === "primary" ? "#00D2FF" : v === "ghost" ? "transparent" : "#e0f2fe", color: v === "primary" ? "#00334E" : v === "ghost" ? "#64748b" : "#0f172a", border: v === "ghost" ? "1px solid #cbd5e1" : v === "secondary" ? "1px solid #bae6fd" : "none" }),
-      feedback: (t) => ({ marginTop: "20px", padding: "16px 20px", borderRadius: "8px", fontSize: "12px", lineHeight: "1.8", background: t === "correct" ? "rgba(16,185,129,0.1)" : t === "partial" ? "rgba(245,158,11,0.1)" : "rgba(239,68,68,0.1)", border: `1px solid ${t === "correct" ? "#10b981" : t === "partial" ? "#f59e0b" : "#ef4444"}`, color: t === "correct" ? "#059669" : t === "partial" ? "#d97706" : "#dc2626", whiteSpace: "pre-wrap" }),
+      feedback: (t) => ({
+        marginTop: "20px",
+        padding: "16px 20px",
+        borderRadius: "8px",
+        fontSize: "12px",
+        lineHeight: "1.8",
+        background:
+          t === "correct"
+            ? "rgba(16,185,129,0.1)"
+            : t === "partial"
+              ? "rgba(250,204,21,0.18)"
+              : t === "neutral"
+                ? "rgba(148,163,184,0.14)"
+                : "rgba(239,68,68,0.1)",
+        border: `1px solid ${t === "correct" ? "#10b981" : t === "partial" ? "#eab308" : t === "neutral" ? "#cbd5e1" : "#ef4444"}`,
+        color: t === "correct" ? "#059669" : t === "partial" ? "#a16207" : t === "neutral" ? "#475569" : "#dc2626",
+        whiteSpace: "pre-wrap",
+      }),
       hintBox: { marginTop: "12px", padding: "12px 16px", background: "rgba(124,58,237,0.08)", border: "1px solid #7c3aed", borderRadius: "6px", fontSize: "11px", color: "#6d28d9", lineHeight: "1.7" },
       expectedBox: { marginTop: "12px", padding: "16px", background: "#f1f5f9", border: "1px solid #e2e8f0", borderRadius: "6px", fontSize: "12px", color: "#475569", whiteSpace: "pre-wrap", lineHeight: "1.7" },
       completeBanner: { textAlign: "center", padding: "60px 20px" },
@@ -1579,6 +1759,7 @@ export default function createINPACTEngine(config) {
     const skipLesson1InterfaceTourToRecap = useCallback(() => {
       writeLesson1InterfaceTourPref("recapOnly");
       setLesson1TourPrefSnapshot("recapOnly");
+      setLesson1TourSkipBarDismissed(true);
       const last = Math.max(0, interfaceTourSteps.length - 1);
       setLesson1TourStartIndex(last);
       setTourLaunchNonce((v) => v + 1);
@@ -1882,7 +2063,7 @@ export default function createINPACTEngine(config) {
       );
     }
 
-    function renderEditorBlockButtons(fbMsg, feedbackPlainForAnnotate = "") {
+    function renderEditorBlockButtons(fbMsg, feedbackPlainForAnnotate = "", feedbackVisualTone = "neutral") {
       const canSubmit = answerShape === "css-tabs"
         ? (parsedCssTabs?.css?.trim())
         : answerShape === "angular-tabs"
@@ -2027,7 +2208,10 @@ export default function createINPACTEngine(config) {
                   style={{
                     cursor: exampleModalDragging ? "grabbing" : "grab",
                     margin: "-4px -8px 8px -8px",
-                    padding: "4px 8px",
+                    minHeight: "32px",
+                    padding: "8px 10px",
+                    display: "flex",
+                    alignItems: "center",
                     borderRadius: "8px",
                     userSelect: "none",
                     touchAction: "none",
@@ -2106,7 +2290,10 @@ export default function createINPACTEngine(config) {
                   style={{
                     cursor: feedbackModalDragging ? "grabbing" : "grab",
                     margin: "-4px -8px 12px -8px",
-                    padding: "4px 8px",
+                    minHeight: "32px",
+                    padding: "8px 10px",
+                    display: "flex",
+                    alignItems: "center",
                     borderRadius: "8px",
                     userSelect: "none",
                     touchAction: "none",
@@ -2117,11 +2304,11 @@ export default function createINPACTEngine(config) {
                 </div>
                 {null /* Intentionally no purple hint block in this modal; we show only feedback. */}
                 {fbMsg && (
-                  <div style={s.feedback(result)}>
+                  <div style={s.feedback(feedbackVisualTone)}>
                     <RichLearnerText text={fbMsg} variant="feedback" />
                   </div>
                 )}
-                {result !== "correct" &&
+                {feedbackVisualTone !== "correct" &&
                   getMergedCodeForKeywordEval().trim() &&
                   (feedbackPlainForAnnotate.trim() || String(node?.hint || "").trim()) && (
                     <div style={{ marginTop: "14px" }}>
@@ -2136,18 +2323,37 @@ export default function createINPACTEngine(config) {
                           setFeedbackAnnotateLoading(true);
                           try {
                             const userCode = getMergedCodeForKeywordEval();
-                            const fb =
+                            const rawFbForAnnotate =
                               feedbackPlainForAnnotate.trim() ||
                               String(node?.hint || "").trim() ||
                               "Review your code against the step task.";
+                            const fb = buildFeedbackOnlyGuidance(rawFbForAnnotate).replace(/^Feedback:\s*/i, "").trim();
+                            const annotateInstructionBase = node?.paal || node?.instruction || "";
+                            const annotateInstruction =
+                              feedbackVisualTone === "correct"
+                                ? annotateInstructionBase
+                                : `${annotateInstructionBase}\n\nValidation status: INCORRECT. Only point out missing or incorrect parts. Do not say the submission is correct.`;
                             const data = await fetchFeedbackAnnotate({
-                              instruction: node?.paal || node?.instruction || "",
+                              instruction: annotateInstruction,
                               feedback: fb,
                               hint: node?.hint || "",
                               userCode,
                               language: editorMonacoLanguage,
                             });
-                            setFeedbackAnnotatedCode(data.annotatedCode ?? "");
+                            const rawAnnotated = String(data?.annotatedCode ?? "");
+                            const sanitizedAnnotated = stripFormattingOnlyCommentsFromAnnotatedCode(rawAnnotated);
+                            const structureMatchesUserCode =
+                              toStructureFingerprint(sanitizedAnnotated) === toStructureFingerprint(userCode);
+                            const finalAnnotated = sanitizedAnnotated;
+                            const userNorm = String(userCode || "").trim();
+                            const annotatedNorm = finalAnnotated.trim();
+                            const isNonCorrect = feedbackVisualTone === "partial" || feedbackVisualTone === "wrong";
+                            // If AI returns code with unchanged structure (or empty), provide a concrete fallback annotation.
+                            const shouldUseFallback =
+                              isNonCorrect &&
+                              (!annotatedNorm || structureMatchesUserCode);
+                            const fallbackAnnotated = `// Feedback: ${fb}\n// Focus: add the missing required pattern for this step.\n${userCode}`;
+                            setFeedbackAnnotatedCode(shouldUseFallback ? fallbackAnnotated : finalAnnotated);
                           } catch (e) {
                             setFeedbackAnnotatedCode(null);
                             setFeedbackAnnotateError(
@@ -2220,16 +2426,16 @@ export default function createINPACTEngine(config) {
                     data-inpact-feedback-primary="true"
                     className="inpact-btn-primary"
                     style={s.btn("primary")}
-                    title={result === "correct" ? "Next step (Enter)" : "Close (Enter)"}
+                    title={feedbackVisualTone === "correct" ? "Next step (Enter)" : "Close (Enter)"}
                     onClick={() => {
                       setShowFeedbackModal(false);
                       setFeedbackAnnotateLoading(false);
                       setFeedbackAnnotateError("");
                       setFeedbackAnnotatedCode(null);
-                      if (result === "correct") next();
+                      if (feedbackVisualTone === "correct") next();
                     }}
                   >
-                    {result === "correct" ? "NEXT STEP →" : "Close"}
+                    {feedbackVisualTone === "correct" ? "NEXT STEP →" : "Close"}
                   </button>
                 </div>
               </div>
@@ -2264,9 +2470,27 @@ export default function createINPACTEngine(config) {
                   overflowY: "auto",
                   boxShadow: "0 20px 60px rgba(0,0,0,0.2)",
                   border: "1px solid #e2e8f0",
+                  transform: `translate(${mentorModalOffset.x}px, ${mentorModalOffset.y}px)`,
                 }}
                 onClick={(e) => e.stopPropagation()}
               >
+                <div
+                  role="presentation"
+                  onPointerDown={handleMentorModalPointerDown}
+                  onPointerMove={handleMentorModalPointerMove}
+                  onPointerUp={handleMentorModalPointerUp}
+                  onPointerCancel={handleMentorModalPointerUp}
+                  style={{
+                    cursor: mentorModalDragging ? "grabbing" : "grab",
+                    margin: "-4px -8px 12px -8px",
+                    minHeight: "32px",
+                    padding: "8px 10px",
+                    borderRadius: "8px",
+                    userSelect: "none",
+                    touchAction: "none",
+                  }}
+                  title="Drag to move"
+                />
                 <div id="mentor-modal-title" style={{ fontSize: "12px", fontWeight: 700, letterSpacing: "0.05em", color: "#64748b", marginBottom: "8px" }}>ASK YOUR MENTOR</div>
                 <p style={{ fontSize: "13px", color: "#475569", lineHeight: 1.5, margin: "0 0 16px" }}>
                   Ask about this step in your own words. You can send follow-up questions; the mentor keeps context for this step until you move on or clear the chat.
@@ -2404,9 +2628,27 @@ export default function createINPACTEngine(config) {
                         overflowY: "auto",
                         boxShadow: "0 20px 60px rgba(0,0,0,0.2)",
                         border: "1px solid #e2e8f0",
+                        transform: `translate(${taskModalOffset.x}px, ${taskModalOffset.y}px)`,
                       }}
                       onClick={(e) => e.stopPropagation()}
                     >
+                      <div
+                        role="presentation"
+                        onPointerDown={handleTaskModalPointerDown}
+                        onPointerMove={handleTaskModalPointerMove}
+                        onPointerUp={handleTaskModalPointerUp}
+                        onPointerCancel={handleTaskModalPointerUp}
+                        style={{
+                          cursor: taskModalDragging ? "grabbing" : "grab",
+                          margin: "-4px -8px 12px -8px",
+                          minHeight: "32px",
+                          padding: "8px 10px",
+                          borderRadius: "8px",
+                          userSelect: "none",
+                          touchAction: "none",
+                        }}
+                        title="Drag to move"
+                      />
                       <div id="task-modal-title" style={{ ...s.paalLabel, marginBottom: "10px" }}>
                         TASK
                       </div>
@@ -2450,9 +2692,27 @@ export default function createINPACTEngine(config) {
                       overflowY: "auto",
                       boxShadow: "0 20px 60px rgba(0,0,0,0.2)",
                       border: "1px solid #e2e8f0",
+                      transform: `translate(${taskModalOffset.x}px, ${taskModalOffset.y}px)`,
                     }}
                     onClick={(e) => e.stopPropagation()}
                   >
+                    <div
+                      role="presentation"
+                      onPointerDown={handleTaskModalPointerDown}
+                      onPointerMove={handleTaskModalPointerMove}
+                      onPointerUp={handleTaskModalPointerUp}
+                      onPointerCancel={handleTaskModalPointerUp}
+                      style={{
+                        cursor: taskModalDragging ? "grabbing" : "grab",
+                        margin: "-4px -8px 12px -8px",
+                        minHeight: "32px",
+                        padding: "8px 10px",
+                        borderRadius: "8px",
+                        userSelect: "none",
+                        touchAction: "none",
+                      }}
+                      title="Drag to move"
+                    />
                     <div
                       style={{
                         marginBottom: "14px",
@@ -2469,15 +2729,6 @@ export default function createINPACTEngine(config) {
                       Pause before coding: Answer the quick thinking prompt first
                     </div>
 
-                    {whyMatters ? (
-                      <div style={{ marginBottom: "12px" }}>
-                        <div style={{ fontSize: "10px", letterSpacing: "2px", color: "#0891b2", marginBottom: "8px", fontWeight: 800 }}>
-                          WHY THIS MATTERS
-                        </div>
-                        <div style={{ fontSize: "14px", color: "#475569", lineHeight: 1.6 }}>{whyMatters}</div>
-                      </div>
-                    ) : null}
-
                     <div style={{ marginBottom: "12px" }}>
                       <div style={{ fontSize: "10px", letterSpacing: "3px", color: "#0891b2", marginBottom: "10px", fontWeight: 800 }}>
                         THINK
@@ -2490,6 +2741,15 @@ export default function createINPACTEngine(config) {
                         />
                       </div>
                     </div>
+
+                    {whyMatters ? (
+                      <div style={{ marginBottom: "12px" }}>
+                        <div style={{ fontSize: "10px", letterSpacing: "2px", color: "#0891b2", marginBottom: "8px", fontWeight: 800 }}>
+                          WHY THIS MATTERS
+                        </div>
+                        <div style={{ fontSize: "14px", color: "#475569", lineHeight: 1.6 }}>{whyMatters}</div>
+                      </div>
+                    ) : null}
 
                     <div style={{ display: "flex", flexDirection: "column", gap: "12px", marginBottom: "16px" }}>
                       {options.map((opt, idx) => {
@@ -2555,7 +2815,7 @@ export default function createINPACTEngine(config) {
                       </div>
                     ) : null}
 
-                    <div style={{ marginTop: "6px" }}>
+                    <div ref={taskModalNowCodeRef} style={{ marginTop: "6px" }}>
                       <div style={{ fontSize: "10px", letterSpacing: "2px", color: "#0891b2", marginBottom: "10px", fontWeight: 800 }}>
                         NOW CODE
                       </div>
@@ -2605,7 +2865,16 @@ export default function createINPACTEngine(config) {
     }
 
     function renderEditorContent({ fillViewport = false } = {}) {
-      const rawFb = result === "correct" ? node.feedback_correct : result === "partial" ? node.feedback_partial : result === "wrong" ? node.feedback_wrong : null;
+      const rawFb =
+        result === "correct"
+          ? node.feedback_correct
+          : result === "partial"
+            ? node.feedback_partial
+            : result === "wrong"
+              ? node.feedback_wrong
+              : hasPassedCurrentQuestionStep
+                ? node.feedback_correct
+                : null;
       const staticFbMsg = typeof rawFb === "function" ? rawFb(answer) : rawFb;
       const feedbackPlainForAnnotate = String(aiFeedback || staticFbMsg || "").trim();
       const fbMsg = buildFeedbackOnlyGuidance(feedbackPlainForAnnotate);
@@ -2646,7 +2915,7 @@ export default function createINPACTEngine(config) {
                 }}
               />
             ) : null}
-            {renderEditorBlockButtons(fbMsg, feedbackPlainForAnnotate)}
+            {renderEditorBlockButtons(fbMsg, feedbackPlainForAnnotate, lessonFeedbackVisualTone)}
           </div>
         </div>
       );
@@ -2675,9 +2944,35 @@ export default function createINPACTEngine(config) {
 
     const showLesson1TourSkipBar =
       isReactTsLesson1TourEntry &&
-      lesson1TourPrefSnapshot !== "recapOnly";
+      interfaceTourOpen &&
+      !lesson1TourSkipBarDismissed;
     const interfaceTourInitialStepIndex =
       effectiveTourTrack === "react-ts" && Number(lessonNum) === 1 ? lesson1TourStartIndex : 0;
+    const highestContiguousCompletedStep = useMemo(() => {
+      let n = 0;
+      while (completedNodes.includes(`step${n + 1}`)) n += 1;
+      return n;
+    }, [completedNodes]);
+
+    function isSideItemUnlocked(itemId) {
+      const currentItemId = NODES[nodeIndex]?.id;
+      if (!itemId) return false;
+      if (itemId === currentItemId) return true;
+      if (completedNodes.includes(itemId)) return true;
+      if (/^step\d+$/i.test(String(itemId))) {
+        const stepNumber = Number(String(itemId).replace(/^step/i, ""));
+        return Number.isFinite(stepNumber) && stepNumber <= highestContiguousCompletedStep + 1;
+      }
+      return true;
+    }
+
+    function selectSideItemByIndex(sideIndex) {
+      const item = sideItems?.[sideIndex];
+      if (!item?.id || !isSideItemUnlocked(item.id)) return;
+      const targetNodeIndex = NODES.findIndex((n) => n?.id === item.id);
+      if (targetNodeIndex < 0) return;
+      setNodeIndex(targetNodeIndex);
+    }
 
     return (
       <div style={s.wrap}>
@@ -2685,7 +2980,14 @@ export default function createINPACTEngine(config) {
           type="button"
           className="inpact-help-tour-button"
           data-tour-id="help-tour-button"
-          style={s.helpTourBtn}
+          style={{
+            ...s.helpTourBtn,
+            ...(showLesson1TourSkipBar
+              ? {
+                  boxShadow: "0 0 0 3px rgba(6, 182, 212, 0.35), 0 0 0 9px rgba(6, 182, 212, 0.15)",
+                }
+              : {}),
+          }}
           title="Replay the interface walkthrough"
           onClick={() => {
             setLesson1TourStartIndex(0);
@@ -2777,8 +3079,30 @@ export default function createINPACTEngine(config) {
                 {sideItems.map((item, i) => {
                   const isActive = NODES[nodeIndex]?.id === item.id || (nodeIndex >= NODES.length && i === sideItems.length - 1);
                   const isDone = completedNodes.includes(item.id);
+                  const canOpenFromSidebar = isSideItemUnlocked(item.id);
                   return (
-                    <div key={item.id} style={s.sideItem(isActive, isDone)} onClick={() => setNodeIndex(i)} role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); setNodeIndex(i); } }}>
+                    <div
+                      key={item.id}
+                      style={{
+                        ...s.sideItem(isActive, isDone),
+                        cursor: canOpenFromSidebar ? "pointer" : "not-allowed",
+                        opacity: canOpenFromSidebar ? 1 : 0.75,
+                      }}
+                      onClick={() => {
+                        if (!canOpenFromSidebar) return;
+                        selectSideItemByIndex(i);
+                      }}
+                      role="button"
+                      aria-disabled={!canOpenFromSidebar}
+                      tabIndex={canOpenFromSidebar ? 0 : -1}
+                      onKeyDown={(e) => {
+                        if (!canOpenFromSidebar) return;
+                        if (e.key === "Enter" || e.key === " ") {
+                          e.preventDefault();
+                          selectSideItemByIndex(i);
+                        }
+                      }}
+                    >
                       <div style={s.sideItemDot(isActive, isDone)} /><div style={s.sideItemText(isActive, isDone)}>{item.label}</div>
                     </div>
                   );
@@ -2845,7 +3169,7 @@ export default function createINPACTEngine(config) {
                   items: sideItems,
                   activeNodeIndex: nodeIndex,
                   completedIds: completedNodes,
-                  onSelectIndex: setNodeIndex,
+                  onSelectIndex: selectSideItemByIndex,
                 }}
               >
                 {node?.type === "question" ? (
@@ -2928,7 +3252,7 @@ export default function createINPACTEngine(config) {
                     cursor: "pointer",
                   }}
                 >
-                  Skip full tour — show recap only
+                  Skip tour
                 </button>
               </div>,
               document.body

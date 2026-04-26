@@ -1,8 +1,3 @@
-/**
- * 🔒 LOCKED — React · TS lesson 2 — ShipmentRecordCard (TypeScript)
- * Do not change steps, copy, or evaluation without explicit product/content sign-off.
- * Generated mirror: content/generated/react-ts/002_shipment-record-card_lesson.json
- */
 import createINPACTEngine from "../inpact_engine_shared";
 
 const NODES = [
@@ -15,8 +10,20 @@ const NODES = [
     title: "TypeScript — Interfaces + Types",
     body: "Go beyond basic props — learn how to model real API data with nested interfaces, extend shared base types, and combine domain shapes with intersections. You'll build the TypeScript foundation that every data-heavy component in a real enterprise app depends on.",
     usecase:
-      "Every piece of data that flows through a real enterprise app — arrives as a nested object from an API. Without the right type shapes, a single field rename on the backend silently breaks the entire UI. This lesson gives you the tools to catch that at the editor, not in production.",
+      "Every piece of data that flows through a real enterprise app arrives as a nested object from an API. Without the right type shapes, a single field rename on the backend silently breaks the entire UI. This lesson gives you the tools to catch that at the editor, not in production.",
   },
+},
+{
+  id: "prereqs",
+  type: "prereqs",
+  phase: "Prerequisites",
+  items: [
+    {
+      lesson: 1,
+      label: "JSX — The Full Language",
+      reason: "This lesson ends by building ShipmentRecordCard — a component that destructures a typed props shape and renders nested values like {origin.city} in JSX. You need to know the component shell (arrow function + JSX.Element return type), curly brace expressions, and how props flow into a component from Lesson 1 before you can put the interfaces you define here to use.",
+    },
+  ],
 },
 {
   id: "objectives",
@@ -54,13 +61,7 @@ const NODES = [
   why_this_matters:
     "In a real enterprise app, id, createdAt, and updatedAt come from the database. No client-side code should ever overwrite them — doing so would corrupt audit trails and break data integrity. readonly makes that rule enforceable by TypeScript rather than by team convention alone.",
   answer_keywords: [
-    "interface",
-    "BaseRecord",
-    "readonly",
-    "id",
-    "createdAt",
-    "updatedAt",
-    "string",
+    "interface", "BaseRecord", "readonly", "id", "createdAt", "updatedAt", "string",
   ],
   seed_code: "",
   starter_code: "// define BaseRecord interface here",
@@ -121,13 +122,7 @@ const NODES = [
     "A separate interface for Location means the shape is defined once and reused wherever a location appears — origin, destination, or any future field. Flat fields scale poorly and tuple types lose the field names entirely.",
   why_this_matters:
     "Real API responses are never flat. An address, a location, a price breakdown — these are always nested objects. Defining a dedicated interface for each nested shape means you describe it once and TypeScript enforces it everywhere it's used. Adding a new location field later means updating one interface, not hunting down every flat field across the codebase.",
-  answer_keywords: [
-    "interface",
-    "Location",
-    "city",
-    "country",
-    "string",
-  ],
+  answer_keywords: ["interface", "Location", "city", "country", "string"],
   seed_code: `interface BaseRecord {
   readonly id: string;
   readonly createdAt: string;
@@ -203,17 +198,8 @@ interface Location {
   why_this_matters:
     "In a real enterprise app every domain type — orders, invoices, users — shares the same base fields from the database. extends means you define those fields once in BaseRecord and every domain type inherits them automatically. When the base shape changes, every child interface updates in one place.",
   answer_keywords: [
-    "interface",
-    "ShipmentRecord",
-    "extends",
-    "BaseRecord",
-    "origin",
-    "Location",
-    "destination",
-    "status",
-    "active",
-    "delayed",
-    "delivered",
+    "interface", "ShipmentRecord", "extends", "BaseRecord",
+    "origin", "Location", "destination", "status", "active", "delayed", "delivered",
   ],
   seed_code: `interface BaseRecord {
   readonly id: string;
@@ -307,15 +293,8 @@ type UserWithContact = BaseUser & ContactInfo;`,
   why_this_matters:
     "Real APIs often return joined data — a shipment with its assigned driver, an order with its customer details. A type intersection lets you express that combined shape without rewriting either source type. Both stay independent and reusable, and the intersection is the join.",
   answer_keywords: [
-    "interface",
-    "DriverSummary",
-    "driverName",
-    "vehicleId",
-    "string",
-    "type",
-    "ShipmentWithDriver",
-    "&",
-    "ShipmentRecord",
+    "interface", "DriverSummary", "driverName", "vehicleId", "string",
+    "type", "ShipmentWithDriver", "&", "ShipmentRecord",
   ],
   seed_code: `interface BaseRecord {
   readonly id: string;
@@ -390,10 +369,10 @@ type OrderLineItem = BaseOrder & ProductDetails;`,
   deepDiveLabel:
     "The intersection flattens both shapes — but what happens when both sides have a field with the same name?",
   deepDive: {
-    hook: "You create a type intersection between two interfaces. Both interfaces happen to have a field called `status` — one typed as `string`, the other as `'active' | 'delayed'`. You expect one to win. Neither does. TypeScript intersects the types too — the resulting `status` field becomes `string & 'active' | 'delayed'`, which simplifies to `'active' | 'delayed'`. The narrower type wins by default.\n\nNow a trickier case: both sides have `id` typed as `string`. The intersection gives you `string & string` — which is just `string`. Fine. But one side has `id: string` and the other has `id: number`. The intersection gives you `string & number` — which is `never`. A field typed as `never` can never be assigned any value. TypeScript won't error when you define the type — it errors when you try to use it. Silent at definition, loud at usage.",
+    hook: "You create a type intersection between two interfaces. Both interfaces happen to have a field called `status` — one typed as `string`, the other as `'active' | 'delayed'`. You expect one to win. Neither does. TypeScript intersects the types too — the resulting `status` field becomes `string & ('active' | 'delayed')`, which simplifies to `'active' | 'delayed'`. The narrower type wins by default.\n\nNow a trickier case: both sides have `id` typed as `string`. The intersection gives you `string & string` — which is just `string`. Fine. But one side has `id: string` and the other has `id: number`. The intersection gives you `string & number` — which is `never`. A field typed as `never` can never be assigned any value. TypeScript won't error when you define the type — it errors when you try to use it. Silent at definition, loud at usage.",
     pain: "⚠️ **Lesson:** You intersect two interfaces and both have a field called `id` — one typed `string`, one typed `number`. TypeScript doesn't error on the intersection definition. But the moment you try to create an object of that type, nothing satisfies it. Why does `string & number` produce `never` — and why does TypeScript wait until usage to tell you?",
     mentalModel:
-      "**Mental model:** Think of a type intersection as a **Venn diagram where the result is the overlap of constraints**.\n- `string & number` means: a value that satisfies both `string` AND `number` simultaneously. No such value exists. The result is `never` — the empty type.\n- `string & 'active' | 'delayed'` means: a value that is both a string AND one of those literals. The literals already are strings — so the narrower constraint wins: `'active' | 'delayed'`.\n- The rule: intersection makes types *more restrictive*, not more permissive. When two constraints can't both be satisfied, the field becomes `never`.\n- TypeScript evaluates this lazily — it constructs the intersection type without checking usability, then errors when you try to assign a value to a `never` field.",
+      "**Mental model:** Think of a type intersection as a **Venn diagram where the result is the overlap of constraints**.\n- `string & number` means: a value that satisfies both `string` AND `number` simultaneously. No such value exists. The result is `never` — the empty type.\n- `string & ('active' | 'delayed')` means: a value that is both a string AND one of those literals. The literals already are strings — so the narrower constraint wins: `'active' | 'delayed'`.\n- The rule: intersection makes types *more restrictive*, not more permissive. When two constraints can't both be satisfied, the field becomes `never`.\n- TypeScript evaluates this lazily — it constructs the intersection type without checking usability, then errors when you try to assign a value to a `never` field.",
     discover:
       "**Pattern — intersection field collisions:**\n```tsx\n// ✅ no collision — all field names are unique\ntype ShipmentWithDriver = ShipmentRecord & DriverSummary;\n\n// ⚠️ same field, compatible types — narrower type wins\ntype A = { status: string };\ntype B = { status: 'active' | 'delayed' };\ntype C = A & B; // status: 'active' | 'delayed' ✅\n\n// ❌ same field, incompatible types — field becomes never\ntype D = { id: string };\ntype E = { id: number };\ntype F = D & E; // id: never 💥 — no value can satisfy this\n```\n- before intersecting two types, check for shared field names\n- compatible types: narrower wins\n- incompatible types: field becomes never, object becomes unusable\n- the safest intersections combine types with completely distinct field names",
     quickRules:
@@ -435,15 +414,8 @@ type OrderLineItem = BaseOrder & ProductDetails;`,
   why_this_matters:
     "Every real API response has nested objects. Knowing how to destructure the top level and then reach into nested fields with dot notation is the pattern you'll use on every data component you ever build — cards, tables, detail views, all of them.",
   answer_keywords: [
-    "ShipmentWithDriver",
-    "ShipmentRecordCard",
-    "JSX.Element",
-    "origin",
-    "destination",
-    "origin.city",
-    "destination.city",
-    "status",
-    "driverName",
+    "ShipmentWithDriver", "ShipmentRecordCard", "JSX.Element",
+    "origin", "destination", "origin.city", "destination.city", "status", "driverName",
   ],
   seed_code: `interface BaseRecord {
   readonly id: string;

@@ -282,6 +282,34 @@ import INPACTEngineP127 from './engines/react-js/inpact_p127_engine'
 import INPACTEngineTS120 from './engines/react-ts/inpact_ts120_engine'
 import INPACTEngineTS121 from './engines/react-ts/inpact_ts121_engine'
 import INPACTEngineTS122 from './engines/react-ts/inpact_ts122_engine'
+import INPACTEngineTS123 from './engines/react-ts/inpact_ts123_engine'
+import INPACTEngineTS124 from './engines/react-ts/inpact_ts124_engine'
+import INPACTEngineTS125 from './engines/react-ts/inpact_ts125_engine'
+import INPACTEngineTS126 from './engines/react-ts/inpact_ts126_engine'
+import INPACTEngineTS127 from './engines/react-ts/inpact_ts127_engine'
+import INPACTEngineTS128 from './engines/react-ts/inpact_ts128_engine'
+import INPACTEngineTS129 from './engines/react-ts/inpact_ts129_engine'
+import INPACTEngineTS130 from './engines/react-ts/inpact_ts130_engine'
+import INPACTEngineTS131 from './engines/react-ts/inpact_ts131_engine'
+import INPACTEngineTS132 from './engines/react-ts/inpact_ts132_engine'
+import INPACTEngineTS133 from './engines/react-ts/inpact_ts133_engine'
+import INPACTEngineTS134 from './engines/react-ts/inpact_ts134_engine'
+import INPACTEngineTS135 from './engines/react-ts/inpact_ts135_engine'
+import INPACTEngineTS136 from './engines/react-ts/inpact_ts136_engine'
+import INPACTEngineTS137 from './engines/react-ts/inpact_ts137_engine'
+import INPACTEngineTS138 from './engines/react-ts/inpact_ts138_engine'
+import INPACTEngineTS139 from './engines/react-ts/inpact_ts139_engine'
+import INPACTEngineTS140 from './engines/react-ts/inpact_ts140_engine'
+import INPACTEngineTS141 from './engines/react-ts/inpact_ts141_engine'
+import INPACTEngineTS142 from './engines/react-ts/inpact_ts142_engine'
+import INPACTEngineTS143 from './engines/react-ts/inpact_ts143_engine'
+import INPACTEngineTS144 from './engines/react-ts/inpact_ts144_engine'
+import INPACTEngineTS145 from './engines/react-ts/inpact_ts145_engine'
+import INPACTEngineTS146 from './engines/react-ts/inpact_ts146_engine'
+import INPACTEngineTS147 from './engines/react-ts/inpact_ts147_engine'
+import INPACTEngineTS148 from './engines/react-ts/inpact_ts148_engine'
+import INPACTEngineTS149 from './engines/react-ts/inpact_ts149_engine'
+import INPACTEngineTS150 from './engines/react-ts/inpact_ts150_engine'
 import INPACTEngineTS101 from './engines/react-ts/inpact_ts101_engine'
 import INPACTEngineTS102 from './engines/react-ts/inpact_ts102_engine'
 import INPACTEngineTS103 from './engines/react-ts/inpact_ts103_engine'
@@ -679,6 +707,7 @@ const ENGINES_TS = [
   INPACTEngineTS85,
   INPACTEngineTS86,
   INPACTEngineTS87,
+  INPACTEngineTS88,
   INPACTEngineTS89,
   INPACTEngineTS90,
   INPACTEngineTS91,
@@ -713,6 +742,34 @@ const ENGINES_TS = [
   INPACTEngineTS120,
   INPACTEngineTS121,
   INPACTEngineTS122,
+  INPACTEngineTS123,
+  INPACTEngineTS124,
+  INPACTEngineTS125,
+  INPACTEngineTS126,
+  INPACTEngineTS127,
+  INPACTEngineTS128,
+  INPACTEngineTS129,
+  INPACTEngineTS130,
+  INPACTEngineTS131,
+  INPACTEngineTS132,
+  INPACTEngineTS133,
+  INPACTEngineTS134,
+  INPACTEngineTS135,
+  INPACTEngineTS136,
+  INPACTEngineTS137,
+  INPACTEngineTS138,
+  INPACTEngineTS139,
+  INPACTEngineTS140,
+  INPACTEngineTS141,
+  INPACTEngineTS142,
+  INPACTEngineTS143,
+  INPACTEngineTS144,
+  INPACTEngineTS145,
+  INPACTEngineTS146,
+  INPACTEngineTS147,
+  INPACTEngineTS148,
+  INPACTEngineTS149,
+  INPACTEngineTS150,
 ]
 
 // TypeScript Fundamentals: 10 language-first lessons (no React)
@@ -909,6 +966,7 @@ const ENGINES_CSS = [
 ]
 
 const ALGO_AI_TRACKS = ['algo-js', 'algo-ts', 'algo-python', 'algo-java']
+const REACT_TS_ENABLED_LESSONS = 50
 
 function getEngines(track, lessonListLength = 0) {
   if (track === 'mobile-angular' && lessonListLength > 0) {
@@ -927,7 +985,7 @@ function getEngines(track, lessonListLength = 0) {
   if (track === 'sec') return ENGINES_SEC
   if (track === 'el') return ENGINES_EL
   if (track === 'fe') return ENGINES_FE
-  if (track === 'react-ts') return ENGINES_TS
+  if (track === 'react-ts') return ENGINES_TS.slice(0, REACT_TS_ENABLED_LESSONS)
   if (track === 'angular') {
     const angularTotal = getLessonCount('angular', { reactListLength: LESSON_LIST.length })
     const staticAngularEngines = 14 + ENGINES_ANGULAR_CURRICULUM.length
@@ -1500,7 +1558,9 @@ export default function App() {
   }
 
   const lessonPathFromUrl = parseLessonPath(location.pathname)
-  const prereqTrack = (lessonIndex != null && lessonTrack != null) ? lessonTrack : track
+  const prereqTrack =
+    lessonPathFromUrl?.track ??
+    ((lessonIndex != null && lessonTrack != null) ? lessonTrack : track)
   const prereqPanel = (() => {
     if (prereqTrack !== 'react-ts') return null
     if (lessonIndex == null) return null
@@ -1514,10 +1574,10 @@ export default function App() {
           marginBottom: '10px',
           marginInline: '12px',
           padding: '12px 14px',
-          border: '1px solid #f59e0b',
+          border: '1px solid #FF6B6B',
           borderRadius: '10px',
-          background: '#fffbeb',
-          color: '#7c2d12',
+          background: '#EAFBFF',
+          color: '#124559',
           fontFamily: "'DM Sans', sans-serif",
         }}
       >
@@ -1529,19 +1589,28 @@ export default function App() {
         </div>
         <div style={{ marginTop: '8px', display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
           {prereqNumbers.map((n) => (
-            <span
+            <button
+              type="button"
               key={n}
               style={{
                 fontSize: '11px',
                 padding: '4px 8px',
                 borderRadius: '999px',
-                border: '1px solid #fdba74',
-                background: '#fff7ed',
-                color: '#9a3412',
+                border: '1px solid #FF6B6B',
+                background: '#ffffff',
+                color: '#124559',
+                cursor: 'pointer',
+                fontFamily: "'DM Sans', sans-serif",
+              }}
+              onClick={() => {
+                const idx = Number(n) - 1
+                if (!Number.isInteger(idx) || idx < 0) return
+                const itemTitle = LESSON_LIST[idx]
+                openLesson(idx, itemTitle ? { title: itemTitle } : { title: `Lesson ${n}` }, 'react-ts')
               }}
             >
               {String(n).padStart(2, '0')} · {LESSON_LIST[n - 1] ?? `Lesson ${n}`}
-            </span>
+            </button>
           ))}
         </div>
       </div>
