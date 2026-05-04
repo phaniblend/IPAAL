@@ -25,7 +25,7 @@ const NODES = [
     },
     {
       lesson: 2,
-      label: "TypeScript — Interfaces + Types",
+      label: "Inventory row — readonly fields, unions, nested types",
       reason: "The type constraint T extends BaseRecord is what lets DataList use item.id as the key prop — because BaseRecord guarantees that field exists. BaseRecord was defined in Lesson 2. Without knowing what extends means and how BaseRecord is structured, the constraint in this lesson looks like magic rather than a deliberate contract.",
     },
     {

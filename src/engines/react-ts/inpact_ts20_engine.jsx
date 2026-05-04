@@ -60,7 +60,7 @@ const NODES = [
     analog_example: "const PriorityTag = ({ priority }: { priority: Priority }): JSX.Element => (\n  <span className={`tag tag--${priority}`}>{priority}</span>\n);",
     deepDiveLabel: "Minimum props = maximum reusability — but what if StatusBadge needs its own label formatting?",
     deepDive: {
-      hook: "StatusBadge renders the status value as text: 'active'. The design team wants 'Active' — capitalised. Then 'delayed' becomes 'In Transit'. Should the badge handle its own label mapping?",
+      hook: "StatusBadge renders the status value as text: 'active'. The design team wants 'Active' — typescript arrow . Then 'delayed' becomes 'In Transit'. Should the badge handle its own label mapping?",
       pain: "⚠️ **Lesson:** Should StatusBadge handle label formatting internally — or should the parent pass a formatted label? Where does data-to-display mapping live?",
       mentalModel: "Two approaches:\n1. **Child maps**: Badge has a label lookup table. Accepts status, derives label. Good when the label is always the same everywhere.\n2. **Parent maps**: Parent passes `label={STATUS_LABELS[status]}`. Good when labels vary by context or locale.\n\n`Record<ShipmentStatus, string>` gives exhaustiveness — TypeScript errors if a new status is added without a label.",
       discover: "```tsx\n// ✅ child maps — canonical label\nconst STATUS_LABELS: Record<ShipmentStatus, string> = {\n  active: 'Active',\n  delayed: 'In Transit',\n  delivered: 'Delivered',\n};\nconst StatusBadge = ({ status }: StatusBadgeProps): JSX.Element => (\n  <span className={`badge badge--${status}`}>{STATUS_LABELS[status]}</span>\n);\n```",

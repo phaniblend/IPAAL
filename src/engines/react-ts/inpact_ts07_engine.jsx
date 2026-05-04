@@ -25,8 +25,8 @@ const NODES = [
     },
     {
       lesson: 2,
-      label: "TypeScript — Interfaces + Types",
-      reason: "Complete Lesson 2 (TypeScript — Interfaces + Types) first — it is a prerequisite on the React-TS track for this lesson.",
+      label: "Inventory row — readonly fields, unions, nested types",
+      reason: "Complete Lesson 2 (Inventory row — readonly fields, unions, nested types) first — it is a prerequisite on the React-TS track for this lesson.",
     },
   ],
 },

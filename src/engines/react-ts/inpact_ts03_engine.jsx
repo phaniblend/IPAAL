@@ -45,7 +45,7 @@ const NODES = [
     },
     {
       lesson: 2,
-      label: "TypeScript — Interfaces + Types",
+      label: "Inventory row — readonly fields, unions, nested types",
       reason: "Every utility type in this lesson — Partial, Pick, Omit, Readonly — transforms a type you already have. That source type is ShipmentRecord, which extends BaseRecord and uses a nested Location interface — both defined in Lesson 2. Without knowing how to read interfaces and extends, the transformations here have nothing meaningful to operate on.",
     },
   ],

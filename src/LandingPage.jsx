@@ -4,11 +4,14 @@ import { getLessonCount, TRACK_LABELS } from "./trackLessonCounts.js";
 import { FUNDA_ANGULAR_LESSONS } from "./angularFundaLessons.js";
 import { MOBILE_ANGULAR_LESSONS } from "./mobileAngularLessons.js";
 import { isReduxRtkLessonIndex, REDUX_LANDING_SUBSECTIONS } from "./reduxRtkLessonIndices.js";
-import { LESSON_LIST as REACT_TS_LESSON_LIST } from "./reactTsCurriculum.js";
+import {
+  LESSON_LIST as REACT_TS_LESSON_LIST,
+  REACT_TS_CURRICULUM_SLOT_COUNT,
+  REACT_TS_GUIDED_LESSON_COUNT,
+} from "./reactTsCurriculum.js";
 
-const REACT_TS_ENABLED_LESSONS = 50;
-// Keep landing catalog aligned with enabled static engines in App.jsx.
-export const LESSON_LIST = REACT_TS_LESSON_LIST.slice(0, REACT_TS_ENABLED_LESSONS);
+/** Full shared blueprint (151 titles). App.jsx pads react-js / vue engine arrays to this length where needed. */
+export const LESSON_LIST = REACT_TS_LESSON_LIST;
 
 /**
  * Groupings for the lessons grid (React · JS / React · TS / Vue) — indices align with LESSON_LIST.
@@ -16,18 +19,19 @@ export const LESSON_LIST = REACT_TS_LESSON_LIST.slice(0, REACT_TS_ENABLED_LESSON
  * Redux ∪ RTK lessons are omitted here; see `reduxRtkLessonIndices.js` and the Redux block below.
  */
 const REACT_GRID_GROUPS = [
-  { key: "tier1", title: "Tier 1 — JSX + TypeScript Foundations", start: 0, end: 21 },
-  { key: "tier2", title: "Tier 2 — Hooks + Async", start: 21, end: 41 },
-  { key: "tier3", title: "Tier 3 — Performance", start: 41, end: 51 },
-  { key: "tier4", title: "Tier 4 — State Architecture", start: 51, end: 72 },
-  { key: "tier5", title: "Tier 5 — Component Patterns", start: 72, end: 83 },
-  { key: "tier6", title: "Tier 6 — Forms at Scale", start: 83, end: 92 },
-  { key: "tier7", title: "Tier 7 — Routing", start: 92, end: 98 },
-  { key: "tier8", title: "Tier 8 — Auth + Security", start: 98, end: 107 },
-  { key: "tier9", title: "Tier 9 — Data Patterns", start: 107, end: 115 },
-  { key: "tier10", title: "Tier 10 — UX Patterns", start: 115, end: 126 },
-  { key: "tier11", title: "Tier 11 — Accessibility", start: 126, end: 130 },
-  { key: "tier12", title: "Tier 12 — Testing", start: 130, end: 150 },
+  { key: "tier1", title: "Tier 1 — JSX + TypeScript Foundations", start: 0, end: 19 },
+  { key: "tier2", title: "Tier 2 — Hooks + Async", start: 19, end: 39 },
+  { key: "tier3", title: "Tier 3 — Performance", start: 39, end: 51 },
+  { key: "tier4", title: "Tier 4 — State Architecture", start: 51, end: 73 },
+  { key: "tier5", title: "Tier 5 — Component Patterns + TS Generics", start: 73, end: 87 },
+  { key: "tier6", title: "Tier 6 — Forms at Scale", start: 87, end: 99 },
+  { key: "tier7", title: "Tier 7 — Routing", start: 99, end: 104 },
+  { key: "tier8", title: "Tier 8 — Auth + Security", start: 104, end: 116 },
+  { key: "tier9", title: "Tier 9 — Data Patterns", start: 116, end: 122 },
+  { key: "tier10", title: "Tier 10 — UX Patterns", start: 122, end: 135 },
+  { key: "tier11", title: "Tier 11 — TypeScript Advanced (Now Earned)", start: 135, end: 138 },
+  { key: "tier12", title: "Tier 12 — Accessibility", start: 138, end: 143 },
+  { key: "tier13", title: "Tier 13 — Testing", start: 143, end: 151 },
 ];
 
 /** Angular track lesson order — must match App.jsx lessonList for next/prev and content indices. */
@@ -113,19 +117,6 @@ const LP = {
   phaseBody: { fontSize: "14px", lineHeight: 1.6, color: "#475569", margin: 0 },
   blueprintBlock: { fontSize: "14px", lineHeight: 1.65, color: "#475569", marginBottom: "14px" },
   deepEnd: { fontSize: "14px", fontStyle: "italic", color: "#64748b", marginBottom: "8px" },
-  btn: {
-    display: "inline-block",
-    marginTop: 0,
-    padding: "10px 22px",
-    background: "#00d4ff",
-    color: "#0f172a",
-    border: "none",
-    borderRadius: "10px",
-    fontWeight: 700,
-    fontSize: "15px",
-    cursor: "pointer",
-    fontFamily: "'DM Sans', sans-serif",
-  },
   strong: { color: "#0f172a", fontWeight: 600 },
   btnOutline: {
     display: "inline-block",
@@ -223,11 +214,11 @@ const LP = {
   },
 };
 
-export default function LandingPage({ track, onSelectLesson, onStartFree, lessonList, freeLessonsHint }) {
+export default function LandingPage({ track, onSelectLesson, lessonList, freeLessonsHint }) {
   const [hover, setHover] = useState(null);
   const [howItWorksOpen, setHowItWorksOpen] = useState(false);
 
-  // lessonList: null = use LESSON_LIST (100 React lessons); array = curriculum (TSF/JSF: title, shortName, why)
+  // lessonList: null = use LESSON_LIST (shared blueprint); array = curriculum (TSF/JSF: title, shortName, why)
   let list = lessonList ?? LESSON_LIST.map((title) => ({ title }));
 
   // Angular track: QuickBite (QB01–QB05), then ANG01–ANG09, then React list, then FUNDA
@@ -349,12 +340,6 @@ export default function LandingPage({ track, onSelectLesson, onStartFree, lesson
         ? "React + JavaScript"
         : "Vue";
 
-  const startFirstLesson = () => {
-    if (list.length === 0) return;
-    if (onStartFree) onStartFree(0, list[0]);
-    else onSelectLesson(0, list[0]);
-  };
-
   useEffect(() => {
     if (!howItWorksOpen) return undefined;
     const onKey = (e) => {
@@ -461,9 +446,6 @@ export default function LandingPage({ track, onSelectLesson, onStartFree, lesson
               marginTop: "8px",
             }}
           >
-            <button type="button" style={LP.btn} onClick={startFirstLesson}>
-              Start Here
-            </button>
             <button type="button" style={LP.btnOutline} onClick={() => setHowItWorksOpen(true)}>
               How it works
             </button>
@@ -482,7 +464,16 @@ export default function LandingPage({ track, onSelectLesson, onStartFree, lesson
           }}
         >
           <div style={{ ...subtitle, color: "#00d4ff", fontWeight: 600, letterSpacing: "0.04em", marginBottom: 0 }}>
-            {TRACK_LABELS[track] ?? track} — {lessonCount} lessons
+            {track === "react-ts" ? (
+              <>
+                {TRACK_LABELS[track] ?? track} — {REACT_TS_GUIDED_LESSON_COUNT} guided lessons ·{" "}
+                {REACT_TS_CURRICULUM_SLOT_COUNT}-step roadmap
+              </>
+            ) : (
+              <>
+                {TRACK_LABELS[track] ?? track} — {lessonCount} lessons
+              </>
+            )}
           </div>
         </div>
 

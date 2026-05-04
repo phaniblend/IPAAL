@@ -25,7 +25,7 @@ const NODES = [
     },
     {
       lesson: 2,
-      label: "TypeScript — Interfaces + Types",
+      label: "Inventory row — readonly fields, unions, nested types",
       reason: "The form state and error state are typed interfaces. You need to know how to define TypeScript interfaces before modelling complex reducer state shapes.",
     },
     {

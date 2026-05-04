@@ -25,7 +25,7 @@ const NODES = [
       },
       {
         lesson: 2,
-        label: "TypeScript — Interfaces + Types",
+        label: "Inventory row — readonly fields, unions, nested types",
         reason: "Enums are often combined with interfaces — for example a ShipmentCard props interface with status: ShipmentLifecycle. Lesson 2 is where interfaces and type aliases become fluent.",
       },
     ],

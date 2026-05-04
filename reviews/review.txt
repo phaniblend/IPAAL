@@ -1,0 +1,28 @@
+# PALL-INPACT — local lesson review
+Exported: 2026-05-04T11:19:06.707Z
+
+Optional: include the phrase "see the screenshot" in a note when you want to explicitly tie wording to an image; image filenames are always listed below when attached.
+
+## react-ts — Lesson 1: First inventory screen — title + grocery card
+
+we dont need to say what is not required global fix  in all steps
+
+Files: images/react-ts_lesson1_1.png
+
+---
+
+## react-ts — Lesson 1: First inventory screen — title + grocery card
+
+we do not say what is not required
+
+Files: images/react-ts_lesson1_2.png
+
+---
+
+## react-ts — Lesson 1: First inventory screen — title + grocery card
+
+the code is correct but getting partial correct feedbak
+
+Files: images/react-ts_lesson1_3.png
+
+---

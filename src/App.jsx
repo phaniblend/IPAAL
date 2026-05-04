@@ -618,8 +618,8 @@ const ENGINES = [
   INPACTEngineP127,
 ]
 
-// TypeScript track: import only inpact_ts01_engine to inpact_ts122_engine.
-const ENGINES_TS = [
+// React-TS: `ENGINES_TS_BASE` is legacy TS01…TS150 order; `ENGINES_TS_REORDER` matches `LESSON_LIST` in reactTsCurriculum.js (151 slots; deep dive reuses TS14).
+const ENGINES_TS_BASE = [
   INPACTEngineTS01,
   INPACTEngineTS02,
   INPACTEngineTS03,
@@ -771,6 +771,12 @@ const ENGINES_TS = [
   INPACTEngineTS149,
   INPACTEngineTS150,
 ]
+
+const ENGINES_TS_REORDER = [
+  1, 2, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 4, 87, 82, 83, 84, 85, 86, 80, 81, 88, 89, 90, 91, 93, 94, 95, 92, 96, 97, 98, 99, 100, 101, 102, 104, 105, 106, 109, 103, 107, 108, 110, 111, 112, 113, 114, 115, 116, 5, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 128, 129, 130, 131, 132, 133, 134, 135, 136, 137, 138, 6, 3, 14, 127, 139, 140, 141, 142, 143, 144, 145, 146, 147, 148, 149, 150,
+]
+
+const ENGINES_TS = ENGINES_TS_REORDER.map((legacyLessonNum) => ENGINES_TS_BASE[legacyLessonNum - 1])
 
 // TypeScript Fundamentals: 10 language-first lessons (no React)
 const ENGINES_TSF = [
@@ -966,7 +972,13 @@ const ENGINES_CSS = [
 ]
 
 const ALGO_AI_TRACKS = ['algo-js', 'algo-ts', 'algo-python', 'algo-java']
-const REACT_TS_ENABLED_LESSONS = 50
+
+/** Match engine slot count to `LESSON_LIST.length` so landing indices align with routes (null = no static engine yet). */
+function padEnginesToLessonCatalog(engines) {
+  const n = LESSON_LIST.length
+  if (!n || engines.length >= n) return engines
+  return [...engines, ...Array(n - engines.length).fill(null)]
+}
 
 function getEngines(track, lessonListLength = 0) {
   if (track === 'mobile-angular' && lessonListLength > 0) {
@@ -985,7 +997,7 @@ function getEngines(track, lessonListLength = 0) {
   if (track === 'sec') return ENGINES_SEC
   if (track === 'el') return ENGINES_EL
   if (track === 'fe') return ENGINES_FE
-  if (track === 'react-ts') return ENGINES_TS.slice(0, REACT_TS_ENABLED_LESSONS)
+  if (track === 'react-ts') return padEnginesToLessonCatalog(ENGINES_TS)
   if (track === 'angular') {
     const angularTotal = getLessonCount('angular', { reactListLength: LESSON_LIST.length })
     const staticAngularEngines = 14 + ENGINES_ANGULAR_CURRICULUM.length
@@ -1009,9 +1021,9 @@ function getEngines(track, lessonListLength = 0) {
       ...Array(pad).fill(null),
     ]
   }
-  if (track === 'vue') return ENGINES_VUE
+  if (track === 'vue') return padEnginesToLessonCatalog(ENGINES_VUE)
   if (track === 'css') return ENGINES_CSS
-  return ENGINES
+  return padEnginesToLessonCatalog(ENGINES)
 }
 
 function getLessonList(track) {
@@ -1042,7 +1054,7 @@ function getLessonList(track) {
     return CSS_CURRICULUM.map((c) => ({ title: c.title, shortName: c.shortName }))
   }
   if (track === 'angular' || track === 'vue') {
-    return null // same 100 lesson titles as React (LESSON_LIST in LandingPage)
+    return null // same shared blueprint titles as React (LESSON_LIST in LandingPage)
   }
   if (track === 'mobile-angular') {
     return MOBILE_ANGULAR_LESSONS.map((c) => ({ title: c.title, shortName: c.shortName }))
@@ -1050,13 +1062,16 @@ function getLessonList(track) {
   if (ALGO_AI_TRACKS.includes(track)) {
     return ALGO_AI_NAMES.map((title) => ({ title }))
   }
-  return null // react-js and react-ts use LESSON_LIST from LandingPage (100 items)
+  return null // react-js and react-ts use LESSON_LIST from LandingPage
 }
 
 import { AI_LESSONS_CONFIG } from './ai-lessons/config.js'
 import { ALGO_AI_NAMES } from './ai-lessons/algoAiNames.js'
 import DynamicLessonPage from './ai-lessons/DynamicLessonPage.jsx'
 import { LessonValidationContext } from './ai-lessons/lessonValidationContext.jsx'
+import {
+  LocalLessonReviewProvider,
+} from './localLessonReview/LocalLessonReview.jsx'
 import {
   mustSoftRegisterToAccess,
   mustHardRegisterToAccess,
@@ -1093,6 +1108,10 @@ import AddFundsModal from './auth/AddFundsModal.jsx'
 import UserDashboard from './auth/UserDashboard.jsx'
 import { addAppUsageSeconds } from './auth/appUsageTime.js'
 import CinematicLanding from './CinematicLanding.jsx'
+import ReactTsPatternsBridge, {
+  isReactTsPatternsBridgeDismissed,
+  REACT_TS_PATTERNS_BRIDGE_STORAGE_KEY,
+} from './ReactTsPatternsBridge.jsx'
 import {
   onAuthStateChange,
   getSession,
@@ -1131,6 +1150,16 @@ export default function App() {
     const p = getHashRoutePathname()
     return !p.startsWith('/lessons/') && p !== '/register'
   })
+  /** In-session hide after dismiss (localStorage is written inside ReactTsPatternsBridge). */
+  const [patternsBridgeDismissedLocal, setPatternsBridgeDismissedLocal] = useState(false)
+  // Include `showCinematic`: after cinematic we clear bridge LS — deps must change or useMemo keeps stale `false`.
+  const showReactTsPatternsBridge = useMemo(
+    () =>
+      !patternsBridgeDismissedLocal &&
+      track === LEARNER_FOCUS_TRACK &&
+      !isReactTsPatternsBridgeDismissed(),
+    [patternsBridgeDismissedLocal, track, showCinematic]
+  )
   /** false until first Supabase getSession() finishes — avoids lesson gates before localStorage mirrors session. */
   const [authSessionReady, setAuthSessionReady] = useState(!isSupabaseConfigured)
 
@@ -1412,20 +1441,6 @@ export default function App() {
     navigate('/', { replace: true })
   }
 
-  const handleStartFree = (i, item) => {
-    const t = LEARNER_FOCUS_TRACK
-    if (user?.id) {
-      handleSelectLesson(i, item)
-      return
-    }
-    setPendingLesson({ track: t, index: i, item })
-    savePendingLesson(t, i, item)
-    setStoredRedirectPath(buildLessonPath(t, i))
-    setRegisterModalVariant('startFree')
-    setShowRegisterModal(true)
-    navigate('/register', { replace: true })
-  }
-
   const handleSelectLesson = (i, item) => {
     const t = LEARNER_FOCUS_TRACK
     if (mustLoginToUnlockPastAnonymousLimit(t, i, lessonGateOpts)) {
@@ -1704,8 +1719,30 @@ export default function App() {
       return (
         <CinematicLanding
           onEnterLessons={() => {
+            try {
+              window.localStorage.removeItem(REACT_TS_PATTERNS_BRIDGE_STORAGE_KEY)
+            } catch {
+              /* ignore */
+            }
+            setPatternsBridgeDismissedLocal(false)
             setTrack(LEARNER_FOCUS_TRACK)
             setShowCinematic(false)
+          }}
+        />
+      )
+    }
+
+    if (showReactTsPatternsBridge) {
+      return (
+        <ReactTsPatternsBridge
+          onComplete={() => {
+            setPatternsBridgeDismissedLocal(true)
+          }}
+          onOpenLesson1={() => {
+            setPatternsBridgeDismissedLocal(true)
+            const list = getLessonList(LEARNER_FOCUS_TRACK)
+            const item = list?.[0] ?? { title: LESSON_LIST[0] ?? 'Lesson 1' }
+            handleSelectLesson(0, item)
           }}
         />
       )
@@ -1804,7 +1841,6 @@ export default function App() {
           <LandingPage
             track={LEARNER_FOCUS_TRACK}
             onSelectLesson={handleSelectLesson}
-            onStartFree={handleStartFree}
             lessonList={getLessonList(LEARNER_FOCUS_TRACK)}
             freeLessonsHint={freeLessonsHint}
           />
@@ -1904,6 +1940,12 @@ export default function App() {
 
   if (useDynamicLesson) {
     return (
+      <LocalLessonReviewProvider
+        enabled={import.meta.env.DEV}
+        lessonIndex={lessonIndex}
+        track={effectiveTrack}
+        lessonTitle={lessonTitle ?? ''}
+      >
       <>
         {/* Top bar: left/center transparent so Lesson/Editor/Output tabs are visible; header (bg + border) only behind name + login */}
         <div
@@ -2030,6 +2072,7 @@ export default function App() {
         )}
         {showAddFundsModal && <AddFundsModal user={user} onDone={addFundsDone} />}
       </>
+      </LocalLessonReviewProvider>
     )
   }
 
@@ -2086,6 +2129,12 @@ export default function App() {
   }
 
   return (
+    <LocalLessonReviewProvider
+      enabled={import.meta.env.DEV}
+      lessonIndex={lessonIndex}
+      track={effectiveTrack}
+      lessonTitle={lessonTitle ?? ''}
+    >
     <>
       <div
         style={{
@@ -2183,5 +2232,6 @@ export default function App() {
       )}
       {showAddFundsModal && <AddFundsModal user={user} onDone={addFundsDone} />}
     </>
+    </LocalLessonReviewProvider>
   )
 }

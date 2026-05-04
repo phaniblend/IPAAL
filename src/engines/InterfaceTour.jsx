@@ -77,6 +77,7 @@ function queryTourTargetElement(selector) {
  * - initialStepIndex: starting step when forceStartNonce fires (0 … steps.length-1)
  * - onOpenChange: notifies parent when the tour opens or closes
  * - onLastStepDone: called when the learner taps Done on the final real step (Skip uses a Help nudge instead)
+ * - externalCloseNonce: increment to close the tour from the parent (e.g. intro “Skip tour” dismisses without recap)
  */
 export default function InterfaceTour({
   steps = [],
@@ -87,12 +88,14 @@ export default function InterfaceTour({
   initialStepIndex = 0,
   onOpenChange,
   onLastStepDone,
+  externalCloseNonce = 0,
 }) {
   const [open, setOpen] = useState(false);
   const [index, setIndex] = useState(0);
   const [box, setBox] = useState(null);
   const [missing, setMissing] = useState(false);
   const prevLessonKeyRef = useRef(null);
+  const prevExternalCloseRef = useRef(0);
   /** After Skip (any step): one-shot spotlight on Help with reassurance copy. */
   const [skipHelpNudge, setSkipHelpNudge] = useState(false);
   const [cardOffset, setCardOffset] = useState({ x: 0, y: 0 });
@@ -135,6 +138,16 @@ export default function InterfaceTour({
     setSkipHelpNudge(false);
     setOpen(false);
   }, [blockTour]);
+
+  useEffect(() => {
+    if (externalCloseNonce <= 0 || externalCloseNonce === prevExternalCloseRef.current) return undefined;
+    prevExternalCloseRef.current = externalCloseNonce;
+    const id = requestAnimationFrame(() => {
+      setSkipHelpNudge(false);
+      setOpen(false);
+    });
+    return () => cancelAnimationFrame(id);
+  }, [externalCloseNonce]);
 
   useEffect(() => {
     if (!open) setBox(null);

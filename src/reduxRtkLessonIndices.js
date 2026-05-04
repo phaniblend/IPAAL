@@ -1,17 +1,12 @@
 /**
- * Redux ∪ RTK (union): curriculum indices (0-based, same order as LESSON_LIST / ENGINES_TS)
- * for lessons that belong in the Redux track on the landing page.
+ * Redux ∪ RTK: curriculum indices (0-based, same order as LESSON_LIST / ENGINES_TS)
+ * for lessons that appear in the Redux ∪ RTK landing subsection instead of the main “deep” grid.
  *
- * Verified against engines / JSON — not from titles alone:
- * - 72: `inpact_ts76_engine.jsx` — Mini Redux (useReducer + Context + useSyncExternalStore selector).
- * - 117: `react-ts/inpact_p124_engine.jsx` — createSlice, createAsyncThunk, configureStore (@reduxjs/toolkit).
- * - 118: `react-ts/inpact_p125_engine.jsx` — RTK Query (createApi, fetchBaseQuery, hooks).
- * - 119–121: `inpact_ts120/121/122_engine.jsx` + `content/react-ts/120_*.json` … `122_*.json` — RTK endpoints, query builder, createAsyncThunk from scratch.
- *
- * Intentionally excluded: index 42 — `inpact_ts46_engine.jsx` teaches React useReducer vs useState
- * (complex form state), not Redux/RTK libraries.
+ * Aligned with blueprint reorder (Mini Redux → RTK Query listener as one contiguous block).
  */
-export const REDUX_RTK_LESSON_INDICES = new Set([72, 117, 118, 119, 120, 121]);
+export const REDUX_RTK_LESSON_INDICES = new Set([
+  58, 59, 60, 61, 62, 63, 64, 65, 66, 67, // Mini Redux … RTK Query — WebSocket Listener
+]);
 
 export function isReduxRtkLessonIndex(i) {
   return REDUX_RTK_LESSON_INDICES.has(i);
@@ -21,7 +16,11 @@ export function isReduxRtkLessonIndex(i) {
  * Landing-page subsections under “Redux (Toolkit & RTK)” — each group lists curriculum indices in display order.
  */
 export const REDUX_LANDING_SUBSECTIONS = [
-  { key: "redux-pattern-mini", title: "Reducer pattern (before Toolkit)", indices: [72] },
-  { key: "redux-toolkit-rtk-query", title: "Redux Toolkit & RTK Query", indices: [117, 118] },
-  { key: "redux-rtk-hands-on", title: "RTK endpoints, queries & async", indices: [119, 120, 121] },
+  { key: "redux-pattern-mini", title: "Reducer pattern (before Toolkit)", indices: [58] },
+  {
+    key: "redux-toolkit-core",
+    title: "Redux Toolkit — slices, store, async, entities",
+    indices: [59, 60, 61, 62, 63, 64],
+  },
+  { key: "redux-rtk-query", title: "RTK Query — API layer", indices: [65, 66, 67] },
 ];

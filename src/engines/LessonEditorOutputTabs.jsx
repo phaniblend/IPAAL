@@ -1,4 +1,4 @@
-import { useRef, useEffect, useLayoutEffect, useState, useContext, useMemo } from "react";
+import { useRef, useEffect, useLayoutEffect, useState, useContext, useMemo, useCallback } from "react";
 import RichLearnerText from "./RichLearnerText";
 import ReadingModeModal from "./ReadingModeModal";
 import DeepDiveModal from "./DeepDiveModal";
@@ -615,6 +615,10 @@ export default function LessonEditorOutputTabs({
   omitObjectivesFromLessonTab = false,
   /** Extra controls after the Lesson tab CTA (e.g. CONTINUE / LET'S BUILD on React · TS lesson 1 shell). */
   preQuestionFooter = null,
+  /**
+   * When set (e.g. intro MCQ from the engine), replaces the default TOPICS card on the Lesson tab so the slot owns the full intro UI.
+   */
+  lessonIntroSlot = null,
   children,
 }) {
   const lessonValidationCtx = useContext(LessonValidationContext);
@@ -653,6 +657,8 @@ export default function LessonEditorOutputTabs({
   const [showOutputModal, setShowOutputModal] = useState(false);
   const [previewCoach, setPreviewCoach] = useState(null);
   const [showReadingModal, setShowReadingModal] = useState(false);
+  /** True when the Lesson tab scroll area has more content below the fold (real scroll host is here, not engine main). */
+  const [lessonScrollMoreBelow, setLessonScrollMoreBelow] = useState(false);
   const lessonScrollRef = useRef(null);
   const lessonObjectivesAnchorRef = useRef(null);
   const previewIframeRef = useRef(null);
@@ -664,6 +670,19 @@ export default function LessonEditorOutputTabs({
     () => getIntroDeepDiveConcept(track, lessonNum, lessonContent.title),
     [track, lessonNum, lessonContent.title]
   );
+
+  const updateLessonScrollMoreBelow = useCallback(() => {
+    const el = lessonScrollRef.current;
+    if (!el) {
+      setLessonScrollMoreBelow(false);
+      return;
+    }
+    const { scrollTop, scrollHeight, clientHeight } = el;
+    const bottomGap = scrollHeight - scrollTop - clientHeight;
+    const hasOverflow = scrollHeight > clientHeight + 8;
+    const notAtBottom = bottomGap > 12;
+    setLessonScrollMoreBelow(hasOverflow && notAtBottom);
+  }, []);
 
   /** Same content as former Output tab: HTML for iframe or placeholder */
   const outputContent = hasOutput
@@ -706,9 +725,50 @@ export default function LessonEditorOutputTabs({
       }
       scrollEl.scrollTop = 0;
     };
-    const id = requestAnimationFrame(run);
+    const id = requestAnimationFrame(() => {
+      run();
+      requestAnimationFrame(() => {
+        updateLessonScrollMoreBelow();
+      });
+    });
     return () => cancelAnimationFrame(id);
-  }, [mainTab, useEditorWorkspaceModal, node?.id, node?.type, objectives.length]);
+  }, [mainTab, useEditorWorkspaceModal, node?.id, node?.type, objectives.length, updateLessonScrollMoreBelow]);
+
+  useLayoutEffect(() => {
+    const showLessonMain = useEditorWorkspaceModal || mainTab === "lesson";
+    if (!showLessonMain) {
+      setLessonScrollMoreBelow(false);
+      return undefined;
+    }
+    const el = lessonScrollRef.current;
+    if (!el) return undefined;
+    updateLessonScrollMoreBelow();
+    const onScroll = () => updateLessonScrollMoreBelow();
+    el.addEventListener("scroll", onScroll, { passive: true });
+    let ro;
+    if (typeof ResizeObserver !== "undefined") {
+      ro = new ResizeObserver(() => updateLessonScrollMoreBelow());
+      ro.observe(el);
+      const inner = el.querySelector(".inpact-lesson-scroll-inner");
+      if (inner instanceof Element) ro.observe(inner);
+    }
+    return () => {
+      el.removeEventListener("scroll", onScroll);
+      if (ro) ro.disconnect();
+    };
+  }, [
+    updateLessonScrollMoreBelow,
+    mainTab,
+    useEditorWorkspaceModal,
+    editorWorkspaceOpen,
+    node?.id,
+    node?.type,
+    lessonContent?.body,
+    lessonContent?.title,
+    lessonContent?.usecase,
+    objectives.length,
+    omitObjectivesFromLessonTab,
+  ]);
 
   useEffect(() => {
     if (!useEditorWorkspaceModal || !editorWorkspaceOpen) return undefined;
@@ -771,6 +831,28 @@ export default function LessonEditorOutputTabs({
               flex-shrink: 0;
             }
           }
+          @keyframes inpact-lesson-scroll-hint-bounce {
+            0%, 100% { transform: translateY(0); opacity: 0.5; }
+            50% { transform: translateY(6px); opacity: 1; }
+          }
+          .inpact-lesson-scroll-hint-chevrons {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1px;
+          }
+          .inpact-lesson-scroll-hint-chevron {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            line-height: 0;
+            color: #0891b2;
+            animation: inpact-lesson-scroll-hint-bounce 1.2s ease-in-out infinite;
+            will-change: transform;
+          }
+          .inpact-lesson-scroll-hint-chevrons .inpact-lesson-scroll-hint-chevron:nth-child(1) { animation-delay: 0s; }
+          .inpact-lesson-scroll-hint-chevrons .inpact-lesson-scroll-hint-chevron:nth-child(2) { animation-delay: 0.14s; }
+          .inpact-lesson-scroll-hint-chevrons .inpact-lesson-scroll-hint-chevron:nth-child(3) { animation-delay: 0.28s; }
         `}
       </style>
       {!tabsInSidebar && (
@@ -818,9 +900,12 @@ export default function LessonEditorOutputTabs({
         </div>
       )}
       {(useEditorWorkspaceModal || mainTab === "lesson") && (
-        <div ref={lessonScrollRef} style={lessonStyles.lessonScroll}>
-            <div style={lessonStyles.wrap}>
-            {(lessonContent.title || lessonContent.body || lessonContent.usecase) && (
+        <div style={{ position: "relative", width: "100%" }}>
+          <div ref={lessonScrollRef} style={lessonStyles.lessonScroll}>
+            <div className="inpact-lesson-scroll-inner" style={lessonStyles.wrap}>
+            {lessonIntroSlot ? (
+              <div style={{ marginBottom: "8px" }}>{lessonIntroSlot}</div>
+            ) : (lessonContent.title || lessonContent.body || lessonContent.usecase) ? (
               <div style={lessonStyles.card}>
                 <div style={lessonStyles.paalLabel}>TOPICS & CONCEPTS</div>
                 {lessonContent.tag && <div style={{ fontSize: "11px", color: "#f28a8a", marginBottom: "8px" }}>{lessonContent.tag}</div>}
@@ -845,7 +930,7 @@ export default function LessonEditorOutputTabs({
                   />
                 )}
               </div>
-            )}
+            ) : null}
             {objectives.length > 0 && (
               <div ref={node?.type === "objectives" ? lessonObjectivesAnchorRef : undefined} style={lessonStyles.card}>
                 <div style={lessonStyles.paalLabel}>LEARNING OBJECTIVES</div>
@@ -858,20 +943,22 @@ export default function LessonEditorOutputTabs({
                 </ul>
               </div>
             )}
-            <div style={lessonStyles.cta}>
-              <span style={{ fontSize: "18px" }}>👉</span>
-              <span>
-                {useEditorWorkspaceModal ? (
-                  <>
-                    Open the <strong style={{ color: "#0891b2" }}>Editor</strong> tab to code in full screen, then <strong style={{ color: "#0891b2" }}>Preview</strong> to run output.
-                  </>
-                ) : (
-                  <>
-                    Switch to the <strong style={{ color: "#0891b2" }}>Editor</strong> tab to write your code, then click <strong style={{ color: "#0891b2" }}>Preview</strong> to see the output.
-                  </>
-                )}
-              </span>
-            </div>
+            {lessonIntroSlot ? null : (
+              <div style={lessonStyles.cta}>
+                <span style={{ fontSize: "18px" }}>👉</span>
+                <span>
+                  {useEditorWorkspaceModal ? (
+                    <>
+                      Open the <strong style={{ color: "#0891b2" }}>Editor</strong> tab to code in full screen, then <strong style={{ color: "#0891b2" }}>Preview</strong> to run output.
+                    </>
+                  ) : (
+                    <>
+                      Switch to the <strong style={{ color: "#0891b2" }}>Editor</strong> tab to write your code, then click <strong style={{ color: "#0891b2" }}>Preview</strong> to see the output.
+                    </>
+                  )}
+                </span>
+              </div>
+            )}
             {preQuestionFooter}
             {node?.type === "question" && deepDiveConcepts.length > 0 ? (
               <div style={{ ...lessonStyles.card, marginTop: "12px" }}>
@@ -922,7 +1009,60 @@ export default function LessonEditorOutputTabs({
                 </p>
               </div>
             ) : null}
+            </div>
           </div>
+          {lessonScrollMoreBelow ? (
+            <div
+              aria-hidden
+              style={{
+                position: "absolute",
+                left: "50%",
+                bottom: "14px",
+                transform: "translateX(-50%)",
+                zIndex: 6,
+                pointerEvents: "none",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                gap: "4px",
+                padding: "8px 16px 6px",
+                borderRadius: "999px",
+                background: "linear-gradient(180deg, rgba(255,255,255,0.02) 0%, rgba(248,250,252,0.92) 40%, rgba(248,250,252,0.98) 100%)",
+                boxShadow: "0 -6px 18px rgba(15,23,42,0.08)",
+                fontFamily: "'DM Sans', sans-serif",
+              }}
+            >
+              <span style={{ fontSize: "10px", fontWeight: 700, letterSpacing: "0.08em", color: "#64748b" }}>
+                MORE BELOW
+              </span>
+              <div className="inpact-lesson-scroll-hint-chevrons" aria-hidden>
+                {[
+                  { w: 22, sw: 2.25 },
+                  { w: 18, sw: 2 },
+                  { w: 14, sw: 1.75 },
+                ].map(({ w, sw }) => (
+                  <span key={w} className="inpact-lesson-scroll-hint-chevron">
+                    <svg
+                      width={w}
+                      height={Math.round(w * 0.42)}
+                      viewBox="0 0 24 11"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                      aria-hidden
+                    >
+                      <path
+                        d="M3 3.5L12 9.5L21 3.5"
+                        stroke="currentColor"
+                        strokeWidth={sw}
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                  </span>
+                ))}
+              </div>
+            </div>
+          ) : null}
         </div>
       )}
       {!useEditorWorkspaceModal && mainTab === "editor" && (

@@ -25,7 +25,7 @@ const NODES = [
       },
       {
         lesson: 2,
-        label: "TypeScript — Interfaces + Types",
+        label: "Inventory row — readonly fields, unions, nested types",
         reason: "You narrow to interface shapes — Lesson 2 is where structured props and records become familiar.",
       },
       {

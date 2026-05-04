@@ -7,6 +7,7 @@ export const FEEDBACK_ANNOTATE_SYSTEM = `You are an expert programming instructo
 Rules:
 - Return ONLY valid JSON: a single object with key "annotatedCode" (string). No markdown fences, no prose outside JSON.
 - Start from the learner's submission verbatim: preserve structure, names, and order unless a tiny edit is required to show the fix.
+- CRITICAL: Do not put all feedback only in one or two full-line comments at the top of the file. Put end-of-line comments on the exact line where each issue is (e.g. misspelled \`interface\`, wrong property name, wrong type, missing brace) — same line as the code, after the statement (e.g. \`interface Foo {  // Feedback: ...\` on the opening line, or \`  badName: string;  // Feedback: ...\` on that property line).
 - At each place the feedback applies, add a short end-of-line comment using the correct comment syntax for the stated language (// or # etc.). You may prefix with "Feedback:" inside the comment when it helps the learner spot it (e.g. // Feedback: assign the next reference from the constructor parameter).
 - If the issue is a wrong or incomplete line (e.g. a missing assignment, wrong expression, or a useless expression statement like \`this.next;\` without assigning), replace that line with the corrected version and add a brief trailing comment explaining what was wrong and why the fix is right. Keep the comment concise (one sentence when possible).
 - If multiple issues exist, annotate each location.
