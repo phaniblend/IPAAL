@@ -13,22 +13,16 @@ function isDeclaredAtModuleScope(raw, declarationStartIndex) {
 
 // ─── evaluators — Lesson 1: interface → typed shell → card JSX → App (1–2 cards) ─
 
-// Step 1 — module-scope `GroceryItemCardProps` (four string fields)
+// Step 1 — module-scope interface pattern (four string fields; names are not enforced)
 function evalLesson1Step1(answer) {
   const raw = String(answer || "");
-  const m = raw.match(/interface\s+GroceryItemCardProps\s*\{([\s\S]*?)\}/m);
+  const m = raw.match(/interface\s+[A-Za-z_][A-Za-z0-9_]*\s*\{([\s\S]*?)\}/m);
   if (!m || m.index == null) return "wrong";
   const body = m[1] || "";
-  const pairs = [
-    /\bname\s*:\s*string\b/,
-    /\bimageUrl\s*:\s*string\b/,
-    /\bquantityAvailable\s*:\s*string\b/,
-    /\bexpiresSummary\s*:\s*string\b/,
-  ];
-  const hit = pairs.filter((re) => re.test(body)).length;
+  const stringFieldCount = [...body.matchAll(/\b[A-Za-z_][A-Za-z0-9_]*\s*:\s*string\b/gm)].length;
   const moduleScoped = isDeclaredAtModuleScope(raw, m.index);
-  if (hit === 4 && moduleScoped) return "correct";
-  if (hit >= 2 && moduleScoped) return "partial";
+  if (stringFieldCount >= 4 && moduleScoped) return "correct";
+  if (stringFieldCount >= 2 && moduleScoped) return "partial";
   return "wrong";
 }
 
@@ -37,7 +31,7 @@ function evalLesson1Step2(answer) {
   const raw = String(answer || "");
   const hasApp = /const\s+App\b|function\s+App\b/.test(raw);
   const hasSig =
-    /const\s+GroceryItemCard\s*=\s*\(\s*\{[\s\S]*?\}\s*:\s*GroceryItemCardProps\s*\)(\s*:\s*(?:JSX\.Element|React\.ReactElement|React\.JSX\.Element))?\s*=>/m.test(
+    /const\s+[A-Z][A-Za-z0-9_]*\s*=\s*\(\s*\{[\s\S]*?\}\s*:\s*[A-Za-z_][A-Za-z0-9_]*\s*\)(\s*:\s*(?:JSX\.Element|React\.ReactElement|React\.JSX\.Element))?\s*=>/m.test(
       raw,
     );
   const hasImg = /<img\b/i.test(raw);
@@ -55,23 +49,65 @@ function evalLesson1Step2(answer) {
   return "wrong";
 }
 
-/** Card body checks — tolerate normal whitespace / line breaks in JSX (review: correct code flagged partial). */
+function extractTypedCardShape(raw) {
+  const sig =
+    raw.match(
+      /const\s+([A-Z][A-Za-z0-9_]*)\s*=\s*\(\s*\{([\s\S]*?)\}\s*:\s*([A-Za-z_][A-Za-z0-9_]*)\s*\)(\s*:\s*(?:JSX\.Element|React\.ReactElement|React\.JSX\.Element))?\s*=>/m,
+    ) || null;
+  if (!sig) return null;
+
+  const componentName = sig[1];
+  const destructuredRaw = sig[2] || "";
+  const propsTypeName = sig[3];
+
+  const destructuredNames = destructuredRaw
+    .split(",")
+    .map((part) =>
+      part
+        .replace(/\/\*[\s\S]*?\*\//g, "")
+        .replace(/\/\/.*$/g, "")
+        .trim(),
+    )
+    .map((part) => part.replace(/[:=].*$/, "").trim())
+    .map((part) => part.replace(/^\.\.\./, "").trim())
+    .filter((part) => /^[A-Za-z_][A-Za-z0-9_]*$/.test(part));
+
+  const ifaceRe = new RegExp(`interface\\s+${propsTypeName}\\s*\\{([\\s\\S]*?)\\}`, "m");
+  const ifaceMatch = raw.match(ifaceRe);
+  const ifaceBody = ifaceMatch?.[1] || "";
+  const interfaceFields = [...ifaceBody.matchAll(/\b([A-Za-z_][A-Za-z0-9_]*)\s*:\s*string\b/gm)].map((m) => m[1]);
+
+  return { componentName, propsTypeName, destructuredNames, interfaceFields };
+}
+
+/** Card body checks — tolerate learner-chosen names; enforce internal consistency. */
 function lesson1CardBodyFromPropsOk(raw) {
-  const hasSig =
-    /const\s+GroceryItemCard\s*=\s*\(\s*\{[\s\S]*?\}\s*:\s*GroceryItemCardProps\s*\)(\s*:\s*(?:JSX\.Element|React\.ReactElement|React\.JSX\.Element))?\s*=>/m.test(
-      raw,
-    );
-  const hasImg =
-    /<img\b[^>]*\bsrc\s*=\s*\{[\s\n]*imageUrl[\s\n]*\}/m.test(raw) ||
-    /<img\b[^>]*\{[\s\n]*imageUrl[\s\n]*\}/m.test(raw);
-  const hasAlt =
-    /<img\b[^>]*\balt\s*=\s*\{[\s\n]*name[\s\n]*\}/m.test(raw) || /<img[^>]*\balt=\{name\}/m.test(raw);
-  const hasQty = /\{[\s\n]*quantityAvailable[\s\n]*\}/.test(raw);
-  const hasExp = /\{[\s\n]*expiresSummary[\s\n]*\}/.test(raw);
-  const hasNameInHeading =
-    /<h2\b[^>]*>[\s\S]*?\{[\s\n]*name[\s\n]*\}[\s\S]*?<\/h2>/im.test(raw) ||
-    /<h2\b[^>]*>\s*\{name\}\s*<\/h2>/im.test(raw);
-  return hasSig && hasImg && hasAlt && hasQty && hasExp && hasNameInHeading;
+  const shape = extractTypedCardShape(raw);
+  if (!shape) return false;
+
+  const destructuredSet = new Set(shape.destructuredNames);
+  const interfaceSet = new Set(shape.interfaceFields);
+  const hasEnoughProps = shape.destructuredNames.length >= 4;
+  const signatureMatchesInterface =
+    shape.interfaceFields.length >= 4 &&
+    shape.destructuredNames.every((name) => interfaceSet.has(name));
+
+  const srcVar = raw.match(/<img\b[^>]*\bsrc\s*=\s*\{\s*([A-Za-z_][A-Za-z0-9_]*)\s*\}/m)?.[1] || null;
+  const altVar = raw.match(/<img\b[^>]*\balt\s*=\s*\{\s*([A-Za-z_][A-Za-z0-9_]*)\s*\}/m)?.[1] || null;
+  const h2Var =
+    raw.match(/<h2\b[^>]*>[\s\S]*?\{\s*([A-Za-z_][A-Za-z0-9_]*)\s*\}[\s\S]*?<\/h2>/im)?.[1] || null;
+  const pVars = [...raw.matchAll(/<p\b[^>]*>[\s\S]*?\{\s*([A-Za-z_][A-Za-z0-9_]*)\s*\}[\s\S]*?<\/p>/gim)].map((m) => m[1]);
+
+  const hasDivShell = /<div\b/i.test(raw) && /<\/div>/i.test(raw);
+  const usesDestructuredBindings =
+    Boolean(srcVar && altVar && h2Var) &&
+    destructuredSet.has(srcVar) &&
+    destructuredSet.has(altVar) &&
+    destructuredSet.has(h2Var) &&
+    pVars.length >= 2 &&
+    pVars.every((name) => destructuredSet.has(name));
+
+  return hasEnoughProps && signatureMatchesInterface && hasDivShell && usesDestructuredBindings;
 }
 
 // Step 3 — full card JSX from props (no App)
@@ -81,7 +117,7 @@ function evalLesson1Step3(answer) {
   const cardOk = lesson1CardBodyFromPropsOk(raw);
   if (cardOk && !hasApp) return "correct";
   if (cardOk && hasApp) return "partial";
-  if (!hasApp && /const\s+GroceryItemCard\b/.test(raw)) return "partial";
+  if (!hasApp && /const\s+[A-Z][A-Za-z0-9_]*\b/.test(raw)) return "partial";
   return "wrong";
 }
 
@@ -89,15 +125,23 @@ function evalLesson1Step3(answer) {
 function evalLesson1Step4(answer) {
   const raw = String(answer || "");
   const cardOk = lesson1CardBodyFromPropsOk(raw);
+  const shape = extractTypedCardShape(raw);
   const hasApp = /const\s+App\b|function\s+App\b/.test(raw);
   const hasExport =
     /export\s+default\s+App\b/m.test(raw) ||
     /export\s+default\s+function\s+App\b/m.test(raw) ||
     /export\s+default\s+const\s+App\b/m.test(raw);
   const hasHeader = /<header\b/i.test(raw) && /<h1\b/i.test(raw);
-  const cardMatches = [...raw.matchAll(/<GroceryItemCard\b/g)];
+  const cardTagRe =
+    shape?.componentName
+      ? new RegExp(`<${shape.componentName}\\b`, "g")
+      : /<[A-Z][A-Za-z0-9_]*\b/g;
+  const cardMatches = [...raw.matchAll(cardTagRe)];
   const nCards = cardMatches.length;
-  const passesSampleData = /name\s*=/.test(raw) && /imageUrl\s*=/.test(raw);
+  const passesSampleData =
+    shape?.interfaceFields?.length >= 4
+      ? shape.interfaceFields.every((field) => new RegExp(`\\b${field}\\s*=`, "m").test(raw))
+      : /[A-Za-z_][A-Za-z0-9_]*\s*=/.test(raw);
   if (cardOk && hasApp && hasExport && hasHeader && nCards >= 2 && passesSampleData) return "correct";
   if (cardOk && hasApp && hasExport && hasHeader && nCards === 1 && passesSampleData) return "partial";
   if (cardOk && hasApp && (!hasExport || !hasHeader)) return "partial";
@@ -149,14 +193,14 @@ const NODES = [
     type: "question",
     phase: "Step 1 of 4",
     paal:
-      "Declare `interface GroceryItemCardProps` at module scope with four `string` fields — use these exact names so later JSX and the compiler line up: `name` (display name), `imageUrl`, `quantityAvailable` (quantity label text), and `expiresSummary` (freshness / expiry note). This step is only that interface; the component arrives in Step 2.",
+    "Write a props contract (interface) at the top of the file. \nName it using PascalCase and end it with the suffix Props — for example, \`ShipmentCardProps\` or \`ProductItemProps\`. Type all four fields this card needs as strings. \nEach field name should use camelCase for compound words — so \`imageLink\`, not \`image_link\` or \`imagelink\`.",
     hint:
-      "One property per line: `name: string;` … `expiresSummary: string;`. The names are fixed for this lesson path; what changes later is the text you pass in, not the identifiers.",
+      "Focus on the checklist, not JSX yet: one named props contract with four required text fields. The syntax pattern is shown in the example panel.",
     example_code: `interface MenuRowProps {
   label: string;
   priceText: string;
 }`,
-    think_prompt: `You are building a grocery app. You hardcode an item's display name as \`itemName\` in one place and accidentally type \`itenName\` (a typo) somewhere else. The app compiles, you deploy it — and the owner calls you because item names are blank on screen.
+    think_prompt: `You are building a grocery app. You hardcoded an item's display name as \`itemName\` in one place and accidentally type \`itenName\` (a typo) somewhere else. The app compiles, you deploy it — and the owner calls you because item names are blank on screen.
 
 You just spent an hour debugging a typo that a clear data contract could have flagged instantly while coding in TypeScript.
 
@@ -176,16 +220,16 @@ Which of these gives you that contract?`,
       "Look for the option that names a single type checklist (`interface`) the compiler can enforce at every callsite.",
     why_this_matters:
       "This is the first half of every typed component you will ever write: name the data the component needs before you write a single line of JSX. Get this right and an entire class of bugs becomes impossible.",
-    answer_keywords: ["interface", "GroceryItemCardProps", "name", "imageUrl", "quantityAvailable", "expiresSummary"],
+    answer_keywords: ["interface", "string"],
     evaluate: evalLesson1Step1,
     seed_code: "",
     starter_code: "// declare your props interface here (four string fields)",
     feedback_correct:
       "Yes — a typed checklist the compiler can verify. No more blank fields from a silent typo.",
     feedback_partial:
-      "Close — confirm `GroceryItemCardProps` lists `name`, `imageUrl`, `quantityAvailable`, and `expiresSummary`, each `string`, above any component.",
+      "Close — you have the right idea. Keep it as a module-scope interface and make sure it includes four fields typed as `string`.",
     feedback_wrong:
-      "Use `interface GroceryItemCardProps` with exactly these four `string` fields: `name`, `imageUrl`, `quantityAvailable`, `expiresSummary`.",
+      "Create one interface at module scope with four properties, and type each property as `string`. We are checking the typed pattern here, not strict field naming.",
     expected: `interface GroceryItemCardProps {
   name: string;
   imageUrl: string;
@@ -205,11 +249,32 @@ Which of these gives you that contract?`,
     example_code: `const MenuRow = ({ label, priceText }: MenuRowProps) => {
   return <></>;
 };`,
-    think_prompt: `You declared an interface in Step 1 that lists exactly what data this component needs. Now you are writing the component function itself.
+    think_prompt: `The data is fetched. Your app now has a list of grocery items — each grocery item's data is an object in the shape your interface defined. The app loops through the list and renders your card once per item.
 
-You want each prop to be directly available as a variable inside the function — no writing \`props.name\` every time — and you want TypeScript to verify that whoever uses this component passes the right data.
+But how does each item's data actually get into the card?
 
-Which parameter style achieves both?`,
+In React, you pass data into a component the same way you set attributes on an HTML tag — right where you use it:
+
+\`\`\`html
+<GroceryItemCard
+  name="Roma tomatoes"
+  imageUrl="https://images.unsplash.com/..."
+  quantityAvailable="2 cases"
+  expiresSummary="Use by Friday"
+/>
+\`\`\`
+
+These are called **props** — the data a component receives from the parent component that renders it.
+
+Read each line in two parts:
+- The left side (\`name\`, \`imageUrl\`, \`quantityAvailable\`, \`expiresSummary\`) is the **prop name**. These names come from the card's props contract (interface) and define what the card expects.
+- The right side (\`"Roma tomatoes"\`, \`"2 cases"\`, etc.) is the **prop value**. These values are supplied by the parent at the place where it renders the card.
+
+So the contract defines the names, and the parent fills in the values for each card instance.
+
+Now the question is: how should your component's parameter list be written so each prop becomes a local variable directly — no writing \`props.name\` every time — and TypeScript still enforces the contract from your interface?
+
+**Which parameter style achieves both?**`,
     mc_options: [
       "A single parameter `(props)` with no type annotation — props are accessible but TypeScript cannot verify them",
       "Destructure each field in the parameter list and annotate the object with your interface — props become local variables and TypeScript enforces the contract",
@@ -280,7 +345,7 @@ const GroceryItemCard = ({
     type: "question",
     phase: "Step 3 of 4",
     paal:
-      "Replace the empty Fragment with the real row: return a `div` wrapping `img` (`src={imageUrl}`, `alt={name}`), `h2` with `{name}`, and two `p` lines using `{quantityAvailable}` and `{expiresSummary}`. Keep the focus on `GroceryItemCard`; `App` and the default export come in Step 4.",
+      "Replace the empty Fragment with the real row: return a `div` wrapping `img` (`src={imageUrl}`, `alt={name}`), `h2` with `{name}`, and two `p` lines using `{quantityAvailable}` and `{expiresSummary}`.",
     hint: "Curly braces in JSX mean “evaluate JavaScript here.” Keep the same destructured parameter list and `GroceryItemCardProps` annotation from Step 2.",
     example_code: `const MenuRow = ({ label, priceText }: MenuRowProps) => {
   return (
@@ -291,7 +356,7 @@ const GroceryItemCard = ({
   );
 };`,
     think_prompt:
-      "Plain text inside JSX stays literal. What syntax reads the `name` variable inside an `h2`?",
+      "Your ShipmentCardProps has a field called name. Inside your JSX, how do you display its value — not the word `name`, but what's actually inside it?",
     mc_options: [
       "`<h2>name</h2>`",
       "`<h2>{name}</h2>`",
@@ -305,7 +370,7 @@ const GroceryItemCard = ({
     mc_think_feedback_incorrect:
       "Remember: plain text inside tags stays literal; braces read variables.",
     why_this_matters:
-      "One typed component definition becomes a reusable template for every row the app will render.",
+      "Every field you typed in your props contract is now a live value passed in by the parent. Curly braces {} are the bridge — they tell JSX to step out of markup mode and read a real value. \nThis is called interpolation: embedding a variable's value directly inside your markup, \nso the UI reflects what the parent actually sent, not a hardcoded word.",
     answer_keywords: [
       "GroceryItemCard",
       "GroceryItemCardProps",
@@ -330,13 +395,40 @@ const GroceryItemCard = ({
 }: GroceryItemCardProps) => {
   return <></>;
 };`,
-    starter_code: "",
+    starter_code: `interface GroceryItemCardProps {
+  name: string;
+  imageUrl: string;
+  quantityAvailable: string;
+  expiresSummary: string;
+}
+
+const GroceryItemCard = ({
+  name,
+  imageUrl,
+  quantityAvailable,
+  expiresSummary,
+}: GroceryItemCardProps) => {
+  return (
+    <div>
+      <img src={imageUrl} alt={name} />
+      <h2>{name}</h2>
+      <p>Available: {quantityAvailable}</p>
+      <p>{expiresSummary}</p>
+    </div>
+  );
+};
+
+// Add the App component below.
+// One .tsx file can contain multiple components (for example: GroceryItemCard and App).`,
+
+// Add the App component below.
+// One .tsx file can contain multiple components (for example: GroceryItemCard and App).`,
     feedback_correct:
       "The card markup is wired to props — the row is ready for `App` to mount next.",
     feedback_partial:
-      "Keep `GroceryItemCard` typed with `GroceryItemCardProps`, and wire `img` (`src` / `alt`), `h2` with `{name}`, and both `p` lines to `quantityAvailable` and `expiresSummary` via `{...}`.",
+      "Keep your component typed with your props interface, and bind `img` (`src` / `alt`), `h2`, and both `p` lines to the same destructured prop names you already declared.",
     feedback_wrong:
-      "`GroceryItemCard` should return a `div` containing `img`, `h2`, and two `p` elements; bind the four props in JSX with `{...}` expressions.",
+      "Return a `div` containing `img`, `h2`, and two `p` elements, then bind those elements to your destructured props using `{...}` expressions.",
     expected: `interface GroceryItemCardProps {
   name: string;
   imageUrl: string;
@@ -367,7 +459,7 @@ const GroceryItemCard = ({
     type: "question",
     phase: "Step 4 of 4",
     paal:
-      "Add the `App` component: return a `div` with `header` / `h1`, then mount two `<GroceryItemCard />` elements with different sample values for all four props on each. End with `export default App` so the preview mounts `App` as the root. (One card is a good warm-up — you need two to pass this step.)",
+      "Add the `App` component: return a `div` with `header` / `h1`, then mount your card component twice with different sample values for all four props on each. End with `export default App` so the preview mounts `App` as the root. (One card is a good warm-up — you need two to pass this step.)",
     hint:
       "String attributes on JSX (`name=\"…\"`) are fine. TypeScript should error if you omit a required prop — that is the interface from Step 1 paying rent.",
     example_code: `const App = () => (
@@ -380,13 +472,13 @@ const GroceryItemCard = ({
 
 export default App;`,
     think_prompt:
-      "Who should own the page title and the decision to mount `GroceryItemCard` — the card itself, or the `App` component?",
+      "Who should own the page title and the decision to mount your card component — the card itself, or the `App` component?",
     mc_options: [
       "The card should import and render the App layout",
-      "The `App` component composes the shell and mounts `<GroceryItemCard />`",
+      "The `App` component composes the shell and mounts the card component",
       "Neither — exports alone decide what renders",
     ],
-    mc_correct_option: "The `App` component composes the shell and mounts `<GroceryItemCard />`",
+    mc_correct_option: "The `App` component composes the shell and mounts the card component",
     mc_anchor:
       "Callers compose screens; presentational pieces stay focused. Here `App` is that caller — twice, with different props, to prove reuse.",
     mc_think_feedback_correct:
@@ -419,13 +511,37 @@ const GroceryItemCard = ({
     </div>
   );
 };`,
-    starter_code: "",
+    starter_code: `interface GroceryItemCardProps {
+  name: string;
+  imageUrl: string;
+  quantityAvailable: string;
+  expiresSummary: string;
+}
+
+const GroceryItemCard = ({
+  name,
+  imageUrl,
+  quantityAvailable,
+  expiresSummary,
+}: GroceryItemCardProps) => {
+  return (
+    <div>
+      <img src={imageUrl} alt={name} />
+      <h2>{name}</h2>
+      <p>Available: {quantityAvailable}</p>
+      <p>{expiresSummary}</p>
+    </div>
+  );
+};
+
+// Add the App component below.
+// One .tsx file can contain multiple components (for example: GroceryItemCard and App).`,
     feedback_correct:
       "Two cards, one `App`, zero duplicated markup definitions. That is the reuse win.",
     feedback_partial:
-      "Compose `App` with `header` + `h1`, `export default App`, and two `<GroceryItemCard … />` callsites with different props for each row.",
+      "Compose `App` with `header` + `h1`, add `export default App`, and mount the same card component you defined above twice, each with different prop values.",
     feedback_wrong:
-      "Pattern: `App` returns a `div` with `header`/`h1`, mounts two `GroceryItemCard` rows with distinct props, and ends with `export default App`.",
+      "Pattern: `App` returns a page shell (`div` with `header` / `h1`), mounts two instances of your existing card component with distinct props, and ends with `export default App`.",
     expected: `interface GroceryItemCardProps {
   name: string;
   imageUrl: string;

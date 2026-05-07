@@ -3,7 +3,7 @@ export const REACT_TS_CURRICULUM = [
   { title: "Inventory row — readonly fields, unions, nested types", prereqs: [1] },
   { title: "Props + Interface", prereqs: [1,2] },
   { title: "Optional Props + Defaults", prereqs: [1,2,3] },
-  { title: "children Prop + ReactNode", prereqs: [1,2,3,4] },
+  { title: "children prop + ReactNode", prereqs: [1,2,3,4] },
   { title: "useState — Primitives", prereqs: [1] },
   { title: "useState — Objects + Spread", prereqs: [1,6] },
   { title: "useState — Arrays", prereqs: [1,6,7] },
@@ -16,13 +16,14 @@ export const REACT_TS_CURRICULUM = [
   { title: "Event Handling — Keyboard + Focus", prereqs: [1,6,9,14] },
   { title: "Component Composition", prereqs: [1,3,4,5] },
   { title: "Conditional CSS Classes", prereqs: [1,6,11] },
-  { title: "Inline Styles + CSSProperties", prereqs: [1,2,6] },
-  { title: "CSS Modules", prereqs: [1,6,12] },
-  { title: "useEffect — Mount", prereqs: [1,6] },
-  { title: "useEffect — Dependencies", prereqs: [1,6,20] },
-  { title: "useEffect — Cleanup", prereqs: [1,6,20,21] },
-  { title: "useLayoutEffect vs useEffect", prereqs: [1,6,20,21,22] },
-  { title: "fetch + Loading + Error State", prereqs: [1,6,20,21] },
+  { title: "Inventory Filter Bar (status + text + location)", prereqs: [1,6,9,10,11,13,14] },
+  { title: "Derived Inventory Views (`inStock`, `low`, `expired`)", prereqs: [1,6,8,11,12,18] },
+  { title: "Custom Hook — useInventoryFilters", prereqs: [18,19] },
+  { title: "Custom Hook — useInventoryMutations", prereqs: [7,8,13,14,19] },
+  { title: "Zustand — UI Workflow State (selected item, drawers, drafts)", prereqs: [16,20,21] },
+  { title: "Redux Toolkit — Inventory Slice (domain state)", prereqs: [8,19,21,22] },
+  { title: "RTK Async Inventory Flow (fetch/save/expire)", prereqs: [23] },
+  { title: "Restaurant App Integration — roles, actions, and state sync", prereqs: [20,21,22,23,24] },
   { title: "AbortController", prereqs: [1,6,20,21,22,24] },
   { title: "useRef — DOM Access", prereqs: [1,6,20] },
   { title: "useRef — Mutable Values", prereqs: [1,6,20,26] },
@@ -159,7 +160,7 @@ export const REACT_TS_CURRICULUM_SLOT_COUNT = REACT_TS_CURRICULUM.length;
  * Lessons you treat as learner-ready for hero copy (INPACT steps you have polished first).
  * The catalogue below may still list the full roadmap — update this as you ship.
  */
-export const REACT_TS_GUIDED_LESSON_COUNT = 17;
+export const REACT_TS_GUIDED_LESSON_COUNT = 25;
 
 export const LESSON_LIST = REACT_TS_CURRICULUM.map((l) => l.title);
 export const LESSON_PREREQS = REACT_TS_CURRICULUM.map((l) => l.prereqs);

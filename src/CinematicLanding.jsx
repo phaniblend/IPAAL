@@ -365,8 +365,7 @@ export default function CinematicLanding({ onEnterLessons }) {
             Start doing — it&apos;s free →
           </button>
           <p className="cin-cta-sub">
-            Guided React + TypeScript — one sample app, lesson by lesson. Next you&apos;ll see how pro UIs reuse the
-            same patterns, then you open the lesson list. Start doing.
+            You are just 25 lessons away from mastering enterprise application development using React + TypeScript.
           </p>
         </div>
       </div>

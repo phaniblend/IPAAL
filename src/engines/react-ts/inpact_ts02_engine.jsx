@@ -39,30 +39,88 @@ function evalLesson2Step2(answer) {
   return "wrong";
 }
 
-function evalLesson2Step3(answer) {
-  const raw = String(answer || "");
-  const hall = raw.match(/interface\s+KitchenHall\s*\{([\s\S]*?)\}/m);
-  if (!hall) return "wrong";
-  const hallBody = hall[1] || "";
-  if (!/\bcity\s*:\s*string\b/.test(hallBody) || !/\bstall\s*:\s*string\b/.test(hallBody)) return "wrong";
-  const pantry = raw.match(/interface\s+PantryLine\s+extends\s+StockLineAudit\s*\{([\s\S]*?)\}/m);
-  if (!pantry) return "wrong";
-  const pb = pantry[1] || "";
-  if (!/\bskuLabel\s*:\s*string\b/.test(pb)) return "wrong";
-  if (!/\bhall\s*:\s*KitchenHall\b/.test(pb)) return "wrong";
-  if (!/\bband\s*:\s*ShelfBand\b/.test(pb)) return "wrong";
-  const audit = raw.match(/interface\s+StockLineAudit\s*\{([\s\S]*?)\}/m);
-  if (!audit) return "wrong";
-  return "correct";
+/** Body inside matching `{` … `}` starting at openBraceIndex (depth 0 at that `{`). */
+function sliceBraceBlock(raw, openBraceIndex) {
+  if (raw[openBraceIndex] !== "{") return null;
+  let depth = 1;
+  let i = openBraceIndex + 1;
+  const innerStart = i;
+  while (i < raw.length && depth > 0) {
+    const c = raw[i];
+    if (c === "{") depth += 1;
+    else if (c === "}") {
+      depth -= 1;
+      if (depth === 0) return raw.slice(innerStart, i);
+    }
+    i += 1;
+  }
+  return null;
 }
 
+/** Step 3 — pattern only: location (interface or object type alias with city + stall), row extends StockLineAudit, string + ShelfBand + nested ref. */
+function evalLesson2Step3(answer) {
+  const raw = String(answer || "");
+  if (!/\binterface\s+StockLineAudit\b/.test(raw) || !/\btype\s+ShelfBand\b/.test(raw)) return "wrong";
+
+  const interfaces = [];
+  for (const dm of raw.matchAll(/\binterface\s+(\w+)(?:\s+extends\s+(\w+))?\s*\{/g)) {
+    const name = dm[1];
+    const ext = dm[2] || null;
+    const open = dm.index + dm[0].length - 1;
+    const inner = sliceBraceBlock(raw, open);
+    if (inner == null) continue;
+    interfaces.push({ name, extends: ext, body: inner });
+  }
+
+  const rows = interfaces.filter((x) => x.extends === "StockLineAudit");
+  const locations = interfaces.filter(
+    (x) =>
+      x.name !== "StockLineAudit" &&
+      x.extends !== "StockLineAudit" &&
+      /\bcity\s*:\s*string\b/.test(x.body) &&
+      /\bstall\s*:\s*string\b/.test(x.body),
+  );
+  const locationNames = new Set(locations.map((x) => x.name));
+
+  // Location as `type Where = { city: string; stall: string }` (no nested braces inside body).
+  for (const tm of raw.matchAll(/\btype\s+(\w+)\s*=\s*\{([^}]*)\}\s*;?/g)) {
+    const body = tm[2] || "";
+    if (/\bcity\s*:\s*string\b/.test(body) && /\bstall\s*:\s*string\b/.test(body)) {
+      locationNames.add(tm[1]);
+    }
+  }
+
+  const fieldString = /\b(?:readonly\s+)?[A-Za-z_$][\w$]*\s*:\s*string\b/;
+  const fieldShelf = /\b(?:readonly\s+)?[A-Za-z_$][\w$]*\s*:\s*ShelfBand\b/;
+  for (const row of rows) {
+    const b = row.body;
+    const hasShelf = fieldShelf.test(b);
+    const hasString = fieldString.test(b);
+    const usesNested = [...locationNames].some((ln) =>
+      new RegExp(`\\b(?:readonly\\s+)?[A-Za-z_$][\\w$]*\\s*:\\s*${ln}\\b`).test(b),
+    );
+    if (hasShelf && hasString && usesNested) return "correct";
+  }
+
+  if (rows.length > 0 || locations.length > 0 || locationNames.size > locations.length) return "partial";
+  return "wrong";
+}
+
+/** Step 4 — PantryLineWithNote + kitchenNote; row side may be any identifier that extends StockLineAudit in this file. */
 function evalLesson2Step4(answer) {
   const raw = String(answer || "");
-  if (
-    !/\btype\s+PantryLineWithNote\s*=\s*PantryLine\s*&\s*\{\s*kitchenNote\s*:\s*string\s*\}\s*;?/m.test(raw)
-  ) {
-    return "wrong";
+  let m = raw.match(
+    /\btype\s+PantryLineWithNote\s*=\s*([A-Za-z_$][\w$]*)\s*&\s*\{\s*kitchenNote\s*:\s*string\s*\}\s*;?/m,
+  );
+  if (!m) {
+    m = raw.match(
+      /\btype\s+PantryLineWithNote\s*=\s*\{\s*kitchenNote\s*:\s*string\s*\}\s*&\s*([A-Za-z_$][\w$]*)\s*;?/m,
+    );
   }
+  if (!m) return "wrong";
+  const rowName = m[1];
+  const rowDecl = new RegExp(`\\binterface\\s+${rowName}\\s+extends\\s+StockLineAudit\\b`);
+  if (!rowDecl.test(raw)) return "wrong";
   return "correct";
 }
 
@@ -74,9 +132,11 @@ const NODES = [
     content: {
       tag: "LESSON #2 · Shapes behind the row",
       title: "Inventory row — readonly fields, unions, nested types",
-      body: `You already built a **visible** grocery card in lesson 1. Before we render dozens of rows, we model the **data** TypeScript will guard: audit metadata that should not be reassigned by accident, a small set of shelf states, where the stock came from inside the building, and occasionally an extra note layered on top.
+      body: `In Lesson 1 you described a component's props with a flat interface — four plain strings, done.
 
-This lesson stays at **module-scope types only** — no new JSX — so you can focus on how interfaces, type aliases, \`extends\`, and \`&\` combine the same way your API payloads and UI props will later.`,
+Real data is messier. Some fields should never change after they are set. Some fields only accept a fixed set of values, not any string. Some fields are whole objects nested inside other objects. And sometimes you need to layer a temporary extra field onto an existing type without rewriting it.
+
+This lesson teaches you the TypeScript tools that handle all four situations — \`readonly\`, union types, nested interfaces, and intersections. No new JSX this time. Just the data shapes that make your components trustworthy before a single prop is passed.`,
     },
   },
   {
@@ -84,10 +144,10 @@ This lesson stays at **module-scope types only** — no new JSX — so you can f
     type: "objectives",
     phase: "Objectives",
     items: [
-      "Freeze identity and audit timestamps with **readonly** fields on a dedicated interface",
-      "Describe a **fixed set of labels** using a string-literal **union** (\`type\` alias)",
-      "Give a nested location its **own interface**, then **extend** a base row type to embed it",
-      "Use a **type intersection** (\`&\`) when one row temporarily carries an extra field without duplicating the whole shape",
+      "Mark fields as `readonly` so TypeScript prevents accidental reassignment after an object is created",
+      "Define a string literal union that restricts a field to a fixed set of allowed values",
+      "Declare a nested interface and use `extends` to build a richer type without repeating shared fields",
+      "Use a type intersection to combine an existing type with an extra field without modifying the original",
     ],
   },
   {
@@ -95,30 +155,42 @@ This lesson stays at **module-scope types only** — no new JSX — so you can f
     type: "question",
     phase: "Step 1 of 4",
     paal:
-      "At module scope, declare `interface StockLineAudit` with two **readonly string** fields: `id` (stable row identifier) and `lastVerifiedAt` (ISO-ish timestamp or human audit string for this lesson). Keep both readonly so later code cannot silently reassign audit metadata.",
-    hint: "Pattern: each field starts with `readonly` before the name, then `: string`. Declare this interface **above** any future component so it reads like shared kitchen paperwork, not an implementation detail buried inside JSX.",
-    think_prompt:
-      "You want TypeScript to treat `id` and `lastVerifiedAt` as **immutable** on every object typed as `StockLineAudit`. What does putting `readonly` in front of each field communicate to both the compiler and teammates?",
+      "Declare an interface named `StockLineAudit` with two string fields — `id` and `lastVerifiedAt` — and mark both as `readonly`.",
+    hint: "Pattern: put the word `readonly` before the field name. Everything else stays the same as a normal interface field.",
+    example_code: `interface AuditStamp {
+  readonly createdAt: string;
+  readonly createdBy: string;
+}`,
+    think_prompt: `You are working on a team. A junior developer is fixing a bug late at night and accidentally writes:
+
+\`\`\`
+row.id = "temp-fix-123";
+\`\`\`
+
+The row now has a corrupted ID. It gets saved. The owner's data is wrong and nobody knows why.
+
+Which option stops that line from compiling in the first place?`,
     mc_options: [
-      "`readonly` is only for numbers, not strings",
-      "`readonly` stops reassignment after the object is created while still allowing reads everywhere",
-      "`readonly` deletes the field from the type",
+      "Leave `id` typed as `string` — TypeScript will warn at runtime",
+      "Mark `id` as `readonly` — any reassignment becomes a compile-time error",
+      "Rename the field to `_id` so developers know not to touch it by convention",
     ],
-    mc_correct_option: "`readonly` stops reassignment after the object is created while still allowing reads everywhere",
+    mc_correct_option:
+      "Mark `id` as `readonly` — any reassignment becomes a compile-time error",
     mc_anchor:
-      "Readonly fields can still be **read** and passed into JSX or helpers — they just cannot be reassigned (`row.id = …` becomes a type error).",
+      "`readonly` moves the guardrail from convention ('please don't touch this') to enforcement ('the compiler won't let you'). The field can still be read and passed anywhere — it just cannot be overwritten.",
     why_this_matters:
-      "Inventory rows bounce through loaders, optimists, and audits. Locking identity and timestamps at the type level prevents “helpful” hotfixes from corrupting history.",
+      "Some fields should be set once and never changed — unique identifiers, creation timestamps, audit trails. `readonly` makes that intention part of the type itself, not a comment someone can ignore.",
     answer_keywords: ["interface", "StockLineAudit", "readonly", "id", "lastVerifiedAt", "string"],
     evaluate: evalLesson2Step1,
     seed_code: "",
-    starter_code: "// declare interface StockLineAudit here (readonly id + lastVerifiedAt, both string)",
+    starter_code: "// declare interface StockLineAudit here — two readonly string fields: id and lastVerifiedAt",
     feedback_correct:
-      "Good — audit metadata is now expressed as readonly strings at module scope. That is the same pattern you will reuse for any row that needs a stable key and a last-checked stamp.",
+      "Yes — both fields are locked at the type level. No teammate can reassign them without the compiler objecting.",
     feedback_partial:
-      "You are close — confirm both fields are marked **readonly**, typed as **string**, and spelled exactly `id` and `lastVerifiedAt` so the next steps can extend this shape.",
+      "Close — make sure both fields are marked `readonly`, typed as `string`, and spelled exactly `id` and `lastVerifiedAt`.",
     feedback_wrong:
-      "Declare **one** interface named `StockLineAudit` with **two readonly string fields**: `id` and `lastVerifiedAt`. Put it at module scope (outside any component).",
+      "Declare `interface StockLineAudit` with two fields — `id` and `lastVerifiedAt` — and put the word `readonly` before each field name.",
     expected: `interface StockLineAudit {
   readonly id: string;
   readonly lastVerifiedAt: string;
@@ -129,21 +201,29 @@ This lesson stays at **module-scope types only** — no new JSX — so you can f
     type: "question",
     phase: "Step 2 of 4",
     paal:
-      "Still at module scope, add `type ShelfBand = 'ok' | 'low' | 'out'` — three literal states the UI can branch on later without accepting arbitrary strings.",
-    hint: "A **type alias** with quoted literals is how you spell “only these tokens are valid.” Order of literals does not matter as long as all three appear joined by `|`.",
-    think_prompt:
-      "Why prefer a **union of string literals** here instead of `string` for the shelf state field you will add next?",
+      "Declare a type alias named `ShelfBand` that only allows three values: `'ok'`, `'low'`, and `'out'`.",
+    hint: "Pattern: `type SomeName = 'value1' | 'value2' | 'value3'` — each allowed value is a quoted string literal joined by `|`.",
+    example_code: `type OrderStatus = 'pending' | 'shipped' | 'delivered';`,
+    think_prompt: `You are building a component that colors a row green, amber, or red depending on stock level. A teammate writes:
+
+\`\`\`
+band: "lo"
+\`\`\`
+
+The row never turns amber. Nobody notices until the owner calls. The typo was one character.
+
+Which option catches that before the app runs?`,
     mc_options: [
-      "`string` already prevents typos at compile time",
-      "Literals narrow the allowed values so typos like `'lo'` fail in the editor instead of at runtime",
-      "Unions only work for numbers",
+      "Type the field as `string` — any text is valid, typos only show up at runtime",
+      "Type the field as a union of string literals — only `'ok'`, `'low'`, and `'out'` compile, everything else is an error",
+      "Add a comment next to the field explaining the three allowed values",
     ],
     mc_correct_option:
-      "Literals narrow the allowed values so typos like `'lo'` fail in the editor instead of at runtime",
+      "Type the field as a union of string literals — only `'ok'`, `'low'`, and `'out'` compile, everything else is an error",
     mc_anchor:
-      "`'ok' | 'low' | 'out'` tells TypeScript the **set** of meaningful states. Autocomplete improves and impossible states never compile.",
+      "A string literal union closes the vocabulary. The compiler rejects anything outside it — no runtime surprises, no one-character bugs slipping through.",
     why_this_matters:
-      "Kitchen dashboards rely on a handful of bands (green / amber / red). Modelling them as literals keeps your future `switch` exhaustive and honest.",
+      "Whenever a field can only ever be one of a small fixed set of values, a literal union is almost always the right choice over `string`. It makes impossible states impossible to compile.",
     answer_keywords: ["type", "ShelfBand", "'ok'", "'low'", "'out'"],
     evaluate: evalLesson2Step2,
     seed_code: `interface StockLineAudit {
@@ -155,67 +235,81 @@ This lesson stays at **module-scope types only** — no new JSX — so you can f
   readonly lastVerifiedAt: string;
 }
 
-// add: type ShelfBand = 'ok' | 'low' | 'out'`,
+// declare type ShelfBand here — three string literals joined by |`,
     feedback_correct:
-      "Nice — shelf state is now a closed vocabulary. When you wire UI later, your branches can cover every case the type allows.",
+      "Good — the vocabulary is now closed. Any value outside those three literals will not compile.",
     feedback_partial:
-      "Check that the alias is named `ShelfBand` and that all three literals `'ok'`, `'low'`, and `'out'` appear in one union expression.",
+      "Check that the alias is named `ShelfBand` and all three literals — `'ok'`, `'low'`, and `'out'` — appear in a single union expression.",
     feedback_wrong:
-      "Add a **type alias** `ShelfBand` equal to a union of exactly the three string literals `'ok'`, `'low'`, and `'out'`.",
+      "Declare a `type` alias named `ShelfBand` equal to exactly three string literals — `'ok'`, `'low'`, and `'out'` — joined by `|`.",
     expected: `interface StockLineAudit {
   readonly id: string;
   readonly lastVerifiedAt: string;
 }
 
-type ShelfBand = "ok" | "low" | "out";`,
+type ShelfBand = 'ok' | 'low' | 'out';`,
   },
   {
     id: "step3",
     type: "question",
     phase: "Step 3 of 4",
     paal:
-      "Add `interface KitchenHall` with `city: string` and `stall: string`. Then declare `interface PantryLine extends StockLineAudit` with `skuLabel: string`, `hall: KitchenHall`, and `band: ShelfBand`.",
-    hint: "`extends` copies the audit fields forward — you only list what **this** row adds. Nested `KitchenHall` keeps the “where in the building” shape reusable instead of flattening four mystery strings.",
-    think_prompt:
-      "`PantryLine` needs both audit fields **and** new row fields. Which option matches how TypeScript expects you to spell that relationship?",
+      "A pantry item has a label, a shelf state, and a location — but location itself has two parts: which city and which stall. It also shares the audit fields from `StockLineAudit`. Model this in TypeScript using two new interfaces and `extends`.",
+    hint: "When a field is itself a group of related values, give that group its own interface. Use `extends` to inherit the audit fields instead of copying them.",
+    example_code: `interface Address {
+  street: string;
+  zip: string;
+}
+
+interface Employee extends AuditStamp {
+  name: string;
+  address: Address;
+}`,
+    think_prompt: `You need to store a pantry item's location. The location has two parts: a city and a stall number.
+
+A teammate suggests adding \`locationCity: string\` and \`locationStall: string\` directly onto the item interface — just flatten it all into one place.
+
+What breaks down as the app grows if you always flatten nested data instead of giving it its own interface?`,
     mc_options: [
-      "Redefine `readonly id` and `readonly lastVerifiedAt` manually inside `PantryLine`",
-      "Use `interface PantryLine extends StockLineAudit { … }` and list only the extra fields",
-      "Use `type PantryLine = string`",
+      "Nothing — flat interfaces are always easier to read and maintain",
+      "The interface becomes harder to read, reuse, or update — changing location means hunting through every flat interface that copied those fields",
+      "TypeScript does not allow more than five fields on one interface",
     ],
-    mc_correct_option: "Use `interface PantryLine extends StockLineAudit { … }` and list only the extra fields",
+    mc_correct_option:
+      "The interface becomes harder to read, reuse, or update — changing location means hunting through every flat interface that copied those fields",
     mc_anchor:
-      "`extends` inherits the base checklist — you declare the delta (`skuLabel`, nested `hall`, `band`) once and stay aligned if `StockLineAudit` ever picks up another readonly field.",
+      "When a group of fields belongs together and describes one concept, give it its own interface. Then any interface that needs that concept just references it by name — one change propagates everywhere.",
     why_this_matters:
-      "Real payloads nest venue, vendor, or hall metadata. Giving nested blobs their own interface keeps diffs readable when procurement changes a field name.",
-    answer_keywords: ["KitchenHall", "PantryLine", "extends", "StockLineAudit", "skuLabel", "hall", "band"],
+      "Real data is nested. Addresses, locations, authors, suppliers — these are all groups of fields that belong together. Giving each group its own interface keeps your types readable and your changes contained.",
+    answer_keywords: ["interface", "extends", "StockLineAudit", "city", "stall", "ShelfBand", "string"],
     evaluate: evalLesson2Step3,
     seed_code: `interface StockLineAudit {
   readonly id: string;
   readonly lastVerifiedAt: string;
 }
 
-type ShelfBand = "ok" | "low" | "out";`,
+type ShelfBand = 'ok' | 'low' | 'out';`,
     starter_code: `interface StockLineAudit {
   readonly id: string;
   readonly lastVerifiedAt: string;
 }
 
-type ShelfBand = "ok" | "low" | "out";
+type ShelfBand = 'ok' | 'low' | 'out';
 
-// add KitchenHall, then PantryLine extends StockLineAudit`,
+// 1. location interface — group city + stall (any interface name you like)
+// 2. row interface extends StockLineAudit — add a string label, a ShelfBand field, and a field typed as your location interface`,
     feedback_correct:
-      "Great — the row type now composes audit metadata, a nested hall, and a banded shelf state without repeating yourself.",
+      "Good — location lives in its own interface, and your row type extends `StockLineAudit` without copying audit fields.",
     feedback_partial:
-      "Verify `KitchenHall` has both string fields, `PantryLine` **extends** `StockLineAudit`, and the three added fields use the exact names `skuLabel`, `hall`, and `band` with the expected types.",
+      "Check the pattern: one interface with `city` and `stall` as strings; one interface `extends StockLineAudit` with a plain `string` field, a `ShelfBand` field, and a field whose type is your location interface.",
     feedback_wrong:
-      "Create a small **KitchenHall** interface (city + stall strings). Then define **PantryLine** with `extends StockLineAudit` and only the extra fields: label text, nested hall, and `ShelfBand`.",
+      "Give the location its own interface with `city` and `stall` as strings. Declare a second interface that `extends StockLineAudit` and adds exactly three new fields: a string (label), a `ShelfBand` (shelf state), and a property typed as your location interface.",
     expected: `interface StockLineAudit {
   readonly id: string;
   readonly lastVerifiedAt: string;
 }
 
-type ShelfBand = "ok" | "low" | "out";
+type ShelfBand = 'ok' | 'low' | 'out';
 
 interface KitchenHall {
   city: string;
@@ -233,22 +327,28 @@ interface PantryLine extends StockLineAudit {
     type: "question",
     phase: "Step 4 of 4",
     paal:
-      "Add `type PantryLineWithNote = PantryLine & { kitchenNote: string }` — an intersection that layers a memo field onto the full row type without rewriting every property.",
-    hint: "Intersections merge two object shapes. Here the right-hand side is a tiny anonymous object type with a single string field. Watch for typos: the field must be `kitchenNote`.",
+      "Add a type alias `PantryLineWithNote` that intersects your Step 3 row interface (the one that `extends StockLineAudit`) with `{ kitchenNote: string }` — same pattern as `Row & { kitchenNote: string }`, using whatever you named that row interface.",
+    hint: "Intersections merge two object shapes. The anonymous side is a one-field object type. The memo field name for this step is `kitchenNote`.",
+    analogousExample: `interface BinLot {
+  code: string;
+  kilograms: number;
+}
+
+type BinLotWithShiftNote = BinLot & { shiftNote: string };`,
     think_prompt:
-      "You already have `PantryLine`. The head chef sometimes adds a free-text memo for tonight’s service only. When should you reach for `& { … }` instead of editing `PantryLine` itself?",
+      "You already have a row interface that extends `StockLineAudit`. The head chef sometimes adds a free-text memo for tonight's service only. When should you reach for `& { … }` instead of editing that row interface itself?",
     mc_options: [
       "When the extra field is universal for every row in the database forever",
       "When a temporary or situational field should combine with an existing type without mutating the base interface",
-      "When you want to delete fields from `PantryLine`",
+      "When you want to delete fields from the row interface",
     ],
     mc_correct_option:
       "When a temporary or situational field should combine with an existing type without mutating the base interface",
     mc_anchor:
-      "`PantryLine & { kitchenNote: string }` is the lightweight pattern for “same row, plus an overlay.” Promotion to a first-class field belongs in the base type only if *every* consumer needs it.",
+      "`RowType & { kitchenNote: string }` is the lightweight pattern for “same row, plus an overlay.” Promotion to a first-class field belongs in the base type only if every consumer needs it.",
     why_this_matters:
       "UI-only overlays (flags, memos, optimistic badges) come and go. Intersections let you experiment without destabilising the canonical row type the API team owns.",
-    answer_keywords: ["type", "PantryLineWithNote", "PantryLine", "&", "kitchenNote"],
+    answer_keywords: ["type", "PantryLineWithNote", "&", "kitchenNote", "StockLineAudit"],
     evaluate: evalLesson2Step4,
     seed_code: `interface StockLineAudit {
   readonly id: string;
@@ -285,13 +385,13 @@ interface PantryLine extends StockLineAudit {
   band: ShelfBand;
 }
 
-// add type PantryLineWithNote = PantryLine & { kitchenNote: string }`,
+// add: type PantryLineWithNote = <YourRowInterface> & { kitchenNote: string }`,
     feedback_correct:
       "Exactly — you combined the existing row with a memo overlay using `&`, which is the idiomatic escape hatch for situational fields.",
     feedback_partial:
-      "Check the alias name `PantryLineWithNote`, the intersection with `PantryLine`, and the memo field name `kitchenNote` typed as `string`.",
+      "Check the alias name `PantryLineWithNote`, the intersection with your Step 3 row interface (the one that `extends StockLineAudit`), and the memo field `kitchenNote` typed as `string`.",
     feedback_wrong:
-      "Declare a **type alias** `PantryLineWithNote` as **PantryLine** intersected with a one-field object type whose only property is `kitchenNote: string`.",
+      "Declare a type alias `PantryLineWithNote` as your row interface intersected (`&`) with a one-field object type whose only property is `kitchenNote: string`.",
     expected: `interface StockLineAudit {
   readonly id: string;
   readonly lastVerifiedAt: string;

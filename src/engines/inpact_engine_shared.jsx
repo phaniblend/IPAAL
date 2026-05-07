@@ -137,6 +137,18 @@ function ensureReactJsxScaffoldForStep(node, code, lang) {
   return code.replace(fnBlock, updatedFn);
 }
 
+function injectReactTsStep4AppComments(node, code) {
+  if (typeof code !== "string") return code;
+  if (node?.id !== "step4") return code;
+  const paal = typeof node?.paal === "string" ? node.paal : "";
+  if (!paal.includes("Add the `App` component")) return code;
+  if (code.includes("// Add the App component below.")) return code;
+  const guidance =
+    "// Add the App component below.\n" +
+    "// One .tsx file can contain multiple components (for example: GroceryItemCard and App).";
+  return `${code.trimEnd()}\n\n${guidance}`;
+}
+
 /**
  * When a question step's editor content comes only from starter/seed (no saved answer, no carry-forward),
  * that string is cleared on first focus if unchanged — same idea as MultiFileEditor's placeholder.
@@ -175,7 +187,8 @@ function computeSingleFileSeedPlaceholderBaseline({
   if (loadedFromPassOrCarry) return undefined;
   if (typeof initialCode !== "string" || !initialCode.trim()) return undefined;
   const afterScaffold = ensureReactJsxScaffoldForStep(node, initialCode, language || node?.language || "");
-  return String(afterScaffold).trim() ? afterScaffold : undefined;
+  const withLessonAffordances = injectReactTsStep4AppComments(node, afterScaffold);
+  return String(withLessonAffordances).trim() ? withLessonAffordances : undefined;
 }
 
 function getMultiFilePreviewCode(answer) {
@@ -582,7 +595,7 @@ function buildFeedbackOnlyGuidance(text) {
 function stripFormattingOnlyCommentsFromAnnotatedCode(annotatedCode) {
   const text = String(annotatedCode || "");
   if (!text) return "";
-  const formattingHint = /\b(space|spacing|tab|tabs|indent|indentation|format|formatting|semicolon|quote style|align)\b/i;
+  const formattingHint = /\b(space|spacing|tab|tabs|indent|indentation|format|formatting|semicolon|quote style|align|parentheses|parenthesis|bracket style)\b/i;
   const cleaned = text
     .split("\n")
     .map((line) => {
@@ -651,7 +664,11 @@ function appendInlineFeedbackFallback(userCode, feedbackText, lessonNode) {
 
   const expected = String(lessonNode?.expected || "");
   const expectedFields = [];
-  const ifaceBody = expected.match(/interface\s+\w+\s*\{([\s\S]*?)\}/m);
+  const ifaceCount = (expected.match(/\binterface\b/g) || []).length;
+  // Multi-interface `expected` (e.g. lesson 2 step 3): first block is often StockLineAudit — do not flag
+  // learner property names like `label` as "wrong" vs `id` / `lastVerifiedAt` from that block.
+  const skipPropertyNameHeuristic = ifaceCount >= 2 || /\bextends\s+StockLineAudit\b/.test(expected);
+  const ifaceBody = !skipPropertyNameHeuristic ? expected.match(/interface\s+\w+\s*\{([\s\S]*?)\}/m) : null;
   if (ifaceBody) {
     for (const mm of ifaceBody[1].matchAll(/\b([a-zA-Z_][a-zA-Z0-9_]*)\s*:/g)) {
       expectedFields.push(mm[1]);
@@ -1285,6 +1302,7 @@ export default function createINPACTEngine(config) {
           initialCode.trim()
         ) {
           initialCode = ensureReactJsxScaffoldForStep(node, initialCode, language || node?.language || "");
+          initialCode = injectReactTsStep4AppComments(node, initialCode);
         }
         setAnswer(initialCode);
         if (answerShape === "multi-file" && multiFilePlaceholderClearOnFirstStepOnly) {
@@ -1730,7 +1748,7 @@ export default function createINPACTEngine(config) {
       sideItem: (a, d) => ({ padding: "12px 20px", display: "flex", alignItems: "center", gap: "12px", cursor: "pointer", background: a ? "#e0f2fe" : "transparent", borderLeft: a ? "3px solid #0891b2" : "3px solid transparent" }),
       sideItemDot: (a, d) => ({ width: "10px", height: "10px", borderRadius: "50%", flexShrink: 0, ...(d ? { background: "#10b981" } : a ? { background: "#0891b2" } : { background: "transparent", border: "2px solid #94a3b8" }) }),
       sideItemText: (a, d) => ({ fontSize: "13px", color: d ? "#059669" : a ? "#0f172a" : "#64748b", lineHeight: 1.35, fontWeight: (a ? 600 : 400) }),
-      main: { flex: 1, padding: "4px 20px 24px 20px", paddingLeft: "96px", minWidth: "75vw", maxWidth: "75vw", minHeight: 0, display: "flex", flexDirection: "column", overflowX: "hidden", boxSizing: "border-box" },
+      main: { flex: 1, padding: "4px 20px 0 20px", paddingLeft: "96px", minWidth: "75vw", maxWidth: "75vw", minHeight: 0, display: "flex", flexDirection: "column", overflowX: "hidden", boxSizing: "border-box" },
       phase: { fontSize: "10px", letterSpacing: "3px", color: "#f28a8a", marginBottom: "16px" },
       tag: { fontSize: "11px", color: "#f28a8a", fontWeight: "600", letterSpacing: "0.15em", marginBottom: "12px" },
       h1: { fontSize: "28px", fontWeight: "400", color: "#0f172a", marginBottom: "32px", lineHeight: "1.2" },
@@ -3038,6 +3056,7 @@ export default function createINPACTEngine(config) {
                         <RichLearnerText
                           text={thinkPrompt}
                           variant="task"
+                          contentMode="blocks"
                           style={{ fontSize: "19px", lineHeight: 1.55, fontWeight: 700, color: "#0f172a" }}
                         />
                       </div>
@@ -3303,14 +3322,39 @@ export default function createINPACTEngine(config) {
             .inpact-main { min-width: 100vw !important; max-width: 100vw !important; padding-left: 16px !important; padding-right: 16px !important; }
           }
           @keyframes inpact-scroll-hint-bounce {
-            0%, 100% { transform: translateY(0); opacity: 0.5; }
-            50% { transform: translateY(6px); opacity: 1; }
+            0%, 100% { transform: translateY(-2px); opacity: 0.35; }
+            50% { transform: translateY(4px); opacity: 1; }
+          }
+          @keyframes inpact-scroll-wheel {
+            0% { opacity: 0.95; transform: translateY(0); }
+            60% { opacity: 0.35; transform: translateY(7px); }
+            100% { opacity: 0.15; transform: translateY(9px); }
+          }
+          .inpact-scroll-hint-mouse {
+            width: 34px;
+            height: 54px;
+            border-radius: 18px;
+            border: 3px solid rgba(8,145,178,0.95);
+            background: rgba(255,255,255,0.94);
+            box-sizing: border-box;
+            display: flex;
+            justify-content: center;
+            padding-top: 8px;
+            box-shadow: inset 0 0 0 1px rgba(255,255,255,0.8);
+          }
+          .inpact-scroll-hint-wheel {
+            width: 6px;
+            height: 9px;
+            border-radius: 999px;
+            background: rgba(8,145,178,0.95);
+            animation: inpact-scroll-wheel 1.15s ease-in-out infinite;
+            will-change: transform, opacity;
           }
           .inpact-scroll-hint-chevrons {
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 1px;
+            gap: 0;
           }
           .inpact-scroll-hint-chevron {
             display: flex;
@@ -3323,7 +3367,6 @@ export default function createINPACTEngine(config) {
           }
           .inpact-scroll-hint-chevrons .inpact-scroll-hint-chevron:nth-child(1) { animation-delay: 0s; }
           .inpact-scroll-hint-chevrons .inpact-scroll-hint-chevron:nth-child(2) { animation-delay: 0.14s; }
-          .inpact-scroll-hint-chevrons .inpact-scroll-hint-chevron:nth-child(3) { animation-delay: 0.28s; }
         `}</style>
         <div style={s.body}>
           <div
@@ -3540,31 +3583,25 @@ export default function createINPACTEngine(config) {
               <div
                 aria-hidden
                 style={{
-                  position: "absolute",
+                  position: "fixed",
                   left: "50%",
-                  bottom: "14px",
+                  bottom: "18px",
                   transform: "translateX(-50%)",
-                  zIndex: 4,
+                  zIndex: 40,
                   pointerEvents: "none",
                   display: "flex",
                   flexDirection: "column",
                   alignItems: "center",
-                  gap: "4px",
-                  padding: "8px 16px 6px",
-                  borderRadius: "999px",
-                  background: "linear-gradient(180deg, rgba(255,255,255,0.02) 0%, rgba(248,250,252,0.92) 40%, rgba(248,250,252,0.98) 100%)",
-                  boxShadow: "0 -6px 18px rgba(15,23,42,0.08)",
-                  fontFamily: "'DM Sans', sans-serif",
+                  gap: "6px",
                 }}
               >
-                <span style={{ fontSize: "10px", fontWeight: 700, letterSpacing: "0.08em", color: "#64748b" }}>
-                  MORE BELOW
-                </span>
+                <div className="inpact-scroll-hint-mouse" aria-hidden>
+                  <span className="inpact-scroll-hint-wheel" />
+                </div>
                 <div className="inpact-scroll-hint-chevrons" aria-hidden>
                   {[
-                    { w: 22, sw: 2.25 },
-                    { w: 18, sw: 2 },
-                    { w: 14, sw: 1.75 },
+                    { w: 20, sw: 2.25 },
+                    { w: 16, sw: 2 },
                   ].map(({ w, sw }) => (
                     <span key={w} className="inpact-scroll-hint-chevron">
                       <svg

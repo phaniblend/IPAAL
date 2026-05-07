@@ -1033,7 +1033,7 @@ export default function LessonEditorOutputTabs({
               }}
             >
               <span style={{ fontSize: "10px", fontWeight: 700, letterSpacing: "0.08em", color: "#64748b" }}>
-                MORE BELOW
+                SROLL
               </span>
               <div className="inpact-lesson-scroll-hint-chevrons" aria-hidden>
                 {[
