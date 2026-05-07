@@ -1573,64 +1573,6 @@ export default function App() {
   }
 
   const lessonPathFromUrl = parseLessonPath(location.pathname)
-  const prereqTrack =
-    lessonPathFromUrl?.track ??
-    ((lessonIndex != null && lessonTrack != null) ? lessonTrack : track)
-  const prereqPanel = (() => {
-    if (prereqTrack !== 'react-ts') return null
-    if (lessonIndex == null) return null
-    const lessonNumber = lessonIndex + 1
-    const prereqNumbers = getLessonPrereqs(lessonNumber)
-    if (!Array.isArray(prereqNumbers) || prereqNumbers.length === 0) return null
-    return (
-      <div
-        style={{
-          marginTop: '58px',
-          marginBottom: '10px',
-          marginInline: '12px',
-          padding: '12px 14px',
-          border: '1px solid #FF6B6B',
-          borderRadius: '10px',
-          background: '#EAFBFF',
-          color: '#124559',
-          fontFamily: "'DM Sans', sans-serif",
-        }}
-      >
-        <div style={{ fontWeight: 700, marginBottom: '6px', fontSize: '13px' }}>
-          Recommended prerequisites (strongly advised)
-        </div>
-        <div style={{ fontSize: '12px', lineHeight: 1.45 }}>
-          Complete these first for the best learning flow:
-        </div>
-        <div style={{ marginTop: '8px', display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
-          {prereqNumbers.map((n) => (
-            <button
-              type="button"
-              key={n}
-              style={{
-                fontSize: '11px',
-                padding: '4px 8px',
-                borderRadius: '999px',
-                border: '1px solid #FF6B6B',
-                background: '#ffffff',
-                color: '#124559',
-                cursor: 'pointer',
-                fontFamily: "'DM Sans', sans-serif",
-              }}
-              onClick={() => {
-                const idx = Number(n) - 1
-                if (!Number.isInteger(idx) || idx < 0) return
-                const itemTitle = LESSON_LIST[idx]
-                openLesson(idx, itemTitle ? { title: itemTitle } : { title: `Lesson ${n}` }, 'react-ts')
-              }}
-            >
-              {String(n).padStart(2, '0')} · {LESSON_LIST[n - 1] ?? `Lesson ${n}`}
-            </button>
-          ))}
-        </div>
-      </div>
-    )
-  })()
   if (!authSessionReady && !lessonPathFromUrl) {
     return (
       <div
@@ -2036,7 +1978,6 @@ export default function App() {
             </div>
           </div>
         </div>
-        {prereqPanel}
         <LessonValidationContext.Provider
           value={{
             track: effectiveTrack,
@@ -2200,7 +2141,6 @@ export default function App() {
           )}
         </div>
       </div>
-      {prereqPanel}
       <LessonValidationContext.Provider
         value={{
           track: effectiveTrack,

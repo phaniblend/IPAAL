@@ -106,15 +106,15 @@ function evalLesson2Step3(answer) {
   return "wrong";
 }
 
-/** Step 4 — PantryLineWithNote + kitchenNote; row side may be any identifier that extends StockLineAudit in this file. */
+/** Step 4 — PantryItemWithNote + kitchenNote; row side may be any identifier that extends StockLineAudit in this file. */
 function evalLesson2Step4(answer) {
   const raw = String(answer || "");
   let m = raw.match(
-    /\btype\s+PantryLineWithNote\s*=\s*([A-Za-z_$][\w$]*)\s*&\s*\{\s*kitchenNote\s*:\s*string\s*\}\s*;?/m,
+    /\btype\s+PantryItemWithNote\s*=\s*([A-Za-z_$][\w$]*)\s*&\s*\{\s*kitchenNote\s*:\s*string\s*\}\s*;?/m,
   );
   if (!m) {
     m = raw.match(
-      /\btype\s+PantryLineWithNote\s*=\s*\{\s*kitchenNote\s*:\s*string\s*\}\s*&\s*([A-Za-z_$][\w$]*)\s*;?/m,
+      /\btype\s+PantryItemWithNote\s*=\s*\{\s*kitchenNote\s*:\s*string\s*\}\s*&\s*([A-Za-z_$][\w$]*)\s*;?/m,
     );
   }
   if (!m) return "wrong";
@@ -132,11 +132,13 @@ const NODES = [
     content: {
       tag: "LESSON #2 · Shapes behind the row",
       title: "Inventory row — readonly fields, unions, nested types",
-      body: `In Lesson 1 you described a component's props with a flat interface — four plain strings, done.
+      body: `In Lesson 1 you built a visible card — interface, component, JSX, done. That card is now part of the app.
 
-Real data is messier. Some fields should never change after they are set. Some fields only accept a fixed set of values, not any string. Some fields are whole objects nested inside other objects. And sometimes you need to layer a temporary extra field onto an existing type without rewriting it.
+Before the next screen gets built, the app needs richer data. Not just four plain strings — but fields that should never change, states that only allow three possible values, and locations that are objects nested inside objects.
 
-This lesson teaches you the TypeScript tools that handle all four situations — \`readonly\`, union types, nested interfaces, and intersections. No new JSX this time. Just the data shapes that make your components trustworthy before a single prop is passed.`,
+This lesson does not add any new UI. \n**You will not write a single JSX tag. Instead, you are going to sharpen the one tool that every screen in this app depends on**: \"the ability to describe data precisely in TypeScript.\"
+
+Think of it as equipping your toolbelt before the next build sprint. Every interface pattern you write here will show up in a real component before this course is done.`,
     },
   },
   {
@@ -161,7 +163,7 @@ This lesson teaches you the TypeScript tools that handle all four situations —
   readonly createdAt: string;
   readonly createdBy: string;
 }`,
-    think_prompt: `You are working on a team. A junior developer is fixing a bug late at night and accidentally writes:
+    think_prompt: `You are working in a team. A developer is fixing a bug late at night and accidentally writes:
 
 \`\`\`
 row.id = "temp-fix-123";
@@ -210,7 +212,7 @@ Which option stops that line from compiling in the first place?`,
 band: "lo"
 \`\`\`
 
-The row never turns amber. Nobody notices until the owner calls. The typo was one character.
+The row never turns amber. Nobody notices until the customer reports the bug. The typo was one character.
 
 Which option catches that before the app runs?`,
     mc_options: [
@@ -254,8 +256,7 @@ type ShelfBand = 'ok' | 'low' | 'out';`,
     type: "question",
     phase: "Step 3 of 4",
     paal:
-      "A pantry item has a label, a shelf state, and a location — but location itself has two parts: which city and which stall. It also shares the audit fields from `StockLineAudit`. Model this in TypeScript using two new interfaces and `extends`.",
-    hint: "When a field is itself a group of related values, give that group its own interface. Use `extends` to inherit the audit fields instead of copying them.",
+      "You have the StockLineAudit interface already; \nNow do these two things:\n1. Create an interface called PantryLocation with two fields: city (string) and stall (string).\n2. Create an interface called PantryItem that extends StockLineAudit and adds three fields: label (string), shelfState (ShelfBand), and location (use PantryLocation as its type).",
     example_code: `interface Address {
   street: string;
   zip: string;
@@ -316,7 +317,7 @@ interface KitchenHall {
   stall: string;
 }
 
-interface PantryLine extends StockLineAudit {
+interface PantryItem extends StockLineAudit {
   skuLabel: string;
   hall: KitchenHall;
   band: ShelfBand;
@@ -327,7 +328,7 @@ interface PantryLine extends StockLineAudit {
     type: "question",
     phase: "Step 4 of 4",
     paal:
-      "Add a type alias `PantryLineWithNote` that intersects your Step 3 row interface (the one that `extends StockLineAudit`) with `{ kitchenNote: string }` — same pattern as `Row & { kitchenNote: string }`, using whatever you named that row interface.",
+      "Add a type alias `PantryItemWithNote` that intersects your Step 3 row interface ( `PantryItem`) with `{ kitchenNote: string }` — same pattern as `Row & { kitchenNote: string }`, using whatever you named that row interface.",
     hint: "Intersections merge two object shapes. The anonymous side is a one-field object type. The memo field name for this step is `kitchenNote`.",
     analogousExample: `interface BinLot {
   code: string;
@@ -348,7 +349,7 @@ type BinLotWithShiftNote = BinLot & { shiftNote: string };`,
       "`RowType & { kitchenNote: string }` is the lightweight pattern for “same row, plus an overlay.” Promotion to a first-class field belongs in the base type only if every consumer needs it.",
     why_this_matters:
       "UI-only overlays (flags, memos, optimistic badges) come and go. Intersections let you experiment without destabilising the canonical row type the API team owns.",
-    answer_keywords: ["type", "PantryLineWithNote", "&", "kitchenNote", "StockLineAudit"],
+    answer_keywords: ["type", "PantryItemWithNote", "&", "kitchenNote", "StockLineAudit"],
     evaluate: evalLesson2Step4,
     seed_code: `interface StockLineAudit {
   readonly id: string;
@@ -362,7 +363,7 @@ interface KitchenHall {
   stall: string;
 }
 
-interface PantryLine extends StockLineAudit {
+interface PantryItem extends StockLineAudit {
   skuLabel: string;
   hall: KitchenHall;
   band: ShelfBand;
@@ -379,19 +380,19 @@ interface KitchenHall {
   stall: string;
 }
 
-interface PantryLine extends StockLineAudit {
+interface PantryItem extends StockLineAudit {
   skuLabel: string;
   hall: KitchenHall;
   band: ShelfBand;
 }
 
-// add: type PantryLineWithNote = <YourRowInterface> & { kitchenNote: string }`,
+// add: type PantryItemWithNote = <YourRowInterface> & { kitchenNote: string }`,
     feedback_correct:
       "Exactly — you combined the existing row with a memo overlay using `&`, which is the idiomatic escape hatch for situational fields.",
     feedback_partial:
-      "Check the alias name `PantryLineWithNote`, the intersection with your Step 3 row interface (the one that `extends StockLineAudit`), and the memo field `kitchenNote` typed as `string`.",
+      "Check the alias name `PantryItemWithNote`, the intersection with your Step 3 row interface (the one that `extends StockLineAudit`), and the memo field `kitchenNote` typed as `string`.",
     feedback_wrong:
-      "Declare a type alias `PantryLineWithNote` as your row interface intersected (`&`) with a one-field object type whose only property is `kitchenNote: string`.",
+      "Declare a type alias `PantryItemWithNote` as your row interface intersected (`&`) with a one-field object type whose only property is `kitchenNote: string`.",
     expected: `interface StockLineAudit {
   readonly id: string;
   readonly lastVerifiedAt: string;
@@ -404,13 +405,13 @@ interface KitchenHall {
   stall: string;
 }
 
-interface PantryLine extends StockLineAudit {
+interface PantryItem extends StockLineAudit {
   skuLabel: string;
   hall: KitchenHall;
   band: ShelfBand;
 }
 
-type PantryLineWithNote = PantryLine & { kitchenNote: string };`,
+type PantryItemWithNote = PantryItem & { kitchenNote: string };`,
   },
 ];
 
