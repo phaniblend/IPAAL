@@ -1,14 +1,53 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
-import { HashRouter } from 'react-router-dom'
+import { HashRouter, Routes, Route } from 'react-router-dom'
 import 'highlight.js/styles/github.css'
 import './index.css'
 import App from './App.jsx'
+import PDStudio from './pd-studio/PDStudio.jsx'
+import Workbench from './workbench/Workbench.jsx'
+import Apply from './cohort-matching/Apply.jsx'
+import MatchingQueue from './cohort-matching/MatchingQueue.jsx'
+import CoreStudioConsole from './core-studio/CoreStudioConsole.jsx'
+import HuddleCalendar from './huddle-calendar/HuddleCalendar.jsx'
+import ContributionMonitor from './contribution-monitor/ContributionMonitor.jsx'
+import HumanCapitalReports from './human-capital-reports/HumanCapitalReports.jsx'
+import IDStudio from './instructional-design/IDStudio.jsx'
+import ModuleLibrary from './instructional-design/ModuleLibrary.jsx'
+import PreviewLesson from './instructional-design/PreviewLesson.jsx'
+import AssistMeWorkspace from './assist-me/AssistMeWorkspace.jsx'
+import Cohorts from './cohorts/Cohorts.jsx'
+import CDReview from './cd-review/CDReview.jsx'
+import RequireRole from './auth/RequireRole.jsx'
+
+const ANY_CORE_ROLE = ['PD', 'PMGT', 'ID', 'CD']
 
 createRoot(document.getElementById('root')).render(
   <HashRouter>
     <StrictMode>
-      <App />
+      <Routes>
+        {/* IPF: these live entirely outside App.jsx's lesson-engine routing on purpose.
+         * Route-level auth per docs/IPF_DEVGUIDE.md §5a — role-specific screens gate on their own
+         * role; shared core-team tooling gates on holding any core role; Apply stays open on
+         * purpose (frictionless applicant funnel, no account needed to apply); Workbench/Assist Me
+         * only need *some* signed-in session (roles=[]), since both -core and JS accounts work
+         * tasks there. */}
+        <Route path="/pd-studio" element={<RequireRole roles={['PD']}><PDStudio /></RequireRole>} />
+        <Route path="/workbench" element={<RequireRole roles={[]}><Workbench /></RequireRole>} />
+        <Route path="/apply" element={<Apply />} />
+        <Route path="/matching-queue" element={<RequireRole roles={ANY_CORE_ROLE}><MatchingQueue /></RequireRole>} />
+        <Route path="/core-studio" element={<RequireRole roles={ANY_CORE_ROLE}><CoreStudioConsole /></RequireRole>} />
+        <Route path="/huddle-calendar" element={<RequireRole roles={ANY_CORE_ROLE}><HuddleCalendar /></RequireRole>} />
+        <Route path="/contribution-monitor" element={<RequireRole roles={ANY_CORE_ROLE}><ContributionMonitor /></RequireRole>} />
+        <Route path="/human-capital-reports" element={<RequireRole roles={ANY_CORE_ROLE}><HumanCapitalReports /></RequireRole>} />
+        <Route path="/id-studio" element={<RequireRole roles={['ID']}><IDStudio /></RequireRole>} />
+        <Route path="/module-library" element={<RequireRole roles={ANY_CORE_ROLE}><ModuleLibrary /></RequireRole>} />
+        <Route path="/preview-lesson" element={<RequireRole roles={ANY_CORE_ROLE}><PreviewLesson /></RequireRole>} />
+        <Route path="/assist-me" element={<RequireRole roles={[]}><AssistMeWorkspace /></RequireRole>} />
+        <Route path="/cohorts" element={<RequireRole roles={ANY_CORE_ROLE}><Cohorts /></RequireRole>} />
+        <Route path="/cd-review" element={<RequireRole roles={['CD']}><CDReview /></RequireRole>} />
+        <Route path="*" element={<App />} />
+      </Routes>
     </StrictMode>
   </HashRouter>,
 )

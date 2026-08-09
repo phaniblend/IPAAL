@@ -14,6 +14,9 @@ dist
 dist-ssr
 *.local
 
+# Google OAuth credentials pasted during local setup (use .env instead)
+oauthcreds.json
+
 # Lesson pedagogy pipeline backups (scripts/lesson-pedagogy-deepseek.mjs --apply)
 *.pedagogy.bak
 

@@ -1108,6 +1108,7 @@ import AddFundsModal from './auth/AddFundsModal.jsx'
 import UserDashboard from './auth/UserDashboard.jsx'
 import { addAppUsageSeconds } from './auth/appUsageTime.js'
 import CinematicLanding from './CinematicLanding.jsx'
+import EnterpriseReadinessGate from './EnterpriseReadinessGate.jsx'
 import ReactTsPatternsBridge, {
   isReactTsPatternsBridgeDismissed,
   REACT_TS_PATTERNS_BRIDGE_STORAGE_KEY,
@@ -1152,6 +1153,9 @@ export default function App() {
   })
   /** In-session hide after dismiss (localStorage is written inside ReactTsPatternsBridge). */
   const [patternsBridgeDismissedLocal, setPatternsBridgeDismissedLocal] = useState(false)
+  /** IPF: shown once, right after "Start doing" — the fork between applying for real matched work
+   * (SpecForge tasks, reviewed like a real PR) and the plain self-paced lesson catalog. */
+  const [showEnterpriseGate, setShowEnterpriseGate] = useState(false)
   // Include `showCinematic`: after cinematic we clear bridge LS — deps must change or useMemo keeps stale `false`.
   const showReactTsPatternsBridge = useMemo(
     () =>
@@ -1657,10 +1661,13 @@ export default function App() {
   }
 
   if (lessonIndex === null) {
-    if (showCinematic) {
+    if (showEnterpriseGate) {
       return (
-        <CinematicLanding
-          onEnterLessons={() => {
+        <EnterpriseReadinessGate
+          onApply={() => {
+            window.location.hash = '#/apply'
+          }}
+          onJustLessons={() => {
             try {
               window.localStorage.removeItem(REACT_TS_PATTERNS_BRIDGE_STORAGE_KEY)
             } catch {
@@ -1669,9 +1676,13 @@ export default function App() {
             setPatternsBridgeDismissedLocal(false)
             setTrack(LEARNER_FOCUS_TRACK)
             setShowCinematic(false)
+            setShowEnterpriseGate(false)
           }}
         />
       )
+    }
+    if (showCinematic) {
+      return <CinematicLanding onEnterLessons={() => setShowEnterpriseGate(true)} />
     }
 
     if (showReactTsPatternsBridge) {

@@ -24,7 +24,13 @@ import { annotateFeedbackOnCode } from "../src/ai-lessons/services/feedbackAnnot
 import { validateLessonConfig } from "../src/ai-lessons/schema.js";
 import { completeWithAI } from "../src/ai-lessons/providers/aiProvider.js";
 import { buildMentorSystemPrompt, OFF_TOPIC_PREFIX, OFF_TOPIC_FALLBACK } from "../src/ai-lessons/prompt-templates/mentorChat.js";
+import cookieParser from "cookie-parser";
 import mentorRouter from "./mentor/mentor-router.js";
+import specforgeRouter from "./specforge-router.js";
+import idRouter from "./id-router.js";
+import assistMeRouter from "./assist-me-router.js";
+import authRouter from "./auth-router.js";
+import recruitRouter from "./recruit-router.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const rootDir = path.resolve(__dirname, "..");
@@ -104,6 +110,7 @@ function mentorSessionMiddleware(req, res, next) {
 }
 
 app.use(express.json());
+app.use(cookieParser());
 
 app.use((_req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
@@ -122,6 +129,11 @@ app.options("/api/lessons/step-example", (_req, res) => res.sendStatus(204));
 app.options("/api/lessons/feedback-annotate", (_req, res) => res.sendStatus(204));
 
 app.use("/api/mentor", mentorSessionMiddleware, mentorRouter);
+app.use("/api/specforge", specforgeRouter);
+app.use("/api/id", idRouter);
+app.use("/api/assist-me", assistMeRouter);
+app.use("/api/auth", authRouter);
+app.use("/api/recruit", recruitRouter);
 
 /** Resolve AI API key from env. DeepSeek only. */
 function getAIOptions() {

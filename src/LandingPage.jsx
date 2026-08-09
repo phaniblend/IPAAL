@@ -449,6 +449,19 @@ export default function LandingPage({ track, onSelectLesson, lessonList, freeLes
             <button type="button" style={LP.btnOutline} onClick={() => setHowItWorksOpen(true)}>
               How it works
             </button>
+            {/* IPF: entry points for the core team — not part of the JS-facing lesson flow */}
+            <a href="#/workbench" style={LP.btnOutline}>Workbench</a>
+            <a href="#/pd-studio" style={LP.btnOutline}>PD Studio</a>
+            <a href="#/apply" style={LP.btnOutline}>Apply</a>
+            <a href="#/matching-queue" style={LP.btnOutline}>Matching Queue</a>
+            <a href="#/cohorts" style={LP.btnOutline}>Cohorts</a>
+            <a href="#/core-studio" style={LP.btnOutline}>Core Studio</a>
+            <a href="#/cd-review" style={LP.btnOutline}>CD Review</a>
+            <a href="#/huddle-calendar" style={LP.btnOutline}>Huddle Calendar</a>
+            <a href="#/contribution-monitor" style={LP.btnOutline}>Contribution Monitor</a>
+            <a href="#/human-capital-reports" style={LP.btnOutline}>Human Capital Reports</a>
+            <a href="#/id-studio" style={LP.btnOutline}>ID Studio</a>
+            <a href="#/module-library" style={LP.btnOutline}>Module Library</a>
           </div>
         </header>
 
