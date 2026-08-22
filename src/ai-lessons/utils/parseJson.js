@@ -45,13 +45,63 @@ export function extractJsonString(raw) {
  * @param {string} raw
  * @returns {unknown}
  */
+/** First complete `{...}` or `[...]` in `text`, respecting JSON strings so `}` in code does not end the object early. */
+export function sliceFirstJsonValue(text) {
+  const s = String(text || "");
+  const startObj = s.indexOf("{");
+  const startArr = s.indexOf("[");
+  let start = -1;
+  if (startObj < 0) start = startArr;
+  else if (startArr < 0) start = startObj;
+  else start = Math.min(startObj, startArr);
+  if (start < 0) return "";
+  const opener = s[start];
+  const closer = opener === "{" ? "}" : "]";
+  let depth = 0;
+  let inString = false;
+  let escape = false;
+  for (let i = start; i < s.length; i++) {
+    const ch = s[i];
+    if (inString) {
+      if (escape) {
+        escape = false;
+        continue;
+      }
+      if (ch === "\\") {
+        escape = true;
+        continue;
+      }
+      if (ch === '"') inString = false;
+      continue;
+    }
+    if (ch === '"') {
+      inString = true;
+      continue;
+    }
+    if (ch === opener) depth += 1;
+    else if (ch === closer) {
+      depth -= 1;
+      if (depth === 0) return s.slice(start, i + 1);
+    }
+  }
+  return "";
+}
+
 export function parseStrictJson(raw) {
   const str = extractJsonString(raw);
   if (!str) throw new Error("No JSON content to parse");
   try {
     return JSON.parse(str);
-  } catch (e) {
-    const msg = e instanceof SyntaxError ? e.message : String(e);
+  } catch (firstErr) {
+    const sliced = sliceFirstJsonValue(str) || sliceFirstJsonValue(raw);
+    if (sliced && sliced !== str) {
+      try {
+        return JSON.parse(sliced);
+      } catch {
+        /* fall through */
+      }
+    }
+    const msg = firstErr instanceof SyntaxError ? firstErr.message : String(firstErr);
     throw new Error("JSON parse failed: " + msg);
   }
 }

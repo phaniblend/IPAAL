@@ -7,6 +7,8 @@
  */
 import jwt from "jsonwebtoken";
 
+import { rolesForEmail } from "./role-grants.js";
+
 const COOKIE_NAME = "ipf_session";
 const SESSION_TTL = "12h";
 
@@ -70,16 +72,26 @@ export function requireSession(req, res, next) {
  * A `-core` account's coreRole (e.g. "PD-core") satisfies the bare role name too ("PD-core"
  * grants "PD") — per the founder's own design: "-core roles ... PD, PMGT, ID (no -core suffix)
  * are roles, not fixed identities — they can also be assigned to a JS." A -core employee already
- * IS their role; a JS has to be explicitly granted it (see role-grants.js). */
+ * IS their role; a JS has to be explicitly granted it (see role-grants.js).
+ * JS roles are re-resolved live from RoleGrant / super-admin list so a grant (or SUPER_ADMIN env)
+ * takes effect without forcing a full re-login. */
 export function requireRole(...allowedRoles) {
-  return (req, res, next) => {
-    const session = readSessionFromRequest(req);
-    if (!session) return res.status(401).json({ error: "Not signed in" });
-    const coreRoleBare = session.coreRole?.replace(/-core$/, "");
-    const effectiveRoles = new Set([...(session.roles || []), ...(coreRoleBare ? [coreRoleBare] : [])]);
-    const allowed = allowedRoles.some((r) => effectiveRoles.has(r));
-    if (!allowed) return res.status(403).json({ error: `Requires one of: ${allowedRoles.join(", ")}` });
-    req.session = session;
-    next();
+  return async (req, res, next) => {
+    try {
+      const session = readSessionFromRequest(req);
+      if (!session) return res.status(401).json({ error: "Not signed in" });
+      if (session.accountType === "js" && session.email) {
+        session.roles = await rolesForEmail(session.email);
+      }
+      const coreRoleBare = session.coreRole?.replace(/-core$/, "");
+      const effectiveRoles = new Set([...(session.roles || []), ...(coreRoleBare ? [coreRoleBare] : [])]);
+      const allowed = allowedRoles.some((r) => effectiveRoles.has(r));
+      if (!allowed) return res.status(403).json({ error: `Requires one of: ${allowedRoles.join(", ")}` });
+      req.session = session;
+      next();
+    } catch (err) {
+      console.error("[auth] requireRole failed:", err.message);
+      res.status(500).json({ error: "Could not verify roles" });
+    }
   };
 }

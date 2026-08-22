@@ -154,7 +154,7 @@ function mapSignUpError(err) {
     return {
       message: "Couldn\u2019t send the confirmation email.",
       hint:
-        "Your Supabase project must be able to send mail. In the Supabase dashboard: Authentication \u2192 check Providers \u2192 Email; Project Settings \u2192 Auth \u2192 set up SMTP or use the built-in mailer within rate limits; Logs \u2192 Auth for the exact failure. For development only, you can turn off \u201cConfirm email\u201d under Authentication \u2192 Providers \u2192 Email so users can sign in immediately after register.",
+        "Email delivery isn\u2019t working for this install. Try again later, or ask an operator to check outbound mail settings. For local testing, registration can be allowed without email confirmation.",
     };
   }
   return { message: raw || "Sign-up failed. Please try again.", hint: "" };
@@ -200,7 +200,7 @@ export default function RegisterModal({
     setSubmitError("");
     setSubmitErrorHint("");
     if (!isFirebaseConfigured) {
-      setSubmitError("Google sign-in isn’t set up yet. Add your Firebase web config to .env (see VITE_FIREBASE_*).");
+      setSubmitError("Google sign-in isn’t set up on this install yet.");
       return;
     }
     setSubmitLoading(true);
@@ -502,7 +502,7 @@ export default function RegisterModal({
           </button>
           {!isFirebaseConfigured ? (
             <div style={{ fontSize: "12px", color: "#94a3b8", marginTop: "8px" }}>
-              Add <code style={{ fontSize: "11px" }}>VITE_FIREBASE_*</code> in <code style={{ fontSize: "11px" }}>.env</code> to enable Google.
+              Google sign-in is not available on this install yet.
             </div>
           ) : null}
           <div
@@ -632,8 +632,7 @@ export default function RegisterModal({
               borderRadius: "8px",
             }}
           >
-            Supabase is not configured (set <code style={{ fontSize: "11px" }}>VITE_SUPABASE_*</code> in{" "}
-            <code style={{ fontSize: "11px" }}>.env</code>). You can still register locally for testing.
+            Account sync is not configured on this install. You can still register locally for testing.
           </div>
         )}
 

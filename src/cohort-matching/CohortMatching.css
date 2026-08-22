@@ -188,6 +188,65 @@
   margin: 0 0 14px;
 }
 
+.cm-assign-email {
+  padding: 16px 18px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+}
+
+.cm-assign-form {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: 1fr;
+}
+
+.cm-assign-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #334155;
+}
+
+.cm-assign-form input,
+.cm-assign-form select {
+  font-weight: 400;
+  padding: 8px 10px;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+.cm-assign-form button {
+  justify-self: start;
+  background: #0891b2;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 16px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.cm-assign-form button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.cm-hint {
+  font-weight: 400;
+  color: #94a3b8;
+  font-size: 12px;
+}
+
+.cm-assign-note {
+  margin: 12px 0 0;
+  font-size: 13px;
+  color: #0f766e;
+}
+
 .cm-app-card {
   display: flex;
   justify-content: space-between;
@@ -212,6 +271,17 @@
   font-family: 'DM Mono', monospace;
   font-size: 12.5px;
   color: #0891b2;
+}
+
+.cm-app-skill {
+  font-size: 12.5px;
+  color: #64748b;
+  margin-top: 2px;
+}
+
+.cm-app-skill strong {
+  color: #334155;
+  font-weight: 600;
 }
 
 .cm-app-email,
@@ -270,6 +340,12 @@
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   gap: 8px;
+  align-items: stretch;
+}
+
+.cm-role-grid {
+  /* Trade picks always share a row height so long blurbs don't leave uneven tiles. */
+  grid-auto-rows: 1fr;
 }
 
 .cm-role-card,
@@ -284,6 +360,12 @@
   display: flex;
   flex-direction: column;
   gap: 4px;
+  height: 100%;
+  min-height: 7.5rem;
+  box-sizing: border-box;
+  /* Override .cm-form button { align-self: flex-start } so tiles match height. */
+  align-self: stretch;
+  color: inherit;
 }
 
 .cm-role-card:hover,
@@ -310,6 +392,7 @@
   font-size: 12px;
   color: #475569;
   margin: 0;
+  flex: 1;
 }
 
 .cm-role-tech {
@@ -317,6 +400,7 @@
   font-size: 10.5px;
   color: #0891b2;
   margin: 2px 0 0;
+  margin-top: auto;
 }
 
 .cm-custom-trade {
@@ -354,10 +438,10 @@
 
 .cm-unlocked-badge {
   display: inline-block;
-  margin-left: 8px;
   font-family: 'DM Mono', monospace;
   font-size: 10px;
-  text-transform: uppercase;
+  text-transform: none;
+  letter-spacing: 0;
   background: #e5efe6;
   color: #2c6b3f;
   border-radius: 10px;

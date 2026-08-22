@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
-import { SKILL_LEVELS } from "./skillLevels.js";
+import { SKILL_LEVELS, BE_SKILL_LEVELS } from "./skillLevels.js";
 import { RESERVED_PROJECT_IDS, taskMeta, isCoreOnlyTrade } from "./matching.js";
 import { useAuth } from "../auth/useAuth.js";
 import "./CohortMatching.css";
@@ -57,7 +57,7 @@ function roleCardCopy(trade) {
  * for now) are excluded even if open tasks exist: that work stays with -core roles, not JS applicants.*/
 async function fetchAvailableTrades() {
   const res = await fetch("/onedev-api/issues?offset=0&count=200");
-  if (!res.ok) throw new Error(`OneDev API ${res.status}`);
+  if (!res.ok) throw new Error(`Request failed (${res.status})`);
   const issues = await res.json();
   const seen = new Map(); // lowercase -> original casing, first-seen wins
   for (const issue of issues) {
@@ -69,11 +69,22 @@ async function fetchAvailableTrades() {
 }
 
 const ASPIRATION_LEVELS = SKILL_LEVELS.filter((l) => l.value !== "none");
+const BE_ASPIRATION_LEVELS = BE_SKILL_LEVELS;
 
 // No email field anymore — signing in with Google (below) IS how we get a verified, reachable
 // email, so asking for one by hand and trusting it unverified was redundant. See EMPTY's lack of
 // an `email` key: the submitted email always comes from the server's own session, never form state.
-const EMPTY = { name: "", trade: "", skillLevel: "", aspiration: "", note: "", ownershipAck: false };
+const EMPTY = {
+  name: "",
+  trade: "",
+  skillLevel: "",
+  beSkillLevel: "",
+  aspiration: "",
+  beAspiration: "",
+  codingFocus: "both",
+  note: "",
+  ownershipAck: false,
+};
 
 // Founder call 2026-08-09 (v2): signing in isn't a separate mid-form gate — someone fills out the
 // whole form first, then the submit button itself IS "Apply with Google" if they're not signed in
@@ -131,8 +142,11 @@ export default function Apply() {
         body: JSON.stringify({
           name: data.name,
           trade: data.trade,
-          skillLevel: isDataCoding ? data.skillLevel : undefined,
-          aspiration: isDataCoding ? data.aspiration : undefined,
+          skillLevel: isDataCoding ? data.skillLevel || undefined : undefined,
+          beSkillLevel: isDataCoding ? data.beSkillLevel || undefined : undefined,
+          aspiration: isDataCoding ? data.aspiration || undefined : undefined,
+          beAspiration: isDataCoding ? data.beAspiration || undefined : undefined,
+          codingFocus: isDataCoding ? data.codingFocus || "both" : undefined,
           note: data.note || undefined,
           ownershipAck: true,
         }),
@@ -207,12 +221,24 @@ export default function Apply() {
   }
 
   function pickRole(value) {
-    setForm((f) => ({ ...f, trade: value, skillLevel: "", aspiration: "" }));
+    setForm((f) => ({
+      ...f,
+      trade: value,
+      skillLevel: "",
+      beSkillLevel: "",
+      aspiration: "",
+      beAspiration: "",
+    }));
   }
 
   const isCoding = form.trade.toLowerCase() === "coding";
   const isSignedIn = authStatus === "signedIn";
-  const canSubmit = form.name && form.trade && form.ownershipAck && (!isCoding || form.skillLevel);
+  const focus = form.codingFocus || "both";
+  const needsFeSkill = isCoding && (focus === "frontend" || focus === "both");
+  const needsBeSkill = isCoding && (focus === "backend" || focus === "both");
+  const skillOk =
+    (!needsFeSkill || !!form.skillLevel) && (!needsBeSkill || !!form.beSkillLevel);
+  const canSubmit = form.name && form.trade && form.ownershipAck && (!isCoding || skillOk);
 
   function handleApplyClick(e) {
     e.preventDefault();
@@ -247,9 +273,9 @@ export default function Apply() {
                 className="cm-view-task-link"
                 href={`#/workbench?highlightTaskId=${matchResult.task.id}&highlightProjectId=${matchResult.task.projectId}`}
               >
-                View your task in Workbench →
+                Open your task →
               </a>
-              <p className="cm-done-sub">Click the task above to start coding.</p>
+              <p className="cm-done-sub">Open it to start coding. Assist Me is available inside the task if you need a guided lesson.</p>
               <p className="cm-legal-note">
                 You confirmed at apply time that this is a hands-on training engagement — what you build becomes
                 part of {matchResult.task.project} for training, portfolio, and reference purposes, without
@@ -260,9 +286,8 @@ export default function Apply() {
             <>
               <h1>Application received</h1>
               <p>
-                Nothing open in {submittedTrade} is placeable right this second, so you're queued — you'll be
-                matched automatically the moment a fitting task opens up (or a member of Core Studio can place you
-                sooner from Matching Queue).
+                Nothing open in {submittedTrade} is ready to assign right this second, so you&apos;re queued — we&apos;ll
+                place you automatically as soon as a fitting task opens up.
               </p>
             </>
           )}
@@ -277,11 +302,13 @@ export default function Apply() {
   return (
     <div className="cm-apply">
       <header className="cm-header">
-        <div className="cm-kicker">Cohort &amp; Matching Engine</div>
-        <h1>Apply — available trades</h1>
+        <div className="cm-kicker">From campus to real product work</div>
+        <h1>Apply — interests first, then a match</h1>
         <p className="cm-sub">
-          Below is what's actually open right now — pick the trade closest to what you want, then tell us honestly
-          where you're starting from. You'll only ever be matched to work that fits.
+          Tell us your trade, where you are academically/career-wise, and (for Coding) frontend vs
+          backend. We match you into a team building enterprise apps that will go live soon for
+          thousands of customers — so you learn by shipping with others, not by stacking another solo
+          project on your resume.
         </p>
       </header>
 
@@ -293,7 +320,7 @@ export default function Apply() {
           <span>
             Signed in as <strong>{session.name}</strong> ({session.email}).
           </span>
-          <a href="#/workbench">Go to Workbench</a>
+          <a href="#/workbench">Go to your tasks</a>
           <button type="button" onClick={logout} style={{ background: "none", border: "none", color: "#0891b2", cursor: "pointer", padding: 0 }}>
             Sign out
           </button>
@@ -354,32 +381,98 @@ export default function Apply() {
 
         {isCoding && (
           <div className="cm-field-group">
-            <span className="cm-field-label">How comfortable are you with code today?</span>
+            <span className="cm-field-label">Prefer frontend, backend, or both?</span>
             <div className="cm-skill-grid">
-              {SKILL_LEVELS.map((s) => (
+              {[
+                { value: "frontend", label: "Frontend", blurb: "UI / React tasks and webapp lessons." },
+                { value: "backend", label: "Backend", blurb: "API / data tasks — language-agnostic skills." },
+                { value: "both", label: "Both", blurb: "Open to either — typical Coding start." },
+              ].map((opt) => (
                 <button
                   type="button"
-                  key={s.value}
-                  className={`cm-skill-card ${form.skillLevel === s.value ? "cm-skill-card-selected" : ""}`}
-                  onClick={() => setForm((f) => ({ ...f, skillLevel: s.value }))}
+                  key={opt.value}
+                  className={`cm-skill-card ${form.codingFocus === opt.value ? "cm-skill-card-selected" : ""}`}
+                  onClick={() =>
+                    setForm((f) => ({
+                      ...f,
+                      codingFocus: opt.value,
+                      skillLevel: opt.value === "backend" ? "" : f.skillLevel,
+                      beSkillLevel: opt.value === "frontend" ? "" : f.beSkillLevel,
+                    }))
+                  }
                 >
-                  <div className="cm-skill-label">{s.label}</div>
-                  <p className="cm-skill-blurb">{s.blurb}</p>
+                  <div className="cm-skill-label">{opt.label}</div>
+                  <p className="cm-skill-blurb">{opt.blurb}</p>
                 </button>
               ))}
             </div>
 
-            <label className="cm-aspiration-label">
-              Aiming to grow into <span className="cm-hint">optional — this is what unlocks harder tasks later</span>
-              <select value={form.aspiration} onChange={update("aspiration")}>
-                <option value="">No particular target yet</option>
-                {ASPIRATION_LEVELS.map((a) => (
-                  <option key={a.value} value={a.value}>
-                    {a.label}
-                  </option>
-                ))}
-              </select>
-            </label>
+            {needsFeSkill && (
+              <>
+                <span className="cm-field-label" style={{ marginTop: 12, display: "block" }}>
+                  Frontend comfort today
+                </span>
+                <div className="cm-skill-grid">
+                  {SKILL_LEVELS.map((s) => (
+                    <button
+                      type="button"
+                      key={s.value}
+                      className={`cm-skill-card ${form.skillLevel === s.value ? "cm-skill-card-selected" : ""}`}
+                      onClick={() => setForm((f) => ({ ...f, skillLevel: s.value }))}
+                    >
+                      <div className="cm-skill-label">{s.label}</div>
+                      <p className="cm-skill-blurb">{s.blurb}</p>
+                    </button>
+                  ))}
+                </div>
+                <label className="cm-aspiration-label">
+                  Frontend aim{" "}
+                  <span className="cm-hint">optional — unlocks harder UI tasks later</span>
+                  <select value={form.aspiration} onChange={update("aspiration")}>
+                    <option value="">No particular target yet</option>
+                    {ASPIRATION_LEVELS.map((a) => (
+                      <option key={a.value} value={a.value}>
+                        {a.label}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+              </>
+            )}
+
+            {needsBeSkill && (
+              <>
+                <span className="cm-field-label" style={{ marginTop: 12, display: "block" }}>
+                  Backend comfort today{" "}
+                  <span className="cm-hint">language-agnostic</span>
+                </span>
+                <div className="cm-skill-grid">
+                  {BE_SKILL_LEVELS.map((s) => (
+                    <button
+                      type="button"
+                      key={s.value}
+                      className={`cm-skill-card ${form.beSkillLevel === s.value ? "cm-skill-card-selected" : ""}`}
+                      onClick={() => setForm((f) => ({ ...f, beSkillLevel: s.value }))}
+                    >
+                      <div className="cm-skill-label">{s.label}</div>
+                      <p className="cm-skill-blurb">{s.blurb}</p>
+                    </button>
+                  ))}
+                </div>
+                <label className="cm-aspiration-label">
+                  Backend aim{" "}
+                  <span className="cm-hint">optional — unlocks CRUD-tier API tasks later</span>
+                  <select value={form.beAspiration} onChange={update("beAspiration")}>
+                    <option value="">No particular target yet</option>
+                    {BE_ASPIRATION_LEVELS.map((a) => (
+                      <option key={a.value} value={a.value}>
+                        {a.label}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+              </>
+            )}
           </div>
         )}
 

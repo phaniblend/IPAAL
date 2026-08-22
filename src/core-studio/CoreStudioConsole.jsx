@@ -6,7 +6,7 @@ const TEAM_OPS_PROJECT_ID = 3;
 
 async function api(path) {
   const res = await fetch(`/onedev-api${path}`);
-  if (!res.ok) throw new Error(`OneDev API ${res.status}: ${await res.text()}`);
+  if (!res.ok) throw new Error(`Request failed (${res.status})`);
   return res.json();
 }
 
@@ -82,7 +82,7 @@ export default function CoreStudioConsole() {
     <div className="csc">
       <header className="csc-header">
         <div className="csc-kicker">Core Studio Console</div>
-        <h1>Every SMB-app project, one view</h1>
+        <h1>Every product project, one view</h1>
         <p className="csc-sub">
           The only cross-cutting screen in IPF — everyone else sees their own project. Owner-level visibility,
           provisioned automatically, not requested per project.

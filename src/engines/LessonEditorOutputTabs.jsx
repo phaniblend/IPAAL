@@ -119,7 +119,7 @@ function generateSandboxBlockedPreview() {
   <div class="box">
     <h1>Preview isn’t available for this setup</h1>
     <p>This lesson uses <strong>Redux</strong> and/or <strong>RTK Query</strong> with imports from <code>./store</code>, <code>./api</code>, or <code>react-redux</code>. The in-app preview runs a single file in an iframe and removes import lines, so the store and hooks are not defined — the browser then often shows only <code>Script error.</code></p>
-    <p>Use <strong>CHECK MY CODE{CTRL+SHIFT+ENTER}{ctrl+shift+enter}</strong> for validation, or run the project in your own dev environment (e.g. Vite) to see the real UI.</p>
+    <p>Use <strong>CHECK MY CODE{CTRL+SHIFT+ENTER}{ctrl+shift+enter}</strong> for validation, or run the project in your own local development environment to see the real UI.</p>
   </div>
 </body>
 </html>`;

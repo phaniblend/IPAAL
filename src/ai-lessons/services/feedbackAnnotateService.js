@@ -43,15 +43,20 @@ export async function annotateFeedbackOnCode(params, options = {}) {
     commentSyntax: commentSyntaxForLanguage(language),
   });
 
-  const raw = await completeWithAI({
-    system: FEEDBACK_ANNOTATE_SYSTEM,
-    user,
-    maxTokens: 4096,
-    apiKey,
-    provider,
-  });
+  const run = (userPrompt) =>
+    completeWithAI({
+      system: FEEDBACK_ANNOTATE_SYSTEM,
+      user: userPrompt,
+      maxTokens: 4096,
+      apiKey,
+      provider,
+    });
 
-  const parsed = parseAndValidate(raw, annotateResponseSchema);
+  let parsed = parseAndValidate(await run(user), annotateResponseSchema);
+  if (!parsed.success) {
+    const retryUser = `${user}\n\nYour previous reply was not valid JSON (extra text after the object, or a broken string). Reply with ONE JSON object only, no markdown, no commentary:\n{"annotatedCode":"..."}`;
+    parsed = parseAndValidate(await run(retryUser), annotateResponseSchema);
+  }
   if (!parsed.success) {
     throw new Error(parsed.error || "Feedback annotate response invalid");
   }

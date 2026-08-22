@@ -1145,11 +1145,13 @@ export default function App() {
   const [pendingLesson, setPendingLesson] = useState(null) // { track, index, item } when gated
   const [welcomeBonusMessage, setWelcomeBonusMessage] = useState('')
   const [user, setUser] = useState(() => getStoredUser())
-  /** Full page load / refresh always shows the intro; we do not persist “already seen” in sessionStorage (that skipped it on every refresh). */
+  /** Full page load / refresh: JS cinematic landing only on learner home — never on IPF ops hashes. */
   const [showCinematic, setShowCinematic] = useState(() => {
     if (typeof window === 'undefined') return true
     const p = getHashRoutePathname()
-    return !p.startsWith('/lessons/') && p !== '/register'
+    if (p.startsWith('/lessons/') || p === '/register') return false
+    // Only the learner root shows cinematic; /pd-studio etc. are separate routes (see main.jsx).
+    return p === '/' || p === ''
   })
   /** In-session hide after dismiss (localStorage is written inside ReactTsPatternsBridge). */
   const [patternsBridgeDismissedLocal, setPatternsBridgeDismissedLocal] = useState(false)
@@ -1665,7 +1667,7 @@ export default function App() {
       return (
         <EnterpriseReadinessGate
           onApply={() => {
-            window.location.hash = '#/apply'
+            window.location.hash = '#/join'
           }}
           onJustLessons={() => {
             try {
@@ -1682,7 +1684,24 @@ export default function App() {
       )
     }
     if (showCinematic) {
-      return <CinematicLanding onEnterLessons={() => setShowEnterpriseGate(true)} />
+      return (
+        <CinematicLanding
+          onEnterEnterprise={() => {
+            window.location.hash = '#/join'
+          }}
+          onEnterLessons={() => {
+            try {
+              window.localStorage.removeItem(REACT_TS_PATTERNS_BRIDGE_STORAGE_KEY)
+            } catch {
+              /* ignore */
+            }
+            setPatternsBridgeDismissedLocal(false)
+            setTrack(LEARNER_FOCUS_TRACK)
+            setShowCinematic(false)
+            setShowEnterpriseGate(false)
+          }}
+        />
+      )
     }
 
     if (showReactTsPatternsBridge) {

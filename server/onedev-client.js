@@ -29,13 +29,62 @@ async function onedevFetch(path, opts = {}) {
       ...(opts.headers || {}),
     },
   });
-  if (!res.ok) throw new Error(`OneDev API ${res.status}: ${await res.text()}`);
+  if (!res.ok) throw new Error(`Project service error (${res.status})`);
   const text = await res.text();
   return text ? JSON.parse(text) : null;
 }
 
 export async function listProjects({ offset = 0, count = 100 } = {}) {
   return onedevFetch(`/projects?offset=${offset}&count=${count}`);
+}
+
+/** Case-insensitive match on project name across pages (OneDev may paginate). */
+export async function findProjectByName(name) {
+  const want = String(name || "").trim().toLowerCase();
+  if (!want) return null;
+  let offset = 0;
+  const count = 100;
+  for (;;) {
+    const page = (await listProjects({ offset, count })) || [];
+    const hit = page.find((p) => String(p?.name || "").trim().toLowerCase() === want);
+    if (hit) return hit;
+    if (page.length < count) return null;
+    offset += count;
+    if (offset > 2000) return null;
+  }
+}
+
+/**
+ * Create a delivery project, or reuse one that already has this name.
+ * OneDev rejects duplicate names with "already used"; SpecForge first-publish used to hard-fail
+ * after a seed / prior attempt left the project behind.
+ *
+ * @returns {{ projectId: number, projectName: string, reused: boolean }}
+ */
+export async function ensureDeliveryProject({ name, description }) {
+  const desired = String(name || "").trim();
+  if (!desired) throw new Error("delivery project name is required");
+
+  const existing = await findProjectByName(desired);
+  if (existing?.id) {
+    return { projectId: existing.id, projectName: existing.name || desired, reused: true };
+  }
+
+  try {
+    const projectId = await createProject({ name: desired, description });
+    if (!projectId) throw new Error("Project service did not return a project id after creation");
+    return { projectId, projectName: desired, reused: false };
+  } catch (err) {
+    const msg = err?.message || String(err);
+    // Race / OneDev duplicate wording — re-check and reuse rather than fail the whole publish.
+    if (/already used|already exists|duplicate|name.*taken/i.test(msg)) {
+      const again = await findProjectByName(desired);
+      if (again?.id) {
+        return { projectId: again.id, projectName: again.name || desired, reused: true };
+      }
+    }
+    throw err;
+  }
 }
 
 export async function listIssues({ query = "", offset = 0, count = 200 } = {}) {

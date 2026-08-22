@@ -27,7 +27,7 @@ const REQUEST_TIMEOUT_MS = 240_000;
 export async function callGemini(prompt) {
   const apiKey = getGeminiApiKey();
   if (!apiKey) {
-    throw new Error("Missing GEMINI_API_KEY (or VITE_GEMINI_API_KEY / GOOGLE_API_KEY) in D:\\IPAAL\\.env");
+    throw new Error("Draft generation isn't configured on this server.");
   }
 
   const url = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(
@@ -49,7 +49,7 @@ export async function callGemini(prompt) {
     });
   } catch (err) {
     if (err?.name === "AbortError") {
-      throw new Error(`Gemini request timed out after ${REQUEST_TIMEOUT_MS / 1000}s — the connection stalled with no response.`);
+      throw new Error(`Draft generation timed out after ${REQUEST_TIMEOUT_MS / 1000}s — try again.`);
     }
     throw err;
   } finally {
@@ -58,12 +58,12 @@ export async function callGemini(prompt) {
 
   const data = await res.json().catch(() => ({}));
   if (!res.ok) {
-    throw new Error(data?.error?.message || `Gemini request failed with HTTP ${res.status}`);
+    throw new Error(data?.error?.message || `Draft generation failed (${res.status})`);
   }
 
   const text = data?.candidates?.[0]?.content?.parts?.map((p) => p?.text || "").join("") || "";
   if (!text.trim()) {
-    throw new Error("Gemini returned empty output.");
+    throw new Error("Draft generation returned empty output.");
   }
   return text;
 }

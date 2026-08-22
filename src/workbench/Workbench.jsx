@@ -1,158 +1,107 @@
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import { useSearchParams } from "react-router-dom";
-import { useAuth } from "../auth/useAuth.js";
+import { useAuth, hasRole } from "../auth/useAuth.js";
+import { RESERVED_PROJECT_IDS } from "../cohort-matching/matching.js";
+import { AssistMeEmbedded } from "../assist-me/AssistMeWorkspace.jsx";
 import "./Workbench.css";
 
 const MODULE_LIBRARY_PROJECT_ID = 4;
+const PRODUCT_BACKLOG_PROJECT_ID = 1;
+const OPS_ROLES = ["PD", "PMGT", "ID", "CD"];
+
+/** Delivery product boards only — hide IPF bookkeeping projects from the switcher. */
+function isDeliveryProject(project) {
+  const id = project?.id;
+  if (!id) return false;
+  if (RESERVED_PROJECT_IDS.has(id)) return false;
+  if (id === PRODUCT_BACKLOG_PROJECT_ID) return false;
+  return true;
+}
 
 async function api(path, opts) {
   const res = await fetch(`/onedev-api${path}`, {
     headers: { "Content-Type": "application/json", ...(opts?.headers || {}) },
     ...opts,
   });
-  if (!res.ok) throw new Error(`OneDev API ${res.status}: ${await res.text()}`);
+  if (!res.ok) throw new Error(`Couldn't load project data (${res.status})`);
   return res.json();
 }
 
 const EMPTY_ISSUE = { title: "", description: "" };
 
-/** A task published by SpecForge always carries one of these markers (server/specforge-router.js).
- * A task created by hand in Workbench carries neither — that's the "none" fallback below, which
- * keeps the old manual picker so nothing breaks for tasks outside the SpecForge pipeline. */
 function parseAssistInfo(description) {
   const wired = /^AssistModule:\s*(.+)$/m.exec(description || "");
   if (wired) return { status: "wired", tag: wired[1].trim() };
-  if (/^NeedsTutorial:\s*true/m.test(description || "")) return { status: "blocked" };
+  const draft = /^DraftModule:\s*(.+)$/m.exec(description || "");
+  if (/^NeedsTutorial:\s*true/m.test(description || "")) {
+    return { status: "blocked", tag: draft?.[1]?.trim() || null };
+  }
   if (/^NoTutorialNeeded:\s*true/m.test(description || "")) return { status: "exempt" };
   return { status: "none" };
 }
 
-/** "Assist me" button + choice: code here (3-column workspace) vs code locally (instructions only).
- * A task wired to a specific tutorial (AssistModule:) launches straight into it — no picker, because
- * the wiring was already decided at publish time by SpecForge's classifier / ID Studio's review.
- * A task still waiting on a tutorial (NeedsTutorial: true) shows as blocked, not clickable — it was
- * never made assignable without one. Anything with neither marker falls back to the old manual picker. */
-function AssistMeButton({ task, publishedModules }) {
-  const info = parseAssistInfo(task.description);
-  const [open, setOpen] = useState(false);
-  const [pickedTag, setPickedTag] = useState("");
-  // Derived, not synced via effect: publishedModules can arrive after this button already mounted
-  // with an empty list, so the default has to be computed at render time, not pushed into state.
-  const moduleTag = pickedTag || publishedModules[0]?.tag || "";
-
-  function launch(mode, tag) {
-    window.location.hash = `#/assist-me?module=${encodeURIComponent(tag)}&mode=${mode}`;
-  }
-
-  if (info.status === "blocked") {
-    return <span className="workbench-assist-blocked">⏳ Tutorial pending ID Studio review</span>;
-  }
-
-  if (info.status === "exempt") {
-    return <span className="workbench-assist-exempt">No tutorial needed for this trade</span>;
-  }
-
-  if (!open) {
-    return (
-      <button type="button" className="workbench-assist-btn" onClick={() => setOpen(true)}>
-        🧩 Assist me
-      </button>
-    );
-  }
-
-  if (info.status === "wired") {
-    return (
-      <div className="workbench-assist-popover">
-        <p className="workbench-assist-wired">
-          Wired tutorial: <code>{info.tag}</code>
-        </p>
-        <p className="workbench-assist-question">How do you want to work on this?</p>
-        <button type="button" onClick={() => launch("local", info.tag)}>
-          I'll follow instructions from here and code in my local
-        </button>
-        <button type="button" className="workbench-assist-primary" onClick={() => launch("here", info.tag)}>
-          I'll develop here
-        </button>
-        <button type="button" className="workbench-assist-cancel" onClick={() => setOpen(false)}>
-          Cancel
-        </button>
-      </div>
-    );
-  }
-
-  // info.status === "none" — a task from outside the SpecForge pipeline; no wiring decision was
-  // ever made for it, so fall back to picking manually from whatever's published.
-  if (publishedModules.length === 0) {
-    return (
-      <div className="workbench-assist-popover">
-        <p>No published assistance modules yet — nothing in the Module Library to launch.</p>
-        <button type="button" onClick={() => setOpen(false)}>
-          Close
-        </button>
-      </div>
-    );
-  }
-
-  return (
-    <div className="workbench-assist-popover">
-      <label>
-        Module
-        <select value={moduleTag} onChange={(e) => setPickedTag(e.target.value)}>
-          {publishedModules.map((m) => (
-            <option key={m.tag} value={m.tag}>
-              {m.tag}
-            </option>
-          ))}
-        </select>
-      </label>
-      <p className="workbench-assist-question">How do you want to work on this?</p>
-      <button type="button" onClick={() => launch("local", moduleTag)}>
-        I'll follow instructions from here and code in my local
-      </button>
-      <button type="button" className="workbench-assist-primary" onClick={() => launch("here", moduleTag)}>
-        I'll develop here
-      </button>
-      <button type="button" className="workbench-assist-cancel" onClick={() => setOpen(false)}>
-        Cancel
-      </button>
-    </div>
-  );
+function parseTaskFields(description) {
+  const desc = description || "";
+  const field = (key) => new RegExp(`^${key}:\\s*(.+)$`, "m").exec(desc)?.[1]?.trim() || "";
+  return {
+    epic: field("Epic"),
+    story: field("Story"),
+    trade: field("Trade"),
+    techLevel: field("TechLevel"),
+    acceptance: field("AcceptanceCriteria")
+      .split(";")
+      .map((s) => s.trim())
+      .filter(Boolean),
+  };
 }
 
-/** A real task's description is a `Key: value` marker block (Epic/Story/Trade/TechLevel/Cohort/
- * NeedsTutorial), not prose — found live, feeding the raw block to scoreOverlap diluted every
- * match with unrelated label words and turned a real curated-tier match into "none." Pull out just
- * the actual descriptive content: the title plus AcceptanceCriteria's text, marker label stripped. */
 function taskSearchText(task) {
-  const acRaw = /^AcceptanceCriteria:\s*(.+)$/m.exec(task.description || "")?.[1] || "";
-  return `${task.title} ${acRaw.replace(/;/g, " ")}`;
+  const desc = task.description || "";
+  const acRaw = /^AcceptanceCriteria:\s*(.+)$/m.exec(desc)?.[1] || "";
+  const trade = /^Trade:\s*(.+)$/m.exec(desc)?.[1] || "";
+  const tech = /^TechLevel:\s*(.+)$/m.exec(desc)?.[1] || "";
+  return `${task.title} ${acRaw.replace(/;/g, " ")} ${trade} ${tech}`.trim();
 }
 
-/** Core-lesson routing with a real assistance session (docs/IPF_DEVGUIDE.md §5a-4) — additive
- * alongside AssistMeButton, never replacing it. Picking a lesson is a real, logged human choice
- * (same "logged decision, not an algorithm's guess" philosophy as everywhere else) — the server
- * re-validates the choice and owns the session/token, so this component only ever asks for a
- * match, asks to launch one of the results, and navigates. Same-tab, not a new tab: now that
- * completion redirects back here automatically, a new tab would just orphan itself instead of
- * closing the loop. */
-function TryCoreLesson({ task }) {
-  const [result, setResult] = useState(null);
-  const [status, setStatus] = useState("idle"); // idle | loading | done | error | launching
+function humanDescription(description) {
+  if (!description) return "";
+  // Strip Key: value marker lines — show remaining prose if any.
+  const prose = description
+    .split("\n")
+    .filter((l) => !/^[A-Za-z][A-Za-z0-9]*:\s*/.test(l.trim()))
+    .join("\n")
+    .trim();
+  return prose;
+}
+
+function humanLessonLabel(tag) {
+  return String(tag || "")
+    .split("-")
+    .filter(Boolean)
+    .map((w) => {
+      const upper = w.toUpperCase();
+      if (["API", "UI", "CRUD", "HTTP", "SQL", "JS", "TS"].includes(upper)) return upper;
+      return w.charAt(0).toUpperCase() + w.slice(1);
+    })
+    .join(" ");
+}
+
+/**
+ * Assist Me lives inside an opened task — never navigates away to #/assist-me.
+ * Core lessons embed in an iframe; published assist modules use AssistMeEmbedded.
+ */
+function TaskAssistPanel({ task, publishedModules, onCloseLesson, autoStart = false }) {
+  const info = parseAssistInfo(task.description);
+  const [phase, setPhase] = useState("idle");
+  const [coreResult, setCoreResult] = useState(null);
   const [error, setError] = useState("");
+  const [pickedTag, setPickedTag] = useState("");
+  const [embed, setEmbed] = useState(null); // { kind: 'core', url } | { kind: 'module', tag, mode }
+  const moduleTag = pickedTag || publishedModules[0]?.tag || "";
+  const didAutoStart = useRef(false);
 
-  function check() {
-    setStatus("loading");
-    fetch(`/api/id/core-lesson-match?query=${encodeURIComponent(taskSearchText(task))}`)
-      .then((r) => r.json())
-      .then((data) => {
-        setResult(data);
-        setStatus("done");
-      })
-      .catch(() => setStatus("error"));
-  }
-
-  async function launch(lesson) {
-    setStatus("launching");
+  async function launchCoreLesson(lesson) {
+    setPhase("launching");
     setError("");
     try {
       const res = await fetch("/api/id/assistance-session", {
@@ -162,46 +111,408 @@ function TryCoreLesson({ task }) {
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || `Session creation failed (${res.status})`);
-      window.location.assign(data.url);
+      setEmbed({ kind: "core", url: data.url, title: lesson.title });
+      setPhase("embedded");
     } catch (err) {
       setError(err.message);
-      setStatus("done"); // back to the results view, showing the error, rather than a dead-end
+      setPhase("error");
     }
   }
 
-  if (status === "idle") {
+  function launchModule(mode, tag) {
+    setEmbed({ kind: "module", tag, mode });
+    setPhase("embedded");
+  }
+
+  async function startAssistMe() {
+    setError("");
+    setCoreResult(null);
+    // Wired AssistModule wins over core auto-match — that tag is the intended Assist Me path.
+    if (info.status === "wired" && info.tag) {
+      launchModule("here", info.tag);
+      return;
+    }
+    setPhase("matching");
+    try {
+      const q = encodeURIComponent(taskSearchText(task));
+      const looksBe = /\b(api|endpoint|rest|sql|postgres|middleware|jwt|crud|backend|server)\b/i.test(
+        taskSearchText(task)
+      );
+      const side = looksBe ? "&side=backend" : "";
+      const res = await fetch(`/api/id/core-lesson-match?query=${q}${side}`);
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Match failed");
+      setCoreResult(data);
+
+      if (data.auto) {
+        await launchCoreLesson(data.auto);
+        return;
+      }
+      if (data.curated?.length) {
+        setPhase("curated");
+        return;
+      }
+      setPhase("module-fallback");
+    } catch (err) {
+      setError(err.message || "Could not match a lesson");
+      setPhase("error");
+    }
+  }
+
+  useEffect(() => {
+    if (!autoStart || didAutoStart.current) return;
+    didAutoStart.current = true;
+    startAssistMe();
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- one-shot open from Story "Assist me"
+  }, [autoStart]);
+
+  function closeEmbed() {
+    setEmbed(null);
+    setPhase("idle");
+    onCloseLesson?.();
+  }
+
+  if (embed?.kind === "core") {
     return (
-      <button type="button" className="workbench-core-lesson-check" onClick={check}>
-        📘 Try a core lesson
-      </button>
+      <div className="workbench-assist-embed">
+        <div className="workbench-assist-embed-bar">
+          <span>Assist Me{embed.title ? ` · ${embed.title}` : ""}</span>
+          <button type="button" onClick={closeEmbed}>
+            Close lesson
+          </button>
+        </div>
+        <iframe className="workbench-assist-iframe" title="Assist Me lesson" src={embed.url} />
+      </div>
     );
   }
-  if (status === "loading") return <span className="workbench-core-lesson-loading">Checking core lessons…</span>;
-  if (status === "launching") return <span className="workbench-core-lesson-loading">Opening lesson…</span>;
-  if (status === "error" || !result) return <span className="workbench-core-lesson-loading">Core lessons unreachable — is the lessons app running?</span>;
-  if (result.none) return <span className="workbench-core-lesson-loading">No close core lesson found for this task.</span>;
 
-  const options = result.auto ? [result.auto] : result.curated;
-  return (
-    <div className="workbench-core-lesson-results">
-      {!result.auto && <p className="workbench-core-lesson-hint">No confident match — closest core lessons:</p>}
-      {options.map((lesson) => (
-        <button key={lesson.lessonKey} type="button" className="workbench-core-lesson-link" onClick={() => launch(lesson)}>
-          {lesson.title} →
+  if (embed?.kind === "module") {
+    return (
+      <div className="workbench-assist-embed">
+        <AssistMeEmbedded
+          moduleTag={embed.tag}
+          mode={embed.mode}
+          embedded
+          onClose={closeEmbed}
+        />
+      </div>
+    );
+  }
+
+  if (info.status === "exempt") {
+    return <p className="workbench-assist-exempt">No tutorial needed for this trade</p>;
+  }
+
+  if (phase === "idle") {
+    return (
+      <div className="workbench-assist-start">
+        <p className="workbench-assist-blurb">
+          Stuck or learning the pattern for this task? Assist Me opens a guided lesson beside the work —
+          you stay on this task.
+        </p>
+        <button type="button" className="workbench-assist-btn" onClick={startAssistMe}>
+          Assist me
         </button>
-      ))}
-      {error && <p className="workbench-core-lesson-error">{error}</p>}
+      </div>
+    );
+  }
+
+  if (phase === "matching" || phase === "launching") {
+    return (
+      <span className="workbench-assist-status">
+        {phase === "matching" ? "Finding the right lesson…" : "Opening Assist Me…"}
+      </span>
+    );
+  }
+
+  if (phase === "error") {
+    return (
+      <div className="workbench-assist-popover">
+        <p className="workbench-assist-error">{error || "Assist Me unavailable."}</p>
+        <button type="button" className="workbench-assist-primary" onClick={startAssistMe}>
+          Try again
+        </button>
+        <button type="button" className="workbench-assist-cancel" onClick={() => setPhase("idle")}>
+          Cancel
+        </button>
+      </div>
+    );
+  }
+
+  if (phase === "curated") {
+    return (
+      <div className="workbench-assist-popover">
+        <p className="workbench-assist-question">Closest lessons for this task — pick one:</p>
+        {(coreResult?.curated || []).map((lesson) => (
+          <button
+            key={lesson.lessonKey}
+            type="button"
+            className="workbench-assist-primary"
+            onClick={() => launchCoreLesson(lesson)}
+          >
+            {lesson.title}
+            {lesson.side ? ` (${lesson.side === "backend" ? "BE" : "FE"})` : ""}
+          </button>
+        ))}
+        {error && <p className="workbench-assist-error">{error}</p>}
+        <button type="button" className="workbench-assist-cancel" onClick={() => setPhase("idle")}>
+          Cancel
+        </button>
+      </div>
+    );
+  }
+
+  if (info.status === "blocked" && !info.tag) {
+    return (
+      <div className="workbench-assist-popover">
+        <p>A guided lesson for this task isn&apos;t ready yet. Check back soon.</p>
+        <button type="button" className="workbench-assist-cancel" onClick={() => setPhase("idle")}>
+          Close
+        </button>
+      </div>
+    );
+  }
+
+  if (info.status === "wired" && (phase === "module-wired" || phase === "module-fallback")) {
+    return (
+      <div className="workbench-assist-popover">
+        <p className="workbench-assist-wired">
+          Guided lesson: <strong>{humanLessonLabel(info.tag)}</strong>
+        </p>
+        <p className="workbench-assist-question">How do you want to work on this?</p>
+        <button type="button" onClick={() => launchModule("local", info.tag)}>
+          Follow instructions here — code in my local editor
+        </button>
+        <button type="button" className="workbench-assist-primary" onClick={() => launchModule("here", info.tag)}>
+          Develop here
+        </button>
+        <button type="button" className="workbench-assist-cancel" onClick={() => setPhase("idle")}>
+          Cancel
+        </button>
+      </div>
+    );
+  }
+
+  if (publishedModules.length === 0) {
+    return (
+      <div className="workbench-assist-popover">
+        <p>No guided lesson is available for this task yet.</p>
+        <button type="button" className="workbench-assist-cancel" onClick={() => setPhase("idle")}>
+          Close
+        </button>
+      </div>
+    );
+  }
+
+  return (
+    <div className="workbench-assist-popover">
+      <p className="workbench-assist-question">Pick a guided lesson for this task:</p>
+      <label>
+        Lesson
+        <select value={moduleTag} onChange={(e) => setPickedTag(e.target.value)}>
+          {publishedModules.map((m) => (
+            <option key={m.tag} value={m.tag}>
+              {humanLessonLabel(m.tag)}
+            </option>
+          ))}
+        </select>
+      </label>
+      <button type="button" onClick={() => launchModule("local", moduleTag)}>
+        Follow instructions here — code in my local editor
+      </button>
+      <button type="button" className="workbench-assist-primary" onClick={() => launchModule("here", moduleTag)}>
+        Develop here
+      </button>
+      <button type="button" className="workbench-assist-cancel" onClick={() => setPhase("idle")}>
+        Cancel
+      </button>
+    </div>
+  );
+}
+
+function OpenTaskView({ task, publishedModules, onBack, isJS, projects = [] }) {
+  const fields = parseTaskFields(task.description);
+  const prose = humanDescription(task.description);
+  const assist = parseAssistInfo(task.description);
+  const waitingOnLesson = assist.status === "blocked";
+  const [tab, setTab] = useState("story"); // story | assistance
+  const [assistOpen, setAssistOpen] = useState(false);
+  const project = projects.find((p) => p.id === task.projectId);
+  const projectPath = project?.path || project?.name || null;
+  const cloneUrl = projectPath ? `http://localhost:6610/${projectPath}.git` : null;
+  const pullsUrl = projectPath ? `http://localhost:6610/${projectPath}/~pulls` : "http://localhost:6610";
+  const branchHint = `js/${(task.title || "task")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/(^-|-$)/g, "")
+    .slice(0, 40)}`;
+
+  function openAssistance() {
+    setAssistOpen(true);
+    setTab("assistance");
+  }
+
+  function closeAssistance() {
+    setAssistOpen(false);
+    setTab("story");
+  }
+
+  return (
+    <div className="workbench-task-open">
+      <button type="button" className="workbench-task-back" onClick={onBack}>
+        ← {isJS ? "Your tasks" : "Board"}
+      </button>
+
+      <div className="workbench-card-num">
+        #{task.number}
+        {task.project ? ` · ${task.project}` : ""}
+        {task.state ? ` · ${task.state}` : ""}
+      </div>
+      <h2 className="workbench-task-title">{task.title}</h2>
+
+      {waitingOnLesson && (
+        <div className="workbench-lesson-pending">
+          {isJS
+            ? "A guided lesson for this task is still being prepared. You can keep reading the task — Assist Me will unlock when it’s ready."
+            : <>
+                No published assistance lesson is wired to this task yet
+                {assist.tag || /^DraftModule:\s*(.+)$/m.exec(task.description || "")?.[1]
+                  ? ` (draft: ${assist.tag || /^DraftModule:\s*(.+)$/m.exec(task.description || "")?.[1]?.trim()}).`
+                  : "."}{" "}
+                ID reviews and publishes it; Workbench will wire it here automatically. Recruit only assigns once
+                it&apos;s wired.
+              </>}
+        </div>
+      )}
+
+      {assistOpen && (
+        <div className="workbench-task-tabs" role="tablist" aria-label="Task views">
+          <button
+            type="button"
+            role="tab"
+            aria-selected={tab === "story"}
+            className={`workbench-task-tab${tab === "story" ? " is-active" : ""}`}
+            onClick={() => setTab("story")}
+          >
+            Story
+          </button>
+          <button
+            type="button"
+            role="tab"
+            aria-selected={tab === "assistance"}
+            className={`workbench-task-tab${tab === "assistance" ? " is-active" : ""}`}
+            onClick={() => setTab("assistance")}
+          >
+            Assistance
+          </button>
+        </div>
+      )}
+
+      <section
+        className="workbench-task-panel"
+        role="tabpanel"
+        hidden={assistOpen && tab !== "story"}
+      >
+        {(fields.epic || fields.story || fields.trade) && (
+          <div className="workbench-task-meta">
+            {fields.epic && (
+              <span>
+                Epic <strong>{fields.epic}</strong>
+              </span>
+            )}
+            {fields.story && (
+              <span>
+                Story <strong>{fields.story}</strong>
+              </span>
+            )}
+            {fields.trade && (
+              <span>
+                Trade <strong>{fields.trade}</strong>
+              </span>
+            )}
+          </div>
+        )}
+
+        {prose && <p className="workbench-task-body">{prose}</p>}
+
+        {fields.acceptance.length > 0 && (
+          <div className="workbench-task-ac">
+            <h3>Acceptance criteria</h3>
+            <ul>
+              {fields.acceptance.map((line) => (
+                <li key={line}>{line}</li>
+              ))}
+            </ul>
+          </div>
+        )}
+
+        {!prose && fields.acceptance.length === 0 && task.description && (
+          <pre className="workbench-task-raw">{task.description}</pre>
+        )}
+
+        {!waitingOnLesson && !assistOpen && (
+          <div className="workbench-assist-start workbench-assist-start-inline">
+            <p className="workbench-assist-blurb">
+              Stuck or learning the pattern for this task? Assist Me opens a guided lesson in a full tab — you
+              stay on this task.
+            </p>
+            <button type="button" className="workbench-assist-btn" onClick={openAssistance}>
+              Assist me
+            </button>
+          </div>
+        )}
+
+        {isJS && !assistOpen && (
+          <div className="workbench-submit-box">
+            <h3>Submit your work (Pull Request)</h3>
+            <ol className="workbench-submit-steps">
+              <li>
+                Clone the project repo
+                {cloneUrl ? (
+                  <>
+                    : <code>{cloneUrl}</code>
+                  </>
+                ) : (
+                  " from OneDev (project git URL)."
+                )}
+              </li>
+              <li>
+                Create a branch, e.g. <code>{branchHint}</code>
+              </li>
+              <li>Implement the acceptance criteria above (Assist Me helps with the pattern).</li>
+              <li>
+                Push the branch, then open a Pull Request into <code>main</code> at{" "}
+                <a href={pullsUrl} target="_blank" rel="noreferrer">
+                  {pullsUrl}
+                </a>
+              </li>
+              <li>CD Review picks up the PR for human review (CI later).</li>
+            </ol>
+          </div>
+        )}
+      </section>
+
+      {assistOpen && (
+        <section
+          className="workbench-task-panel workbench-task-panel-assist"
+          role="tabpanel"
+          hidden={tab !== "assistance"}
+        >
+          <TaskAssistPanel
+            task={task}
+            publishedModules={publishedModules}
+            autoStart
+            onCloseLesson={closeAssistance}
+          />
+        </section>
+      )}
     </div>
   );
 }
 
 export default function Workbench() {
   const { session, status: authStatus } = useAuth();
-  // A JS applicant gets a "your tasks only" view (myTasks* state below) — a -core account gets the
-  // existing full admin-style board (every project, every task). Was undifferentiated until now:
-  // founder call 2026-08-09, found live when a JS's "View your task" link landed on the exact same
-  // full project switcher + every product's board that Core Studio uses to manage everything.
-  const isJS = session?.accountType === "js";
+  const isJS = session?.accountType === "js" && !hasRole(session, OPS_ROLES);
 
   const [projects, setProjects] = useState([]);
   const [projectId, setProjectId] = useState(null);
@@ -213,16 +524,15 @@ export default function Workbench() {
   const [publishedModules, setPublishedModules] = useState([]);
   const [searchParams, setSearchParams] = useSearchParams();
   const completedTaskId = searchParams.get("tutorialCompleted");
-  // Deep link from Apply's "You're matched" screen (recruit-router.js's response carries both ids) —
-  // lands you on the right project with your actual task highlighted, instead of the default first
-  // project with no indication which of possibly 100+ cards is yours. Only meaningful for the
-  // -core board view below; the JS view doesn't need it (there's nothing to scroll through).
   const highlightTaskId = searchParams.get("highlightTaskId");
   const highlightProjectId = searchParams.get("highlightProjectId");
+  const openTaskParam = searchParams.get("openTask");
 
   const [myTasks, setMyTasks] = useState([]);
   const [myTasksLoading, setMyTasksLoading] = useState(true);
   const [myTasksError, setMyTasksError] = useState("");
+  const [openedTask, setOpenedTask] = useState(null);
+  const [wireNote, setWireNote] = useState("");
 
   useEffect(() => {
     if (!isJS) return;
@@ -248,7 +558,7 @@ export default function Workbench() {
         )
       )
       .catch(() => {});
-  }, []); // needed by both views — AssistMeButton renders in the JS view's cards too
+  }, []);
 
   const loadIssues = useCallback(async (pid) => {
     if (!pid) return;
@@ -256,9 +566,45 @@ export default function Workbench() {
     setIssues(data.filter((i) => i.projectId === pid));
   }, []);
 
+  // Workbench listens: when ID publishes a Module Library lesson, NeedsTutorial + DraftModule
+  // tasks get AssistModule automatically. Poll while this screen is open.
   useEffect(() => {
-    // Wait for auth to resolve before deciding which board to load — a JS account doesn't need the
-    // full every-project/every-task fetch this effect does at all (myTasks* above covers it).
+    let cancelled = false;
+    async function syncWiring() {
+      try {
+        const res = await fetch("/api/id/sync-wiring");
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok || cancelled) return;
+        if (data.wiredCount > 0) {
+          setWireNote(
+            isJS
+              ? "A guided lesson just became available on one of your tasks — open the task and use Assist Me."
+              : `Wired ${data.wiredCount} task${data.wiredCount === 1 ? "" : "s"} to newly published assistance lessons.`
+          );
+          if (isJS) {
+            fetch("/api/recruit/my-tasks")
+              .then((r) => r.json())
+              .then((d) => {
+                if (!cancelled && d.tasks) setMyTasks(d.tasks);
+              })
+              .catch(() => {});
+          } else if (projectId) {
+            loadIssues(projectId).catch(() => {});
+          }
+        }
+      } catch {
+        /* ignore transient */
+      }
+    }
+    syncWiring();
+    const id = setInterval(syncWiring, 12000);
+    return () => {
+      cancelled = true;
+      clearInterval(id);
+    };
+  }, [isJS, projectId, loadIssues]);
+
+  useEffect(() => {
     if (authStatus === "loading") return;
     if (isJS) {
       setLoading(false);
@@ -267,10 +613,11 @@ export default function Workbench() {
     (async () => {
       try {
         const data = await api("/projects?offset=0&count=100");
-        setProjects(data);
-        if (data.length > 0) {
-          const targetId = highlightProjectId ? Number(highlightProjectId) : data[0].id;
-          const initialProject = data.some((p) => p.id === targetId) ? targetId : data[0].id;
+        const delivery = data.filter(isDeliveryProject);
+        setProjects(delivery);
+        if (delivery.length > 0) {
+          const targetId = highlightProjectId ? Number(highlightProjectId) : delivery[0].id;
+          const initialProject = delivery.some((p) => p.id === targetId) ? targetId : delivery[0].id;
           setProjectId(initialProject);
           await loadIssues(initialProject);
         }
@@ -280,26 +627,45 @@ export default function Workbench() {
         setLoading(false);
       }
     })();
-    // highlightProjectId deliberately only matters at first mount (the URL that got you here) —
-    // same reasoning as the lazy-capture pattern in Apply.jsx's login-code exchange.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loadIssues, authStatus, isJS]);
 
-  // Scroll the highlighted card into view exactly once, after the board has actually rendered —
-  // an inline ref callback re-fires on every render and fights itself mid-scroll (found live: the
-  // card ended up correctly highlighted but nowhere near the viewport). A one-shot effect gated on
-  // `loading` flipping false is the fix; requestAnimationFrame waits one more paint so layout is settled.
+  // Deep-link / lesson-return → open task detail once lists are ready.
   useEffect(() => {
-    if (loading || !highlightTaskId) return;
+    const id = openTaskParam || completedTaskId || highlightTaskId;
+    if (!id) return;
+    const pool = isJS ? myTasks : issues;
+    if (!pool?.length) return;
+    const found = pool.find((t) => String(t.id) === String(id));
+    if (found) setOpenedTask(found);
+  }, [openTaskParam, completedTaskId, highlightTaskId, myTasks, issues, isJS]);
+
+  useEffect(() => {
+    if (loading || !highlightTaskId || openedTask) return;
     const raf = requestAnimationFrame(() => {
       document.querySelector(`[data-task-id="${highlightTaskId}"]`)?.scrollIntoView({ block: "center" });
     });
     return () => cancelAnimationFrame(raf);
-  }, [loading, highlightTaskId]);
+  }, [loading, highlightTaskId, openedTask]);
+
+  function openTask(task) {
+    setOpenedTask(task);
+    const next = new URLSearchParams(searchParams);
+    next.set("openTask", String(task.id));
+    setSearchParams(next, { replace: true });
+  }
+
+  function closeTask() {
+    setOpenedTask(null);
+    const next = new URLSearchParams(searchParams);
+    next.delete("openTask");
+    setSearchParams(next, { replace: true });
+  }
 
   async function handleProjectChange(e) {
     const pid = Number(e.target.value);
     setProjectId(pid);
+    setOpenedTask(null);
     setLoading(true);
     try {
       await loadIssues(pid);
@@ -328,44 +694,98 @@ export default function Workbench() {
     }
   }
 
-  // A JS applicant only ever sees their own matched task(s) — no project switcher, no other
-  // products' boards, no "+ Add task" (that's core-team territory). Deliberately a separate return,
-  // not another branch woven into the board below: the two views share almost nothing structurally
-  // once the full project/task board is off the table.
   if (isJS) {
+    if (openedTask) {
+      return (
+        <div className="workbench">
+          <header className="workbench-header">
+            <div className="workbench-kicker">Your work</div>
+            <h1>Your tasks</h1>
+          </header>
+          <OpenTaskView
+            task={openedTask}
+            publishedModules={publishedModules}
+            onBack={closeTask}
+            isJS
+            projects={projects}
+          />
+        </div>
+      );
+    }
+
     return (
       <div className="workbench">
         <header className="workbench-header">
-          <div className="workbench-kicker">Workbench</div>
+          <div className="workbench-kicker">Your work</div>
           <h1>Your tasks</h1>
-          <p className="workbench-sub">Whatever you're matched to shows up here — click in and start building.</p>
+          <p className="workbench-sub">Open a task to start. If you need help, Assist Me is inside each task.</p>
         </header>
+
+        {wireNote && <div className="workbench-tutorial-done">{wireNote}</div>}
+
+        {completedTaskId && (
+          <div className="workbench-tutorial-done">
+            ✓ Tutorial completed for task #{completedTaskId}. You&apos;re back on the task.
+            <button
+              type="button"
+              onClick={() => {
+                const next = new URLSearchParams(searchParams);
+                next.delete("tutorialCompleted");
+                setSearchParams(next);
+              }}
+            >
+              Dismiss
+            </button>
+          </div>
+        )}
 
         {myTasksError && <div className="workbench-error">{myTasksError}</div>}
         {myTasksLoading && <div className="workbench-loading">Loading your tasks…</div>}
 
         {!myTasksLoading && myTasks.length === 0 && !myTasksError && (
           <div className="workbench-empty-state">
-            No tasks assigned yet. If you just applied, you're queued — we'll match you automatically the moment
-            something opens up. <a href="#/apply">Check your application status</a>.
+            No tasks assigned yet. If you just applied, you&apos;re queued — we&apos;ll match you automatically the
+            moment something opens up. <a href="#/apply">Check your application status</a>.
           </div>
         )}
 
         {!myTasksLoading && myTasks.length > 0 && (
           <div className="workbench-cards workbench-my-tasks">
             {myTasks.map((issue) => (
-              <div className="workbench-card" key={issue.id} data-task-id={issue.id}>
+              <button
+                type="button"
+                className="workbench-card workbench-card-button"
+                key={issue.id}
+                data-task-id={issue.id}
+                onClick={() => openTask(issue)}
+              >
                 <div className="workbench-card-num">
                   #{issue.number} · {issue.project}
                 </div>
                 <div className="workbench-card-title">{issue.title}</div>
-                {issue.description && <div className="workbench-card-desc">{issue.description}</div>}
-                <AssistMeButton task={issue} publishedModules={publishedModules} />
-                <TryCoreLesson task={issue} />
-              </div>
+                <div className="workbench-card-open-hint">Open task →</div>
+              </button>
             ))}
           </div>
         )}
+      </div>
+    );
+  }
+
+  if (openedTask) {
+    return (
+      <div className="workbench">
+        <header className="workbench-header">
+          <div className="workbench-kicker">Workbench</div>
+          <h1>Where the work actually happens</h1>
+        </header>
+        <OpenTaskView
+          task={openedTask}
+          publishedModules={publishedModules}
+          onBack={closeTask}
+          isJS={false}
+          projects={projects}
+        />
       </div>
     );
   }
@@ -375,7 +795,6 @@ export default function Workbench() {
     state: s,
     items: issues.filter((i) => i.state === s),
   }));
-  // Anything with a state outside the two known ones (custom workflow) still shows up.
   const otherStates = [...new Set(issues.map((i) => i.state).filter((s) => !states.includes(s)))];
   for (const s of otherStates) grouped.push({ state: s, items: issues.filter((i) => i.state === s) });
 
@@ -385,9 +804,11 @@ export default function Workbench() {
         <div className="workbench-kicker">Workbench</div>
         <h1>Where the work actually happens</h1>
         <p className="workbench-sub">
-          Backed by OneDev — invisible plumbing underneath. This is the only screen PJT and JS use day to day.
+          Open a task to see details and Assist Me. Workbench wires published lessons onto waiting tasks automatically.
         </p>
       </header>
+
+      {wireNote && <div className="workbench-tutorial-done">{wireNote}</div>}
 
       {projects.length > 0 && (
         <div className="workbench-project-select">
@@ -411,7 +832,7 @@ export default function Workbench() {
             const completedTask = issues.find((i) => i.id === Number(completedTaskId));
             return completedTask ? ` — "${completedTask.title}"` : ` for task #${completedTaskId}`;
           })()}
-          . You're back — pick up the task below.
+          . You&apos;re back — pick up the task below.
           <button type="button" onClick={() => setSearchParams({})}>
             Dismiss
           </button>
@@ -420,6 +841,12 @@ export default function Workbench() {
 
       {error && <div className="workbench-error">{error}</div>}
       {loading && <div className="workbench-loading">Loading…</div>}
+
+      {!loading && projects.length === 0 && !error && (
+        <div className="workbench-empty-state">
+          No delivery products yet — publish one from <a href="#/pd-studio">PD Studio</a>.
+        </div>
+      )}
 
       {!loading && projectId && (
         <>
@@ -448,17 +875,19 @@ export default function Workbench() {
                 </h2>
                 <div className="workbench-cards">
                   {col.items.map((issue) => (
-                    <div
-                      className={`workbench-card${String(issue.id) === highlightTaskId ? " workbench-card-highlight" : ""}`}
+                    <button
+                      type="button"
+                      className={`workbench-card workbench-card-button${
+                        String(issue.id) === highlightTaskId ? " workbench-card-highlight" : ""
+                      }`}
                       key={issue.id}
                       data-task-id={issue.id}
+                      onClick={() => openTask(issue)}
                     >
                       <div className="workbench-card-num">#{issue.number}</div>
                       <div className="workbench-card-title">{issue.title}</div>
-                      {issue.description && <div className="workbench-card-desc">{issue.description}</div>}
-                      <AssistMeButton task={issue} publishedModules={publishedModules} />
-                      <TryCoreLesson task={issue} />
-                    </div>
+                      <div className="workbench-card-open-hint">Open →</div>
+                    </button>
                   ))}
                   {col.items.length === 0 && <div className="workbench-empty">Nothing here</div>}
                 </div>
@@ -469,7 +898,7 @@ export default function Workbench() {
       )}
 
       {!loading && projects.length === 0 && (
-        <div className="workbench-empty-state">No projects in OneDev yet — create one via its API or admin UI first.</div>
+        <div className="workbench-empty-state">No delivery projects yet — publish from PD Studio first.</div>
       )}
     </div>
   );

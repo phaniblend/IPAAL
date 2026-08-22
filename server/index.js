@@ -541,8 +541,9 @@ app.post("/api/lessons/feedback-annotate", async (req, res) => {
     const h = String(hint || "").trim();
     const base = fb || h || "Review the step requirements and add the missing required pattern.";
     const safe = base.replace(/\r?\n+/g, " ").trim();
+    const coach = `On this line you started the solution — but you still need: ${safe}`;
     return res.json({
-      annotatedCode: `// Feedback: ${safe}\n// Focus: add the missing required pattern for this step.\n${String(userCode)}`,
+      annotatedCode: `// ${coach}\n${String(userCode)}`,
       note: "fallback-without-ai-key",
     });
   }

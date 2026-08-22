@@ -1,4 +1,4 @@
-# IPF Handoff — Inpact Platform Foundation
+# IPF Handoff — Inpact PlatForm
 
 **Engineering handoff — 2026-08-09.** A current-state snapshot for whoever picks this up next. For the
 full chronological build log (every decision, every bug found and fixed, every live-verification), read
@@ -96,14 +96,18 @@ whole build assumes).
 
 ### LDAP seed data (`ou=core,dc=inpact,dc=live`)
 
-| Name | uid | coreRole |
-|---|---|---|
-| Priya Sharma | `priya_sharma` | PD-core |
-| Arjun Mehta | `arjun_mehta` | PMGT-core |
-| Kavya Nair | `kavya_nair` | ID-core |
+| Name | uid | coreRole | Notes |
+|---|---|---|---|
+| Priya Sharma | `priya_sharma` | PD-core | Original seed |
+| Arjun Mehta | `arjun_mehta` | PMGT-core | Original seed |
+| Kavya Nair | `kavya_nair` | ID-core | Original seed |
+| PD Core | `PD_Core` | PD-core | Dev test — password `inpact` |
+| ID Core | `ID_core` | ID-core | Dev test — password `inpact` |
+| PM Core | `PM_Core` | PMGT-core | Dev test — password `inpact` |
 
-Passwords are in your own setup notes, not reproduced here. Anonymous LDAP reads are disabled (a real admin
-bind is required even for the uid→DN lookup step).
+Original seed passwords are in your own setup notes. Re-seed the three `*_Core` test users with
+`scripts/seed-ldap-core-test-users.ldif` (`ldapadd` as admin). Anonymous LDAP reads are disabled (a real
+admin bind is required even for the uid→DN lookup step).
 
 ### Paid / external APIs
 

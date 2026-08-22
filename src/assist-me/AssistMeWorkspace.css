@@ -14,7 +14,58 @@
   font-size: 14px;
 }
 
-/* --- three-column layout --- */
+.amw-engine {
+  min-height: 100vh;
+  background: #0f172a;
+}
+
+.amw-engine-embedded {
+  min-height: calc(100vh - 280px);
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid #334155;
+}
+
+.amw-engine-bar-embedded {
+  position: static;
+}
+
+.amw-embedded {
+  min-height: 50vh;
+}
+
+.amw-engine-bar {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 14px;
+  background: #0f172a;
+  color: #e2e8f0;
+  font-family: 'DM Mono', monospace;
+  font-size: 12px;
+  border-bottom: 1px solid #334155;
+}
+
+.amw-engine-bar button {
+  background: transparent;
+  border: 1px solid #475569;
+  color: #e2e8f0;
+  border-radius: 4px;
+  padding: 4px 10px;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 11px;
+}
+
+.amw-engine-bar button:hover {
+  border-color: #94a3b8;
+}
+
+/* --- three-column layout (legacy; mode=here now uses IPAAL engine) --- */
 .amw-three-col {
   display: grid;
   grid-template-columns: 200px 1fr 380px;

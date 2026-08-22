@@ -1,12 +1,8 @@
 import InpactLogo from './components/InpactLogo.jsx'
 
 /**
- * Shown once, right after the cinematic intro's "Start doing" click and before we commit to either
- * path — this is the fork between IPF's real-work track (SpecForge tasks, matched by trade/skill,
- * reviewed like a real PR) and the plain self-paced lesson catalog (the existing restaurant-
- * management-themed modules). Same visual language as LandingPage.jsx's LP tokens: light background,
- * DM Sans, cyan (#00d4ff / #0891b2) accents — deliberately not the cinematic canvas, since this is a
- * real decision point, not a hook.
+ * Fallback fork if something still lands here after the cinematic CTA — same two paths as
+ * CinematicLanding: product-team experience (Apply) vs self-paced React+TS lessons.
  */
 export default function EnterpriseReadinessGate({ onApply, onJustLessons }) {
   return (
@@ -39,7 +35,7 @@ export default function EnterpriseReadinessGate({ onApply, onJustLessons }) {
             marginBottom: '10px',
           }}
         >
-          Before you start
+          Your path
         </div>
 
         <h1
@@ -51,23 +47,12 @@ export default function EnterpriseReadinessGate({ onApply, onJustLessons }) {
             margin: '0 0 18px',
           }}
         >
-          This isn&apos;t a typical React course.
+          This isn&apos;t a coding course. This is the industry.
         </h1>
 
-        <p style={{ fontSize: '15px', lineHeight: 1.7, color: '#334155', margin: '0 0 14px' }}>
-          Most lessons here stop at teaching React syntax. Ours don&apos;t — they&apos;re built to give you{' '}
-          <strong style={{ color: '#0f172a', fontWeight: 600 }}>real enterprise dev-environment readiness</strong>:
-          real tasks matched to your trade and level, real code review, real tooling — the kind of experience you can
-          point to with a reference for what you actually built here, not just a certificate for lessons completed.
-        </p>
-
         <p style={{ fontSize: '15px', lineHeight: 1.7, color: '#334155', margin: '0 0 26px' }}>
-          That path starts with a short application so we can match you to real, open work. If you&apos;d rather just
-          learn React at your own pace first, that&apos;s here too — no application needed.
-        </p>
-
-        <p style={{ fontSize: '16px', fontWeight: 600, color: '#0f172a', margin: '0 0 20px' }}>
-          Do you want to continue? It's absolutely free forever.
+          An experience builder — you join a product team, learn by doing, and ship enterprise
+          software in the tech and trade you choose. Ready to continue? It&apos;s absolutely free.
         </p>
 
         <div
@@ -83,7 +68,7 @@ export default function EnterpriseReadinessGate({ onApply, onJustLessons }) {
             onClick={onApply}
             style={{
               width: '100%',
-              maxWidth: '360px',
+              maxWidth: '420px',
               padding: '13px 22px',
               background: '#0891b2',
               color: '#fff',
@@ -93,16 +78,17 @@ export default function EnterpriseReadinessGate({ onApply, onJustLessons }) {
               fontSize: '15px',
               cursor: 'pointer',
               fontFamily: "'DM Sans', sans-serif",
+              lineHeight: 1.35,
             }}
           >
-            Yes, I&apos;ll apply
+            Yes — take me to the experience (then Apply)
           </button>
           <button
             type="button"
             onClick={onJustLessons}
             style={{
               width: '100%',
-              maxWidth: '360px',
+              maxWidth: '420px',
               padding: '11px 22px',
               background: 'transparent',
               color: '#0891b2',
@@ -112,9 +98,10 @@ export default function EnterpriseReadinessGate({ onApply, onJustLessons }) {
               fontSize: '15px',
               cursor: 'pointer',
               fontFamily: "'DM Sans', sans-serif",
+              lineHeight: 1.35,
             }}
           >
-            No, I just want React lessons
+            Not yet — just teach me React with TypeScript
           </button>
         </div>
       </div>

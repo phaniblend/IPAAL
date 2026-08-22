@@ -6,7 +6,7 @@ const TEAM_OPS_PROJECT_ID = 3;
 
 async function api(path) {
   const res = await fetch(`/onedev-api${path}`);
-  if (!res.ok) throw new Error(`OneDev API ${res.status}: ${await res.text()}`);
+  if (!res.ok) throw new Error(`Request failed (${res.status})`);
   return res.json();
 }
 

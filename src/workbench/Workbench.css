@@ -301,30 +301,7 @@
   border-radius: 4px;
 }
 
-.workbench-empty-state {
-  padding: 24px;
-  text-align: center;
-  color: #64748b;
-  font-family: 'DM Mono', monospace;
-  font-size: 13px;
-}
-
-/* Thin-slice core-lesson routing (§5a-4) — indigo, deliberately distinct from the cyan Assist Me
- * family, since this opens a different app entirely rather than IPF's own assist modules. */
-.workbench-core-lesson-check {
-  margin-top: 6px;
-  background: #eef2ff;
-  color: #4f46e5;
-  border: 1px solid #c7d2fe;
-  border-radius: 6px;
-  padding: 6px 10px;
-  font-size: 12px;
-  font-weight: 600;
-  cursor: pointer;
-}
-
-.workbench-core-lesson-loading,
-.workbench-core-lesson-hint {
+.workbench-assist-status {
   display: block;
   margin-top: 6px;
   font-size: 12px;
@@ -332,34 +309,18 @@
   font-family: 'DM Mono', monospace;
 }
 
-.workbench-core-lesson-results {
-  margin-top: 6px;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.workbench-core-lesson-link {
-  font-size: 12px;
-  font-family: inherit;
-  color: #4f46e5;
-  text-decoration: none;
-  border: 1px solid #c7d2fe;
-  border-radius: 6px;
-  padding: 6px 10px;
-  background: #eef2ff;
-  cursor: pointer;
-  text-align: left;
-}
-.workbench-core-lesson-link:hover {
-  border-color: #4f46e5;
-  background: #e0e7ff;
-}
-
-.workbench-core-lesson-error {
-  margin: 4px 0 0;
+.workbench-assist-error {
+  margin: 0 0 8px;
   font-size: 12px;
   color: #991b1b;
+}
+
+.workbench-empty-state {
+  padding: 24px;
+  text-align: center;
+  color: #64748b;
+  font-family: 'DM Mono', monospace;
+  font-size: 13px;
 }
 
 .workbench-tutorial-done {
@@ -383,4 +344,286 @@
   padding: 4px 10px;
   font-size: 12px;
   cursor: pointer;
+}
+
+.workbench-card-button {
+  display: block;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+  font: inherit;
+  color: inherit;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.workbench-card-button:hover {
+  border-color: #67e8f9;
+  box-shadow: 0 0 0 1px rgba(8, 145, 178, 0.2);
+}
+
+.workbench-card-open-hint {
+  margin-top: 8px;
+  font-size: 11px;
+  font-family: "DM Mono", monospace;
+  color: #0891b2;
+}
+
+.workbench-lesson-pending {
+  margin: 0 0 16px;
+  padding: 12px 16px;
+  background: #fffbeb;
+  border: 1px solid #fde68a;
+  color: #92400e;
+  border-radius: 8px;
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.workbench-task-back {
+  background: none;
+  border: none;
+  color: #0891b2;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0;
+  margin-bottom: 12px;
+}
+
+.workbench-task-tabs {
+  display: flex;
+  gap: 0;
+  margin: 4px 0 16px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.workbench-task-tab {
+  appearance: none;
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  padding: 10px 16px;
+  font-family: "Syne", sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: #64748b;
+  cursor: pointer;
+}
+
+.workbench-task-tab:hover {
+  color: #0f172a;
+}
+
+.workbench-task-tab.is-active {
+  color: #0f172a;
+  border-bottom-color: #0891b2;
+}
+
+.workbench-task-panel {
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 20px 22px;
+  min-height: 60vh;
+}
+
+.workbench-task-panel-assist {
+  padding: 12px;
+  background: #0f172a;
+  border-color: #334155;
+  min-height: calc(100vh - 220px);
+}
+
+.workbench-task-panel-assist .workbench-assist-start,
+.workbench-task-panel-assist .workbench-assist-popover {
+  background: #fff;
+  border-radius: 8px;
+  padding: 18px 20px;
+}
+
+.workbench-task-assist-hint {
+  margin: 20px 0 0;
+  padding-top: 16px;
+  border-top: 1px solid #e2e8f0;
+  font-size: 13px;
+  color: #64748b;
+}
+
+.workbench-task-assist-link {
+  appearance: none;
+  background: none;
+  border: none;
+  padding: 0;
+  color: #0891b2;
+  font-weight: 600;
+  font-size: inherit;
+  cursor: pointer;
+}
+
+.workbench-task-assist-link:hover {
+  text-decoration: underline;
+}
+
+.workbench-task-layout {
+  display: block;
+}
+
+.workbench-task-main {
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 20px 22px;
+}
+
+.workbench-task-title {
+  font-family: "Syne", sans-serif;
+  font-size: 22px;
+  margin: 6px 0 12px;
+}
+
+.workbench-task-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 16px;
+  font-size: 12px;
+  color: #64748b;
+  margin-bottom: 14px;
+}
+
+.workbench-task-meta strong {
+  color: #0f172a;
+  font-weight: 600;
+}
+
+.workbench-task-body {
+  font-size: 14px;
+  line-height: 1.55;
+  color: #334155;
+  white-space: pre-wrap;
+}
+
+.workbench-task-ac h3,
+.workbench-task-assist h3 {
+  font-family: "Syne", sans-serif;
+  font-size: 14px;
+  margin: 0 0 10px;
+}
+
+.workbench-task-ac ul {
+  margin: 0;
+  padding-left: 18px;
+  color: #334155;
+  font-size: 13.5px;
+  line-height: 1.45;
+}
+
+.workbench-task-raw {
+  font-family: "DM Mono", monospace;
+  font-size: 11px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  padding: 12px;
+  overflow: auto;
+  white-space: pre-wrap;
+  color: #475569;
+}
+
+.workbench-task-assist {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 16px 18px;
+  min-height: 200px;
+}
+
+.workbench-assist-blurb {
+  font-size: 13px;
+  color: #64748b;
+  margin: 0 0 12px;
+  line-height: 1.45;
+}
+
+.workbench-assist-start-inline {
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid #e2e8f0;
+}
+
+.workbench-submit-box {
+  margin-top: 24px;
+  padding: 16px 18px;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  background: #f8fafc;
+}
+
+.workbench-submit-box h3 {
+  margin: 0 0 10px;
+  font-size: 15px;
+  color: #0f172a;
+}
+
+.workbench-submit-steps {
+  margin: 0;
+  padding-left: 18px;
+  font-size: 13px;
+  color: #334155;
+  line-height: 1.55;
+}
+
+.workbench-submit-steps code {
+  font-size: 12px;
+  background: #e2e8f0;
+  padding: 1px 5px;
+  border-radius: 4px;
+}
+
+.workbench-submit-steps a {
+  color: #0369a1;
+}
+
+.workbench-task-panel[hidden],
+.workbench-task-panel-assist[hidden] {
+  display: none !important;
+}
+
+.workbench-assist-embed {
+  margin: 0;
+  min-height: calc(100vh - 260px);
+}
+
+.workbench-assist-embed-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 8px;
+  font-size: 12px;
+  font-family: "DM Mono", monospace;
+  color: #cbd5e1;
+}
+
+.workbench-assist-embed-bar button {
+  font-size: 12px;
+  padding: 4px 10px;
+  border-radius: 6px;
+  border: 1px solid #475569;
+  background: #1e293b;
+  color: #e2e8f0;
+  cursor: pointer;
+}
+
+.workbench-assist-iframe {
+  width: 100%;
+  min-height: calc(100vh - 280px);
+  border: 1px solid #334155;
+  border-radius: 8px;
+  background: #fff;
+}
+
+.workbench:has(.workbench-task-open) {
+  max-width: min(1400px, 100%);
+  padding-top: 24px;
 }

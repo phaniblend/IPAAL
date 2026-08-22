@@ -592,6 +592,14 @@ function buildFeedbackOnlyGuidance(text) {
   return "Feedback: review the task requirements, verify behavior step-by-step, and ensure type correctness.";
 }
 
+/** Fix 2: pre-check concept hint shown in the Hint & Feedback modal before any code check has
+ * run on this step — labeled "Hint" (not "Feedback") since nothing has been evaluated yet. */
+function buildPreCheckHintGuidance(text) {
+  const raw = String(text || "").trim();
+  if (!raw) return "";
+  return /^\s*hint\s*:/i.test(raw) ? raw : `Hint: ${raw}`;
+}
+
 function stripFormattingOnlyCommentsFromAnnotatedCode(annotatedCode) {
   const text = String(annotatedCode || "");
   if (!text) return "";
@@ -607,33 +615,169 @@ function stripFormattingOnlyCommentsFromAnnotatedCode(annotatedCode) {
   return cleaned.trim() ? cleaned : text;
 }
 
-/** Inline feedback / focus comment lines in AI-annotated code — green + bold so they read as guidance, not code. */
+function wrapNarrativeLines(text, width = 88) {
+  const words = String(text || "").replace(/\s+/g, " ").trim().split(" ");
+  const rows = [];
+  let row = "";
+  for (const word of words) {
+    if (!word) continue;
+    if (!row) row = word;
+    else if (row.length + 1 + word.length <= width) row += ` ${word}`;
+    else {
+      rows.push(row);
+      row = word;
+    }
+  }
+  if (row) rows.push(row);
+  return rows;
+}
+
+function splitFeedbackIntoBeats(text) {
+  const cleaned = String(text || "")
+    .replace(/^\s*(?:\/\/|#)\s*/, "")
+    .replace(/^\s*(?:Feedback|Focus|NOTE|TIP)\s*:\s*/i, "")
+    .trim();
+  if (!cleaned) return [];
+  return cleaned
+    .split(/(?:;\s+(?=[A-Za-z])|\.\s+(?=Also\b|Use\b|Wrap\b|The\b|If\b|Do\b)|;\s*also\b)/i)
+    .map((part) => part.replace(/^[,;\s]+/, "").trim())
+    .filter(Boolean);
+}
+
+function snippetFromCode(code, max = 56) {
+  const compact = String(code || "").replace(/\s+/g, " ").trim();
+  if (!compact) return "";
+  return compact.length > max ? `${compact.slice(0, max - 1)}…` : compact;
+}
+
+function narrativeBeatsForLine(code, comment) {
+  const beats = splitFeedbackIntoBeats(comment);
+  const snippet = snippetFromCode(code);
+  return beats.map((beat, i) => {
+    let text = beat.trim();
+    if (!text) return "";
+    if (!/[.!?]$/.test(text)) text += ".";
+    if (i === 0 && snippet && !/^(on this line|you wrote)\b/i.test(text)) {
+      const rest = text.charAt(0).toLowerCase() + text.slice(1);
+      return `On this line you wrote \`${snippet}\` — ${rest}`;
+    }
+    return text;
+  }).filter(Boolean);
+}
+
+function splitTrailingAnnotateComment(line) {
+  const text = String(line || "");
+  const labeled = text.match(/^(.*?)(?:\s*\/\/\s*(?:Feedback|Focus|NOTE|TIP)\s*:\s*)(.+)$/i)
+    || text.match(/^(.*?)(?:\s*#\s*(?:Feedback|Focus)\s*:\s*)(.+)$/i);
+  if (labeled) return { code: labeled[1].replace(/\s+$/, ""), comment: labeled[2].trim() };
+  const generic = text.match(/^(.*\S)(?:\s*\/\/\s+)(.{35,})$/);
+  if (
+    generic &&
+    /[a-zA-Z]/.test(generic[1]) &&
+    /(key prop|missing|should|forgot|instead|JSX|callback|template|comma|stable key|do this|you wrote)/i.test(generic[2])
+  ) {
+    return { code: generic[1], comment: generic[2].trim() };
+  }
+  return null;
+}
+
+function isStandaloneCoachComment(line) {
+  const t = String(line || "").trim();
+  return (
+    /^\/\/\s*(Feedback|Focus|NOTE|⚠|~|TIP|On this line|You wrote|Do this)\b/i.test(t) ||
+    /^#\s*(Feedback|Focus)\s*:/i.test(t) ||
+    (/^\/\//.test(t) &&
+      /(missing|incorrect|required pattern|add the missing|Focus:|review your code|you still need|forgot|instead of)/i.test(t))
+  );
+}
+
+function stripCoachCommentPrefix(line) {
+  return String(line || "")
+    .replace(/^\s*(?:\/\/|#)\s*/, "")
+    .replace(/^(?:Feedback|Focus|NOTE|TIP)\s*:\s*/i, "")
+    .trim();
+}
+
+function renderCoachNote(text, key) {
+  const paras = String(text || "").split(/\n\n+/).map((p) => p.trim()).filter(Boolean);
+  return (
+    <div
+      key={key}
+      style={{
+        margin: "8px 0 10px",
+        padding: "8px 10px",
+        background: "#ecfdf5",
+        borderLeft: "3px solid #16a34a",
+        borderRadius: "0 8px 8px 0",
+        color: "#14532d",
+        fontWeight: 600,
+        fontFamily: "Segoe UI, system-ui, sans-serif",
+        fontSize: "12.5px",
+        lineHeight: 1.55,
+        whiteSpace: "pre-wrap",
+        wordBreak: "break-word",
+      }}
+    >
+      <div style={{ fontSize: "10px", letterSpacing: "0.06em", fontWeight: 800, color: "#15803d", marginBottom: "4px" }}>
+        WHAT TO CHANGE
+      </div>
+      {paras.map((para, i) => (
+        <div key={i} style={{ marginTop: i ? 8 : 0 }}>
+          {wrapNarrativeLines(para).join("\n")}
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function renderCodeLine(text, key) {
+  return (
+    <span
+      key={key}
+      style={{
+        display: "block",
+        whiteSpace: "pre-wrap",
+        wordBreak: "break-word",
+        color: "#0f172a",
+        fontWeight: 400,
+        fontFamily: 'ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace',
+      }}
+    >
+      {text.length ? text : "\u00a0"}
+    </span>
+  );
+}
+
+/** Code stays monospace; coaching notes are separate wrapped prose so they are not a green lump. */
 function renderAnnotatedFeedbackCodeLines(code) {
   const lines = String(code || "").split("\n");
-  return lines.map((line, idx) => {
-    const isHighlight =
-      /^\s*\/\/\s*(Feedback|Focus|NOTE|⚠|~|TIP)/i.test(line) ||
-      /\/\/\s*Feedback:/i.test(line) ||
-      /\/\/\s*Focus:/i.test(line) ||
-      /^\s*#\s*(Feedback|Focus)\s*:/i.test(line) ||
-      (/^\s*\/\//.test(line) &&
-        /(missing|incorrect|required pattern|add the missing|Focus:|review your code)/i.test(line)) ||
-      (/^\s*\/\/\s*.*\bFeedback\s*:/i.test(line) && /\b(JSX\.Element|return type)\b/i.test(line));
-    return (
-      <span
-        key={idx}
-        style={{
-          display: "block",
-          whiteSpace: "pre-wrap",
-          wordBreak: "break-word",
-          color: isHighlight ? "#166534" : "#0f172a",
-          fontWeight: isHighlight ? 800 : 400,
-        }}
-      >
-        {line.length ? line : "\u00a0"}
-      </span>
-    );
+  const out = [];
+  let noteBuf = [];
+  const flushNotes = (keyBase) => {
+    if (!noteBuf.length) return;
+    out.push(renderCoachNote(noteBuf.join("\n\n"), `${keyBase}-note`));
+    noteBuf = [];
+  };
+
+  lines.forEach((line, idx) => {
+    const split = splitTrailingAnnotateComment(line);
+    if (split) {
+      if (split.code.trim()) {
+        flushNotes(idx);
+        out.push(renderCodeLine(split.code, `${idx}-code`));
+      }
+      noteBuf.push(...narrativeBeatsForLine(split.code, split.comment));
+      return;
+    }
+    if (isStandaloneCoachComment(line)) {
+      noteBuf.push(...splitFeedbackIntoBeats(stripCoachCommentPrefix(line)));
+      return;
+    }
+    flushNotes(idx);
+    out.push(renderCodeLine(line, `${idx}-code`));
   });
+  flushNotes("end");
+  return out;
 }
 
 function toStructureFingerprint(code) {
@@ -653,20 +797,23 @@ function codeTextUnchangedExceptWhitespace(a, b) {
  * If AI / annotate path fails, attach feedback on the most relevant line (not a block at file top).
  * Uses optional lesson `expected` to spot wrong interface property names vs contract.
  */
-function appendInlineFeedbackFallback(userCode, feedbackText, lessonNode) {
-  const raw = String(userCode || "");
-  const lines = raw.split("\n");
-  const fb = String(feedbackText || "").replace(/\s+/g, " ").trim();
-  const tail = fb.length > 160 ? `${fb.slice(0, 157)}...` : fb;
-  if (!lines.length || !lines.some((l) => l.trim())) {
-    return tail ? `// Feedback: ${tail}` : raw;
-  }
+function insertCoachNotesAboveLine(lines, index, feedbackText, codeLine) {
+  const beats = narrativeBeatsForLine(codeLine, feedbackText);
+  const commentLines = (beats.length ? beats : [String(feedbackText || "").trim()]).flatMap((beat) =>
+    wrapNarrativeLines(beat, 88).map((row) => `// ${row}`)
+  );
+  lines.splice(index, 0, ...commentLines);
+}
 
+function pickFallbackAnnotateIndex(lines, lessonNode, feedbackText) {
+  const blob = `${feedbackText} ${lessonNode?.paal || ""} ${lessonNode?.hint || ""}`.toLowerCase();
+  if (/\bkey\b|\.map\b|jsx/.test(blob)) {
+    const mapIdx = lines.findIndex((l) => /\.map\s*\(/.test(l) || /<\s*(li|p|div|span)\b/.test(l));
+    if (mapIdx >= 0) return mapIdx;
+  }
   const expected = String(lessonNode?.expected || "");
   const expectedFields = [];
   const ifaceCount = (expected.match(/\binterface\b/g) || []).length;
-  // Multi-interface `expected` (e.g. lesson 2 step 3): first block is often StockLineAudit — do not flag
-  // learner property names like `label` as "wrong" vs `id` / `lastVerifiedAt` from that block.
   const skipPropertyNameHeuristic = ifaceCount >= 2 || /\bextends\s+StockLineAudit\b/.test(expected);
   const ifaceBody = !skipPropertyNameHeuristic ? expected.match(/interface\s+\w+\s*\{([\s\S]*?)\}/m) : null;
   if (ifaceBody) {
@@ -674,37 +821,34 @@ function appendInlineFeedbackFallback(userCode, feedbackText, lessonNode) {
       expectedFields.push(mm[1]);
     }
   }
-
   if (expectedFields.length) {
-    for (let i = 0; i < lines.length; i++) {
-      const pm = lines[i].match(/^\s*([a-zA-Z_][a-zA-Z0-9_]*)\s*:\s*\w+/);
-      if (pm && !expectedFields.includes(pm[1])) {
-        const ln = lines[i];
-        if (!/\/\/\s*Feedback:/i.test(ln)) {
-          lines[i] = `${ln.replace(/\s+$/, "")}  // Feedback: ${tail}`;
-          return lines.join("\n");
-        }
-      }
-    }
+    const badProp = lines.findIndex((l) => {
+      const pm = l.match(/^\s*([a-zA-Z_][a-zA-Z0-9_]*)\s*:\s*\w+/);
+      return pm && !expectedFields.includes(pm[1]);
+    });
+    if (badProp >= 0) return badProp;
   }
-
   const typoIface = lines.findIndex((l) => /\binteface\b/i.test(l));
-  if (typoIface >= 0) {
-    const ln = lines[typoIface];
-    if (!/\/\/\s*Feedback:/i.test(ln)) {
-      lines[typoIface] = `${ln.replace(/\s+$/, "")}  // Feedback: did you mean \`interface\`? ${tail}`;
-      return lines.join("\n");
-    }
-  }
-
+  if (typoIface >= 0) return typoIface;
   let idx = lines.findIndex((l) => /\binterface\s+[A-Za-z0-9_]+/.test(l));
   if (idx < 0) idx = lines.findIndex((l) => l.trim());
-  if (idx < 0) idx = 0;
-  const ln = lines[idx];
-  if (/\/\/\s*Feedback:/i.test(ln)) {
-    return `${raw}\n// Feedback: ${tail}`;
+  return idx < 0 ? 0 : idx;
+}
+
+/**
+ * If AI / annotate path fails, put coaching notes on their own lines above the relevant code
+ * (not a long end-of-line comment).
+ */
+function appendInlineFeedbackFallback(userCode, feedbackText, lessonNode) {
+  const raw = String(userCode || "");
+  const lines = raw.split("\n");
+  const fb = String(feedbackText || "").replace(/\s+/g, " ").trim();
+  if (!fb) return raw;
+  if (!lines.length || !lines.some((l) => l.trim())) {
+    return wrapNarrativeLines(`On this line you have no code yet — ${fb}`, 88).map((row) => `// ${row}`).join("\n");
   }
-  lines[idx] = `${ln.replace(/\s+$/, "")}  // Feedback: ${tail}`;
+  const idx = pickFallbackAnnotateIndex(lines, lessonNode, fb);
+  insertCoachNotesAboveLine(lines, idx, fb, lines[idx] || "");
   return lines.join("\n");
 }
 
@@ -847,6 +991,189 @@ function revealNodeHasIntroGateMcq(revealNode) {
   const options = Array.isArray(gate.options) ? gate.options.filter((x) => typeof x === "string" && x.trim()) : [];
   const correct = typeof gate.correct === "string" ? gate.correct.trim() : "";
   return Boolean(scenario && prompt && options.length >= 2 && correct && options.includes(correct));
+}
+
+const MOCK_SHELL = {
+  fontFamily: "Segoe UI, system-ui, sans-serif",
+  background: "#fff",
+  border: "1px solid #e2e8f0",
+  borderRadius: "12px",
+  overflow: "hidden",
+  boxShadow: "0 8px 24px rgba(15,23,42,0.06)",
+};
+const MOCK_CHROME = {
+  display: "flex",
+  alignItems: "center",
+  gap: 6,
+  padding: "8px 12px",
+  background: "#f8fafc",
+  borderBottom: "1px solid #e2e8f0",
+};
+const MOCK_DOT = { width: 8, height: 8, borderRadius: "50%", background: "#cbd5e1", display: "inline-block" };
+
+function LessonDesignMock({ mock }) {
+  if (!mock || typeof mock !== "object") return null;
+  const kind = mock.kind || "list-and-form";
+  const caption = mock.caption || "This is the screen you are building. Match the pieces — not the brand colors.";
+
+  if (String(kind).includes("api")) {
+    const getSample = mock.getSample || "";
+    const postSample = mock.postSample || "";
+    return (
+      <div style={{ margin: "0 0 28px" }}>
+        <div style={{ fontSize: 10, letterSpacing: "0.12em", fontWeight: 800, color: "#64748b", marginBottom: 8 }}>DESIGN MOCK</div>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: 10 }}>
+          <div style={MOCK_SHELL}>
+            <div style={MOCK_CHROME}>
+              <span style={MOCK_DOT} /><span style={MOCK_DOT} /><span style={MOCK_DOT} />
+              <span style={{ fontSize: 11, color: "#64748b", marginLeft: 6 }}>{mock.getLabel || "GET"}</span>
+            </div>
+            <pre style={{ margin: 0, padding: 12, fontSize: 11, lineHeight: 1.45, color: "#0f172a", whiteSpace: "pre-wrap" }}>{getSample}</pre>
+          </div>
+          <div style={MOCK_SHELL}>
+            <div style={MOCK_CHROME}>
+              <span style={MOCK_DOT} /><span style={MOCK_DOT} /><span style={MOCK_DOT} />
+              <span style={{ fontSize: 11, color: "#64748b", marginLeft: 6 }}>{mock.postLabel || "POST"}</span>
+            </div>
+            <pre style={{ margin: 0, padding: 12, fontSize: 11, lineHeight: 1.45, color: "#0f172a", whiteSpace: "pre-wrap" }}>{postSample}</pre>
+          </div>
+        </div>
+        <p style={{ margin: "8px 0 0", fontSize: 12, color: "#64748b", lineHeight: 1.5 }}>{caption}</p>
+      </div>
+    );
+  }
+
+  return <LiveListFormDesignMock mock={mock} caption={caption} />;
+}
+
+function rowFromFormValues(fields, values) {
+  const by = {};
+  fields.forEach((field, i) => {
+    by[String(field.label || "").toLowerCase()] = String(values[i] || "").trim();
+  });
+  if (by.service || by.provider) {
+    return { title: by.service || values[1], subtitle: by.provider || values[0], meta: by["starts at"] || by.startsat || values[2] };
+  }
+  if (by.client) {
+    return { title: by.client, subtitle: by.amount, meta: by["due date"] || by.duedate || values[2] };
+  }
+  return { title: values[0] || "", subtitle: values[1] || "", meta: values[2] || "" };
+}
+
+function LiveListFormDesignMock({ mock, caption }) {
+  const sampleRows = Array.isArray(mock.rows) ? mock.rows : [];
+  const fields = Array.isArray(mock.fields) ? mock.fields : [];
+  const [rows, setRows] = useState(sampleRows);
+  const [values, setValues] = useState(() => fields.map(() => ""));
+
+  function onSubmit(e) {
+    e.preventDefault();
+    if (values.every((v) => !String(v).trim())) return;
+    setRows((prev) => [...prev, rowFromFormValues(fields, values)]);
+    setValues(fields.map(() => ""));
+  }
+
+  return (
+    <div style={{ margin: "0 0 28px" }}>
+      <div style={{ fontSize: 10, letterSpacing: "0.12em", fontWeight: 800, color: "#64748b", marginBottom: 8 }}>DESIGN MOCK — try it</div>
+      <div style={{ ...MOCK_SHELL, maxWidth: 560 }}>
+        <div style={MOCK_CHROME}>
+          <span style={{ ...MOCK_DOT, background: "#f43f5e" }} />
+          <span style={{ ...MOCK_DOT, background: "#f59e0b" }} />
+          <span style={{ ...MOCK_DOT, background: "#22c55e" }} />
+          <span style={{ fontSize: 12, fontWeight: 700, color: "#0f172a", marginLeft: 8 }}>{mock.screenTitle || mock.screenTitle || "App"}</span>
+        </div>
+        <div style={{ padding: 14, display: "grid", gap: 14 }}>
+          <div>
+            <div style={{ fontSize: 10, letterSpacing: "0.08em", color: "#64748b", marginBottom: 6 }}>{mock.listCaption || "LIST"}</div>
+            {rows.length === 0 ? (
+              <div
+                style={{
+                  border: "1px dashed #cbd5e1",
+                  borderRadius: 8,
+                  padding: "16px 12px",
+                  textAlign: "center",
+                  fontSize: 13,
+                  color: "#64748b",
+                  background: "#f8fafc",
+                }}
+              >
+                {mock.emptyMessage || "Nothing here yet."}
+              </div>
+            ) : (
+              <div style={{ border: "1px solid #e2e8f0", borderRadius: 8, overflow: "hidden" }}>
+                {rows.map((row, i) => (
+                  <div
+                    key={`${row.title}-${row.subtitle}-${row.meta}-${i}`}
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      gap: 12,
+                      padding: "10px 12px",
+                      borderTop: i ? "1px solid #f1f5f9" : "none",
+                      background: "#fff",
+                    }}
+                  >
+                    <div>
+                      <div style={{ fontSize: 13, fontWeight: 700, color: "#0f172a" }}>{row.title}</div>
+                      <div style={{ fontSize: 12, color: "#64748b" }}>{row.subtitle}</div>
+                    </div>
+                    <div style={{ fontSize: 12, color: "#334155", whiteSpace: "nowrap" }}>{row.meta}</div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+          <form onSubmit={onSubmit} style={{ display: "grid", gap: 8 }}>
+            <div style={{ fontSize: 10, letterSpacing: "0.08em", color: "#64748b" }}>FORM</div>
+            {fields.map((field, i) => (
+              <label key={field.label} style={{ display: "grid", gap: 4, fontSize: 11, color: "#475569" }}>
+                {field.label}
+                <input
+                  value={values[i] || ""}
+                  placeholder={field.sample || field.sample || ""}
+                  onChange={(e) => {
+                    const next = [...values];
+                    next[i] = e.target.value;
+                    setValues(next);
+                  }}
+                  style={{
+                    border: "1px solid #cbd5e1",
+                    borderRadius: 6,
+                    padding: "8px 10px",
+                    fontSize: 13,
+                    color: "#0f172a",
+                    background: "#fff",
+                    fontFamily: "inherit",
+                  }}
+                />
+              </label>
+            ))}
+            <button
+              type="submit"
+              style={{
+                marginTop: 4,
+                justifySelf: "start",
+                padding: "8px 14px",
+                borderRadius: 8,
+                border: "none",
+                background: "#0891b2",
+                color: "#fff",
+                fontSize: 13,
+                fontWeight: 700,
+                cursor: "pointer",
+              }}
+            >
+              {mock.submitLabel || "Submit"}
+            </button>
+          </form>
+        </div>
+      </div>
+      <p style={{ margin: "8px 0 0", fontSize: 12, color: "#64748b", lineHeight: 1.5 }}>
+        {caption} Type in the boxes and click {mock.submitLabel || "Submit"} — a new row should appear. The empty message shows when the list has no rows.
+      </p>
+    </div>
+  );
 }
 
 export default function createINPACTEngine(config) {
@@ -2117,6 +2444,11 @@ export default function createINPACTEngine(config) {
             <h1 style={s.h1}>{revealTitle}</h1>
             <RichLearnerText text={revealBody} style={s.pre} />
           </div>
+          {c.designMock ? (
+            <div style={revealPadding}>
+              <LessonDesignMock mock={c.designMock} />
+            </div>
+          ) : null}
           {c.usecase && <div style={{ ...revealPadding, background: "rgba(8,145,178,0.08)", border: "1px solid rgba(8,145,178,0.25)", borderLeft: "3px solid #0891b2", borderRadius: "8px", padding: "16px 20px", marginBottom: "28px" }}><div style={{ fontSize: "10px", letterSpacing: "2px", color: "#0891b2", marginBottom: "8px" }}>💡 WHY THIS MATTERS</div><RichLearnerText text={c.usecase} variant="muted" style={{ fontSize: "14px", color: "#475569", lineHeight: "1.7" }} /></div>}
           <div style={s.btnRow}><button type="button" className="inpact-btn-primary" style={s.btn("primary")} onClick={next}>CONTINUE →</button></div>
         </div>
@@ -2615,6 +2947,7 @@ export default function createINPACTEngine(config) {
                   </div>
                 )}
                 {feedbackVisualTone !== "correct" &&
+                  (attempts > 0 || hasPassedCurrentQuestionStep) &&
                   getMergedCodeForKeywordEval().trim() &&
                   (feedbackPlainForAnnotate.trim() || String(node?.hint || "").trim()) && (
                     <div style={{ marginTop: "14px" }}>
@@ -2662,11 +2995,21 @@ export default function createINPACTEngine(config) {
                                 (structureMatchesUserCode && codeTextUnchangedExceptWhitespace(userCode, finalAnnotated)));
                             const fallbackAnnotated = appendInlineFeedbackFallback(userCode, fb, node);
                             setFeedbackAnnotatedCode(shouldUseFallback ? fallbackAnnotated : finalAnnotated);
-                          } catch (e) {
-                            setFeedbackAnnotatedCode(null);
-                            setFeedbackAnnotateError(
-                              e && typeof e.message === "string" ? e.message : "Could not map feedback to your code."
-                            );
+                          } catch {
+                            const userCode = getMergedCodeForKeywordEval();
+                            const rawFbForAnnotate =
+                              feedbackPlainForAnnotate.trim() ||
+                              String(node?.hint || "").trim() ||
+                              "Review your code against the step task.";
+                            const fbSafe = buildFeedbackOnlyGuidance(rawFbForAnnotate).replace(/^Feedback:\s*/i, "").trim();
+                            const fallbackAnnotated = appendInlineFeedbackFallback(userCode, fbSafe, node);
+                            if (String(fallbackAnnotated || "").trim()) {
+                              setFeedbackAnnotatedCode(fallbackAnnotated);
+                              setFeedbackAnnotateError("");
+                            } else {
+                              setFeedbackAnnotatedCode(null);
+                              setFeedbackAnnotateError("Could not map feedback onto your code. Read the hint above and try again.");
+                            }
                           } finally {
                             setFeedbackAnnotateLoading(false);
                           }
@@ -2675,7 +3018,7 @@ export default function createINPACTEngine(config) {
                         {feedbackAnnotateLoading ? "Preparing…" : "Annotate my code with this feedback"}
                       </button>
                       <p style={{ fontSize: "11px", color: "#64748b", margin: "8px 0 0", lineHeight: 1.45 }}>
-                        Adds brief inline comments at the relevant lines (and small corrections where needed) so the feedback connects directly to your submission.
+                        Walks your submission line by line: your code stays as code, and a short note under it says what you wrote versus what this step still needs.
                       </p>
                     </div>
                   )}
@@ -2705,7 +3048,7 @@ export default function createINPACTEngine(config) {
                         marginBottom: "8px",
                       }}
                     >
-                      YOUR CODE, ANNOTATED
+                      YOUR CODE + NOTES
                     </div>
                     <pre
                       style={{
@@ -2997,7 +3340,9 @@ export default function createINPACTEngine(config) {
                           : "")
                   : (typeof node.mc_think_feedback_incorrect === "string" && node.mc_think_feedback_incorrect.trim()
                       ? node.mc_think_feedback_incorrect.trim()
-                      : "Pick the option that matches the question above — the smallest step that still puts pixels on screen.");
+                      : typeof node.feedback_wrong === "string" && node.feedback_wrong.trim()
+                        ? node.feedback_wrong.trim()
+                        : "Not quite — pick the option that best answers the question above.");
 
                 return (
                   <div
@@ -3059,6 +3404,9 @@ export default function createINPACTEngine(config) {
                           contentMode="blocks"
                           style={{ fontSize: "19px", lineHeight: 1.55, fontWeight: 700, color: "#0f172a" }}
                         />
+                      </div>
+                      <div style={{ marginTop: "10px", fontSize: "12px", fontWeight: 700, letterSpacing: "0.04em", color: "#64748b" }}>
+                        Choose the best answer:
                       </div>
                     </div>
 
@@ -3197,7 +3545,17 @@ export default function createINPACTEngine(config) {
                 : null;
       const staticFbMsg = typeof rawFb === "function" ? rawFb(answer) : rawFb;
       const feedbackPlainForAnnotate = String(aiFeedback || staticFbMsg || "").trim();
-      const fbMsg = buildFeedbackOnlyGuidance(feedbackPlainForAnnotate);
+      /** Fix 2: before any CHECK MY CODE attempt on this step, show a lightweight,
+       * non-answer-revealing concept hint (`node.pre_check_hint`) instead of generic
+       * boilerplate feedback — there is nothing checked yet to give real feedback about.
+       * Falls back to the old generic-fallback behavior when a step has no pre_check_hint
+       * (e.g. lesson tracks other than the generated Assist Me modules), so this is additive. */
+      const hasCheckedThisStep = attempts > 0 || hasPassedCurrentQuestionStep;
+      const preCheckHintMsg =
+        !hasCheckedThisStep && String(node?.pre_check_hint || "").trim()
+          ? buildPreCheckHintGuidance(node.pre_check_hint)
+          : "";
+      const fbMsg = preCheckHintMsg || buildFeedbackOnlyGuidance(feedbackPlainForAnnotate);
       return (
         <div style={{ display: "flex", flexDirection: "column", flex: 1, minHeight: 0, width: "100%", maxWidth: "100%", overflowX: "hidden" }}>
           <div

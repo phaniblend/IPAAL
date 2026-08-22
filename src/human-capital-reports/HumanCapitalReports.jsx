@@ -9,7 +9,7 @@ async function api(path, opts) {
     headers: { "Content-Type": "application/json", ...(opts?.headers || {}) },
     ...opts,
   });
-  if (!res.ok) throw new Error(`OneDev API ${res.status}: ${await res.text()}`);
+  if (!res.ok) throw new Error(`Request failed (${res.status})`);
   return res.json();
 }
 
@@ -102,9 +102,9 @@ export default function HumanCapitalReports() {
         <h1>Evidence, not a resume claim</h1>
         <p className="hcr-sub">
           Every figure below traces back to something that happened on the platform. Skill mastery is intentionally
-          marked pending — it depends on the IPAAL Bridge, which is blocked on <code>DEEPSEEK_API_KEY</code> +
-          Supabase/Firebase config in <code>D:\IPAAL\.env</code>. Nothing here ships externally without the JS's
-          opt-in, per report — that gate isn't built yet either, so treat this as internal-only for now.
+          marked pending — the IPAAL Bridge wiring for mastery evidence is not live yet. Nothing here ships
+          externally without the JS&apos;s opt-in, per report — that gate isn&apos;t built yet either, so treat this
+          as internal-only for now.
         </p>
       </header>
 
@@ -127,7 +127,7 @@ export default function HumanCapitalReports() {
                   <dt>Placed</dt>
                   <dd>{new Date(p.placedOn).toISOString().slice(0, 10)}</dd>
                 </dl>
-                <p className="hcr-source">Source: OneDev issue history</p>
+                <p className="hcr-source">Source: placement history</p>
               </div>
 
               <div className="hcr-block">

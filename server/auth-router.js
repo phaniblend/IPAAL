@@ -172,9 +172,24 @@ router.post("/exchange-login-code", (req, res) => {
   res.json({ ok: true, name: pending.payload.name });
 });
 
-router.get("/me", (req, res) => {
+router.get("/me", async (req, res) => {
   const session = readSessionFromRequest(req);
   if (!session) return res.status(401).json({ error: "Not signed in" });
+  // Live-refresh JS roles so RoleGrant / IPF_SUPER_ADMIN_EMAILS take effect without re-OAuth.
+  if (session.accountType === "js" && session.email) {
+    try {
+      session.roles = await rolesForEmail(session.email);
+      setSessionCookie(res, issueSession({
+        sub: session.sub,
+        name: session.name,
+        email: session.email,
+        accountType: session.accountType,
+        roles: session.roles,
+      }));
+    } catch (err) {
+      console.error("[auth] /me role refresh failed:", err.message);
+    }
+  }
   res.json(session);
 });
 

@@ -128,11 +128,11 @@ export default function UserDashboard({ user }) {
       </p>
 
       {!isSupabaseConfigured ? (
-        <p style={{ color: "#b45309", fontSize: "14px" }}>Progress backup is unavailable (app not connected to Supabase).</p>
+        <p style={{ color: "#b45309", fontSize: "14px" }}>Progress backup is unavailable right now.</p>
       ) : null}
       {isSupabaseConfigured && user?.id && !isSupabaseAuthUserId(user.id) ? (
         <p style={{ color: "#64748b", fontSize: "14px", marginBottom: "16px", lineHeight: 1.55 }}>
-          You’re signed in with Google on this device. Detailed lesson history in this dashboard is tied to Supabase email
+          You’re signed in with Google on this device. Detailed lesson history in this dashboard syncs with email
           accounts for now; yours will show here once that link is enabled, or you can add the same email via&nbsp;
           <strong>Log in</strong> to sync progress in the cloud.
         </p>

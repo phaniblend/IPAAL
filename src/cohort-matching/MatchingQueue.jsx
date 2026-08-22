@@ -1,13 +1,15 @@
 import { useEffect, useState, useCallback } from "react";
 import { notifyTeam } from "../team-messaging/notify.js";
-import { SKILL_LEVELS } from "./skillLevels.js";
+import { SKILL_LEVELS, skillLabel } from "./skillLevels.js";
 import {
   RESERVED_PROJECT_IDS,
   COHORT_PROJECT_ID,
   TEAM_OPS_PROJECT_ID,
   extractApplicationId,
   isAssignable,
+  matchedTaskIds,
   parseApplication,
+  latestAspirationLevel,
   effectiveCeiling as sharedEffectiveCeiling,
   tasksForApplicant as sharedTasksForApplicant,
 } from "./matching.js";
@@ -15,12 +17,23 @@ import "./CohortMatching.css";
 
 const ASPIRATION_OPTIONS = SKILL_LEVELS.filter((l) => l.value !== "none");
 
+/** Human label for Apply's SkillLevel / BeSkillLevel. */
+function existingCodingSkillLabel(skillLevel) {
+  if (!skillLevel) return null;
+  return skillLabel(skillLevel);
+}
+
+function aspirationDisplayLabel(value) {
+  if (!value) return null;
+  return skillLabel(value);
+}
+
 async function api(path, opts) {
   const res = await fetch(`/onedev-api${path}`, {
     headers: { "Content-Type": "application/json", ...(opts?.headers || {}) },
     ...opts,
   });
-  if (!res.ok) throw new Error(`OneDev API ${res.status}: ${await res.text()}`);
+  if (!res.ok) throw new Error(`Couldn't load matching data (${res.status})`);
   return res.json();
 }
 
@@ -39,6 +52,13 @@ export default function MatchingQueue() {
   const [error, setError] = useState("");
   const [placing, setPlacing] = useState(null); // applicationId currently being placed
   const [savingAspiration, setSavingAspiration] = useState(null); // name currently being saved
+  const [rematching, setRematching] = useState(false);
+  const [rematchNote, setRematchNote] = useState("");
+  const [assignEmail, setAssignEmail] = useState("");
+  const [assignName, setAssignName] = useState("");
+  const [assignTaskId, setAssignTaskId] = useState("");
+  const [assigning, setAssigning] = useState(false);
+  const [assignNote, setAssignNote] = useState("");
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -74,6 +94,13 @@ export default function MatchingQueue() {
     load();
   }, [load]);
 
+  // Drop a stale selection if that task got matched since the form was filled.
+  useEffect(() => {
+    if (!assignTaskId) return;
+    const taken = matchedTaskIds(matches);
+    if (taken.has(Number(assignTaskId))) setAssignTaskId("");
+  }, [matches, assignTaskId]);
+
   function projectName(id) {
     return projects.find((p) => p.id === id)?.name ?? `project ${id}`;
   }
@@ -86,6 +113,58 @@ export default function MatchingQueue() {
   }
   function tasksForApplicant(app) {
     return sharedTasksForApplicant(parseApplication(app), tasks, { matches, allIssues, aspirationIssues });
+  }
+  function aspirationFor(app) {
+    const info = parseApplication(app);
+    return latestAspirationLevel(info.Name, info.Aspiration, aspirationIssues);
+  }
+
+  function ApplicantSkillLines({ app }) {
+    const info = parseApplication(app);
+    const feLabel = existingCodingSkillLabel(info.SkillLevel);
+    const beLabel = existingCodingSkillLabel(info.BeSkillLevel);
+    const aspirationLabel = aspirationDisplayLabel(aspirationFor(app));
+    const beAspirationLabel = aspirationDisplayLabel(info.BeAspiration);
+    const ceiling = effectiveCeiling(app);
+    const focus = info.CodingFocus || "";
+    return (
+      <>
+        <div className="cm-app-trade">
+          {info["Stated trade"]}
+          {focus ? ` · ${focus}` : ""}
+        </div>
+        {feLabel && (
+          <div className="cm-app-skill">
+            Frontend skill: <strong>{feLabel}</strong>
+          </div>
+        )}
+        {beLabel && (
+          <div className="cm-app-skill">
+            Backend skill: <strong>{beLabel}</strong>
+          </div>
+        )}
+        {aspirationLabel && (
+          <div className="cm-app-skill">
+            FE aspiration: <strong>{aspirationLabel}</strong>
+          </div>
+        )}
+        {beAspirationLabel && (
+          <div className="cm-app-skill">
+            BE aspiration: <strong>{beAspirationLabel}</strong>
+          </div>
+        )}
+        {ceiling === "advanced" && (
+          <div className="cm-app-skill">
+            <span
+              className="cm-unlocked-badge"
+              title="Can be matched to TypeScript / advanced FE tasks (stated skill, aspiration, or finished a JS task)"
+            >
+              Eligible for TypeScript / advanced FE tasks
+            </span>
+          </div>
+        )}
+      </>
+    );
   }
 
   async function handlePlace(app) {
@@ -108,11 +187,11 @@ export default function MatchingQueue() {
             `TaskId: ${task.id}`,
             `Task: #${task.number} "${task.title}" in ${projectName(task.projectId)}`,
             `StatedTrade: ${info["Stated trade"] || ""}`,
-            `— placed manually from Matching Queue (server/recruit-router.js couldn't auto-match this one at application time)`,
+            `— placed manually from Matching Queue (no automatic match was available at application time)`,
           ].join("\n"),
         }),
       });
-      if (!res.ok) throw new Error(`OneDev API ${res.status}: ${await res.text()}`);
+      if (!res.ok) throw new Error(`Couldn't place applicant (${res.status})`);
       await notifyTeam(
         `🎉 **${info.Name || "A new JS"}** joined **${projectName(task.projectId)}** — placed on #${task.number} "${task.title}" (stated trade: ${info["Stated trade"] || "unspecified"})`
       );
@@ -121,6 +200,60 @@ export default function MatchingQueue() {
       setError(err.message);
     } finally {
       setPlacing(null);
+    }
+  }
+
+  async function handleRematchSweep() {
+    setRematching(true);
+    setError("");
+    setRematchNote("");
+    try {
+      const res = await fetch("/api/recruit/rematch-queued", { method: "POST" });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.error || `Rematch failed (${res.status})`);
+      const n = data.count ?? data.rematched?.length ?? 0;
+      setRematchNote(
+        n === 0
+          ? "Rematch sweep finished — nobody waiting could be placed (no assignable task fit)."
+          : `Rematch sweep placed ${n} applicant${n === 1 ? "" : "s"}.`,
+      );
+      await load();
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setRematching(false);
+    }
+  }
+
+  async function handleAssignByEmail(e) {
+    e.preventDefault();
+    if (!assignEmail.trim() || !assignTaskId) return;
+    setAssigning(true);
+    setError("");
+    setAssignNote("");
+    try {
+      const res = await fetch("/api/recruit/assign-by-email", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: assignEmail.trim(),
+          taskId: Number(assignTaskId),
+          name: assignName.trim() || undefined,
+        }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.error || `Assign failed (${res.status})`);
+      setAssignNote(
+        `Assigned ${data.name} (${data.email}) → #${data.task.number} ${data.task.title} in ${data.task.project}.`
+      );
+      setAssignEmail("");
+      setAssignName("");
+      setAssignTaskId("");
+      await load();
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setAssigning(false);
     }
   }
 
@@ -149,6 +282,9 @@ export default function MatchingQueue() {
 
   const pending = applications.filter((a) => !matchedIds.has(a.id));
   const placed = applications.filter((a) => matchedIds.has(a.id));
+  // Assign-by-email must only offer free tasks — same taken set as tasksForApplicant / auto-match.
+  const takenTaskIds = matchedTaskIds(matches);
+  const unassignedTasks = tasks.filter((t) => !takenTaskIds.has(t.id));
 
   return (
     <div className="cm-queue">
@@ -156,15 +292,68 @@ export default function MatchingQueue() {
         <div className="cm-kicker">Cohort &amp; Matching Engine · Core Studio view</div>
         <h1>Matching queue</h1>
         <p className="cm-sub">
-          Most applicants are matched automatically the moment they apply (see server/recruit-router.js) — what's
-          below is only whoever didn't get an automatic match yet, usually because nothing in their trade is
-          assignable right now. Placing here is manual and immediate; the same trade/level rule applies either
-          way — JS-tier by default, TS/advanced once they've said they're ready or finished a JS task.
+          Most applicants are matched automatically the moment they apply — what&apos;s below is only whoever
+          didn&apos;t get an automatic match yet, usually because nothing in their trade is assignable right now.
+          Placing here is manual and immediate; the same trade/level rule applies either way — JS-tier by default,
+          TS/advanced once they&apos;ve said they&apos;re ready or finished a JS task.
         </p>
+        <div className="cm-header-actions" style={{ marginTop: 12 }}>
+          <button type="button" disabled={rematching || loading} onClick={handleRematchSweep}>
+            {rematching ? "Running rematch…" : "Rematch queued applicants"}
+          </button>
+          {rematchNote && <span className="cm-rematch-note" style={{ marginLeft: 12, color: "#475569", fontSize: 13 }}>{rematchNote}</span>}
+        </div>
       </header>
 
       {error && <div className="cm-error">{error}</div>}
       {loading && <div className="cm-loading">Loading…</div>}
+
+      {!loading && (
+        <section className="cm-section cm-assign-email">
+          <h2>Assign by email</h2>
+          <p className="cm-sub" style={{ marginBottom: 12 }}>
+            Place an unassigned open task on a JS by email. Creates an Application if they haven&apos;t applied yet.
+            Does not remove existing assignments on other tasks.
+          </p>
+          <form className="cm-assign-form" onSubmit={handleAssignByEmail}>
+            <label>
+              Email
+              <input
+                type="email"
+                required
+                value={assignEmail}
+                onChange={(e) => setAssignEmail(e.target.value)}
+                placeholder="js.applicant@gmail.com"
+              />
+            </label>
+            <label>
+              Name <span className="cm-hint">(optional)</span>
+              <input
+                value={assignName}
+                onChange={(e) => setAssignName(e.target.value)}
+                placeholder="Display name"
+              />
+            </label>
+            <label>
+              Open task <span className="cm-hint">(unassigned only)</span>
+              <select required value={assignTaskId} onChange={(e) => setAssignTaskId(e.target.value)}>
+                <option value="">
+                  {unassignedTasks.length === 0 ? "No unassigned open tasks…" : "Choose an open task…"}
+                </option>
+                {unassignedTasks.map((t) => (
+                  <option key={t.id} value={t.id}>
+                    #{t.number} {t.title} — {projectName(t.projectId)}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <button type="submit" disabled={assigning || !assignEmail.trim() || !assignTaskId}>
+              {assigning ? "Assigning…" : "Assign task"}
+            </button>
+          </form>
+          {assignNote && <p className="cm-assign-note">{assignNote}</p>}
+        </section>
+      )}
 
       {!loading && blockedTaskCount > 0 && (
         <div className="cm-blocked-note">
@@ -182,18 +371,12 @@ export default function MatchingQueue() {
               const info = parseApplication(app);
               const visibleTasks = tasksForApplicant(app);
               const hiddenCount = tasks.length - visibleTasks.length;
-              const ceiling = effectiveCeiling(app);
               return (
                 <div className="cm-app-card" key={app.id}>
                   <div className="cm-app-info">
                     <div className="cm-app-name">{info.Name}</div>
-                    <div className="cm-app-trade">
-                      {info["Stated trade"]}
-                      {info.SkillLevel && <span className="cm-skill-badge"> · {info.SkillLevel}</span>}
-                      {ceiling === "advanced" && <span className="cm-unlocked-badge">TS/advanced unlocked</span>}
-                    </div>
+                    <ApplicantSkillLines app={app} />
                     <div className="cm-app-email">{info.Email}</div>
-                    {info.Aspiration && <div className="cm-app-aspiration">Aiming for: {info.Aspiration}</div>}
                     {info.Note && <div className="cm-app-note">{info.Note}</div>}
                   </div>
                   <div className="cm-app-match">
@@ -228,16 +411,21 @@ export default function MatchingQueue() {
             <h2>Placed ({placed.length})</h2>
             {placed.map((app) => {
               const info = parseApplication(app);
-              const ceiling = effectiveCeiling(app);
+              const theirMatches = matches.filter((m) => extractApplicationId(m.description) === app.id);
               return (
                 <div className="cm-app-card cm-app-card-done" key={app.id}>
                   <div className="cm-app-info">
                     <div className="cm-app-name">{info.Name}</div>
-                    <div className="cm-app-trade">
-                      {info["Stated trade"]}
-                      {info.SkillLevel && <span className="cm-skill-badge"> · {info.SkillLevel}</span>}
-                      {ceiling === "advanced" && <span className="cm-unlocked-badge">TS/advanced unlocked</span>}
-                    </div>
+                    <ApplicantSkillLines app={app} />
+                    {info.Email && <div className="cm-app-email">{info.Email}</div>}
+                    {theirMatches.map((m) => {
+                      const taskLine = /^Task:\s*(.+)$/m.exec(m.description || "")?.[1]?.trim();
+                      return (
+                        <div className="cm-app-note" key={m.id}>
+                          → {taskLine || m.title.replace(/^Matched:\s*/, "")}
+                        </div>
+                      );
+                    })}
                   </div>
                   {info.SkillLevel && (
                     <div className="cm-aspiration-checkin">

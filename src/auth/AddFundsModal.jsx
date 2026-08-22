@@ -129,13 +129,12 @@ export default function AddFundsModal({ user = null, onDone }) {
           >
             <strong>Unlock student pricing with .edu</strong>
             <p style={{ margin: "8px 0 0", color: "#64748b" }}>
-              We only send a magic link to a <strong>.edu</strong> address. After you click the link in email, you
-              sign in with Supabase and your session email must be that .edu (Site URL + redirect must match this app in
-              the Supabase dashboard).
+              We only send a magic link to a <strong>.edu</strong> address. After you click the link in email, sign in
+              again so your session email is that .edu address.
             </p>
             {!isSupabaseConfigured ? (
               <p style={{ margin: "8px 0 0", color: "#b45309" }}>
-                Connect Supabase (<code style={{ fontSize: "11px" }}>VITE_SUPABASE_*</code>) to enable magic link.
+                Student .edu verification is not available on this install yet.
               </p>
             ) : (
               <form onSubmit={sendMagic} style={{ marginTop: "12px" }}>

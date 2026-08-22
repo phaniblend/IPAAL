@@ -1,33 +1,16 @@
-import { useState, useMemo, useEffect, useRef } from "react";
-import { useSearchParams } from "react-router-dom";
-import CodeEditor from "../engines/CodeEditor.jsx";
+import { useState, useMemo, useEffect, useRef, useCallback } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import "./AssistMeWorkspace.css";
 
-// Eagerly loads every generated assist module's NODES export, keyed by filename.
-// import.meta.glob is Vite's supported way to dynamically register a set of modules —
-// this is how a module generated at runtime by ID Studio becomes loadable here without
-// a manual import list. Matches both extensions: new modules are written as .tsx (they contain
-// real TypeScript syntax), older ones on disk may still be plain .jsx — both are valid here.
+// Eagerly loads every generated assist module. Each module's default export is createINPACTEngine(...)
+// — the real IPAAL UI. We only fall back to reading NODES for mode=local (instructions-only).
 const ASSIST_MODULES = import.meta.glob("../engines/assist/*.{jsx,tsx}", { eager: true });
 
 function findModuleBySlug(slug) {
-  const entry = Object.entries(ASSIST_MODULES).find(([path]) => path.includes(`inpact_assist_${slug}_engine`));
+  const entry = Object.entries(ASSIST_MODULES).find(([path]) =>
+    path.includes(`inpact_assist_${slug}_engine`),
+  );
   return entry ? entry[1] : null;
-}
-
-/** Simplified local grading fallback for nodes without a custom evaluate() — NOT a byte-exact
- * port of inpact_engine_shared.jsx's fallback (which has extra sophistication this doesn't
- * replicate), just an honest, working approximation: keyword-ratio matching. */
-function localEvaluate(node, answer) {
-  if (typeof node.evaluate === "function") return node.evaluate(answer);
-  const a = String(answer || "").toLowerCase().replace(/\s/g, "");
-  const keywords = node.answer_keywords || [];
-  if (keywords.length === 0) return a.trim() ? "partial" : "wrong";
-  const hits = keywords.filter((kw) => a.includes(String(kw).toLowerCase().replace(/\s/g, ""))).length;
-  const ratio = hits / keywords.length;
-  if (ratio >= 0.8) return "correct";
-  if (ratio >= 0.5) return "partial";
-  return "wrong";
 }
 
 function ChatBubble({ label, children, tone = "default" }) {
@@ -43,12 +26,26 @@ function ChatBubble({ label, children, tone = "default" }) {
   );
 }
 
-export default function AssistMeWorkspace() {
-  const [params] = useSearchParams();
-  const slug = params.get("module");
-  const mode = params.get("mode") || "here"; // "here" | "local"
+function humanLessonLabel(tag) {
+  return String(tag || "")
+    .split("-")
+    .filter(Boolean)
+    .map((w) => {
+      const upper = w.toUpperCase();
+      if (["API", "UI", "CRUD", "HTTP", "SQL", "JS", "TS"].includes(upper)) return upper;
+      return w.charAt(0).toUpperCase() + w.slice(1);
+    })
+    .join(" ");
+}
 
+/**
+ * Embedded Assist Me (published assist-module path). Used inside an opened task.
+ * `embedded` hides the full-page chrome; `onClose` returns to the task body.
+ */
+export function AssistMeEmbedded({ moduleTag, mode = "here", embedded = false, onClose }) {
+  const slug = moduleTag;
   const mod = useMemo(() => (slug ? findModuleBySlug(slug) : null), [slug]);
+  const Engine = typeof mod?.default === "function" ? mod.default : null;
   const nodes = mod?.NODES || [];
   const questionNodes = nodes.filter((n) => n.type === "question");
   const introNode = nodes.find((n) => n.type === "reveal");
@@ -56,9 +53,6 @@ export default function AssistMeWorkspace() {
 
   const [activeId, setActiveId] = useState(questionNodes[0]?.id || introNode?.id || null);
   const activeNode = nodes.find((n) => n.id === activeId) || introNode;
-  const [code, setCode] = useState(activeNode?.seed_code || "");
-  const [result, setResult] = useState(null); // "correct" | "partial" | "wrong" | null
-  const [attempts, setAttempts] = useState(0);
   const [mentorThread, setMentorThread] = useState([]);
   const [mentorDraft, setMentorDraft] = useState("");
   const [mentorLoading, setMentorLoading] = useState(false);
@@ -66,21 +60,12 @@ export default function AssistMeWorkspace() {
   const chatEndRef = useRef(null);
 
   useEffect(() => {
-    setCode(activeNode?.seed_code || activeNode?.starter_code || "");
-    setResult(null);
-    setAttempts(0);
-  }, [activeId]); // eslint-disable-line react-hooks/exhaustive-deps
-
-  useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [result, mentorThread]);
+  }, [mentorThread]);
 
-  function checkCode() {
-    if (!activeNode || activeNode.type !== "question") return;
-    const res = localEvaluate(activeNode, code);
-    setResult(res);
-    setAttempts((a) => a + 1);
-  }
+  const handleDone = useCallback(() => {
+    if (onClose) onClose();
+  }, [onClose]);
 
   async function sendMentorMessage() {
     const msg = mentorDraft.trim();
@@ -105,125 +90,131 @@ export default function AssistMeWorkspace() {
   }
 
   if (!slug) {
-    return <div className="amw-empty">No module specified — open this from a task's "Assist me" button.</div>;
+    return <div className="amw-empty">No module specified.</div>;
   }
   if (!mod) {
     return (
       <div className="amw-empty">
-        No published module found for <code>{slug}</code>. It may still be pending generation/review in ID
-        Studio.
+        No guided lesson found for this topic yet. Try again later, or ask your mentor.
       </div>
     );
   }
 
-  // --- Instructions column content, shared between "here" and "local" modes ---
-  const instructionsColumn = (
-    <div className="amw-chat">
-      <div className="amw-chat-scroll">
-        {introNode && (
-          <ChatBubble label={`📘 ${introNode.content?.title || "Lesson"}`} tone="intro">
-            <p>{introNode.content?.body}</p>
-            {introNode.content?.usecase && <p className="amw-usecase">{introNode.content.usecase}</p>}
-          </ChatBubble>
-        )}
-        {objectivesNode && (
-          <ChatBubble label="🎯 Objectives" tone="intro">
-            <ul>
-              {objectivesNode.items.map((it, i) => (
-                <li key={i}>{it}</li>
-              ))}
-            </ul>
-          </ChatBubble>
-        )}
-        {activeNode?.type === "question" && (
-          <>
-            <ChatBubble label={`✅ ${activeNode.phase || "Task"}`} tone="task">
-              <p>{activeNode.paal}</p>
-            </ChatBubble>
-            {attempts > 0 && activeNode.hint && (
-              <ChatBubble label="💡 Hint" tone="hint">
-                <p>{activeNode.hint}</p>
-              </ChatBubble>
-            )}
-            {activeNode.example_code && (
-              <ChatBubble label="🧩 Example (different domain, same pattern)" tone="example">
-                <pre>{activeNode.example_code}</pre>
-              </ChatBubble>
-            )}
-            {mode === "here" && result && (
-              <ChatBubble label={result === "correct" ? "✅ Correct" : result === "partial" ? "🟡 Almost" : "🔴 Not quite"} tone={result}>
-                <p>{activeNode[`feedback_${result}`]}</p>
-              </ChatBubble>
-            )}
-          </>
-        )}
-        {mentorThread.map((m, i) => (
-          <ChatBubble key={i} label={m.role === "user" ? "🙋 You asked" : "🤖 Mentor"} tone={m.role}>
-            <p>{m.content}</p>
-          </ChatBubble>
-        ))}
-        {mentorError && <div className="amw-mentor-error">{mentorError}</div>}
-        <div ref={chatEndRef} />
-      </div>
-      <div className="amw-mentor-box">
-        <input
-          value={mentorDraft}
-          onChange={(e) => setMentorDraft(e.target.value)}
-          onKeyDown={(e) => e.key === "Enter" && sendMentorMessage()}
-          placeholder="Ask Mentor…"
-          disabled={mentorLoading}
-        />
-        <button type="button" onClick={sendMentorMessage} disabled={mentorLoading || !mentorDraft.trim()}>
-          {mentorLoading ? "…" : "Send"}
-        </button>
-      </div>
-    </div>
-  );
-
-  if (mode === "local") {
+  if (mode !== "local" && Engine) {
     return (
-      <div className="amw amw-local">
-        <div className="amw-local-banner">Coding locally — this panel is instructions + mentor only.</div>
-        <div className="amw-col-instructions amw-col-instructions-solo">{instructionsColumn}</div>
+      <div className={`amw-engine${embedded ? " amw-engine-embedded" : ""}`}>
+        {!embedded && (
+          <div className="amw-engine-bar">
+            <span>
+              Assist Me · <b>{humanLessonLabel(slug)}</b>
+            </span>
+            <button type="button" onClick={handleDone}>
+              ← Back to task
+            </button>
+          </div>
+        )}
+        {embedded && (
+          <div className="amw-engine-bar amw-engine-bar-embedded">
+            <span>
+              Assist Me · <b>{humanLessonLabel(slug)}</b>
+            </span>
+            {onClose && (
+              <button type="button" onClick={onClose}>
+                Close lesson
+              </button>
+            )}
+          </div>
+        )}
+        <Engine
+          onNextLesson={handleDone}
+          onAskMentor={async (node, question, thread) => {
+            const res = await fetch("/api/assist-me/ask", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ moduleTag: slug, node, question, thread }),
+            });
+            const data = await res.json();
+            if (!res.ok) throw new Error(data.error || "Mentor unavailable");
+            return data.reply;
+          }}
+        />
       </div>
     );
   }
 
   return (
-    <div className="amw amw-three-col">
-      <div className="amw-col-explorer">
-        <div className="amw-col-label">STEPS</div>
-        {introNode && (
-          <button type="button" className={`amw-explorer-item ${activeId === introNode.id ? "active" : ""}`} onClick={() => setActiveId(introNode.id)}>
-            Lesson
+    <div className={`amw-root amw-mode-local${embedded ? " amw-embedded" : ""}`}>
+      {embedded && onClose && (
+        <div className="amw-engine-bar amw-engine-bar-embedded">
+          <span>
+            Assist Me · <b>{humanLessonLabel(slug)}</b> · local
+          </span>
+          <button type="button" onClick={onClose}>
+            Close lesson
           </button>
-        )}
-        {objectivesNode && (
-          <button type="button" className={`amw-explorer-item ${activeId === objectivesNode.id ? "active" : ""}`} onClick={() => setActiveId(objectivesNode.id)}>
-            Objectives
-          </button>
-        )}
-        {questionNodes.map((n, i) => (
-          <button key={n.id} type="button" className={`amw-explorer-item ${activeId === n.id ? "active" : ""}`} onClick={() => setActiveId(n.id)}>
-            Step {i + 1}
-          </button>
-        ))}
+        </div>
+      )}
+      <div className="amw-col-instructions">
+        <div className="amw-chat">
+          <div className="amw-chat-scroll">
+            {introNode && (
+              <ChatBubble label={`📘 ${introNode.content?.title || "Lesson"}`} tone="intro">
+                <p>{introNode.content?.body}</p>
+                {introNode.content?.usecase && <p className="amw-usecase">{introNode.content.usecase}</p>}
+              </ChatBubble>
+            )}
+            {objectivesNode && (
+              <ChatBubble label="🎯 Objectives" tone="intro">
+                <ul>
+                  {objectivesNode.items.map((it, i) => (
+                    <li key={i}>{it}</li>
+                  ))}
+                </ul>
+              </ChatBubble>
+            )}
+            {questionNodes.map((n, i) => (
+              <ChatBubble key={n.id} label={`Step ${i + 1}`} tone="task">
+                <p>{n.paal || n.content?.body}</p>
+                {n.hint && <p className="amw-hint">Hint: {n.hint}</p>}
+              </ChatBubble>
+            ))}
+            {mentorThread.map((m, i) => (
+              <ChatBubble key={i} label={m.role === "user" ? "You" : "Mentor"} tone={m.role === "user" ? "you" : "mentor"}>
+                <p>{m.content}</p>
+              </ChatBubble>
+            ))}
+            <div ref={chatEndRef} />
+          </div>
+          <div className="amw-mentor-compose">
+            {mentorError && <p className="amw-mentor-error">{mentorError}</p>}
+            <textarea
+              rows={2}
+              value={mentorDraft}
+              onChange={(e) => setMentorDraft(e.target.value)}
+              placeholder="Ask the mentor…"
+            />
+            <button type="button" disabled={mentorLoading || !mentorDraft.trim()} onClick={sendMentorMessage}>
+              {mentorLoading ? "…" : "Ask"}
+            </button>
+          </div>
+        </div>
       </div>
-      <div className="amw-col-editor">
-        {activeNode?.type === "question" ? (
-          <>
-            <CodeEditor value={code} onChange={setCode} height="100%" language="typescript" onSubmitShortcut={checkCode} />
-            <div className="amw-editor-actions">
-              <button type="button" onClick={checkCode}>
-                Check my code {"{ctrl+shift+enter}"}
-              </button>
-            </div>
-          </>
-        ) : (
-          <div className="amw-editor-placeholder">Select a step to start coding.</div>
-        )}
-      </div>
-      <div className="amw-col-instructions">{instructionsColumn}</div>
     </div>
+  );
+}
+
+/** Hash-route wrapper (`#/assist-me?module=…`) — still works; prefer Workbench task embed. */
+export default function AssistMeWorkspace() {
+  const navigate = useNavigate();
+  const [params] = useSearchParams();
+  const slug = params.get("module");
+  const mode = params.get("mode") || "here";
+
+  return (
+    <AssistMeEmbedded
+      moduleTag={slug}
+      mode={mode}
+      onClose={() => navigate("/workbench")}
+    />
   );
 }

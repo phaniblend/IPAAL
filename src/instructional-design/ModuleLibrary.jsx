@@ -35,14 +35,23 @@ export default function ModuleLibrary() {
         .filter((i) => i.title.startsWith("Module:"))
         .map((i) => ({ tag: i.title.replace("Module:", "").trim(), publishedAt: i.submitDate }));
       const pend = libraryIssues
-        .filter((i) => i.title.startsWith("Tutorial needed:") && !i.title.includes("(resolved)"))
+        .filter(
+          (i) =>
+            (i.title.startsWith("Assistance lesson needed:") || i.title.startsWith("Tutorial needed:")) &&
+            !i.title.includes("(resolved)")
+        )
         .map((i) => {
           const productMatch = /RequestedForProduct:\s*(.+)/.exec(i.description || "");
           const tasksMatch = /RequestedForTasks:\s*(.+)/.exec(i.description || "");
+          const tag = i.title
+            .replace(/^Assistance lesson needed:\s*/i, "")
+            .replace(/^Tutorial needed:\s*/i, "")
+            .trim();
           return {
-            tag: i.title.replace("Tutorial needed:", "").trim(),
+            tag,
             product: productMatch?.[1]?.trim() || "",
             taskCount: (tasksMatch?.[1] || "").split(",").filter(Boolean).length,
+            kind: /Kind:\s*funda/i.test(i.description || "") ? "funda" : "core",
           };
         });
       setPublished(pub);
@@ -132,7 +141,8 @@ export default function ModuleLibrary() {
                 ))}
                 {orgPending.map((p) => (
                   <span className="mlib-chip mlib-chip-pending" key={p.tag}>
-                    ⏳ {p.tag}
+                    ⏳ {p.kind === "funda" ? "funda · " : ""}
+                    {p.tag}
                   </span>
                 ))}
               </div>

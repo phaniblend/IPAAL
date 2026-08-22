@@ -112,7 +112,7 @@ const LINES = [
   { id: 'cin-L4', text: 'Start doing.  Stop watching.' },
 ]
 
-export default function CinematicLanding({ onEnterLessons }) {
+export default function CinematicLanding({ onEnterEnterprise, onEnterLessons }) {
   const canvasRef = useRef(null)
   const curRef = useRef(null)
   const ringRef = useRef(null)
@@ -361,12 +361,21 @@ export default function CinematicLanding({ onEnterLessons }) {
           <div className="cin-line cin-tag" id="cin-L4" />
         </div>
         <div ref={ctaWrapRef} className="cin-cta-wrap">
-          <button type="button" className="cin-cta-btn" onClick={() => onEnterLessons?.()}>
-            Start doing — it&apos;s free →
-          </button>
-          <p className="cin-cta-sub">
-            You are just 25 lessons away from mastering enterprise application development using React + TypeScript.
-          </p>
+          <div className="cin-cta-card">
+            <p className="cin-cta-sub">
+              These aren&apos;t coding tutorials. This is an experience builder — you join a product
+              team shipping enterprise applications in the tech and trade you choose. Ready to
+              continue? It&apos;s free.
+            </p>
+            <div className="cin-cta-choices">
+              <button type="button" className="cin-cta-btn" onClick={() => onEnterEnterprise?.()}>
+                Yes — show me the experience (then Apply)
+              </button>
+              <button type="button" className="cin-cta-btn cin-cta-btn-secondary" onClick={() => onEnterLessons?.()}>
+                Not yet — just teach me React with TypeScript
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </div>

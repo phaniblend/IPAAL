@@ -43,7 +43,7 @@ export async function createAssistanceSession({ taskId, taskTitle, lessonKey, le
     ].join("\n"),
   });
   const sessionId = created;
-  if (!sessionId) throw new Error("OneDev did not return a session id after creation");
+  if (!sessionId) throw new Error("Session service did not return a session id after creation");
   return { sessionId, completionToken: token };
 }
 

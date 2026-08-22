@@ -455,6 +455,7 @@ export default function LandingPage({ track, onSelectLesson, lessonList, freeLes
             <a href="#/apply" style={LP.btnOutline}>Apply</a>
             <a href="#/matching-queue" style={LP.btnOutline}>Matching Queue</a>
             <a href="#/cohorts" style={LP.btnOutline}>Cohorts</a>
+            <a href="#/pmgt" style={LP.btnOutline}>PMGT</a>
             <a href="#/core-studio" style={LP.btnOutline}>Core Studio</a>
             <a href="#/cd-review" style={LP.btnOutline}>CD Review</a>
             <a href="#/huddle-calendar" style={LP.btnOutline}>Huddle Calendar</a>

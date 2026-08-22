@@ -294,13 +294,42 @@
   background: #fff;
   border: 1px solid #e2e8f0;
   border-radius: 8px;
-  padding: 14px 16px;
-  cursor: pointer;
+  padding: 0;
   font-family: inherit;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 }
 
 .ids-pending-card:hover {
   border-color: #0891b2;
+}
+
+.ids-pending-card-main {
+  text-align: left;
+  background: transparent;
+  border: none;
+  padding: 14px 16px;
+  cursor: pointer;
+  font-family: inherit;
+  width: 100%;
+}
+
+.ids-pending-generate {
+  border: none;
+  border-top: 1px solid #e2e8f0;
+  background: #ecfeff;
+  color: #0e7490;
+  font-weight: 600;
+  font-size: 13px;
+  padding: 10px 16px;
+  cursor: pointer;
+  font-family: inherit;
+  text-align: left;
+}
+
+.ids-pending-generate:hover {
+  background: #cffafe;
 }
 
 .ids-pending-top {
@@ -338,4 +367,71 @@
   font-size: 13.5px;
   color: #047857;
   font-weight: 600;
+}
+
+.ids-funda-alert {
+  margin-top: 8px;
+  font-size: 12px;
+  color: #92400e;
+  background: #fffbeb;
+  border: 1px solid #fcd34d;
+  border-radius: 6px;
+  padding: 6px 8px;
+  text-align: left;
+}
+
+.ids-funda-panel {
+  background: #fffbeb;
+  border: 1px solid #fcd34d;
+  border-radius: 10px;
+  padding: 16px 18px;
+  margin-bottom: 18px;
+}
+
+.ids-funda-panel h2 {
+  margin: 0 0 6px;
+  font-size: 16px;
+  color: #92400e;
+}
+
+.ids-funda-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 10px 0;
+  border-top: 1px solid #fde68a;
+}
+
+.ids-funda-label {
+  font-weight: 600;
+  font-size: 13.5px;
+  color: #78350f;
+}
+
+.ids-funda-choices {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  font-size: 13px;
+  color: #78350f;
+}
+
+.ids-funda-choices label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+}
+
+.ids-funda-done {
+  margin-top: 10px;
+  font-size: 13.5px;
+  color: #92400e;
+}
+
+.ids-error-inline {
+  color: #b91c1c;
+  margin-top: 6px;
 }

@@ -728,26 +728,15 @@ Three follow-ups from live-testing §5a-5/§5a-6, same session:
   applicant who just applied anonymously — Workbench requires *some* session (`roles={[]}` in
   `main.jsx`), and applying itself doesn't create one. Whether matched applicants should be prompted
   to sign in with Google right on the confirmation screen is an open question, not yet decided.
-- **Backend tutorial coverage — real architectural finding, not just a content gap.** Founder observed
-  Coding-trade matching only ever offers UI/React work. Checked the actual lesson runtime
-  (`src/engines/react-js/inpact_p01_engine.jsx`'s NODES shape, `generateModule.js`'s sandbox stubs for
-  `react`/`react/jsx-runtime`): every lesson, including anything Gemini auto-drafts, is built around a
-  React component rendered live in-browser and graded against `answer_keywords`/`expected` output.
-  There is no backend execution runtime (no sandboxed Node process, no way to run/grade a real
-  Express endpoint or DB query) — so this isn't "write more lessons like the 109 that exist," it's a
-  new lesson runtime + grading model. **Founder decision: incremental, not a big-bang build.** Stay
-  strict UI-only for now (already the current state — no code change needed for this). Backend
-  coverage expands later, and when it does, Gemini generates the BE tutorial automatically at task-
-  creation time — i.e., extend the *existing* per-task auto-draft pipeline (the same one that already
-  fires when SpecForge tags a task `NeedsTutorial: true`) to a backend-content mode, rather than
-  hand-authoring a separate curriculum up front. **Not started**: no backend lesson schema, no
-  non-React grading mode, no updated Gemini prompt for it yet — this is a plan, not a build, until
-  told to start it. Practical consequence in the meantime: the 7 BE tasks already created in
-  `product-backlog`/`shift-swap` (Ingredient/shift-swap REST APIs, DB schema, etc.) stay blocked
-  (`NeedsTutorial: true`, "⏳ Tutorial pending ID Studio review") indefinitely under current behavior,
-  since today's auto-draft prompt has no backend mode to draft them with — flagged to the founder as
-  an open question (exempt them now via `NoTutorialNeeded: true` as a stopgap, or leave them queued
-  until the backend pipeline exists) rather than decided unilaterally.
+- **Backend tutorial coverage — closed 2026-08-09.** Companion lessons app now ships
+  `backend-fundamentals` (37) + `backend-blocks` (34) with FE-style analogy tagging (`analogOf`, e.g.
+  vote→`be-counter-api`). IPF regenerates `coreLessonManifest.json` (180 entries) via
+  `scripts/generateCoreLessonManifest.mjs`; Workbench “Try a core lesson” matches through
+  `matchCoreLesson` (side-aware + analog boost). BE submit grades through sandboxed Node `vm`
+  (`POST /api/grade-backend` on the lessons AI server; mirror `POST /api/id/grade-backend` on IPF) —
+  mocks only (http/pg/queue/cache), not a Docker Postgres runner. Gemini Module Library auto-draft for
+  BE product-specific tutorials remains a separate, optional incremental; core BE analogs cover Assist
+  Me routing for typical API/CRUD tasks now.
 
 ---
 
@@ -767,10 +756,10 @@ in this list gets touched until explicitly told to implement.
 1. **Google OAuth audience** — Cloud Console app is still in Testing; publish (or add every applicant as
    a test user) before a real public funnel works.
 2. **First remote commit / review** of the IPF ops slice (exclude `.env` and any credential paste files).
-3. **Optional live smoke** after containers are up: apply → auto-match → Workbench → Assist Me, plus ID
-   publish → confirm rematch of a queued applicant.
-4. **Backend tutorial runtime** — founder-deferred; UI-only lessons remain policy for now (§5a-7).
-5. **Delivery-project reuse validation** — hardened 2026-08-09 (`deliveryProjectId` must exist in OneDev
+3. **Optional live smoke** after containers are up: apply → auto-match → Workbench → Assist Me (FE + BE
+   core lesson), plus ID publish → confirm rematch of a queued applicant. Restart both AI servers if
+   port 3000 is contested (IPF default; lessons app can use `PORT=3001` + `VITE_AI_SERVER_PORT=3001`).
+4. **Delivery-project reuse validation** — hardened 2026-08-09 (`deliveryProjectId` must exist in OneDev
    and must not be reserved; `/publish` requires a PD session). Keep watching if PD Studio is ever exposed
    more broadly.
 

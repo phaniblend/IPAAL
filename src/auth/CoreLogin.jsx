@@ -42,9 +42,12 @@ export default function CoreLogin({ onSignedIn }) {
   return (
     <div style={{ maxWidth: 340, margin: "80px auto", padding: 24, fontFamily: "-apple-system, sans-serif" }}>
       <div style={{ fontFamily: "monospace", fontSize: 12, letterSpacing: "0.08em", textTransform: "uppercase", color: "#0891b2", marginBottom: 8 }}>
-        IPF · Core team
+        Core team sign-in
       </div>
-      <h1 style={{ fontSize: 22, margin: "0 0 20px" }}>Sign in</h1>
+      <h1 style={{ fontSize: 22, margin: "0 0 8px" }}>Sign in</h1>
+      <p style={{ margin: "0 0 20px", fontSize: 13, color: "#64748b", lineHeight: 1.45 }}>
+        Product Design, ID, CD, and other ops screens use this login — not the job-seeker Apply landing.
+      </p>
       <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: 12 }}>
         <label style={{ display: "flex", flexDirection: "column", gap: 4, fontSize: 13 }}>
           Username

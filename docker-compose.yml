@@ -74,8 +74,8 @@ services:
     volumes:
       - ipf_ldap_data:/var/lib/ldap
       - ipf_ldap_config:/etc/ldap/slapd.d
-    # Seed ou=core users (priya_sharma / arjun_mehta / kavya_nair) via ldapadd after first boot —
-    # see docs/HANDOFF.md §4. Passwords are not stored in this repo.
+    # Seed ou=core users via ldapadd after first boot — see docs/HANDOFF.md §4.
+    # Test accounts (PD_Core / ID_core / PM_Core, password inpact): scripts/seed-ldap-core-test-users.ldif
 
 volumes:
   ipf_pg_data:

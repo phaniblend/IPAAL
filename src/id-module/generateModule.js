@@ -133,7 +133,7 @@ export async function generateAssistModule(spec) {
     const raw = await callGemini(prompt);
     const candidate = extractSingleTypescriptBlock(raw);
     if (!candidate.trim()) {
-      lastError = "No parseable code block returned by Gemini.";
+      lastError = "No parseable code block returned by draft generation.";
       continue;
     }
     try {

@@ -12,7 +12,7 @@ async function api(path, opts) {
     headers: { "Content-Type": "application/json", ...(opts?.headers || {}) },
     ...opts,
   });
-  if (!res.ok) throw new Error(`OneDev API ${res.status}: ${await res.text()}`);
+  if (!res.ok) throw new Error(`Request failed (${res.status})`);
   return res.json();
 }
 
