@@ -11,7 +11,10 @@ dotenv.config({ path: path.join(rootDir, ".env") });
 const app = express();
 app.use(express.json({ limit: "2mb" }));
 
-const PORT = Number(process.env.GEMINI_LESSON_SERVER_PORT || 3099);
+// Railway (and most PaaS hosts) inject PORT and expect the app to bind to exactly that — prefer
+// it over the local-dev-only GEMINI_LESSON_SERVER_PORT convention so this needs zero extra
+// per-host port configuration.
+const PORT = Number(process.env.PORT || process.env.GEMINI_LESSON_SERVER_PORT || 3099);
 const MODEL = (process.env.GEMINI_MODEL || "gemini-2.5-flash").trim();
 const PROMPT_PATH = path.join(
   rootDir,
