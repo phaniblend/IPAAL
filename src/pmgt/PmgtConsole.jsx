@@ -7,7 +7,7 @@ const MODULE_LIBRARY_PROJECT_ID = 4;
 const RESERVED = new Set([COHORT_PROJECT_ID, TEAM_OPS_PROJECT_ID, MODULE_LIBRARY_PROJECT_ID, 1 /* product-backlog */]);
 
 async function api(path) {
-  const res = await fetch(`/onedev-api${path}`);
+  const res = await fetch(`/api/onedev${path}`);
   if (!res.ok) throw new Error(`Request failed (${res.status})`);
   return res.json();
 }

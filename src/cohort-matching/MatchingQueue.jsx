@@ -29,7 +29,7 @@ function aspirationDisplayLabel(value) {
 }
 
 async function api(path, opts) {
-  const res = await fetch(`/onedev-api${path}`, {
+  const res = await fetch(`/api/onedev${path}`, {
     headers: { "Content-Type": "application/json", ...(opts?.headers || {}) },
     ...opts,
   });
@@ -176,7 +176,7 @@ export default function MatchingQueue() {
     setError("");
     try {
       const info = parseApplication(app);
-      const res = await fetch("/onedev-api/issues", {
+      const res = await fetch("/api/onedev/issues", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

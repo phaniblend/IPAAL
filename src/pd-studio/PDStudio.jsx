@@ -361,7 +361,7 @@ export default function PDStudio() {
 
   async function loadCohorts() {
     try {
-      const res = await fetch("/onedev-api/issues?offset=0&count=200");
+      const res = await fetch("/api/onedev/issues?offset=0&count=200");
       if (!res.ok) return;
       const all = await res.json();
       const cohorts = all

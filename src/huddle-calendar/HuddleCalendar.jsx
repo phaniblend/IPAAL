@@ -5,7 +5,7 @@ const COHORT_PROJECT_ID = 2;
 const TEAM_OPS_PROJECT_ID = 3;
 
 async function api(path, opts) {
-  const res = await fetch(`/onedev-api${path}`, {
+  const res = await fetch(`/api/onedev${path}`, {
     headers: { "Content-Type": "application/json", ...(opts?.headers || {}) },
     ...opts,
   });

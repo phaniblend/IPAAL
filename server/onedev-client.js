@@ -11,7 +11,10 @@
  *   POST /projects                   -> create project, body ProjectData {name, description, ...}, returns project id
  *   GET  /projects?offset=&count=    -> list projects
  */
-const ONEDEV_URL = "http://localhost:6610/~api";
+// Local dev: OneDev's Docker container on localhost. Production (Railway): set ONEDEV_INTERNAL_URL
+// to the private-network address of the OneDev service (e.g. http://onedev.railway.internal:6610) —
+// never expose OneDev's own port publicly; only this server talks to it directly.
+const ONEDEV_URL = `${(process.env.ONEDEV_INTERNAL_URL || "http://localhost:6610").replace(/\/+$/, "")}/~api`;
 
 function authHeader() {
   const user = process.env.ONEDEV_API_USER || "";

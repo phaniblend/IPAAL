@@ -9,7 +9,10 @@ export async function notifyTeamServer(text) {
     return;
   }
   try {
-    await fetch(`http://localhost:8065/hooks/${webhookId}`, {
+    // Local dev: Mattermost's Docker container on localhost. Production: set
+    // MATTERMOST_INTERNAL_URL to the private-network address of the Mattermost service.
+    const base = (process.env.MATTERMOST_INTERNAL_URL || "http://localhost:8065").replace(/\/+$/, "");
+    await fetch(`${base}/hooks/${webhookId}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ text }),

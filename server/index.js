@@ -31,6 +31,7 @@ import idRouter from "./id-router.js";
 import assistMeRouter from "./assist-me-router.js";
 import authRouter from "./auth-router.js";
 import recruitRouter from "./recruit-router.js";
+import { requireSession } from "./auth-session.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const rootDir = path.resolve(__dirname, "..");
@@ -134,6 +135,70 @@ app.use("/api/id", idRouter);
 app.use("/api/assist-me", assistMeRouter);
 app.use("/api/auth", authRouter);
 app.use("/api/recruit", recruitRouter);
+
+/**
+ * Authenticated pass-through to OneDev's REST API — replaces the old `/onedev-api` path, which
+ * only ever existed as a Vite **dev-server** proxy (vite.config.js `server.proxy`) that forwarded
+ * to OneDev with zero session check and injected the OneDev admin credentials on every request.
+ * That's fine on localhost; it's a wide-open OneDev-admin hole the moment this is public. Any
+ * signed-in user (any account type/role) may use this — OneDev's own per-project permissions are
+ * the finer-grained boundary beyond "is this an internal, logged-in user at all." Credentials are
+ * injected here, server-side, and never reach the browser.
+ * Ops pages (PD Studio, Workbench, Cohorts, ModuleLibrary, ContributionMonitor, HuddleCalendar,
+ * CD Review, HumanCapitalReports, MatchingQueue, Apply) call this the same generic way the old
+ * `/onedev-api` path worked: `fetch(\`/api/onedev${onedevApiPath}\`, opts)`.
+ */
+app.use("/api/onedev", requireSession, async (req, res) => {
+  try {
+    const base = (process.env.ONEDEV_INTERNAL_URL || "http://localhost:6610").replace(/\/+$/, "");
+    const target = `${base}/~api${req.url}`;
+    const user = process.env.ONEDEV_API_USER || "";
+    const pass = process.env.ONEDEV_API_PASS || "";
+    const auth = "Basic " + Buffer.from(`${user}:${pass}`).toString("base64");
+    const hasBody = !["GET", "HEAD"].includes(req.method);
+    const upstream = await fetch(target, {
+      method: req.method,
+      headers: {
+        Authorization: auth,
+        Accept: "application/json",
+        "Content-Type": req.headers["content-type"] || "application/json",
+      },
+      body: hasBody ? (typeof req.body === "string" ? req.body : JSON.stringify(req.body ?? {})) : undefined,
+    });
+    const text = await upstream.text();
+    res.status(upstream.status);
+    res.setHeader("Content-Type", upstream.headers.get("content-type") || "application/json");
+    res.send(text);
+  } catch (err) {
+    console.error("[onedev-proxy] upstream error:", err.message);
+    res.status(502).json({ error: "OneDev upstream error" });
+  }
+});
+
+/**
+ * Mattermost incoming-webhook pass-through — replaces the old `/mattermost-api` Vite-dev-only
+ * proxy. No session gate: the webhook URL/id itself is the credential (write-only, narrowly
+ * scoped to posting into one channel), same design note as src/team-messaging/notify.js.
+ */
+app.use("/api/mattermost", async (req, res) => {
+  try {
+    const base = (process.env.MATTERMOST_INTERNAL_URL || "http://localhost:8065").replace(/\/+$/, "");
+    const target = `${base}${req.url}`;
+    const hasBody = !["GET", "HEAD"].includes(req.method);
+    const upstream = await fetch(target, {
+      method: req.method,
+      headers: { "Content-Type": req.headers["content-type"] || "application/json" },
+      body: hasBody ? (typeof req.body === "string" ? req.body : JSON.stringify(req.body ?? {})) : undefined,
+    });
+    const text = await upstream.text();
+    res.status(upstream.status);
+    res.setHeader("Content-Type", upstream.headers.get("content-type") || "application/json");
+    res.send(text);
+  } catch (err) {
+    console.error("[mattermost-proxy] upstream error:", err.message);
+    res.status(502).json({ error: "Mattermost upstream error" });
+  }
+});
 
 /** Resolve AI API key from env. DeepSeek only. */
 function getAIOptions() {

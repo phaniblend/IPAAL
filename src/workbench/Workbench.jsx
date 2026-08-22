@@ -19,7 +19,7 @@ function isDeliveryProject(project) {
 }
 
 async function api(path, opts) {
-  const res = await fetch(`/onedev-api${path}`, {
+  const res = await fetch(`/api/onedev${path}`, {
     headers: { "Content-Type": "application/json", ...(opts?.headers || {}) },
     ...opts,
   });

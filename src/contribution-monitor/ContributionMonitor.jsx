@@ -8,7 +8,7 @@ const ABSENCE_THRESHOLD = 2; // flags at 2+ absences out of logged huddles
 const WARNINGS_BEFORE_VOTE = 2; // per the design doc: "a few fair warnings" before a vote is eligible
 
 async function api(path, opts) {
-  const res = await fetch(`/onedev-api${path}`, {
+  const res = await fetch(`/api/onedev${path}`, {
     headers: { "Content-Type": "application/json", ...(opts?.headers || {}) },
     ...opts,
   });

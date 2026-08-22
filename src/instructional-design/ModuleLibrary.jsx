@@ -26,7 +26,7 @@ export default function ModuleLibrary() {
     try {
       const [catalogRes, issues] = await Promise.all([
         api("/api/id/catalog"),
-        api(`/onedev-api/issues?offset=0&count=200`),
+        api(`/api/onedev/issues?offset=0&count=200`),
       ]);
       setCatalog(catalogRes.catalog || []);
 

@@ -11,7 +11,7 @@ export async function notifyTeam(text) {
     return;
   }
   try {
-    await fetch(`/mattermost-api/hooks/${WEBHOOK_ID}`, {
+    await fetch(`/api/mattermost/hooks/${WEBHOOK_ID}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ text }),

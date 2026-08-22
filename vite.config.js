@@ -14,12 +14,6 @@ dotenv.config()
 // this proxy target itself (silent self-loop, dressed up as random ECONNREFUSED/ENOBUFS noise).
 const aiServerPort = process.env.VITE_AI_SERVER_PORT || 3000
 
-// IPF: OneDev backend (invisible plumbing behind PD Studio / Workbench).
-// Auth stays server-side here — never shipped to the browser bundle.
-const onedevUser = process.env.ONEDEV_API_USER || 'inpact-admin'
-const onedevPass = process.env.ONEDEV_API_PASS || ''
-const onedevAuth = 'Basic ' + Buffer.from(`${onedevUser}:${onedevPass}`).toString('base64')
-
 export default defineConfig({
   plugins: [react(), vitePluginLocalReview()],
   resolve: {
@@ -41,25 +35,11 @@ export default defineConfig({
       // against 127.0.0.1) is flaky under some environments' network stacks, surfacing as
       // intermittent ECONNREFUSED/EADDRINUSE/ENOBUFS from the proxy for no code-level reason.
       // Pinning to the literal IPv4 address sidesteps the race entirely.
+      // OneDev and Mattermost pass-through now live server-side at /api/onedev and
+      // /api/mattermost (server/index.js) — gated by a real session check instead of this
+      // dev-only proxy injecting admin credentials with no auth. This one rule covers both,
+      // same as every other /api/* route, as long as `npm run server` is running locally.
       '/api': { target: `http://127.0.0.1:${aiServerPort}`, changeOrigin: true },
-      '/onedev-api': {
-        target: 'http://127.0.0.1:6610',
-        changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/onedev-api/, '/~api'),
-        configure: (proxy) => {
-          proxy.on('proxyReq', (proxyReq) => {
-            proxyReq.setHeader('Authorization', onedevAuth)
-            proxyReq.setHeader('Accept', 'application/json')
-          })
-        },
-      },
-      // IPF: Mattermost (Team Messaging). Just a network hop — no credential injection needed,
-      // the incoming webhook URL itself is the auth.
-      '/mattermost-api': {
-        target: 'http://127.0.0.1:8065',
-        changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/mattermost-api/, ''),
-      },
     },
   },
 })

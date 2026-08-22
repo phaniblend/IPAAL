@@ -56,7 +56,7 @@ function roleCardCopy(trade) {
  * "guaranteed instant placement." Core-only trades (matching.js's CORE_ONLY_TRADES — Product design,
  * for now) are excluded even if open tasks exist: that work stays with -core roles, not JS applicants.*/
 async function fetchAvailableTrades() {
-  const res = await fetch("/onedev-api/issues?offset=0&count=200");
+  const res = await fetch("/api/onedev/issues?offset=0&count=200");
   if (!res.ok) throw new Error(`Request failed (${res.status})`);
   const issues = await res.json();
   const seen = new Map(); // lowercase -> original casing, first-seen wins
