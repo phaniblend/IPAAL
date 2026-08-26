@@ -570,12 +570,16 @@ function pushInitialMain(projectName, readmeBody) {
     console.warn("  skip git seed — ONEDEV_API_USER/PASS missing");
     return false;
   }
+  // Local dev: OneDev's Docker container on localhost. Point ONEDEV_INTERNAL_URL at a real
+  // instance (e.g. its Railway public domain, when running this script against a remote
+  // instance) to seed git history there instead.
+  const base = new URL(process.env.ONEDEV_INTERNAL_URL || "http://localhost:6610");
   const remote =
-    "http://" +
+    `${base.protocol}//` +
     encodeURIComponent(user) +
     ":" +
     encodeURIComponent(pass) +
-    `@localhost:6610/${projectName}.git`;
+    `@${base.host}/${projectName}.git`;
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), `${projectName}-`));
   gitIn(dir, "init");
   gitIn(dir, "config", "user.email", "seed@inpact.live");
