@@ -295,20 +295,11 @@ function pushInitialMain(projectName, readmeBody) {
   gitIn(dir, "init");
   gitIn(dir, "config", "user.email", "seed@inpact.live");
   gitIn(dir, "config", "user.name", "IPF Seed");
+  // No CONTRIBUTING.md — found live 2026-09-05: its "how to submit work" steps named OneDev
+  // explicitly, and duplicated instructions the Workbench task page's own "Submit your work"
+  // section already gives (real repo URL included, no tool name needed). JS applicants should
+  // never see our internal tooling by name; the task page is the one place that guidance belongs.
   fs.writeFileSync(path.join(dir, "README.md"), readmeBody);
-  fs.writeFileSync(
-    path.join(dir, "CONTRIBUTING.md"),
-    [
-      "# How to submit work",
-      "",
-      "1. Clone this repo from OneDev.",
-      "2. Create a branch named `js/<your-name>/<short-task>`.",
-      "3. Implement the Workbench task acceptance criteria.",
-      "4. Push the branch and open a Pull Request into `main`.",
-      "5. CD Review picks up the PR for human review.",
-      "",
-    ].join("\n"),
-  );
   gitIn(dir, "add", ".");
   gitIn(dir, "commit", "-m", `chore: seed ${projectName} main for JS submissions`);
   gitIn(dir, "branch", "-M", "main");
@@ -396,10 +387,11 @@ for (const product of PRODUCTS) {
     console.log(`  #${id} [${t.trade}] ${t.title}${t.assist ? ` → ${t.assist}` : ""}`);
   }
 
-  pushInitialMain(
-    product.name,
-    `# ${product.name}\n\n${product.overview}\n\nSeeded for IPF Apply → Assist Me → PR testing.\nSee docs/SMB_PRODUCT_SELECTION_JOURNAL.md\n`,
-  );
+  // README is real, applicant-facing repo content — a JS applicant clones this. Product name and
+  // description only, never internal process/tooling references ("Seeded for IPF Apply...", a
+  // pointer to an internal planning doc) — found live 2026-09-05: those lines meant nothing to an
+  // outside applicant and leaked internal naming that has no business being in a product's own repo.
+  pushInitialMain(product.name, `# ${product.name}\n\n${product.overview}\n`);
 
   created.push({ projectId, name: product.name, tasks: taskIds });
 }
