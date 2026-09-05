@@ -24,8 +24,7 @@ export const NODES = [
     type: "objectives",
     phase: "Objectives",
     items: [
-      "Define the component function shell this code will live in",
-      "Define TypeScript types for a vendor, an item option, and one order line",
+      "Model the vendor, item option, and order-line shapes, then set up the component around them",
       "Store vendors, items, and the in-progress order lines in React state",
       "Fetch real vendors and items from the Mini ERP API when the component mounts",
       "Create a real purchase order with POST /api/po",
@@ -33,80 +32,15 @@ export const NODES = [
     ],
   },
   {
-    id: "step0",
-    type: "question",
-    phase: "Step 1 of 6",
-    paal: `We need a place for this component's code to live.
-
-Your task: create src/components/PurchaseOrderForm.tsx — every step from here on edits this same file.`,
-    hint: `Create the file at src/components/PurchaseOrderForm.tsx (empty is fine to start).`,
-    example_code: `// src/components/InventoryTable.tsx\n`,
-    think_prompt: `Every component in this codebase lives in its own file, in the same place the other components live — you already did this once for InventoryTable. Where should this one go, and what should it be named?`,
-    mc_options: ["src/components/PurchaseOrderForm.tsx", "src/PurchaseOrderForm.js", "Anywhere — name and location don't matter"],
-    mc_correct_option: "src/components/PurchaseOrderForm.tsx",
-    mc_anchor: "src/components/PurchaseOrderForm.tsx",
-    why_this_matters: `Same convention as every other component in this codebase — get the path right here and everything later (App.tsx, a teammate's import, a real pull request) can find it.`,
-    answer_keywords: ["src/components/PurchaseOrderForm.tsx"],
-    seed_code: ``,
-    starter_code: ``,
-    feedback_correct: "Correct — this file is where every following step lives.",
-    feedback_partial: "Close — check the hint and try again.",
-    feedback_wrong: "Create the file at src/components/PurchaseOrderForm.tsx, matching this codebase's existing components.",
-    pre_check_hint: `Same rule as InventoryTable.tsx: one file per component, under src/components/, named after the component.`,
-    expected: ``,
-    analog_example: `// src/components/InventoryTable.tsx\n`,
-    deepDiveLabel: "Why this step matters",
-    deepDive: {
-      hook: `You've already done this move once for InventoryTable — the file location is what lets anything importing this component find it by path.`,
-      pain: "A component in the wrong place is invisible to anything that imports it by its expected path.",
-      mentalModel: `Build the screen that creates a purchase order against a real vendor and item, then receives it for real — a form, a create call, a receive call, and the reflected result.`,
-      discover: `// src/components/PurchaseOrderForm.tsx\n`,
-      quickRules: "- One component per file\n- File path matches the component name\n- Match this codebase's existing src/components/ convention",
-      watchOut: "Do not put a new component directly in src/ when this codebase already organizes them under src/components/.",
-      dryRun: "Create the same kind of file for a different component.",
-      build: `Create src/components/PurchaseOrderForm.tsx.`,
-    },
-  },
-  {
+    // Redesign: the old template opened with two pure-scaffolding steps (create the file, write
+    // an empty shell) before ever touching real data. Neither is a move in this task's actual
+    // algorithm. This step merges all three: the real content is modeling the three distinct
+    // shapes a PO form has to keep straight, and the component shell is just the container that
+    // decision needs to live in — not a lesson of its own.
     id: "step1",
     type: "question",
-    phase: "Step 2 of 6",
-    paal: `Every step from here on adds to one function. Write and export a function named \`PurchaseOrderForm\` that returns \`<div />\`.
-
-Your task: define and export PurchaseOrderForm as a function component returning <div />.`,
-    hint: `export function PurchaseOrderForm() {\n  return <div />;\n}`,
-    example_code: `export function InventoryTable() {\n  return <div />;\n}`,
-    think_prompt: `This is the same shape as InventoryTable — a named, exported function returning the smallest possible JSX before any real data or form state exists. What do you name it here?`,
-    mc_options: ["export function PurchaseOrderForm() { return <div />; }", "Write the JSX first, then wrap it in a function later", "Skip the function — a component can be a bare object of props"],
-    mc_correct_option: "export function PurchaseOrderForm() { return <div />; }",
-    mc_anchor: "export function PurchaseOrderForm() { return",
-    why_this_matters: `Naming and exporting the shell first is what lets every later step — vendor state, item state, the create call, the receive call — attach to something real.`,
-    answer_keywords: ["export", "function", "PurchaseOrderForm", "return"],
-    seed_code: `// This becomes a real component in the codebase — start with an empty shell.\n`,
-    starter_code: `// This becomes a real component in the codebase — start with an empty shell.\n\n`,
-    feedback_correct: "Correct — every later step builds inside this shell.",
-    feedback_partial: "Close — check the hint and try again.",
-    feedback_wrong: "Start from an empty, exported function component — everything else nests inside it.",
-    pre_check_hint: `A component is a function that returns JSX. Before any form state exists, it can return almost nothing at all.`,
-    expected: `export function PurchaseOrderForm() {\n  return <div />;\n}\n`,
-    analog_example: `export function InventoryTable() {\n  return <div />;\n}`,
-    deepDiveLabel: "Why this step matters",
-    deepDive: {
-      hook: `A function needs a body before it needs contents — this shell is what every later piece of state and every real API call in this task nests inside.`,
-      pain: "Skipping this step leaves later code with no home to live in.",
-      mentalModel: `Build the screen that creates a purchase order against a real vendor and item, then receives it for real.`,
-      discover: `export function PurchaseOrderForm() {\n  return <div />;\n}\n`,
-      quickRules: "- One skill per step\n- Name the skill, not the product noun\n- Example uses the same pattern",
-      watchOut: "Do not add form state before the shell exists.",
-      dryRun: "Write the same shell step for a different form component.",
-      build: `export function PurchaseOrderForm() { return <div />; }`,
-    },
-  },
-  {
-    id: "step2",
-    type: "question",
-    phase: "Step 3 of 6",
-    paal: `Define TypeScript types for a vendor, an item option, and one order line
+    phase: "Step 1 of 5",
+    paal: `Model the vendor, item option, and order-line shapes, then set up the component around them
 
 MOCK DATA
   Vendor: { id: "v1", name: "Acme Supply Co." }
@@ -115,39 +49,39 @@ MOCK DATA
 
 The real POST /api/po body is { vendorId, items: [{ itemId, quantity, unitPrice }] } — quantity and unitPrice are real JSON numbers here (not strings like the inventory table's display fields), because this is what your form sends, not what the API echoes back.
 
-Your task: write \`type Vendor\` (id, name), \`type ItemOption\` (id, sku, name), and \`type OrderLine\` (itemId, quantity, unitPrice) — quantity and unitPrice as number.`,
-    hint: `type Vendor = { id: string; name: string; };\ntype ItemOption = { id: string; sku: string; name: string; };\ntype OrderLine = { itemId: string; quantity: number; unitPrice: number; };`,
-    example_code: `export type Item = {\n  id: string;\n  sku: string;\n  name: string;\n  costPrice: string;\n  sellingPrice: string;\n  stockOnHand: number;\n};`,
-    think_prompt: `Three different shapes are in play here: a vendor to pick from, an item to pick from, and a line you're building to send. Unlike the inventory table's display-only costPrice/sellingPrice (strings, because that's what the API echoes back), quantity and unitPrice here are values *your form* sends as real numbers. What does each of the three types need to name?`,
-    mc_options: ["Three separate types: Vendor (id, name), ItemOption (id, sku, name), OrderLine (itemId, quantity: number, unitPrice: number)", "One big type with every field optional", "Reuse the inventory table's Item type unchanged for everything"],
-    mc_correct_option: "Three separate types: Vendor (id, name), ItemOption (id, sku, name), OrderLine (itemId, quantity: number, unitPrice: number)",
-    mc_anchor: "Three separate types: Vendor (id, name)",
-    why_this_matters: `A form has three different kinds of data in play — what you can pick from, and what you're building to send. Keeping them as separate, precisely-typed shapes is what stops a vendor id from being passed where an item id belongs.`,
-    answer_keywords: ["type", "Vendor", "ItemOption", "OrderLine", "quantity", "unitPrice", "number"],
-    seed_code: `export function PurchaseOrderForm() {\n  return <div />;\n}\n\n// Describe a vendor, an item to pick from, and one order line.\n`,
-    starter_code: `export function PurchaseOrderForm() {\n  return <div />;\n}\n\n// Describe a vendor, an item to pick from, and one order line.\n\n`,
-    feedback_correct: "Correct — three distinct shapes for three distinct pieces of data.",
+Your task: write \`type Vendor\` (id, name), \`type ItemOption\` (id, sku, name), and \`type OrderLine\` (itemId, quantity, unitPrice) — quantity and unitPrice as number — then define and export PurchaseOrderForm as a function component returning <div /> — every step from here on edits this same file.`,
+    hint: `type Vendor = { id: string; name: string; };\ntype ItemOption = { id: string; sku: string; name: string; };\ntype OrderLine = { itemId: string; quantity: number; unitPrice: number; };\n\nexport function PurchaseOrderForm() {\n  return <div />;\n}`,
+    example_code: `export type Item = {\n  id: string;\n  sku: string;\n  name: string;\n  costPrice: string;\n  sellingPrice: string;\n  stockOnHand: number;\n};\n\nexport function InventoryTable() {\n  return <div />;\n}`,
+    think_prompt: `Three different shapes are in play here: a vendor to pick from, an item to pick from, and a line you're building to send. Unlike the inventory table's display-only costPrice/sellingPrice (strings, because that's what the API echoes back), quantity and unitPrice here are values *your form* sends as real numbers. What does each of the three types need to name, and what does the component that will hold them need to be called?`,
+    mc_options: ["Three separate types (Vendor, ItemOption, OrderLine with numeric quantity/unitPrice), then export function PurchaseOrderForm() returning <div />", "One big type with every field optional", "Reuse the inventory table's Item type unchanged for everything"],
+    mc_correct_option: "Three separate types (Vendor, ItemOption, OrderLine with numeric quantity/unitPrice), then export function PurchaseOrderForm() returning <div />",
+    mc_anchor: "Three separate types (Vendor, ItemOption",
+    why_this_matters: `A form has three different kinds of data in play — what you can pick from, and what you're building to send. Keeping them as separate, precisely-typed shapes is what stops a vendor id from being passed where an item id belongs. Naming and exporting the component next to them is what lets every later step — vendor state, the create call, the receive call — attach to something real.`,
+    answer_keywords: ["type", "Vendor", "ItemOption", "OrderLine", "quantity", "unitPrice", "number", "export", "function", "PurchaseOrderForm"],
+    seed_code: ``,
+    starter_code: ``,
+    feedback_correct: "Correct — three distinct data shapes and the component both exist now; every later step builds inside this.",
     feedback_partial: "Close — check the hint and try again.",
-    feedback_wrong: "Write three separate types, matching exactly what POST /api/po expects for items.",
-    pre_check_hint: `POST /api/po expects { vendorId, items: [{ itemId, quantity, unitPrice }] } — quantity and unitPrice as real numbers, since your form is producing them, not echoing a decimal field back from the database.`,
+    feedback_wrong: "Write three separate types matching exactly what POST /api/po expects, then the component shell that will use them.",
+    pre_check_hint: `POST /api/po expects { vendorId, items: [{ itemId, quantity, unitPrice }] } — quantity and unitPrice as real numbers, since your form is producing them, not echoing a decimal field back from the database. The component just needs to exist before it can render anything.`,
     expected: `export type Vendor = {\n  id: string;\n  name: string;\n};\n\nexport type ItemOption = {\n  id: string;\n  sku: string;\n  name: string;\n};\n\nexport type OrderLine = {\n  itemId: string;\n  quantity: number;\n  unitPrice: number;\n};\n\nexport function PurchaseOrderForm() {\n  return <div />;\n}\n`,
-    analog_example: `export type Item = {\n  id: string;\n  sku: string;\n  name: string;\n  costPrice: string;\n  sellingPrice: string;\n  stockOnHand: number;\n};`,
+    analog_example: `export type Item = {\n  id: string;\n  sku: string;\n  name: string;\n  costPrice: string;\n  sellingPrice: string;\n  stockOnHand: number;\n};\n\nexport function InventoryTable() {\n  return <div />;\n}`,
     deepDiveLabel: "Why this step matters",
     deepDive: {
-      hook: `A form built around one giant type invites bugs where a vendor's id ends up where an item's id belongs. Three narrow types, each matching exactly one real shape, make that mistake a compile error instead of a runtime surprise.`,
+      hook: `A form built around one giant type invites bugs where a vendor's id ends up where an item's id belongs. Three narrow types, each matching exactly one real shape, make that mistake a compile error instead of a runtime surprise — and pairing them with the component's own shell in the same step turns this from "a types file" into a real, mergeable start on the actual screen.`,
       pain: "Collapsing three different shapes into one loose type lets the wrong id slide into the wrong field silently.",
       mentalModel: `Build the screen that creates a purchase order against a real vendor and item, then receives it for real.`,
-      discover: `export type OrderLine = {\n  itemId: string;\n  quantity: number;\n  unitPrice: number;\n};`,
+      discover: `export type OrderLine = {\n  itemId: string;\n  quantity: number;\n  unitPrice: number;\n};\n\nexport function PurchaseOrderForm() {\n  return <div />;\n}`,
       quickRules: "- One skill per step\n- Name the skill, not the product noun\n- Example uses the same pattern",
       watchOut: "Do not type quantity/unitPrice as string here — they're real numbers your form produces, unlike the inventory table's echoed decimal strings.",
-      dryRun: "Write the same three-type split for a different create-form against a different real API.",
-      build: `type Vendor = { id: string; name: string }; type ItemOption = { id: string; sku: string; name: string }; type OrderLine = { itemId: string; quantity: number; unitPrice: number };`,
+      dryRun: "Write the same three-type-plus-shell split for a different create-form against a different real API.",
+      build: `type Vendor = { id: string; name: string }; type ItemOption = { id: string; sku: string; name: string }; type OrderLine = { itemId: string; quantity: number; unitPrice: number };\n\nexport function PurchaseOrderForm() { return <div />; }`,
     },
   },
   {
-    id: "step3",
+    id: "step2",
     type: "question",
-    phase: "Step 4 of 6",
+    phase: "Step 2 of 5",
     paal: `Store vendors, items, and the in-progress order lines in React state
 
 Your task: hold vendors (Vendor[]), items (ItemOption[]), lines (OrderLine[]), a selected vendorId (string), and the created purchase order result (any, starting null) — all in useState, all starting empty/null.`,
@@ -180,9 +114,9 @@ Your task: hold vendors (Vendor[]), items (ItemOption[]), lines (OrderLine[]), a
     },
   },
   {
-    id: "step4",
+    id: "step3",
     type: "question",
-    phase: "Step 5 of 6",
+    phase: "Step 3 of 5",
     paal: `Fetch real vendors and items from the Mini ERP API when the component mounts
 
 Your task: inside a useEffect that runs once on mount, fetch("http://localhost:4100/api/vendors") and fetch("http://localhost:4100/api/items"), read each response's \`data\` array, and store them with setVendors and setItems.`,
@@ -215,9 +149,9 @@ Your task: inside a useEffect that runs once on mount, fetch("http://localhost:4
     },
   },
   {
-    id: "step5",
+    id: "step4",
     type: "question",
-    phase: "Step 6 of 6",
+    phase: "Step 4 of 5",
     paal: `Create the purchase order for real, then receive it for real
 
 Your task: write an async function \`createPO\` that POSTs { vendorId, items: lines } as JSON to http://localhost:4100/api/po, reads the response's \`data\`, and stores it with setPo. Then write \`receivePO\` that POSTs to \`http://localhost:4100/api/po/\${po.id}/receive\` (once po exists) and again stores the response's \`data\` with setPo. Render a "Create PO" button calling createPO, and — once po exists — a "Receive Goods" button calling receivePO, plus the current po.status.`,
@@ -254,12 +188,10 @@ Your task: write an async function \`createPO\` that POSTs { vendorId, items: li
 const sideItems = [
   { label: "Lesson", id: "intro" },
   { label: "Objectives", id: "objectives" },
-  { label: "Step 1", id: "step0" },
-  { label: "Step 2", id: "step1" },
-  { label: "Step 3", id: "step2" },
-  { label: "Step 4", id: "step3" },
-  { label: "Step 5", id: "step4" },
-  { label: "Step 6", id: "step5" },
+  { label: "Step 1", id: "step1" },
+  { label: "Step 2", id: "step2" },
+  { label: "Step 3", id: "step3" },
+  { label: "Step 4", id: "step4" },
 ];
 
 export default createINPACTEngine({

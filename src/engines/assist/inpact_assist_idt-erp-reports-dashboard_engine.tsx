@@ -24,8 +24,7 @@ export const NODES = [
     type: "objectives",
     phase: "Objectives",
     items: [
-      "Define the component function shell this code will live in",
-      "Define TypeScript types for a trial balance row and the income statement",
+      "Model the trial balance and income statement shapes, then set up the component around them",
       "Store both reports in React state",
       "Fetch the real trial balance and income statement from the Mini ERP API when the component mounts",
       "Render the trial balance as a real table, including whether it's balanced",
@@ -33,80 +32,12 @@ export const NODES = [
     ],
   },
   {
-    id: "step0",
-    type: "question",
-    phase: "Step 1 of 6",
-    paal: `We need a place for this component's code to live.
-
-Your task: create src/components/ReportsDashboard.tsx — every step from here on edits this same file.`,
-    hint: `Create the file at src/components/ReportsDashboard.tsx (empty is fine to start).`,
-    example_code: `// src/components/SalesOrderPipeline.tsx\n`,
-    think_prompt: `Same convention you've used for every component so far. What's this one named?`,
-    mc_options: ["src/components/ReportsDashboard.tsx", "src/ReportsDashboard.js", "Anywhere — name and location don't matter"],
-    mc_correct_option: "src/components/ReportsDashboard.tsx",
-    mc_anchor: "src/components/ReportsDashboard.tsx",
-    why_this_matters: `Same convention as every other component in this codebase — get the path right here and everything later can find it.`,
-    answer_keywords: ["src/components/ReportsDashboard.tsx"],
-    seed_code: ``,
-    starter_code: ``,
-    feedback_correct: "Correct — this file is where every following step lives.",
-    feedback_partial: "Close — check the hint and try again.",
-    feedback_wrong: "Create the file at src/components/ReportsDashboard.tsx, matching this codebase's existing components.",
-    pre_check_hint: `Same rule as every other component in this codebase: one file per component, under src/components/, named after the component.`,
-    expected: ``,
-    analog_example: `// src/components/SalesOrderPipeline.tsx\n`,
-    deepDiveLabel: "Why this step matters",
-    deepDive: {
-      hook: `Fourth time using this exact convention — file path matches component name, lives under src/components/.`,
-      pain: "A component in the wrong place is invisible to anything that imports it by its expected path.",
-      mentalModel: `Build the dashboard that pulls real numbers straight from the real general ledger.`,
-      discover: `// src/components/ReportsDashboard.tsx\n`,
-      quickRules: "- One component per file\n- File path matches the component name\n- Match this codebase's existing src/components/ convention",
-      watchOut: "Do not put a new component directly in src/ when this codebase already organizes them under src/components/.",
-      dryRun: "Create the same kind of file for a different component.",
-      build: `Create src/components/ReportsDashboard.tsx.`,
-    },
-  },
-  {
+    // Redesign: merges the old "create the file" + "empty shell" scaffolding steps into the real
+    // data-modeling step — neither was a move in this task's actual algorithm on its own.
     id: "step1",
     type: "question",
-    phase: "Step 2 of 6",
-    paal: `Every step from here on adds to one function. Write and export a function named \`ReportsDashboard\` that returns \`<div />\`.
-
-Your task: define and export ReportsDashboard as a function component returning <div />.`,
-    hint: `export function ReportsDashboard() {\n  return <div />;\n}`,
-    example_code: `export function SalesOrderPipeline() {\n  return <div />;\n}`,
-    think_prompt: `Same shell shape as every component you've built in this product. What do you name it here?`,
-    mc_options: ["export function ReportsDashboard() { return <div />; }", "Write the JSX first, then wrap it in a function later", "Skip the function — a component can be a bare object of props"],
-    mc_correct_option: "export function ReportsDashboard() { return <div />; }",
-    mc_anchor: "export function ReportsDashboard() { return",
-    why_this_matters: `Naming and exporting the shell first is what lets both real report fetches attach to something.`,
-    answer_keywords: ["export", "function", "ReportsDashboard", "return"],
-    seed_code: `// This becomes a real component in the codebase — start with an empty shell.\n`,
-    starter_code: `// This becomes a real component in the codebase — start with an empty shell.\n\n`,
-    feedback_correct: "Correct — every later step builds inside this shell.",
-    feedback_partial: "Close — check the hint and try again.",
-    feedback_wrong: "Start from an empty, exported function component — everything else nests inside it.",
-    pre_check_hint: `A component is a function that returns JSX. Before any report data exists, it can return almost nothing at all.`,
-    expected: `export function ReportsDashboard() {\n  return <div />;\n}\n`,
-    analog_example: `export function SalesOrderPipeline() {\n  return <div />;\n}`,
-    deepDiveLabel: "Why this step matters",
-    deepDive: {
-      hook: `A function needs a body before it needs contents — this shell is what both report fetches and their rendering nest inside.`,
-      pain: "Skipping this step leaves later code with no home to live in.",
-      mentalModel: `Build the dashboard that pulls real numbers straight from the real general ledger.`,
-      discover: `export function ReportsDashboard() {\n  return <div />;\n}\n`,
-      quickRules: "- One skill per step\n- Name the skill, not the product noun\n- Example uses the same pattern",
-      watchOut: "Do not add report state before the shell exists.",
-      dryRun: "Write the same shell step for a different dashboard component.",
-      build: `export function ReportsDashboard() { return <div />; }`,
-    },
-  },
-  {
-    id: "step2",
-    type: "question",
-    phase: "Step 3 of 6",
-    paal: `Define TypeScript types for a trial balance row and the income statement
+    phase: "Step 1 of 5",
+    paal: `Model the trial balance and income statement shapes, then set up the component around them
 
 MOCK DATA
   Row:              { code: "1000", name: "Cash", type: "ASSET", debit: "4200.00", credit: "0.00", balance: "4200.00" }
@@ -115,39 +46,39 @@ MOCK DATA
 
 Every dollar figure here is a string, same reason as the inventory table's price fields — Prisma's exact decimal type serializes to JSON as a string so no precision is silently lost.
 
-Your task: write \`type TrialBalanceRow\` (code, name, type, debit, credit, balance — all string), \`type TrialBalance\` (rows: TrialBalanceRow[], totalDebits, totalCredits — string, balanced — boolean), and \`type IncomeStatement\` (totalRevenue, totalExpense, netIncome — all string).`,
-    hint: `type TrialBalanceRow = { code: string; name: string; type: string; debit: string; credit: string; balance: string; };\ntype TrialBalance = { rows: TrialBalanceRow[]; totalDebits: string; totalCredits: string; balanced: boolean; };\ntype IncomeStatement = { totalRevenue: string; totalExpense: string; netIncome: string; };`,
-    example_code: `export type Item = {\n  id: string;\n  sku: string;\n  name: string;\n  costPrice: string;\n  sellingPrice: string;\n  stockOnHand: number;\n};`,
-    think_prompt: `Same lesson as the inventory table's costPrice/sellingPrice fields, applied to every dollar figure a real accounting report produces — each one arrives as a string, never a number, because it's an exact decimal underneath. What's the one field in TrialBalance that genuinely is a boolean, not a string?`,
-    mc_options: ["All dollar figures as string; balanced as boolean; rows as TrialBalanceRow[]", "All numeric-looking fields as number since they're dollar amounts", "One shared type reused for both reports"],
-    mc_correct_option: "All dollar figures as string; balanced as boolean; rows as TrialBalanceRow[]",
-    mc_anchor: "All dollar figures as string; balanced",
-    why_this_matters: `Getting a decimal field's type wrong here means TypeScript can't catch an accidental sum of two price strings that silently concatenates instead of adding — exactly the class of bug a real accounting screen cannot afford.`,
-    answer_keywords: ["type", "TrialBalanceRow", "TrialBalance", "IncomeStatement", "balanced", "boolean", "string"],
-    seed_code: `export function ReportsDashboard() {\n  return <div />;\n}\n\n// Describe one trial balance row, the whole trial balance, and the income statement.\n`,
-    starter_code: `export function ReportsDashboard() {\n  return <div />;\n}\n\n// Describe one trial balance row, the whole trial balance, and the income statement.\n\n`,
-    feedback_correct: "Correct — every dollar figure stays a string, and balanced stays a real boolean.",
+Your task: write \`type TrialBalanceRow\` (code, name, type, debit, credit, balance — all string), \`type TrialBalance\` (rows: TrialBalanceRow[], totalDebits, totalCredits — string, balanced — boolean), and \`type IncomeStatement\` (totalRevenue, totalExpense, netIncome — all string), then define and export ReportsDashboard as a function component returning <div /> — every step from here on edits this same file.`,
+    hint: `type TrialBalanceRow = { code: string; name: string; type: string; debit: string; credit: string; balance: string; };\ntype TrialBalance = { rows: TrialBalanceRow[]; totalDebits: string; totalCredits: string; balanced: boolean; };\ntype IncomeStatement = { totalRevenue: string; totalExpense: string; netIncome: string; };\n\nexport function ReportsDashboard() {\n  return <div />;\n}`,
+    example_code: `export type Item = {\n  id: string;\n  sku: string;\n  name: string;\n  costPrice: string;\n  sellingPrice: string;\n  stockOnHand: number;\n};\n\nexport function InventoryTable() {\n  return <div />;\n}`,
+    think_prompt: `Same lesson as the inventory table's costPrice/sellingPrice fields, applied to every dollar figure a real accounting report produces — each one arrives as a string, never a number, because it's an exact decimal underneath. What's the one field in TrialBalance that genuinely is a boolean, not a string, and what does the component that will hold both reports need to be called?`,
+    mc_options: ["All dollar figures as string, balanced as boolean, rows as TrialBalanceRow[], then export function ReportsDashboard() returning <div />", "All numeric-looking fields as number since they're dollar amounts", "One shared type reused for both reports"],
+    mc_correct_option: "All dollar figures as string, balanced as boolean, rows as TrialBalanceRow[], then export function ReportsDashboard() returning <div />",
+    mc_anchor: "All dollar figures as string, balanced",
+    why_this_matters: `Getting a decimal field's type wrong here means TypeScript can't catch an accidental sum of two price strings that silently concatenates instead of adding — exactly the class of bug a real accounting screen cannot afford. Naming and exporting the component next to them is what lets both real report fetches attach to something real.`,
+    answer_keywords: ["type", "TrialBalanceRow", "TrialBalance", "IncomeStatement", "balanced", "boolean", "string", "export", "function", "ReportsDashboard"],
+    seed_code: ``,
+    starter_code: ``,
+    feedback_correct: "Correct — every dollar figure stays a string, balanced stays a real boolean, and the component both exist now.",
     feedback_partial: "Close — check the hint and try again.",
-    feedback_wrong: "Every dollar amount is a string here, matching exactly what the real API sends — only balanced is a boolean.",
-    pre_check_hint: `The real GET /api/reports/trial-balance and GET /api/reports/income-statement responses send every dollar figure as a string (Prisma Decimal serialized to JSON) — only \`balanced\` is a genuine boolean.`,
+    feedback_wrong: "Every dollar amount is a string here, matching exactly what the real API sends — only balanced is a boolean — then the component shell that will use them.",
+    pre_check_hint: `The real GET /api/reports/trial-balance and GET /api/reports/income-statement responses send every dollar figure as a string (Prisma Decimal serialized to JSON) — only \`balanced\` is a genuine boolean. The component just needs to exist before it can render anything.`,
     expected: `export type TrialBalanceRow = {\n  code: string;\n  name: string;\n  type: string;\n  debit: string;\n  credit: string;\n  balance: string;\n};\n\nexport type TrialBalance = {\n  rows: TrialBalanceRow[];\n  totalDebits: string;\n  totalCredits: string;\n  balanced: boolean;\n};\n\nexport type IncomeStatement = {\n  totalRevenue: string;\n  totalExpense: string;\n  netIncome: string;\n};\n\nexport function ReportsDashboard() {\n  return <div />;\n}\n`,
-    analog_example: `export type Item = {\n  id: string;\n  sku: string;\n  name: string;\n  costPrice: string;\n  sellingPrice: string;\n  stockOnHand: number;\n};`,
+    analog_example: `export type Item = {\n  id: string;\n  sku: string;\n  name: string;\n  costPrice: string;\n  sellingPrice: string;\n  stockOnHand: number;\n};\n\nexport function InventoryTable() {\n  return <div />;\n}`,
     deepDiveLabel: "Why this step matters",
     deepDive: {
-      hook: `An accounting report is the one place a "close enough" numeric type is genuinely unacceptable — typing every dollar figure as the string the real API actually sends is what makes this dashboard trustworthy instead of quietly wrong.`,
+      hook: `An accounting report is the one place a "close enough" numeric type is genuinely unacceptable — typing every dollar figure as the string the real API actually sends is what makes this dashboard trustworthy instead of quietly wrong. Pairing that with the component's own shell in the same step turns this from "a types file" into a real, mergeable start on the actual screen.`,
       pain: "Typing a decimal string as number invites silent precision bugs the type system should have caught.",
       mentalModel: `Build the dashboard that pulls real numbers straight from the real general ledger.`,
-      discover: `export type TrialBalance = {\n  rows: TrialBalanceRow[];\n  totalDebits: string;\n  totalCredits: string;\n  balanced: boolean;\n};`,
+      discover: `export type TrialBalance = {\n  rows: TrialBalanceRow[];\n  totalDebits: string;\n  totalCredits: string;\n  balanced: boolean;\n};\n\nexport function ReportsDashboard() {\n  return <div />;\n}`,
       quickRules: "- One skill per step\n- Name the skill, not the product noun\n- Example uses the same pattern",
       watchOut: "Do not type balanced as a string — it's the one genuinely boolean field in either report.",
-      dryRun: "Write the same string-typed-decimal pattern for a different real financial report.",
-      build: `TrialBalanceRow (all string), TrialBalance (rows + string totals + boolean balanced), IncomeStatement (all string).`,
+      dryRun: "Write the same string-typed-decimal-plus-shell pattern for a different real financial report.",
+      build: `TrialBalanceRow (all string), TrialBalance (rows + string totals + boolean balanced), IncomeStatement (all string).\n\nexport function ReportsDashboard() { return <div />; }`,
     },
   },
   {
-    id: "step3",
+    id: "step2",
     type: "question",
-    phase: "Step 4 of 6",
+    phase: "Step 2 of 5",
     paal: `Store both reports in React state
 
 Your task: hold trialBalance (TrialBalance | null) and incomeStatement (IncomeStatement | null) in useState, both starting null.`,
@@ -180,9 +111,9 @@ Your task: hold trialBalance (TrialBalance | null) and incomeStatement (IncomeSt
     },
   },
   {
-    id: "step4",
+    id: "step3",
     type: "question",
-    phase: "Step 5 of 6",
+    phase: "Step 3 of 5",
     paal: `Fetch the real trial balance and income statement from the Mini ERP API when the component mounts
 
 Your task: inside a useEffect that runs once on mount, fetch("http://localhost:4100/api/reports/trial-balance") and fetch("http://localhost:4100/api/reports/income-statement"), read each response's \`data\`, and store them with setTrialBalance and setIncomeStatement.`,
@@ -215,9 +146,9 @@ Your task: inside a useEffect that runs once on mount, fetch("http://localhost:4
     },
   },
   {
-    id: "step5",
+    id: "step4",
     type: "question",
-    phase: "Step 6 of 6",
+    phase: "Step 4 of 5",
     paal: `Render the trial balance as a real table, plus the income statement's revenue, expense, and net income
 
 Your task: show a loading message while either report is null. Once both exist, render a real <table> from trialBalance.rows (columns: code, name, debit, credit, balance) with a line showing whether it's balanced (trialBalance.balanced), and below it show incomeStatement's totalRevenue, totalExpense, and netIncome.`,
@@ -254,12 +185,10 @@ Your task: show a loading message while either report is null. Once both exist, 
 const sideItems = [
   { label: "Lesson", id: "intro" },
   { label: "Objectives", id: "objectives" },
-  { label: "Step 1", id: "step0" },
-  { label: "Step 2", id: "step1" },
-  { label: "Step 3", id: "step2" },
-  { label: "Step 4", id: "step3" },
-  { label: "Step 5", id: "step4" },
-  { label: "Step 6", id: "step5" },
+  { label: "Step 1", id: "step1" },
+  { label: "Step 2", id: "step2" },
+  { label: "Step 3", id: "step3" },
+  { label: "Step 4", id: "step4" },
 ];
 
 export default createINPACTEngine({

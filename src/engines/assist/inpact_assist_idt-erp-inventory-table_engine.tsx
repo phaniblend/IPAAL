@@ -24,8 +24,7 @@ export const NODES = [
     type: "objectives",
     phase: "Objectives",
     items: [
-      "Define the component function shell this code will live in",
-      "Define a TypeScript type for one inventory item",
+      "Model one inventory item as a type, then set up the component around it",
       "Store the list in React state with useState",
       "Fetch real inventory data from the Mini ERP API when the component mounts",
       "Define TanStack Table columns and instantiate the table",
@@ -33,112 +32,10 @@ export const NODES = [
     ],
   },
   {
-    id: "step0",
-    type: "question",
-    phase: "Step 1 of 7",
-    paal: `We need a place for this component's code to live.
-
-Your task: create src/components/InventoryTable.tsx — every step from here on edits this same file.`,
-    hint: `Create the file at src/components/InventoryTable.tsx (empty is fine to start).`,
-    example_code: `// src/components/BookingsList.tsx
-`,
-    think_prompt: `Every component in this codebase lives in its own file, in the same place the other components live. Where should you create this one, and what should you name it?`,
-    mc_options: ["src/components/InventoryTable.tsx", "src/InventoryTable.js", "Anywhere — name and location don't matter"],
-    mc_correct_option: "src/components/InventoryTable.tsx",
-    mc_anchor: "src/components/InventoryTable.tsx",
-    why_this_matters: `Every later step in this task edits this same file — creating it first, in the right place with the right name, is what lets App.tsx (and anything else that imports it later) find it.`,
-    answer_keywords: ["src/components/InventoryTable.tsx"],
-    seed_code: ``,
-    starter_code: ``,
-    feedback_correct: "Correct — this file is where every following step lives.",
-    feedback_partial: "Close — check the hint and try again.",
-    feedback_wrong: "Create the file at src/components/InventoryTable.tsx, matching this codebase's existing components.",
-    pre_check_hint: `Every component in this codebase lives in its own file under src/components/. So create a new file at src/components/InventoryTable.tsx.`,
-    expected: ``,
-    analog_example: `// src/components/BookingsList.tsx
-`,
-    deepDiveLabel: "Why this step matters",
-    deepDive: {
-      hook: `A component's file location and name aren't just tidiness — anything that imports it (App.tsx, a test file, a teammate's PR) does so by that exact path. Getting the path right here means every later step, and a real pull request, lines up with how this codebase is already organized.`,
-      pain: "A component in the wrong place, or named inconsistently, is invisible to anything that tries to import it by its expected path.",
-      mentalModel: `Build a screen that lists real inventory from a real backend:
-
-  Fetch  →  every item, live from the real Mini ERP API
-  Table  →  a real TanStack Table — sortable columns, not a plain <ul>
-  Loading →  a message while the fetch is in flight
-  Empty  →  a message if there are no items yet
-`,
-      discover: `// src/components/InventoryTable.tsx
-`,
-      quickRules: "- One component per file\n- File path matches the component name\n- Match this codebase's existing src/components/ convention",
-      watchOut: "Do not put a new component directly in src/ when this codebase already organizes them under src/components/.",
-      dryRun: "Create the same kind of file for a different component, following the same convention.",
-      build: `Create src/components/InventoryTable.tsx.`,
-    },
-  },
-  {
     id: "step1",
     type: "question",
-    phase: "Step 2 of 7",
-    paal: `Every step from here on adds to one function. Write and export a function named \`InventoryTable\` that returns \`<div />\`.
-
-Your task: define and export InventoryTable as a function component returning <div />.`,
-    hint: `export function InventoryTable() {
-  return <div />;
-}`,
-    example_code: `export function BookingsList() {
-  return <div />;
-}`,
-    think_prompt: `This code is not a floating script — it merges into a real component in a real codebase. Every piece you write in the next few steps (the type, the fetch, the table) has to live inside one function. What do you name that function, and what is the smallest thing it can return before it has any data at all?`,
-    mc_options: ["export function InventoryTable() { return <div />; }", "Write the JSX first, then wrap it in a function later", "Skip the function — a component can be a bare object of props"],
-    mc_correct_option: "export function InventoryTable() { return <div />; }",
-    mc_anchor: "export function InventoryTable() { return",
-    why_this_matters: `A React component is just a function that returns JSX — naming and exporting that shell first is what lets every later step (and a real pull request) attach to something. The backend already exists and is running — this task is frontend only, against real endpoints.`,
-    answer_keywords: ["export", "function", "InventoryTable", "return"],
-    seed_code: `// This becomes a real component in the codebase — start with an empty shell.
-`,
-    starter_code: `// This becomes a real component in the codebase — start with an empty shell.
-
-`,
-    feedback_correct: "Correct — every later step builds inside this shell.",
-    feedback_partial: "Close — check the hint and try again.",
-    feedback_wrong: "Start from an empty, exported function component — everything else nests inside it.",
-    pre_check_hint: `A component is a function that returns JSX. Before it renders any real data, it can return almost nothing at all — an empty element is a perfectly valid starting point.`,
-    expected: `export function InventoryTable() {
-  return <div />;
-}
-`,
-    analog_example: `export function BookingsList() {
-  return <div />;
-}`,
-    deepDiveLabel: "Why this step matters",
-    deepDive: {
-      hook: `A component is a function, and a function needs a body before it needs contents. Naming and exporting the shell first — before any data or markup exists — is what turns a lesson's worth of steps into one real, mergeable file instead of loose snippets.`,
-      pain: "Skipping this step leaves later code with no data shape or no source of truth.",
-      mentalModel: `Build a screen that lists real inventory from a real backend:
-
-  Fetch  →  every item, live from the real Mini ERP API
-  Table  →  a real TanStack Table — sortable columns, not a plain <ul>
-  Loading →  a message while the fetch is in flight
-  Empty  →  a message if there are no items yet
-`,
-      discover: `export function InventoryTable() {
-  return <div />;
-}
-`,
-      quickRules: "- One skill per step\n- Name the skill, not the product noun\n- Example uses the same pattern",
-      watchOut: "Do not turn a single import or interface into its own lesson.",
-      dryRun: "Write the same step for a different resource with the same shape.",
-      build: `export function InventoryTable() {
-  return <div />;
-}`,
-    },
-  },
-  {
-    id: "step2",
-    type: "question",
-    phase: "Step 3 of 7",
-    paal: `Define a TypeScript type for one item in a list
+    phase: "Step 1 of 6",
+    paal: `Model one inventory item as a type, then set up the component around it
 
 MOCK ROW — Inventory
   Sku: "WIDGET-01"
@@ -148,13 +45,28 @@ MOCK ROW — Inventory
 
 The real API sends costPrice and sellingPrice as strings, not numbers — Prisma's exact decimal type serializes to JSON as a string so no precision is ever silently lost. stockOnHand really is a number.
 
-Your task: write \`type Item\` with id (string), sku (string), name (string), costPrice (string), sellingPrice (string), and stockOnHand (number).`,
-    hint: `Write a TypeScript type named Item with id, sku, name, costPrice, sellingPrice all string, and stockOnHand as number.`,
+Your task: write \`type Item\` with id (string), sku (string), name (string), costPrice (string), sellingPrice (string), and stockOnHand (number), then define and export InventoryTable as a function component returning <div /> — every step from here on edits this same file.`,
+    hint: `type Item = {
+  id: string;
+  sku: string;
+  name: string;
+  costPrice: string;
+  sellingPrice: string;
+  stockOnHand: number;
+};
+
+export function InventoryTable() {
+  return <div />;
+}`,
     example_code: `export type Guest = {
   id: string;
   name: string;
   note: string;
-};`,
+};
+
+export function GuestList() {
+  return <div />;
+}`,
     think_prompt: `\`\`\`text
 MOCK ROW — Inventory
   Sku: "WIDGET-01"
@@ -162,29 +74,18 @@ MOCK ROW — Inventory
   Stock On Hand: 20
 \`\`\`
 
-Every value with a shape needs one type to describe that shape. Looking at the real API's response above, one field looks like it should be a number but is actually sent as a string, and one is genuinely a number — what does the type need to name, and get right, for each?`,
-    mc_options: ["Build one type for a single Item row, with costPrice/sellingPrice as string and stockOnHand as number", "Make every field a number since they are all quantities", "Wait until the table is built before deciding the type"],
-    mc_correct_option: "Build one type for a single Item row, with costPrice/sellingPrice as string and stockOnHand as number",
-    mc_anchor: "Build one type for a single Item row, wit",
-    why_this_matters: `The backend already exists and is running — this task is frontend only, against real endpoints. Getting a field's type wrong here doesn't just fail silently: TypeScript will flag every place you later try to do math on a price string as if it were a number, catching the bug before it ships.`,
-    answer_keywords: ["export", "type", "Item", "sku", "costPrice", "sellingPrice", "stockOnHand"],
-    seed_code: `export function InventoryTable() {
-  return <div />;
-}
-
-// Describe one inventory item. The table will use this type.
-`,
-    starter_code: `export function InventoryTable() {
-  return <div />;
-}
-
-// Describe one inventory item. The table will use this type.
-
-`,
-    feedback_correct: "Correct — one type for one list item.",
+Every value with a shape needs one type to describe that shape before any component can safely hold or render it — and that type has to sit alongside the function that will actually use it. Looking at the real API's response above, one field looks like it should be a number but is actually sent as a string, and one is genuinely a number — what does the type need to name, and get right, for each, and what does the component that will render it need to be called?`,
+    mc_options: ["Define type Item (costPrice/sellingPrice as string, stockOnHand as number), then export function InventoryTable() returning <div />", "Make every field a number since they are all quantities", "Wait until the table is built before deciding the type or the component"],
+    mc_correct_option: "Define type Item (costPrice/sellingPrice as string, stockOnHand as number), then export function InventoryTable() returning <div />",
+    mc_anchor: "Define type Item (costPrice/sellingPrice",
+    why_this_matters: `The backend already exists and is running — this task is frontend only, against real endpoints. Getting a field's type wrong here doesn't just fail silently: TypeScript will flag every place you later try to do math on a price string as if it were a number, catching the bug before it ships. Naming and exporting the component next to it is what lets every later step, and a real pull request, attach real behavior to something that already exists.`,
+    answer_keywords: ["export", "type", "Item", "sku", "costPrice", "sellingPrice", "stockOnHand", "function", "InventoryTable", "return"],
+    seed_code: ``,
+    starter_code: ``,
+    feedback_correct: "Correct — the data shape and the component both exist now; every later step builds inside this.",
     feedback_partial: "Close — check the hint and try again.",
-    feedback_wrong: "Start with a type for one record, matching exactly what the real API sends.",
-    pre_check_hint: `A TypeScript type is a contract: it names every field a value must have — and matching the real API's actual response shape (string price fields included) is what keeps that contract honest.`,
+    feedback_wrong: "Start with a type matching exactly what the real API sends, then the component shell that will use it.",
+    pre_check_hint: `A TypeScript type is a contract naming every field a value must have — and matching the real API's actual response shape (string price fields included) is what keeps that contract honest. A component just needs to exist before it can render anything.`,
     expected: `export type Item = {
   id: string;
   sku: string;
@@ -202,10 +103,14 @@ export function InventoryTable() {
   id: string;
   name: string;
   note: string;
-};`,
+};
+
+export function GuestList() {
+  return <div />;
+}`,
     deepDiveLabel: "Why this step matters",
     deepDive: {
-      hook: `A type that matches what the API actually sends — not what "feels like" it should send — is what makes TypeScript useful instead of decorative. A price field typed as string when the API genuinely returns a string means every accidental attempt to do arithmetic on it directly is a compile error, not a NaN a customer sees.`,
+      hook: `A type that matches what the API actually sends — not what "feels like" it should send — is what makes TypeScript useful instead of decorative. A price field typed as string when the API genuinely returns a string means every accidental attempt to do arithmetic on it directly is a compile error, not a NaN a customer sees. Pairing that with the component's own shell in the same step is what turns this from "a type file" into a real, mergeable start on the actual screen.`,
       pain: "A type that guesses wrong about the API's real shape produces confusing runtime bugs that TypeScript should have caught but didn't.",
       mentalModel: `Build a screen that lists real inventory from a real backend:
 
@@ -230,13 +135,13 @@ export function InventoryTable() {
       quickRules: "- One skill per step\n- Name the skill, not the product noun\n- Example uses the same pattern",
       watchOut: "Do not assume a numeric-looking field is a number without checking what the real API actually sends.",
       dryRun: "Write the same step for a different resource with a real API you haven't used before — check its actual response shape first.",
-      build: `Write a TypeScript type named Item with id, sku, name, costPrice, sellingPrice (all string), and stockOnHand (number).`,
+      build: `type Item = { id: string; sku: string; name: string; costPrice: string; sellingPrice: string; stockOnHand: number; };\n\nexport function InventoryTable() { return <div />; }`,
     },
   },
   {
-    id: "step3",
+    id: "step2",
     type: "question",
-    phase: "Step 4 of 7",
+    phase: "Step 2 of 6",
     paal: `Store a list in React state with useState so the UI re-renders
 
 Your task: hold items in state that React watches, typed as Item[], starting empty — the real data arrives in the next step.`,
@@ -334,9 +239,9 @@ export function InventoryTable() {
     },
   },
   {
-    id: "step4",
+    id: "step3",
     type: "question",
-    phase: "Step 5 of 7",
+    phase: "Step 3 of 6",
     paal: `Fetch real data from the real Mini ERP API when the component mounts
 
 This backend genuinely exists and is running at http://localhost:4100 — no seed data, no mock.
@@ -446,9 +351,9 @@ export function InventoryTable() {
     },
   },
   {
-    id: "step5",
+    id: "step4",
     type: "question",
-    phase: "Step 6 of 7",
+    phase: "Step 4 of 6",
     paal: `Define TanStack Table columns and instantiate the table
 
 TanStack Table doesn't render anything itself — it computes rows, headers, and sorting state from column definitions you hand it, and you render the JSX yourself in the next step.
@@ -587,9 +492,9 @@ const table = useReactTable({ data: items, columns, getCoreRowModel: getCoreRowM
     },
   },
   {
-    id: "step6",
+    id: "step5",
     type: "question",
-    phase: "Step 7 of 7",
+    phase: "Step 5 of 6",
     paal: `Render the table's header and rows, with loading and empty states
 
 Your task: track whether the fetch has finished with a loading flag, defaulting to true and set to false once real data arrives. Show a loading message while true, an empty message once false with zero items, and otherwise a real <table> built from table.getHeaderGroups() and table.getRowModel().rows, using flexRender for each header and cell.`,
@@ -798,13 +703,11 @@ export function InventoryTable() {
 const sideItems = [
   { label: "Lesson", id: "intro" },
   { label: "Objectives", id: "objectives" },
-  { label: "Step 1", id: "step0" },
-  { label: "Step 2", id: "step1" },
-  { label: "Step 3", id: "step2" },
-  { label: "Step 4", id: "step3" },
-  { label: "Step 5", id: "step4" },
-  { label: "Step 6", id: "step5" },
-  { label: "Step 7", id: "step6" },
+  { label: "Step 1", id: "step1" },
+  { label: "Step 2", id: "step2" },
+  { label: "Step 3", id: "step3" },
+  { label: "Step 4", id: "step4" },
+  { label: "Step 5", id: "step5" },
 ];
 
 export default createINPACTEngine({

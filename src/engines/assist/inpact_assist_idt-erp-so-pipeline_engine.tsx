@@ -24,8 +24,7 @@ export const NODES = [
     type: "objectives",
     phase: "Objectives",
     items: [
-      "Define the component function shell this code will live in",
-      "Define TypeScript types for a customer, an item option, and one order line",
+      "Model the customer, item option, and order-line shapes, then set up the component around them",
       "Store customers, items, the in-progress order lines, and any error in React state",
       "Fetch real customers and items from the Mini ERP API when the component mounts",
       "Create a real sales order with POST /api/so, surfacing a real oversell error if it's blocked",
@@ -33,80 +32,12 @@ export const NODES = [
     ],
   },
   {
-    id: "step0",
-    type: "question",
-    phase: "Step 1 of 6",
-    paal: `We need a place for this component's code to live.
-
-Your task: create src/components/SalesOrderPipeline.tsx — every step from here on edits this same file.`,
-    hint: `Create the file at src/components/SalesOrderPipeline.tsx (empty is fine to start).`,
-    example_code: `// src/components/PurchaseOrderForm.tsx\n`,
-    think_prompt: `Same convention you've now used twice — one file per component, under src/components/. What's this one named?`,
-    mc_options: ["src/components/SalesOrderPipeline.tsx", "src/SalesOrderPipeline.js", "Anywhere — name and location don't matter"],
-    mc_correct_option: "src/components/SalesOrderPipeline.tsx",
-    mc_anchor: "src/components/SalesOrderPipeline.tsx",
-    why_this_matters: `Same convention as every other component in this codebase — get the path right here and everything later can find it.`,
-    answer_keywords: ["src/components/SalesOrderPipeline.tsx"],
-    seed_code: ``,
-    starter_code: ``,
-    feedback_correct: "Correct — this file is where every following step lives.",
-    feedback_partial: "Close — check the hint and try again.",
-    feedback_wrong: "Create the file at src/components/SalesOrderPipeline.tsx, matching this codebase's existing components.",
-    pre_check_hint: `Same rule as InventoryTable.tsx and PurchaseOrderForm.tsx: one file per component, under src/components/, named after the component.`,
-    expected: ``,
-    analog_example: `// src/components/PurchaseOrderForm.tsx\n`,
-    deepDiveLabel: "Why this step matters",
-    deepDive: {
-      hook: `Third time using this exact convention — by now the pattern should feel automatic: file path matches component name, lives under src/components/.`,
-      pain: "A component in the wrong place is invisible to anything that imports it by its expected path.",
-      mentalModel: `Build the screen that sells real inventory without ever overselling it — a form, a guarded create call, a fulfill call, and the reflected status.`,
-      discover: `// src/components/SalesOrderPipeline.tsx\n`,
-      quickRules: "- One component per file\n- File path matches the component name\n- Match this codebase's existing src/components/ convention",
-      watchOut: "Do not put a new component directly in src/ when this codebase already organizes them under src/components/.",
-      dryRun: "Create the same kind of file for a different component.",
-      build: `Create src/components/SalesOrderPipeline.tsx.`,
-    },
-  },
-  {
+    // Redesign: merges the old "create the file" + "empty shell" scaffolding steps into the real
+    // data-modeling step — neither was a move in this task's actual algorithm on its own.
     id: "step1",
     type: "question",
-    phase: "Step 2 of 6",
-    paal: `Every step from here on adds to one function. Write and export a function named \`SalesOrderPipeline\` that returns \`<div />\`.
-
-Your task: define and export SalesOrderPipeline as a function component returning <div />.`,
-    hint: `export function SalesOrderPipeline() {\n  return <div />;\n}`,
-    example_code: `export function PurchaseOrderForm() {\n  return <div />;\n}`,
-    think_prompt: `Same shell shape as the last two components — a named, exported function returning the smallest possible JSX. What do you name it here?`,
-    mc_options: ["export function SalesOrderPipeline() { return <div />; }", "Write the JSX first, then wrap it in a function later", "Skip the function — a component can be a bare object of props"],
-    mc_correct_option: "export function SalesOrderPipeline() { return <div />; }",
-    mc_anchor: "export function SalesOrderPipeline() { return",
-    why_this_matters: `Naming and exporting the shell first is what lets every later step — customer state, the guarded create call, the fulfill call — attach to something real.`,
-    answer_keywords: ["export", "function", "SalesOrderPipeline", "return"],
-    seed_code: `// This becomes a real component in the codebase — start with an empty shell.\n`,
-    starter_code: `// This becomes a real component in the codebase — start with an empty shell.\n\n`,
-    feedback_correct: "Correct — every later step builds inside this shell.",
-    feedback_partial: "Close — check the hint and try again.",
-    feedback_wrong: "Start from an empty, exported function component — everything else nests inside it.",
-    pre_check_hint: `A component is a function that returns JSX. Before any form state exists, it can return almost nothing at all.`,
-    expected: `export function SalesOrderPipeline() {\n  return <div />;\n}\n`,
-    analog_example: `export function PurchaseOrderForm() {\n  return <div />;\n}`,
-    deepDiveLabel: "Why this step matters",
-    deepDive: {
-      hook: `A function needs a body before it needs contents — this shell is what every later piece of state and every real API call in this task nests inside.`,
-      pain: "Skipping this step leaves later code with no home to live in.",
-      mentalModel: `Build the screen that sells real inventory without ever overselling it.`,
-      discover: `export function SalesOrderPipeline() {\n  return <div />;\n}\n`,
-      quickRules: "- One skill per step\n- Name the skill, not the product noun\n- Example uses the same pattern",
-      watchOut: "Do not add form state before the shell exists.",
-      dryRun: "Write the same shell step for a different form component.",
-      build: `export function SalesOrderPipeline() { return <div />; }`,
-    },
-  },
-  {
-    id: "step2",
-    type: "question",
-    phase: "Step 3 of 6",
-    paal: `Define TypeScript types for a customer, an item option, and one order line
+    phase: "Step 1 of 5",
+    paal: `Model the customer, item option, and order-line shapes, then set up the component around them
 
 MOCK DATA
   Customer: { id: "c1", name: "Riverside Cafe" }
@@ -115,39 +46,39 @@ MOCK DATA
 
 The real POST /api/so body is { customerId, items: [{ itemId, quantity, unitPrice }] } — same shape as the purchase order's line, because both forms send a real number for quantity and unitPrice.
 
-Your task: write \`type Customer\` (id, name), \`type ItemOption\` (id, sku, name), and \`type OrderLine\` (itemId, quantity, unitPrice) — quantity and unitPrice as number.`,
-    hint: `type Customer = { id: string; name: string; };\ntype ItemOption = { id: string; sku: string; name: string; };\ntype OrderLine = { itemId: string; quantity: number; unitPrice: number; };`,
-    example_code: `export type Vendor = {\n  id: string;\n  name: string;\n};`,
-    think_prompt: `You've written this exact OrderLine shape once already for the purchase order. What changes here is the picker — a customer instead of a vendor — while the line itself stays identical, because both APIs send the same {itemId, quantity, unitPrice} shape. What do the three types need to name?`,
-    mc_options: ["Three separate types: Customer (id, name), ItemOption (id, sku, name), OrderLine (itemId, quantity: number, unitPrice: number)", "Reuse the Vendor type renamed, since it has the same fields", "One big type with every field optional"],
-    mc_correct_option: "Three separate types: Customer (id, name), ItemOption (id, sku, name), OrderLine (itemId, quantity: number, unitPrice: number)",
-    mc_anchor: "Three separate types: Customer (id, name)",
-    why_this_matters: `Even though Customer and Vendor happen to share the same two fields today, they represent different real entities in the database — keeping them as separate named types is what stops a customer id from being sent where the API expects a vendor id (and here, there is no vendor id at all).`,
-    answer_keywords: ["type", "Customer", "ItemOption", "OrderLine", "quantity", "unitPrice", "number"],
-    seed_code: `export function SalesOrderPipeline() {\n  return <div />;\n}\n\n// Describe a customer, an item to pick from, and one order line.\n`,
-    starter_code: `export function SalesOrderPipeline() {\n  return <div />;\n}\n\n// Describe a customer, an item to pick from, and one order line.\n\n`,
-    feedback_correct: "Correct — three distinct shapes for three distinct pieces of data.",
+Your task: write \`type Customer\` (id, name), \`type ItemOption\` (id, sku, name), and \`type OrderLine\` (itemId, quantity, unitPrice) — quantity and unitPrice as number — then define and export SalesOrderPipeline as a function component returning <div /> — every step from here on edits this same file.`,
+    hint: `type Customer = { id: string; name: string; };\ntype ItemOption = { id: string; sku: string; name: string; };\ntype OrderLine = { itemId: string; quantity: number; unitPrice: number; };\n\nexport function SalesOrderPipeline() {\n  return <div />;\n}`,
+    example_code: `export type Vendor = {\n  id: string;\n  name: string;\n};\n\nexport function PurchaseOrderForm() {\n  return <div />;\n}`,
+    think_prompt: `You've written this exact OrderLine shape once already for the purchase order. What changes here is the picker — a customer instead of a vendor — while the line itself stays identical, because both APIs send the same {itemId, quantity, unitPrice} shape. What do the three types need to name, and what does the component that will hold them need to be called?`,
+    mc_options: ["Three separate types (Customer, ItemOption, OrderLine with numeric quantity/unitPrice), then export function SalesOrderPipeline() returning <div />", "Reuse the Vendor type renamed, since it has the same fields", "One big type with every field optional"],
+    mc_correct_option: "Three separate types (Customer, ItemOption, OrderLine with numeric quantity/unitPrice), then export function SalesOrderPipeline() returning <div />",
+    mc_anchor: "Three separate types (Customer, ItemOption",
+    why_this_matters: `Even though Customer and Vendor happen to share the same two fields today, they represent different real entities in the database — keeping them as separate named types is what stops a customer id from being sent where the API expects a vendor id (and here, there is no vendor id at all). Naming and exporting the component next to them is what lets every later step attach to something real.`,
+    answer_keywords: ["type", "Customer", "ItemOption", "OrderLine", "quantity", "unitPrice", "number", "export", "function", "SalesOrderPipeline"],
+    seed_code: ``,
+    starter_code: ``,
+    feedback_correct: "Correct — three distinct data shapes and the component both exist now; every later step builds inside this.",
     feedback_partial: "Close — check the hint and try again.",
-    feedback_wrong: "Write three separate types, matching exactly what POST /api/so expects for items.",
-    pre_check_hint: `POST /api/so expects { customerId, items: [{ itemId, quantity, unitPrice }] } — the same OrderLine shape as the purchase order, since your form is producing these numbers the same way in both places.`,
+    feedback_wrong: "Write three separate types matching exactly what POST /api/so expects, then the component shell that will use them.",
+    pre_check_hint: `POST /api/so expects { customerId, items: [{ itemId, quantity, unitPrice }] } — the same OrderLine shape as the purchase order. The component just needs to exist before it can render anything.`,
     expected: `export type Customer = {\n  id: string;\n  name: string;\n};\n\nexport type ItemOption = {\n  id: string;\n  sku: string;\n  name: string;\n};\n\nexport type OrderLine = {\n  itemId: string;\n  quantity: number;\n  unitPrice: number;\n};\n\nexport function SalesOrderPipeline() {\n  return <div />;\n}\n`,
-    analog_example: `export type Vendor = {\n  id: string;\n  name: string;\n};`,
+    analog_example: `export type Vendor = {\n  id: string;\n  name: string;\n};\n\nexport function PurchaseOrderForm() {\n  return <div />;\n}`,
     deepDiveLabel: "Why this step matters",
     deepDive: {
-      hook: `Customer and Vendor look identical today (id + name) but name genuinely different real-world entities — a real codebase keeps them as separate types even when the shape briefly coincides, because that shape can diverge the moment either entity needs a new field.`,
+      hook: `Customer and Vendor look identical today (id + name) but name genuinely different real-world entities — a real codebase keeps them as separate types even when the shape briefly coincides, because that shape can diverge the moment either entity needs a new field. Pairing that with the component's own shell in the same step turns this from "a types file" into a real, mergeable start on the actual screen.`,
       pain: "Collapsing two different real entities into one shared type because they happen to look alike today breaks the moment either one needs its own field.",
       mentalModel: `Build the screen that sells real inventory without ever overselling it.`,
-      discover: `export type Customer = {\n  id: string;\n  name: string;\n};`,
+      discover: `export type Customer = {\n  id: string;\n  name: string;\n};\n\nexport function SalesOrderPipeline() {\n  return <div />;\n}`,
       quickRules: "- One skill per step\n- Name the skill, not the product noun\n- Example uses the same pattern",
       watchOut: "Do not reuse the Vendor type for Customer just because the fields currently match.",
-      dryRun: "Write the same three-type split for a different create-form against a different real API.",
-      build: `type Customer = { id: string; name: string }; type ItemOption = { id: string; sku: string; name: string }; type OrderLine = { itemId: string; quantity: number; unitPrice: number };`,
+      dryRun: "Write the same three-type-plus-shell split for a different create-form against a different real API.",
+      build: `type Customer = { id: string; name: string }; type ItemOption = { id: string; sku: string; name: string }; type OrderLine = { itemId: string; quantity: number; unitPrice: number };\n\nexport function SalesOrderPipeline() { return <div />; }`,
     },
   },
   {
-    id: "step3",
+    id: "step2",
     type: "question",
-    phase: "Step 4 of 6",
+    phase: "Step 2 of 5",
     paal: `Store customers, items, the in-progress order lines, and any error in React state
 
 Your task: hold customers (Customer[]), items (ItemOption[]), lines (OrderLine[]), a selected customerId (string), the created sales order result (any, starting null), and an error message (string, starting empty) — all in useState.`,
@@ -180,9 +111,9 @@ Your task: hold customers (Customer[]), items (ItemOption[]), lines (OrderLine[]
     },
   },
   {
-    id: "step4",
+    id: "step3",
     type: "question",
-    phase: "Step 5 of 6",
+    phase: "Step 3 of 5",
     paal: `Fetch real customers and items from the Mini ERP API when the component mounts
 
 Your task: inside a useEffect that runs once on mount, fetch("http://localhost:4100/api/customers") and fetch("http://localhost:4100/api/items"), read each response's \`data\` array, and store them with setCustomers and setItems.`,
@@ -215,9 +146,9 @@ Your task: inside a useEffect that runs once on mount, fetch("http://localhost:4
     },
   },
   {
-    id: "step5",
+    id: "step4",
     type: "question",
-    phase: "Step 6 of 6",
+    phase: "Step 4 of 5",
     paal: `Create the sales order for real, surface a real oversell block, then fulfill it for real
 
 Your task: write an async function \`createSO\` that POSTs { customerId, items: lines } as JSON to http://localhost:4100/api/so. On a 409 response, read the response's \`message\` and store it with setError instead of setting so. On success, store the response's \`data\` with setSo and clear the error. Then write \`fulfillSO\` that POSTs to \`http://localhost:4100/api/so/\${so.id}/fulfill\` (once so exists) and stores the response's \`data.order\` with setSo. Render a "Create SO" button, the error message if one exists, and — once so exists — the current so.status plus a "Fulfill" button.`,
@@ -254,12 +185,10 @@ Your task: write an async function \`createSO\` that POSTs { customerId, items: 
 const sideItems = [
   { label: "Lesson", id: "intro" },
   { label: "Objectives", id: "objectives" },
-  { label: "Step 1", id: "step0" },
-  { label: "Step 2", id: "step1" },
-  { label: "Step 3", id: "step2" },
-  { label: "Step 4", id: "step3" },
-  { label: "Step 5", id: "step4" },
-  { label: "Step 6", id: "step5" },
+  { label: "Step 1", id: "step1" },
+  { label: "Step 2", id: "step2" },
+  { label: "Step 3", id: "step3" },
+  { label: "Step 4", id: "step4" },
 ];
 
 export default createINPACTEngine({
