@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import { SKILL_LEVELS, BE_SKILL_LEVELS } from "./skillLevels.js";
 import { useAuth } from "../auth/useAuth.js";
+import TeamIntro from "./TeamIntro.jsx";
 import "./CohortMatching.css";
 
 // Curated copy for trade labels we already know about — SpecForge (see src/specforge/schemas.js's
@@ -161,7 +162,14 @@ const EMPTY = {
   beSkillLevel: "",
   aspiration: "",
   beAspiration: "",
-  codingFocus: "both",
+  // Empty, not "both" — "both" was the literal value the manual picker's "selected" tile compared
+  // against, so it showed pre-highlighted from the moment "Coding" was picked, before the applicant
+  // had answered anything or a recommendation existed to justify it (found live 2026-09-03, twice:
+  // first against an existing contradicting recommendation, then again here — this field simply
+  // shouldn't start pre-answered at all, same as skillLevel/beSkillLevel below it never do).
+  // `focus = form.codingFocus || "both"` a few dozen lines down still treats unset as "both" for
+  // gating/submission purposes — unchanged, only the *visible* pre-selection goes away.
+  codingFocus: "",
   note: "",
   ownershipAck: false,
   // Career-counselor signal — client-side only for computing the recommendation; folded into
@@ -188,6 +196,10 @@ export default function Apply() {
   const [status, setStatus] = useState("idle"); // idle | loading | done | error
   const [error, setError] = useState("");
   const [submittedTrade, setSubmittedTrade] = useState("");
+  // Captured the same way submittedTrade already is — `form` gets reset to EMPTY right after a
+  // successful submit, so the done-view's team-intro panel (needs the applicant's own name to
+  // highlight "(you)" in the real roster) can't read it from `form` by then.
+  const [submittedName, setSubmittedName] = useState("");
   const [matchResult, setMatchResult] = useState(null); // { matched, task? } from /api/recruit/apply
 
   const { session, status: authStatus, refresh, logout } = useAuth();
@@ -205,6 +217,14 @@ export default function Apply() {
   // immediately showed a recommendation before other known languages could be added). Require an
   // explicit "done picking" action instead of inferring it from array length.
   const [languagesReviewed, setLanguagesReviewed] = useState(false);
+  // `EMPTY.codingFocus` is a fixed "both" so the field always has *some* value to submit if the
+  // manual picker below is never touched — but that fixed default was also what the picker's
+  // "selected" tile compared against, so "Both" showed highlighted even while the recommendation
+  // box right above it was independently saying Frontend (found live 2026-09-03). Tracks whether
+  // the applicant has actually clicked a tile themselves; while they haven't, the effect below keeps
+  // `form.codingFocus` synced to the live recommendation instead of sitting on the unrelated
+  // hardcoded default, so the highlighted tile and the recommendation text always agree.
+  const [codingFocusTouched, setCodingFocusTouched] = useState(false);
   useEffect(() => {
     fetchAvailableTrades()
       .then(setTrades)
@@ -270,6 +290,7 @@ export default function Apply() {
       const result = await res.json();
       if (!res.ok) throw new Error(result.error || `Application failed (${res.status})`);
       setSubmittedTrade(data.trade);
+      setSubmittedName(data.name);
       setMatchResult(result);
       setStatus("done");
       setForm(EMPTY);
@@ -350,6 +371,7 @@ export default function Apply() {
     }));
     setRecommendationApplied(false);
     setLanguagesReviewed(false);
+    setCodingFocusTouched(false);
   }
 
   function toggleLanguage(value) {
@@ -363,6 +385,7 @@ export default function Apply() {
     // an already-applied recommendation was based on invalidates it.
     setLanguagesReviewed(false);
     setRecommendationApplied(false);
+    setCodingFocusTouched(false);
   }
 
   // Requires an actual, *completed* answer on both branches — was true the instant priorKnowledge
@@ -375,11 +398,16 @@ export default function Apply() {
     ? recommend({ priorKnowledge: form.priorKnowledge, knownLanguages: form.knownLanguages, interestPull: form.interestPull })
     : null;
 
-  function applyRecommendation() {
-    if (!rec) return;
-    setForm((f) => ({ ...f, codingFocus: rec.focus, skillLevel: rec.skillLevel, beSkillLevel: rec.beSkillLevel }));
-    setRecommendationApplied(true);
-  }
+  // Keeps the manual picker's highlighted tile honest: while the applicant hasn't clicked one
+  // themselves, follow whatever the recommendation currently says rather than sitting on
+  // `EMPTY.codingFocus`'s fixed "both". `rec` is a fresh object every render, so depend on the
+  // primitive focus value — a no-op setForm (returning `f` unchanged) once already synced avoids
+  // looping.
+  useEffect(() => {
+    if (rec && !codingFocusTouched) {
+      setForm((f) => (f.codingFocus === rec.focus ? f : { ...f, codingFocus: rec.focus }));
+    }
+  }, [rec?.focus, codingFocusTouched]);
 
   const isCoding = form.trade.toLowerCase() === "coding";
   const isSignedIn = authStatus === "signedIn";
@@ -390,27 +418,83 @@ export default function Apply() {
     (!needsFeSkill || !!form.skillLevel) && (!needsBeSkill || !!form.beSkillLevel);
   const canSubmit = form.name && form.trade && form.ownershipAck && (!isCoding || skillOk);
 
+  // What's actually missing, in plain language — the submit button used to just sit disabled with
+  // no explanation (flagged live 2026-09-03: looked "not active even after filling the form
+  // completely," when the real gap was a required field that read as filled but wasn't — the Name
+  // input's placeholder was a realistic-looking example name, easy to mistake for a real value).
+  // Recomputed the same way `canSubmit` is, so this can never say "all set" while the button stays
+  // disabled or vice versa.
+  const missingReasons = [];
+  if (!form.name) missingReasons.push("your name");
+  if (!form.trade) missingReasons.push("a trade");
+  if (isCoding && needsFeSkill && !form.skillLevel) missingReasons.push("your frontend comfort level");
+  if (isCoding && needsBeSkill && !form.beSkillLevel) missingReasons.push("your backend comfort level");
+  if (!form.ownershipAck) missingReasons.push("the training acknowledgment checkbox");
+
+  // Single place both submit paths go through, parameterized on `data` rather than reading `form`
+  // directly — needed because `applyRecommendation` below calls this in the same tick it updates
+  // `form`, before that setState has actually landed (same reason `submitApplication` already takes
+  // `data` instead of closing over `form`).
+  function proceedToApply(data) {
+    const dataIsCoding = data.trade.toLowerCase() === "coding";
+    const dataFocus = data.codingFocus || "both";
+    const dataNeedsFe = dataIsCoding && (dataFocus === "frontend" || dataFocus === "both");
+    const dataNeedsBe = dataIsCoding && (dataFocus === "backend" || dataFocus === "both");
+    const dataSkillOk = (!dataNeedsFe || !!data.skillLevel) && (!dataNeedsBe || !!data.beSkillLevel);
+    const dataCanSubmit = data.name && data.trade && data.ownershipAck && (!dataIsCoding || dataSkillOk);
+    if (!dataCanSubmit) return;
+    if (isSignedIn) {
+      submitApplication(data);
+    } else {
+      // Round-trip to Google and back (server/auth-router.js's /google/start → /google/callback →
+      // ?loginCode= on this page) — the draft is what survives that full page navigation; the
+      // loginCode effect above picks it up and auto-submits once signed in. Explicit returnTo keeps
+      // Apply as the post-OAuth landing even if someone later changes the default.
+      sessionStorage.setItem(DRAFT_STORAGE_KEY, JSON.stringify(data));
+      // Dev-only: import.meta.env.DEV is Vite's own build-mode flag, hard-false in any production
+      // build regardless of server config — skips the real Google round-trip so testing Apply
+      // locally doesn't need a real Gmail account or a Testing-mode OAuth test-user allowlist entry.
+      // Server-side gate (ALLOW_DEV_JS_LOGIN) is the second, independent lock — see auth-router.js.
+      const authPath = import.meta.env.DEV ? "/api/auth/dev-js-login" : "/api/auth/google/start";
+      window.location.href = `${authPath}?returnTo=${encodeURIComponent("#/apply")}`;
+    }
+  }
+
+  // Accepting the recommendation IS the applicant's last real choice — showing the same "prefer
+  // frontend/backend" picker's confirmation state and then still requiring a separate scroll-down
+  // click on "Apply with Google" was one more step than the decision actually needed (flagged live
+  // 2026-09-03). This sets the focus/skill fields and immediately tries to proceed exactly like the
+  // main submit button would — if Name or the ownership checkbox aren't filled in yet, `proceedToApply`
+  // just no-ops (the missing-fields hint below the real submit button says what's left) rather than
+  // forcing them to redo this step once those are filled.
+  function applyRecommendation() {
+    if (!rec) return;
+    const nextForm = { ...form, codingFocus: rec.focus, skillLevel: rec.skillLevel, beSkillLevel: rec.beSkillLevel };
+    setForm(nextForm);
+    setRecommendationApplied(true);
+    proceedToApply(nextForm);
+  }
+
   // Plain-language summary of what "Use this recommendation" actually set — shown in place of the
   // confirmed recommendation banner once applied, so the applicant sees what they agreed to instead
   // of just a checkmark.
   const focusLabel = { frontend: "Frontend", backend: "Backend", both: "Frontend & Backend" }[form.codingFocus] || form.codingFocus;
   const feLevelLabel = SKILL_LEVELS.find((s) => s.value === form.skillLevel)?.label;
   const beLevelLabel = BE_SKILL_LEVELS.find((s) => s.value === form.beSkillLevel)?.label;
-  const appliedSummary = [focusLabel, feLevelLabel, beLevelLabel].filter(Boolean).join(" · ");
+  // Named rows, not a bare " · "-joined string — "Frontend · None yet" read as one contradictory
+  // phrase (flagged live 2026-09-03: "simply frontend not yet is awful"). Each value now sits next
+  // to the field it actually answers, matching the labels the picker sections above already use
+  // ("Frontend comfort today" / "Backend comfort today"), so "None yet" reads as a comfort-level
+  // answer instead of an ambiguous trailing fragment.
+  const appliedSummaryItems = [
+    { label: "Focus", value: focusLabel },
+    feLevelLabel ? { label: "Frontend comfort", value: feLevelLabel } : null,
+    beLevelLabel ? { label: "Backend comfort", value: beLevelLabel } : null,
+  ].filter(Boolean);
 
   function handleApplyClick(e) {
     e.preventDefault();
-    if (!canSubmit) return;
-    if (isSignedIn) {
-      submitApplication(form);
-    } else {
-      // Round-trip to Google and back (server/auth-router.js's /google/start → /google/callback →
-      // ?loginCode= on this page) — the draft is what survives that full page navigation; the
-      // loginCode effect above picks it up and auto-submits once signed in. Explicit returnTo keeps
-      // Apply as the post-OAuth landing even if someone later changes the default.
-      sessionStorage.setItem(DRAFT_STORAGE_KEY, JSON.stringify(form));
-      window.location.href = `/api/auth/google/start?returnTo=${encodeURIComponent("#/apply")}`;
-    }
+    proceedToApply(form);
   }
 
   if (status === "done") {
@@ -422,21 +506,26 @@ export default function Apply() {
               <h1>You're in!</h1>
               <p className="cm-done-lead">
                 Congratulations — you're now part of the <strong>{matchResult.task.project}</strong> development
-                team. Your first task:
+                team. Your first ticket:
               </p>
               <p className="cm-done-task">
                 #{matchResult.task.number} {matchResult.task.title}
               </p>
+              {matchResult.task.story && <p className="cm-done-story">Part of: {matchResult.task.story}</p>}
+              <TeamIntro projectName={matchResult.task.project} myName={submittedName} />
               <a
                 className="cm-submit-btn cm-open-task-btn"
                 href={`#/workbench?highlightTaskId=${matchResult.task.id}&highlightProjectId=${matchResult.task.projectId}`}
               >
-                Open my task →
+                Open my ticket →
               </a>
-              <p className="cm-done-sub">Assist Me is available inside the task if you need a guided lesson.</p>
+              <p className="cm-done-sub">
+                Technical spec, acceptance criteria, and repo setup are available inside the ticket — Assist Me is
+                there too if you want a guided walkthrough of the pattern.
+              </p>
               <p className="cm-legal-note">
-                You confirmed at apply time that this is a hands-on training engagement — what you build becomes
-                part of {matchResult.task.project} for training, portfolio, and reference purposes, without
+                Reminder from your application: this is a hands-on training engagement, not employment. What you
+                build becomes part of {matchResult.task.project} for training, portfolio, and reference — no
                 ownership, equity, or revenue claim.
               </p>
             </>
@@ -500,7 +589,7 @@ export default function Apply() {
       <form className="cm-form" onSubmit={handleApplyClick}>
         <label>
           Name
-          <input required value={form.name} onChange={update("name")} placeholder="Jane Doe" />
+          <input required value={form.name} onChange={update("name")} placeholder="Your full name" />
         </label>
 
         <div className="cm-field-group">
@@ -563,6 +652,7 @@ export default function Apply() {
                       knownLanguages: opt.value === "no" ? [] : f.knownLanguages,
                     }));
                     setRecommendationApplied(false);
+                    setCodingFocusTouched(false);
                   }}
                 >
                   <div className="cm-skill-label">{opt.label}</div>
@@ -613,6 +703,7 @@ export default function Apply() {
                       onClick={() => {
                         setForm((f) => ({ ...f, interestPull: opt.value }));
                         setRecommendationApplied(false);
+                        setCodingFocusTouched(false);
                       }}
                     >
                       <div className="cm-skill-label">{opt.label}</div>
@@ -636,7 +727,11 @@ export default function Apply() {
             {recommendationApplied && (
               <div className="cm-recommendation cm-recommendation-confirmed">
                 <div className="cm-recommendation-label cm-recommendation-label-confirmed">Track set</div>
-                <p className="cm-recommendation-text cm-recommendation-text-confirmed">{appliedSummary}</p>
+                {appliedSummaryItems.map((item) => (
+                  <p className="cm-recommendation-text cm-recommendation-text-confirmed" key={item.label}>
+                    <span className="cm-recommendation-summary-label">{item.label}:</span> {item.value}
+                  </p>
+                ))}
                 <button type="button" className="cm-recommendation-change" onClick={() => setRecommendationApplied(false)}>
                   Choose differently
                 </button>
@@ -658,14 +753,15 @@ export default function Apply() {
                   type="button"
                   key={opt.value}
                   className={`cm-skill-card ${form.codingFocus === opt.value ? "cm-skill-card-selected" : ""}`}
-                  onClick={() =>
+                  onClick={() => {
                     setForm((f) => ({
                       ...f,
                       codingFocus: opt.value,
                       skillLevel: opt.value === "backend" ? "" : f.skillLevel,
                       beSkillLevel: opt.value === "frontend" ? "" : f.beSkillLevel,
-                    }))
-                  }
+                    }));
+                    setCodingFocusTouched(true);
+                  }}
                 >
                   <div className="cm-skill-label">{opt.label}</div>
                   <p className="cm-skill-blurb">{opt.blurb}</p>
@@ -759,8 +855,8 @@ export default function Apply() {
         <button type="submit" className="cm-submit-btn" disabled={status === "loading" || !canSubmit}>
           {status === "loading" ? "Submitting…" : isSignedIn ? "Submit application" : "Apply with Google"}
         </button>
-        {!isSignedIn && (
-          <p className="cm-hint">You'll sign in with Google as the last step — no separate password to create.</p>
+        {!canSubmit && missingReasons.length > 0 && (
+          <p className="cm-hint">Still needed: {missingReasons.join(", ")}.</p>
         )}
         {status === "error" && <div className="cm-error">{error}</div>}
       </form>

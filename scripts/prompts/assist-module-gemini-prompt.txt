@@ -107,6 +107,12 @@ Skip steps that genuinely don't apply to this concept, but never combine two ste
   phase: "Step N of Total",
   paal: "",
   hint: "",
+  // example_code, seed_code, starter_code, expected, analog_example, and intro.content.body are
+  // ALL raw text/code, never markdown - never wrap any of them in a ```fence, found live
+  // 2026-09-01: a whole module came back with every one of these wrapped in a literal ```tsx /
+  // ``` pair, so the editor's "starter code" literally started with the text "```tsx" as if it
+  // were real code. Fences are only ever legitimate inside deepDive fields (hook/pain/
+  // mentalModel/discover/quickRules/watchOut/dryRun/build) - nowhere else.
   example_code: "",
   think_prompt: "",
   mc_options: [],        // exactly 3, plain strings, no React.FC
@@ -161,12 +167,51 @@ Emit it as ONE compact JSON object literal (double-quoted keys and strings, no t
 template literals or JS expressions inside it - it must be valid JSON, not just valid JS) directly
 after `designMock:`. Pick exactly one shape based on what this module teaches:
 
+**The deciding question is "does the developer building this ever see a screen?"** - not whether an
+API is involved. Found live 2026-09-01: a module teaching "toggle a message's status and filter a
+list" (clearly a UI task - a button, a dropdown, a list on screen) got api-request-response because
+its own build description also mentioned "wire to API endpoints", and Gemini latched onto that
+instead of the screen. If the task builds or touches ANY visible screen - a list, a form, a toggle, a
+filter, a detail view - use list-and-form, even when that screen also calls an API to do it; the
+mock's job is to show what the developer is looking at, not the network call underneath it.
+Reserve api-request-response for a module with NO screen at all - a pure backend/API task where the
+developer's whole deliverable is the endpoint itself, nothing rendered.
+
 **UI / list+form modules** (a list of records with a form to add one):
 ```typescript
 designMock: {"kind":"list-and-form","screenTitle":"Short window title, 1-3 words","caption":"One sentence: what to match in the mock (pieces, not colors).","listCaption":"LIST — sample rows","emptyCaption":"EMPTY — when there are no rows","emptyMessage":"One sentence shown when the list is empty.","rows":[{"title":"...","subtitle":"...","meta":"..."},{"title":"...","subtitle":"...","meta":"..."}],"fields":[{"label":"...","sample":"..."},{"label":"...","sample":"..."}],"submitLabel":"One or two words, e.g. Add"}
 ```
 `rows` must have exactly 2 generic sample rows. `fields` has one entry per field the worked
 example's form actually uses, matching that example's own field names/order.
+
+Two optional additions, both found live 2026-09-01 as real gaps — add whichever fits this module:
+- A field with a small FIXED set of choices (a status filter, a category picker) is a real dropdown,
+  not free text: give it `"options":["...","...","..."]` instead of `"sample"` (2-4 generic options,
+  a plain <select> is rendered from these; never both `options` and `sample` on the same field).
+- A module whose whole point is changing one existing row's status (mark resolved, approve, archive
+  - anything with an on/off or two-state field) needs `"rowToggle":{"values":["State A","State B"],
+  "labels":{"State A":"Button label shown when meta is State A","State B":"Button label shown when
+  meta is State B"}}` at the top level of designMock (alongside rows/fields) - `values` must be
+  exactly the two literal strings used in `rows[].meta`. Without this, a status-toggle module's mock
+  can only add new rows, never demonstrate the actual toggle the task is about. If toggling should
+  also change who/what the row is attributed to (e.g. claiming sets the subtitle to "You", assigning
+  sets it to a name), add `"subtitleValues":["Subtitle when meta is State A","Subtitle when meta is
+  State B"]` inside rowToggle, paired index-for-index with `values` - found live 2026-09-01: a
+  "Claim" button that flipped the status badge but left the subtitle still reading "Unassigned"
+  visibly contradicted its own badge.
+- A form whose only job is narrowing the existing list (a single field, usually with `options`, that
+  filters rather than describes a new item - "Filter by Status", "Filter by Category") needs
+  `"formMode":"filter"` at the top level of designMock. Without it the mock defaults to "add a row",
+  so submitting a filter selection creates a nonsense row titled after the filter value instead of
+  filtering anything - confusing for a beginner who has no idea that's not the real behavior. Leave
+  `formMode` out entirely (or omit it) for a genuine add-a-new-item form - that default is unchanged.
+- If `rows[].meta` shows a status/state badge (e.g. "Assigned"/"Claim", "Active"/"Draft") but no
+  field in the add-a-new-item form produces that value, a row created through the form would show
+  no badge at all - visibly incomplete next to the sample rows. Add `"metaFromField":{"index":<field
+  index whose presence implies the state>,"whenFilled":"...","whenEmpty":"..."}` at the top level of
+  designMock so a new row gets a real badge too, e.g. `{"index":1,"whenFilled":"Assigned",
+  "whenEmpty":"Claim"}` when field 1 is who it's assigned to. Omit entirely when every field maps
+  directly to title/subtitle/meta already (no derived state needed).
 
 **API / request-response modules** (one endpoint's request/response shape):
 ```typescript

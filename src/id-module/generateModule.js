@@ -122,6 +122,32 @@ function assertHasDesignMock(exports) {
     if (!Array.isArray(mock.fields) || mock.fields.length < 1) {
       throw new Error("designMock kind is list-and-form but fields is missing or empty — needs the form's fields.");
     }
+    if (mock.rowToggle !== undefined) {
+      const values = mock.rowToggle?.values;
+      if (!Array.isArray(values) || values.length !== 2) {
+        throw new Error("designMock.rowToggle is present but values isn't a 2-element array — need exactly the two states a row toggles between.");
+      }
+      if (mock.rowToggle.subtitleValues !== undefined) {
+        const sv = mock.rowToggle.subtitleValues;
+        if (!Array.isArray(sv) || sv.length !== 2) {
+          throw new Error("designMock.rowToggle.subtitleValues, if present, must be a 2-element array paired index-for-index with values.");
+        }
+      }
+    }
+    for (const field of mock.fields) {
+      if (field.options !== undefined && (!Array.isArray(field.options) || field.options.length < 1)) {
+        throw new Error(`designMock field "${field.label}" has options but it's empty — needs at least one choice.`);
+      }
+    }
+    if (mock.metaFromField !== undefined) {
+      const { index, whenFilled, whenEmpty } = mock.metaFromField;
+      if (!Number.isInteger(index) || index < 0 || index >= mock.fields.length) {
+        throw new Error("designMock.metaFromField.index must be a valid index into fields.");
+      }
+      if (!whenFilled || !whenEmpty) {
+        throw new Error("designMock.metaFromField needs both whenFilled and whenEmpty text.");
+      }
+    }
   } else {
     throw new Error(`designMock.kind "${mock.kind}" isn't recognized — use "list-and-form" or "api-request-response".`);
   }
@@ -162,6 +188,31 @@ export function assertValidModule(code) {
   }
 
   assertHasDesignMock(exportsObj); // (3) content completeness — see comment above
+  assertNoStrayCodeFences(exportsObj); // (4) content correctness — see comment above the function
+}
+
+/** Found live 2026-09-01: a whole module (every question step) came back with every code field and
+ * intro.content.body wrapped in a literal ```tsx / ``` fence — syntactically valid JS (the fence is
+ * just characters inside a string), so it sailed through (1)-(3) above, but it's real breakage: the
+ * starter code shown in the editor literally started with the text "```tsx" as if it were code, and
+ * intro.content.body renders via RichLearnerText's default *inline* mode, which doesn't parse fences
+ * at all (only DeepDive fields render with contentMode="blocks", where a fence is legitimate — this
+ * check deliberately excludes deepDive). Failing fast here means a retry, not a silently broken
+ * lesson shipped to a real learner. */
+function assertNoStrayCodeFences(exports) {
+  const nodes = exports?.NODES;
+  if (!Array.isArray(nodes)) return;
+  const CODE_FIELDS = ["example_code", "seed_code", "starter_code", "expected", "analog_example"];
+  for (const node of nodes) {
+    if (node?.type === "reveal" && typeof node?.content?.body === "string" && node.content.body.includes("```")) {
+      throw new Error(`Node "${node.id}"'s content.body contains a literal \`\`\` fence — that field renders as plain prose, never fenced code.`);
+    }
+    for (const field of CODE_FIELDS) {
+      if (typeof node?.[field] === "string" && node[field].includes("```")) {
+        throw new Error(`Node "${node.id}"'s ${field} contains a literal \`\`\` fence — that field is raw code, not markdown; strip the fence wrapper.`);
+      }
+    }
+  }
 }
 
 /**

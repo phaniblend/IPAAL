@@ -73,6 +73,17 @@ export default function CoreLogin({ onSignedIn }) {
       >
         Sign in with Google (job seekers)
       </a>
+      {/* Dev-only: import.meta.env.DEV is hard-false in any production build regardless of server
+          config, and server/auth-router.js's /dev-js-login is itself gated behind ALLOW_DEV_JS_LOGIN
+          — two independent locks. Skips needing a real Gmail account to test the JS side locally. */}
+      {import.meta.env.DEV && (
+        <a
+          href={`/api/auth/dev-js-login?returnTo=${encodeURIComponent(googleReturnTo.startsWith("/") ? `#${googleReturnTo}` : googleReturnTo)}`}
+          style={{ ...buttonStyle, display: "block", textAlign: "center", textDecoration: "none", background: "#fff", color: "#94a3b8", border: "1px dashed #cbd5e1", marginTop: 8, fontSize: 12 }}
+        >
+          🧪 Dev: sign in as test applicant (local only)
+        </a>
+      )}
       <p style={{ marginTop: 20, fontSize: 12, color: "#94a3b8" }}>
         Applying for the first time? <a href="#/apply">Go to Apply</a> instead — no account needed there.
       </p>

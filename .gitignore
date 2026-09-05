@@ -34,3 +34,13 @@ oauthcreds.json
 cache/
 
 .cursor/
+
+# Local-only scratch, personal files, and generated mirrors — never belong in the repo
+mini-erp/
+.repo-stats/
+scripts/_batch-output/
+src/engines/assist-rejected/
+NUL.css
+Untitled.txt
+*.pdf
+\# Demo narration — Test user token.txt

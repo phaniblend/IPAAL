@@ -27,10 +27,55 @@ export const NODES = [
     items: ["Define the component function shell this code will live in","Define a TypeScript type for one item in a list","Store a list in React state with useState so the UI re-renders","Filter the list in the UI so only matching rows render","Show an empty message when the list has no items","Wire controlled inputs so form fields live in React state","On submit, preventDefault, append one item to the list, and clear the form"],
   },
   {
+    id: "step0",
+    type: "question",
+    phase: "Step 1 of 8",
+    paal: `We need a place for this component's code to live.
+
+Your task: create src/components/DueBoard.tsx — every step from here on edits this same file.`,
+    hint: `Create the file at src/components/DueBoard.tsx (empty is fine to start).`,
+    example_code: `// src/components/BookingsList.tsx
+`,
+    think_prompt: `Every component in this codebase lives in its own file, in the same place the other components live. Where should you create this one, and what should you name it?`,
+    mc_options: ["src/components/DueBoard.tsx", "src/DueBoard.js", "Anywhere — name and location don't matter"],
+    mc_correct_option: "src/components/DueBoard.tsx",
+    mc_anchor: "src/components/DueBoard.tsx",
+    why_this_matters: `Every later step in this task edits this same file — creating it first, in the right place with the right name, is what lets App.tsx (and anything else that imports it later) find it.`,
+    answer_keywords: ["src/components/DueBoard.tsx"],
+    seed_code: ``,
+    starter_code: ``,
+    feedback_correct: "Correct — this file is where every following step lives.",
+    feedback_partial: "Close — check the hint and try again.",
+    feedback_wrong: "Create the file at src/components/DueBoard.tsx, matching this codebase's existing components.",
+    pre_check_hint: `Every component in this codebase lives in its own file under src/components/. So create a new file at src/components/DueBoard.tsx.`,
+    expected: ``,
+    analog_example: `// src/components/BookingsList.tsx
+`,
+    deepDiveLabel: "Why this step matters",
+    deepDive: {
+      hook: `A component's file location and name aren't just tidiness — anything that imports it (App.tsx, a test file, a teammate's PR) does so by that exact path. Getting the path right here means every later step, and a real pull request, lines up with how this codebase is already organized.`,
+      pain: "A component in the wrong place, or named inconsistently, is invisible to anything that tries to import it by its expected path.",
+      mentalModel: `Build a screen that lists reminders and a form to add one:
+
+  List     →  each row is one ScheduledReminder
+  Empty    →  a message when the list has no items
+  Form     →  Client, Channel, Status
+  Submit   →  the new row appears on the list
+  Filter   →  only matching rows render — the full list stays in state
+`,
+      discover: `// src/components/DueBoard.tsx
+`,
+      quickRules: "- One component per file\n- File path matches the component name\n- Match this codebase's existing src/components/ convention",
+      watchOut: "Do not put a new component directly in src/ when this codebase already organizes them under src/components/.",
+      dryRun: "Create the same kind of file for a different component, following the same convention.",
+      build: `Create src/components/DueBoard.tsx.`,
+    },
+  },
+  {
     id: "step1",
     type: "question",
-    phase: "Step 1 of 7",
-    paal: `Every step from here on adds to one function. Write and export a function named \`DueBoard\` that returns \`<div />\`.
+    phase: "Step 2 of 8",
+    paal: `Create a new component called DueBoard.
 
 Your task: define and export DueBoard as a function component returning <div />.`,
     hint: `export function DueBoard() {
@@ -55,7 +100,7 @@ Your task: define and export DueBoard as a function component returning <div />.
     feedback_wrong: "Start from an empty, exported function component — everything else nests inside it.",
     // Fix 2: shown pre-check (before CHECK MY CODE has run on this step) instead of the
     // generic fallback feedback text — a lightweight, non-answer-revealing conceptual hint.
-    pre_check_hint: `A component is a function that returns JSX. Before it renders any real data, it can return almost nothing at all — an empty element is a perfectly valid starting point.`,
+    pre_check_hint: `A component is a function that returns JSX. So declare a function called DueBoard and return <div></div>.`,
     expected: `export function DueBoard() {
   return <div />;
 }
@@ -92,7 +137,7 @@ Your task: define and export DueBoard as a function component returning <div />.
   {
     id: "step2",
     type: "question",
-    phase: "Step 2 of 7",
+    phase: "Step 3 of 8",
     paal: `Define a TypeScript type for one item in a list
 
 MOCK ROW — Due now
@@ -140,7 +185,7 @@ Every value with a shape needs one type to describe that shape — and a list sc
     feedback_wrong: "Start with a type for one record. Layout and APIs come after the data shape exists.",
     // Fix 2: shown pre-check (before CHECK MY CODE has run on this step) instead of the
     // generic fallback feedback text — a lightweight, non-answer-revealing conceptual hint.
-    pre_check_hint: `A TypeScript type is a contract: it names every field a value must have, so a mismatched shape becomes a compile error instead of a runtime surprise later.`,
+    pre_check_hint: `A TypeScript type is a contract: it names every field a value must have. So define type ScheduledReminder with id, client, channel, and status, all strings.`,
     expected: `export type ScheduledReminder = {
   id: string;
   client: string;
@@ -191,7 +236,7 @@ export function DueBoard() {
   {
     id: "step3",
     type: "question",
-    phase: "Step 3 of 7",
+    phase: "Step 4 of 8",
     paal: `Store a list in React state with useState so the UI re-renders
 
 LIST — Due now
@@ -245,7 +290,7 @@ export function DueBoard() {
     feedback_wrong: "List data must live in useState, not a bare let or an un-awaited fetch.",
     // Fix 2: shown pre-check (before CHECK MY CODE has run on this step) instead of the
     // generic fallback feedback text — a lightweight, non-answer-revealing conceptual hint.
-    pre_check_hint: `To re-render a component, we need to update the value it watches through React's own state mechanism — a hook that both holds the current value and gives you a setter to update it.`,
+    pre_check_hint: `To make a component re-render, its data has to live in React's own state, not a plain variable. So call useState<ScheduledReminder[]>([]) and store the list in reminders.`,
     expected: `import { useState } from "react";
 
 export type ScheduledReminder = {
@@ -298,7 +343,7 @@ export function DueBoard() {
   {
     id: "step4",
     type: "question",
-    phase: "Step 4 of 7",
+    phase: "Step 5 of 8",
     paal: `Filter the list in the UI so only matching rows render
 
 LIST (filtered) — Due now
@@ -363,7 +408,7 @@ export function DueBoard() {
     feedback_wrong: "Filter for display; do not destroy the source list.",
     // Fix 2: shown pre-check (before CHECK MY CODE has run on this step) instead of the
     // generic fallback feedback text — a lightweight, non-answer-revealing conceptual hint.
-    pre_check_hint: `Filtering an array for display and mutating the array in state are two different operations — .filter() always returns a brand-new array and never touches the one it was called on.`,
+    pre_check_hint: `.filter() builds a new array for display without touching the one in state. So map reminders (filtering first if needed) into rows — the full list in state stays intact.`,
     expected: `import { useState } from "react";
 
 export type ScheduledReminder = {
@@ -434,7 +479,7 @@ export function DueBoard() {
   {
     id: "step5",
     type: "question",
-    phase: "Step 5 of 7",
+    phase: "Step 6 of 8",
     paal: `Show an empty message when the list has no items
 
 EMPTY — Due now
@@ -491,7 +536,7 @@ export function DueBoard() {
     feedback_wrong: "Branch on length before mapping.",
     // Fix 2: shown pre-check (before CHECK MY CODE has run on this step) instead of the
     // generic fallback feedback text — a lightweight, non-answer-revealing conceptual hint.
-    pre_check_hint: `Checking a number against zero before deciding what to render is an ordinary conditional — the empty case and the list case are just two branches of the same render.`,
+    pre_check_hint: `An empty list is just a conditional with two branches. So check reminders.length === 0 — show the empty message in that branch, otherwise map the list into rows.`,
     expected: `import { useState } from "react";
 
 export type ScheduledReminder = {
@@ -568,7 +613,7 @@ export function DueBoard() {
   {
     id: "step6",
     type: "question",
-    phase: "Step 6 of 7",
+    phase: "Step 7 of 8",
     paal: `Wire controlled inputs so form fields live in React state
 
 FORM — Due now
@@ -627,7 +672,7 @@ export function DueBoard() {
     feedback_wrong: "Controlled inputs: value and onChange both talk to React state.",
     // Fix 2: shown pre-check (before CHECK MY CODE has run on this step) instead of the
     // generic fallback feedback text — a lightweight, non-answer-revealing conceptual hint.
-    pre_check_hint: `In a functional component, a piece of typed text is just another value that can live in state — the input's value prop reads it back out, and onChange is the only place that ever changes it.`,
+    pre_check_hint: `A controlled input reads its value from state and writes every keystroke back into it. So add a useState("") for each of client, channel, and status, and wire each input's value and onChange to its own piece of state.`,
     expected: `import { useState } from "react";
 
 export type ScheduledReminder = {
@@ -699,7 +744,7 @@ export function DueBoard() {
   {
     id: "step7",
     type: "question",
-    phase: "Step 7 of 7",
+    phase: "Step 8 of 8",
     paal: `On submit, preventDefault, append one item to the list, and clear the form
 
 FORM — Due now
@@ -781,7 +826,7 @@ export function DueBoard() {
     feedback_wrong: "Stay on the page, grow the list, reset the form.",
     // Fix 2: shown pre-check (before CHECK MY CODE has run on this step) instead of the
     // generic fallback feedback text — a lightweight, non-answer-revealing conceptual hint.
-    pre_check_hint: `A submit handler runs in a fixed order: stop the default page reload, build the new record from the current field values, add it to state without mutating the old array, then clear the fields for the next entry.`,
+    pre_check_hint: `A submit handler runs in a fixed order: stop the reload, add the new record, then clear the fields. So call e.preventDefault(), then setReminders to append a new record built from client/channel/status, then reset each field back to empty.`,
     expected: `import { useState } from "react";
 
 export type ScheduledReminder = {
@@ -894,13 +939,14 @@ export function DueBoard() {
 const sideItems = [
   { label: "Lesson", id: "intro" },
   { label: "Objectives", id: "objectives" },
-  { label: "Step 1", id: "step1" },
-  { label: "Step 2", id: "step2" },
-  { label: "Step 3", id: "step3" },
-  { label: "Step 4", id: "step4" },
-  { label: "Step 5", id: "step5" },
-  { label: "Step 6", id: "step6" },
-  { label: "Step 7", id: "step7" },
+  { label: "Step 1", id: "step0" },
+  { label: "Step 2", id: "step1" },
+  { label: "Step 3", id: "step2" },
+  { label: "Step 4", id: "step3" },
+  { label: "Step 5", id: "step4" },
+  { label: "Step 6", id: "step5" },
+  { label: "Step 7", id: "step6" },
+  { label: "Step 8", id: "step7" },
 ];
 
 export default createINPACTEngine({

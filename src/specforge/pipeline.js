@@ -49,13 +49,16 @@ const STAGE3_SYSTEM = `You are SpecForge Stage 3 — Task Breakdown.
 You receive Stage 1 (scope) and Stage 2 (surfaces + apis). Emit assignable apprentice tasks with this HARD RULE:
 
 COUNT RULE (non-negotiable):
-- Exactly 1 Coding frontend task per Stage 2 surface
-- Exactly 1 Coding backend task per Stage 2 api
-- Total coding tasks MUST equal surfaces.length + apis.length
+- Baseline: exactly 1 Coding frontend task per Stage 2 surface, exactly 1 Coding backend task per
+  Stage 2 api. Total coding tasks MUST equal surfaces.length + apis.length — UNLESS that total is
+  below 5, in which case split surfaces/apis into more granular tasks (by distinct resource, distinct
+  screen group, or distinct operation cluster) until you reach at least 5 total. Never reach 5 by
+  inventing scope not already implied by a real surface or api — split what's there, don't pad.
 - You may add at most ONE non-code task (Product design / PM) only if Stage 1 truly needs it — usually zero
 
-Each FE task covers the whole surface (all pages + user_jobs + wiring to APIs).
-Each BE task covers the whole API (persistence + operations + validation).
+Each FE task covers the whole surface it's derived from (all pages + user_jobs + wiring to APIs) —
+or, if split, the pages/jobs specific to its slice. Each BE task covers the whole api it's derived
+from (persistence + operations + validation) — or, if split, the operations specific to its slice.
 
 TRADE FIELD — set literally, do not substitute:
 - Every task from the COUNT RULE above (both FE and BE) gets trade: "Coding" — exactly that string,
@@ -73,8 +76,51 @@ FORBIDDEN:
 
 If Stage 2 lists 3 surfaces and 3 APIs, return exactly 6 Coding tasks (plus at most 1 optional non-code).
 
+DESCRIPTION FIELD — every task's description is shown directly to the developer, above the
+acceptance criteria, as the only prose explaining what the task actually is. Found live 2026-09-02:
+a task with only Epic/Story/Trade labels and bare AC bullets leaves a total beginner with no idea
+what the feature does. 1-2 sentences, plain language, via a real-world analog using an everyday
+consumer product a beginner has actually used (Gmail, Instagram, Amazon — never a proprietary
+internal tool, and never a B2B tool a beginner wouldn't recognize like Zendesk or Jira). Never frame
+the task as a simulation, exercise, or practice — it is real, shipped work.
+
 Keep titles concrete. tech_level is an internal matching floor — not edited by PD.
-For Coding frontend tasks use js (or ts/advanced when clearly harder). For Coding backend tasks use language-agnostic http-api (request/response) or crud (resources + persistence/validation/conflicts). Set coding_focus to frontend or backend when the task is clearly one side. no_tutorial_needed false for Coding.`;
+For Coding frontend tasks use js (or ts/advanced when clearly harder). For Coding backend tasks use language-agnostic http-api (request/response) or crud (resources + persistence/validation/conflicts). Set coding_focus to frontend or backend when the task is clearly one side. no_tutorial_needed false for Coding.
+
+TECH STACK — every Coding task gets tech_stack: a concrete, real language/framework label a
+developer would recognize (e.g. "React", "TypeScript", "Go", "Java", "Python/FastAPI", "Node.js/
+Express"), never a vague or internal-only term like "js"/"backend"/tech_level's own values — this is
+shown directly to the developer as what they need to know, tech_level is not.
+- All frontend tasks in one product: same tech_stack (a UI can't be half React half something else).
+  Default "React" + "TypeScript" together as "React + TypeScript" unless Stage 1 clearly implies
+  otherwise — this platform's own convention.
+- All backend tasks in one product: pick ONE real backend stack and use it for every backend task in
+  that product (a product's API can't be half Go half Java) — choose whichever is actually the most
+  natural fit for the domain (a CRUD-heavy admin tool suits Node.js/Express or Python/FastAPI; a
+  performance- or concurrency-sensitive service suits Go; an enterprise-flavored domain suits Java).
+- Vary the backend choice ACROSS different products rather than defaulting to the same stack every
+  time — the point is real breadth across the whole catalog, not novelty within one product.
+
+ACCEPTANCE CRITERIA FOR BACKEND TASKS (coding_focus backend) — must be development-ready, not a
+headline. Found live 2026-09-01: a one-line AC like "409 when package already fully used" leaves a
+developer guessing the business rule, the data source, the response shape, validation, and edge
+cases — not assignable to someone who's never seen this codebase without a follow-up question. Every
+backend acceptance_criteria array MUST cover ALL of, as separate bullets:
+- The business rule stated explicitly, with a concrete numeric example (e.g. "a package with
+  punchLimit 3 rejects a 4th punch; the 3rd still succeeds" — not just "reject when full").
+- Where the rule's inputs live (e.g. "used count = number of existing punch records for that
+  packageId" — never leave the data source implicit).
+- The full response shape for BOTH the success and the rejection case — status code AND body, never
+  a bare status code (e.g. 409 with body {error: "PACKAGE_FULL", message: "..."}, not just "409").
+- Validation for every request field that has a rule (required vs optional, format, bounds).
+- The response for a request against a resource that doesn't exist (404) vs a malformed request
+  (400) — define both even when the task title doesn't mention them.
+- A concurrency/atomicity bullet whenever the rule enforces a limit or count two simultaneous
+  requests could both pass (e.g. "enforced atomically — two simultaneous requests for the last unit
+  cannot both succeed").
+- At least 4 concrete Given/Then test-case bullets covering the boundary: one under the limit, one at
+  the limit, one over the limit, one invalid-input case.
+Aim for 6-10 acceptance_criteria bullets on a real backend task, not 1-2.`;
 
 export async function runNormalizer(rawInput, apiKey) {
   const input = ProductConceptInputSchema.parse(rawInput);
@@ -117,14 +163,23 @@ export async function runTaskBreakdown(stage1, stage2, apiKey) {
   const ready = assertStage2Ready(stage2);
   const surfaceCount = ready.surfaces.length;
   const apiCount = ready.apis.length;
-  const expectedCoding = surfaceCount + apiCount;
+  const naturalCoding = surfaceCount + apiCount;
+  // Floor of 5 (found live 2026-09-01 — "at least 5 tasks"): below that, ask for a split-driven
+  // count instead of the strict 1-per-surface/1-per-api total, since a 2-3 task breakdown is too
+  // thin either way. Never lower than the natural count — this only ever raises the target.
+  const expectedCoding = Math.max(naturalCoding, 5);
   const hardMax = expectedCoding + 1; // optional single non-code
+
+  const countInstruction =
+    naturalCoding >= 5
+      ? `Return EXACTLY ${expectedCoding} Coding tasks (${surfaceCount} FE + ${apiCount} BE), optionally +1 non-code. No more.`
+      : `${surfaceCount} surface(s) + ${apiCount} api(s) = only ${naturalCoding} natural Coding tasks — below the 5-task floor. Split surfaces/apis into more granular tasks (see COUNT RULE) to return AT LEAST 5 Coding tasks total, optionally +1 non-code. No more than ${hardMax}.`;
 
   const user = `Stage 1 (scope):\n${JSON.stringify(stage1, null, 2)}\n\nStage 2 (MUST drive every task):\n${JSON.stringify(
     ready,
     null,
     2,
-  )}\n\nReturn EXACTLY ${expectedCoding} Coding tasks (${surfaceCount} FE + ${apiCount} BE), optionally +1 non-code. No more.`;
+  )}\n\n${countInstruction}`;
 
   let tasks = (
     await generateStructured({
@@ -136,6 +191,8 @@ export async function runTaskBreakdown(stage1, stage2, apiKey) {
     })
   ).tasks;
 
+  const codingCount = (t) => t.filter((task) => task.trade === "Coding").length;
+
   if (tasks.length > hardMax) {
     // One stern retry — still oversize → hard fail so PD never publishes a 48-task swamp.
     tasks = (
@@ -144,6 +201,20 @@ export async function runTaskBreakdown(stage1, stage2, apiKey) {
         user:
           user +
           `\n\nREJECTED: you previously returned ${tasks.length} tasks. Return at most ${hardMax}. One FE per surface, one BE per API.`,
+        schema: Stage3OutputSchema,
+        apiKey,
+        maxTokens: 8000,
+      })
+    ).tasks;
+  } else if (codingCount(tasks) < expectedCoding) {
+    // Undershot the 5-task floor — one retry telling it exactly how short it was, same discipline
+    // as the oversize retry above.
+    tasks = (
+      await generateStructured({
+        system: STAGE3_SYSTEM,
+        user:
+          user +
+          `\n\nREJECTED: you returned only ${codingCount(tasks)} Coding tasks. Return at least ${expectedCoding} by splitting surfaces/apis into more granular tasks — do not invent scope not implied by Stage 2.`,
         schema: Stage3OutputSchema,
         apiKey,
         maxTokens: 8000,

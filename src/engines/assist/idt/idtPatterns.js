@@ -115,7 +115,7 @@ export function resourceListAndFormPattern({ goal, productHook, files }) {
           {
             id: "5.2",
             name: "5.2 Open a Pull Request",
-            ref: "git branch → OneDev PR",
+            ref: "git branch → pull request",
             tag: "OUR_WORK",
           },
         ],
@@ -294,7 +294,7 @@ export function resourceCrudApiPattern({ goal, productHook, files, domainRule })
           {
             id: "4.2",
             name: "4.2 Open a Pull Request",
-            ref: "git branch → OneDev PR",
+            ref: "git branch → pull request",
             tag: "OUR_WORK",
           },
         ],

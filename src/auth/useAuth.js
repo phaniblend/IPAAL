@@ -33,8 +33,14 @@ export function useAuth() {
 
   async function logout() {
     await fetch("/api/auth/logout", { method: "POST" });
-    setSession(null);
-    setStatus("signedOut");
+    // Not just setSession(null) here — found live 2026-09-01: useAuth() has no shared context, so
+    // every component that calls it (Workbench, and separately the RequireRole wrapping it) holds
+    // its own independent copy of session state. Clearing only this instance's copy left
+    // RequireRole — the actual route guard — still holding its stale "signed in" session, so it
+    // kept rendering the gated screen instead of falling back to CoreLogin. A hard reload forces
+    // every useAuth() instance on the page to remount and re-fetch /api/auth/me fresh, which is now
+    // genuinely signed out server-side.
+    window.location.reload();
   }
 
   return { session, status, refresh, logout };

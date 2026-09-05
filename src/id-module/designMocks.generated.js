@@ -801,11 +801,12 @@ export const DESIGN_MOCKS = {
   },
   "idt-reminder-due-board": {
     "kind": "list-and-form",
-    "screenTitle": "Due now",
-    "caption": "This is the screen you are building. Match the pieces — list, empty message, form, submit — not the brand colors. Try typing and submitting.",
-    "listCaption": "LIST — sample rows",
-    "emptyCaption": "EMPTY — when there are no rows",
-    "emptyMessage": "Nothing due.",
+    "formMode": "filter",
+    "screenTitle": "Reminders",
+    "caption": "This board doesn't create reminders — it filters the existing schedule down to what's due. Pick a status and click Filter.",
+    "listCaption": "LIST — the full schedule",
+    "emptyCaption": "EMPTY — when nothing matches",
+    "emptyMessage": "No reminders match this filter.",
     "rows": [
       {
         "title": "Alex",
@@ -813,26 +814,23 @@ export const DESIGN_MOCKS = {
         "meta": "due"
       },
       {
-        "title": "Second row",
-        "subtitle": "Another",
-        "meta": "due"
+        "title": "Priya",
+        "subtitle": "email",
+        "meta": "scheduled"
+      },
+      {
+        "title": "Jordan",
+        "subtitle": "push",
+        "meta": "sent"
       }
     ],
     "fields": [
       {
-        "label": "Client",
-        "sample": "Alex"
-      },
-      {
-        "label": "Channel",
-        "sample": "sms"
-      },
-      {
         "label": "Status",
-        "sample": "due"
+        "options": ["all", "due", "scheduled", "sent"]
       }
     ],
-    "submitLabel": "Schedule"
+    "submitLabel": "Filter"
   },
   "idt-package-list-form": {
     "kind": "list-and-form",

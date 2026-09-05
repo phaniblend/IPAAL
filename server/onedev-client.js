@@ -144,6 +144,24 @@ export async function updateIssueTitle(issueId, title) {
   return onedevFetch(`/issues/${issueId}/title`, { method: "POST", body: title });
 }
 
+// Unlike the issue endpoints above, OneDev has no dedicated `/projects/{id}/description` route —
+// confirmed live 2026-09-03 (404). The actual update endpoint is `POST /projects/{id}` (same path
+// `updateProject` uses), taking the full ProjectData shape createProject above already sends,
+// with `gitPackConfig`/`codeAnalysisSetting` rejected as "must not be null" if omitted — verified
+// against the real running instance, not guessed. `name` must be re-sent (a 400 on empty name),
+// even though only the description is actually changing.
+export async function updateProjectDescription(projectId, name, description) {
+  return onedevFetch(`/projects/${projectId}`, {
+    method: "POST",
+    body: JSON.stringify({
+      name,
+      description: description || "",
+      gitPackConfig: { windowMemory: null, packSizeLimit: null, threads: null, window: null },
+      codeAnalysisSetting: { analysisFiles: null },
+    }),
+  });
+}
+
 /** Parses the simple "Key: value" per-line convention every IPF module uses for issue descriptions
  * (Apply, MatchingQueue, HuddleCalendar, ContributionMonitor, id-router all follow this). Values that
  * span multiple lines aren't supported — same limitation the existing per-file parsers already have. */

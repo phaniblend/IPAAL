@@ -297,11 +297,20 @@ function buildTaskDescription(task, cohortName, assistLine) {
   return [
     `Epic: ${task.epic}`,
     `Story: ${task.story}`,
+    // Stage3TaskSchema requires `description` (min 1 char) and the AI genuinely writes one —
+    // it was just never included here, so every task ever published lost it the moment the
+    // OneDev issue was created (the in-memory value was never persisted anywhere else). Found
+    // live 2026-09-02 on a freshly-generated product: a learner saw Epic/Story/Trade/AC bullets
+    // and nothing explaining what the feature actually is — `humanDescription()` in
+    // Workbench.jsx shows any non-`Key:`-prefixed line as free prose, so a bare line (not a new
+    // `Key:` field) is what actually surfaces here.
+    task.description ? task.description.trim() : null,
     `Trade: ${task.trade}`,
     // TechLevel only exists for tasks with a real skill ladder (Coding, mostly) — Matching Queue
     // reads this to gate placement against what an applicant actually said they're ready for.
     task.tech_level ? `TechLevel: ${task.tech_level}` : null,
     task.coding_focus ? `CodingFocus: ${task.coding_focus}` : null,
+    task.tech_stack ? `TechStack: ${task.tech_stack}` : null,
     `Cohort: ${cohortName}`,
     criteria ? `AcceptanceCriteria: ${criteria}` : null,
     ...assistLine,

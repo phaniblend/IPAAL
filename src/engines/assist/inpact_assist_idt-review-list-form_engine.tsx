@@ -26,9 +26,53 @@ export const NODES = [
     items: ["Define the component function shell this code will live in","Define a TypeScript type for one item in a list","Store a list in React state with useState so the UI re-renders","Render each item in a list as a row with a stable key","Show an empty message when the list has no items","Wire controlled inputs so form fields live in React state","On submit, preventDefault, append one item to the list, and clear the form"],
   },
   {
+    id: "step0",
+    type: "question",
+    phase: "Step 1 of 8",
+    paal: `We need a place for this component's code to live.
+
+Your task: create src/components/ReviewInbox.tsx — every step from here on edits this same file.`,
+    hint: `Create the file at src/components/ReviewInbox.tsx (empty is fine to start).`,
+    example_code: `// src/components/BookingsList.tsx
+`,
+    think_prompt: `Every component in this codebase lives in its own file, in the same place the other components live. Where should you create this one, and what should you name it?`,
+    mc_options: ["src/components/ReviewInbox.tsx", "src/ReviewInbox.js", "Anywhere — name and location don't matter"],
+    mc_correct_option: "src/components/ReviewInbox.tsx",
+    mc_anchor: "src/components/ReviewInbox.tsx",
+    why_this_matters: `Every later step in this task edits this same file — creating it first, in the right place with the right name, is what lets App.tsx (and anything else that imports it later) find it.`,
+    answer_keywords: ["src/components/ReviewInbox.tsx"],
+    seed_code: ``,
+    starter_code: ``,
+    feedback_correct: "Correct — this file is where every following step lives.",
+    feedback_partial: "Close — check the hint and try again.",
+    feedback_wrong: "Create the file at src/components/ReviewInbox.tsx, matching this codebase's existing components.",
+    pre_check_hint: `Every component in this codebase lives in its own file under src/components/. So create a new file at src/components/ReviewInbox.tsx.`,
+    expected: ``,
+    analog_example: `// src/components/BookingsList.tsx
+`,
+    deepDiveLabel: "Why this step matters",
+    deepDive: {
+      hook: `A component's file location and name aren't just tidiness — anything that imports it (App.tsx, a test file, a teammate's PR) does so by that exact path. Getting the path right here means every later step, and a real pull request, lines up with how this codebase is already organized.`,
+      pain: "A component in the wrong place, or named inconsistently, is invisible to anything that tries to import it by its expected path.",
+      mentalModel: `Build a screen that lists reviews and a form to add one:
+
+  List     →  each row is one Review
+  Empty    →  a message when the list has no items
+  Form     →  Author, Rating, Body
+  Submit   →  the new row appears on the list
+`,
+      discover: `// src/components/ReviewInbox.tsx
+`,
+      quickRules: "- One component per file\n- File path matches the component name\n- Match this codebase's existing src/components/ convention",
+      watchOut: "Do not put a new component directly in src/ when this codebase already organizes them under src/components/.",
+      dryRun: "Create the same kind of file for a different component, following the same convention.",
+      build: `Create src/components/ReviewInbox.tsx.`,
+    },
+  },
+  {
     id: "step1",
     type: "question",
-    phase: "Step 1 of 7",
+    phase: "Step 2 of 8",
     paal: `Every step from here on adds to one function. Write and export a function named \`ReviewInbox\` that returns \`<div />\`.
 
 Your task: define and export ReviewInbox as a function component returning <div />.`,
@@ -90,7 +134,7 @@ Your task: define and export ReviewInbox as a function component returning <div 
   {
     id: "step2",
     type: "question",
-    phase: "Step 2 of 7",
+    phase: "Step 3 of 8",
     paal: `Define a TypeScript type for one item in a list
 
 MOCK ROW — Reviews
@@ -188,7 +232,7 @@ export function ReviewInbox() {
   {
     id: "step3",
     type: "question",
-    phase: "Step 3 of 7",
+    phase: "Step 4 of 8",
     paal: `Store a list in React state with useState so the UI re-renders
 
 LIST — Reviews
@@ -294,7 +338,7 @@ export function ReviewInbox() {
   {
     id: "step4",
     type: "question",
-    phase: "Step 4 of 7",
+    phase: "Step 5 of 8",
     paal: `Render each item in a list as a row with a stable key
 
 LIST — Reviews
@@ -429,7 +473,7 @@ export function ReviewInbox() {
   {
     id: "step5",
     type: "question",
-    phase: "Step 5 of 7",
+    phase: "Step 6 of 8",
     paal: `Show an empty message when the list has no items
 
 EMPTY — Reviews
@@ -562,7 +606,7 @@ export function ReviewInbox() {
   {
     id: "step6",
     type: "question",
-    phase: "Step 6 of 7",
+    phase: "Step 7 of 8",
     paal: `Wire controlled inputs so form fields live in React state
 
 FORM — Reviews
@@ -692,7 +736,7 @@ export function ReviewInbox() {
   {
     id: "step7",
     type: "question",
-    phase: "Step 7 of 7",
+    phase: "Step 8 of 8",
     paal: `On submit, preventDefault, append one item to the list, and clear the form
 
 FORM — Reviews
@@ -886,13 +930,14 @@ export function ReviewInbox() {
 const sideItems = [
   { label: "Lesson", id: "intro" },
   { label: "Objectives", id: "objectives" },
-  { label: "Step 1", id: "step1" },
-  { label: "Step 2", id: "step2" },
-  { label: "Step 3", id: "step3" },
-  { label: "Step 4", id: "step4" },
-  { label: "Step 5", id: "step5" },
-  { label: "Step 6", id: "step6" },
-  { label: "Step 7", id: "step7" },
+  { label: "Step 1", id: "step0" },
+  { label: "Step 2", id: "step1" },
+  { label: "Step 3", id: "step2" },
+  { label: "Step 4", id: "step3" },
+  { label: "Step 5", id: "step4" },
+  { label: "Step 6", id: "step5" },
+  { label: "Step 7", id: "step6" },
+  { label: "Step 8", id: "step7" },
 ];
 
 export default createINPACTEngine({

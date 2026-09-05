@@ -22,12 +22,17 @@ async function api(path, opts) {
   return res.json();
 }
 
-/** OneDev's own field names, confirmed against its Java source (PullRequest.java) rather than
- * guessed — but never fired against a real submitted PR yet, so treat the nested submitter/project
- * shapes as best-effort until the first live one shows up. Fallback chains cover that gap. */
-function prMeta(pr) {
+/** OneDev's own field names. Confirmed live against a real submitted PR 2026-09-01 (the first one
+ * ever opened in this system) — the actual shape is flat (`targetProjectId`, `submitterId`), never
+ * the nested `submitter`/`targetProject` objects this originally guessed from Java source alone.
+ * `usersById` resolves `submitterId` to a real name the same way `allProjects` already resolves
+ * `targetProjectId` to a project name at the call sites below — without it, every real PR's
+ * submitter renders as "unknown" (found live: OneDev's `/pulls` response carries no submitter name
+ * or object at all, only the bare id). */
+function prMeta(pr, usersById) {
+  const user = usersById?.get(pr.submitterId);
   return {
-    submitterName: pr.submitter?.fullName || pr.submitter?.name || pr.submitterName || "unknown",
+    submitterName: pr.submitter?.fullName || pr.submitter?.name || pr.submitterName || user?.fullName || user?.name || "unknown",
     targetProjectId: pr.targetProject?.id ?? pr.targetProjectId ?? null,
     targetProjectPath: pr.targetProject?.path || pr.targetProject?.name || null,
     targetBranch: pr.targetBranch || "",
@@ -42,6 +47,7 @@ function onedevPrUrl(projectPath, number) {
 export default function CDReview() {
   const [prs, setPrs] = useState([]);
   const [projects, setProjects] = useState([]);
+  const [usersById, setUsersById] = useState(new Map());
   const [cohortByProject, setCohortByProject] = useState(new Map());
   const [reviewedByPrId, setReviewedByPrId] = useState(new Map()); // prId -> {outcome, note, reviewedAt}
   const [draft, setDraft] = useState({}); // prId -> {outcome, note}
@@ -53,12 +59,15 @@ export default function CDReview() {
     setLoading(true);
     setError("");
     try {
-      const [allProjects, allPrs, teamOpsIssues] = await Promise.all([
+      const [allProjects, allUsers, allPrs, teamOpsIssues] = await Promise.all([
         api("/projects?offset=0&count=100"),
+        api("/users?offset=0&count=200"),
         api("/pulls?offset=0&count=100"),
         api("/issues?offset=0&count=200"),
       ]);
       setProjects(allProjects);
+      const usersMap = new Map((allUsers || []).map((u) => [u.id, u]));
+      setUsersById(usersMap);
 
       const teamOps = teamOpsIssues.filter((i) => i.projectId === TEAM_OPS_PROJECT_ID);
       const cohorts = teamOps.filter((i) => i.title.startsWith("Cohort:"));
@@ -124,7 +133,7 @@ export default function CDReview() {
       );
       const unnotified = openPrs.filter((p) => !alreadyNotified.has(String(p.id)));
       for (const pr of unnotified) {
-        const meta = prMeta(pr);
+        const meta = prMeta(pr, usersMap);
         const projName = allProjects.find((proj) => proj.id === meta.targetProjectId)?.name || meta.targetProjectPath || "a project";
         await api("/issues", {
           method: "POST",
@@ -155,7 +164,7 @@ export default function CDReview() {
     setSaving(pr.id);
     setError("");
     try {
-      const meta = prMeta(pr);
+      const meta = prMeta(pr, usersById);
       await api("/issues", {
         method: "POST",
         body: JSON.stringify({
@@ -237,7 +246,7 @@ export default function CDReview() {
                 {g.cohort && <span className="cdr-cohort-tag">{g.cohort}</span>}
               </h2>
               {g.prs.map((pr) => {
-                const meta = prMeta(pr);
+                const meta = prMeta(pr, usersById);
                 const reviewed = reviewedByPrId.get(pr.id);
                 const url = onedevPrUrl(meta.targetProjectPath, pr.number);
                 return (

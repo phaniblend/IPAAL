@@ -202,6 +202,8 @@ export const CODING_ASSISTS = {
       assist: "idt-review-list-form",
       focus: "frontend",
       story: "Catch the feedback",
+      description:
+        "A salon or clinic's reviews show up scattered across Google, Yelp, and word of mouth — nothing catches them in one place yet. Build the screen every review lands on first: a list of what's already logged, and a form to log a new one the moment it comes in.",
       ac: "Reviews are listed as they come in; The form logs a review with author, rating, and body; An empty state displays when no reviews exist.",
     },
     {
@@ -210,6 +212,8 @@ export const CODING_ASSISTS = {
       focus: "backend",
       tech: "crud",
       story: "Unanswered is derived",
+      description:
+        "Whether a review still needs a reply shouldn't rely on anyone's memory — it should be computed straight from whether a reply exists yet. Build the API that stores reviews and derives that needs-reply flag itself, the same way a real reputation tool would.",
       ac: "Needs-reply status is derived from whether a reply timestamp exists; The API validates the rating is within range.",
     },
     {
@@ -217,6 +221,8 @@ export const CODING_ASSISTS = {
       assist: "idt-review-reply-list-form",
       focus: "frontend",
       story: "Answer on the record",
+      description:
+        "Answering a review out loud on the phone leaves no trail — the owner needs a written record of what was actually said back, tied to the review it answers. Build the screen that lists existing replies and lets the owner write a new one.",
       ac: "Replies are listed against their review; The form writes a reply with review, body, and channel; An empty state displays when no replies exist.",
     },
     {
@@ -225,6 +231,8 @@ export const CODING_ASSISTS = {
       focus: "backend",
       tech: "http-api",
       story: "No double posts",
+      description:
+        "Posting the same reply twice on the same channel reads as careless to a customer scrolling past it. Build the API that accepts one reply per review per channel, and rejects a second attempt on that same pair as a conflict, not a silent duplicate.",
       ac: "A reply can be posted once per review and channel; Posting a second reply for the same review and channel returns a conflict.",
     },
     {
@@ -232,6 +240,8 @@ export const CODING_ASSISTS = {
       assist: "idt-review-unanswered-board",
       focus: "frontend",
       story: "Triage what still needs a reply",
+      description:
+        "An owner opening this first thing in the morning doesn't want to scroll the entire review history — they want to see exactly what's still waiting on a reply. Build a filtered view that narrows the full review list down to just the unanswered ones, without losing the rest.",
       ac: "The full review list is kept in state; The displayed list narrows to reviews that still need a reply; The underlying list is never mutated by the filter.",
     },
   ],

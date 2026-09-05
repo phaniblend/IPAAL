@@ -225,6 +225,7 @@ router.post("/apply", requireSession, async (req, res) => {
         title: task.title,
         project: projectNameOf(projects, task.projectId),
         projectId: task.projectId,
+        story: /^Story:\s*(.+)$/m.exec(task.description || "")?.[1]?.trim() || "",
       },
     });
   } catch (err) {
@@ -503,6 +504,7 @@ router.post("/assign-by-email", requireRole("PD", "PMGT", "ID", "CD"), async (re
         title: task.title,
         project: projectNameOf(projects, task.projectId),
         projectId: task.projectId,
+        story: /^Story:\s*(.+)$/m.exec(task.description || "")?.[1]?.trim() || "",
       },
     });
   } catch (err) {

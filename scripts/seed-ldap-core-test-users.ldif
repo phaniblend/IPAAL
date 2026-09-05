@@ -33,3 +33,13 @@ uid: PM_Core
 mail: pm_core@inpact.live
 description: PMGT-core
 userPassword: inpact
+
+dn: cn=CD Core,ou=core,dc=inpact,dc=live
+objectClass: inetOrgPerson
+cn: CD Core
+sn: Core
+givenName: CD
+uid: CD_Core
+mail: cd_core@inpact.live
+description: CD-core
+userPassword: inpact

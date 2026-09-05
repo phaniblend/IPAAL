@@ -120,6 +120,40 @@ router.get("/google/start", (req, res) => {
   res.redirect(buildAuthUrl(mintOAuthState(req.query.returnTo)));
 });
 
+/** GET /dev-js-login — local-only stand-in for the real Google round-trip, so testing the JS side
+ * of the app (Apply, Workbench, Assist Me) doesn't require a real Gmail account or the OAuth app's
+ * Testing-mode test-user allowlist. Double-gated, never just one flag: ALLOW_DEV_JS_LOGIN must be
+ * explicitly set to "true" in .env (absent/false by default, never committed — see .env.example if
+ * one exists) AND the frontend only ever links here when import.meta.env.DEV is true, which Vite
+ * hard-codes false in any production build regardless of server config. Either gate alone failing
+ * closed is enough; both together make an accidental prod exposure very unlikely.
+ * Reuses the exact same mintLoginCode -> ?loginCode= -> POST /exchange-login-code path the real
+ * Google callback uses below, so nothing about session issuance itself is untested code. */
+router.get("/dev-js-login", async (req, res) => {
+  if (process.env.ALLOW_DEV_JS_LOGIN !== "true") {
+    return res.status(404).send("Not found");
+  }
+  const frontend = process.env.IPF_FRONTEND_URL || "http://localhost:5173";
+  const returnTo = typeof req.query.returnTo === "string" && req.query.returnTo ? req.query.returnTo : "#/apply";
+  const email = String(req.query.email || "test-apply@inpact.local").trim().toLowerCase();
+  const name = String(req.query.name || "Test Applicant").trim() || "Test Applicant";
+  try {
+    const roles = await rolesForEmail(email);
+    const loginCode = mintLoginCode({
+      sub: `dev-js:${email}`,
+      name,
+      email,
+      accountType: "js",
+      roles,
+    });
+    const sep = returnTo.includes("?") ? "&" : "?";
+    res.redirect(`${frontend}${returnTo}${sep}loginCode=${encodeURIComponent(loginCode)}`);
+  } catch (err) {
+    console.error("[auth] /dev-js-login failed:", err.message);
+    res.status(500).send("Dev login failed — see server logs.");
+  }
+});
+
 router.get("/google/callback", async (req, res) => {
   // "localhost", not "127.0.0.1" — found live: this dev environment's Vite server binds only to
   // [::1]:5173 (IPv6 loopback), not 0.0.0.0/127.0.0.1, so a literal IPv4 redirect target gets

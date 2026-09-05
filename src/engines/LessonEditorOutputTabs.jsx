@@ -507,9 +507,20 @@ const introNodeFromNodes = (nodes) => nodes?.find((n) => n.type === "reveal" && 
 const objectivesNodeFromNodes = (nodes) => nodes?.find((n) => n.type === "objectives");
 
 /** Same PROGRESS affordance as the main lesson sidebar, embedded beside the code editor. */
-function EditorProgressRail({ items, activeNodeIndex, completedIds, onSelectIndex }) {
+/**
+ * `items` is a hand-authored list per module (module tag, "Lesson", "Objectives", "Step N: ...")
+ * that's expected to line up position-for-position with the engine's real NODES array — but any
+ * node inserted ahead of the question steps (e.g. the "funda-gate" prereq check, added later and
+ * never a `sideItems` entry) throws that alignment off by however many nodes were inserted, so a
+ * raw index match silently highlights the wrong row. Found live 2026-09-02. Match by the node's own
+ * `id` instead — `activeItemId` — so the highlight is correct regardless of what NODES contains
+ * before the current node; `activeNodeIndex` stays as a fallback for callers that don't pass it.
+ */
+function EditorProgressRail({ items, activeNodeIndex, activeItemId, completedIds, onSelectIndex }) {
   if (!Array.isArray(items) || items.length === 0 || typeof onSelectIndex !== "function") return null;
   const doneSet = new Set(Array.isArray(completedIds) ? completedIds : []);
+  const activeIndexById = activeItemId != null ? items.findIndex((it) => it.id === activeItemId) : -1;
+  const resolvedActiveIndex = activeIndexById >= 0 ? activeIndexById : activeNodeIndex;
   const railStyles = {
     wrap: {
       width: "220px",
@@ -561,7 +572,7 @@ function EditorProgressRail({ items, activeNodeIndex, completedIds, onSelectInde
     >
         <div style={railStyles.label}>PROGRESS</div>
         {items.map((item, i) => {
-          const isActive = activeNodeIndex === i;
+          const isActive = resolvedActiveIndex === i;
           const isDone = doneSet.has(item.id);
           return (
             <div
@@ -957,6 +968,28 @@ export default function LessonEditorOutputTabs({
                     </>
                   )}
                 </span>
+                <button
+                  type="button"
+                  style={{
+                    marginLeft: "auto",
+                    padding: "9px 18px",
+                    fontSize: "12px",
+                    fontWeight: 700,
+                    background: "#0891b2",
+                    color: "#fff",
+                    border: "none",
+                    borderRadius: "8px",
+                    cursor: "pointer",
+                    fontFamily: "'DM Sans', sans-serif",
+                    flexShrink: 0,
+                  }}
+                  onClick={() => {
+                    if (useEditorWorkspaceModal) onOpenEditorWorkspace?.();
+                    else setMainTab("editor");
+                  }}
+                >
+                  Continue →
+                </button>
               </div>
             )}
             {preQuestionFooter}
@@ -1106,6 +1139,7 @@ export default function LessonEditorOutputTabs({
               <EditorProgressRail
                 items={editorProgress.items}
                 activeNodeIndex={editorProgress.activeNodeIndex}
+                activeItemId={editorProgress.activeItemId}
                 completedIds={editorProgress.completedIds}
                 onSelectIndex={editorProgress.onSelectIndex}
               />
@@ -1232,6 +1266,7 @@ export default function LessonEditorOutputTabs({
                     <EditorProgressRail
                       items={editorProgress.items}
                       activeNodeIndex={editorProgress.activeNodeIndex}
+                      activeItemId={editorProgress.activeItemId}
                       completedIds={editorProgress.completedIds}
                       onSelectIndex={editorProgress.onSelectIndex}
                     />

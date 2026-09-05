@@ -88,7 +88,15 @@ export const Stage3TaskSchema = z.object({
   epic: z.string().min(1),
   story: z.string().min(1),
   title: z.string().min(1),
-  description: z.string().min(1),
+  description: z
+    .string()
+    .min(1)
+    .describe(
+      "1-2 sentences a total beginner can follow, shown directly to the developer above the acceptance criteria. " +
+        'Explain what this piece does and why, via a real-world analog (e.g. "You might have noticed that in Gmail, a shared inbox lets you \'Assign to\' a teammate — this is that assign action."). ' +
+        "Never name proprietary/internal tools (OneDev, Mattermost, etc.) or B2B software a beginner wouldn't know (Zendesk, Jira, etc.) — use everyday consumer products instead (Gmail, Instagram, Amazon). " +
+        "Never frame this as a simulation, exercise, or practice task — it is real, shipped work.",
+    ),
   trade: z.string().min(1),
   acceptance_criteria: z.array(z.string()).default([]),
   no_tutorial_needed: z.boolean().default(false),
@@ -97,6 +105,9 @@ export const Stage3TaskSchema = z.object({
     .nullable()
     .default(null),
   coding_focus: z.enum(["frontend", "backend", "both"]).nullable().default(null),
+  // Real language/framework label (e.g. "React", "TypeScript", "Go", "Java") — separate from
+  // tech_level, which is only a JS-skill-ladder rung and can't express a non-JS stack at all.
+  tech_stack: z.string().min(1).nullable().default(null),
 });
 
 export const Stage3OutputSchema = z.object({
