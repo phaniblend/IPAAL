@@ -379,6 +379,17 @@ function OpenTaskView({ task, publishedModules, onBack, isJS, projects = [] }) {
   const waitingOnLesson = assist.status === "blocked";
   const [assistOpen, setAssistOpen] = useState(false);
   const [workspaceOpen, setWorkspaceOpen] = useState(false);
+  // null = choice screen ("continue here online" vs "use my local editor") not answered yet for
+  // this open of the modal; "online" mounts the real in-browser editor; "local" shows the manual
+  // clone/branch/PR instructions instead. Reset on every fresh open (openWorkspace below) rather
+  // than persisting across opens — found live 2026-09-05: Start Dev is now the one entry point for
+  // every task regardless of trade, so re-asking each time is cheap and keeps the choice honest if
+  // a learner's own setup changed since the task before.
+  const [workspaceMode, setWorkspaceMode] = useState(null);
+  function openWorkspace() {
+    setWorkspaceMode(null);
+    setWorkspaceOpen(true);
+  }
   // The same interactive preview Assist Me shows mid-lesson (DesignMockPreview), surfaced right on
   // the task itself so a dev can see the target screen before ever opening Assist Me. Only exists
   // for wired Coding tasks; other trades/unwired tasks just don't get a button.
@@ -603,43 +614,16 @@ function OpenTaskView({ task, publishedModules, onBack, isJS, projects = [] }) {
           </div>
         )}
 
-        {isJS && (
-          <div className="workbench-submit-box">
-            <h3>Submit your work (Pull Request)</h3>
-            <ol className="workbench-submit-steps">
-              <li>
-                Clone the project repo
-                {cloneUrl ? (
-                  <>
-                    : <code>{cloneUrl}</code>
-                  </>
-                ) : (
-                  " (project git URL)."
-                )}
-              </li>
-              <li>
-                Create a branch, e.g. <code>{branchHint}</code>
-              </li>
-              <li>Implement the acceptance criteria above (Assist Me helps with the pattern).</li>
-              <li>
-                Push the branch, then open a Pull Request into <code>main</code> at{" "}
-                <a href={pullsUrl} target="_blank" rel="noreferrer">
-                  {pullsUrl}
-                </a>
-              </li>
-              <li>CD Review picks up the PR for human review (CI later).</li>
-            </ol>
-          </div>
-        )}
-
-        {/* Real in-browser dev workspace (file tree + editor + live preview + real git commit/push)
-            — an alternative to the manual clone-and-commit-yourself flow above, not a replacement
-            for it yet. Kept as an opt-in toggle rather than swapping the submit-box out entirely:
-            this is the first real test of it, and the manual path is a proven fallback if anything
-            about the in-browser one doesn't work for a given learner's task/browser. */}
+        {/* Start Dev is the one entry point for submitting work, shown on every task regardless of
+            trade — found live 2026-09-05: gating this to Coding only was never actually enforced in
+            code, but a QA/Content/Design task with real file output deserves the same button; in
+            practice only JS-focused applicants click it. What happens next (online editor vs manual
+            clone instructions) is a choice inside the modal, not two separate always-visible blocks
+            on the task page — the manual path used to show unconditionally even to someone about to
+            use the online editor anyway. */}
         {isJS && projectPath && (
           <div className="workbench-workspace-toggle">
-            <button type="button" className="workbench-workspace-open-btn" onClick={() => setWorkspaceOpen(true)}>
+            <button type="button" className="workbench-workspace-open-btn" onClick={openWorkspace}>
               🚀 Start Dev
             </button>
           </div>
@@ -664,13 +648,66 @@ function OpenTaskView({ task, publishedModules, onBack, isJS, projects = [] }) {
               </button>
             </div>
             <div className="workbench-dev-modal-body">
-              <DevWorkspace
-                projectPath={projectPath}
-                branchHint={branchHint}
-                pullsUrl={pullsUrl}
-                codingFocus={fields.codingFocus}
-                moduleTag={assist.status === "wired" ? assist.tag : null}
-              />
+              {workspaceMode === null && (
+                <div className="workbench-dev-choice">
+                  <p>The repo's already cloned and ready — where do you want to work?</p>
+                  <div className="workbench-dev-choice-options">
+                    <button type="button" className="workbench-dev-choice-btn workbench-dev-choice-btn-primary" onClick={() => setWorkspaceMode("online")}>
+                      Continue here online
+                    </button>
+                    <button type="button" className="workbench-dev-choice-btn" onClick={() => setWorkspaceMode("local")}>
+                      I want to use my local editor
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {workspaceMode === "online" && (
+                <>
+                  <button type="button" className="workbench-dev-choice-back" onClick={() => setWorkspaceMode(null)}>
+                    ← choose differently
+                  </button>
+                  <DevWorkspace
+                    projectPath={projectPath}
+                    branchHint={branchHint}
+                    pullsUrl={pullsUrl}
+                    codingFocus={fields.codingFocus}
+                    moduleTag={assist.status === "wired" ? assist.tag : null}
+                  />
+                </>
+              )}
+
+              {workspaceMode === "local" && (
+                <div className="workbench-submit-box">
+                  <button type="button" className="workbench-dev-choice-back" onClick={() => setWorkspaceMode(null)}>
+                    ← choose differently
+                  </button>
+                  <h3>Submit your work (Pull Request)</h3>
+                  <ol className="workbench-submit-steps">
+                    <li>
+                      Clone the project repo
+                      {cloneUrl ? (
+                        <>
+                          : <code>{cloneUrl}</code>
+                        </>
+                      ) : (
+                        " (project git URL)."
+                      )}
+                    </li>
+                    <li>
+                      Create a branch, e.g. <code>{branchHint}</code>
+                    </li>
+                    <li>Implement the acceptance criteria above (Assist Me helps with the pattern).</li>
+                    <li>
+                      Push the branch, then open a Pull Request into <code>main</code> at{" "}
+                      <a href={pullsUrl} target="_blank" rel="noreferrer">
+                        {pullsUrl}
+                      </a>
+                    </li>
+                    <li>CD Review picks up the PR for human review (CI later).</li>
+                  </ol>
+                </div>
+              )}
             </div>
           </div>
         </div>
