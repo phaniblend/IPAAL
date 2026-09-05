@@ -56,7 +56,7 @@ function injectBaseStyles(html) {
   if (typeof html !== "string" || !html) return html;
   const base = `<style>
     *, *::before, *::after { box-sizing: border-box; }
-    body { margin: 0; padding: 20px; background: #f0f4f8; font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif; font-size: 14px; color: #1a202c; line-height: 1.5; }
+    body { margin: 0; padding: 20px; background: #f0f4f8; font-family: "Comfortaa", system-ui, sans-serif; font-size: 14px; color: #1a202c; line-height: 1.5; }
   </style>`;
   return html.includes("</head>")
     ? html.replace("</head>", base + "</head>")
@@ -108,7 +108,7 @@ function generateSandboxBlockedPreview() {
   <meta charset="utf-8">
   <style>
     *, *::before, *::after { box-sizing: border-box; }
-    body { margin: 0; padding: 24px; background: #f0f4f8; font-family: system-ui, -apple-system, sans-serif; font-size: 14px; color: #334155; line-height: 1.6; max-width: 520px; }
+    body { margin: 0; padding: 24px; background: #f0f4f8; font-family: "Comfortaa", system-ui, sans-serif; font-size: 14px; color: #334155; line-height: 1.6; max-width: 520px; }
     h1 { font-size: 15px; color: #0f172a; margin: 0 0 12px 0; }
     p { margin: 0 0 10px 0; }
     .box { background: #fff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 16px 18px; border-left: 4px solid #0891b2; }
@@ -207,7 +207,7 @@ function stripTsForBabelPreview(src) {
 /** Generate a live React preview iframe HTML using Babel Standalone CDN */
 function generateReactPreview(code) {
   if (!code || !code.trim()) {
-    return `<!DOCTYPE html><html><body style="background:#f0f4f8;padding:24px;font-family:system-ui,sans-serif;color:#64748b;font-size:14px">Write your React component in the Editor tab to see a live preview here.</body></html>`;
+    return `<!DOCTYPE html><html><body style="background:#f0f4f8;padding:24px;font-family: "Comfortaa", system-ui, sans-serif;color:#64748b;font-size:14px">Write your React component in the Editor tab to see a live preview here.</body></html>`;
   }
 
   // Find the main component name from the source code (`const X = (): JSX.Element =>`, legacy `React.FC`, or `function X`)
@@ -237,7 +237,7 @@ function generateReactPreview(code) {
   <meta charset="utf-8">
   <style>
     *, *::before, *::after { box-sizing: border-box; }
-    body { margin: 0; padding: 20px; background: #f0f4f8; font-family: system-ui, -apple-system, sans-serif; font-size: 14px; color: #1a202c; }
+    body { margin: 0; padding: 20px; background: #f0f4f8; font-family: "Comfortaa", system-ui, sans-serif; font-size: 14px; color: #1a202c; }
     .error-box { background: #fff1f0; border: 1px solid #ffa39e; color: #c0392b; padding: 12px 16px; border-radius: 6px; font-family: ui-monospace, monospace; font-size: 12px; white-space: pre-wrap; margin-top: 8px; max-width: 100%; overflow-x: auto; }
     .loading { color: #94a3b8; font-size: 13px; }
   </style>
@@ -374,7 +374,7 @@ function generateReactPreview(code) {
 /** Generate a formatted Angular/HTML template preview */
 function generateTemplatePreview(code) {
   if (!code || !code.trim()) {
-    return `<!DOCTYPE html><html><body style="background:#f0f4f8;padding:24px;font-family:system-ui,sans-serif;color:#64748b;font-size:14px">Write your template code in the Editor tab to see a preview here.</body></html>`;
+    return `<!DOCTYPE html><html><body style="background:#f0f4f8;padding:24px;font-family: "Comfortaa", system-ui, sans-serif;color:#64748b;font-size:14px">Write your template code in the Editor tab to see a preview here.</body></html>`;
   }
   const escaped = code.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   return `<!DOCTYPE html>
@@ -384,7 +384,7 @@ function generateTemplatePreview(code) {
   <style>
     body { margin: 0; padding: 20px; background: #f8fafc; font-family: monospace; font-size: 13px; color: #334155; }
     pre { color: #0f172a; white-space: pre-wrap; word-break: break-word; line-height: 1.7; margin: 0; }
-    .note { font-family: system-ui, sans-serif; font-size: 12px; color: #64748b; margin-bottom: 14px; padding: 10px 14px; background: rgba(100,116,139,0.1); border-left: 3px solid #475569; border-radius: 4px; }
+    .note { font-family: "Comfortaa", system-ui, sans-serif; font-size: 12px; color: #64748b; margin-bottom: 14px; padding: 10px 14px; background: rgba(100,116,139,0.1); border-left: 3px solid #475569; border-radius: 4px; }
     .tag { color: #7dd3fc; }
     .attr { color: #86efac; }
     .val { color: #fde68a; }

@@ -55,10 +55,10 @@ export function buildPreviewDocument(fileMap, entryPath) {
   <meta charset="utf-8">
   <style>
     *, *::before, *::after { box-sizing: border-box; }
-    body { margin: 0; padding: 0; background: #fff; font-family: system-ui, -apple-system, sans-serif; }
+    body { margin: 0; padding: 0; background: #fff; font-family: "Comfortaa", system-ui, sans-serif; }
     .preview-error-box { background: #fff1f0; border: 1px solid #ffa39e; color: #c0392b; padding: 12px 16px; border-radius: 6px; font-family: ui-monospace, monospace; font-size: 12px; white-space: pre-wrap; margin: 16px; }
-    .preview-note-box { background: #fffbeb; border: 1px solid #fde68a; color: #92400e; padding: 8px 14px; font-size: 12px; font-family: system-ui, sans-serif; }
-    .preview-loading { padding: 24px; color: #94a3b8; font-size: 13px; font-family: system-ui, sans-serif; }
+    .preview-note-box { background: #fffbeb; border: 1px solid #fde68a; color: #92400e; padding: 8px 14px; font-size: 12px; font-family: "Comfortaa", system-ui, sans-serif; }
+    .preview-loading { padding: 24px; color: #94a3b8; font-size: 13px; font-family: "Comfortaa", system-ui, sans-serif; }
   </style>
 </head>
 <body>
@@ -189,7 +189,7 @@ export function buildPreviewDocument(fileMap, entryPath) {
 }
 
 function simpleMessageHtml(message) {
-  return `<!DOCTYPE html><html><body style="margin:0;padding:24px;font-family:system-ui,sans-serif;color:#64748b;font-size:14px;white-space:pre-wrap">${String(
+  return `<!DOCTYPE html><html><body style="margin:0;padding:24px;font-family: "Comfortaa", system-ui, sans-serif;color:#64748b;font-size:14px;white-space:pre-wrap">${String(
     message
   ).replace(/</g, "&lt;")}</body></html>`;
 }

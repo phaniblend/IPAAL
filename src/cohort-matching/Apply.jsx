@@ -225,6 +225,14 @@ export default function Apply() {
   // `form.codingFocus` synced to the live recommendation instead of sitting on the unrelated
   // hardcoded default, so the highlighted tile and the recommendation text always agree.
   const [codingFocusTouched, setCodingFocusTouched] = useState(false);
+  // Same reasoning as codingFocusTouched, for the comfort-level tiles: found live 2026-09-04 —
+  // picking "HTML & CSS" as a known language didn't carry over to "Frontend comfort today" below,
+  // because skillLevel/beSkillLevel only ever got set when "Use this recommendation" was clicked —
+  // the manual tiles had no live sync of their own the way codingFocus already did. Syncing them
+  // the same way removes the mismatch: whichever tile is highlighted always matches what the live
+  // recommendation currently says, until the applicant clicks one themselves.
+  const [skillLevelTouched, setSkillLevelTouched] = useState(false);
+  const [beSkillLevelTouched, setBeSkillLevelTouched] = useState(false);
   useEffect(() => {
     fetchAvailableTrades()
       .then(setTrades)
@@ -233,6 +241,18 @@ export default function Apply() {
         setTrades([]);
       });
   }, []);
+
+  // Coding is the only supported trade right now (SUPPORTED_TRADES above) — until the others are
+  // activated, requiring a click on the one selectable card is a pointless extra step. Only fires
+  // once trades have loaded and nothing's picked yet, so it never clobbers a manual pick or a
+  // restored post-Google-redirect draft (see DRAFT_STORAGE_KEY).
+  useEffect(() => {
+    const codingTrade = trades?.find((t) => t.toLowerCase() === "coding");
+    if (codingTrade && isTradeSupported(codingTrade) && !form.trade) {
+      pickRole(codingTrade);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- one-shot default, not a live sync
+  }, [trades]);
 
   // The actual POST — parameterized on `data` rather than reading `form` directly, since the
   // post-Google-redirect path below has to call this from a restored draft, not live form state
@@ -372,6 +392,8 @@ export default function Apply() {
     setRecommendationApplied(false);
     setLanguagesReviewed(false);
     setCodingFocusTouched(false);
+    setSkillLevelTouched(false);
+    setBeSkillLevelTouched(false);
   }
 
   function toggleLanguage(value) {
@@ -386,6 +408,8 @@ export default function Apply() {
     setLanguagesReviewed(false);
     setRecommendationApplied(false);
     setCodingFocusTouched(false);
+    setSkillLevelTouched(false);
+    setBeSkillLevelTouched(false);
   }
 
   // Requires an actual, *completed* answer on both branches — was true the instant priorKnowledge
@@ -408,6 +432,18 @@ export default function Apply() {
       setForm((f) => (f.codingFocus === rec.focus ? f : { ...f, codingFocus: rec.focus }));
     }
   }, [rec?.focus, codingFocusTouched]);
+
+  // Same live-sync, for the comfort-level tiles — see skillLevelTouched's own comment above.
+  useEffect(() => {
+    if (rec && !skillLevelTouched) {
+      setForm((f) => (f.skillLevel === (rec.skillLevel || "") ? f : { ...f, skillLevel: rec.skillLevel || "" }));
+    }
+  }, [rec?.skillLevel, skillLevelTouched]);
+  useEffect(() => {
+    if (rec && !beSkillLevelTouched) {
+      setForm((f) => (f.beSkillLevel === (rec.beSkillLevel || "") ? f : { ...f, beSkillLevel: rec.beSkillLevel || "" }));
+    }
+  }, [rec?.beSkillLevel, beSkillLevelTouched]);
 
   const isCoding = form.trade.toLowerCase() === "coding";
   const isSignedIn = authStatus === "signedIn";
@@ -550,9 +586,8 @@ export default function Apply() {
         <h1>Apply — interests first, then a match</h1>
         <p className="cm-sub">
           Tell us your trade, where you are academically/career-wise, and (for Coding) frontend vs
-          backend. We match you into a team building enterprise apps that will go live soon for
-          thousands of customers — so you learn by shipping with others, not by stacking another solo
-          project on your resume.
+          backend. We match you into a team building enterprise apps that will go live soon — so
+          you learn by shipping with others, not by stacking another solo project on your resume.
         </p>
       </header>
 
@@ -653,6 +688,8 @@ export default function Apply() {
                     }));
                     setRecommendationApplied(false);
                     setCodingFocusTouched(false);
+                    setSkillLevelTouched(false);
+                    setBeSkillLevelTouched(false);
                   }}
                 >
                   <div className="cm-skill-label">{opt.label}</div>
@@ -679,7 +716,7 @@ export default function Apply() {
                 </div>
                 {form.knownLanguages.length > 0 && !languagesReviewed && (
                   <button type="button" className="cm-recommendation-apply cm-languages-done" onClick={() => setLanguagesReviewed(true)}>
-                    Done picking — show my recommendation
+                    Done picking
                   </button>
                 )}
               </>
@@ -704,6 +741,8 @@ export default function Apply() {
                         setForm((f) => ({ ...f, interestPull: opt.value }));
                         setRecommendationApplied(false);
                         setCodingFocusTouched(false);
+                        setSkillLevelTouched(false);
+                        setBeSkillLevelTouched(false);
                       }}
                     >
                       <div className="cm-skill-label">{opt.label}</div>
@@ -714,29 +753,6 @@ export default function Apply() {
               </>
             )}
 
-            {rec && !recommendationApplied && (
-              <div className="cm-recommendation">
-                <div className="cm-recommendation-label">Our recommendation</div>
-                <p className="cm-recommendation-text">{rec.why}</p>
-                <button type="button" className="cm-recommendation-apply" onClick={applyRecommendation}>
-                  Use this recommendation
-                </button>
-              </div>
-            )}
-
-            {recommendationApplied && (
-              <div className="cm-recommendation cm-recommendation-confirmed">
-                <div className="cm-recommendation-label cm-recommendation-label-confirmed">Track set</div>
-                {appliedSummaryItems.map((item) => (
-                  <p className="cm-recommendation-text cm-recommendation-text-confirmed" key={item.label}>
-                    <span className="cm-recommendation-summary-label">{item.label}:</span> {item.value}
-                  </p>
-                ))}
-                <button type="button" className="cm-recommendation-change" onClick={() => setRecommendationApplied(false)}>
-                  Choose differently
-                </button>
-              </div>
-            )}
           </div>
         )}
 
@@ -780,7 +796,10 @@ export default function Apply() {
                       type="button"
                       key={s.value}
                       className={`cm-skill-card ${form.skillLevel === s.value ? "cm-skill-card-selected" : ""}`}
-                      onClick={() => setForm((f) => ({ ...f, skillLevel: s.value }))}
+                      onClick={() => {
+                        setForm((f) => ({ ...f, skillLevel: s.value }));
+                        setSkillLevelTouched(true);
+                      }}
                     >
                       <div className="cm-skill-label">{s.label}</div>
                       <p className="cm-skill-blurb">{s.blurb}</p>
@@ -814,7 +833,10 @@ export default function Apply() {
                       type="button"
                       key={s.value}
                       className={`cm-skill-card ${form.beSkillLevel === s.value ? "cm-skill-card-selected" : ""}`}
-                      onClick={() => setForm((f) => ({ ...f, beSkillLevel: s.value }))}
+                      onClick={() => {
+                        setForm((f) => ({ ...f, beSkillLevel: s.value }));
+                        setBeSkillLevelTouched(true);
+                      }}
                     >
                       <div className="cm-skill-label">{s.label}</div>
                       <p className="cm-skill-blurb">{s.blurb}</p>
@@ -835,6 +857,30 @@ export default function Apply() {
                 </label>
               </>
             )}
+          </div>
+        )}
+
+        {isCoding && rec && !recommendationApplied && (
+          <div className="cm-recommendation">
+            <div className="cm-recommendation-label">Our recommendation</div>
+            <p className="cm-recommendation-text">{rec.why}</p>
+            <button type="button" className="cm-recommendation-apply" onClick={applyRecommendation}>
+              Use this recommendation and apply
+            </button>
+          </div>
+        )}
+
+        {isCoding && recommendationApplied && (
+          <div className="cm-recommendation cm-recommendation-confirmed">
+            <div className="cm-recommendation-label cm-recommendation-label-confirmed">Track set</div>
+            {appliedSummaryItems.map((item) => (
+              <p className="cm-recommendation-text cm-recommendation-text-confirmed" key={item.label}>
+                <span className="cm-recommendation-summary-label">{item.label}:</span> {item.value}
+              </p>
+            ))}
+            <button type="button" className="cm-recommendation-change" onClick={() => setRecommendationApplied(false)}>
+              Choose differently
+            </button>
           </div>
         )}
 

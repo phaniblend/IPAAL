@@ -1005,10 +1005,6 @@ export default function Workbench() {
   if (openedTask) {
     return (
       <div className="workbench">
-        <header className="workbench-header">
-          <div className="workbench-kicker">Workbench</div>
-          <h1>Where the work actually happens</h1>
-        </header>
         <OpenTaskView
           task={openedTask}
           publishedModules={publishedModules}
