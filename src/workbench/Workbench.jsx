@@ -377,7 +377,6 @@ function OpenTaskView({ task, publishedModules, onBack, isJS, projects = [] }) {
   const prose = humanDescription(task.description);
   const assist = parseAssistInfo(task.description);
   const waitingOnLesson = assist.status === "blocked";
-  const [assistOpen, setAssistOpen] = useState(false);
   const [workspaceOpen, setWorkspaceOpen] = useState(false);
   // null = choice screen ("continue here online" vs "use my local editor") not answered yet for
   // this open of the modal; "online" mounts the real in-browser editor; "local" shows the manual
@@ -490,14 +489,6 @@ function OpenTaskView({ task, publishedModules, onBack, isJS, projects = [] }) {
     .replace(/(^-|-$)/g, "")
     .slice(0, 40)}-${task.id}`;
 
-  function openAssistance() {
-    setAssistOpen(true);
-  }
-
-  function closeAssistance() {
-    setAssistOpen(false);
-  }
-
   return (
     <div className="workbench-task-open">
       <button type="button" className="workbench-task-back" onClick={onBack}>
@@ -602,18 +593,6 @@ function OpenTaskView({ task, publishedModules, onBack, isJS, projects = [] }) {
           <pre className="workbench-task-raw">{task.description}</pre>
         )}
 
-        {!waitingOnLesson && (
-          <div className="workbench-assist-start workbench-assist-start-inline">
-            <p className="workbench-assist-blurb">
-              Stuck or learning the pattern for this task? Assist Me opens a guided lesson right here — you
-              stay on this task.
-            </p>
-            <button type="button" className="workbench-assist-btn" onClick={openAssistance}>
-              Assist me
-            </button>
-          </div>
-        )}
-
         {/* Start Dev is the one entry point for submitting work, shown on every task regardless of
             trade — found live 2026-09-05: gating this to Coding only was never actually enforced in
             code, but a QA/Content/Design task with real file output deserves the same button; in
@@ -709,23 +688,6 @@ function OpenTaskView({ task, publishedModules, onBack, isJS, projects = [] }) {
                 </div>
               )}
             </div>
-          </div>
-        </div>
-      )}
-
-      {/* Lightbox over the task page, not a tab that replaces it — found live 2026-09-01: "Assist
-          Me opens a guided lesson in a full tab" read as though the task itself navigated away.
-          Story stays exactly as it was underneath; clicking the scrim (not the panel itself)
-          closes back to it, same click-outside convention as the "Try the mock" modal below. */}
-      {assistOpen && (
-        <div className="workbench-assist-overlay" role="presentation" onClick={(e) => e.target === e.currentTarget && closeAssistance()}>
-          <div className="workbench-assist-lightbox" role="dialog" aria-modal="true" aria-label="Assist Me">
-            <TaskAssistPanel
-              task={task}
-              publishedModules={publishedModules}
-              autoStart
-              onCloseLesson={closeAssistance}
-            />
           </div>
         </div>
       )}
