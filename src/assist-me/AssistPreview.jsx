@@ -4,14 +4,19 @@ import { AssistMeEmbedded } from "./AssistMeWorkspace.jsx";
 // Pokedex (and the whole prior SMB product catalog before it) was replaced 2026-09-03 by Mini
 // ERP — a real Fastify + Prisma + PostgreSQL backend (Procure-to-Pay, Order-to-Cash, double-entry
 // GL — already built, verified against its own spec's acceptance criteria, and running) with
-// four purely-frontend learner tasks against it. All four now have real Assist modules built and
-// wired (2026-09-04) — merging all four tasks' PRs produces the complete MiniERP frontend on top
-// of the already-complete backend.
+// purely-frontend learner tasks against it.
+//
+// 2026-09-07: this used to be four separate tasks, but idt-erp-reports-dashboard's own steps
+// imported types (Item/PurchaseOrder/SalesOrder) from files the other three tasks built — a
+// learner assigned only the dashboard task hit an import with nothing to point at (user report:
+// "its still asking me to import type from a file that was never created"). Merged all four into
+// one 26-step task under the same idt-erp-reports-dashboard tag, in dependency order (inventory ->
+// procurement -> sales -> financials -> App.tsx assembly), so the prerequisite steps and the
+// steps that depend on them now live in the same task. The three old per-component engine files
+// (inpact_assist_idt-erp-inventory-table/po-form/so-pipeline_engine.tsx) are left on disk, not
+// deleted — their content still exists inside the merged file — but are no longer listed here.
 const MODULES = [
-  { tag: "idt-erp-inventory-table", product: "MiniERP", trade: "Coding · FE", title: "Build the inventory master table" },
-  { tag: "idt-erp-po-form", product: "MiniERP", trade: "Coding · FE", title: "Build the purchase order form and receive modal" },
-  { tag: "idt-erp-so-pipeline", product: "MiniERP", trade: "Coding · FE", title: "Build the sales order pipeline view" },
-  { tag: "idt-erp-reports-dashboard", product: "MiniERP", trade: "Coding · FE", title: "Build the financial reporting dashboard" },
+  { tag: "idt-erp-reports-dashboard", product: "MiniERP", trade: "Coding · FE", title: "Build the MiniERP frontend: inventory, procurement, sales & financial dashboard" },
 ];
 
 export default function AssistPreview() {
