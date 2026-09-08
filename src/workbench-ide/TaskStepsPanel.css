@@ -106,6 +106,25 @@
   overflow-y: auto;
 }
 
+/* Marks where one file's lines end and the next one's begin — the annotated block can span
+   several concatenated files (see renderAnnotatedCode's file-marker handling in
+   formatFeedbackText.jsx), so without this the line numbers resetting to 1 would look like a
+   glitch instead of "you're looking at a different file now". */
+.tsp-annotated-file {
+  padding: 10px 12px 4px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  color: #67e8f9;
+  border-top: 1px solid rgba(148, 163, 184, 0.25);
+  margin-top: 4px;
+}
+
+.tsp-annotated-file:first-child {
+  border-top: none;
+  margin-top: 0;
+}
+
 .tsp-annotated-line {
   display: flex;
   padding: 0 12px;
