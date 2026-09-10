@@ -16,10 +16,11 @@ export const NODES = [
     type: "reveal",
     phase: "Lesson",
     content: {
-      tag: "idt-kioskguard-triage",
-      title: "KioskGuard: incident triage cockpit",
+      tag: "idt-sentinelpos-triage",
+      title: "SentinelPOS: incident triage cockpit",
       body: MENTAL_MODEL,
-      usecase: "The real KioskGuard backend already scores cashier shifts (a rolling Z-score against each store's own 30-day baseline) and opens a real Incident record once a shift crosses the threshold — this task builds the screen a loss-prevention analyst actually works from to review and resolve those real incidents.",
+      usecase: "The real SentinelPOS backend already scores cashier shifts (a rolling Z-score against each store's own 30-day baseline) and opens a real Incident record once a shift crosses the threshold — this task builds the screen a loss-prevention analyst actually works from to review and resolve those real incidents.",
+      walkthroughProduct: "sentinelpos",
       designMock: {"kind":"list-and-form","screenTitle":"Incident Triage","caption":"This is the screen you are building — every row is a real incident the backend's own scoring already flagged.","listCaption":"TABLE — real incidents, live from the API","emptyCaption":"EMPTY — if nothing is currently flagged","emptyMessage":"No open incidents.","rows":[{"title":"INC-Z-482910","subtitle":"Z = 2.8","meta":"CRITICAL"},{"title":"INC-Z-482844","subtitle":"Z = 2.1","meta":"HIGH"}],"fields":[{"label":"Severity","options":["All","CRITICAL","HIGH"]}],"formMode":"filter","submitLabel":"Filter"},
     },
   },
@@ -1255,6 +1256,6 @@ export default createINPACTEngine({
   NODES,
   sideItems,
   lessonNum: 0,
-  title: "KioskGuard: incident triage cockpit",
+  title: "SentinelPOS: incident triage cockpit",
   shortName: "Incident triage",
 });
