@@ -1,6 +1,8 @@
+import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
+import { useAuth } from "../auth/useAuth.js";
 import ProductWalkthrough from "./ProductWalkthrough.jsx";
-import { PRODUCT_WALKTHROUGHS } from "./productWalkthroughConfigs.jsx";
+import { PRODUCT_WALKTHROUGHS, slugForProjectName } from "./productWalkthroughConfigs.jsx";
 import GuidedTour from "./GuidedTour.jsx";
 import { GUIDED_TOURS } from "./guidedTours.jsx";
 import "./ProductOverview.css";
@@ -35,10 +37,37 @@ const PRODUCT_TITLES = { minierp: "MiniERP" };
 
 export default function ProductOverview() {
   const { slug } = useParams();
+  const { session, status: authStatus } = useAuth();
   const copy = PRODUCT_COPY[slug];
   const guidedTour = GUIDED_TOURS[slug];
   const walkthrough = PRODUCT_WALKTHROUGHS[slug];
   const title = PRODUCT_TITLES[slug] || walkthrough?.title || slug;
+
+  // "Apply" only makes sense for someone who isn't already building this — e.g. a visitor who
+  // reached this page from inside their own assigned task's curiosity nudge (WalkthroughNudge)
+  // shouldn't be told to go apply for the very thing they're already signed in and working on
+  // (user report, 2026-09-10). Checked against the same /api/recruit/my-tasks Workbench itself
+  // reads, not a guess — only actually skips the CTA once a real matching task is confirmed.
+  const [alreadyAssigned, setAlreadyAssigned] = useState(false);
+  useEffect(() => {
+    if (authStatus !== "signedIn") {
+      setAlreadyAssigned(false);
+      return;
+    }
+    let cancelled = false;
+    fetch("/api/recruit/my-tasks")
+      .then((r) => (r.ok ? r.json() : { tasks: [] }))
+      .then(({ tasks }) => {
+        if (cancelled) return;
+        setAlreadyAssigned((tasks || []).some((t) => slugForProjectName(t.project) === slug));
+      })
+      .catch(() => {
+        if (!cancelled) setAlreadyAssigned(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [authStatus, slug]);
 
   if (!copy) {
     return (
@@ -64,9 +93,15 @@ export default function ProductOverview() {
         <p className="po-description">{copy.description}</p>
 
         <div className="po-cta-row">
-          <Link className="po-cta-primary" to="/apply">
-            Apply to build this →
-          </Link>
+          {alreadyAssigned ? (
+            <Link className="po-cta-primary" to="/workbench">
+              You're already building this — go to your task →
+            </Link>
+          ) : (
+            <Link className="po-cta-primary" to="/apply">
+              Apply to build this →
+            </Link>
+          )}
         </div>
 
         {guidedTour ? (
