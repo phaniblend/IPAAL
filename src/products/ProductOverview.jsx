@@ -1,12 +1,19 @@
 import { Link, useParams } from "react-router-dom";
 import ProductWalkthrough from "./ProductWalkthrough.jsx";
 import { PRODUCT_WALKTHROUGHS } from "./productWalkthroughConfigs.jsx";
+import GuidedTour from "./GuidedTour.jsx";
+import { GUIDED_TOURS } from "./guidedTours.jsx";
 import "./ProductOverview.css";
 
 // Public, shareable copy per product — the plain-English pitch a pilot audience or a prospective
 // aspirant reads before the animated walkthrough gets into the real engineering. Kept separate from
 // productWalkthroughConfigs.jsx's phases/logs since this is marketing copy, not simulator data.
 const PRODUCT_COPY = {
+  minierp: {
+    tagline: "Real double-entry books that close themselves, not a spreadsheet pretending to.",
+    description:
+      "Every stock move — a purchase order received, an order fulfilled — posts a real, balanced journal entry in the same transaction, automatically. Moving Average Cost recalculates on every receipt. A background worker watches for low stock and drafts its own replenishment orders. Revenue, COGS, and net profit are never a month-end reconciliation — they're always already correct.",
+  },
   sentinelpos: {
     tagline: "Retail loss-prevention that actually watches the register, not just the cameras.",
     description:
@@ -24,11 +31,14 @@ const PRODUCT_COPY = {
   },
 };
 
+const PRODUCT_TITLES = { minierp: "MiniERP" };
+
 export default function ProductOverview() {
   const { slug } = useParams();
   const copy = PRODUCT_COPY[slug];
+  const guidedTour = GUIDED_TOURS[slug];
   const walkthrough = PRODUCT_WALKTHROUGHS[slug];
-  const title = walkthrough?.title || slug;
+  const title = PRODUCT_TITLES[slug] || walkthrough?.title || slug;
 
   if (!copy) {
     return (
@@ -59,7 +69,12 @@ export default function ProductOverview() {
           </Link>
         </div>
 
-        {walkthrough ? (
+        {guidedTour ? (
+          <section className="po-walkthrough-section">
+            <h2 className="po-section-h2">How it really works</h2>
+            <GuidedTour key={slug} renderStage={guidedTour.renderStage} chapters={guidedTour.chapters} />
+          </section>
+        ) : walkthrough ? (
           <section className="po-walkthrough-section">
             <h2 className="po-section-h2">How it really works</h2>
             <ProductWalkthrough key={slug} productKey={slug} />
