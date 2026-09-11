@@ -44,3 +44,15 @@ NUL.css
 Untitled.txt
 *.pdf
 \# Demo narration — Test user token.txt
+
+# Everything moved here by the 2026-09-11 repo-hygiene pass (scratch text/docs, design-reference
+# mockups, and the untracked-and-regenerable audit/report JSONs the scripts below write to repo
+# root) — kept on disk locally, never tracked. See each script for how to regenerate its report:
+# audit-lesson-quality.js, audit-multifile-integrity.js, quality-pass-content-lessons.js,
+# sanitize-content-lessons.js, apply-task-splitting.js.
+.archive/
+/audit-lesson-quality-report.json
+/audit-multifile-integrity-report.json
+/quality-pass-report.json
+/sanitize-lessons-report.json
+/task-splitting-report.json
