@@ -134,7 +134,7 @@ Whatever a client sends in a request body can never be assumed well-formed — c
     mc_correct_option: "error string for bad fields, else null",
     mc_anchor: "error string for bad fields, else null",
     why_this_matters: `Validation prevents packages with missing or undefined balances from being created.`,
-    answer_keywords: ["validatePackage","client","service","totalPunches","usedPunches"],
+    answer_keywords: ["validatePackage","client","service","totalPunches"],
     seed_code: `let packages = [];
 let nextIdCounter = 1;
 function nextId() { return String(nextIdCounter++); }
@@ -158,7 +158,6 @@ export function validatePackage(input) {
   if (typeof input?.client !== "string" || !input.client.trim()) return "client is required";
   if (typeof input?.service !== "string" || !input.service.trim()) return "service is required";
   if (typeof input?.totalPunches !== "number" || input.totalPunches <= 0) return "totalPunches must be > 0";
-  if (typeof input?.usedPunches !== "number" || input.usedPunches < 0) return "usedPunches must be >= 0";
   return null;
 }
 `,
@@ -185,7 +184,6 @@ export function validatePackage(input) {
   if (typeof input?.client !== "string" || !input.client.trim()) return "client is required";
   if (typeof input?.service !== "string" || !input.service.trim()) return "service is required";
   if (typeof input?.totalPunches !== "number" || input.totalPunches <= 0) return "totalPunches must be > 0";
-  if (typeof input?.usedPunches !== "number" || input.usedPunches < 0) return "usedPunches must be >= 0";
   return null;
 }
 `,
@@ -313,10 +311,7 @@ Attaching a computed field to data on its way out of a route means running the d
     mc_options: ["GET/POST attach derived status; POST validates first","POST stores client status verbatim","GET omits status"],
     mc_correct_option: "GET/POST attach derived status; POST validates first",
     mc_anchor: "GET/POST attach derived status; POST val",
-    why_this_matters: `The client receives back the saved package along with its server-calculated status tag.
-
-
-================================================================================`,
+    why_this_matters: `The client receives back the saved package along with its server-calculated status tag.`,
     answer_keywords: ["derivePackageStatus","validatePackage","201"],
     seed_code: `let packages = [];
 let nextIdCounter = 1;
@@ -352,7 +347,7 @@ export function createHandlers() {
     create(req, res) {
       const err = validatePackage(req.body);
       if (err) return res.status(400).json({ error: err });
-      const row = { id: nextId(), client: req.body.client, service: req.body.service, totalPunches: req.body.totalPunches, usedPunches: req.body.usedPunches, usedPunches: 0 };
+      const row = { id: nextId(), client: req.body.client, service: req.body.service, totalPunches: req.body.totalPunches, usedPunches: 0 };
       packages.push(row);
       res.status(201).json({ ...row, status: derivePackageStatus(row) });
     },
@@ -374,10 +369,7 @@ export function createPackage(req: Request, res: Response) {
     deepDive: {
       // Fix 7: lead with the general concept (why a shared pattern matters), not the task
       // instruction restated verbatim.
-      hook: `The client receives back the saved package along with its server-calculated status tag.
-
-
-================================================================================`,
+      hook: `The client receives back the saved package along with its server-calculated status tag.`,
       pain: "Skipping this step leaves later code with no data shape or no source of truth.",
       mentalModel: `Implement /api/packages with a derived status:
 
@@ -398,7 +390,7 @@ export function createHandlers() {
     create(req, res) {
       const err = validatePackage(req.body);
       if (err) return res.status(400).json({ error: err });
-      const row = { id: nextId(), client: req.body.client, service: req.body.service, totalPunches: req.body.totalPunches, usedPunches: req.body.usedPunches, usedPunches: 0 };
+      const row = { id: nextId(), client: req.body.client, service: req.body.service, totalPunches: req.body.totalPunches, usedPunches: 0 };
       packages.push(row);
       res.status(201).json({ ...row, status: derivePackageStatus(row) });
     },

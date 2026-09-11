@@ -12,7 +12,7 @@ export const NODES = [
 
   Store    →  in-memory Deposit rows
   Validate →  required fields
-  Derive   →  if appliedAt is set → applied; else held
+  Derive   →  if applied is true → applied; else held
   Routes   →  GET/POST attach computed status (do not trust client status)`,
       usecase: "Money states must be derived from facts (held vs applied), not from a status string the browser invents.",
       designMock: {"kind":"api-sample","screenTitle":"/api/deposits","caption":"Status is computed on the way out — clients cannot fake it.","getSample":"GET /api/deposits\n→ [ { \"id\": \"1\", \"status\": \"…\" } ]","postSample":"POST /api/deposits\n{ …fields… }\n→ 201 { …row, \"status\": \"…\" }"},
@@ -91,7 +91,7 @@ function makeId(): string {
 
   Store    →  in-memory Deposit rows
   Validate →  required fields
-  Derive   →  if appliedAt is set → applied; else held
+  Derive   →  if applied is true → applied; else held
   Routes   →  GET/POST attach computed status (do not trust client status)`,
       discover: `let deposits = [];
 let nextIdCounter = 1;
@@ -177,7 +177,7 @@ export function validateDeposit(input) {
 
   Store    →  in-memory Deposit rows
   Validate →  required fields
-  Derive   →  if appliedAt is set → applied; else held
+  Derive   →  if applied is true → applied; else held
   Routes   →  GET/POST attach computed status (do not trust client status)`,
       discover: `let deposits = [];
 let nextIdCounter = 1;
@@ -220,7 +220,7 @@ SAMPLE — /api/deposits
 GET /api/deposits
 → [ { "id": "1", "status": "…" } ]
 
-Rule: if appliedAt is set → applied; else held
+Rule: if applied is true → applied; else held
 \`\`\`
 
 A status label describing a record can always be recalculated from that record's own stored facts — comparing dates, or checking a boolean flag — rather than being sent by the client and simply trusted. Given the rule above, should the browser send status, or should the server compute it — and from what?`,
@@ -244,9 +244,8 @@ export function deriveDepositStatus(row, now = new Date()) {}
     pre_check_hint: `A derive function takes one stored row (plus, optionally, the current time) and returns a label computed purely from that row's own fields — it never reads anything the client sent in the current request.`,
     expected: `let deposits = [];
 export function validateDeposit(input) { return null; }
-export function deriveDepositStatus(row, now = new Date()) {
-  if (new Date(row.appointmentId) < now) return "stale";
-  return "fresh";
+export function deriveDepositStatus(row) {
+  return row.applied === true ? "applied" : "held";
 }
 `,
     analog_example: `const status = Number(req.body.amount) > 5000 ? "held" : "applied";`,
@@ -260,13 +259,12 @@ export function deriveDepositStatus(row, now = new Date()) {
 
   Store    →  in-memory Deposit rows
   Validate →  required fields
-  Derive   →  if appliedAt is set → applied; else held
+  Derive   →  if applied is true → applied; else held
   Routes   →  GET/POST attach computed status (do not trust client status)`,
       discover: `let deposits = [];
 export function validateDeposit(input) { return null; }
-export function deriveDepositStatus(row, now = new Date()) {
-  if (new Date(row.appointmentId) < now) return "stale";
-  return "fresh";
+export function deriveDepositStatus(row) {
+  return row.applied === true ? "applied" : "held";
 }
 `,
       quickRules: "- One skill per step\n- Name the skill, not the product noun\n- Example uses the same pattern",
@@ -317,10 +315,7 @@ Attaching a computed field to data on its way out of a route means running the d
     mc_options: ["GET/POST attach derived status; POST validates first","POST stores client status verbatim","GET omits status"],
     mc_correct_option: "GET/POST attach derived status; POST validates first",
     mc_anchor: "GET/POST attach derived status; POST val",
-    why_this_matters: `The client receives back the exact saved record along with the server-verified status.
-
-
-================================================================================`,
+    why_this_matters: `The client receives back the exact saved record along with the server-verified status.`,
     answer_keywords: ["deriveDepositStatus","validateDeposit","201"],
     seed_code: `let deposits = [];
 let nextIdCounter = 1;
@@ -356,7 +351,7 @@ export function createHandlers() {
     create(req, res) {
       const err = validateDeposit(req.body);
       if (err) return res.status(400).json({ error: err });
-      const row = { id: nextId(), client: req.body.client, amount: req.body.amount, appointmentId: req.body.appointmentId };
+      const row = { id: nextId(), client: req.body.client, amount: req.body.amount, appointmentId: req.body.appointmentId, applied: false };
       deposits.push(row);
       res.status(201).json({ ...row, status: deriveDepositStatus(row) });
     },
@@ -378,16 +373,13 @@ export function createDeposit(req: Request, res: Response) {
     deepDive: {
       // Fix 7: lead with the general concept (why a shared pattern matters), not the task
       // instruction restated verbatim.
-      hook: `The client receives back the exact saved record along with the server-verified status.
-
-
-================================================================================`,
+      hook: `The client receives back the exact saved record along with the server-verified status.`,
       pain: "Skipping this step leaves later code with no data shape or no source of truth.",
       mentalModel: `Implement /api/deposits with a derived status:
 
   Store    →  in-memory Deposit rows
   Validate →  required fields
-  Derive   →  if appliedAt is set → applied; else held
+  Derive   →  if applied is true → applied; else held
   Routes   →  GET/POST attach computed status (do not trust client status)`,
       discover: `let deposits = [];
 let nextIdCounter = 1;
@@ -402,7 +394,7 @@ export function createHandlers() {
     create(req, res) {
       const err = validateDeposit(req.body);
       if (err) return res.status(400).json({ error: err });
-      const row = { id: nextId(), client: req.body.client, amount: req.body.amount, appointmentId: req.body.appointmentId };
+      const row = { id: nextId(), client: req.body.client, amount: req.body.amount, appointmentId: req.body.appointmentId, applied: false };
       deposits.push(row);
       res.status(201).json({ ...row, status: deriveDepositStatus(row) });
     },

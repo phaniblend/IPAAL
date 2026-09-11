@@ -476,10 +476,7 @@ Submitting an HTML form reloads the page by default; canceling that default lets
     mc_options: ["preventDefault, append one item, clear fields","window.location.reload after every submit","only console.log the form values"],
     mc_correct_option: "preventDefault, append one item, clear fields",
     mc_anchor: "preventDefault, append one item, clear f",
-    why_this_matters: `Stopping page reload prevents the entire browser from blinking, creating an instant and seamless app experience.
-
-
-================================================================================`,
+    why_this_matters: `Stopping page reload prevents the entire browser from blinking, creating an instant and seamless app experience.`,
     answer_keywords: ["preventDefault","setAppointments","prev","provider","service","startsAt"],
     seed_code: `import { useState } from "react";
 
@@ -596,10 +593,7 @@ export function BookingDesk() {
     deepDive: {
       // Fix 7: lead with the general concept (why a shared pattern matters), not the task
       // instruction restated verbatim.
-      hook: `Stopping page reload prevents the entire browser from blinking, creating an instant and seamless app experience.
-
-
-================================================================================`,
+      hook: `Stopping page reload prevents the entire browser from blinking, creating an instant and seamless app experience.`,
       pain: "Skipping this step leaves later code with no data shape or no source of truth.",
       mentalModel: `Build a screen that lists appointments and a form to add one:
 

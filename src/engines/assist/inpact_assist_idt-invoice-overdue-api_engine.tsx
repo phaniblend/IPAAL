@@ -316,10 +316,7 @@ Attaching a computed field to data on its way out of a route means running the d
     mc_options: ["GET/POST attach derived status; POST validates first","POST stores client status verbatim","GET omits status"],
     mc_correct_option: "GET/POST attach derived status; POST validates first",
     mc_anchor: "GET/POST attach derived status; POST val",
-    why_this_matters: `The client receives the finalized invoice with the calculated status included.
-
-
-================================================================================`,
+    why_this_matters: `The client receives the finalized invoice with the calculated status included.`,
     answer_keywords: ["deriveStatus","validateInvoice","201"],
     seed_code: `let invoices = [];
 let nextIdCounter = 1;
@@ -377,10 +374,7 @@ export function createInvoice(req: Request, res: Response) {
     deepDive: {
       // Fix 7: lead with the general concept (why a shared pattern matters), not the task
       // instruction restated verbatim.
-      hook: `The client receives the finalized invoice with the calculated status included.
-
-
-================================================================================`,
+      hook: `The client receives the finalized invoice with the calculated status included.`,
       pain: "Skipping this step leaves later code with no data shape or no source of truth.",
       mentalModel: `Implement /api/invoices with a derived status:
 

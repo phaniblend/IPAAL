@@ -241,9 +241,8 @@ export function deriveCoverageStatus(row, now = new Date()) {}
     pre_check_hint: `A derive function takes one stored row (plus, optionally, the current time) and returns a label computed purely from that row's own fields — it never reads anything the client sent in the current request.`,
     expected: `let coverage = [];
 export function validateCoverage(input) { return null; }
-export function deriveCoverageStatus(row, now = new Date()) {
-  if (new Date(row.neededBy) < now) return "stale";
-  return "fresh";
+export function deriveCoverageStatus(row) {
+  return row.claimedBy ? "filled" : "open";
 }
 `,
     analog_example: `const status = req.body.assignedWorkerId ? "filled" : "open";`,
@@ -261,9 +260,8 @@ export function deriveCoverageStatus(row, now = new Date()) {
   Routes   →  GET/POST attach computed status (do not trust client status)`,
       discover: `let coverage = [];
 export function validateCoverage(input) { return null; }
-export function deriveCoverageStatus(row, now = new Date()) {
-  if (new Date(row.neededBy) < now) return "stale";
-  return "fresh";
+export function deriveCoverageStatus(row) {
+  return row.claimedBy ? "filled" : "open";
 }
 `,
       quickRules: "- One skill per step\n- Name the skill, not the product noun\n- Example uses the same pattern",
@@ -313,10 +311,7 @@ Attaching a computed field to data on its way out of a route means running the d
     mc_options: ["GET/POST attach derived status; POST validates first","POST stores client status verbatim","GET omits status"],
     mc_correct_option: "GET/POST attach derived status; POST validates first",
     mc_anchor: "GET/POST attach derived status; POST val",
-    why_this_matters: `Consistently returning the newly created object with its derived status gives the client instant confirmation.
-
-
-================================================================================`,
+    why_this_matters: `Consistently returning the newly created object with its derived status gives the client instant confirmation.`,
     answer_keywords: ["deriveCoverageStatus","validateCoverage","201"],
     seed_code: `let coverage = [];
 let nextIdCounter = 1;
@@ -374,10 +369,7 @@ export function addCoverage(req: Request, res: Response) {
     deepDive: {
       // Fix 7: lead with the general concept (why a shared pattern matters), not the task
       // instruction restated verbatim.
-      hook: `Consistently returning the newly created object with its derived status gives the client instant confirmation.
-
-
-================================================================================`,
+      hook: `Consistently returning the newly created object with its derived status gives the client instant confirmation.`,
       pain: "Skipping this step leaves later code with no data shape or no source of truth.",
       mentalModel: `Implement /api/coverage with a derived status:
 

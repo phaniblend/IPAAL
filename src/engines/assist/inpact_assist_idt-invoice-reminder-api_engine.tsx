@@ -249,7 +249,7 @@ export function hasPendingReminder(candidate) {}
     expected: `let reminders = [];
 export function validateReminder(input) { return null; }
 export function hasPendingReminder(candidate) {
-  return reminders.some((row) => row.invoiceId === candidate.invoiceId && row.sendAt === candidate.sendAt);
+  return reminders.some((row) => row.invoiceId === candidate.invoiceId && row.channel === candidate.channel);
 }
 `,
     analog_example: `const exists = reminders.some(
@@ -276,7 +276,7 @@ if (exists) {
       discover: `let reminders = [];
 export function validateReminder(input) { return null; }
 export function hasPendingReminder(candidate) {
-  return reminders.some((row) => row.invoiceId === candidate.invoiceId && row.sendAt === candidate.sendAt);
+  return reminders.some((row) => row.invoiceId === candidate.invoiceId && row.channel === candidate.channel);
 }
 `,
       quickRules: "- One skill per step\n- Name the skill, not the product noun\n- Example uses the same pattern",
@@ -327,10 +327,7 @@ A route handler is where validation, conflict-checking, and storage come togethe
     mc_options: ["GET lists store; POST validates, rejects conflict, else 201","POST always 201 even on overlap","GET returns HTML instead of JSON"],
     mc_correct_option: "GET lists store; POST validates, rejects conflict, else 201",
     mc_anchor: "GET lists store; POST validates, rejects",
-    why_this_matters: `Clear error codes (400 for bad data, 409 for conflicts) make API behavior predictable.
-
-
-================================================================================`,
+    why_this_matters: `Clear error codes (400 for bad data, 409 for conflicts) make API behavior predictable.`,
     answer_keywords: ["409","400","201","validateReminder","hasPendingReminder"],
     seed_code: `let reminders = [];
 let nextIdCounter = 1;
@@ -358,7 +355,7 @@ let nextIdCounter = 1;
 function nextId() { return String(nextIdCounter++); }
 export function validateReminder(input) { return null; }
 export function hasPendingReminder(candidate) {
-  return reminders.some((row) => row.invoiceId === candidate.invoiceId && row.sendAt === candidate.sendAt);
+  return reminders.some((row) => row.invoiceId === candidate.invoiceId && row.channel === candidate.channel);
 }
 export function createHandlers() {
   return {
@@ -391,10 +388,7 @@ export function createReminder(req: Request, res: Response) {
     deepDive: {
       // Fix 7: lead with the general concept (why a shared pattern matters), not the task
       // instruction restated verbatim.
-      hook: `Clear error codes (400 for bad data, 409 for conflicts) make API behavior predictable.
-
-
-================================================================================`,
+      hook: `Clear error codes (400 for bad data, 409 for conflicts) make API behavior predictable.`,
       pain: "Skipping this step leaves later code with no data shape or no source of truth.",
       mentalModel: `Implement /api/reminders with persistence and a conflict rule:
 
@@ -407,7 +401,7 @@ let nextIdCounter = 1;
 function nextId() { return String(nextIdCounter++); }
 export function validateReminder(input) { return null; }
 export function hasPendingReminder(candidate) {
-  return reminders.some((row) => row.invoiceId === candidate.invoiceId && row.sendAt === candidate.sendAt);
+  return reminders.some((row) => row.invoiceId === candidate.invoiceId && row.channel === candidate.channel);
 }
 export function createHandlers() {
   return {

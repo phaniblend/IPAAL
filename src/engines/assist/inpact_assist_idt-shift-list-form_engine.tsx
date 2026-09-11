@@ -472,10 +472,7 @@ Submitting an HTML form reloads the page by default; canceling that default lets
     mc_options: ["preventDefault, append one item, clear fields","window.location.reload after every submit","only console.log the form values"],
     mc_correct_option: "preventDefault, append one item, clear fields",
     mc_anchor: "preventDefault, append one item, clear f",
-    why_this_matters: `Published shifts appear on the board instantly without page reloads.
-
-
-================================================================================`,
+    why_this_matters: `Published shifts appear on the board instantly without page reloads.`,
     answer_keywords: ["preventDefault","setShifts","prev","worker","role","startsAt"],
     seed_code: `import { useState } from "react";
 
@@ -593,10 +590,7 @@ export function ShiftBoard() {
     deepDive: {
       // Fix 7: lead with the general concept (why a shared pattern matters), not the task
       // instruction restated verbatim.
-      hook: `Published shifts appear on the board instantly without page reloads.
-
-
-================================================================================`,
+      hook: `Published shifts appear on the board instantly without page reloads.`,
       pain: "Skipping this step leaves later code with no data shape or no source of truth.",
       mentalModel: `Build a screen that lists shifts and a form to add one:
 

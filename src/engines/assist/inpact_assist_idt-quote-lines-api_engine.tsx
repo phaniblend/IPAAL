@@ -246,7 +246,7 @@ export function hasDuplicateLine(candidate) {}
     expected: `let lines = [];
 export function validateLine(input) { return null; }
 export function hasDuplicateLine(candidate) {
-  return lines.some((row) => row.quoteId === candidate.quoteId && row.amount === candidate.amount);
+  return lines.some((row) => row.quoteId === candidate.quoteId && row.label === candidate.label);
 }
 `,
     analog_example: `const exists = quoteLines.some(
@@ -270,7 +270,7 @@ if (exists) {
       discover: `let lines = [];
 export function validateLine(input) { return null; }
 export function hasDuplicateLine(candidate) {
-  return lines.some((row) => row.quoteId === candidate.quoteId && row.amount === candidate.amount);
+  return lines.some((row) => row.quoteId === candidate.quoteId && row.label === candidate.label);
 }
 `,
       quickRules: "- One skill per step\n- Name the skill, not the product noun\n- Example uses the same pattern",
@@ -321,10 +321,7 @@ A route handler is where validation, conflict-checking, and storage come togethe
     mc_options: ["GET lists store; POST validates, rejects conflict, else 201","POST always 201 even on overlap","GET returns HTML instead of JSON"],
     mc_correct_option: "GET lists store; POST validates, rejects conflict, else 201",
     mc_anchor: "GET lists store; POST validates, rejects",
-    why_this_matters: `Consistent error codes (400 for bad data, 409 for duplicates) make API behavior predictable.
-
-
-================================================================================`,
+    why_this_matters: `Consistent error codes (400 for bad data, 409 for duplicates) make API behavior predictable.`,
     answer_keywords: ["409","400","201","validateLine","hasDuplicateLine"],
     seed_code: `let lines = [];
 let nextIdCounter = 1;
@@ -352,7 +349,7 @@ let nextIdCounter = 1;
 function nextId() { return String(nextIdCounter++); }
 export function validateLine(input) { return null; }
 export function hasDuplicateLine(candidate) {
-  return lines.some((row) => row.quoteId === candidate.quoteId && row.amount === candidate.amount);
+  return lines.some((row) => row.quoteId === candidate.quoteId && row.label === candidate.label);
 }
 export function createHandlers() {
   return {
@@ -385,10 +382,7 @@ export function createLine(req: Request, res: Response) {
     deepDive: {
       // Fix 7: lead with the general concept (why a shared pattern matters), not the task
       // instruction restated verbatim.
-      hook: `Consistent error codes (400 for bad data, 409 for duplicates) make API behavior predictable.
-
-
-================================================================================`,
+      hook: `Consistent error codes (400 for bad data, 409 for duplicates) make API behavior predictable.`,
       pain: "Skipping this step leaves later code with no data shape or no source of truth.",
       mentalModel: `Implement /api/quote-lines with persistence and a conflict rule:
 
@@ -401,7 +395,7 @@ let nextIdCounter = 1;
 function nextId() { return String(nextIdCounter++); }
 export function validateLine(input) { return null; }
 export function hasDuplicateLine(candidate) {
-  return lines.some((row) => row.quoteId === candidate.quoteId && row.amount === candidate.amount);
+  return lines.some((row) => row.quoteId === candidate.quoteId && row.label === candidate.label);
 }
 export function createHandlers() {
   return {

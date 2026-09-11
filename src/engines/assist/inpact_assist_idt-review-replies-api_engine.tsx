@@ -321,10 +321,7 @@ A route handler is where validation, conflict-checking, and storage come togethe
     mc_options: ["GET lists store; POST validates, rejects conflict, else 201","POST always 201 even on overlap","GET returns HTML instead of JSON"],
     mc_correct_option: "GET lists store; POST validates, rejects conflict, else 201",
     mc_anchor: "GET lists store; POST validates, rejects",
-    why_this_matters: `Consistent error codes (400 for bad data, 409 for duplicates) make API behavior predictable.
-
-
-================================================================================`,
+    why_this_matters: `Consistent error codes (400 for bad data, 409 for duplicates) make API behavior predictable.`,
     answer_keywords: ["409","400","201","validateReply","hasReplyAlready"],
     seed_code: `let replies = [];
 let nextIdCounter = 1;
@@ -385,10 +382,7 @@ export function postReply(req: Request, res: Response) {
     deepDive: {
       // Fix 7: lead with the general concept (why a shared pattern matters), not the task
       // instruction restated verbatim.
-      hook: `Consistent error codes (400 for bad data, 409 for duplicates) make API behavior predictable.
-
-
-================================================================================`,
+      hook: `Consistent error codes (400 for bad data, 409 for duplicates) make API behavior predictable.`,
       pain: "Skipping this step leaves later code with no data shape or no source of truth.",
       mentalModel: `Implement /api/review-replies with persistence and a conflict rule:
 

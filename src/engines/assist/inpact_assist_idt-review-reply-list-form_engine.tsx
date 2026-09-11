@@ -472,10 +472,7 @@ Submitting an HTML form reloads the page by default; canceling that default lets
     mc_options: ["preventDefault, append one item, clear fields","window.location.reload after every submit","only console.log the form values"],
     mc_correct_option: "preventDefault, append one item, clear fields",
     mc_anchor: "preventDefault, append one item, clear f",
-    why_this_matters: `Replies appear instantly in the sent list without page reloads.
-
-
-================================================================================`,
+    why_this_matters: `Replies appear instantly in the sent list without page reloads.`,
     answer_keywords: ["preventDefault","setReplies","prev","reviewId","body","channel"],
     seed_code: `import { useState } from "react";
 
@@ -593,10 +590,7 @@ export function ReviewReplyDesk() {
     deepDive: {
       // Fix 7: lead with the general concept (why a shared pattern matters), not the task
       // instruction restated verbatim.
-      hook: `Replies appear instantly in the sent list without page reloads.
-
-
-================================================================================`,
+      hook: `Replies appear instantly in the sent list without page reloads.`,
       pain: "Skipping this step leaves later code with no data shape or no source of truth.",
       mentalModel: `Build a screen that lists replies and a form to add one:
 

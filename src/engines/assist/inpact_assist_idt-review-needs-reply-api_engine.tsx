@@ -241,10 +241,8 @@ export function deriveReviewStatus(row, now = new Date()) {}
     pre_check_hint: `A derive function takes one stored row (plus, optionally, the current time) and returns a label computed purely from that row's own fields — it never reads anything the client sent in the current request.`,
     expected: `let reviews = [];
 export function validateReview(input) { return null; }
-export function deriveReviewStatus(row, now = new Date()) {
-  if (row.replied === true) return "answered";
-  if (new Date(row.rating) < now) return "needs-reply";
-  return "needs-reply";
+export function deriveReviewStatus(row) {
+  return row.replied === true ? "answered" : "needs-reply";
 }
 `,
     analog_example: `const status = req.body.replyText ? "replied" : "needs-reply";`,
@@ -262,10 +260,8 @@ export function deriveReviewStatus(row, now = new Date()) {
   Routes   →  GET/POST attach computed status (do not trust client status)`,
       discover: `let reviews = [];
 export function validateReview(input) { return null; }
-export function deriveReviewStatus(row, now = new Date()) {
-  if (row.replied === true) return "answered";
-  if (new Date(row.rating) < now) return "needs-reply";
-  return "needs-reply";
+export function deriveReviewStatus(row) {
+  return row.replied === true ? "answered" : "needs-reply";
 }
 `,
       quickRules: "- One skill per step\n- Name the skill, not the product noun\n- Example uses the same pattern",
@@ -315,10 +311,7 @@ Attaching a computed field to data on its way out of a route means running the d
     mc_options: ["GET/POST attach derived status; POST validates first","POST stores client status verbatim","GET omits status"],
     mc_correct_option: "GET/POST attach derived status; POST validates first",
     mc_anchor: "GET/POST attach derived status; POST val",
-    why_this_matters: `The client receives back the logged review along with its server-calculated status tag.
-
-
-================================================================================`,
+    why_this_matters: `The client receives back the logged review along with its server-calculated status tag.`,
     answer_keywords: ["deriveReviewStatus","validateReview","201"],
     seed_code: `let reviews = [];
 let nextIdCounter = 1;
@@ -376,10 +369,7 @@ export function logFeedback(req: Request, res: Response) {
     deepDive: {
       // Fix 7: lead with the general concept (why a shared pattern matters), not the task
       // instruction restated verbatim.
-      hook: `The client receives back the logged review along with its server-calculated status tag.
-
-
-================================================================================`,
+      hook: `The client receives back the logged review along with its server-calculated status tag.`,
       pain: "Skipping this step leaves later code with no data shape or no source of truth.",
       mentalModel: `Implement /api/reviews with a derived status:
 

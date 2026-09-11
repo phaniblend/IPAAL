@@ -325,10 +325,7 @@ A route handler is where validation, conflict-checking, and storage come togethe
     mc_options: ["GET lists store; POST validates, rejects conflict, else 201","POST always 201 even on overlap","GET returns HTML instead of JSON"],
     mc_correct_option: "GET lists store; POST validates, rejects conflict, else 201",
     mc_anchor: "GET lists store; POST validates, rejects",
-    why_this_matters: `Separating read and write doorways makes your API predictable, standard, and easy for frontend components to consume.
-
-
-================================================================================`,
+    why_this_matters: `Separating read and write doorways makes your API predictable, standard, and easy for frontend components to consume.`,
     answer_keywords: ["409","400","201","validateAppointment","hasSlotConflict"],
     seed_code: `let appointments = [];
 let nextIdCounter = 1;
@@ -389,10 +386,7 @@ export function handlePost(req: Request, res: Response) {
     deepDive: {
       // Fix 7: lead with the general concept (why a shared pattern matters), not the task
       // instruction restated verbatim.
-      hook: `Separating read and write doorways makes your API predictable, standard, and easy for frontend components to consume.
-
-
-================================================================================`,
+      hook: `Separating read and write doorways makes your API predictable, standard, and easy for frontend components to consume.`,
       pain: "Skipping this step leaves later code with no data shape or no source of truth.",
       mentalModel: `Implement /api/appointments with persistence and a conflict rule:
 

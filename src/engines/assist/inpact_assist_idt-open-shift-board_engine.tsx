@@ -479,10 +479,7 @@ Submitting an HTML form reloads the page by default; canceling that default lets
     mc_options: ["preventDefault, append one item, clear fields","window.location.reload after every submit","only console.log the form values"],
     mc_correct_option: "preventDefault, append one item, clear fields",
     mc_anchor: "preventDefault, append one item, clear f",
-    why_this_matters: `The new shift is added to the master list, and your filter automatically displays it if it is marked unfilled.
-
-
-================================================================================`,
+    why_this_matters: `The new shift is added to the master list, and your filter automatically displays it if it is marked unfilled.`,
     answer_keywords: ["preventDefault","setRequests","prev","shiftId","reason","status"],
     seed_code: `import { useState } from "react";
 
@@ -599,10 +596,7 @@ export function OpenShiftBoard() {
     deepDive: {
       // Fix 7: lead with the general concept (why a shared pattern matters), not the task
       // instruction restated verbatim.
-      hook: `The new shift is added to the master list, and your filter automatically displays it if it is marked unfilled.
-
-
-================================================================================`,
+      hook: `The new shift is added to the master list, and your filter automatically displays it if it is marked unfilled.`,
       pain: "Skipping this step leaves later code with no data shape or no source of truth.",
       mentalModel: `Build a screen that lists requests and a form to add one:
 

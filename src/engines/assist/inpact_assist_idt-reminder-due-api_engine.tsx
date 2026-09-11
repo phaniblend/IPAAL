@@ -315,10 +315,7 @@ Attaching a computed field to data on its way out of a route means running the d
     mc_options: ["GET/POST attach derived status; POST validates first","POST stores client status verbatim","GET omits status"],
     mc_correct_option: "GET/POST attach derived status; POST validates first",
     mc_anchor: "GET/POST attach derived status; POST val",
-    why_this_matters: `The client receives back the scheduled reminder along with its server-calculated status tag.
-
-
-================================================================================`,
+    why_this_matters: `The client receives back the scheduled reminder along with its server-calculated status tag.`,
     answer_keywords: ["deriveReminderStatus","validateScheduledReminder","201"],
     seed_code: `let reminders = [];
 let nextIdCounter = 1;
@@ -376,10 +373,7 @@ export function createScheduleItem(req: Request, res: Response) {
     deepDive: {
       // Fix 7: lead with the general concept (why a shared pattern matters), not the task
       // instruction restated verbatim.
-      hook: `The client receives back the scheduled reminder along with its server-calculated status tag.
-
-
-================================================================================`,
+      hook: `The client receives back the scheduled reminder along with its server-calculated status tag.`,
       pain: "Skipping this step leaves later code with no data shape or no source of truth.",
       mentalModel: `Implement /api/scheduled-reminders with a derived status:
 

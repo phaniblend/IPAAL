@@ -19,11 +19,19 @@ import { fileURLToPath } from "url";
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const DOCS = path.resolve(__dirname, "../docs");
 
+// A task's slice runs up to (not including) the *next* task's "TASK:" line — but the next task's
+// opening "====...====" divider sits *before* that line, so it's still inside the current task's
+// range. Left untrimmed, every task's last step's `why` (and the deepDive.hook mirrored from it)
+// ended with a literal stray "================================================================"
+// line (caught live 2026-09-06 reviewing idt-coverage-list-form's actual generated content).
+// Blank-line trimming alone doesn't catch it since the divider itself isn't a blank line.
+const isBlankOrDivider = (line) => line.trim() === "" || /^=+$/.test(line.trim());
+
 function trimBlankEdges(linesArr) {
   let start = 0;
   let end = linesArr.length;
-  while (start < end && linesArr[start].trim() === "") start++;
-  while (end > start && linesArr[end - 1].trim() === "") end--;
+  while (start < end && isBlankOrDivider(linesArr[start])) start++;
+  while (end > start && isBlankOrDivider(linesArr[end - 1])) end--;
   return linesArr.slice(start, end);
 }
 

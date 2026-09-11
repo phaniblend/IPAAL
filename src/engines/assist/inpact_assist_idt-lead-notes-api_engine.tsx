@@ -246,7 +246,7 @@ export function isDuplicateNote(candidate) {}
     expected: `let notes = [];
 export function validateNote(input) { return null; }
 export function isDuplicateNote(candidate) {
-  return notes.some((row) => row.leadId === candidate.leadId && row.channel === candidate.channel);
+  return notes.some((row) => row.leadId === candidate.leadId && row.body === candidate.body);
 }
 `,
     analog_example: `const isDuplicate = notesStore.some(
@@ -270,7 +270,7 @@ if (isDuplicate) {
       discover: `let notes = [];
 export function validateNote(input) { return null; }
 export function isDuplicateNote(candidate) {
-  return notes.some((row) => row.leadId === candidate.leadId && row.channel === candidate.channel);
+  return notes.some((row) => row.leadId === candidate.leadId && row.body === candidate.body);
 }
 `,
       quickRules: "- One skill per step\n- Name the skill, not the product noun\n- Example uses the same pattern",
@@ -321,10 +321,7 @@ A route handler is where validation, conflict-checking, and storage come togethe
     mc_options: ["GET lists store; POST validates, rejects conflict, else 201","POST always 201 even on overlap","GET returns HTML instead of JSON"],
     mc_correct_option: "GET lists store; POST validates, rejects conflict, else 201",
     mc_anchor: "GET lists store; POST validates, rejects",
-    why_this_matters: `Consistent error codes (400 for bad data, 409 for duplicates) make the API easy to consume.
-
-
-================================================================================`,
+    why_this_matters: `Consistent error codes (400 for bad data, 409 for duplicates) make the API easy to consume.`,
     answer_keywords: ["409","400","201","validateNote","isDuplicateNote"],
     seed_code: `let notes = [];
 let nextIdCounter = 1;
@@ -352,7 +349,7 @@ let nextIdCounter = 1;
 function nextId() { return String(nextIdCounter++); }
 export function validateNote(input) { return null; }
 export function isDuplicateNote(candidate) {
-  return notes.some((row) => row.leadId === candidate.leadId && row.channel === candidate.channel);
+  return notes.some((row) => row.leadId === candidate.leadId && row.body === candidate.body);
 }
 export function createHandlers() {
   return {
@@ -385,10 +382,7 @@ export function createNote(req: Request, res: Response) {
     deepDive: {
       // Fix 7: lead with the general concept (why a shared pattern matters), not the task
       // instruction restated verbatim.
-      hook: `Consistent error codes (400 for bad data, 409 for duplicates) make the API easy to consume.
-
-
-================================================================================`,
+      hook: `Consistent error codes (400 for bad data, 409 for duplicates) make the API easy to consume.`,
       pain: "Skipping this step leaves later code with no data shape or no source of truth.",
       mentalModel: `Implement /api/lead-notes with persistence and a conflict rule:
 
@@ -401,7 +395,7 @@ let nextIdCounter = 1;
 function nextId() { return String(nextIdCounter++); }
 export function validateNote(input) { return null; }
 export function isDuplicateNote(candidate) {
-  return notes.some((row) => row.leadId === candidate.leadId && row.channel === candidate.channel);
+  return notes.some((row) => row.leadId === candidate.leadId && row.body === candidate.body);
 }
 export function createHandlers() {
   return {

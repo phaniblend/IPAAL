@@ -12,7 +12,7 @@ export const NODES = [
 
   Store    →  in-memory Lead rows
   Validate →  required fields
-  Derive   →  if capturedAt older than N days → stale; else fresh
+  Derive   →  if capturedAt older than 7 days → stale; else fresh
   Routes   →  GET/POST attach computed status (do not trust client status)`,
       usecase: "Stale leads must be computed from capture time so the inbox stays honest.",
       designMock: {"kind":"api-sample","screenTitle":"/api/leads","caption":"Status is computed on the way out — clients cannot fake it.","getSample":"GET /api/leads\n→ [ { \"id\": \"1\", \"status\": \"…\" } ]","postSample":"POST /api/leads\n{ …fields… }\n→ 201 { …row, \"status\": \"…\" }"},
@@ -90,7 +90,7 @@ function makeLeadId(): string {
 
   Store    →  in-memory Lead rows
   Validate →  required fields
-  Derive   →  if capturedAt older than N days → stale; else fresh
+  Derive   →  if capturedAt older than 7 days → stale; else fresh
   Routes   →  GET/POST attach computed status (do not trust client status)`,
       discover: `let leads = [];
 let nextIdCounter = 1;
@@ -174,7 +174,7 @@ export function validateLead(input) {
 
   Store    →  in-memory Lead rows
   Validate →  required fields
-  Derive   →  if capturedAt older than N days → stale; else fresh
+  Derive   →  if capturedAt older than 7 days → stale; else fresh
   Routes   →  GET/POST attach computed status (do not trust client status)`,
       discover: `let leads = [];
 let nextIdCounter = 1;
@@ -217,7 +217,7 @@ SAMPLE — /api/leads
 GET /api/leads
 → [ { "id": "1", "status": "…" } ]
 
-Rule: if capturedAt older than N days → stale; else fresh
+Rule: if capturedAt older than 7 days → stale; else fresh
 \`\`\`
 
 A status label describing a record can always be recalculated from that record's own stored facts — comparing dates, or checking a boolean flag — rather than being sent by the client and simply trusted. Given the rule above, should the browser send status, or should the server compute it — and from what?`,
@@ -242,7 +242,8 @@ export function deriveLeadStatus(row, now = new Date()) {}
     expected: `let leads = [];
 export function validateLead(input) { return null; }
 export function deriveLeadStatus(row, now = new Date()) {
-  if (new Date(row.capturedAt) < now) return "stale";
+  const staleMs = 7 * 24 * 60 * 60 * 1000;
+  if (now.getTime() - new Date(row.capturedAt).getTime() > staleMs) return "stale";
   return "fresh";
 }
 `,
@@ -259,12 +260,13 @@ const status = isStale ? "stale" : "fresh";`,
 
   Store    →  in-memory Lead rows
   Validate →  required fields
-  Derive   →  if capturedAt older than N days → stale; else fresh
+  Derive   →  if capturedAt older than 7 days → stale; else fresh
   Routes   →  GET/POST attach computed status (do not trust client status)`,
       discover: `let leads = [];
 export function validateLead(input) { return null; }
 export function deriveLeadStatus(row, now = new Date()) {
-  if (new Date(row.capturedAt) < now) return "stale";
+  const staleMs = 7 * 24 * 60 * 60 * 1000;
+  if (now.getTime() - new Date(row.capturedAt).getTime() > staleMs) return "stale";
   return "fresh";
 }
 `,
@@ -315,10 +317,7 @@ Attaching a computed field to data on its way out of a route means running the d
     mc_options: ["GET/POST attach derived status; POST validates first","POST stores client status verbatim","GET omits status"],
     mc_correct_option: "GET/POST attach derived status; POST validates first",
     mc_anchor: "GET/POST attach derived status; POST val",
-    why_this_matters: `The client receives back the saved lead along with its server-calculated freshness tag.
-
-
-================================================================================`,
+    why_this_matters: `The client receives back the saved lead along with its server-calculated freshness tag.`,
     answer_keywords: ["deriveLeadStatus","validateLead","201"],
     seed_code: `let leads = [];
 let nextIdCounter = 1;
@@ -376,16 +375,13 @@ export function createLead(req: Request, res: Response) {
     deepDive: {
       // Fix 7: lead with the general concept (why a shared pattern matters), not the task
       // instruction restated verbatim.
-      hook: `The client receives back the saved lead along with its server-calculated freshness tag.
-
-
-================================================================================`,
+      hook: `The client receives back the saved lead along with its server-calculated freshness tag.`,
       pain: "Skipping this step leaves later code with no data shape or no source of truth.",
       mentalModel: `Implement /api/leads with a derived status:
 
   Store    →  in-memory Lead rows
   Validate →  required fields
-  Derive   →  if capturedAt older than N days → stale; else fresh
+  Derive   →  if capturedAt older than 7 days → stale; else fresh
   Routes   →  GET/POST attach computed status (do not trust client status)`,
       discover: `let leads = [];
 let nextIdCounter = 1;

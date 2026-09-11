@@ -479,10 +479,7 @@ Submitting an HTML form reloads the page by default; canceling that default lets
     mc_options: ["preventDefault, append one item, clear fields","window.location.reload after every submit","only console.log the form values"],
     mc_correct_option: "preventDefault, append one item, clear fields",
     mc_anchor: "preventDefault, append one item, clear f",
-    why_this_matters: `The new reminder is added to the master list, and your filter automatically displays it if it is marked due.
-
-
-================================================================================`,
+    why_this_matters: `The new reminder is added to the master list, and your filter automatically displays it if it is marked due.`,
     answer_keywords: ["preventDefault","setReminders","prev","client","channel","status"],
     seed_code: `import { useState } from "react";
 
@@ -599,10 +596,7 @@ export function DueBoard() {
     deepDive: {
       // Fix 7: lead with the general concept (why a shared pattern matters), not the task
       // instruction restated verbatim.
-      hook: `The new reminder is added to the master list, and your filter automatically displays it if it is marked due.
-
-
-================================================================================`,
+      hook: `The new reminder is added to the master list, and your filter automatically displays it if it is marked due.`,
       pain: "Skipping this step leaves later code with no data shape or no source of truth.",
       mentalModel: `Build a screen that lists reminders and a form to add one:
 
