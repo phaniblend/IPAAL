@@ -145,6 +145,14 @@ function stockMovesNextId() {
   return String(stockMovesIdCounter++);
 }
 
+// Read-only view over the audit log both /po/:id/receive and /so/:id/fulfill already write to —
+// added 2026-09-11 alongside the FE curriculum's Stock Movement Ledger task (idt-erp-stock-ledger).
+// The data always existed; nothing FE-facing could read it until now. Newest first, same convention
+// GET /accounts and GET /items don't need (those aren't append-only logs) but a ledger view does.
+router.get("/stock-moves", (_req, res) => {
+  res.status(200).json([...stockMoves].reverse());
+});
+
 // ---------------------------------------------------------------------------
 // TASK 3: Procure-to-Pay — Purchase Orders + Receipt
 // ---------------------------------------------------------------------------
