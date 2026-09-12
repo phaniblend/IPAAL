@@ -94,6 +94,68 @@ function calculateRecipeCost(recipeId) {
   return { costPerServing, totalBatchCost: Math.round(totalBatchCost * 100) / 100, foodCostPct };
 }
 
+// Read-only pantry view — added 2026-09-11 alongside the FE curriculum's Pantry Stock Table task
+// (idt-batchcraft-pantry-table). All four ingredients already existed; nothing FE-facing could list
+// them (or see stockOnHand deplete after a real prep batch) until now.
+router.get("/v1/ingredients", (_req, res) => {
+  res.status(200).json(ingredients);
+});
+
+/** Same per-line math as calculateRecipeCost above, kept as a genuinely separate function rather
+ * than making calculateRecipeCost itself return line detail: every existing caller of
+ * calculateRecipeCost (GET /v1/recipes/costs, POST /v1/recipes/:id/prep-batches) only ever needs the
+ * summary numbers, and changing its return shape would mean updating both those call sites for a
+ * detail view neither of them wants. Added 2026-09-11 alongside the FE curriculum's Recipe Detail
+ * Drawer task (idt-batchcraft-recipe-detail-drawer). */
+function buildRecipeBreakdown(recipeId) {
+  const recipe = recipes.find((r) => r.id === recipeId);
+  if (!recipe) return null;
+
+  const lines = recipe.items.map((item) => {
+    if (item.ingredientId) {
+      const ingredient = ingredients.find((i) => i.id === item.ingredientId);
+      const baseUnitCost = ingredient.purchasePrice / ingredient.purchaseQty;
+      const unitCost = Math.round((baseUnitCost / (ingredient.yieldPercent / 100)) * 10000) / 10000;
+      return {
+        kind: "ingredient",
+        id: ingredient.id,
+        name: ingredient.name,
+        quantityRequired: item.quantityRequired,
+        unitCost,
+        lineCost: Math.round(unitCost * item.quantityRequired * 100) / 100,
+      };
+    }
+    const child = recipes.find((r) => r.id === item.subRecipeId);
+    const childCost = calculateRecipeCost(item.subRecipeId);
+    return {
+      kind: "subRecipe",
+      id: child.id,
+      name: child.name,
+      quantityRequired: item.quantityRequired,
+      unitCost: childCost.costPerServing,
+      lineCost: Math.round(childCost.costPerServing * item.quantityRequired * 100) / 100,
+    };
+  });
+
+  const cost = calculateRecipeCost(recipeId);
+  return {
+    id: recipe.id,
+    code: recipe.code,
+    name: recipe.name,
+    type: recipe.type,
+    servingYield: recipe.servingYield,
+    targetCostPct: recipe.targetCostPct,
+    sellingPrice: recipe.sellingPrice,
+    costPerServing: cost.costPerServing,
+    foodCostPct: cost.foodCostPct,
+    lines,
+  };
+}
+
+// Registered BEFORE the /v1/recipes/:id detail route below — Express matches routes in
+// registration order, and a parameterized /v1/recipes/:id would otherwise swallow this exact path
+// (matching "costs" as :id) since it's more specific but registered later. Static-before-param is
+// the rule to keep whenever both exist under the same prefix.
 router.get("/v1/recipes/costs", (_req, res) => {
   const summaries = recipes.map((r) => {
     const cost = calculateRecipeCost(r.id);
@@ -109,6 +171,12 @@ router.get("/v1/recipes/costs", (_req, res) => {
     };
   });
   res.status(200).json(summaries);
+});
+
+router.get("/v1/recipes/:id", (req, res) => {
+  const breakdown = buildRecipeBreakdown(req.params.id);
+  if (!breakdown) return res.status(404).json({ error: "Recipe not found" });
+  res.status(200).json(breakdown);
 });
 
 /** Faithfully adapted from the spec's prep.service.ts executePrepBatch: scale every raw-ingredient
