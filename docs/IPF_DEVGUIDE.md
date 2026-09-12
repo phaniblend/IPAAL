@@ -740,6 +740,49 @@ Three follow-ups from live-testing §5a-5/§5a-6, same session:
 
 ---
 
+## 5a-8. SpecForge Stage 3 + tutorial-drafting retired for curriculum authoring — 2026-09-11
+
+**Founder call, 2026-09-11**: stop routing real product task/curriculum authoring through SpecForge's
+Stage 3 (task breakdown) + tutorial-drafting + Gemini module-generation pipeline
+(`server/specforge-router.js`'s `/breakdown`/`/publish`, `src/specforge/pipeline.js`'s
+`runTaskBreakdown`/`runTutorialDrafting`, `src/id-module/generateModule.js`). Reason, not just
+preference: this is a structural mismatch, not a prompt-tuning gap.
+
+- **Stage 3's own system prompt hard-rules "one task per surface, whole thing"** — *"Each FE task
+  covers the whole surface it's derived from (all pages + user_jobs + wiring to APIs)"*
+  (`STAGE3_SYSTEM` in `pipeline.js`). It cannot emit a tiered, dependency-ordered WBS (Foundation /
+  Domain / Interactive / Resilience) no matter how it's reworded — the rule forbids exactly that
+  granularity.
+- **Tutorial-drafting + Gemini module-gen target the Socratic NODES-quiz lesson format**
+  (`mc_options`/`deepDive.hook`/`seed_code`), not a working reference component — a different kind of
+  artifact from a build spec, and one with a long, already-logged history of exactly the fragility
+  that motivated this call: DeepSeek guessing the wrong JSON schema on its first-ever live run (§0a),
+  a raw newline in generated JSX blanking the *entire app* via the eager glob (§0a), an unescaped
+  `${unreadCount}` crashing a shipped lesson at runtime — caught only after bolting a real `vm`-sandbox
+  execution check onto the generator (§5a-3) — and a publish that took close to an hour before the
+  3-task/10-group caps were added (§5a-3). "Garbage output, humongous time to test and fix" is an
+  accurate description of that history, not an unfair one.
+
+**What replaced it, effective this session**: manually authoring a WBS spec doc per product —
+grounded in the real running backend router (not the original spec's assumed stack), tiered
+Foundation→Domain→Interactive→Resilience, one task per atomic concern, complete non-placeholder
+reference code, any new backend endpoint the curriculum needs live-verified against the actual router
+before being written down. Four done so far, in `docs/curriculum/`:
+`minierp-fe-tasks.md` (20 tasks), `sentinelpos-fe-tasks.md` (9), `routematrix-fe-tasks.md` (10),
+`batchcraft-fe-tasks.md` (10). Each doc's own header explains its product-specific calls (real API
+contracts, no TanStack Query, supersedes-but-doesn't-delete the old single coarse task).
+
+**Scope of this call, deliberately narrow — confirmed with the founder, not assumed**: the pipeline
+code itself is untouched (no deletions, no deprecation warnings added yet) and PD Studio / Workbench /
+MatchingQueue / ID Studio's gating logic (`AssistModule:`/`NeedsTutorial:`/`DraftModule:` markers) are
+all unchanged and still load-bearing for whatever's already published. This is "stop reaching for it
+going forward," not "rip it out" — a full removal would mean reworking every one of those screens'
+contracts, scoped as its own deliberate piece of work, not a side effect of this decision. If a future
+session is asked to build curriculum for a new product, use the manual WBS-doc workflow above by
+default; don't invoke SpecForge's Stage 3/tutorial-drafting path unless explicitly told to.
+
+---
+
 ## 5b. UX feedback queue — logged, NOT implemented until told to
 
 Rule: items land here the moment they're raised, live testing continues on the *current* UI, and nothing
