@@ -34,6 +34,7 @@ import assistMeRouter from "./assist-me-router.js";
 import authRouter from "./auth-router.js";
 import { isCoreSession } from "./authz.js";
 import recruitRouter from "./recruit-router.js";
+import adminRouter from "./admin-router.js";
 import gitProxyRouter from "./git-proxy-router.js";
 import smbDeskRouter from "./smb-desk-router.js";
 import minierpRouter from "./minierp-router.js";
@@ -176,6 +177,7 @@ app.use("/api/id", idRouter);
 app.use("/api/assist-me", assistMeRouter);
 app.use("/api/auth", authRouter);
 app.use("/api/recruit", recruitRouter);
+app.use("/api/admin", adminRouter);
 app.use("/api/git", requireSession, gitProxyRouter);
 // Real, in-memory backend for the SMB product APIs (Booking/Package/Invoice/Lead/Shift/Quote/
 // Review/Reminder desks) — generated from the same MODULES config the FE task lesson content
