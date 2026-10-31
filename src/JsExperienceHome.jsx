@@ -17,9 +17,14 @@ export default function JsExperienceHome() {
 
       <header className="jxh-top">
         <InpactLogo height={56} />
-        <Link className="jxh-top-link" to="/apply">
-          Apply
-        </Link>
+        <nav className="jxh-top-nav" aria-label="Aspirant">
+          <Link className="jxh-top-link" to="/workbench">
+            My tasks
+          </Link>
+          <Link className="jxh-top-link" to="/apply">
+            Apply
+          </Link>
+        </nav>
       </header>
 
       <main>

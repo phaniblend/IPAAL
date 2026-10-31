@@ -625,7 +625,12 @@ export default function Apply() {
   return (
     <div className="cm-apply">
       <header className="cm-header">
-        <div className="cm-kicker">From campus to real product work</div>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", gap: 12, flexWrap: "wrap" }}>
+          <div className="cm-kicker">From campus to real product work</div>
+          <a href="#/workbench" style={{ fontSize: 13, fontWeight: 600, color: "#0891b2" }}>
+            My tasks
+          </a>
+        </div>
         <h1>Apply — interests first, then a match</h1>
         <p className="cm-sub">
           Tell us your trade, where you are academically/career-wise, and (for Coding) frontend vs

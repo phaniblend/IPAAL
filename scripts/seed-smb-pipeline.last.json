@@ -1,155 +1,155 @@
 {
   "products": [
     {
-      "projectId": 5,
+      "projectId": 30,
       "name": "BookingDepositDesk",
       "tasks": [
         {
-          "id": 42,
+          "id": 1063,
           "trade": "Coding",
-          "title": "Build the appointment calendar list and book form",
+          "title": "Build the appointment list and booking form",
           "assist": "idt-booking-appointment-list-form"
         },
         {
-          "id": 43,
+          "id": 1064,
           "trade": "Coding",
-          "title": "Implement appointments API with slot conflict checks",
+          "title": "Build the appointments API with slot-conflict checks",
           "assist": "idt-booking-appointments-api"
         },
         {
-          "id": 44,
+          "id": 1065,
           "trade": "Coding",
-          "title": "Build deposit list and take-deposit form",
+          "title": "Build the deposit list and take-deposit form",
           "assist": "idt-booking-deposit-list-form"
         },
         {
-          "id": 45,
+          "id": 1066,
           "trade": "Coding",
-          "title": "Implement deposits API with held/applied status",
+          "title": "Build the deposits API with held/applied status",
           "assist": "idt-booking-deposits-api"
         },
         {
-          "id": 46,
+          "id": 1067,
           "trade": "Coding",
-          "title": "Build day board filtered by provider",
+          "title": "Build a provider-filtered view of the day's appointments",
           "assist": "idt-booking-day-board-filter"
         },
         {
-          "id": 47,
+          "id": 1068,
           "trade": "QA",
           "title": "Write a manual test plan for Booking desk happy path",
           "assist": null
         },
         {
-          "id": 48,
+          "id": 1069,
           "trade": "QA",
           "title": "Document edge cases for Booking desk",
           "assist": null
         },
         {
-          "id": 49,
+          "id": 1070,
           "trade": "QA",
           "title": "Regression checklist after Booking desk coding merge",
           "assist": null
         },
         {
-          "id": 50,
+          "id": 1071,
           "trade": "QA",
           "title": "Acceptance table for Booking desk API errors",
           "assist": null
         },
         {
-          "id": 51,
+          "id": 1072,
           "trade": "QA",
           "title": "Usability pass notes for Booking desk empty states",
           "assist": null
         },
         {
-          "id": 52,
+          "id": 1073,
           "trade": "Content",
           "title": "Draft client-facing confirmation copy for Booking desk",
           "assist": null
         },
         {
-          "id": 53,
+          "id": 1074,
           "trade": "Content",
           "title": "Write reminder / nudge templates for Booking desk",
           "assist": null
         },
         {
-          "id": 54,
+          "id": 1075,
           "trade": "Content",
           "title": "Error-message style guide for Booking desk",
           "assist": null
         },
         {
-          "id": 55,
+          "id": 1076,
           "trade": "Content",
           "title": "Onboarding blurb for Booking desk first-run",
           "assist": null
         },
         {
-          "id": 56,
+          "id": 1077,
           "trade": "Content",
           "title": "Help-center FAQ (5 Qs) for Booking desk",
           "assist": null
         },
         {
-          "id": 57,
+          "id": 1078,
           "trade": "PM",
           "title": "Cut MVP scope for Booking desk v1",
           "assist": null
         },
         {
-          "id": 58,
+          "id": 1079,
           "trade": "PM",
           "title": "Acceptance criteria polish for Booking desk Coding tasks",
           "assist": null
         },
         {
-          "id": 59,
+          "id": 1080,
           "trade": "PM",
           "title": "Risk register for Booking desk",
           "assist": null
         },
         {
-          "id": 60,
+          "id": 1081,
           "trade": "PM",
           "title": "Release checklist for Booking desk demo day",
           "assist": null
         },
         {
-          "id": 61,
+          "id": 1082,
           "trade": "PM",
           "title": "Stakeholder update template for Booking desk",
           "assist": null
         },
         {
-          "id": 62,
+          "id": 1083,
           "trade": "Product design",
           "title": "Define Booking desk lifecycle statuses for handoff",
           "assist": null
         },
         {
-          "id": 63,
+          "id": 1084,
           "trade": "Product design",
           "title": "Wireframe notes for Booking desk list + form",
           "assist": null
         },
         {
-          "id": 64,
+          "id": 1085,
           "trade": "Product design",
           "title": "Mobile pass for Booking desk primary screen",
           "assist": null
         },
         {
-          "id": 65,
+          "id": 1086,
           "trade": "Product design",
           "title": "Empty + error state copy map for Booking desk",
           "assist": null
         },
         {
-          "id": 66,
+          "id": 1087,
           "trade": "Product design",
           "title": "Accessibility checklist for Booking desk forms",
           "assist": null
@@ -157,155 +157,155 @@
       ]
     },
     {
-      "projectId": 6,
+      "projectId": 31,
       "name": "InvoiceFollowUpTracker",
       "tasks": [
         {
-          "id": 68,
+          "id": 1089,
           "trade": "Coding",
-          "title": "Build invoice list and create-invoice form",
+          "title": "Build the invoice list and create-invoice form",
           "assist": "idt-invoice-list-form"
         },
         {
-          "id": 69,
+          "id": 1090,
           "trade": "Coding",
-          "title": "Implement invoices API with overdue status",
+          "title": "Build the invoices API with overdue status",
           "assist": "idt-invoice-overdue-api"
         },
         {
-          "id": 70,
+          "id": 1091,
           "trade": "Coding",
-          "title": "Build reminder log list and schedule form",
+          "title": "Build the reminder log and schedule-reminder form",
           "assist": "idt-invoice-reminder-list-form"
         },
         {
-          "id": 71,
+          "id": 1092,
           "trade": "Coding",
-          "title": "Implement reminders API — one pending per invoice channel",
+          "title": "Build the reminders API preventing duplicate pending sends",
           "assist": "idt-invoice-reminder-api"
         },
         {
-          "id": 72,
+          "id": 1093,
           "trade": "Coding",
-          "title": "Build overdue board filtered by status",
+          "title": "Build an overdue-invoices view filtered by status",
           "assist": "idt-invoice-overdue-board"
         },
         {
-          "id": 73,
+          "id": 1094,
           "trade": "QA",
           "title": "Write a manual test plan for Collections desk happy path",
           "assist": null
         },
         {
-          "id": 74,
+          "id": 1095,
           "trade": "QA",
           "title": "Document edge cases for Collections desk",
           "assist": null
         },
         {
-          "id": 75,
+          "id": 1096,
           "trade": "QA",
           "title": "Regression checklist after Collections desk coding merge",
           "assist": null
         },
         {
-          "id": 76,
+          "id": 1097,
           "trade": "QA",
           "title": "Acceptance table for Collections desk API errors",
           "assist": null
         },
         {
-          "id": 77,
+          "id": 1098,
           "trade": "QA",
           "title": "Usability pass notes for Collections desk empty states",
           "assist": null
         },
         {
-          "id": 78,
+          "id": 1099,
           "trade": "Content",
           "title": "Draft client-facing confirmation copy for Collections desk",
           "assist": null
         },
         {
-          "id": 79,
+          "id": 1100,
           "trade": "Content",
           "title": "Write reminder / nudge templates for Collections desk",
           "assist": null
         },
         {
-          "id": 80,
+          "id": 1101,
           "trade": "Content",
           "title": "Error-message style guide for Collections desk",
           "assist": null
         },
         {
-          "id": 81,
+          "id": 1102,
           "trade": "Content",
           "title": "Onboarding blurb for Collections desk first-run",
           "assist": null
         },
         {
-          "id": 82,
+          "id": 1103,
           "trade": "Content",
           "title": "Help-center FAQ (5 Qs) for Collections desk",
           "assist": null
         },
         {
-          "id": 83,
+          "id": 1104,
           "trade": "PM",
           "title": "Cut MVP scope for Collections desk v1",
           "assist": null
         },
         {
-          "id": 84,
+          "id": 1105,
           "trade": "PM",
           "title": "Acceptance criteria polish for Collections desk Coding tasks",
           "assist": null
         },
         {
-          "id": 85,
+          "id": 1106,
           "trade": "PM",
           "title": "Risk register for Collections desk",
           "assist": null
         },
         {
-          "id": 86,
+          "id": 1107,
           "trade": "PM",
           "title": "Release checklist for Collections desk demo day",
           "assist": null
         },
         {
-          "id": 87,
+          "id": 1108,
           "trade": "PM",
           "title": "Stakeholder update template for Collections desk",
           "assist": null
         },
         {
-          "id": 88,
+          "id": 1109,
           "trade": "Product design",
           "title": "Define Collections desk lifecycle statuses for handoff",
           "assist": null
         },
         {
-          "id": 89,
+          "id": 1110,
           "trade": "Product design",
           "title": "Wireframe notes for Collections desk list + form",
           "assist": null
         },
         {
-          "id": 90,
+          "id": 1111,
           "trade": "Product design",
           "title": "Mobile pass for Collections desk primary screen",
           "assist": null
         },
         {
-          "id": 91,
+          "id": 1112,
           "trade": "Product design",
           "title": "Empty + error state copy map for Collections desk",
           "assist": null
         },
         {
-          "id": 92,
+          "id": 1113,
           "trade": "Product design",
           "title": "Accessibility checklist for Collections desk forms",
           "assist": null
@@ -313,155 +313,155 @@
       ]
     },
     {
-      "projectId": 7,
+      "projectId": 32,
       "name": "LeadFollowUpInbox",
       "tasks": [
         {
-          "id": 94,
+          "id": 1115,
           "trade": "Coding",
-          "title": "Build lead inbox list and capture form",
+          "title": "Build the lead inbox and capture form",
           "assist": "idt-lead-list-form"
         },
         {
-          "id": 95,
+          "id": 1116,
           "trade": "Coding",
-          "title": "Implement leads API with fresh/stale status",
+          "title": "Build the leads API with fresh/stale status",
           "assist": "idt-lead-stale-api"
         },
         {
-          "id": 96,
+          "id": 1117,
           "trade": "Coding",
-          "title": "Build reply notes list and add-note form",
+          "title": "Build the reply-notes list and add-note form",
           "assist": "idt-lead-reply-list-form"
         },
         {
-          "id": 97,
+          "id": 1118,
           "trade": "Coding",
-          "title": "Implement lead-notes API blocking duplicate body spam",
+          "title": "Build the lead-notes API blocking duplicate replies",
           "assist": "idt-lead-notes-api"
         },
         {
-          "id": 98,
+          "id": 1119,
           "trade": "Coding",
-          "title": "Build stale-lead board filtered by status",
+          "title": "Build a stale-leads view filtered by status",
           "assist": "idt-lead-stale-board"
         },
         {
-          "id": 99,
+          "id": 1120,
           "trade": "QA",
           "title": "Write a manual test plan for Lead desk happy path",
           "assist": null
         },
         {
-          "id": 100,
+          "id": 1121,
           "trade": "QA",
           "title": "Document edge cases for Lead desk",
           "assist": null
         },
         {
-          "id": 101,
+          "id": 1122,
           "trade": "QA",
           "title": "Regression checklist after Lead desk coding merge",
           "assist": null
         },
         {
-          "id": 102,
+          "id": 1123,
           "trade": "QA",
           "title": "Acceptance table for Lead desk API errors",
           "assist": null
         },
         {
-          "id": 103,
+          "id": 1124,
           "trade": "QA",
           "title": "Usability pass notes for Lead desk empty states",
           "assist": null
         },
         {
-          "id": 104,
+          "id": 1125,
           "trade": "Content",
           "title": "Draft client-facing confirmation copy for Lead desk",
           "assist": null
         },
         {
-          "id": 105,
+          "id": 1126,
           "trade": "Content",
           "title": "Write reminder / nudge templates for Lead desk",
           "assist": null
         },
         {
-          "id": 106,
+          "id": 1127,
           "trade": "Content",
           "title": "Error-message style guide for Lead desk",
           "assist": null
         },
         {
-          "id": 107,
+          "id": 1128,
           "trade": "Content",
           "title": "Onboarding blurb for Lead desk first-run",
           "assist": null
         },
         {
-          "id": 108,
+          "id": 1129,
           "trade": "Content",
           "title": "Help-center FAQ (5 Qs) for Lead desk",
           "assist": null
         },
         {
-          "id": 109,
+          "id": 1130,
           "trade": "PM",
           "title": "Cut MVP scope for Lead desk v1",
           "assist": null
         },
         {
-          "id": 110,
+          "id": 1131,
           "trade": "PM",
           "title": "Acceptance criteria polish for Lead desk Coding tasks",
           "assist": null
         },
         {
-          "id": 111,
+          "id": 1132,
           "trade": "PM",
           "title": "Risk register for Lead desk",
           "assist": null
         },
         {
-          "id": 112,
+          "id": 1133,
           "trade": "PM",
           "title": "Release checklist for Lead desk demo day",
           "assist": null
         },
         {
-          "id": 113,
+          "id": 1134,
           "trade": "PM",
           "title": "Stakeholder update template for Lead desk",
           "assist": null
         },
         {
-          "id": 114,
+          "id": 1135,
           "trade": "Product design",
           "title": "Define Lead desk lifecycle statuses for handoff",
           "assist": null
         },
         {
-          "id": 115,
+          "id": 1136,
           "trade": "Product design",
           "title": "Wireframe notes for Lead desk list + form",
           "assist": null
         },
         {
-          "id": 116,
+          "id": 1137,
           "trade": "Product design",
           "title": "Mobile pass for Lead desk primary screen",
           "assist": null
         },
         {
-          "id": 117,
+          "id": 1138,
           "trade": "Product design",
           "title": "Empty + error state copy map for Lead desk",
           "assist": null
         },
         {
-          "id": 118,
+          "id": 1139,
           "trade": "Product design",
           "title": "Accessibility checklist for Lead desk forms",
           "assist": null
@@ -469,155 +469,155 @@
       ]
     },
     {
-      "projectId": 8,
+      "projectId": 33,
       "name": "ShiftCoverageBoard",
       "tasks": [
         {
-          "id": 120,
+          "id": 1141,
           "trade": "Coding",
-          "title": "Build shift board list and publish form",
+          "title": "Build the shift board and publish-shift form",
           "assist": "idt-shift-list-form"
         },
         {
-          "id": 121,
+          "id": 1142,
           "trade": "Coding",
-          "title": "Implement shifts API with worker overlap conflicts",
+          "title": "Build the shifts API rejecting double-booked workers",
           "assist": "idt-shift-overlap-api"
         },
         {
-          "id": 122,
+          "id": 1143,
           "trade": "Coding",
-          "title": "Build open coverage list and request form",
+          "title": "Build the open-coverage list and request-cover form",
           "assist": "idt-coverage-list-form"
         },
         {
-          "id": 123,
+          "id": 1144,
           "trade": "Coding",
-          "title": "Implement coverage API with open/filled status",
+          "title": "Build the coverage API with open/filled status",
           "assist": "idt-coverage-api"
         },
         {
-          "id": 124,
+          "id": 1145,
           "trade": "Coding",
-          "title": "Build open-shift board filtered to unfilled coverage",
+          "title": "Build an unfilled-coverage view filtered by status",
           "assist": "idt-open-shift-board"
         },
         {
-          "id": 125,
+          "id": 1146,
           "trade": "QA",
           "title": "Write a manual test plan for Shift desk happy path",
           "assist": null
         },
         {
-          "id": 126,
+          "id": 1147,
           "trade": "QA",
           "title": "Document edge cases for Shift desk",
           "assist": null
         },
         {
-          "id": 127,
+          "id": 1148,
           "trade": "QA",
           "title": "Regression checklist after Shift desk coding merge",
           "assist": null
         },
         {
-          "id": 128,
+          "id": 1149,
           "trade": "QA",
           "title": "Acceptance table for Shift desk API errors",
           "assist": null
         },
         {
-          "id": 129,
+          "id": 1150,
           "trade": "QA",
           "title": "Usability pass notes for Shift desk empty states",
           "assist": null
         },
         {
-          "id": 130,
+          "id": 1151,
           "trade": "Content",
           "title": "Draft client-facing confirmation copy for Shift desk",
           "assist": null
         },
         {
-          "id": 131,
+          "id": 1152,
           "trade": "Content",
           "title": "Write reminder / nudge templates for Shift desk",
           "assist": null
         },
         {
-          "id": 132,
+          "id": 1153,
           "trade": "Content",
           "title": "Error-message style guide for Shift desk",
           "assist": null
         },
         {
-          "id": 133,
+          "id": 1154,
           "trade": "Content",
           "title": "Onboarding blurb for Shift desk first-run",
           "assist": null
         },
         {
-          "id": 134,
+          "id": 1155,
           "trade": "Content",
           "title": "Help-center FAQ (5 Qs) for Shift desk",
           "assist": null
         },
         {
-          "id": 135,
+          "id": 1156,
           "trade": "PM",
           "title": "Cut MVP scope for Shift desk v1",
           "assist": null
         },
         {
-          "id": 136,
+          "id": 1157,
           "trade": "PM",
           "title": "Acceptance criteria polish for Shift desk Coding tasks",
           "assist": null
         },
         {
-          "id": 137,
+          "id": 1158,
           "trade": "PM",
           "title": "Risk register for Shift desk",
           "assist": null
         },
         {
-          "id": 138,
+          "id": 1159,
           "trade": "PM",
           "title": "Release checklist for Shift desk demo day",
           "assist": null
         },
         {
-          "id": 139,
+          "id": 1160,
           "trade": "PM",
           "title": "Stakeholder update template for Shift desk",
           "assist": null
         },
         {
-          "id": 140,
+          "id": 1161,
           "trade": "Product design",
           "title": "Define Shift desk lifecycle statuses for handoff",
           "assist": null
         },
         {
-          "id": 141,
+          "id": 1162,
           "trade": "Product design",
           "title": "Wireframe notes for Shift desk list + form",
           "assist": null
         },
         {
-          "id": 142,
+          "id": 1163,
           "trade": "Product design",
           "title": "Mobile pass for Shift desk primary screen",
           "assist": null
         },
         {
-          "id": 143,
+          "id": 1164,
           "trade": "Product design",
           "title": "Empty + error state copy map for Shift desk",
           "assist": null
         },
         {
-          "id": 144,
+          "id": 1165,
           "trade": "Product design",
           "title": "Accessibility checklist for Shift desk forms",
           "assist": null
@@ -625,155 +625,155 @@
       ]
     },
     {
-      "projectId": 9,
+      "projectId": 34,
       "name": "QuoteEstimateDesk",
       "tasks": [
         {
-          "id": 146,
+          "id": 1167,
           "trade": "Coding",
-          "title": "Build quote list and create-estimate form",
+          "title": "Build the quote list and create-estimate form",
           "assist": "idt-quote-list-form"
         },
         {
-          "id": 147,
+          "id": 1168,
           "trade": "Coding",
-          "title": "Implement quotes API with open/expired/accepted status",
+          "title": "Build the quotes API with open/expired/accepted status",
           "assist": "idt-quote-expiry-api"
         },
         {
-          "id": 148,
+          "id": 1169,
           "trade": "Coding",
-          "title": "Build quote line-items list and add-line form",
+          "title": "Build the quote line-items list and add-line form",
           "assist": "idt-quote-line-list-form"
         },
         {
-          "id": 149,
+          "id": 1170,
           "trade": "Coding",
-          "title": "Implement quote-lines API blocking duplicate labels",
+          "title": "Build the quote-lines API blocking duplicate labels",
           "assist": "idt-quote-lines-api"
         },
         {
-          "id": 150,
+          "id": 1171,
           "trade": "Coding",
-          "title": "Build accepted-quotes board filtered by status",
+          "title": "Build an accepted-quotes view filtered by status",
           "assist": "idt-quote-accepted-board"
         },
         {
-          "id": 151,
+          "id": 1172,
           "trade": "QA",
           "title": "Write a manual test plan for Quote desk happy path",
           "assist": null
         },
         {
-          "id": 152,
+          "id": 1173,
           "trade": "QA",
           "title": "Document edge cases for Quote desk",
           "assist": null
         },
         {
-          "id": 153,
+          "id": 1174,
           "trade": "QA",
           "title": "Regression checklist after Quote desk coding merge",
           "assist": null
         },
         {
-          "id": 154,
+          "id": 1175,
           "trade": "QA",
           "title": "Acceptance table for Quote desk API errors",
           "assist": null
         },
         {
-          "id": 155,
+          "id": 1176,
           "trade": "QA",
           "title": "Usability pass notes for Quote desk empty states",
           "assist": null
         },
         {
-          "id": 156,
+          "id": 1177,
           "trade": "Content",
           "title": "Draft client-facing confirmation copy for Quote desk",
           "assist": null
         },
         {
-          "id": 157,
+          "id": 1178,
           "trade": "Content",
           "title": "Write reminder / nudge templates for Quote desk",
           "assist": null
         },
         {
-          "id": 158,
+          "id": 1179,
           "trade": "Content",
           "title": "Error-message style guide for Quote desk",
           "assist": null
         },
         {
-          "id": 159,
+          "id": 1180,
           "trade": "Content",
           "title": "Onboarding blurb for Quote desk first-run",
           "assist": null
         },
         {
-          "id": 160,
+          "id": 1181,
           "trade": "Content",
           "title": "Help-center FAQ (5 Qs) for Quote desk",
           "assist": null
         },
         {
-          "id": 161,
+          "id": 1182,
           "trade": "PM",
           "title": "Cut MVP scope for Quote desk v1",
           "assist": null
         },
         {
-          "id": 162,
+          "id": 1183,
           "trade": "PM",
           "title": "Acceptance criteria polish for Quote desk Coding tasks",
           "assist": null
         },
         {
-          "id": 163,
+          "id": 1184,
           "trade": "PM",
           "title": "Risk register for Quote desk",
           "assist": null
         },
         {
-          "id": 164,
+          "id": 1185,
           "trade": "PM",
           "title": "Release checklist for Quote desk demo day",
           "assist": null
         },
         {
-          "id": 165,
+          "id": 1186,
           "trade": "PM",
           "title": "Stakeholder update template for Quote desk",
           "assist": null
         },
         {
-          "id": 166,
+          "id": 1187,
           "trade": "Product design",
           "title": "Define Quote desk lifecycle statuses for handoff",
           "assist": null
         },
         {
-          "id": 167,
+          "id": 1188,
           "trade": "Product design",
           "title": "Wireframe notes for Quote desk list + form",
           "assist": null
         },
         {
-          "id": 168,
+          "id": 1189,
           "trade": "Product design",
           "title": "Mobile pass for Quote desk primary screen",
           "assist": null
         },
         {
-          "id": 169,
+          "id": 1190,
           "trade": "Product design",
           "title": "Empty + error state copy map for Quote desk",
           "assist": null
         },
         {
-          "id": 170,
+          "id": 1191,
           "trade": "Product design",
           "title": "Accessibility checklist for Quote desk forms",
           "assist": null
@@ -781,155 +781,155 @@
       ]
     },
     {
-      "projectId": 10,
+      "projectId": 35,
       "name": "ReviewReplyInbox",
       "tasks": [
         {
-          "id": 172,
+          "id": 1193,
           "trade": "Coding",
-          "title": "Build review inbox list and log-review form",
+          "title": "Build the review inbox and log-review form",
           "assist": "idt-review-list-form"
         },
         {
-          "id": 173,
+          "id": 1194,
           "trade": "Coding",
-          "title": "Implement reviews API with needs-reply status",
+          "title": "Build the reviews API with needs-reply status",
           "assist": "idt-review-needs-reply-api"
         },
         {
-          "id": 174,
+          "id": 1195,
           "trade": "Coding",
-          "title": "Build review replies list and write-reply form",
+          "title": "Build the review-replies list and write-reply form",
           "assist": "idt-review-reply-list-form"
         },
         {
-          "id": 175,
+          "id": 1196,
           "trade": "Coding",
-          "title": "Implement review-replies API — one reply per channel",
+          "title": "Build the review-replies API allowing one reply per channel",
           "assist": "idt-review-replies-api"
         },
         {
-          "id": 176,
+          "id": 1197,
           "trade": "Coding",
-          "title": "Build unanswered-reviews board filtered by status",
+          "title": "Build an unanswered-reviews view filtered by status",
           "assist": "idt-review-unanswered-board"
         },
         {
-          "id": 177,
+          "id": 1198,
           "trade": "QA",
           "title": "Write a manual test plan for Review desk happy path",
           "assist": null
         },
         {
-          "id": 178,
+          "id": 1199,
           "trade": "QA",
           "title": "Document edge cases for Review desk",
           "assist": null
         },
         {
-          "id": 179,
+          "id": 1200,
           "trade": "QA",
           "title": "Regression checklist after Review desk coding merge",
           "assist": null
         },
         {
-          "id": 180,
+          "id": 1201,
           "trade": "QA",
           "title": "Acceptance table for Review desk API errors",
           "assist": null
         },
         {
-          "id": 181,
+          "id": 1202,
           "trade": "QA",
           "title": "Usability pass notes for Review desk empty states",
           "assist": null
         },
         {
-          "id": 182,
+          "id": 1203,
           "trade": "Content",
           "title": "Draft client-facing confirmation copy for Review desk",
           "assist": null
         },
         {
-          "id": 183,
+          "id": 1204,
           "trade": "Content",
           "title": "Write reminder / nudge templates for Review desk",
           "assist": null
         },
         {
-          "id": 184,
+          "id": 1205,
           "trade": "Content",
           "title": "Error-message style guide for Review desk",
           "assist": null
         },
         {
-          "id": 185,
+          "id": 1206,
           "trade": "Content",
           "title": "Onboarding blurb for Review desk first-run",
           "assist": null
         },
         {
-          "id": 186,
+          "id": 1207,
           "trade": "Content",
           "title": "Help-center FAQ (5 Qs) for Review desk",
           "assist": null
         },
         {
-          "id": 187,
+          "id": 1208,
           "trade": "PM",
           "title": "Cut MVP scope for Review desk v1",
           "assist": null
         },
         {
-          "id": 188,
+          "id": 1209,
           "trade": "PM",
           "title": "Acceptance criteria polish for Review desk Coding tasks",
           "assist": null
         },
         {
-          "id": 189,
+          "id": 1210,
           "trade": "PM",
           "title": "Risk register for Review desk",
           "assist": null
         },
         {
-          "id": 190,
+          "id": 1211,
           "trade": "PM",
           "title": "Release checklist for Review desk demo day",
           "assist": null
         },
         {
-          "id": 191,
+          "id": 1212,
           "trade": "PM",
           "title": "Stakeholder update template for Review desk",
           "assist": null
         },
         {
-          "id": 192,
+          "id": 1213,
           "trade": "Product design",
           "title": "Define Review desk lifecycle statuses for handoff",
           "assist": null
         },
         {
-          "id": 193,
+          "id": 1214,
           "trade": "Product design",
           "title": "Wireframe notes for Review desk list + form",
           "assist": null
         },
         {
-          "id": 194,
+          "id": 1215,
           "trade": "Product design",
           "title": "Mobile pass for Review desk primary screen",
           "assist": null
         },
         {
-          "id": 195,
+          "id": 1216,
           "trade": "Product design",
           "title": "Empty + error state copy map for Review desk",
           "assist": null
         },
         {
-          "id": 196,
+          "id": 1217,
           "trade": "Product design",
           "title": "Accessibility checklist for Review desk forms",
           "assist": null
@@ -937,155 +937,155 @@
       ]
     },
     {
-      "projectId": 11,
+      "projectId": 36,
       "name": "ClientReminderHub",
       "tasks": [
         {
-          "id": 198,
+          "id": 1219,
           "trade": "Coding",
-          "title": "Build reminder schedule list and create form",
+          "title": "Build the reminder schedule list and create form",
           "assist": "idt-reminder-schedule-list-form"
         },
         {
-          "id": 199,
+          "id": 1220,
           "trade": "Coding",
-          "title": "Implement reminders API with due/sent status",
+          "title": "Build the reminders API with due/sent status",
           "assist": "idt-reminder-due-api"
         },
         {
-          "id": 200,
+          "id": 1221,
           "trade": "Coding",
-          "title": "Build reminder templates list and save-template form",
+          "title": "Build the reminder-templates list and save-template form",
           "assist": "idt-reminder-template-list-form"
         },
         {
-          "id": 201,
+          "id": 1222,
           "trade": "Coding",
-          "title": "Implement reminder-templates API — unique name per channel",
+          "title": "Build the reminder-templates API enforcing unique names",
           "assist": "idt-reminder-templates-api"
         },
         {
-          "id": 202,
+          "id": 1223,
           "trade": "Coding",
-          "title": "Build due-reminders board filtered by status",
+          "title": "Build a due-reminders view filtered by status",
           "assist": "idt-reminder-due-board"
         },
         {
-          "id": 203,
+          "id": 1224,
           "trade": "QA",
           "title": "Write a manual test plan for Reminder desk happy path",
           "assist": null
         },
         {
-          "id": 204,
+          "id": 1225,
           "trade": "QA",
           "title": "Document edge cases for Reminder desk",
           "assist": null
         },
         {
-          "id": 205,
+          "id": 1226,
           "trade": "QA",
           "title": "Regression checklist after Reminder desk coding merge",
           "assist": null
         },
         {
-          "id": 206,
+          "id": 1227,
           "trade": "QA",
           "title": "Acceptance table for Reminder desk API errors",
           "assist": null
         },
         {
-          "id": 207,
+          "id": 1228,
           "trade": "QA",
           "title": "Usability pass notes for Reminder desk empty states",
           "assist": null
         },
         {
-          "id": 208,
+          "id": 1229,
           "trade": "Content",
           "title": "Draft client-facing confirmation copy for Reminder desk",
           "assist": null
         },
         {
-          "id": 209,
+          "id": 1230,
           "trade": "Content",
           "title": "Write reminder / nudge templates for Reminder desk",
           "assist": null
         },
         {
-          "id": 210,
+          "id": 1231,
           "trade": "Content",
           "title": "Error-message style guide for Reminder desk",
           "assist": null
         },
         {
-          "id": 211,
+          "id": 1232,
           "trade": "Content",
           "title": "Onboarding blurb for Reminder desk first-run",
           "assist": null
         },
         {
-          "id": 212,
+          "id": 1233,
           "trade": "Content",
           "title": "Help-center FAQ (5 Qs) for Reminder desk",
           "assist": null
         },
         {
-          "id": 213,
+          "id": 1234,
           "trade": "PM",
           "title": "Cut MVP scope for Reminder desk v1",
           "assist": null
         },
         {
-          "id": 214,
+          "id": 1235,
           "trade": "PM",
           "title": "Acceptance criteria polish for Reminder desk Coding tasks",
           "assist": null
         },
         {
-          "id": 215,
+          "id": 1236,
           "trade": "PM",
           "title": "Risk register for Reminder desk",
           "assist": null
         },
         {
-          "id": 216,
+          "id": 1237,
           "trade": "PM",
           "title": "Release checklist for Reminder desk demo day",
           "assist": null
         },
         {
-          "id": 217,
+          "id": 1238,
           "trade": "PM",
           "title": "Stakeholder update template for Reminder desk",
           "assist": null
         },
         {
-          "id": 218,
+          "id": 1239,
           "trade": "Product design",
           "title": "Define Reminder desk lifecycle statuses for handoff",
           "assist": null
         },
         {
-          "id": 219,
+          "id": 1240,
           "trade": "Product design",
           "title": "Wireframe notes for Reminder desk list + form",
           "assist": null
         },
         {
-          "id": 220,
+          "id": 1241,
           "trade": "Product design",
           "title": "Mobile pass for Reminder desk primary screen",
           "assist": null
         },
         {
-          "id": 221,
+          "id": 1242,
           "trade": "Product design",
           "title": "Empty + error state copy map for Reminder desk",
           "assist": null
         },
         {
-          "id": 222,
+          "id": 1243,
           "trade": "Product design",
           "title": "Accessibility checklist for Reminder desk forms",
           "assist": null
@@ -1093,155 +1093,155 @@
       ]
     },
     {
-      "projectId": 12,
+      "projectId": 37,
       "name": "PackagePunchCard",
       "tasks": [
         {
-          "id": 224,
+          "id": 1245,
           "trade": "Coding",
-          "title": "Build package punch-card list and sell form",
+          "title": "Build the package list and sell-package form",
           "assist": "idt-package-list-form"
         },
         {
-          "id": 225,
+          "id": 1246,
           "trade": "Coding",
-          "title": "Implement packages API with remaining/empty status",
+          "title": "Build the packages API with remaining/empty status",
           "assist": "idt-package-remaining-api"
         },
         {
-          "id": 226,
+          "id": 1247,
           "trade": "Coding",
-          "title": "Build punch log list and redeem form",
+          "title": "Build the punch log and redeem-punch form",
           "assist": "idt-punch-log-list-form"
         },
         {
-          "id": 227,
+          "id": 1248,
           "trade": "Coding",
-          "title": "Implement punches API rejecting redeem when empty",
+          "title": "Build the punches API rejecting redeems on empty packages",
           "assist": "idt-punch-redeem-api"
         },
         {
-          "id": 228,
+          "id": 1249,
           "trade": "Coding",
-          "title": "Build low-balance packages board filtered by status",
+          "title": "Build a low-balance view filtered by status",
           "assist": "idt-package-low-board"
         },
         {
-          "id": 229,
+          "id": 1250,
           "trade": "QA",
           "title": "Write a manual test plan for Package desk happy path",
           "assist": null
         },
         {
-          "id": 230,
+          "id": 1251,
           "trade": "QA",
           "title": "Document edge cases for Package desk",
           "assist": null
         },
         {
-          "id": 231,
+          "id": 1252,
           "trade": "QA",
           "title": "Regression checklist after Package desk coding merge",
           "assist": null
         },
         {
-          "id": 232,
+          "id": 1253,
           "trade": "QA",
           "title": "Acceptance table for Package desk API errors",
           "assist": null
         },
         {
-          "id": 233,
+          "id": 1254,
           "trade": "QA",
           "title": "Usability pass notes for Package desk empty states",
           "assist": null
         },
         {
-          "id": 234,
+          "id": 1255,
           "trade": "Content",
           "title": "Draft client-facing confirmation copy for Package desk",
           "assist": null
         },
         {
-          "id": 235,
+          "id": 1256,
           "trade": "Content",
           "title": "Write reminder / nudge templates for Package desk",
           "assist": null
         },
         {
-          "id": 236,
+          "id": 1257,
           "trade": "Content",
           "title": "Error-message style guide for Package desk",
           "assist": null
         },
         {
-          "id": 237,
+          "id": 1258,
           "trade": "Content",
           "title": "Onboarding blurb for Package desk first-run",
           "assist": null
         },
         {
-          "id": 238,
+          "id": 1259,
           "trade": "Content",
           "title": "Help-center FAQ (5 Qs) for Package desk",
           "assist": null
         },
         {
-          "id": 239,
+          "id": 1260,
           "trade": "PM",
           "title": "Cut MVP scope for Package desk v1",
           "assist": null
         },
         {
-          "id": 240,
+          "id": 1261,
           "trade": "PM",
           "title": "Acceptance criteria polish for Package desk Coding tasks",
           "assist": null
         },
         {
-          "id": 241,
+          "id": 1262,
           "trade": "PM",
           "title": "Risk register for Package desk",
           "assist": null
         },
         {
-          "id": 242,
+          "id": 1263,
           "trade": "PM",
           "title": "Release checklist for Package desk demo day",
           "assist": null
         },
         {
-          "id": 243,
+          "id": 1264,
           "trade": "PM",
           "title": "Stakeholder update template for Package desk",
           "assist": null
         },
         {
-          "id": 244,
+          "id": 1265,
           "trade": "Product design",
           "title": "Define Package desk lifecycle statuses for handoff",
           "assist": null
         },
         {
-          "id": 245,
+          "id": 1266,
           "trade": "Product design",
           "title": "Wireframe notes for Package desk list + form",
           "assist": null
         },
         {
-          "id": 246,
+          "id": 1267,
           "trade": "Product design",
           "title": "Mobile pass for Package desk primary screen",
           "assist": null
         },
         {
-          "id": 247,
+          "id": 1268,
           "trade": "Product design",
           "title": "Empty + error state copy map for Package desk",
           "assist": null
         },
         {
-          "id": 248,
+          "id": 1269,
           "trade": "Product design",
           "title": "Accessibility checklist for Package desk forms",
           "assist": null

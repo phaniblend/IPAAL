@@ -879,29 +879,37 @@ export const DESIGN_MOCKS = {
   "idt-punch-log-list-form": {
     "kind": "list-and-form",
     "screenTitle": "Punches",
-    "caption": "This is the screen you are building. Match the pieces — list, empty message, form, submit — not the brand colors. Try picking a package and redeeming.",
+    "caption": "This is the screen you are building. Match the pieces — list, empty message, form, submit — not the brand colors. Try typing and submitting.",
     "listCaption": "LIST — sample rows",
     "emptyCaption": "EMPTY — when there are no rows",
-    "emptyMessage": "No punches redeemed today.",
+    "emptyMessage": "No punches yet.",
     "rows": [
       {
-        "title": "Riley",
-        "subtitle": "Cut",
-        "meta": "Just now"
+        "title": "p-1",
+        "subtitle": "Visit 3",
+        "meta": "Sat 11:00"
       },
       {
         "title": "Second row",
         "subtitle": "Another",
-        "meta": "Just now"
+        "meta": "Sat 11:00"
       }
     ],
     "fields": [
       {
-        "label": "Package",
-        "sample": "Riley — Cut (3 left)"
+        "label": "Package id",
+        "sample": "p-1"
+      },
+      {
+        "label": "Note",
+        "sample": "Visit 3"
+      },
+      {
+        "label": "At",
+        "sample": "Sat 11:00"
       }
     ],
-    "submitLabel": "Redeem visit"
+    "submitLabel": "Redeem"
   },
   "idt-punch-redeem-api": {
     "kind": "api-sample",
@@ -912,12 +920,11 @@ export const DESIGN_MOCKS = {
   },
   "idt-package-low-board": {
     "kind": "list-and-form",
-    "screenTitle": "Low-balance packages",
-    "meansExplainer": "you need to derive a filtered subset of the shared packages list — status \"low\" or \"empty\" — and render it as alert cards, without ever changing the shared list itself.",
-    "caption": "This is the screen you are building. Match the pieces — list, empty message, filter — not the brand colors. Try filtering by status.",
-    "listCaption": "LIST — sample packages",
+    "screenTitle": "Almost empty",
+    "caption": "This is the screen you are building. Match the pieces — list, empty message, form, submit — not the brand colors. Try typing and submitting.",
+    "listCaption": "LIST — sample rows",
     "emptyCaption": "EMPTY — when there are no rows",
-    "emptyMessage": "All client packages have healthy balances.",
+    "emptyMessage": "No low-balance packages.",
     "rows": [
       {
         "title": "Riley",
@@ -925,18 +932,25 @@ export const DESIGN_MOCKS = {
         "meta": "low"
       },
       {
-        "title": "Jordan",
-        "subtitle": "Color",
-        "meta": "empty"
+        "title": "Second row",
+        "subtitle": "Another",
+        "meta": "low"
       }
     ],
     "fields": [
       {
+        "label": "Client",
+        "sample": "Riley"
+      },
+      {
+        "label": "Service",
+        "sample": "Cut"
+      },
+      {
         "label": "Status",
-        "options": ["All", "low", "empty", "ok"]
+        "sample": "low"
       }
     ],
-    "formMode": "filter",
-    "submitLabel": "Filter"
+    "submitLabel": "Sell"
   }
 };

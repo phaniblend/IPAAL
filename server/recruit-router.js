@@ -19,7 +19,7 @@
  *   4. Responds { ok, matched, task? } either way — the application is always created, matched or not.
  */
 import express from "express";
-import { listIssues, listProjects, createIssue, updateIssueDescription, updateIssueTitle } from "./onedev-client.js";
+import { listIssues, listAllIssues, listProjects, createIssue, updateIssueDescription, updateIssueTitle } from "./onedev-client.js";
 import { notifyTeamServer } from "./notify-server.js";
 import { requireSession, requireRole } from "./auth-session.js";
 import {
@@ -249,7 +249,8 @@ router.get("/my-tasks", requireSession, async (req, res) => {
     const email = req.session.email;
     const [projects, issues] = await Promise.all([
       listProjects({ offset: 0, count: 100 }),
-      listIssues({ offset: 0, count: 200 }),
+      // Full corpus — a single page of 200 misses Application:/Matched: after a full desk seed.
+      listAllIssues(),
     ]);
 
     const myApplicationIds = new Set(
@@ -258,7 +259,9 @@ router.get("/my-tasks", requireSession, async (req, res) => {
           (i) =>
             i.projectId === COHORT_PROJECT_ID &&
             i.title.startsWith("Application:") &&
-            (i.description || "").split("\n").some((line) => line.trim() === `Email: ${email}`)
+            (i.description || "")
+              .split("\n")
+              .some((line) => line.trim().toLowerCase() === `email: ${String(email || "").trim().toLowerCase()}`)
         )
         .map((i) => i.id)
     );
@@ -284,12 +287,10 @@ router.get("/my-tasks", requireSession, async (req, res) => {
           project: projectNameOf(projects, task.projectId),
         };
       })
-      .filter(Boolean)
-      // Only shows tasks from products that are actually live (see LIVE_PRODUCT_IDS) — hides any
-      // already-matched task from a not-yet-live product (a stray match made before it was pulled
-      // from rotation, e.g.). Doesn't touch the underlying Matched: issue in OneDev, just this
-      // display; a product's tasks reappear here on their own once its id joins the live set.
-      .filter((t) => LIVE_PRODUCT_IDS.has(t.projectId));
+      .filter(Boolean);
+    // Show every task this aspirant is matched to — including desks under test that are not yet
+    // in LIVE_PRODUCT_IDS. Auto-match at Apply still gates on LIVE_PRODUCT_IDS; this endpoint is
+    // "what did we assign you," not "what is publicly rolling out."
 
     res.json({ tasks });
   } catch (err) {
