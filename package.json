@@ -6,8 +6,8 @@
   "scripts": {
     "dev": "vite",
     "server": "node server/index.js",
-    "postinstall": "prisma generate",
-    "prestart": "prisma migrate deploy",
+    "postinstall": "node scripts/postinstall-prisma.mjs",
+    "prestart": "node scripts/prestart-migrate.mjs",
     "seed:sentinelpos": "node scripts/seed-sentinelpos.js",
     "warm-cache": "node scripts/warm-cache.js",
     "warm-cache-standalone": "node scripts/warm-cache-standalone.js",
