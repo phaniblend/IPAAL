@@ -196,24 +196,28 @@ export default function RegisterModal({
   const [confirmationSent, setConfirmationSent] = useState(false);
   const [confirmationEmail, setConfirmationEmail] = useState("");
 
+  /** Prefer Firebase when lesson sync is wired; otherwise use IPF Google OAuth — same path Apply
+   * uses — so aspirants who first joined with Gmail can return without inventing an email password. */
   const handleGoogleSignIn = async () => {
     setSubmitError("");
     setSubmitErrorHint("");
-    if (!isFirebaseConfigured) {
-      setSubmitError("Google sign-in isn’t set up on this install yet.");
+    if (isFirebaseConfigured) {
+      setSubmitLoading(true);
+      try {
+        const fbUser = await signInWithGoogle();
+        const profile = profileFromFirebaseUser(fbUser);
+        if (profile) setRegistered(profile);
+        onSuccess?.({ flow: "google" });
+      } catch (err) {
+        setSubmitError(mapGoogleSignInError(err));
+      } finally {
+        setSubmitLoading(false);
+      }
       return;
     }
-    setSubmitLoading(true);
-    try {
-      const fbUser = await signInWithGoogle();
-      const profile = profileFromFirebaseUser(fbUser);
-      if (profile) setRegistered(profile);
-      onSuccess?.({ flow: "google" });
-    } catch (err) {
-      setSubmitError(mapGoogleSignInError(err));
-    } finally {
-      setSubmitLoading(false);
-    }
+    const hash = typeof window !== "undefined" ? window.location.hash || "#/" : "#/";
+    const returnTo = hash.startsWith("#") ? hash : `#${hash}`;
+    window.location.href = `/api/auth/google/start?returnTo=${encodeURIComponent(returnTo)}`;
   };
 
   const handleRegister = async (e) => {
@@ -382,11 +386,11 @@ export default function RegisterModal({
   const extraFreeLabel =
     FREE_LESSONS_AFTER_REGISTER === 1 ? "one more included lesson" : `${FREE_LESSONS_AFTER_REGISTER} more included lessons`;
   const softVoluntarySub = hasEverRegistered()
-    ? "You already have an account. Log in to pick up any remaining included lessons on this browser."
+    ? "Welcome back — continue with Google (same Gmail you used before), or use email if that’s how you signed up."
     : `Use your email, or sign in with Google. After your guest previews, registering unlocks ${extraFreeLabel} and saved progress.`;
-  const hardGateCallout = `You’ve had two commitment-free previews in this browser. To open the next lesson — and the rest of your free tier — sign in or create an account. We’ve saved a seat for you.`;
+  const hardGateCallout = `You’ve had two commitment-free previews in this browser. To open the next lesson — and the rest of your free tier — sign in with Google or create an account. We’ve saved a seat for you.`;
   const loginWallCallout =
-    "You’ve used your guest previews on this browser. Log in with the account you created to continue and use any remaining included lessons.";
+    "You’ve used your guest previews on this browser. Continue with Google if that’s how you joined, or log in with email.";
   const startFreeSub =
     "Sign in with Google for the fastest path, or use your email if you already have an account. Want to look around first? You can continue without signing in.";
 
@@ -486,7 +490,7 @@ export default function RegisterModal({
               gap: "10px",
             }}
             onClick={handleGoogleSignIn}
-            disabled={submitLoading || !isFirebaseConfigured}
+            disabled={submitLoading}
           >
             {submitLoading ? "\u2026" : (
               <>
@@ -500,11 +504,6 @@ export default function RegisterModal({
               </>
             )}
           </button>
-          {!isFirebaseConfigured ? (
-            <div style={{ fontSize: "12px", color: "#94a3b8", marginTop: "8px" }}>
-              Google sign-in is not available on this install yet.
-            </div>
-          ) : null}
           <div
             style={{
               textAlign: "center",
@@ -552,8 +551,10 @@ export default function RegisterModal({
     <div style={sub}>{softGateFirstSub}</div>
   );
 
-  const showGoogleOnForm = isFirebaseConfigured && !isLoginWall && !passwordRecovery && !isStartFree;
-  const showGoogleOnStartFreeEmail = isFirebaseConfigured && isStartFree && startFreeStep === "email";
+  // Always offer Google on login/register (including the returning-user wall). Firebase when
+  // configured; otherwise IPF `/api/auth/google/start` — same Gmail path as first Apply.
+  const showGoogleOnForm = !passwordRecovery && !isStartFree;
+  const showGoogleOnStartFreeEmail = isStartFree && startFreeStep === "email";
 
   return (
     <div
