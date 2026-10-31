@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
+import { syncIpfSessionToLessonUser } from "./lessonAccess.js";
 
 /** Current session, polled once on mount from /api/auth/me — the same endpoint the backend's
  * requireRole() middleware checks against, so "can the UI show this" and "will the API actually
@@ -18,6 +19,10 @@ export function useAuth() {
       .then((data) => {
         setSession(data);
         setStatus(data ? "signedIn" : "signedOut");
+        // One email, one account: Google/IPF session owns that address for lesson register too.
+        if (data?.email && data.accountType === "js") {
+          syncIpfSessionToLessonUser(data);
+        }
         return data;
       })
       .catch(() => {

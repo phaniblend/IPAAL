@@ -3,6 +3,8 @@ import {
   setRegistered,
   FREE_LESSONS_AFTER_REGISTER,
   hasEverRegistered,
+  isGoogleBoundEmail,
+  markGoogleBoundEmail,
 } from "./lessonAccess.js";
 import {
   isSupabaseConfigured,
@@ -206,7 +208,10 @@ export default function RegisterModal({
       try {
         const fbUser = await signInWithGoogle();
         const profile = profileFromFirebaseUser(fbUser);
-        if (profile) setRegistered(profile);
+        if (profile) {
+          markGoogleBoundEmail(profile.emailOrPhone || profile.email);
+          setRegistered({ ...profile, authProvider: "google" });
+        }
         onSuccess?.({ flow: "google" });
       } catch (err) {
         setSubmitError(mapGoogleSignInError(err));
@@ -219,6 +224,29 @@ export default function RegisterModal({
     const returnTo = hash.startsWith("#") ? hash : `#${hash}`;
     window.location.href = `/api/auth/google/start?returnTo=${encodeURIComponent(returnTo)}`;
   };
+
+  const GOOGLE_EMAIL_TAKEN =
+    "This email already signs in with Google. Use Continue with Google — don’t create a separate password account for it.";
+
+  async function rejectIfGoogleBound(em) {
+    if (isGoogleBoundEmail(em)) return GOOGLE_EMAIL_TAKEN;
+    try {
+      const r = await fetch("/api/auth/me");
+      if (r.ok) {
+        const s = await r.json();
+        if (
+          s?.accountType === "js" &&
+          String(s.email || "").trim().toLowerCase() === em.trim().toLowerCase()
+        ) {
+          markGoogleBoundEmail(em);
+          return GOOGLE_EMAIL_TAKEN;
+        }
+      }
+    } catch {
+      /* ignore — local check above still applies */
+    }
+    return null;
+  }
 
   const handleRegister = async (e) => {
     e.preventDefault();
@@ -238,8 +266,14 @@ export default function RegisterModal({
       setSubmitError("Password must be at least 8 characters.");
       return;
     }
+    const googleBlock = await rejectIfGoogleBound(em);
+    if (googleBlock) {
+      setSubmitError(googleBlock);
+      setMode("login");
+      return;
+    }
     if (!isSupabaseConfigured) {
-      setRegistered({ name: n, emailOrPhone: em });
+      setRegistered({ name: n, emailOrPhone: em, authProvider: "email" });
       onSuccess?.({ flow: "register" });
       return;
     }
@@ -287,8 +321,13 @@ export default function RegisterModal({
       setSubmitError("Enter your password.");
       return;
     }
+    const googleBlock = await rejectIfGoogleBound(em);
+    if (googleBlock) {
+      setSubmitError(googleBlock);
+      return;
+    }
     if (!isSupabaseConfigured) {
-      setRegistered({ name: em.split("@")[0], emailOrPhone: em });
+      setRegistered({ name: em.split("@")[0], emailOrPhone: em, authProvider: "email" });
       onSuccess?.({ flow: "login" });
       return;
     }
