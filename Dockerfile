@@ -33,6 +33,7 @@ ENV PORT=8080 \
     ONEDEV_INTERNAL_URL=http://127.0.0.1:6610 \
     NODE_ENV=production
 
-EXPOSE 8080 6610 6611
+# Only the Node/SPA port is public. OneDev stays on 127.0.0.1:6610 inside the container.
+EXPOSE 8080
 
 CMD ["bash", "scripts/start-colocated.sh"]
