@@ -10,10 +10,9 @@
  * Requires OneDev up + .env ONEDEV_API_USER/PASS.
  */
 import "dotenv/config";
-import { listIssues, listProjects, createIssue } from "../server/onedev-client.js";
+import { listAllIssues, listProjects, createIssue } from "../server/onedev-client.js";
 import {
   COHORT_PROJECT_ID,
-  RESERVED_PROJECT_IDS,
   isAssignable,
   taskMeta,
   extractApplicationId,
@@ -41,7 +40,7 @@ function projectNameOf(projects, id) {
 
 const [projects, issues] = await Promise.all([
   listProjects({ offset: 0, count: 100 }),
-  listIssues({ offset: 0, count: 500 }),
+  listAllIssues(),
 ]);
 
 const productIds = new Set(
