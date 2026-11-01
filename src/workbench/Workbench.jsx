@@ -1022,12 +1022,27 @@ export default function Workbench() {
   }
 
   if (isJS) {
+    const aspirantChrome = (
+      <div className="workbench-aspirant-chrome">
+        <a className="workbench-chrome-link workbench-chrome-link-active" href="#/workbench">
+          My tasks
+        </a>
+        <a className="workbench-chrome-link" href="#/apply">
+          Apply
+        </a>
+        <a className="workbench-chrome-link" href="#/join">
+          How it works
+        </a>
+      </div>
+    );
+
     if (openedTask) {
-    return (
-      <div className="workbench">
-        <header className="workbench-header">
+      return (
+        <div className="workbench">
+          {aspirantChrome}
+          <header className="workbench-header">
             <div className="workbench-kicker">Your work</div>
-          <h1>Your tasks</h1>
+            <h1>My tasks</h1>
             <div className="workbench-auth-strip" style={{ display: "flex", alignItems: "center", gap: 12, marginTop: 8, fontSize: 13 }}>
               <span>
                 Signed in as <strong>{session?.name}</strong> ({session?.email}).
@@ -1036,7 +1051,7 @@ export default function Workbench() {
                 Sign out
               </button>
             </div>
-        </header>
+          </header>
           <OpenTaskView
             task={openedTask}
             publishedModules={publishedModules}
@@ -1050,6 +1065,7 @@ export default function Workbench() {
 
     return (
       <div className="workbench">
+        {aspirantChrome}
         <header className="workbench-header">
           <div className="workbench-kicker">Your work</div>
           <h1>My tasks</h1>
