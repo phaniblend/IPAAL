@@ -82,14 +82,7 @@ function DocumentTitleUpdater() {
       hook: `Imagine you're building a complex application, perhaps a social media feed. When a user logs in, you need to fetch their posts, their friends' updates, and their notifications. If you just put the data fetching logic directly inside your component's main body, it would run *every single time* the component re-renders. This means if a user types in a search bar, or clicks a like button, your app would unnecessarily re-fetch all the data again, even if it hasn't changed. This would be incredibly inefficient, slow down your application, and potentially hit API rate limits. You need a way to say, "Hey, only fetch this data when the component first appears, or when a specific piece of information (like the user's ID) changes, not on every single update."`,
       pain: `⚠️ **Lesson:** Running side effects directly in the component body leads to uncontrolled execution. Symptom: Infinite loops, excessive network requests, performance degradation, and unexpected behavior as effects re-run on every render.`,
       mentalModel: `**Mental model:** The "Effect Synchronizer." Think of \`useEffect\` as a dedicated manager that synchronizes your component with the outside world. It doesn't just run code; it *observes* specific values (its dependencies) and only triggers its "synchronization task" (the effect function) when those observed values change. This prevents unnecessary re-synchronization, much like a smart assistant only updates your calendar when a meeting actually changes, not every time you glance at it.`,
-      discover: `**Pattern - Import Hooks:**
-\`\`\`tsx
-import { useState, useEffect } from 'react';
-\`\`\`
-- \`useState\`: The fundamental hook for adding state to functional components. It returns a stateful value and a function to update it.
-- \`useEffect\`: The hook for performing side effects in functional components. It takes a function (the effect) and an optional array of dependencies.
-- These hooks are part of the core React library and must be imported to be used.
-- They allow functional components to manage state and lifecycle events, previously only available in class components.`,
+      discover: "Re-read the WHAT / HOW for this step. The check verifies those requirements — not a pasted answer.",
       quickRules: `**Quick rules:**
 - ✅ Always import \`useState\` and \`useEffect\` from 'react' when you need state or side effects.
 - ✅ Use \`useState\` for any data that needs to persist across renders and trigger re-renders when it changes.
@@ -179,19 +172,7 @@ function displayUser(user: UserProfile) {
       hook: `Imagine you're working on a large team project. One developer builds the backend API that sends data, and another builds the frontend component that displays it. If the backend developer changes the name of a field from \`productName\` to \`title\`, how does the frontend developer know? Without a shared contract, the frontend code might silently break, displaying empty fields or crashing, and it could take hours to debug. This problem scales with the complexity of your data and the size of your team. You need a way to explicitly declare the expected shape of your data, making changes visible and errors immediate.`,
       pain: `⚠️ **Lesson:** Implicit data structures lead to runtime errors and difficult debugging. Symptom: Type mismatches, unexpected \`undefined\` values, and silent failures when data shapes change between backend and frontend.`,
       mentalModel: `**Mental model:** The "Data Blueprint." An interface is like a blueprint for a house. It specifies exactly what rooms (properties) the house will have, what materials they're made of (types), and how they connect. Anyone building or inspecting the house can refer to this blueprint to ensure consistency and catch deviations early. It doesn't *build* the house, but it defines its expected structure, making it easier to reason about and validate.`,
-      discover: `**Pattern - Define Interfaces:**
-\`\`\`tsx
-interface Item {
-  id: string;
-  name: string;
-  description: string;
-  status: 'active' | 'archived';
-}
-\`\`\`
-- **Type Safety:** Ensures that any object assigned to the \`Item\` type conforms to this structure, catching errors at compile-time.
-- **Readability:** Clearly communicates the expected data shape to other developers (and your future self).
-- **Autocompletion:** IDEs can provide intelligent autocompletion and type hints based on the interface.
-- **Maintainability:** Makes refactoring easier; if the data structure changes, TypeScript will highlight all places that need updating.`,
+      discover: "Re-read the WHAT / HOW for this step. The check verifies those requirements — not a pasted answer.",
       quickRules: `**Quick rules:**
 - ✅ Define an interface for any complex object structure that your component expects to receive or manage.
 - ✅ Use specific types like \`string\`, \`number\`, \`boolean\`, or union types (e.g., \`'active' | 'archived'\`) instead of \`any\`.
@@ -303,21 +284,7 @@ function ItemDetailFetcher({ itemId }: { itemId: string }) {
       hook: `Imagine you're building a library of reusable UI components. You have a \`Button\` component, a \`Card\` component, and a \`Modal\` component. If each of these components relied on global variables for their text, colors, or visibility, they would be incredibly difficult to reuse. Every time you wanted a different button text or a different card image, you'd have to change a global variable, which would affect *all* instances of that component simultaneously. This leads to unpredictable behavior, makes testing a nightmare, and prevents you from having multiple instances of the same component with different configurations on the same screen.`,
       pain: `⚠️ **Lesson:** Relying on global variables for component configuration leads to tightly coupled, inflexible, and unpredictable components. Symptom: Components that are hard to reuse, unexpected side effects when one component changes a global state, and difficulty in isolating component behavior for testing.`,
       mentalModel: `**Mental model:** The "Component Configuration Panel." Think of props as the configuration panel for a component. Just like a TV has buttons and inputs (props) to control its volume, channel, and input source, a component uses props to receive all the data it needs to render itself and behave correctly. Each instance of the component gets its own independent configuration panel, allowing it to be customized without affecting other instances.`,
-      discover: `**Pattern - Component with Props:**
-\`\`\`tsx
-function ItemDetailFetcher({ itemId }: { itemId: string }) {
-  // ...
-  return (
-    <div>
-      <p>Fetching details for ID: {itemId}</p>
-    </div>
-  );
-}
-\`\`\`
-- **Reusability:** Components become self-contained and can be used in different parts of the application with different data.
-- **Predictability:** Given the same props, a component will always render the same output (for pure components).
-- **Data Flow:** Establishes a clear, unidirectional data flow (parent to child), making it easier to understand how data moves through your application.
-- **Type Safety:** With TypeScript, props can be strongly typed, ensuring that components receive the expected data format.`,
+      discover: "Re-read the WHAT / HOW for this step. The check verifies those requirements — not a pasted answer.",
       quickRules: `**Quick rules:**
 - ✅ Pass all data a component needs to render and function as props.
 - ✅ Destructure props in the function signature for cleaner access.
@@ -451,13 +418,7 @@ function ItemDetailFetcher({ itemId }: { itemId: string }) {
       hook: `Imagine you have a simple counter in your component. You declare \`let count = 0;\` and a button that increments it. You click the button, \`count\` becomes 1, then 2, but the number displayed on your screen never changes! This is because React doesn't know that \`count\` has changed. It only re-renders components when their *state* or *props* change. A regular JavaScript variable, even if updated, won't signal to React that it needs to re-render the UI to reflect the new value. You'd be stuck with a static display, no matter how much your underlying data changes.`,
       pain: `⚠️ **Lesson:** Regular variables don't trigger UI updates. Symptom: Data changes in the background but the user interface remains static, leading to a broken or unresponsive application.`,
       mentalModel: `**Mental model:** The "Reactive Data Store." \`useState\` is like a special, observable data store for your component. When you update a value stored with \`useState\` (using its setter function), it not only changes the value but also *notifies* React that the component needs to be re-rendered with the new data. This makes your UI "reactive" – it automatically updates in response to changes in its underlying state, much like a spreadsheet automatically recalculates cells when input values change.`,
-      discover: `**Pattern - State Declaration:**
-\`\`\`tsx
-const [item, setItem] = useState<Item | null>(null);
-const [loading, setLoading] = useState(true);
-const [error, setError] = useState<string | null>(null);
-\`\`\`
-- **Stateful Value:** The first element of the array returned by \`useState\` is the current state value (\`item\`, \`loading\`, \`error\`).
+      discover: "Re-read the WHAT / HOW for this step. The check verifies those requirements — not a pasted answer.", \`loading\`, \`error\`).
 - **Setter Function:** The second element is a function to update that state value (\`setItem\`, \`setLoading\`, \`setError\`). Calling this function triggers a re-render.
 - **Initial State:** The argument passed to \`useState\` is the initial value for that state variable.
 - **Type Annotation:** For TypeScript, you can explicitly define the type of the state, especially for nullable types like \`Item | null\` or \`string | null\`.`,
@@ -676,28 +637,7 @@ function ItemDetailFetcher({ itemId }: { itemId: string }) {
       hook: `Imagine a user clicks a button to load a complex report. For a few seconds, nothing happens on the screen. The user might think the app is frozen, click the button again, or even close the tab in frustration. This lack of feedback during asynchronous operations is a common pitfall. Similarly, if an error occurs during data fetching, and the app just shows a blank screen or crashes, the user is left completely in the dark about what went wrong. You need a way to gracefully guide the user through these different states, providing clear visual cues for loading, success, and failure.`,
       pain: `⚠️ **Lesson:** Lack of visual feedback during asynchronous operations or errors leads to a poor user experience. Symptom: Users perceive the application as slow or broken, leading to frustration and abandonment.`,
       mentalModel: `**Mental model:** The "UI Traffic Cop." Conditional rendering acts like a traffic cop for your UI. Based on the current state (loading, error, data available), it directs which parts of the UI are allowed to be displayed. It ensures that only one "lane" of the UI is open at a time, preventing conflicting messages and guiding the user smoothly through the application's different operational states.`,
-      discover: `**Pattern - Conditional Rendering:**
-\`\`\`tsx
-if (loading) {
-  return <p>Loading item details...</p>;
-}
-if (error) {
-  return <p style={{ color: 'red' }}>Error: {error}</p>;
-}
-if (!item) {
-  return <p>No item found for ID: {itemId}</p>;
-}
-return (
-  <div>
-    <h2>{item.name}</h2>
-    {/* ... other details */}
-  </div>
-);
-\`\`\`
-- **Early Exits:** Using \`if (condition) { return <JSX /> }\` statements at the top of your component is a clean way to handle different states, especially for loading and error.
-- **Logical AND (\`&&\`):** For simple inline conditions, \`{condition && <JSX />}\` can render JSX only if the condition is true.
-- **Ternary Operator (\`?\`):** For choosing between two different JSX outputs, \`{condition ? <JSX1 /> : <JSX2 />}\` is concise.
-- **Order Matters:** Always handle loading and error states *before* trying to render the actual data, as data might not be available yet.`,
+      discover: "Re-read the WHAT / HOW for this step. The check verifies those requirements — not a pasted answer.",
       quickRules: `**Quick rules:**
 - ✅ Use early \`return\` statements for critical states like \`loading\` or \`error\` to simplify logic.
 - ✅ Provide clear, user-friendly messages for each state (e.g., "Loading...", "Error: ...", "No data found.").
@@ -989,27 +929,7 @@ function ItemDetailFetcher({ itemId }: { itemId: string }) {
       hook: `Imagine you're trying to order food online. You click "Place Order," and the app sends your request to the restaurant. What happens if the restaurant's system is down? Or if your internet connection drops? If the app doesn't anticipate these problems, it might just freeze, crash, or show a confusing error message. You need a way to gracefully handle the waiting period, deal with potential failures, and ensure that regardless of success or failure, certain cleanup actions (like hiding a loading spinner) always happen. Without this, your app becomes fragile and frustrating to use.`,
       pain: `⚠️ **Lesson:** Unhandled asynchronous operations lead to unpredictable behavior and crashes. Symptom: Applications freezing, unexpected errors, and resources not being properly released after an operation.`,
       mentalModel: `**Mental model:** The "Reliable Courier Service." Think of \`async/await\` as hiring a reliable courier service for your data. You \`await\` their delivery, knowing they'll eventually return with the package (data) or a clear explanation of why they couldn't (error). The \`try-catch-finally\` block is like the courier's protocol: \`try\` to deliver, \`catch\` any problems (like a flat tire), and \`finally\` report back to the sender (e.g., update the loading status) regardless of success or failure. This ensures a predictable and robust delivery process.`,
-      discover: `**Pattern - Async Data Fetching:**
-\`\`\`tsx
-const fetchItemDetail = async () => {
-  setLoading(true);
-  setError(null);
-  try {
-    // Simulate network request
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    // Process response
-    setItem(data);
-  } catch (err) {
-    setError('Failed to fetch.');
-  } finally {
-    setLoading(false);
-  }
-};
-\`\`\`
-- **\`async\` function:** Declares that the function will perform asynchronous operations and can use the \`await\` keyword.
-- **\`await\` keyword:** Pauses the execution of the \`async\` function until the Promise it's waiting for settles (resolves or rejects).
-- **\`try...catch\`:** The \`try\` block contains code that might throw an error. If an error occurs, execution jumps to the \`catch\` block, allowing you to handle the error gracefully.
-- **\`finally\` block:** Code inside \`finally\` always executes, regardless of whether an error occurred or not. This is ideal for cleanup, like setting \`loading\` to \`false\`.`,
+      discover: "Re-read the WHAT / HOW for this step. The check verifies those requirements — not a pasted answer.",
       quickRules: `**Quick rules:**
 - ✅ Always use \`async/await\` for network requests and other Promise-based asynchronous operations.
 - ✅ Wrap asynchronous code in a \`try-catch\` block to handle potential errors gracefully.
@@ -1310,17 +1230,7 @@ function ItemDetailFetcher({ itemId }: { itemId: string }) {
       hook: `Imagine you have a component that fetches data, and after fetching, it updates a piece of state. If you put that state update directly into the \`useEffect\` without a dependency array, or with an incorrect one, what happens? The state update causes a re-render. The re-render causes the \`useEffect\` to run again. The \`useEffect\` fetches data and updates state again. This creates a vicious cycle – an infinite loop of fetching and re-rendering, quickly crashing your application or exhausting your API limits. You need a precise way to tell React: "Only run this effect when *these specific values* have actually changed, not just any time the component re-renders."`,
       pain: `⚠️ **Lesson:** Incorrectly managed \`useEffect\` dependencies lead to infinite loops and performance issues. Symptom: Browser freezing, excessive network requests, and application crashes due to uncontrolled re-renders.`,
       mentalModel: `**Mental model:** The "Change Detector." The dependency array in \`useEffect\` is like a highly specialized change detector. It constantly monitors the values listed within it. The effect function (the first argument to \`useEffect\`) will *only* re-run if one or more of those monitored values have changed since the *last* render. If the array is empty, it means "don't monitor anything, just run once on mount." If it's omitted entirely, it means "monitor everything, run on every render." This precise control prevents unnecessary re-executions.`,
-      discover: `**Pattern - \`useEffect\` with Dependencies:**
-\`\`\`tsx
-useEffect(() => {
-  fetchItemDetail();
-}, [itemId]); // Dependency array
-\`\`\`
-- **Effect Function:** The first argument is a function containing the side effect logic (e.g., calling \`fetchItemDetail()\`).
-- **Dependency Array:** The second argument is an array of values. The effect will re-run only if any of these values change between renders.
-- **Empty Array (\`[]\`):** The effect runs once after the initial render and cleans up on unmount. Useful for \`componentDidMount\` behavior.
-- **No Array:** The effect runs after *every* render. This is rarely what you want for data fetching.
-- **Including Props/State:** If your effect uses props (like \`itemId\`) or state variables, they should generally be included in the dependency array.`,
+      discover: "Re-read the WHAT / HOW for this step. The check verifies those requirements — not a pasted answer.",
       quickRules: `**Quick rules:**
 - ✅ Include all values from the component's scope (props, state, functions) that are used inside your \`useEffect\` callback in the dependency array.
 - ✅ Use an empty dependency array \`[]\` for effects that should only run once on component mount (e.g., initial data fetch that doesn't depend on props).

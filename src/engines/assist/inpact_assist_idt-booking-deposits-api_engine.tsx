@@ -42,12 +42,9 @@ Your task: Create server-side storage for deposits and an ID generator function.
     hint: `1. Storage array: Initialize a let variable to an empty array typed with your deposit interface.
 2. Counter: Initialize a let count variable to track numbers.
 3. Generator: Return an incremental ID string from your helper function.`,
-    example_code: `let store: DepositRecord[] = [];
-let count = 1;
-
-function makeId(): string {
-  return \`dep-\${count++}\`;
-}`,
+    example_code: `let tasks = [];
+let nextIdCounter = 1;
+function nextId() { return String(nextIdCounter++); }`,
     think_prompt: `\`\`\`text
 SAMPLE — /api/deposits
 GET /api/deposits
@@ -75,12 +72,9 @@ let nextIdCounter = 1;
 function nextId() { return String(nextIdCounter++); }
 export function getStore() { return deposits; }
 `,
-    analog_example: `let store: DepositRecord[] = [];
-let count = 1;
-
-function makeId(): string {
-  return \`dep-\${count++}\`;
-}`,
+    analog_example: `let tasks = [];
+let nextIdCounter = 1;
+function nextId() { return String(nextIdCounter++); }`,
     deepDiveLabel: "Why this step matters",
     deepDive: {
       // Fix 7: lead with the general concept (why a shared pattern matters), not the task
@@ -93,17 +87,11 @@ function makeId(): string {
   Validate →  required fields
   Derive   →  if applied is true → applied; else held
   Routes   →  GET/POST attach computed status (do not trust client status)`,
-      discover: `let deposits = [];
-let nextIdCounter = 1;
-function nextId() { return String(nextIdCounter++); }
-export function getStore() { return deposits; }
-`,
-      quickRules: "- One skill per step\n- Name the skill, not the product noun\n- Example uses the same pattern",
+      discover: "Re-read the WHAT / HOW for this step. The check verifies those requirements — not a pasted answer.",
+      quickRules: "- One skill per step\n- Name the skill, not the product noun\n- Example uses a different domain",
       watchOut: "Do not turn a single import or interface into its own lesson.",
       dryRun: "Write the same step for a different resource with the same shape.",
-      build: `1. Storage array: Initialize a let variable to an empty array typed with your deposit interface.
-2. Counter: Initialize a let count variable to track numbers.
-3. Generator: Return an incremental ID string from your helper function.`,
+      build: `Two requests that arrive close together must never be handed the same id — a counter that only ever increases guarantees each new record gets a value nothing before it used, which a timestamp alone cannot promise.`,
     },
   },
   {
@@ -122,9 +110,7 @@ Your task: Reject invalid deposit requests with status 400 if required info is m
     hint: `1. Verify body content: Inspect req.body for missing properties.
 2. Trigger check: If any required property is falsy, enter the error block.
 3. Return 400: Send res.status(400).json(...) to halt the request.`,
-    example_code: `if (!req.body.client || !req.body.amount) {
-  return res.status(400).json({ error: "Missing required deposit details" });
-}`,
+    example_code: `if (!input?.title?.trim()) return "title is required";`,
     think_prompt: `\`\`\`text
 SAMPLE — /api/deposits
 POST /api/deposits
@@ -164,9 +150,7 @@ export function validateDeposit(input) {
   return null;
 }
 `,
-    analog_example: `if (!req.body.client || !req.body.amount) {
-  return res.status(400).json({ error: "Missing required deposit details" });
-}`,
+    analog_example: `if (!input?.title?.trim()) return "title is required";`,
     deepDiveLabel: "Why this step matters",
     deepDive: {
       // Fix 7: lead with the general concept (why a shared pattern matters), not the task
@@ -179,23 +163,11 @@ export function validateDeposit(input) {
   Validate →  required fields
   Derive   →  if applied is true → applied; else held
   Routes   →  GET/POST attach computed status (do not trust client status)`,
-      discover: `let deposits = [];
-let nextIdCounter = 1;
-function nextId() { return String(nextIdCounter++); }
-export function getStore() { return deposits; }
-export function validateDeposit(input) {
-  if (typeof input?.client !== "string" || !input.client.trim()) return "client is required";
-  if (typeof input?.amount !== "number" || input.amount <= 0) return "amount must be > 0";
-  if (typeof input?.appointmentId !== "string" || !input.appointmentId.trim()) return "appointmentId is required";
-  return null;
-}
-`,
-      quickRules: "- One skill per step\n- Name the skill, not the product noun\n- Example uses the same pattern",
+      discover: "Re-read the WHAT / HOW for this step. The check verifies those requirements — not a pasted answer.",
+      quickRules: "- One skill per step\n- Name the skill, not the product noun\n- Example uses a different domain",
       watchOut: "Do not turn a single import or interface into its own lesson.",
       dryRun: "Write the same step for a different resource with the same shape.",
-      build: `1. Verify body content: Inspect req.body for missing properties.
-2. Trigger check: If any required property is falsy, enter the error block.
-3. Return 400: Send res.status(400).json(...) to halt the request.`,
+      build: `A validator is just a function that inspects the fields it was given and returns either a short error message or nothing at all — the caller decides what to do with that answer.`,
     },
   },
   {
@@ -214,7 +186,11 @@ Your task: Calculate whether the deposit should be marked "held" or "applied" on
     hint: `1. Evaluate business rules: Check the condition (e.g. amount thresholds or account balance).
 2. Set the status: Use a ternary expression or if statement to set status to either "held" or "applied".
 3. Ignore user payload status: Never read status directly from req.body.`,
-    example_code: `const status = Number(req.body.amount) > 5000 ? "held" : "applied";`,
+    example_code: `function taskStatus(item, today) {
+  if (item.done) return "done";
+  if (new Date(item.due) < today) return "late";
+  return "open";
+}`,
     think_prompt: `\`\`\`text
 SAMPLE — /api/deposits
 GET /api/deposits
@@ -248,7 +224,11 @@ export function deriveDepositStatus(row) {
   return row.applied === true ? "applied" : "held";
 }
 `,
-    analog_example: `const status = Number(req.body.amount) > 5000 ? "held" : "applied";`,
+    analog_example: `function taskStatus(item, today) {
+  if (item.done) return "done";
+  if (new Date(item.due) < today) return "late";
+  return "open";
+}`,
     deepDiveLabel: "Why this step matters",
     deepDive: {
       // Fix 7: lead with the general concept (why a shared pattern matters), not the task
@@ -261,18 +241,11 @@ export function deriveDepositStatus(row) {
   Validate →  required fields
   Derive   →  if applied is true → applied; else held
   Routes   →  GET/POST attach computed status (do not trust client status)`,
-      discover: `let deposits = [];
-export function validateDeposit(input) { return null; }
-export function deriveDepositStatus(row) {
-  return row.applied === true ? "applied" : "held";
-}
-`,
-      quickRules: "- One skill per step\n- Name the skill, not the product noun\n- Example uses the same pattern",
+      discover: "Re-read the WHAT / HOW for this step. The check verifies those requirements — not a pasted answer.",
+      quickRules: "- One skill per step\n- Name the skill, not the product noun\n- Example uses a different domain",
       watchOut: "Do not turn a single import or interface into its own lesson.",
       dryRun: "Write the same step for a different resource with the same shape.",
-      build: `1. Evaluate business rules: Check the condition (e.g. amount thresholds or account balance).
-2. Set the status: Use a ternary expression or if statement to set status to either "held" or "applied".
-3. Ignore user payload status: Never read status directly from req.body.`,
+      build: `A derive function takes one stored row (plus, optionally, the current time) and returns a label computed purely from that row's own fields — it never reads anything the client sent in the current request.`,
     },
   },
   {
@@ -291,17 +264,7 @@ Your task: Provide endpoints to view deposits and create new ones with the calcu
     hint: `1. GET route: Send status 200 with the storage array.
 2. Run checks: In POST, validate inputs and calculate the server-derived status.
 3. Save record: Assemble the final record with id and derived status, push to store, and respond with 201.`,
-    example_code: `export function getDeposits(res: Response) {
-  return res.status(200).json(store);
-}
-
-export function createDeposit(req: Request, res: Response) {
-  // Step 2 validation check
-  // Step 3 derive status logic
-  const record = { id: makeId(), ...req.body, status };
-  store.push(record);
-  return res.status(201).json(record);
-}`,
+    example_code: `res.json(tasks.map((t) => ({ ...t, status: taskStatus(t) })));`,
     think_prompt: `\`\`\`text
 SAMPLE — /api/deposits
 GET /api/deposits
@@ -358,17 +321,7 @@ export function createHandlers() {
   };
 }
 `,
-    analog_example: `export function getDeposits(res: Response) {
-  return res.status(200).json(store);
-}
-
-export function createDeposit(req: Request, res: Response) {
-  // Step 2 validation check
-  // Step 3 derive status logic
-  const record = { id: makeId(), ...req.body, status };
-  store.push(record);
-  return res.status(201).json(record);
-}`,
+    analog_example: `res.json(tasks.map((t) => ({ ...t, status: taskStatus(t) })));`,
     deepDiveLabel: "Why this step matters",
     deepDive: {
       // Fix 7: lead with the general concept (why a shared pattern matters), not the task
@@ -381,32 +334,11 @@ export function createDeposit(req: Request, res: Response) {
   Validate →  required fields
   Derive   →  if applied is true → applied; else held
   Routes   →  GET/POST attach computed status (do not trust client status)`,
-      discover: `let deposits = [];
-let nextIdCounter = 1;
-function nextId() { return String(nextIdCounter++); }
-export function validateDeposit(input) { return null; }
-export function deriveDepositStatus(row, now = new Date()) { return "open"; }
-export function createHandlers() {
-  return {
-    list(_req, res) {
-      res.json(deposits.map((r) => ({ ...r, status: deriveDepositStatus(r) })));
-    },
-    create(req, res) {
-      const err = validateDeposit(req.body);
-      if (err) return res.status(400).json({ error: err });
-      const row = { id: nextId(), client: req.body.client, amount: req.body.amount, appointmentId: req.body.appointmentId, applied: false };
-      deposits.push(row);
-      res.status(201).json({ ...row, status: deriveDepositStatus(row) });
-    },
-  };
-}
-`,
-      quickRules: "- One skill per step\n- Name the skill, not the product noun\n- Example uses the same pattern",
+      discover: "Re-read the WHAT / HOW for this step. The check verifies those requirements — not a pasted answer.",
+      quickRules: "- One skill per step\n- Name the skill, not the product noun\n- Example uses a different domain",
       watchOut: "Do not turn a single import or interface into its own lesson.",
       dryRun: "Write the same step for a different resource with the same shape.",
-      build: `1. GET route: Send status 200 with the storage array.
-2. Run checks: In POST, validate inputs and calculate the server-derived status.
-3. Save record: Assemble the final record with id and derived status, push to store, and respond with 201.`,
+      build: `A route handler's job is to call helpers in the right order and translate their answers into HTTP responses — validate first, then map the derive function over whatever gets returned.`,
     },
   },
 ];

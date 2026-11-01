@@ -15,8 +15,8 @@ export const DESIGN_MOCKS = {
         "meta": "Tue 2:00 PM"
       },
       {
-        "title": "Second row",
-        "subtitle": "Another",
+        "title": "Maya B",
+        "subtitle": "Color & cut (alt)",
         "meta": "Tue 2:00 PM"
       }
     ],
@@ -57,8 +57,8 @@ export const DESIGN_MOCKS = {
         "meta": "a-100"
       },
       {
-        "title": "Second row",
-        "subtitle": "Another",
+        "title": "Priya B",
+        "subtitle": "40 (alt)",
         "meta": "a-100"
       }
     ],
@@ -99,8 +99,8 @@ export const DESIGN_MOCKS = {
         "meta": "10:00"
       },
       {
-        "title": "Second row",
-        "subtitle": "Another",
+        "title": "Maya B",
+        "subtitle": "Cut (alt)",
         "meta": "10:00"
       }
     ],
@@ -134,8 +134,8 @@ export const DESIGN_MOCKS = {
         "meta": "2026-09-01"
       },
       {
-        "title": "Second row",
-        "subtitle": "Another",
+        "title": "River Co B",
+        "subtitle": "250 (alt)",
         "meta": "2026-09-01"
       }
     ],
@@ -176,8 +176,8 @@ export const DESIGN_MOCKS = {
         "meta": "Fri 9:00"
       },
       {
-        "title": "Second row",
-        "subtitle": "Another",
+        "title": "inv-9 B",
+        "subtitle": "email (alt)",
         "meta": "Fri 9:00"
       }
     ],
@@ -218,8 +218,8 @@ export const DESIGN_MOCKS = {
         "meta": "overdue"
       },
       {
-        "title": "Second row",
-        "subtitle": "Another",
+        "title": "River Co B",
+        "subtitle": "250 (alt)",
         "meta": "overdue"
       }
     ],
@@ -253,8 +253,8 @@ export const DESIGN_MOCKS = {
         "meta": "Wants quote"
       },
       {
-        "title": "Second row",
-        "subtitle": "Another",
+        "title": "Jordan B",
+        "subtitle": "Instagram (alt)",
         "meta": "Wants quote"
       }
     ],
@@ -295,8 +295,8 @@ export const DESIGN_MOCKS = {
         "meta": "sms"
       },
       {
-        "title": "Second row",
-        "subtitle": "Another",
+        "title": "L-1 B",
+        "subtitle": "Sent price sheet (alt)",
         "meta": "sms"
       }
     ],
@@ -337,8 +337,8 @@ export const DESIGN_MOCKS = {
         "meta": "stale"
       },
       {
-        "title": "Second row",
-        "subtitle": "Another",
+        "title": "Jordan B",
+        "subtitle": "Web (alt)",
         "meta": "stale"
       }
     ],
@@ -372,9 +372,9 @@ export const DESIGN_MOCKS = {
         "meta": "Sat 8:00"
       },
       {
-        "title": "Second row",
-        "subtitle": "Another",
-        "meta": "Sat 8:00"
+        "title": "Kai",
+        "subtitle": "Host",
+        "meta": "Sat 12:00"
       }
     ],
     "fields": [
@@ -414,8 +414,8 @@ export const DESIGN_MOCKS = {
         "meta": "Fri noon"
       },
       {
-        "title": "Second row",
-        "subtitle": "Another",
+        "title": "s-3 B",
+        "subtitle": "Sick (alt)",
         "meta": "Fri noon"
       }
     ],
@@ -456,8 +456,8 @@ export const DESIGN_MOCKS = {
         "meta": "open"
       },
       {
-        "title": "Second row",
-        "subtitle": "Another",
+        "title": "s-3 B",
+        "subtitle": "Sick (alt)",
         "meta": "open"
       }
     ],
@@ -491,9 +491,9 @@ export const DESIGN_MOCKS = {
         "meta": "2026-09-15"
       },
       {
-        "title": "Second row",
-        "subtitle": "Another",
-        "meta": "2026-09-15"
+        "title": "River Clinic",
+        "subtitle": "640",
+        "meta": "2026-10-01"
       }
     ],
     "fields": [
@@ -533,8 +533,8 @@ export const DESIGN_MOCKS = {
         "meta": "900"
       },
       {
-        "title": "Second row",
-        "subtitle": "Another",
+        "title": "q-1 B",
+        "subtitle": "Labor (alt)",
         "meta": "900"
       }
     ],
@@ -575,8 +575,8 @@ export const DESIGN_MOCKS = {
         "meta": "accepted"
       },
       {
-        "title": "Second row",
-        "subtitle": "Another",
+        "title": "Patel Home B",
+        "subtitle": "1800 (alt)",
         "meta": "accepted"
       }
     ],
@@ -610,8 +610,8 @@ export const DESIGN_MOCKS = {
         "meta": "Great cut"
       },
       {
-        "title": "Second row",
-        "subtitle": "Another",
+        "title": "Sam B",
+        "subtitle": "5 (alt)",
         "meta": "Great cut"
       }
     ],
@@ -652,8 +652,8 @@ export const DESIGN_MOCKS = {
         "meta": "google"
       },
       {
-        "title": "Second row",
-        "subtitle": "Another",
+        "title": "r-1 B",
+        "subtitle": "Thanks Sam! (alt)",
         "meta": "google"
       }
     ],
@@ -694,8 +694,8 @@ export const DESIGN_MOCKS = {
         "meta": "needs-reply"
       },
       {
-        "title": "Second row",
-        "subtitle": "Another",
+        "title": "Sam B",
+        "subtitle": "2 (alt)",
         "meta": "needs-reply"
       }
     ],
@@ -729,8 +729,8 @@ export const DESIGN_MOCKS = {
         "meta": "Fri 9:00"
       },
       {
-        "title": "Second row",
-        "subtitle": "Another",
+        "title": "Alex B",
+        "subtitle": "sms (alt)",
         "meta": "Fri 9:00"
       }
     ],
@@ -771,8 +771,8 @@ export const DESIGN_MOCKS = {
         "meta": "sms"
       },
       {
-        "title": "Second row",
-        "subtitle": "Another",
+        "title": "Appt tomorrow B",
+        "subtitle": "See you at {time} (alt)",
         "meta": "sms"
       }
     ],
@@ -813,8 +813,8 @@ export const DESIGN_MOCKS = {
         "meta": "due"
       },
       {
-        "title": "Second row",
-        "subtitle": "Another",
+        "title": "Alex B",
+        "subtitle": "sms (alt)",
         "meta": "due"
       }
     ],
@@ -848,8 +848,8 @@ export const DESIGN_MOCKS = {
         "meta": "5"
       },
       {
-        "title": "Second row",
-        "subtitle": "Another",
+        "title": "Riley B",
+        "subtitle": "Cut (alt)",
         "meta": "5"
       }
     ],
@@ -890,8 +890,8 @@ export const DESIGN_MOCKS = {
         "meta": "Sat 11:00"
       },
       {
-        "title": "Second row",
-        "subtitle": "Another",
+        "title": "p-1 B",
+        "subtitle": "Visit 3 (alt)",
         "meta": "Sat 11:00"
       }
     ],
@@ -932,8 +932,8 @@ export const DESIGN_MOCKS = {
         "meta": "low"
       },
       {
-        "title": "Second row",
-        "subtitle": "Another",
+        "title": "Riley B",
+        "subtitle": "Cut (alt)",
         "meta": "low"
       }
     ],

@@ -71,21 +71,7 @@ async function loadFileContent(filePath: string) {
       hook: `Imagine you're building a custom toolbox. You don't want to carry the entire factory that makes tools; you just need a specific wrench for a specific job. In programming, libraries like 'react' are like those factories, containing many different functions and components. If you just wrote \`useState()\` without importing it, your JavaScript environment would have no idea what \`useState\` refers to. It's like asking for "the wrench" without specifying which toolbox it's in or where to find it. This leads to frustrating "useState is not defined" errors, halting your development before you even start.`,
       pain: `⚠️ **Lesson:** JavaScript modules require explicit imports for functions or variables exported from other files or libraries. Symptom: "ReferenceError: useState is not defined" or similar errors, indicating that the function you're trying to use hasn't been brought into the current scope.`,
       mentalModel: `**Mental model:** The Library Card. Think of the 'react' library as a vast public library. To borrow a specific book (like the \`useState\` hook), you need a library card and you must explicitly request that book by name. If the book is a popular, standalone title, you might just ask for "useState." If it's part of a collection, you might ask for "the useState book from the Hooks collection." The \`import { useState } from 'react';\` syntax is your library card and specific request, telling your program exactly where to find and how to use the 'useState' book.`,
-      discover: `**Pattern - Named Imports:**
-\`\`\`tsx
-// Syntax for importing a named export
-import { namedExport1, namedExport2 } from 'module-name';
-
-// Example: Importing useState from 'react'
-import { useState } from 'react';
-
-// Example: Importing multiple named exports
-import { useEffect, useRef, useState } from 'react';
-\`\`\`
--   \`import\` keyword initiates the import process.
--   Curly braces \`{}\` are used for **named exports**. This means the module (e.g., 'react') explicitly exported \`useState\` by that exact name.
--   \`from 'react'\` specifies the module or library you're importing from.
--   Without this line, \`useState\` would not be recognized as a valid function within your component.`,
+      discover: "Re-read the WHAT / HOW for this step. The check verifies those requirements — not a pasted answer.",
       quickRules: `**Quick rules:**
 -   ✅ Use \`import { Name } from 'module';\` for named exports.
 -   ✅ Place import statements at the top of your file for clarity.
@@ -159,25 +145,7 @@ function createGreetingElement(name: string) {
       hook: `You've written many JavaScript functions before. They take inputs, perform operations, and return values. But in React, some functions have a special role: they describe what the user sees. If you just write a regular function that returns a string or a number, React won't know how to display it as part of your application's interface. It needs a specific kind of output to understand how to build the UI tree. What is that special output, and how does a function signal to React that it's meant to be a UI building block?`,
       pain: `⚠️ **Lesson:** Not all functions are React components. For a function to be recognized as a component, it must adhere to specific conventions. Symptom: React errors like "Objects are not valid as a React child" or your function's return value simply not appearing on screen.`,
       mentalModel: `**Mental model:** The UI Blueprint. Imagine a functional component as a blueprint for a small part of a building. It's a set of instructions that, when followed, constructs a specific section of the user interface. Just like a blueprint needs to be drawn in a specific format (e.g., architectural symbols, dimensions), a functional component needs to return a specific type of data (JSX) for React, the builder, to understand and construct the UI. It also needs to start with a capital letter to distinguish it from regular HTML elements.`,
-      discover: `**Pattern - Functional Component Structure:**
-\`\`\`tsx
-// 1. Must be a JavaScript function (arrow or regular)
-// 2. Must start with a capital letter (e.g., 'MyComponent', not 'myComponent')
-// 3. Must return JSX (JavaScript XML)
-function MyComponent(props: { message: string }) {
-  // Component logic goes here
-  const greeting = \`Hello, \${props.message}!\`;
-
-  return (
-    // JSX describes the UI structure
-    <div>
-      <h1>{greeting}</h1>
-      <p>This is a functional component.</p>
-    </div>
-  );
-}
-\`\`\`
--   **Capitalization:** Component names *must* start with an uppercase letter (e.g., \`ToggleContent\`). This distinguishes them from standard HTML elements (e.g., \`div\`, \`p\`).
+      discover: "Re-read the WHAT / HOW for this step. The check verifies those requirements — not a pasted answer.", \`p\`).
 -   **Return JSX:** A functional component must return JSX, which is a syntax extension for JavaScript that looks like HTML. This JSX describes the UI that React should render.
 -   **Props:** Components can accept a single argument, typically called \`props\`, which is an object containing data passed from a parent component.`,
       quickRules: `**Quick rules:**
@@ -265,14 +233,7 @@ function toggleMenu() {
       hook: `You want your component to "remember" a piece of data, like whether a menu is open or closed. You could just declare a regular JavaScript variable, like \`let isOpen = false;\`. But if you change \`isOpen\` to \`true\`, nothing on your screen updates. Your component doesn't know it needs to re-render. How do you tell React, "Hey, this piece of data changed, and now you need to update the UI to reflect it"? This is where the special return value of \`useState\` comes in.`,
       pain: `⚠️ **Lesson:** Directly modifying a regular JavaScript variable within a component will not trigger a re-render. Symptom: Your data changes, but the UI remains static, leading to a desynchronized view for the user.`,
       mentalModel: `**Mental model:** The State Register and Notifier. Imagine \`useState\` as a special register at a post office. When you call \`useState(false)\`, you're asking for a new entry in this register, initially marked 'false'. The post office gives you two things: a copy of the current entry's value (the 'false' itself) and a special pen (the 'setter function') that *only* works on this register entry. When you use the special pen to change the entry (e.g., to 'true'), the post office automatically sends a notification to everyone who needs to know (triggering a component re-render) so they can get the updated value.`,
-      discover: `**Pattern - \`useState\` Return Value:**
-\`\`\`tsx
-const [stateValue, setStateValue] = useState(initialValue);
-\`\`\`
--   **\`stateValue\`:** This is the current value of your state. It will be \`initialValue\` on the first render, and then whatever you set it to on subsequent renders.
--   **\`setStateValue\`:** This is a function that allows you to update \`stateValue\`. When you call \`setStateValue\` with a new value, React will re-render your component with the updated state.
--   **\`useState(initialValue)\`:** The argument you pass to \`useState\` is the initial state value. This value is only used during the *first* render of the component.
--   **Array Destructuring:** \`[stateValue, setStateValue]\` is a JavaScript feature called array destructuring. It's a concise way to extract values from arrays. \`useState\` returns an array, and this syntax makes it easy to name the two returned elements.`,
+      discover: "Re-read the WHAT / HOW for this step. The check verifies those requirements — not a pasted answer.",
       quickRules: `**Quick rules:**
 -   ✅ Always use the setter function (e.g., \`setIsVisible\`) to update state.
 -   ✅ The initial value passed to \`useState\` is only used on the first render.
@@ -355,21 +316,7 @@ function ToggleContent() {
       hook: `You've probably seen many interactive elements on websites. Some look like buttons, some are links, and others might just be text that changes when you click it. While you *could* technically make almost any HTML element clickable using JavaScript, not all clickable elements are created equal. If you use a generic \`<div>\` and attach a click handler, it might look like a button, but it won't behave like one for everyone. What crucial aspects are you missing by not using the semantically correct element?`,
       pain: `⚠️ **Lesson:** Using semantically appropriate HTML elements is critical for accessibility, SEO, and default browser behavior. Symptom: Users relying on keyboard navigation or screen readers might struggle to interact with your UI, or your site might perform poorly in search engine rankings.`,
       mentalModel: `**Mental model:** The Right Tool for the Job. Imagine building a house. You wouldn't use a hammer to turn a screw, even if you could force it. You'd use a screwdriver. Similarly, in web development, HTML provides specific elements like \`<button>\`, \`<a>\`, \`<input>\` because they come with built-in behaviors, accessibility features, and semantic meaning. Using the right element (a \`<button>\` for an action) ensures your UI is robust, accessible, and understood by browsers and assistive technologies without extra effort.`,
-      discover: `**Pattern - Semantic HTML for Interactivity:**
-\`\`\`tsx
-// ✅ Correct: A button for an action
-<button onClick={handleClick}>Submit Form</button>
-
-// ✅ Correct: A link for navigation
-<a href="/about">About Us</a>
-
-// ❌ Incorrect: Using a div as a button
-<div onClick={handleClick} style={{ cursor: 'pointer' }}>Click Me</div>
-\`\`\`
--   **Accessibility:** Buttons are inherently focusable and triggerable with the keyboard (Space or Enter keys). Screen readers announce them as "button," informing users of their interactive nature.
--   **Default Styling & Behavior:** Browsers apply default styles and behaviors to buttons, which can be customized but provide a good starting point.
--   **Semantic Meaning:** Search engines and assistive technologies understand the meaning of a \`<button>\` element, improving SEO and user experience.
--   **Event Handling:** While you can attach \`onClick\` to any element, \`<button>\` is explicitly designed for user-initiated actions.`,
+      discover: "Re-read the WHAT / HOW for this step. The check verifies those requirements — not a pasted answer.",
       quickRules: `**Quick rules:**
 -   ✅ Use \`<button>\` for actions that trigger changes or submissions.
 -   ✅ Use \`<a>\` for navigation to different pages or sections.
@@ -473,26 +420,7 @@ function toggleActiveState() {
       hook: `You've declared \`const [isVisible, setIsVisible] = useState(false);\`. It seems intuitive to just write \`isVisible = true;\` when you want to change the state. After all, that's how you change regular JavaScript variables. But if you try this, your UI won't update. The button will be clicked, the code will run, but the content will remain stubbornly hidden or visible. Why does React enforce this specific way of updating state, and what magic does \`setIsVisible\` perform that a direct assignment doesn't?`,
       pain: `⚠️ **Lesson:** Directly modifying a state variable (e.g., \`isVisible = true;\`) bypasses React's rendering mechanism. Symptom: State changes in your code, but the UI does not update, leading to a desynchronized application state and a broken user experience.`,
       mentalModel: `**Mental model:** The State's Gatekeeper. Imagine your component's state as a guarded vault. You can look at the contents (read \`isVisible\`), but you can't just walk in and change them directly. \`setIsVisible\` is the only authorized gatekeeper. When you hand a new value to \`setIsVisible\`, it not only updates the value in the vault but also sends a signal to React's central control tower, saying, "Hey, something important in this component's vault changed! It needs to be re-rendered to show the new contents." A direct assignment is like trying to sneak into the vault through a back door – the value might change, but no one gets notified, and the UI remains unaware.`,
-      discover: `**Pattern - Immutability and State Setters:**
-\`\`\`tsx
-const [value, setValue] = useState(initialValue);
-
-// ✅ Correct: Use the setter function
-const updateValue = () => {
-  setValue(newValue); // Triggers re-render
-};
-
-// ❌ Incorrect: Direct assignment (does NOT trigger re-render)
-// value = newValue;
-
-// ✅ Correct: Toggling a boolean
-const toggleBoolean = () => {
-  setValue(prevValue => !prevValue); // Functional update for safety
-};
-\`\`\`
--   **Immutability:** In React, state should be treated as immutable. Instead of modifying the existing state object/value, you always create a *new* one and pass it to the setter function.
--   **Re-rendering:** Calling the setter function (\`setIsVisible\`) is React's signal to know that the component's state has changed and that it needs to re-render the component with the new state value.
--   **Batching:** React often batches multiple state updates for performance. The setter function integrates with this internal optimization.`,
+      discover: "Re-read the WHAT / HOW for this step. The check verifies those requirements — not a pasted answer.",
       quickRules: `**Quick rules:**
 -   ✅ Always use the setter function returned by \`useState\` to update state.
 -   ✅ Treat state variables as immutable; pass new values to the setter.
@@ -602,31 +530,7 @@ function ToggleContent() {
       hook: `You've written a function, \`handleToggle\`, that changes your state. Now you need to connect it to a button so that when a user clicks, your function runs. In traditional HTML, you might use \`<button onclick="someFunction()">\`. But in React JSX, you write \`onClick={someFunction}\`. Why the difference in syntax, and what's happening behind the scenes when you use curly braces with an event prop? It's not just a string; it's something more powerful.`,
       pain: `⚠️ **Lesson:** React's event system is a synthetic layer over native browser events, requiring specific JSX syntax. Symptom: Event handlers not firing, "function is not defined" errors, or unexpected behavior if you try to use plain HTML event attributes.`,
       mentalModel: `**Mental model:** The Event Dispatcher. Imagine React as a sophisticated event dispatcher sitting between your components and the browser's native events. When you write \`onClick={handleToggle}\`, you're not directly attaching a native \`onclick\` attribute. Instead, you're telling React, "When a click event bubbles up to this element, please call this JavaScript function, \`handleToggle\`." React normalizes these events across different browsers and manages their lifecycle, providing you with a consistent and performant event system. The curly braces \`{}\` signal that you're passing a JavaScript expression (in this case, a function reference), not a literal string.`,
-      discover: `**Pattern - Event Handling in JSX:**
-\`\`\`tsx
-function MyComponent() {
-  const handleClick = () => {
-    console.log('Button clicked!');
-  };
-
-  return (
-    <div>
-      {/* ✅ Correct: Pass a function reference */}
-      <button onClick={handleClick}>Click Me</button>
-
-      {/* ✅ Correct: Inline arrow function (use sparingly for simple logic) */}
-      <button onClick={() => console.log('Another click!')}>Click Me Too</button>
-
-      {/* ❌ Incorrect: Passing a string (like in plain HTML) */}
-      {/* <button onClick="handleClick()">Don't do this</button> */}
-
-      {/* ❌ Incorrect: Calling the function immediately */}
-      {/* <button onClick={handleClick()}>This calls it on render!</button> */}
-    </div>
-  );
-}
-\`\`\`
--   **CamelCase:** React event props are named using camelCase (e.g., \`onClick\`, \`onChange\`, \`onSubmit\`), unlike their lowercase HTML equivalents (\`onclick\`, \`onchange\`).
+      discover: "Re-read the WHAT / HOW for this step. The check verifies those requirements — not a pasted answer.", \`onChange\`, \`onSubmit\`), unlike their lowercase HTML equivalents (\`onclick\`, \`onchange\`).
 -   **Function Reference:** You pass a *reference* to a JavaScript function (e.g., \`handleToggle\`) directly within curly braces \`{}\`. You do *not* call the function (e.g., \`handleToggle()\`) directly in the \`onClick\` prop, as that would execute it immediately during rendering.
 -   **Synthetic Events:** React wraps native browser events in a "SyntheticEvent" object, which provides a consistent cross-browser API.`,
       quickRules: `**Quick rules:**
@@ -745,22 +649,7 @@ function ToggleContent() {
       hook: `You have a piece of content that should only appear when a certain condition is met – for instance, a secret message that only shows when a "Show" button is clicked. You can't just use a regular \`if\` statement directly inside your JSX, because JSX is a declarative syntax for describing UI, not a place for imperative control flow. So, how do you tell React, "Only render this part of the UI *if* this state variable is true, otherwise render nothing"?`,
       pain: `⚠️ **Lesson:** Standard JavaScript control flow statements (like \`if/else\`) cannot be used directly inside JSX. Symptom: Syntax errors or unexpected behavior when trying to embed \`if\` statements within your component's return JSX.`,
       mentalModel: `**Mental model:** The JSX Gatekeeper. Imagine JSX as a special language that only understands expressions – things that evaluate to a single value. An \`if\` statement is a statement, not an expression. The logical AND operator (\`&&\`) acts as a gatekeeper. If the condition on the left (\`isVisible\`) is false, the gatekeeper immediately stops and returns \`false\` (which React knows how to render as nothing). If the condition is true, the gatekeeper lets the right side (\`<p>...</p>\`) through, and that JSX element is rendered. It's a concise way to say, "If this is true, then render that; otherwise, render nothing."`,
-      discover: `**Pattern - Conditional Rendering with Logical AND:**
-\`\`\`tsx
-function MyComponent({ isLoggedIn }: { isLoggedIn: boolean }) {
-  return (
-    <div>
-      <h1>Welcome!</h1>
-      {/* Renders the paragraph ONLY if isLoggedIn is true */}
-      {isLoggedIn && <p>You are logged in.</p>}
-
-      {/* Alternative: Ternary operator for true/false branches */}
-      {isLoggedIn ? <button>Logout</button> : <button>Login</button>}
-    </div>
-  );
-}
-\`\`\`
--   **Logical AND (\`&&\`):** In JavaScript, if the left-hand side of \`&&\` is \`true\`, the expression evaluates to the right-hand side. If the left-hand side is \`false\`, the expression evaluates to \`false\`.
+      discover: "Re-read the WHAT / HOW for this step. The check verifies those requirements — not a pasted answer.", the expression evaluates to the right-hand side. If the left-hand side is \`false\`, the expression evaluates to \`false\`.
 -   **React's Handling of \`false\`:** React treats \`false\`, \`null\`, \`undefined\`, and \`0\` as "nothing to render" in JSX. So, \`false && <p>...</p>\` results in \`false\`, and React renders nothing.
 -   **Ternary Operator (\`? :\`):** For cases where you need to render one thing if a condition is true and *another* thing if it's false, the ternary operator is more appropriate (\`condition ? trueValue : falseValue\`).`,
       quickRules: `**Quick rules:**

@@ -65,21 +65,7 @@ assignRole('user-123', 'editor'); // Valid
       hook: `Imagine you're building a system where an item can have a status: 'active', 'inactive', or 'pending'. If you simply declare a variable \`itemStatus: string;\`, TypeScript will happily let you assign \`'active'\`, \`'inactive'\`, \`'pending'\`, but also \`'typo'\`, \`'finished'\`, or even an empty string \`''\`. Your code might then try to perform actions based on these statuses, leading to runtime errors or unexpected behavior because it's expecting one of the three specific values. You'd have to write extensive runtime checks everywhere, which is tedious, error-prone, and doesn't catch issues until the code actually runs. This lack of compile-time safety means you could ship bugs that only surface when a user enters an unexpected status, making debugging a nightmare.`,
       pain: `⚠️ **Lesson:** Without union types, you lose compile-time safety for discrete sets of values. Symptom: Runtime errors due to unexpected string values, verbose runtime validation, and difficulty understanding what values are truly allowed.`,
       mentalModel: `**Mental model:** The "Either/Or" Switch. Think of a union type like a physical switch that can only be in one of several clearly labeled positions. It can't be 'half-on' or in a position that isn't explicitly marked. Each label ('active', 'inactive', 'pending') is a distinct, valid state. TypeScript ensures that when you interact with this switch, you only ever try to set it to one of its predefined positions, preventing you from trying to set it to a non-existent 'off-off' position.`,
-      discover: `**Pattern - Defining a Union Type:**
-\`\`\`tsx
-type ItemStatus = 'active' | 'inactive' | 'pending';
-
-// You can also union different primitive types:
-type Id = number | string;
-
-// Or even object types:
-type Result = { success: true; data: any } | { success: false; error: string };
-\`\`\`
-- The \`type\` keyword introduces a type alias, giving a name to your union.
-- String literals (e.g., \`'active'\`) are specific, exact string values.
-- The \`|\` (pipe) symbol acts as an "OR", meaning the type can be *any one* of the types listed.
-- This pattern provides strong type checking at compile time, catching invalid assignments early.
-- Union types are not limited to string literals; they can combine any types, including primitives, objects, or other type aliases.`,
+      discover: "Re-read the WHAT / HOW for this step. The check verifies those requirements — not a pasted answer.",
       quickRules: `**Quick rules:**
 - ✅ Use union types for properties that can only take a specific, finite set of values (e.g., 'red' | 'green' | 'blue').
 - ✅ Combine different primitive types (e.g., \`string | number\`) when a value could genuinely be either.
@@ -156,24 +142,7 @@ const myNotification: Notification = {
       hook: `You've just seen how to define a standalone union type and then use it within an interface. But what if you wanted to define a complex object that itself could be one of several distinct shapes? For instance, a 'User' object might have different properties depending on whether they are 'authenticated' or 'guest'. Without a clear way to combine these distinct object structures, you'd end up with a single, massive interface full of optional properties, leading to confusing code where you'd constantly have to check if a property exists before using it, or worse, type assertions that bypass type safety entirely.`,
       pain: `⚠️ **Lesson:** Union types are crucial for defining data structures that can take on distinct, mutually exclusive forms. Symptom: Overly complex interfaces with many optional properties, requiring constant runtime checks, or unsafe type assertions to handle different object shapes.`,
       mentalModel: `**Mental model:** The "Blueprint with Flexible Parts." Imagine an interface as a blueprint for a specific kind of machine. When you use a union type within that blueprint, it's like saying, "For this particular part of the machine, you can either install Component A OR Component B OR Component C." The blueprint itself is fixed, but one of its internal components has a predefined set of interchangeable options, all of which are valid for that slot. TypeScript ensures that whatever component you put in that slot is one of the allowed options.`,
-      discover: `**Pattern - Using Union Types in Interfaces/Type Aliases:**
-\`\`\`tsx
-type ItemStatus = 'active' | 'inactive' | 'pending';
-
-interface Item {
-  id: string;
-  name: string;
-  status: ItemStatus; // Applying the union type here
-}
-
-// You can also union entire interfaces/types:
-interface Circle { kind: "circle"; radius: number; }
-interface Square { kind: "square"; sideLength: number; }
-type Shape = Circle | Square; // Shape can be either a Circle or a Square
-\`\`\`
-- Union types can be used as the type for any property within an \`interface\` or \`type\` alias.
-- This enforces that the property's value must conform to one of the types in the union.
-- You can also create union types of entire object shapes, like \`Shape\`, allowing a variable to hold one of several distinct object structures.
+      discover: "Re-read the WHAT / HOW for this step. The check verifies those requirements — not a pasted answer.", allowing a variable to hold one of several distinct object structures.
 - This approach makes your data models more precise and easier to reason about, especially when dealing with polymorphic data.`,
       quickRules: `**Quick rules:**
 - ✅ Use union types for properties that have a limited set of discrete values.
@@ -271,32 +240,7 @@ handleFeedback(bugReport);
       hook: `Imagine you've meticulously defined your \`ItemStatus\` and \`Item\` types, ensuring every piece of data in your application is perfectly structured. Then, you write a function \`processItem(item)\` but forget to add \`: Item\` to the parameter. TypeScript, in its default configuration, might infer \`item\` as \`any\`. Now, inside your function, you could accidentally try to access \`item.nonExistentProperty\` or assign \`item.status = 'invalid-status'\`, and TypeScript wouldn't warn you. All the careful type definitions you made would be bypassed, leading to potential runtime errors that could have been caught at compile time.`,
       pain: `⚠️ **Lesson:** Untyped function parameters can undermine your entire type system. Symptom: Loss of compile-time safety within the function body, allowing invalid property access or assignments that lead to runtime errors.`,
       mentalModel: `**Mental model:** The "Untrusted Gatekeeper." Think of a function as a gatekeeper for a specific operation. If you don't give the gatekeeper clear instructions (type annotations) about what kind of data is allowed through the gate, it will let anything pass. Even if you've carefully prepared the data outside the gate, once it's inside, the gatekeeper (the function) won't enforce any rules, potentially allowing corrupted or unexpected data to proceed and cause problems.`,
-      discover: `**Pattern - Typing Function Parameters with Interfaces:**
-\`\`\`tsx
-type ItemStatus = 'active' | 'inactive' | 'pending';
-
-interface Item {
-  id: string;
-  name: string;
-  status: ItemStatus;
-}
-
-function processItem(item: Item): void { // 'item: Item' is the key
-  // TypeScript now knows 'item' has 'id', 'name', and 'status' (of type ItemStatus)
-  console.log(\`Item name: \${item.name}, Status: \${item.status}\`);
-}
-
-// Example of how TypeScript helps:
-const validItem: Item = { id: '1', name: 'Book', status: 'active' };
-processItem(validItem); // OK
-
-// const invalidItem = { id: '2', title: 'Pen', state: 'broken' };
-// processItem(invalidItem); // TypeScript error: 'invalidItem' is not assignable to type 'Item'
-\`\`\`
-- The \`item: Item\` annotation explicitly tells TypeScript the expected shape of the \`item\` parameter.
-- This enables full type checking for \`item\`'s properties within the function body.
-- It prevents calling the function with arguments that do not conform to the \`Item\` interface.
-- Specifying a return type like \`: void\` (or any other type) further enhances type safety and readability.`,
+      discover: "Re-read the WHAT / HOW for this step. The check verifies those requirements — not a pasted answer.",
       quickRules: `**Quick rules:**
 - ✅ Always type your function parameters with the most specific type possible (e.g., an interface or union type).
 - ✅ Use interfaces or type aliases for complex object parameters to keep signatures clean.
@@ -411,34 +355,7 @@ handleInput({ type: 'checkbox', checked: true });
       hook: `You've defined an \`Item\` with a \`status\` that can be 'active', 'inactive', or 'pending'. Now, inside your \`processItem\` function, you want to do something specific for each status. If you just try to access a property that only exists on, say, an 'active' item (if your union type was more complex, like \`{ status: 'active', readyDate: Date } | { status: 'inactive' }\`), TypeScript would complain that the property might not exist on all union members. You'd be stuck, unable to write specific logic without resorting to unsafe \`any\` casts or ignoring compiler errors, which defeats the entire purpose of using TypeScript.`,
       pain: `⚠️ **Lesson:** Without type narrowing, TypeScript cannot guarantee safety when accessing properties or methods specific to one member of a union. Symptom: Compiler errors when trying to access specific properties on a union-typed variable, or resorting to unsafe type assertions.`,
       mentalModel: `**Mental model:** The "Specialized Lens." Imagine you have a box of mixed items (your union type). You can't use a tool designed only for 'active' items on the whole box, because some items might be 'inactive' or 'pending'. Type narrowing is like putting on a specialized lens that lets you clearly see *only* the 'active' items. While wearing that lens, you can safely use your 'active'-item tool, knowing that everything you're looking at is indeed 'active'. When you switch to the 'inactive' lens, you can use the 'inactive'-item tool, and so on.`,
-      discover: `**Pattern - Type Narrowing with Conditional Checks:**
-\`\`\`tsx
-type ItemStatus = 'active' | 'inactive' | 'pending';
-
-interface Item {
-  id: string;
-  name: string;
-  status: ItemStatus;
-}
-
-function processItem(item: Item): void {
-  if (item.status === 'active') {
-    // Inside this block, TypeScript knows item.status is 'active'
-    console.log(\`Active item: \${item.name}\`);
-  } else if (item.status === 'inactive') {
-    // Inside this block, TypeScript knows item.status is 'inactive'
-    console.log(\`Inactive item: \${item.name}\`);
-  } else {
-    // If ItemStatus only had 'active' and 'inactive', this 'else' would mean item.status is 'inactive'.
-    // With 'pending', it means item.status is 'pending'.
-    console.log(\`Other item status: \${item.status}\`);
-  }
-}
-\`\`\`
-- Type narrowing is the process by which TypeScript refines the type of a variable within a specific code block.
-- Common type guards include \`typeof\` checks (e.g., \`typeof x === 'string'\`), \`instanceof\` checks, and equality checks (e.g., \`x === 'literal'\`).
-- For union types of string or number literals, direct equality checks (\`===\`) are very effective type guards.
-- This allows you to write logic that is specific to each possible type within the union, with full type safety.`,
+      discover: "Re-read the WHAT / HOW for this step. The check verifies those requirements — not a pasted answer.",
       quickRules: `**Quick rules:**
 - ✅ Use \`if\` statements with equality checks (\`===\`) for narrowing string or number literal union types.
 - ✅ Employ \`typeof\` checks (e.g., \`typeof value === 'string'\`) for unions of primitive types.
@@ -596,31 +513,7 @@ processPayment(25.00, paypalPayment);
       hook: `Imagine your application grows, and you need to add a new item status, say 'archived'. Without union types, you might have scattered string literals like \`'active'\`, \`'inactive'\`, \`'pending'\` throughout your codebase. To add 'archived', you'd have to manually find every place where statuses are checked or assigned and update them. This is a tedious, error-prone process, and it's easy to miss a spot, leading to inconsistent behavior or runtime bugs that are hard to track down. The lack of a single, central definition makes refactoring a nightmare.`,
       pain: `⚠️ **Lesson:** Without a centralized definition, evolving discrete states in your application becomes error-prone and difficult to maintain. Symptom: Scattered string literals, missed updates when adding new states, and inconsistent behavior across the application.`,
       mentalModel: `**Mental model:** The "Centralized Dictionary." Think of a union type as a specialized dictionary that lists all the *only* valid words for a particular concept (like item status). When you need to add a new word, you only update this one dictionary. Every part of your application that uses this concept refers to the dictionary. If you try to use a word not in the dictionary, TypeScript immediately flags it. This ensures consistency and makes updates incredibly efficient and safe, as the compiler guides you to all necessary changes.`,
-      discover: `**Pattern - Centralized State Definition for Maintainability:**
-\`\`\`tsx
-// Central definition of all possible statuses
-type ItemStatus = 'active' | 'inactive' | 'pending' | 'archived'; // Easy to add new states here
-
-interface Item {
-  id: string;
-  name: string;
-  status: ItemStatus; // All Item objects automatically get the updated type
-}
-
-function processItem(item: Item): void {
-  if (item.status === 'active') { /* ... */ }
-  else if (item.status === 'inactive') { /* ... */ }
-  else if (item.status === 'pending') { /* ... */ }
-  else if (item.status === 'archived') { // TypeScript will now prompt you to handle this new case
-    console.log(\`Item \${item.name} is archived. Read-only.\`);
-  }
-  // If you used an exhaustive check with assertNever, TypeScript would error here if 'archived' wasn't handled.
-}
-\`\`\`
-- A single \`type\` alias for a union type acts as a centralized definition for all possible states.
-- When you add a new state to the union type, TypeScript immediately highlights all places where this type is used but not fully handled (e.g., in \`if/else if\` chains or \`switch\` statements).
-- This "compile-time feedback" guides you through necessary updates, drastically reducing the chance of missing a case.
-- It makes your code self-documenting, clearly showing all allowed values at a glance.`,
+      discover: "Re-read the WHAT / HOW for this step. The check verifies those requirements — not a pasted answer.",
       quickRules: `**Quick rules:**
 - ✅ Define all discrete states for a concept using a single union type alias.
 - ✅ Leverage TypeScript's compiler errors to guide you when adding new states to a union.

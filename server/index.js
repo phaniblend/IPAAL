@@ -227,9 +227,10 @@ app.use("/api", batchcraftRouter);
  */
 app.use("/api/onedev", requireSession, async (req, res) => {
   try {
-    if (!isCoreSession(req.session) && !["GET", "HEAD"].includes(req.method)) {
+    // Audit P02: JS aspirants must not list Application emails via /issues.
+    if (!isCoreSession(req.session)) {
       return res.status(403).json({
-        error: "Only core accounts may write through this endpoint — use the dedicated task/application routes instead.",
+        error: "Junior accounts cannot use this endpoint — use /api/recruit/my-tasks instead.",
       });
     }
     const base = (process.env.ONEDEV_INTERNAL_URL || "http://localhost:6610").replace(/\/+$/, "");

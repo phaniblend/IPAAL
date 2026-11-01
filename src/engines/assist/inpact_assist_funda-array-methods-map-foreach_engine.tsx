@@ -89,25 +89,7 @@ const ingredients: Ingredient[] = [
       hook: `Imagine you're building a simple application to manage a list of tasks. Each task has a title, a description, a due date, and a status (e.g., 'pending', 'completed'). If you had to manage each of these pieces of information as separate variables (e.g., \`task1Title\`, \`task1Description\`, \`task2Title\`, \`task2Description\`), your code would quickly become unmanageable and difficult to read. What if you had 100 tasks? Or if you needed to add a new property like 'priority'? This approach would lead to a maintenance nightmare, making it nearly impossible to keep track of related data or iterate over your collection of tasks efficiently. This is the problem that structured data in arrays solves.`,
       pain: `⚠️ **Lesson:** Without structured data and arrays, managing collections of related information becomes unwieldy, leading to verbose, error-prone, and unmaintainable code. Symptom: You find yourself creating many similarly named variables (e.g., \`item1Name\`, \`item2Name\`) instead of a single collection.`,
       mentalModel: `**Mental model:** The Data Container. Think of an array as a neatly organized box, and each object within it as a labeled folder. Each folder (object) contains all the related documents (properties) for a single item. This structure allows you to easily find, add, or remove folders, and to process all the documents within all folders in a systematic way. The interface acts as a blueprint, ensuring every folder has the same expected set of documents.`,
-      discover: `**Pattern - Data Structure:**
-\`\`\`typescript
-// 1. Define an interface for the shape of each item
-interface MyItem {
-  id: string;
-  label: string;
-  value: number;
-}
-
-// 2. Create an array to hold multiple items, explicitly typing it
-const myCollection: MyItem[] = [
-  { id: 'x1', label: 'First', value: 100 },
-  { id: 'y2', label: 'Second', value: 200 },
-];
-\`\`\`
-- An \`interface\` defines the expected properties and their types for an object, ensuring consistency.
-- An array (\`[]\`) is used to hold a collection of these structured objects.
-- Each element in the array is an object literal \`{}\` conforming to the \`MyItem\` interface.
-- Explicitly typing the array (e.g., \`MyItem[]\`) provides strong type checking and better developer experience.`,
+      discover: "Re-read the WHAT / HOW for this step. The check verifies those requirements — not a pasted answer.",
       quickRules: `**Quick rules:**
 - ✅ Use an \`interface\` to define the consistent shape of objects within a collection.
 - ✅ Use an array (\`[]\`) to group multiple related objects together.
@@ -209,25 +191,7 @@ ingredients.forEach((ingredient) => {
       hook: `Imagine you have a list of user accounts, and you need to send a welcome email to each new user. Or perhaps you need to update a counter for every completed task in a project. In these scenarios, your goal isn't to create a *new* list of emails or a *new* list of updated tasks; your goal is to *perform an action* for each existing user or task. Using a traditional \`for\` loop works, but \`forEach\` offers a more declarative and often cleaner way to express "do this for every item." It clearly communicates that you're iterating for side effects, not for transformation.`,
       pain: `⚠️ **Lesson:** Using a traditional \`for\` loop when a simple side effect is needed can lead to more verbose code than necessary. Attempting to use \`forEach\` when a new array is required (and then trying to capture its non-existent return value) indicates a misunderstanding of its purpose. Symptom: Your code is longer than it needs to be for simple iteration, or you're getting \`undefined\` when you expect a new array after using \`forEach\`.`,
       mentalModel: `**Mental model:** The Assembly Line Worker. Picture an assembly line where items (your array elements) pass by. A worker (your \`forEach\` callback function) stands at a station and performs a specific action on each item as it goes past – perhaps stamping it, inspecting it, or logging its details. The worker doesn't change the item's position on the line, nor do they create a new item to put on a *different* line. They simply act upon the item in place.`,
-      discover: `**Pattern - \`forEach\` for Side Effects:**
-\`\`\`typescript
-const numbers = [1, 2, 3];
-
-// Basic forEach to log each number
-numbers.forEach((num) => {
-  console.log(num * 2); // Performs an action (logging)
-});
-
-// forEach with index and array (less common, but available)
-const colors = ['red', 'green', 'blue'];
-colors.forEach((color, index, arr) => {
-  console.log(\`Color \${index + 1} of \${arr.length}: \${color}\`);
-});
-\`\`\`
-- \`forEach\` executes a provided callback function once for each array element.
-- The callback function receives the current element, its index, and the array itself as arguments.
-- It does not return a new array; its return value is always \`undefined\`.
-- It's primarily used for side effects: logging, modifying external variables, or triggering other functions.`,
+      discover: "Re-read the WHAT / HOW for this step. The check verifies those requirements — not a pasted answer.",
       quickRules: `**Quick rules:**
 - ✅ Use \`forEach\` when you need to perform an action for each element in an array.
 - ✅ Use \`forEach\` when the order of operations matters.
@@ -346,26 +310,7 @@ console.log('Shopping list (names only):', shoppingListNames);
       hook: `Imagine you have a list of raw sensor readings, each an object with a timestamp, a raw value, and a unit. For your display, you don't need the raw objects; you need a new list where each item is a formatted string like "Timestamp: [time], Value: [value] [unit]". If you tried to use \`forEach\` for this, you'd have to manually create an empty array and \`push\` each formatted string into it, which is cumbersome. This is where \`map\` shines, providing a direct, elegant way to transform an entire array into a new one, element by element.`,
       pain: `⚠️ **Lesson:** Misusing \`forEach\` when a new, transformed array is required leads to more verbose code and the need for manual array creation and population. Conversely, using \`map\` when only side effects are needed can be less efficient if the returned array is immediately discarded. Symptom: You're manually creating an empty array and pushing items into it inside a loop, or you're calling \`map\` and then ignoring its return value.`,
       mentalModel: `**Mental model:** The Data Transformer. Think of \`map\` as a specialized factory machine. It takes a conveyor belt of raw materials (your original array elements). For each raw material, it applies a specific transformation process (your callback function) and then places the *newly manufactured product* onto a *brand new conveyor belt*. The original raw materials remain untouched on their original belt. This new belt is the array that \`map\` returns.`,
-      discover: `**Pattern - \`map\` for Transformation:**
-\`\`\`typescript
-const numbers = [1, 2, 3];
-
-// map to double each number, creating a new array
-const doubledNumbers: number[] = numbers.map((num) => {
-  return num * 2;
-});
-console.log(doubledNumbers); // [2, 4, 6]
-
-// map to transform objects into a simpler format
-interface User { id: number; name: string; email: string; }
-const users: User[] = [{ id: 1, name: 'Alice', email: 'a@example.com' }];
-const userNames: string[] = users.map(user => user.name);
-console.log(userNames); // ['Alice']
-\`\`\`
-- \`map\` creates a *new* array populated with the results of calling a provided function on every element in the calling array.
-- The callback function *must* return a value for each element; this returned value becomes an element in the new array.
-- The new array will always have the same length as the original array.
-- It does not modify the original array (it's immutable).`,
+      discover: "Re-read the WHAT / HOW for this step. The check verifies those requirements — not a pasted answer.",
       quickRules: `**Quick rules:**
 - ✅ Use \`map\` when you need to transform each element of an array into a new value.
 - ✅ Use \`map\` when you need a *new array* as the result of your iteration.
@@ -503,35 +448,7 @@ console.log('Full Recipe Instructions:', formattedInstructions);`,
       hook: `Imagine you're building a dashboard that displays a list of recent notifications. Each notification comes from your backend as an object with properties like \`id\`, \`message\`, \`timestamp\`, and \`type\`. You need to render these as a series of visual cards on the screen. Manually creating a card for each notification would be tedious and error-prone, especially if the list changes dynamically. How do you efficiently translate an array of data objects into an array of visual elements that your UI framework can render? This is a core challenge in front-end development.`,
       pain: `⚠️ **Lesson:** Manually creating and managing individual UI elements for each item in a data array is inefficient, unscalable, and leads to repetitive code. Symptom: You find yourself writing similar blocks of code for each item you want to display, or struggling to update the UI when the underlying data changes.`,
       mentalModel: `**Mental model:** The UI Renderer. Think of \`map\` as a specialized printing press for your user interface. You feed it a stack of data blueprints (your array of data objects). For each blueprint, the press applies a template (your callback function) to generate a finished, displayable page (a string or UI component). The output is a new stack of these finished pages, ready to be presented to the user. The original blueprints remain intact.`,
-      discover: `**Pattern - \`map\` for Display Lists:**
-\`\`\`typescript
-interface Product {
-  id: string;
-  name: string;
-  price: number;
-}
-
-const products: Product[] = [
-  { id: 'p1', name: 'Laptop', price: 1200 },
-  { id: 'p2', name: 'Mouse', price: 25 },
-];
-
-// Map to an array of formatted strings for display
-const productDisplayStrings: string[] = products.map((product) => {
-  return \`\${product.name} - \$ \${product.price.toFixed(2)}\`;
-});
-console.log(productDisplayStrings);
-// Expected: ['Laptop - $ 1200.00', 'Mouse - $ 25.00']
-
-// In a UI framework (conceptual, not actual React code)
-// const productComponents: JSX.Element[] = products.map((product) => {
-//   return <ProductCard key={product.id} name={product.name} price={product.price} />;
-// });
-\`\`\`
-- \`map\` is commonly used to iterate over data arrays and generate an array of strings or UI components.
-- Each element in the original data array corresponds to one generated display element.
-- Template literals (\`\`\`) are excellent for constructing formatted strings from object properties.
-- In UI frameworks, the result of \`map\` (an array of components) can often be directly rendered.`,
+      discover: "Re-read the WHAT / HOW for this step. The check verifies those requirements — not a pasted answer.",
       quickRules: `**Quick rules:**
 - ✅ Use \`map\` to generate a list of strings or UI elements from an array of data.
 - ✅ Ensure each item in the original array results in one displayable element.

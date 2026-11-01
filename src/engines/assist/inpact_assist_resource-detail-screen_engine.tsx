@@ -163,43 +163,7 @@ In software, especially with components that render and re-render, we face a sim
       `,
       pain: `⚠️ **Lesson:** Without dedicated mechanisms for state and side effects, component logic becomes intertwined, leading to unpredictable behavior, performance problems, and difficult-to-debug issues. Symptom: Data fetching repeatedly, UI not updating correctly after an async operation, or infinite re-renders.`,
       mentalModel: `**Mental model:** The Component as a "Smart Display" and "Action Coordinator". Think of your component as a smart display that shows information (\`useState\`) and also has a dedicated "backstage crew" (\`useEffect\`) that handles all the non-display-related tasks. The display's job is to reflect the current data. The backstage crew's job is to fetch new data, set up timers, interact with the browser's DOM, or clean up resources. They communicate, but their roles are distinct. The display tells the crew what data it needs, and the crew updates the display's data when it's ready.`,
-      discover: `
-**Pattern - Separating Concerns with Hooks:**
-\`\`\`tsx
-import { useState, useEffect } from 'react';
-
-function MyComponent() {
-  // 1. useState: Manages data that changes over time and triggers re-renders.
-  const [data, setData] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
-
-  // 2. useEffect: Handles side effects (operations outside React's rendering cycle).
-  //    This runs after every render where its dependencies change.
-  useEffect(() => {
-    // Example: Fetch data when the component mounts or a dependency changes.
-    async function fetchData() {
-      setIsLoading(true);
-      const response = await fetch('/api/data');
-      const result = await response.json();
-      setData(result);
-      setIsLoading(false);
-    }
-    fetchData();
-  }, []); // Empty dependency array means it runs once after initial render.
-
-  // 3. useParams: Reads dynamic segments from the URL.
-  //    (Requires a routing library like react-router-dom)
-  // const { id } = useParams();
-
-  if (isLoading) return <p>Loading...</p>;
-  return <p>Data: {data?.name}</p>;
-}
-\`\`\`
-- \`useState\` is for managing component-specific data that, when changed, should cause the component to re-render.
-- \`useEffect\` is for performing "side effects" – operations that interact with the outside world or need to happen after rendering, like data fetching, subscriptions, or manually changing the DOM.
-- The dependency array of \`useEffect\` controls when the effect re-runs, preventing unnecessary operations.
-- \`useParams\` provides a clean way to access dynamic parts of the URL, essential for detail screens.
-      `,
+      discover: "Re-read the WHAT / HOW for this step. The check verifies those requirements — not a pasted answer.",
       quickRules: `
 **Quick rules:**
 - ✅ Use \`useState\` for any piece of data that needs to change and cause a UI update within your component.
@@ -316,41 +280,7 @@ This ambiguity makes your code harder to reason about. You end up with complex c
       `,
       pain: `⚠️ **Lesson:** Using multiple boolean flags for mutually exclusive states can lead to ambiguous or invalid state combinations, making conditional logic complex and error-prone. Symptom: Conflicting UI states being displayed, or unexpected behavior due to an undefined state combination.`,
       mentalModel: `**Mental model:** The "Traffic Light" for States. Think of an enum as a traffic light. A traffic light can only be RED, YELLOW, or GREEN at any given moment – never two at once, and never "off" in a way that implies an unknown state. Each color clearly and unambiguously dictates the action to be taken (stop, prepare to stop, go). Similarly, an enum for fetch states (LOADING, SUCCESS, ERROR, NOT_FOUND) ensures that your component is always in one, and only one, well-defined state, simplifying your conditional rendering logic.`,
-      discover: `
-**Pattern - Mutually Exclusive States with Enums:**
-\`\`\`tsx
-// Using booleans (less clear, prone to invalid states)
-const [isLoading, setIsLoading] = useState(false);
-const [isError, setIsError] = useState(false);
-const [isNotFound, setIsNotFound] = useState(false);
-
-// How do you know the actual state?
-// if (isLoading && !isError && !isNotFound) { /* Loading */ }
-// if (!isLoading && isError && !isNotFound) { /* Error */ }
-// if (!isLoading && !isError && isNotFound) { /* Not Found */ }
-// if (!isLoading && !isError && !isNotFound) { /* Success or Initial? */ }
-
-// Using an enum (clear, mutually exclusive)
-enum FetchState {
-  IDLE = 'IDLE',
-  LOADING = 'LOADING',
-  SUCCESS = 'SUCCESS',
-  ERROR = 'ERROR',
-  NOT_FOUND = 'NOT_FOUND',
-}
-const [fetchStatus, setFetchStatus] = useState(FetchState.IDLE);
-
-// Clear conditional logic:
-if (fetchStatus === FetchState.LOADING) { /* Loading */ }
-else if (fetchStatus === FetchState.ERROR) { /* Error */ }
-else if (fetchStatus === FetchState.NOT_FOUND) { /* Not Found */ }
-else if (fetchStatus === FetchState.SUCCESS) { /* Success */ }
-\`\`\`
-- Enums provide a set of named constants, making code more readable and self-documenting.
-- They enforce mutually exclusive states, preventing logical inconsistencies that can arise with multiple boolean flags.
-- Conditional logic becomes simpler and more explicit, directly checking the current state.
-- TypeScript enums offer compile-time type checking, catching errors if you try to assign an invalid state.
-      `,
+      discover: "Re-read the WHAT / HOW for this step. The check verifies those requirements — not a pasted answer.",
       quickRules: `
 **Quick rules:**
 - ✅ Use enums when you have a fixed set of distinct, mutually exclusive states.
@@ -489,43 +419,7 @@ Now, imagine a modern factory where each small section has its own dedicated, in
       `,
       pain: `⚠️ **Lesson:** Class components can lead to complex logic, difficult state management, and challenges in reusing stateful logic. Symptom: Components with many lifecycle methods, 'this' binding issues, and difficulty extracting reusable logic.`,
       mentalModel: `**Mental model:** Functional Components as "Pure Functions with Memory and Effects". Think of functional components as mathematical functions: they take inputs (props) and return outputs (JSX). The magic of hooks (\`useState\`, \`useEffect\`, etc.) is that they give these "pure functions" the ability to have internal memory (state) and perform actions outside their immediate scope (side effects) *without* becoming complex, stateful objects like class components. This makes them easier to test, reason about, and compose.`,
-      discover: `
-**Pattern - Functional Components with Hooks:**
-\`\`\`tsx
-// Class Component (older pattern)
-class MyClassComponent extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = { count: 0 };
-  }
-  componentDidMount() { /* Side effect */ }
-  componentDidUpdate() { /* Side effect */ }
-  render() {
-    return (
-      <button onClick={() => this.setState({ count: this.state.count + 1 })}>
-        Clicked {this.state.count} times
-      </button>
-    );
-  }
-}
-
-// Functional Component with Hooks (modern pattern)
-function MyFunctionalComponent() {
-  const [count, setCount] = useState(0); // State management
-  useEffect(() => {
-    // Side effect
-    document.title = \`You clicked \${count} times\`;
-  }, [count]); // Dependencies for effect
-
-  return (
-    <button onClick={() => setCount(count + 1)}>
-      Clicked {count} times
-    </button>
-  );
-}
-\`\`\`
-- Functional components are simpler JavaScript functions, easier to read and test.
-- Hooks (\`useState\`, \`useEffect\`, \`useContext\`, etc.) provide a way to "hook into" React features from functional components, replacing lifecycle methods and \`this.state\`.
+      discover: "Re-read the WHAT / HOW for this step. The check verifies those requirements — not a pasted answer.", \`useEffect\`, \`useContext\`, etc.) provide a way to "hook into" React features from functional components, replacing lifecycle methods and \`this.state\`.
 - They promote better separation of concerns by allowing stateful logic to be extracted into custom hooks.
 - Avoids \`this\` binding issues common in class components.
       `,
@@ -723,36 +617,7 @@ This difference becomes critical when dealing with data that might or might not 
       `,
       pain: `⚠️ **Lesson:** Confusing \`null\` and \`undefined\` can lead to runtime errors when attempting to access properties of non-existent objects. Symptom: "Cannot read properties of undefined" errors, especially when dealing with optional data or API responses.`,
       mentalModel: `**Mental model:** \`undefined\` as "Unknown" and \`null\` as "Empty". Think of \`undefined\` as a variable that has been declared but not yet assigned any value – its content is "unknown" or "not yet defined". Conversely, \`null\` is an intentional assignment, meaning "empty" or "no value". When you explicitly set a state variable to \`null\`, you're saying, "I know this variable exists, but right now, it holds no meaningful data." This allows you to check for its presence (\`resource !== null\`) before attempting to use it.`,
-      discover: `
-**Pattern - Differentiating \`null\` and \`undefined\`:**
-\`\`\`tsx
-// Example 1: Undefined (variable declared but not assigned)
-let myVariable;
-console.log(myVariable); // undefined
-// console.log(myVariable.property); // 💥 TypeError: Cannot read properties of undefined
-
-// Example 2: Null (explicitly assigned "no value")
-let myResource: Resource | null = null;
-console.log(myResource); // null
-// console.log(myResource.property); // 💥 TypeError: Cannot read properties of null (still an error, but different)
-
-// How to safely handle:
-if (myResource !== null) {
-  console.log(myResource.name); // Safe
-}
-
-// In useState:
-const [data, setData] = useState<Resource | undefined>(undefined); // Less common, implies "not yet set"
-const [data2, setData2] = useState<Resource | null>(null); // Common, implies "no data currently"
-
-// When fetching:
-// Initial: data2 is null
-// On success: setData2(fetchedResource);
-// On 404: setData2(null); // Still no resource, but status is NOT_FOUND
-\`\`\`
-- \`undefined\` means a variable has been declared but not assigned a value, or a property does not exist on an object.
-- \`null\` is an assignment value, meaning "no value" or "empty". It's an intentional absence.
-- For \`useState\`, initializing with \`null\` is often preferred for data that will be fetched, as it clearly indicates that no data is present yet, but the variable itself exists.
+      discover: "Re-read the WHAT / HOW for this step. The check verifies those requirements — not a pasted answer.", initializing with \`null\` is often preferred for data that will be fetched, as it clearly indicates that no data is present yet, but the variable itself exists.
 - Checking \`if (variable !== null)\` is a common and safe way to ensure a variable holds a value before attempting to access its properties.
       `,
       quickRules: `
@@ -998,40 +863,7 @@ In component rendering, if you have multiple conditions (loading, error, not fou
       `,
       pain: `⚠️ **Lesson:** Deeply nested conditional logic for mutually exclusive states makes code harder to read, understand, and maintain. Symptom: Excessive indentation, complex boolean expressions, and difficulty tracing the rendering path for different scenarios.`,
       mentalModel: `**Mental model:** The "Guard Clause" for Rendering. Think of early returns as "guard clauses" at the beginning of your component's render logic. Each guard checks for a specific, critical state (like loading or an error) that prevents the component from rendering its primary content. If a guard condition is met, the component immediately returns the appropriate UI for that state, effectively "exiting early" from the render function. This leaves the remaining code path (after all guards) to deal *only* with the "happy path" – the successful rendering of the main content – making it much cleaner.`,
-      discover: `
-**Pattern - Early Return for Conditional Rendering:**
-\`\`\`tsx
-function DataDisplay({ data, isLoading, isError, isEmpty }) {
-  // Guard 1: Loading state
-  if (isLoading) {
-    return <p>Loading data...</p>;
-  }
-
-  // Guard 2: Error state
-  if (isError) {
-    return <p style={{ color: 'red' }}>Failed to load data.</p>;
-  }
-
-  // Guard 3: Empty state (e.g., no results found)
-  if (isEmpty) {
-    return <p>No data available.</p>;
-  }
-
-  // Happy path: Render the actual data
-  return (
-    <div>
-      <h2>Data Loaded!</h2>
-      {/* Render data here */}
-      <pre>{JSON.stringify(data, null, 2)}</pre>
-    </div>
-  );
-}
-\`\`\`
-- Each \`if\` statement checks a specific, mutually exclusive condition.
-- If a condition is met, the component returns JSX immediately, stopping further execution of the render function.
-- This flattens the code structure, reducing nesting and improving readability.
-- The code for the "successful" state (the main content) doesn't need to be wrapped in an \`else\` block, making it easier to focus on.
-      `,
+      discover: "Re-read the WHAT / HOW for this step. The check verifies those requirements — not a pasted answer.",
       quickRules: `
 **Quick rules:**
 - ✅ Use early returns for distinct, mutually exclusive states like loading, error, or empty data.
@@ -1445,47 +1277,7 @@ In data fetching, especially when a user quickly navigates between different det
       `,
       pain: `⚠️ **Lesson:** Multiple asynchronous operations triggered by rapidly changing dependencies can lead to race conditions, where an older, slower response overwrites newer, correct data. Symptom: UI displaying stale data after quick navigation or multiple rapid updates.`,
       mentalModel: `**Mental model:** The "Cancellation Token" for Effects. Think of \`useEffect\` as having an internal "cancellation token" or "cleanup mechanism." When the dependencies of an \`useEffect\` change (e.g., the \`id\` changes), React "cleans up" the *previous* effect before running the *new* one. This cleanup phase is where you can signal to any ongoing asynchronous operations from the *previous* effect that their results are no longer relevant. By using a cleanup function to set a flag, you can prevent state updates from older, slower fetches, ensuring only the most recent fetch's data is applied.`,
-      discover: `
-**Pattern - Preventing Race Conditions with Cleanup:**
-\`\`\`tsx
-useEffect(() => {
-  let isMounted = true; // Flag to track if the component is still mounted/effect is active
-  const fetchResource = async () => {
-    setFetchStatus(FetchState.LOADING);
-    setResource(null);
-
-    try {
-      const response = await fetch(\`/api/resources/\${id}\`);
-      if (!isMounted) return; // Crucial: Don't update state if effect is no longer active
-
-      if (response.status === 404) {
-        setFetchStatus(FetchState.NOT_FOUND);
-        return;
-      }
-      if (!response.ok) {
-        throw new Error(\`HTTP error! status: \${response.status}\`);
-      }
-      const data: Resource = await response.json();
-      setResource(data);
-      setFetchStatus(FetchState.SUCCESS);
-    } catch (error) {
-      if (!isMounted) return; // Don't update state if effect is no longer active
-      console.error("Failed to fetch resource:", error);
-      setFetchStatus(FetchState.ERROR);
-    }
-  };
-
-  fetchResource();
-
-  // Cleanup function: runs when component unmounts or before effect re-runs
-  return () => {
-    isMounted = false; // Mark the effect as inactive
-  };
-}, [id]);
-\`\`\`
-- A boolean flag (\`isMounted\`) is declared *inside* the \`useEffect\` callback, making it local to that specific effect run.
-- The flag is set to \`false\` in the \`useEffect\`'s cleanup function, which runs when the component unmounts or before the effect re-runs due to dependency changes.
-- Before calling any state setters (\`setResource\`, \`setFetchStatus\`), the flag is checked. If \`isMounted\` is \`false\`, it means the current effect run is no longer the active one, and its results should be ignored.
+      discover: "Re-read the WHAT / HOW for this step. The check verifies those requirements — not a pasted answer.", \`setFetchStatus\`), the flag is checked. If \`isMounted\` is \`false\`, it means the current effect run is no longer the active one, and its results should be ignored.
 - This pattern ensures that only the response from the *latest* active \`useEffect\` call updates the component's state.
       `,
       quickRules: `
@@ -1967,38 +1759,7 @@ In JSX, when you have a variable that might be \`null\` or \`undefined\` (like \
       `,
       pain: `⚠️ **Lesson:** Attempting to access properties of a \`null\` or \`undefined\` object in JSX will cause runtime errors and crash the application. Symptom: "Cannot read properties of null (reading 'name')" or similar errors in the console, leading to a blank or broken UI.`,
       mentalModel: `**Mental model:** The "Conditional Gatekeeper" for Rendering. Think of \`resource && <JSX>\` as a gatekeeper. The \`&&\` (logical AND) operator in JavaScript works from left to right. If the left-hand side (\`resource\`) is a "falsy" value (like \`null\`, \`undefined\`, \`false\`, \`0\`, \`''\`), the expression short-circuits, and the right-hand side (\`<JSX>\`) is never evaluated or rendered. If the left-hand side is "truthy" (like an object or a non-empty string), then the right-hand side is evaluated and rendered. This effectively acts as a conditional gate, only allowing the JSX to pass through if \`resource\` actually holds data.`,
-      discover: `
-**Pattern - Conditional Rendering with Logical AND (\`&&\`):**
-\`\`\`tsx
-// Without conditional check (DANGEROUS if 'user' can be null/undefined)
-// return <p>Welcome, {user.name}!</p>; // 💥 Crashes if user is null
-
-// With conditional check using &&
-const user = null; // Or undefined, or { name: 'Alice' }
-
-return (
-  <div>
-    {user && ( // If user is truthy (not null/undefined), render the following JSX
-      <>
-        <p>Welcome, {user.name}!</p>
-        <p>Email: {user.email}</p>
-      </>
-    )}
-    {!user && <p>Please log in.</p>} {/* Optional: render something if user is falsy */}
-  </div>
-);
-
-// Another example:
-const itemCount = 0;
-return (
-  <div>
-    {itemCount > 0 && <p>You have {itemCount} items.</p>}
-    {itemCount === 0 && <p>Your cart is empty.</p>}
-  </div>
-);
-\`\`\`
-- The \`&&\` operator is used for short-circuit evaluation in JSX.
-- If the expression before \`&&\` is falsy (\`null\`, \`undefined\`, \`false\`, \`0\`, \`""\`), the expression after \`&&\` is ignored, and nothing is rendered.
+      discover: "Re-read the WHAT / HOW for this step. The check verifies those requirements — not a pasted answer.", \`undefined\`, \`false\`, \`0\`, \`""\`), the expression after \`&&\` is ignored, and nothing is rendered.
 - If the expression before \`&&\` is truthy, the expression after \`&&\` is evaluated and rendered.
 - This is a concise way to conditionally render blocks of JSX only when certain data is available.
       `,

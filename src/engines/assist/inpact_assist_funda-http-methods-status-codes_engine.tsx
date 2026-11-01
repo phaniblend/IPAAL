@@ -61,24 +61,7 @@ import { createReadStream } from 'fs';
       hook: `Imagine you're trying to build a complex machine, say, a car. If you had to forge every single bolt, weld every joint, and design every circuit from scratch, it would take an impossibly long time and require expertise in dozens of unrelated fields. Every time you wanted to add a new feature, like power windows or air conditioning, you'd have to reinvent fundamental components. This is similar to trying to build a web server without a framework. You'd be dealing with raw TCP/IP sockets, parsing HTTP headers byte by byte, managing connection states, and manually routing every incoming URL to the correct piece of code. It's a monumental task, prone to errors, and incredibly inefficient for developing modern applications. The sheer volume of boilerplate and low-level networking concerns would completely overshadow your actual application logic, making development slow and painful.`,
       pain: `⚠️ **Lesson:** Building web servers from scratch without frameworks is incredibly complex and inefficient. **Symptom:** Developers spend more time on low-level networking and parsing than on application logic, leading to slow development, increased bugs, and difficulty scaling.`,
       mentalModel: `**Mental model:** The "API Traffic Controller." Think of a city's traffic controller. Without one, cars (requests) would just drive anywhere, causing chaos. The controller (Express) provides a structured system of roads (routes), traffic lights (middleware), and designated parking spots (handlers) to ensure every car gets to its destination efficiently and safely. It manages the flow, directs traffic, and ensures that the right services are invoked at the right time, preventing gridlock and ensuring smooth operation.`,
-      discover: `\`\`\`tsx
-// Basic Express setup
-import express from 'express';
-const app = express();
-const port = 3000;
-
-app.get('/', (req, res) => {
-  res.send('Hello World!');
-});
-
-app.listen(port, () => {
-  console.log(\`Server listening on port \${port}\`);
-});
-\`\`\`
-- \`import express from 'express';\`: Brings in the Express library, making its functions available.
-- \`const app = express();\`: Initializes an Express application instance, which is the core object for configuring your server.
-- \`app.get('/', ...);\`: Defines a route handler for HTTP GET requests to the root path (\`/\`).
-- \`app.listen(port, ...);\`: Starts the server, making it listen for incoming connections on a specified port.`,
+      discover: "Re-read the WHAT / HOW for this step. The check verifies those requirements — not a pasted answer.",
       quickRules: `**Quick rules:**
 - ✅ Use frameworks like Express to abstract away low-level HTTP details.
 - ✅ Leverage framework routing capabilities to map URLs to specific functions.
@@ -145,27 +128,7 @@ interface CarSpecification {
       hook: `Imagine working on a team where everyone describes the same "user" data differently. One developer expects \`firstName\` and \`lastName\`, another uses \`fullName\`, and a third expects \`first_name\` and \`last_name\`. When you try to integrate different parts of the system, or when a frontend developer tries to consume an API built by a backend developer, this inconsistency leads to constant confusion, bugs, and wasted time debugging "undefined property" errors. Without a clear, shared definition of what a "user" or an "item" looks like, communication breaks down, and the system becomes fragile, requiring endless manual checks and conversions. This lack of a contract makes collaboration incredibly difficult and slows down the entire development process.`,
       pain: `⚠️ **Lesson:** Undefined or inconsistent data structures lead to integration bugs and communication breakdowns. **Symptom:** Frequent "undefined property" errors, difficulty integrating different parts of a system, and wasted time on data mapping issues.`,
       mentalModel: `**Mental model:** The "Data Contract." Think of an interface as a legally binding contract between different parts of your codebase, or even between different teams (frontend and backend). This contract specifies exactly what properties a piece of data *must* have and what types those properties *must* be. When you adhere to this contract, both sides know exactly what to expect, eliminating ambiguity and ensuring smooth, predictable interactions, just like a real-world contract prevents disputes.`,
-      discover: `\`\`\`tsx
-interface Product {
-  id: string;
-  name: string;
-  price: number;
-  inStock: boolean;
-}
-
-function displayProduct(product: Product) {
-  console.log(\`Product: \${product.name} (ID: \${product.id})\`);
-  if (product.inStock) {
-    console.log(\`Price: $\${product.price}\`);
-  } else {
-    console.log('Out of stock');
-  }
-}
-\`\`\`
-- \`interface Product { ... }\`: Defines the expected shape for any object considered a \`Product\`.
-- \`id: string;\`: Specifies that \`Product\` must have an \`id\` property of type \`string\`.
-- \`inStock: boolean;\`: Ensures a boolean \`inStock\` property is present.
-- \`product: Product\`: The function parameter is explicitly typed, meaning TypeScript will check if the passed argument matches the \`Product\` interface.`,
+      discover: "Re-read the WHAT / HOW for this step. The check verifies those requirements — not a pasted answer.",
       quickRules: `**Quick rules:**
 - ✅ Define interfaces for all data structures exchanged between client and server.
 - ✅ Use specific types (\`string\`, \`number\`, \`boolean\`, literal types) for properties.
@@ -254,25 +217,7 @@ program
       hook: `Imagine you've ordered a package online, but it arrives in a sealed, unlabeled box. Before you can use what's inside, you first need to open the box, identify its contents, and perhaps assemble a few pieces. If every single delivery required you to manually perform these steps, it would be incredibly tedious and error-prone. In web development, when a client sends data to your server, especially in a \`POST\` or \`PUT\` request, that data often arrives as a raw stream of bytes. Without a mechanism to automatically "open the box" and "identify the contents" (i.e., parse the JSON into a usable JavaScript object), your route handlers would have to manually read and parse this raw data for every single request, leading to repetitive, error-prone code and a significant drain on developer productivity.`,
       pain: `⚠️ **Lesson:** Manually parsing request bodies is repetitive, error-prone, and inefficient. **Symptom:** Route handlers are cluttered with boilerplate code for data extraction, leading to bugs and slower development.`,
       mentalModel: `**Mental model:** The "Assembly Line Pre-Processor." Think of \`express.json()\` as a station on an assembly line *before* your main product (the request) reaches its final processing stage (your route handler). This station's job is to take raw materials (the incoming JSON string), process them (parse into a JavaScript object), and attach the processed component (\`req.body\`) to the product. By the time the product reaches your specific handler, this common, repetitive task has already been completed, allowing your handler to focus solely on its unique role.`,
-      discover: `\`\`\`tsx
-// Example of middleware in Express
-app.use((req, res, next) => {
-  console.log('Request received:', req.method, req.url);
-  // If the request has a JSON body, express.json() will process it
-  // and attach it to req.body before this middleware runs.
-  next(); // Pass control to the next middleware or route handler
-});
-
-app.post('/data', (req, res) => {
-  // req.body is now automatically parsed thanks to express.json()
-  console.log('Received data:', req.body);
-  res.status(200).send('Data processed');
-});
-\`\`\`
-- \`app.use(...)\`: Registers a middleware function to be executed for every incoming request.
-- \`(req, res, next) => { ... }\`: The signature of a middleware function.
-- \`next()\`: Crucial for passing control to the next middleware function in the stack or the final route handler.
-- \`express.json()\`: A specific middleware that parses JSON bodies and populates \`req.body\`.`,
+      discover: "Re-read the WHAT / HOW for this step. The check verifies those requirements — not a pasted answer.",
       quickRules: `**Quick rules:**
 - ✅ Use \`express.json()\` for APIs expecting JSON request bodies.
 - ✅ Place \`app.use(express.json())\` early in your middleware stack.
@@ -376,31 +321,7 @@ function calculateTotal(prices: number[]): number {
       hook: `Imagine you're writing down important notes on a piece of paper, but every time you close your notebook, all the notes magically disappear. You'd quickly realize this isn't a sustainable way to store information you need to keep! In software, if your application stores all its data only in memory (like our \`items\` array), that data is lost as soon as the application restarts or crashes. This means any changes made by users, any new items created, or any settings configured would vanish, leading to a frustrating and unusable experience. While convenient for quick tests or simple calculations, relying solely on in-memory storage for persistent data is a critical flaw for most real-world applications.`,
       pain: `⚠️ **Lesson:** In-memory data is volatile and lost upon application restart. **Symptom:** User data, configurations, and any state changes are not preserved, leading to a non-persistent and frustrating user experience.`,
       mentalModel: `**Mental model:** The "Short-Term Memory Scratchpad." Think of in-memory data as a temporary scratchpad or a short-term memory. It's fast and easy to write to, but it has no permanence. As soon as the "brain" (the server process) shuts down or restarts, everything on the scratchpad is erased. For anything that needs to be remembered long-term, you need to transfer it to a more permanent storage solution, like a notebook (a database) or a hard drive (a file system).`,
-      discover: `\`\`\`tsx
-// In-memory array (volatile)
-let temporaryCache: string[] = [];
-
-function addItemToCache(item: string) {
-  temporaryCache.push(item);
-  console.log('Added to cache:', item);
-}
-
-// This data will be lost if the Node.js process restarts
-addItemToCache('User Session 123');
-
-// Contrast with persistent storage (conceptual)
-// import { writeFileSync, readFileSync } from 'fs';
-// function saveToFile(data: string) {
-//   writeFileSync('data.txt', data);
-// }
-// function loadFromFile(): string {
-//   return readFileSync('data.txt', 'utf-8');
-// }
-\`\`\`
-- \`let temporaryCache: string[] = [];\`: Declares an array that exists only as long as the server process is running.
-- \`temporaryCache.push(item);\`: Adds data to this volatile storage.
-- **Trade-off:** Fast access, but data is lost on server restart.
-- **Alternative:** Persistent storage (like files or databases) ensures data survives restarts.`,
+      discover: "Re-read the WHAT / HOW for this step. The check verifies those requirements — not a pasted answer.",
       quickRules: `**Quick rules:**
 - ✅ Use in-memory data for temporary states, caches, or during development/learning.
 - ✅ Leverage in-memory data for performance-critical, short-lived data.
@@ -566,20 +487,7 @@ program
 *   \`PATCH\` (less common but important) is like "Edit" a specific detail of a book (e.g., update its genre).
 *   \`DELETE\` is like "Remove" a book from the collection.
 These verbs immediately convey the intent of the request, making the API intuitive and predictable.`,
-      discover: `\`\`\`tsx
-// Common HTTP Methods and their typical uses
-app.get('/resources', (req, res) => { /* Retrieve a list of resources */ });
-app.get('/resources/:id', (req, res) => { /* Retrieve a specific resource */ });
-app.post('/resources', (req, res) => { /* Create a new resource */ });
-app.put('/resources/:id', (req, res) => { /* Fully update an existing resource */ });
-app.patch('/resources/:id', (req, res) => { /* Partially update an existing resource */ });
-app.delete('/resources/:id', (req, res) => { /* Delete a specific resource */ });
-\`\`\`
-- \`GET\`: Used to request data from a specified resource. It should only retrieve data and have no other effect.
-- \`POST\`: Used to submit an entity to the specified resource, often causing a change in state or side effects on the server. Typically used for creating new resources.
-- \`PUT\`: Used to update a resource or create a new resource if it does not exist. It's idempotent, meaning multiple identical requests should have the same effect as a single one.
-- \`DELETE\`: Used to delete the specified resource.
-- \`/:id\`: A route parameter that captures a dynamic segment of the URL, typically used to identify a specific resource.`,
+      discover: "Re-read the WHAT / HOW for this step. The check verifies those requirements — not a pasted answer.",
       quickRules: `**Quick rules:**
 - ✅ Use \`GET\` for fetching data without side effects.
 - ✅ Use \`POST\` for creating new resources.
@@ -877,27 +785,7 @@ function processVendingMachineRequest(itemCode: string, payment: number) {
 *   \`4xx (Client Error)\`: "It's your fault, client!" (Red light, with specific numbers like \`400 Bad Request\` for invalid input, \`401 Unauthorized\`, \`403 Forbidden\`, \`404 Not Found\`).
 *   \`5xx (Server Error)\`: "It's my fault, server!" (Red light, indicating an issue on the server side, like \`500 Internal Server Error\`).
 This system allows both sides to quickly and precisely understand the state of the interaction.`,
-      discover: `\`\`\`tsx
-// Examples of common HTTP status codes
-// Success
-res.status(200).json({ message: 'Success' }); // OK - General success
-res.status(201).json({ id: 'new-id' });      // Created - New resource created
-res.status(204).send();                      // No Content - Success, but no body to return (e.g., DELETE)
-
-// Client Errors
-res.status(400).send('Invalid input');       // Bad Request - Client sent malformed request
-res.status(401).send('Unauthorized');        // Unauthorized - Authentication required/failed
-res.status(403).send('Forbidden');           // Forbidden - Client lacks permission
-res.status(404).send('Resource not found');  // Not Found - Resource does not exist
-
-// Server Errors
-res.status(500).send('Internal Server Error'); // Internal Server Error - Generic server-side issue
-\`\`\`
-- \`2xx\` codes indicate various types of success.
-- \`4xx\` codes indicate errors caused by the client's request.
-- \`5xx\` codes indicate errors that occurred on the server.
-- \`res.status(CODE)\`: Sets the HTTP status code for the response.
-- \`res.json(data)\` / \`res.send(message)\`: Sends the response body.`,
+      discover: "Re-read the WHAT / HOW for this step. The check verifies those requirements — not a pasted answer.",
       quickRules: `**Quick rules:**
 - ✅ Use \`200 OK\` for successful \`GET\` and \`PUT\` operations.
 - ✅ Use \`201 Created\` for successful \`POST\` operations that create a new resource.

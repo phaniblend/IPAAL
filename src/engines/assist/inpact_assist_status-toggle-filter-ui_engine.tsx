@@ -125,14 +125,7 @@ type PermissionLevel = 'full' | 'limited' | 'none';
       mentalModel: `
         **Mental model:** A union type is a guest list, not a suggestion. \`type StatusFilter = 'all' | 'open' | 'resolved'\` means exactly those three strings are welcome — anything else is rejected at the door, before the code ever runs.
       `,
-      discover: `
-        **Pattern - Union Types:**
-        \`\`\`tsx
-        type StatusFilter = 'all' | 'open' | 'resolved';
-        \`\`\`
-        - Each member is an exact string literal, not a general \`string\`.
-        - The compiler flags any value outside this set immediately.
-      `,
+      discover: "Re-read the WHAT / HOW for this step. The check verifies those requirements — not a pasted answer.",
       quickRules: `
         **Quick rules:**
         - ✅ List every valid value as its own string literal.
@@ -206,17 +199,7 @@ interface UserProfile {
       mentalModel: `
         **Mental model:** The "Contract Agreement." Think of an interface as a formal contract. When you define \`interface Item\`, you're saying "any object claiming to be an \`Item\` *must* fulfill these requirements" — preventing mismatches between different parts of your codebase.
       `,
-      discover: `
-        **Pattern - Interfaces:**
-        \`\`\`tsx
-        interface Item {
-          id: number;
-          name: string;
-        }
-        \`\`\`
-        - Interfaces define the shape of objects, specifying property names and their types.
-        - Build it up one field at a time — the status field comes next.
-      `,
+      discover: "Re-read the WHAT / HOW for this step. The check verifies those requirements — not a pasted answer.",
       quickRules: `
         **Quick rules:**
         - ✅ Define interfaces for object shapes to ensure consistency.
@@ -288,18 +271,7 @@ interface UserProfile {
       mentalModel: `
         **Mental model:** One source of truth. StatusFilter is defined once; every field that needs "a valid status" points back to that same definition instead of copying its values.
       `,
-      discover: `
-        **Pattern - Reusing a type:**
-        \`\`\`tsx
-        type StatusFilter = 'all' | 'open' | 'resolved';
-        interface Item {
-          id: number;
-          name: string;
-          status: StatusFilter;
-        }
-        \`\`\`
-        - \`status: StatusFilter\` reuses the exact type, not a copy of its values.
-      `,
+      discover: "Re-read the WHAT / HOW for this step. The check verifies those requirements — not a pasted answer.",
       quickRules: `
         **Quick rules:**
         - ✅ Reuse an existing type by name wherever the same concept applies.
@@ -404,28 +376,7 @@ function GreetingDisplay() {
       mentalModel: `
         **Mental model:** The "Pure Function with Memory." Think of a functional component as a regular JavaScript function that, given some inputs (props), always produces the same output (JSX). The "memory" part comes from hooks like \`useState\` and \`useEffect\`. These hooks allow functional components to "remember" state between renders and perform "side effects" (like data fetching) without turning the function into a complex object with its own \`this\` context and lifecycle methods. It's like having a simple calculator that can also store a few numbers and perform actions outside its core calculation, all while remaining a simple function.
       `,
-      discover: `
-        **Pattern - Functional Component Structure:**
-        \`\`\`tsx
-        function MyComponent(props: { message: string }) {
-          // 1. Declare state variables using hooks
-          // const [count, setCount] = useState(0);
-
-          // 2. Perform side effects (e.g., data fetching) using hooks
-          // useEffect(() => { /* ... */ }, []);
-
-          // 3. Return JSX to describe the UI
-          return (
-            <div>
-              <p>{props.message}</p>
-              {/* <button onClick={() => setCount(count + 1)}>Increment</button> */}
-            </div>
-          );
-        }
-        \`\`\`
-        - Functional components are plain JavaScript functions that accept a single \`props\` object as an argument.
-        - They return JSX, which describes the UI structure.
-        - Hooks (like \`useState\`, \`useEffect\`) enable state and side effects within these functions, making them powerful.
+      discover: "Re-read the WHAT / HOW for this step. The check verifies those requirements — not a pasted answer.", \`useEffect\`) enable state and side effects within these functions, making them powerful.
         - They are generally simpler to write, read, and test compared to class components.
       `,
       quickRules: `
@@ -588,39 +539,7 @@ function CountdownTimer() {
       mentalModel: `
         **Mental model:** The "Component's Brain and Hands." Think of \`useState\` as the component's "brain" – it allows the component to remember specific pieces of information (its state) across different renders. When the brain decides to change a piece of information (e.g., \`setItems\`), the component re-renders to reflect that new memory. \`useEffect\` acts as the component's "hands" – it allows the component to reach out and interact with the "outside world" (like an API, the browser's DOM, or timers) *after* rendering. The dependency array of \`useEffect\` is like a set of instructions for the hands: "Only perform this action if these specific memories (dependencies) have changed." An empty dependency array means, "Do this once when I first wake up."
       `,
-      discover: `
-        **Pattern - State and Effect Management:**
-        \`\`\`tsx
-        function DataFetcher() {
-          const [data, setData] = useState<string | null>(null); // Brain: remembers the data
-          const [loading, setLoading] = useState(true); // Brain: remembers loading status
-
-          useEffect(() => { // Hands: reaches out to fetch data
-            const fetchData = async () => {
-              setLoading(true);
-              try {
-                const response = await fetch('/api/some-resource');
-                const result = await response.json();
-                setData(result.message); // Brain updates its memory
-              } catch (error) {
-                console.error("Failed to fetch:", error);
-                setData("Error loading data.");
-              } finally {
-                setLoading(false);
-              }
-            };
-            fetchData();
-          }, []); // Empty dependency array: perform this action only once on mount
-
-          if (loading) return <p>Loading...</p>;
-          return <p>{data}</p>;
-        }
-        \`\`\`
-        - \`useState\` provides a way to declare state variables in functional components and their corresponding update functions.
-        - \`useEffect\` allows you to perform side effects (data fetching, subscriptions, manual DOM changes) after the render.
-        - The dependency array in \`useEffect\` controls when the effect runs: empty array \`[]\` for once on mount, specific variables for re-running when they change, or no array for every render.
-        - The setter function from \`useState\` (e.g., \`setItems\`) triggers a re-render of the component.
-      `,
+      discover: "Re-read the WHAT / HOW for this step. The check verifies those requirements — not a pasted answer.",
       quickRules: `
         **Quick rules:**
         - ✅ Use \`useState\` for any data that changes over time and affects rendering.
@@ -867,27 +786,7 @@ function BlogPostList() {
       mentalModel: `
         **Mental model:** The "Unique ID Badge." Think of the \`key\` prop as a unique ID badge that you give to each item in a list. When React renders a list, it uses these ID badges to keep track of which specific item is which. If the list changes (items are added, removed, or reordered), React doesn't just look at the position; it looks at the ID badges. If an item with a specific ID badge moves, React knows it's the *same item* just in a new position, so it can efficiently move its corresponding DOM element and preserve its internal state. If an item with a new ID badge appears, React knows it's a new item and creates a new DOM element for it. This makes updates precise and performant.
       `,
-      discover: `
-        **Pattern - List Rendering with Keys:**
-        \`\`\`tsx
-        function ItemList({ items }: { items: Item[] }) {
-          return (
-            <ul>
-              {items.map(item => (
-                // 'key' prop is essential for unique identification
-                <li key={item.id}>
-                  {item.name} - {item.status}
-                </li>
-              ))}
-            </ul>
-          );
-        }
-        \`\`\`
-        - The \`key\` prop must be a stable, unique identifier for each item within its list.
-        - It helps React identify which items have changed, are added, or are removed.
-        - Using array index as a key is generally discouraged if the list items can be reordered, added, or removed, as it can lead to performance issues and incorrect component state.
-        - Keys should be unique among siblings, not globally unique across the entire application.
-      `,
+      discover: "Re-read the WHAT / HOW for this step. The check verifies those requirements — not a pasted answer.",
       quickRules: `
         **Quick rules:**
         - ✅ Always provide a \`key\` prop when rendering lists of elements.
@@ -1243,30 +1142,7 @@ function NotificationList() {
       mentalModel: `
         **Mental model:** The "New Edition Principle." Think of your component's state as a book. When you want to make a change, you don't scribble directly into the existing book (mutating state). Instead, you create a brand new edition of the book (a new state object or array) that incorporates your changes. You then tell React, "Here's the new edition!" React can then easily compare the old edition with the new one, quickly identify what has changed, and efficiently update only the necessary parts of the UI. If you just scribble in the old book, React might not realize anything is different, and the readers (users) will see the old content.
       `,
-      discover: `
-        **Pattern - Immutable Array Updates:**
-        \`\`\`tsx
-        // Original state
-        const [items, setItems] = useState([{ id: 1, name: 'A' }, { id: 2, name: 'B' }]);
-
-        // ❌ Direct mutation (bad)
-        // items[0].name = 'New A';
-        // setItems(items); // React might not re-render!
-
-        // ✅ Immutable update (good) - updating an item
-        const updatedItems = items.map(item =>
-          item.id === 1 ? { ...item, name: 'New A' } : item
-        );
-        setItems(updatedItems); // React sees a new array reference and re-renders
-
-        // ✅ Immutable update (good) - adding an item
-        setItems(prevItems => [...prevItems, { id: 3, name: 'C' }]);
-
-        // ✅ Immutable update (good) - removing an item
-        setItems(prevItems => prevItems.filter(item => item.id !== 2));
-        \`\`\`
-        - When updating arrays or objects in state, always create a *new* array or object.
-        - Use array methods like \`map\`, \`filter\`, \`slice\`, or the spread syntax (\`...\`) to create new copies.
+      discover: "Re-read the WHAT / HOW for this step. The check verifies those requirements — not a pasted answer.", \`filter\`, \`slice\`, or the spread syntax (\`...\`) to create new copies.
         - For objects, use the object spread syntax (\`{ ...oldObject, newProp: value }\`) to create a new object with updated properties.
         - This allows React to detect changes by comparing references and optimize re-renders.
       `,
@@ -1651,41 +1527,7 @@ function UserSettings() {
       mentalModel: `
         **Mental model:** The "Function Reference vs. Function Call." Think of an event handler like a doorbell. When you attach \`onClick={handler}\`, you're essentially telling the doorbell, "Here's the *name* of the person (the function) to call when someone presses me." The doorbell then waits for a press before making the call. When you attach \`onClick={handler()}\`, you're immediately *calling* the person (executing the function) *right now* and then giving the doorbell whatever that person *returns*. If the function returns nothing (like \`void\`), the doorbell has nothing to call later. If it returns a new function, that new function becomes the handler. The key is to provide the doorbell with a *reference* to the function, not the *result* of calling it immediately.
       `,
-      discover: `
-        **Pattern - Event Handler Binding:**
-        \`\`\`tsx
-        function InteractiveComponent() {
-          const [count, setCount] = useState(0);
-
-          // Handler function
-          const increment = () => {
-            setCount(prev => prev + 1);
-          };
-
-          // Handler function that needs arguments
-          const incrementBy = (amount: number) => {
-            setCount(prev => prev + amount);
-          };
-
-          return (
-            <div>
-              <p>Count: {count}</p>
-              {/* ✅ Correct: Pass a reference to the function */}
-              <button onClick={increment}>Increment</button>
-
-              {/* ✅ Correct: Use an arrow function to call with arguments */}
-              <button onClick={() => incrementBy(5)}>Increment by 5</button>
-
-              {/* ❌ Incorrect: Calls increment() immediately on render, not on click */}
-              {/* <button onClick={increment()}>This will run immediately</button> */}
-            </div>
-          );
-        }
-        \`\`\`
-        - When an event handler doesn't need arguments, pass a direct reference to the function: \`onClick={myFunction}\`.
-        - When an event handler needs arguments, wrap the function call in an anonymous arrow function: \`onClick={() => myFunction(arg1, arg2)}\`. This ensures the function is called only when the event occurs.
-        - Passing \`myFunction()\` directly executes the function during the render phase, and its return value (often \`undefined\`) is then assigned as the event handler, which is usually not the desired behavior.
-        - Event handlers in JSX are camelCased (e.g., \`onClick\`, \`onChange\`), not lowercase HTML attributes (e.g., \`onclick\`).
+      discover: "Re-read the WHAT / HOW for this step. The check verifies those requirements — not a pasted answer.", \`onChange\`), not lowercase HTML attributes (e.g., \`onclick\`).
       `,
       quickRules: `
         **Quick rules:**

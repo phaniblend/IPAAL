@@ -142,28 +142,7 @@ function SimpleCounter() {
       mentalModel: `
         **Mental model:** The Component's Blueprint and Life Support System. Think of types as the blueprint for your data – they define the exact shape and properties of every piece of information your component handles, preventing miscommunications. Hooks, on the other hand, are the component's life support system. \`useState\` provides the component's memory, allowing it to remember things that change over time (like user input or fetched data). \`useEffect\` gives the component the ability to perform actions that interact with the outside world (like fetching data from an API or setting up event listeners) and clean up after itself, ensuring it behaves correctly throughout its existence.
       `,
-      discover: `
-        **Pattern - Imports and Types:**
-        \`\`\`tsx
-        import { useState, useEffect } from 'react'; // Essential hooks for state and side effects
-
-        // Type definition for a single resource item
-        type Resource = {
-          id: string;
-          title: string;
-          description: string;
-          status: 'active' | 'draft' | 'archived'; // Union type for specific statuses
-          createdAt: string; // ISO date string for consistent date handling
-        };
-
-        // Type definition for the filter dropdown's possible values
-        type FilterStatus = 'all' | 'active' | 'draft' | 'archived';
-        \`\`\`
-        -   **\`useState\`**: Allows functional components to manage local state. When state changes, the component re-renders.
-        -   **\`useEffect\`**: Enables functional components to perform side effects (like data fetching, subscriptions, or manually changing the DOM) after rendering. It's crucial for interacting with external systems.
-        -   **\`type Resource\`**: Defines the expected structure of each item in our list, including its unique identifier, display text, and a specific set of allowed status values.
-        -   **\`type FilterStatus\`**: Creates a union type for the filter options, ensuring that only valid filter values can be used, which helps prevent typos and invalid states.
-      `,
+      discover: "Re-read the WHAT / HOW for this step. The check verifies those requirements — not a pasted answer.",
       quickRules: `
         **Quick rules:**
         - ✅ Always define types for complex data structures and props to improve readability and catch errors.
@@ -274,24 +253,7 @@ function ActionButton() {
       mentalModel: `
         **Mental model:** The Pure Function with Superpowers. Think of a functional component as a mathematical function: it takes inputs (props) and reliably produces an output (JSX). It's inherently simpler and easier to reason about because it doesn't have its own internal instance or complex lifecycle. Hooks are the "superpowers" that allow these pure functions to manage state, perform side effects, and tap into the component's lifecycle *without* becoming a class. This keeps the component's core logic focused on rendering, while hooks handle the dynamic behavior in a modular way.
       `,
-      discover: `
-        **Pattern - Functional Component Shell:**
-        \`\`\`tsx
-        function ResourceList() { // A simple JavaScript function
-          // ... state and effects will go here ...
-          return ( // Returns JSX, describing what the UI should look like
-            <div>
-              <h2>Resource List</h2>
-              {/* Other UI elements will be added here */}
-            </div>
-          );
-        }
-        \`\`\`
-        -   **\`function ResourceList()\`**: Defines a standard JavaScript function. This is the simplest and most common way to create a component.
-        -   **No \`class\` keyword**: Unlike class components, functional components are just functions, making them lighter and often easier to read.
-        -   **\`return (...)\`**: The function returns JSX, which is a syntax extension for JavaScript that looks like HTML. This JSX describes the UI elements that should be rendered.
-        -   **Root \`div\`**: It's common practice for a component to return a single root element (like a \`div\`) that wraps all its children.
-      `,
+      discover: "Re-read the WHAT / HOW for this step. The check verifies those requirements — not a pasted answer.",
       quickRules: `
         **Quick rules:**
         - ✅ Use functional components for all new components.
@@ -429,16 +391,7 @@ function TextInput() {
       mentalModel: `
         **Mental model:** The Component's Short-Term Memory. Think of \`useState\` as giving your functional component a small, dedicated notepad. When your component first renders, it writes an initial value on the notepad. When you want to change that value, you don't erase it directly; instead, you use a special "setter" function (like \`setResources\`) which tells the component, "Hey, this value on the notepad has changed, and you need to re-read it and update your display." The component then re-renders, sees the new value on the notepad, and updates the UI accordingly, preserving the state across renders.
       `,
-      discover: `
-        **Pattern - State Variable Declaration:**
-        \`\`\`tsx
-        const [value, setValue] = useState<Type>(initialValue);
-        \`\`\`
-        -   **\`const [value, setValue]\`**: This is array destructuring. \`value\` is the current state, and \`setValue\` is the function to update it.
-        -   **\`useState<Type>\`**: The generic \`<Type>\` specifies the type of the state variable, providing TypeScript with crucial information for type checking.
-        -   **\`(initialValue)\`**: This is the value \`value\` will have on the very first render of the component. It's only used once.
-        -   **\`setValue(newValue)\`**: When you call the setter function, the component will re-render with \`newValue\` as the new \`value\`.
-      `,
+      discover: "Re-read the WHAT / HOW for this step. The check verifies those requirements — not a pasted answer.",
       quickRules: `
         **Quick rules:**
         - ✅ Always use \`useState\` for data that changes and affects the UI.
@@ -603,24 +556,7 @@ function UserProfile() {
       mentalModel: `
         **Mental model:** The UI Blueprint. Think of the JSX skeleton as the architectural blueprint for your component's user interface. It defines the main sections, their hierarchy, and where dynamic content or interactive elements will eventually reside. By starting with static placeholders and comments, you're creating clear "slots" for future logic. This allows you to focus on the visual layout and accessibility first, ensuring a solid foundation before you introduce the complexities of state and data. It's like drawing the wireframe of your UI directly in code.
       `,
-      discover: `
-        **Pattern - JSX Structure Skeleton:**
-        \`\`\`tsx
-        <div>
-          <h2>Component Title</h2>
-          <label htmlFor="filter-id">Filter:</label>
-          <select id="filter-id">
-            <option value="option1">Option 1</option>
-            <option value="option2">Option 2</option>
-          </select>
-
-          {/* This is a JSX comment for a loading state */}
-          {/* This is a JSX comment for an error message */}
-          {/* This is a JSX comment for an empty state */}
-          {/* This where the actual list of items will go */}
-        </div>
-        \`\`\`
-        -   **Semantic HTML**: Using elements like \`<h2>\`, \`<label>\`, and \`<select>\` provides meaning to the structure and improves accessibility.
+      discover: "Re-read the WHAT / HOW for this step. The check verifies those requirements — not a pasted answer.", \`<label>\`, and \`<select>\` provides meaning to the structure and improves accessibility.
         -   **\`id\` and \`htmlFor\`**: Linking labels to their input elements with \`id\` and \`htmlFor\` is crucial for accessibility.
         -   **\`select\` and \`option\`**: These elements create a standard dropdown menu, allowing users to choose from predefined options.
         -   **JSX Comments (\`{/* ... */}\`)**: These are used to mark sections where dynamic content or conditional rendering logic will be inserted later, keeping the structure clean.
@@ -869,36 +805,7 @@ function UserProfile({ userId }: { userId: string }) {
       mentalModel: `
         **Mental model:** The Component's Watchdog and Task Manager. Think of \`useEffect\` as a vigilant watchdog that observes specific values (its dependencies) and, when they change, triggers a set of tasks. For data fetching, it's like saying, "Hey, whenever the \`filterStatus\` changes, go fetch new data from the API." It also acts as a task manager, ensuring that tasks like setting loading states, handling errors, and updating the UI are performed in a controlled and predictable manner, preventing race conditions and ensuring proper cleanup. The cleanup function (returned by \`useEffect\`) is like telling the watchdog, "If you're interrupted, stop what you're doing cleanly."
       `,
-      discover: `
-        **Pattern - Data Fetching with \`useEffect\`:**
-        \`\`\`tsx
-        useEffect(() => {
-          const fetchData = async () => {
-            setLoading(true); // Start loading
-            setError(null);   // Clear previous errors
-            try {
-              const response = await fetch(\`/api/data?filter=\${filterStatus}\`);
-              if (!response.ok) {
-                throw new Error('Failed to fetch data');
-              }
-              const result = await response.json();
-              setData(result); // Update data state
-            } catch (err: any) {
-              setError(err.message); // Set error state
-              setData([]); // Clear data on error
-            } finally {
-              setLoading(false); // Stop loading
-            }
-          };
-          fetchData(); // Execute the fetch function
-        }, [filterStatus]); // Dependency array: re-run when filterStatus changes
-        \`\`\`
-        -   **\`useEffect(() => { ... }, [dependencies])\`**: The core structure. The first argument is the effect function, the second is the dependency array.
-        -   **\`async/await\`**: Used for handling asynchronous operations (like \`fetch\`) in a more readable, synchronous-looking way.
-        -   **\`setLoading(true/false)\`**: Manages the loading state, providing visual feedback to the user.
-        -   **\`setError(message)\`**: Captures and displays any errors that occur during the fetch operation.
-        -   **Dependency Array (\`[filterStatus]\`)**: Crucial for controlling when the effect re-runs. If \`filterStatus\` changes, the effect runs again. An empty array (\`[]\`) means it runs once on mount. Omitting it means it runs on every render (often an infinite loop).
-      `,
+      discover: "Re-read the WHAT / HOW for this step. The check verifies those requirements — not a pasted answer.",
       quickRules: `
         **Quick rules:**
         - ✅ Use \`useEffect\` for all side effects (data fetching, subscriptions, manual DOM changes).
@@ -1202,26 +1109,7 @@ function ToggleSwitch() {
       mentalModel: `
         **Mental model:** The UI's Listener and Messenger. Think of an event handler as a dedicated listener attached to a specific UI element (like our filter dropdown). When a user interacts with that element (e.g., selects an option), the listener "hears" the event. The handler then acts as a messenger, taking information from the event (like the new selected value) and delivering it to the component's state management system (e.g., calling \`setFilterStatus\`). This message then triggers a re-render, updating the UI to reflect the user's action and potentially initiating other processes like data fetching.
       `,
-      discover: `
-        **Pattern - Event Handler for State Update:**
-        \`\`\`tsx
-        const handleFilterChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-          // e.target refers to the <select> element
-          const selectedValue = e.target.value;
-          // Type assertion to ensure TypeScript knows it's a valid FilterStatus
-          setFilterStatus(selectedValue as FilterStatus);
-        };
-
-        // ... later in JSX ...
-        <select onChange={handleFilterChange} value={filterStatus}>
-          {/* options */}
-        </select>
-        \`\`\`
-        -   **\`const handleFilterChange = (e: React.ChangeEvent<HTMLSelectElement>) => { ... }\`**: Defines an arrow function that takes an event object \`e\`. \`React.ChangeEvent<HTMLSelectElement>\` provides strong typing for the event from a \`select\` element.
-        -   **\`e.target.value\`**: This property of the event object holds the current value of the input element that triggered the event (in this case, the selected option's \`value\`).
-        -   **\`setFilterStatus(...)\`**: This is the state setter function. Calling it with the new value updates the \`filterStatus\` state variable, which will cause the component to re-render and potentially trigger \`useEffect\`.
-        -   **\`as FilterStatus\`**: This is a type assertion, telling TypeScript that we are confident \`selectedValue\` will be one of the \`FilterStatus\` literal values.
-      `,
+      discover: "Re-read the WHAT / HOW for this step. The check verifies those requirements — not a pasted answer.",
       quickRules: `
         **Quick rules:**
         - ✅ Always define event handlers as functions within your component.
@@ -1583,32 +1471,7 @@ function TodoList() {
       mentalModel: `
         **Mental model:** The UI's Dynamic Director and Assembly Line. Conditional rendering is like a director on a movie set, deciding which scene (loading spinner, error message, empty state, or the actual list) should be shown based on the current script (your component's state). It ensures only the relevant UI is visible. List mapping, on the other hand, is like an efficient assembly line. You provide a blueprint for a single item (e.g., a resource card), and the \`map\` function automatically replicates that blueprint for every piece of data in your collection, assembling a full list without manual repetition.
       `,
-      discover: `
-        **Pattern - Conditional Rendering and List Mapping:**
-        \`\`\`tsx
-        // Conditional Rendering
-        {loading && <p>Loading data...</p>}
-        {error && <p style={{ color: 'red' }}>Error: {error}</p>}
-        {!loading && !error && items.length === 0 && <p>No items found.</p>}
-
-        // List Mapping
-        {!loading && !error && items.length > 0 && (
-          <ul>
-            {items.map(item => (
-              <li key={item.id}>
-                {/* Render item details */}
-                <strong>{item.title}</strong> - {item.status}
-              </li>
-            ))}
-          </ul>
-        )}
-        \`\`\`
-        -   **\`value={filterStatus}\`**: Makes the \`<select>\` a controlled component. Its displayed value is always synchronized with the \`filterStatus\` state.
-        -   **\`onChange={handleFilterChange}\`**: Attaches our event handler to the \`<select>\` element, so \`handleFilterChange\` runs whenever the user changes the selection.
-        -   **\`{condition && <JSX />}\`**: A common pattern for conditional rendering. If \`condition\` is true, the JSX is rendered; otherwise, nothing is rendered.
-        -   **\`{items.map(item => <li key={item.id}>...</li>)}\`**: The \`map\` array method transforms each item in the \`items\` array into a JSX element.
-        -   **\`key={item.id}\`**: The \`key\` prop is crucial for lists. It helps the rendering engine efficiently identify which items have changed, been added, or removed, improving performance and preventing bugs. It must be a stable, unique identifier for each item.
-      `,
+      discover: "Re-read the WHAT / HOW for this step. The check verifies those requirements — not a pasted answer.",
       quickRules: `
         **Quick rules:**
         - ✅ Use \`value\` and \`onChange\` props to make form elements (like \`select\`) controlled components.

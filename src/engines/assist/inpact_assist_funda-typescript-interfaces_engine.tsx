@@ -70,19 +70,7 @@ const myProduct: Product = {
       hook: `Imagine you're building a complex application, perhaps a system that manages different types of items like 'books', 'movies', and 'music albums'. Each of these items shares some common properties, like a 'title' and 'releaseYear', but also has unique ones, like 'author' for books or 'director' for movies. As your application grows, you might find yourself needing to extend these definitions, combine them, or even have different parts of your system contribute to the same definition. If you're just using inline type annotations or simple type aliases, you might run into limitations when trying to merge or extend these types in a clean, declarative way. This is where the specific capabilities of interfaces shine, offering a more robust and flexible approach to defining object shapes, especially in large, collaborative codebases where type definitions might need to evolve or be composed from multiple sources.`,
       pain: `⚠️ **Lesson:** Without a clear, extensible way to define object shapes, managing complex data structures can lead to redundant type definitions, difficult-to-merge types, and less flexible code. Symptom: You find yourself copying and pasting type definitions or struggling to combine types from different modules.`,
       mentalModel: `**Mental model:** Interface as a Blueprint. Think of an interface as a detailed architectural blueprint for a building. It specifies exactly what rooms (properties) the building must have, what materials they're made of (types), and how they're connected. Just like a blueprint, an interface doesn't *build* the object itself; it only describes its required structure. Multiple contractors (different parts of your code) can then use this single blueprint to construct many identical buildings (objects), ensuring they all conform to the same design. This blueprint can also be extended (e.g., adding a new wing) or combined with other blueprints (e.g., a residential blueprint combined with a commercial one), providing flexibility for future development.`,
-      discover: `**Pattern - Defining a Basic Interface:**
-\`\`\`tsx
-interface MyObject {
-  propertyA: string;
-  propertyB: number;
-  propertyC: boolean;
-}
-\`\`\`
--   The \`interface\` keyword declares a new interface.
--   The interface name (e.g., \`MyObject\`) should follow PascalCase convention.
--   Inside the curly braces, list each property name followed by a colon and its type (e.g., \`propertyA: string;\`).
--   Each property definition ends with a semicolon.
--   This interface now acts as a contract: any object declared as \`MyObject\` must have these properties with these exact types.`,
+      discover: "Re-read the WHAT / HOW for this step. The check verifies those requirements — not a pasted answer.",
       quickRules: `**Quick rules:**
 -   ✅ Use \`interface\` to define the shape of objects.
 -   ✅ Name interfaces using PascalCase (e.g., \`UserConfig\`).
@@ -147,18 +135,7 @@ const user2: UserProfile = { username: "bob", email: "bob@example.com", avatarUr
       hook: `Imagine you're designing a user profile interface. Every user *must* have a username and an email, but a profile picture URL might be optional – some users upload one, others don't. If you define \`avatarUrl: string | undefined;\`, it technically works, but it implies that \`undefined\` is a *valid value* that you might explicitly assign. In contrast, \`avatarUrl?: string;\` clearly communicates that the property itself *might not exist* on the object at all. This distinction becomes critical when you're working with data from external sources (like APIs) where fields might simply be omitted rather than explicitly set to \`undefined\`, or when you're destructuring objects and want to know if a property will even be present.`,
       pain: `⚠️ **Lesson:** Confusing optional properties with properties that can explicitly be \`undefined\` can lead to less precise type definitions and potential runtime errors if code expects a property to always exist, even if its value is \`undefined\`. Symptom: You're constantly checking \`if (obj.prop !== undefined)\` even when the property might not be on the object at all.`,
       mentalModel: `**Mental model:** Optional as a Missing Piece. Think of an optional property as a piece of a puzzle that *might* be included, but isn't strictly necessary for the puzzle to be complete. If the piece isn't there, the puzzle is still valid. If it *is* there, it must fit perfectly (i.e., have the correct type). A property that is a union with \`undefined\` (e.g., \`string | undefined\`) is like a puzzle piece that *must* be present, but its content could be blank. The \`?\` syntax is a more direct and semantically clear way to express that a property might simply be absent from the object's structure.`,
-      discover: `**Pattern - Optional Properties:**
-\`\`\`tsx
-interface Settings {
-  theme: 'dark' | 'light';
-  notificationsEnabled?: boolean; // This property might not exist
-  language: string | undefined;   // This property must exist, but its value can be undefined
-}
-\`\`\`
--   The \`?\` modifier after the property name makes the property optional.
--   If a property is optional, it means it *might not be present* on objects conforming to the interface.
--   When accessing an optional property, TypeScript will automatically infer its type as \`T | undefined\`.
--   This is semantically different from \`property: Type | undefined;\`, which means the property *must* exist, but its value can be \`undefined\`.`,
+      discover: "Re-read the WHAT / HOW for this step. The check verifies those requirements — not a pasted answer.", which means the property *must* exist, but its value can be \`undefined\`.`,
       quickRules: `**Quick rules:**
 -   ✅ Use \`propertyName?: Type;\` when the property might not exist on the object at all.
 -   ✅ Use \`propertyName: Type | undefined;\` when the property *must* exist, but its value can be explicitly \`undefined\`.
@@ -232,27 +209,7 @@ const myBook: Book = {
       hook: `Imagine you're building a system for managing unique inventory items. Each item has a serial number that's assigned at the factory and should *never* change. If you just define a property as \`serialNumber: string;\`, nothing prevents another part of your code from accidentally reassigning it later, potentially corrupting your inventory data. You need a way to declare that this specific property, *within an object*, is immutable once the object is created. While \`const\` prevents a *variable* from being reassigned, it doesn't prevent the *properties of an object* assigned to that \`const\` variable from being modified. This is where \`readonly\` steps in, providing a crucial layer of immutability at the property level.`,
       pain: `⚠️ **Lesson:** Without explicit immutability declarations for object properties, critical identifiers or values can be accidentally overwritten, leading to data corruption and hard-to-trace bugs. Symptom: Important object properties are unexpectedly changing values during runtime.`,
       mentalModel: `**Mental model:** Readonly as a Sealed Label. Think of a \`readonly\` property like a sealed label on a product's packaging. Once the product is packaged, that label (e.g., a batch number or expiration date) is fixed and cannot be changed without breaking the seal. The product itself (the object) can still be moved around or used, and other parts of its packaging (other properties) might be modifiable, but the information on that specific sealed label is permanent. This contrasts with \`const\` on a variable, which is like putting the entire packaged product into a locked display case – you can't swap out the product for a different one, but you could still potentially modify the product *inside* the case if it wasn't sealed itself.`,
-      discover: `**Pattern - Readonly Properties:**
-\`\`\`tsx
-interface ImmutableConfig {
-  readonly id: string;
-  name: string;
-  createdAt: Date;
-}
-
-const config: ImmutableConfig = {
-  id: "cfg-123",
-  name: "Initial Config",
-  createdAt: new Date(),
-};
-
-// config.id = "new-id"; // TypeScript error: Cannot assign to 'id' because it is a read-only property.
-config.name = "Updated Config"; // This is allowed.
-\`\`\`
--   The \`readonly\` keyword is placed before the property name in an interface.
--   It ensures that once the property is initialized (either during object creation or in a class constructor), it cannot be reassigned.
--   This applies only to the property itself, not to the object it might reference (if the property's type is an object).
--   \`readonly\` is a compile-time check; it doesn't enforce immutability at runtime if JavaScript code bypasses TypeScript.`,
+      discover: "Re-read the WHAT / HOW for this step. The check verifies those requirements — not a pasted answer.",
       quickRules: `**Quick rules:**
 -   ✅ Use \`readonly\` for properties that should be immutable after object creation.
 -   ✅ It's ideal for identifiers, timestamps, or initial configuration values.
@@ -338,21 +295,7 @@ const point1: Coordinates = { x: 10, y: 25 };
       hook: `Imagine you've meticulously defined an interface for a 'User' with properties like 'id', 'name', and 'email'. Later, another developer (or even yourself, after a long night) tries to create a user object but accidentally types 'emial' instead of 'email', or forgets to include the 'id'. Without the interface actively checking, this typo or omission would go unnoticed until runtime, potentially causing your application to crash or behave unexpectedly. The beauty of TypeScript is that it catches these kinds of structural mismatches *at compile time*, giving you immediate feedback and preventing a whole class of bugs from ever reaching production.`,
       pain: `⚠️ **Lesson:** Assigning objects that don't conform to their declared interface can introduce subtle bugs that are only discovered at runtime, leading to unexpected behavior or crashes. Symptom: Your code fails when trying to access properties that you expected to be present, or properties have unexpected types.`,
       mentalModel: `**Mental model:** Interface as a Mold. Think of an interface as a precise mold for casting objects. When you declare a variable with an interface type and assign an object to it, TypeScript tries to fit that object into the mold. If the object has all the required pieces (properties) and they are of the correct shape (types), it fits perfectly. If a piece is missing, or a piece is the wrong shape, TypeScript immediately tells you it doesn't fit the mold. This ensures that every object you create using that mold will consistently have the expected structure, making your code much more reliable.`,
-      discover: `**Pattern - Typing a Variable with an Interface:**
-\`\`\`tsx
-interface Person {
-  name: string;
-  age: number;
-}
-
-const alice: Person = { name: "Alice", age: 30 }; // Valid
-// const bob: Person = { name: "Bob" }; // Error: Property 'age' is missing
-// const charlie: Person = { name: "Charlie", age: "twenty" }; // Error: Type 'string' is not assignable to type 'number'
-\`\`\`
--   After the variable name, use a colon (\`:\`) followed by the interface name.
--   TypeScript then checks the assigned object literal against the interface's definition.
--   If the object is missing required properties, or if properties have incorrect types, TypeScript will report a compile-time error.
--   This check ensures structural compatibility, a core concept of TypeScript's type system.`,
+      discover: "Re-read the WHAT / HOW for this step. The check verifies those requirements — not a pasted answer.",
       quickRules: `**Quick rules:**
 -   ✅ Always explicitly type variables with interfaces when their structure is important.
 -   ✅ Ensure all required properties are present in the assigned object.
@@ -457,24 +400,7 @@ const todoList: Task[] = [
       hook: `Imagine you're building a dashboard that displays a list of user notifications. Each notification has a 'message', a 'timestamp', and a 'readStatus'. If your array of notifications is untyped (e.g., just \`const notifications = [];\`), you could accidentally push an object with a misspelled property like 'massege' or a 'timestamp' that's a string instead of a Date object. When you later try to display these notifications, your UI component might crash because it expects specific properties and types. Typing the array with an interface ensures that every single notification object in that array conforms to the expected structure, making your list reliable and preventing runtime errors during iteration or display.`,
       pain: `⚠️ **Lesson:** Untyped arrays of objects can lead to inconsistent data structures within collections, causing runtime errors when iterating or accessing properties. Symptom: Your loops or map functions fail because some elements in an array are missing expected properties or have incorrect types.`,
       mentalModel: `**Mental model:** Typed Array as a Homogeneous Container. Think of a typed array as a container that is specifically designed to hold only items of a particular shape, as defined by your interface. Just like a box labeled "Fragile Glassware" will only contain items that fit that description, an array typed as \`ConfigurationItem[]\` will only accept objects that perfectly match the \`ConfigurationItem\` interface. This ensures that when you pull an item out of the box, you always know exactly what kind of item it is and what properties it will have, making it safe to work with without constant runtime checks.`,
-      discover: `**Pattern - Typing Arrays with Interfaces:**
-\`\`\`tsx
-interface LogEntry {
-  timestamp: Date;
-  message: string;
-  level: 'info' | 'warn' | 'error';
-}
-
-const logs: LogEntry[] = []; // Array of LogEntry objects
-// Or: const logs: Array<LogEntry> = []; // Equivalent syntax
-
-logs.push({ timestamp: new Date(), message: "App started", level: "info" });
-// logs.push({ message: "Error occurred" }); // Error: Property 'timestamp' is missing
-\`\`\`
--   The \`InterfaceName[]\` syntax is the most common way to declare an array whose elements conform to \`InterfaceName\`.
--   Alternatively, \`Array<InterfaceName>\` provides the same functionality.
--   TypeScript will enforce that any element added to this array, or any element retrieved from it, matches the \`InterfaceName\` structure.
--   This provides strong type safety for collections of objects.`,
+      discover: "Re-read the WHAT / HOW for this step. The check verifies those requirements — not a pasted answer.",
       quickRules: `**Quick rules:**
 -   ✅ Use \`InterfaceName[]\` or \`Array<InterfaceName>\` for arrays of objects.
 -   ✅ This ensures every element in the array conforms to the interface.
@@ -597,29 +523,7 @@ greetCustomer(newCustomer);
       hook: `Imagine you're writing a utility function that processes different kinds of data, perhaps a function that calculates the total price of items in a shopping cart, or one that formats a user's address for display. Without interfaces, you might just accept a generic 'data' parameter, leaving you to guess what properties it might have. This means you'd have to add runtime checks (e.g., \`if (data && data.price)\`) and constantly refer to documentation to understand the expected input. This approach is fragile and error-prone. Interfaces, however, provide a clear, compile-time contract for your function's inputs, making your code self-documenting, safer, and much easier to reuse across your application.`,
       pain: `⚠️ **Lesson:** Functions with untyped or loosely typed parameters are difficult to use correctly, leading to runtime errors, poor autocompletion, and increased cognitive load for developers. Symptom: You frequently encounter 'undefined is not a function' or 'cannot read property of undefined' errors when calling functions.`,
       mentalModel: `**Mental model:** Function Parameter as a Gatekeeper. Think of an interface on a function parameter as a gatekeeper at the entrance of a VIP event. The gatekeeper (TypeScript) checks every guest (argument) trying to enter the event (function call). If a guest doesn't have the required credentials (properties) or their credentials are invalid (wrong types), the gatekeeper immediately denies entry (compile-time error). This ensures that only properly structured and valid guests ever make it inside the event, making the event itself (the function's logic) much smoother and safer, as it can trust that all its inputs are correct.`,
-      discover: `**Pattern - Typing Function Parameters with Interfaces:**
-\`\`\`tsx
-interface UserDetails {
-  id: string;
-  name: string;
-  email: string;
-}
-
-function displayUserDetails(user: UserDetails): void {
-  console.log(\`User ID: \${user.id}\`);
-  console.log(\`Name: \${user.name}\`);
-  console.log(\`Email: \${user.email}\`);
-}
-
-const currentUser: UserDetails = { id: "u123", name: "Alice", email: "alice@example.com" };
-displayUserDetails(currentUser);
-
-// displayUserDetails({ id: "u456", name: "Bob" }); // Error: Property 'email' is missing
-\`\`\`
--   The parameter is typed using the interface name, similar to typing a variable.
--   TypeScript will check that any object passed as an argument to this function conforms to the \`UserDetails\` interface.
--   This provides strong type safety for function inputs, preventing calls with incorrect data.
--   It also enables excellent IDE support, offering autocompletion for the parameter's properties.`,
+      discover: "Re-read the WHAT / HOW for this step. The check verifies those requirements — not a pasted answer.",
       quickRules: `**Quick rules:**
 -   ✅ Always type function parameters with interfaces when expecting structured objects.
 -   ✅ This improves type safety, catching errors at the call site.

@@ -160,13 +160,7 @@ function nonCodingPack(epic, productKey) {
   return out;
 }
 
-// `overview` is what a learner actually sees as this product's "how it works" explanation — a
-// hook sentence plus a crisp numbered walkthrough of the real mechanics (per-product request,
-// found live 2026-09-03: the short `blurb` tagline was the only product-level text that existed
-// anywhere, and it reads as marketing copy, not "how do I use this thing"). Falls back to `blurb`
-// when no overview is given yet — every product should eventually get one written, but this keeps
-// the ones that don't yet from breaking rather than shipping with an empty description.
-function buildProduct(name, blurb, epic, overview) {
+function buildProduct(name, blurb, epic) {
   const coding = (CODING_ASSISTS[name] || []).map((t) => ({
     ...t,
     trade: "Coding",
@@ -175,7 +169,7 @@ function buildProduct(name, blurb, epic, overview) {
     epic,
   }));
   const rest = nonCodingPack(epic, name);
-  return { name, blurb, overview: overview || blurb, tasks: [...coding, ...rest] };
+  return { name, blurb, tasks: [...coding, ...rest] };
 }
 
 const PRODUCTS = [
@@ -208,13 +202,6 @@ const PRODUCTS = [
     "ReviewReplyInbox",
     "Log reviews + reply + unanswered triage — without Birdeye/Podium-class reputation spend.",
     "Review desk",
-    // Hook sentence, blank line, then short `N. Label: detail` lines — Workbench.jsx's
-    // parseProductOverview() renders this as a bold-label numbered list, not a dense paragraph.
-    `ReviewReplyInbox collects every customer review into one inbox so your team never leaves a customer hanging.
-
-1. Collect: Every review — from Google, Yelp, or anywhere else — lands here automatically, with its author, rating, and body.
-2. Filter: Switch to "Unanswered" to instantly see exactly what still needs a reply.
-3. Respond: Reply right from the inbox — the system won't let the same reply go out twice.`,
   ),
   buildProduct(
     "ClientReminderHub",
@@ -241,21 +228,34 @@ function engineRel(tag) {
 }
 
 function taskDescription(productName, t) {
+  // Audit P07: desk tasks were fragments ("List quotes / form client/total…"). Expand into a
+  // readable ticket while keeping the keyed lines Workbench already parses.
+  const goal =
+    t.goal ||
+    (t.focus === "frontend"
+      ? `Build the screen described in the story so a teammate can use it without reading this ticket twice.`
+      : `Implement the API behaviour in the acceptance criteria; return clear status codes the UI can trust.`);
+  const outOfScope =
+    t.outOfScope ||
+    (t.focus === "frontend"
+      ? `Saving to a remote server is out of scope for this task — local React state is enough unless acceptance criteria say otherwise.`
+      : `UI components are out of scope — this task is the API only.`);
+  const acLines = String(t.ac || "")
+    .split(";")
+    .map((s) => s.trim())
+    .filter(Boolean);
   const lines = [
     `Epic: ${t.epic}`,
-    `Story: ${t.story}`,
-    // Same insertion point server/specforge-router.js's buildTaskDescription() uses for the AI
-    // pipeline's task.description — right after Story, before the rest of the structured Key:
-    // value lines. Workbench.jsx's humanDescription() strips every `Key: value` line and shows
-    // whatever prose is left, so this single bare line is what a learner actually sees explaining
-    // what to build and why — found live 2026-09-03 that this whole seed path never had one at all
-    // (unlike Stage3TaskSchema.description in the AI pipeline), leaving every SMB-seeded task with
-    // nothing but a terse Story: phrase and a bulleted acceptance list.
-    t.description ? t.description.trim() : null,
+    `Story: As a teammate on ${productName}, I want to ${String(t.story || t.title || "complete this work").replace(/^./, (c) => c.toLowerCase())} so the desk stays usable without a side chat thread.`,
+    `Goal: ${goal}`,
+    `OutOfScope: ${outOfScope}`,
     `Trade: ${t.trade}`,
     t.tech ? `TechLevel: ${t.tech}` : null,
     `Cohort: ${productName}`,
     `AcceptanceCriteria: ${t.ac}`,
+    "",
+    "What done looks like:",
+    ...acLines.map((line, i) => `${i + 1}. ${line}`),
   ];
   if (t.assist) {
     lines.push(`AssistModule: ${t.assist}`);
@@ -263,7 +263,7 @@ function taskDescription(productName, t) {
     lines.push("TutorialExempt: true");
   }
   if (t.focus) lines.push(`CodingFocus: ${t.focus}`);
-  return lines.filter(Boolean).join("\n");
+  return lines.filter((l) => l != null).join("\n");
 }
 
 function gitIn(dir, ...args) {
@@ -295,11 +295,20 @@ function pushInitialMain(projectName, readmeBody) {
   gitIn(dir, "init");
   gitIn(dir, "config", "user.email", "seed@inpact.live");
   gitIn(dir, "config", "user.name", "IPF Seed");
-  // No CONTRIBUTING.md — found live 2026-09-05: its "how to submit work" steps named OneDev
-  // explicitly, and duplicated instructions the Workbench task page's own "Submit your work"
-  // section already gives (real repo URL included, no tool name needed). JS applicants should
-  // never see our internal tooling by name; the task page is the one place that guidance belongs.
   fs.writeFileSync(path.join(dir, "README.md"), readmeBody);
+  fs.writeFileSync(
+    path.join(dir, "CONTRIBUTING.md"),
+    [
+      "# How to submit work",
+      "",
+      "1. Clone this repo from OneDev.",
+      "2. Create a branch named `js/<your-name>/<short-task>`.",
+      "3. Implement the Workbench task acceptance criteria.",
+      "4. Push the branch and open a Pull Request into `main`.",
+      "5. CD Review picks up the PR for human review.",
+      "",
+    ].join("\n"),
+  );
   gitIn(dir, "add", ".");
   gitIn(dir, "commit", "-m", `chore: seed ${projectName} main for JS submissions`);
   gitIn(dir, "branch", "-M", "main");
@@ -358,7 +367,7 @@ const created = [];
 for (const product of PRODUCTS) {
   const ensured = await ensureDeliveryProject({
     name: product.name,
-    description: product.overview,
+    description: product.blurb,
   });
   const projectId = ensured.projectId;
   console.log(`\nProject ${product.name} #${projectId} ${ensured.reused ? "(reused)" : "(created)"}`);
@@ -387,11 +396,10 @@ for (const product of PRODUCTS) {
     console.log(`  #${id} [${t.trade}] ${t.title}${t.assist ? ` → ${t.assist}` : ""}`);
   }
 
-  // README is real, applicant-facing repo content — a JS applicant clones this. Product name and
-  // description only, never internal process/tooling references ("Seeded for IPF Apply...", a
-  // pointer to an internal planning doc) — found live 2026-09-05: those lines meant nothing to an
-  // outside applicant and leaked internal naming that has no business being in a product's own repo.
-  pushInitialMain(product.name, `# ${product.name}\n\n${product.overview}\n`);
+  pushInitialMain(
+    product.name,
+    `# ${product.name}\n\n${product.blurb}\n\nSeeded for IPF Apply → Assist Me → PR testing.\nSee docs/SMB_PRODUCT_SELECTION_JOURNAL.md\n`,
+  );
 
   created.push({ projectId, name: product.name, tasks: taskIds });
 }

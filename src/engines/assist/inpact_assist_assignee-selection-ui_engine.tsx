@@ -143,34 +143,7 @@ function Counter() {
       hook: `Imagine you're building a complex application, perhaps a dashboard with many interactive elements. Without hooks like \`useState\` and \`useEffect\`, managing component state and side effects would often involve class components, which can become verbose and harder to reason about, especially when dealing with lifecycle methods. You might find yourself writing repetitive code for data fetching, subscriptions, or manual DOM manipulation across different lifecycle stages (\`componentDidMount\`, \`componentDidUpdate\`, \`componentWillUnmount\`). This can lead to bugs, memory leaks, and a general feeling of "boilerplate fatigue." Furthermore, passing callback functions down through multiple layers of components without memoization can trigger unnecessary re-renders, slowing down your application and making it feel sluggish. The need for a more direct, functional, and performant way to handle these common patterns led to the introduction of hooks.`,
       pain: `⚠️ **Lesson:** Without a clear, concise way to manage state and side effects, components become bloated and difficult to maintain. Symptom: Class components with complex lifecycle methods, prop drilling callbacks, and performance issues due to unmemoized functions.`,
       mentalModel: `**Mental model:** The "Component's Toolkit." Think of \`useState\`, \`useEffect\`, and \`useCallback\` as the essential tools in a functional component's toolkit. \`useState\` is your workbench for holding dynamic data, \`useEffect\` is your automated assistant for tasks that need to run after rendering (like fetching data or setting up subscriptions), and \`useCallback\` is your efficiency expert, ensuring that your tools (functions) are only rebuilt when absolutely necessary, saving time and tasks.`,
-      discover: `**Pattern - The Core React Hooks:**
-\`\`\`tsx
-import { useState, useEffect, useCallback } from 'react';
-
-function MyComponent() {
-  // useState: Manages local, reactive state
-  const [data, setData] = useState([]);
-
-  // useEffect: Handles side effects (data fetching, subscriptions, DOM manipulation)
-  useEffect(() => {
-    // This runs after every render where dependencies change
-    console.log('Component rendered or data changed:', data);
-    // Cleanup function (optional)
-    return () => console.log('Cleanup for data effect');
-  }, [data]); // Dependencies array: effect re-runs if 'data' changes
-
-  // useCallback: Memoizes functions to prevent unnecessary re-creation
-  const handleClick = useCallback(() => {
-    setData(prevData => [...prevData, 'new item']);
-  }, []); // Empty dependencies array: function created once
-
-  return <button onClick={handleClick}>Add Item</button>;
-}
-\`\`\`
-- \`useState\` provides a way to add state variables to functional components, returning the current state value and a function to update it.
-- \`useEffect\` lets you perform side effects in functional components, such as data fetching, subscriptions, or manually changing the DOM. It runs after every render by default, but can be configured to run only when specific dependencies change.
-- \`useCallback\` returns a memoized version of the callback function that only changes if one of the dependencies has changed. This is useful for preventing unnecessary re-renders in child components that rely on reference equality.
-- Together, these hooks form the backbone of most interactive and performant functional React components.`,
+      discover: "Re-read the WHAT / HOW for this step. The check verifies those requirements — not a pasted answer.",
       quickRules: `**Quick rules:**
 - ✅ Use \`useState\` for any piece of data that needs to change and trigger a re-render.
 - ✅ Use \`useEffect\` for operations that interact with the browser, network, or other external systems.
@@ -237,38 +210,7 @@ interface User {
       hook: `Imagine working on a large team project where multiple developers are interacting with the same data structures. Without clear definitions, one developer might assume a user object has a \`userId\` property (a number), while another expects an \`id\` property (a string). This ambiguity leads to constant communication overhead, runtime errors, and a significant amount of debugging time spent just figuring out what shape the data is supposed to be in. The lack of a contract makes it incredibly difficult to refactor code, onboard new team members, or even confidently make small changes without fear of breaking something elsewhere in the application.`,
       pain: `⚠️ **Lesson:** Undefined data shapes lead to ambiguity, runtime errors, and increased development friction. Symptom: Frequent \`undefined is not a function\` or \`Cannot read properties of undefined\` errors, inconsistent data access patterns, and difficulty in refactoring.`,
       mentalModel: `**Mental model:** The "Data Blueprint." Think of an interface as a detailed blueprint for a piece of data. Just as an architect's blueprint specifies the exact dimensions, materials, and layout of a building, a TypeScript interface specifies the exact properties, their types, and their optionality for an object. This blueprint ensures that everyone working on the project has a shared, unambiguous understanding of the data's structure, preventing miscommunications and structural errors before the code even runs.`,
-      discover: `**Pattern - Type-Safe Data Structures with Interfaces:**
-\`\`\`tsx
-interface Configuration {
-  theme: 'dark' | 'light';
-  notificationsEnabled: boolean;
-  language?: string; // Optional property
-}
-
-interface UserProfile {
-  id: string;
-  username: string;
-  email: string;
-  settings: Configuration; // Nested interface
-}
-
-const user: UserProfile = {
-  id: 'usr-123',
-  username: 'coder_cat',
-  email: 'cat@example.com',
-  settings: {
-    theme: 'dark',
-    notificationsEnabled: true,
-  }
-};
-
-// This would cause a compile-time error:
-// const invalidUser: UserProfile = { id: 123, username: 'dog' };
-\`\`\`
-- Interfaces define the shape of an object, specifying property names and their types.
-- They enforce type checking at compile time, catching potential errors before the code runs.
-- Interfaces improve code readability and make it easier for other developers to understand your data structures.
-- They support optional properties (with \`?\`) and can be nested to represent complex data relationships.`,
+      discover: "Re-read the WHAT / HOW for this step. The check verifies those requirements — not a pasted answer.",
       quickRules: `**Quick rules:**
 - ✅ Use interfaces to define the shape of objects, especially for data fetched from APIs or passed as props.
 - ✅ Be explicit with types (e.g., \`string\`, \`number\`, \`boolean\`, custom types).
@@ -348,22 +290,7 @@ interface Task {
       hook: `Consider an e-commerce cart: the moment a shopper changes an item's quantity, the UI updates immediately — but the change hasn't reached the server yet. If the request later fails, the UI has to know which specific row to roll back. Without a field on the data itself marking "this one is still in flight," there's no reliable way to tell a confirmed value apart from an optimistic guess once several updates are happening close together.`,
       pain: `⚠️ **Lesson:** Optimistic UI without a pending marker on the data can't tell "confirmed" apart from "guessed" once a request fails or a second update starts before the first finishes. Symptom: rollbacks that revert the wrong row, or UI that looks confirmed when it silently failed.`,
       mentalModel: `**Mental model:** The "Sticky Note." An \`isPending\` flag is like a sticky note stuck to one row saying "still waiting to hear back." Once the server confirms, you peel the note off. If the server says no, you use the note to know exactly which value to restore.`,
-      discover: `**Pattern - Marking In-Flight State on the Data Itself:**
-\`\`\`tsx
-interface Task {
-  id: string;
-  name: string;
-  assigneeId: string | null;
-  isPending?: boolean;
-}
-
-function assign(tasks: Task[], id: string, assigneeId: string) {
-  return tasks.map(t => (t.id === id ? { ...t, assigneeId, isPending: true } : t));
-}
-\`\`\`
-- The flag lives on the same object as the data it's tracking — no separate lookup needed.
-- It's optional (\`?\`) because most of the time nothing is pending.
-- Confirming or rolling back just means updating (or removing) that same flag.`,
+      discover: "Re-read the WHAT / HOW for this step. The check verifies those requirements — not a pasted answer.",
       quickRules: `**Quick rules:**
 - ✅ Put the pending marker on the same record it describes, not in separate state.
 - ✅ Make it optional — most records aren't mid-update most of the time.
@@ -474,28 +401,7 @@ function TaskAssignmentPanel() {
       hook: `Before the introduction of hooks, if you needed state or lifecycle methods, you had to use class components. This meant writing \`class MyComponent extends React.Component\`, dealing with \`this\` binding issues, and often having to refactor functional components into class components just to add a single piece of state. The code could become verbose, especially for simple components, and the logic related to a single feature (like data fetching) might be scattered across multiple lifecycle methods (\`componentDidMount\`, \`componentDidUpdate\`, \`componentWillUnmount\`), making it hard to follow and maintain. This complexity often led to larger bundles, slower development, and a steeper learning curve for new developers.`,
       pain: `⚠️ **Lesson:** Class components can introduce boilerplate, \`this\` binding complexities, and scattered logic. Symptom: Verbose code, difficulty in reusing stateful logic, and a higher cognitive load for understanding component behavior.`,
       mentalModel: `**Mental model:** The "Pure Function with Memory." Imagine a functional component as a pure mathematical function: given the same inputs (props), it always produces the same output (JSX). Hooks like \`useState\` and \`useEffect\` then act as a special kind of "memory" or "side-effect manager" that you can attach to these pure functions, allowing them to remember things between renders and interact with the outside world, without losing their functional simplicity.`,
-      discover: `**Pattern - Functional Component Structure:**
-\`\`\`tsx
-import { useState } from 'react';
-
-function MyButton({ label }: { label: string }) {
-  const [clicks, setClicks] = useState(0);
-
-  const handleClick = () => {
-    setClicks(prev => prev + 1);
-  };
-
-  return (
-    <button onClick={handleClick}>
-      {label} ({clicks} clicks)
-    </button>
-  );
-}
-\`\`\`
-- Functional components are plain JavaScript functions that accept a single \`props\` object as an argument and return React elements (JSX).
-- They are generally simpler and more concise than class components.
-- With the introduction of hooks, functional components can manage state, perform side effects, and access context, making them fully capable replacements for most class component use cases.
-- They are easier to test and reason about due to their functional nature.`,
+      discover: "Re-read the WHAT / HOW for this step. The check verifies those requirements — not a pasted answer.",
       quickRules: `**Quick rules:**
 - ✅ Use functional components for all new components.
 - ✅ Pass data down to functional components via props.
@@ -611,28 +517,7 @@ function TaskAssignmentPanel() {
       hook: `Have you ever wondered how React "remembers" the state of your functional components between renders? Without \`useState\`, every time your component function runs (which happens on every re-render), all local variables would be re-initialized, effectively wiping out any previous state. This would make it impossible to build interactive UIs where data persists and changes over time, like a counter that increments, a form input that holds its value, or a list that updates. The challenge is to give a pure function "memory" without turning it into a class or relying on global variables, which would break React's component model and make debugging a nightmare.`,
       pain: `⚠️ **Lesson:** Without a mechanism to persist state between renders, functional components would be stateless and non-interactive. Symptom: UI elements resetting to initial values on every re-render, inability to store user input or dynamic data.`,
       mentalModel: `**Mental model:** The "Component's Private Locker." Imagine each functional component instance has a small, private locker. When you call \`useState('initialValue')\`, React assigns a slot in that locker for this specific state variable and stores 'initialValue' there. On subsequent renders, when React sees the same \`useState\` call, it doesn't re-initialize; instead, it retrieves the current value from that locker slot. The setter function (\`setSomething\`) is the key to updating the value in the locker, which then tells React to re-render the component with the new value.`,
-      discover: `**Pattern - Basic \`useState\` Usage:**
-\`\`\`tsx
-import { useState } from 'react';
-
-function ToggleButton() {
-  const [isOn, setIsOn] = useState(false); // Initial state is false
-
-  const handleToggle = () => {
-    setIsOn(!isOn); // Toggles the boolean state
-  };
-
-  return (
-    <button onClick={handleToggle}>
-      {isOn ? 'ON' : 'OFF'}
-    </button>
-  );
-}
-\`\`\`
-- \`useState\` is a hook that lets you add React state to functional components.
-- It returns a pair: the current state value and a function that lets you update it.
-- The argument passed to \`useState\` is the initial state. This initial state is only used during the *first* render.
-- When the setter function (e.g., \`setIsOn\`) is called, React re-renders the component, and the new state value is provided.`,
+      discover: "Re-read the WHAT / HOW for this step. The check verifies those requirements — not a pasted answer.",
       quickRules: `**Quick rules:**
 - ✅ Call \`useState\` at the top level of your functional component.
 - ✅ Use descriptive names for your state variables and their setters (e.g., \`[count, setCount]\`).
@@ -1110,30 +995,7 @@ function TaskAssignmentPanel() {
       hook: `Imagine you have a list of items, perhaps a dozen, or even hundreds. If you just render them without a unique identifier, React struggles to efficiently update the UI when items are added, removed, or reordered. When a list changes, React needs to know *which* specific item has changed, rather than re-rendering the entire list from scratch. Without this crucial piece of information, React's reconciliation algorithm can become inefficient, leading to performance issues, incorrect component state (e.g., an input field losing its value), and unexpected visual glitches. This problem becomes particularly noticeable in dynamic lists where user interactions frequently modify the list's content or order.`,
       pain: `⚠️ **Lesson:** Missing or incorrect \`key\` props in lists lead to inefficient updates and potential UI bugs. Symptom: Slow list rendering, incorrect component state after updates, and console warnings about missing keys.`,
       mentalModel: `**Mental model:** The "Item's Identity Card." Think of the \`key\` prop as a unique identity card for each item in a list. When React renders a list, it uses these identity cards to track each individual item. If an item's identity card (its \`key\`) remains the same, React knows it's the same item, even if its position or other properties change. If an item with a new identity card appears, React knows it's a new item. This allows React to efficiently update only the necessary parts of the DOM, rather than rebuilding the entire list.`,
-      discover: `**Pattern - Efficient List Rendering with \`map\` and \`key\`:**
-\`\`\`tsx
-interface Task {
-  id: string;
-  description: string;
-  completed: boolean;
-}
-
-function TaskList({ tasks }: { tasks: Task[] }) {
-  return (
-    <ul>
-      {tasks.map(task => (
-        <li key={task.id} className={task.completed ? 'completed' : ''}>
-          {task.description}
-        </li>
-      ))}
-    </ul>
-  );
-}
-\`\`\`
-- Use the \`Array.prototype.map()\` method to transform an array of data into an array of React elements.
-- Always provide a unique \`key\` prop for each item rendered in a list. This \`key\` should be a stable, unique identifier for the item (e.g., a database ID).
-- The \`key\` prop helps React identify which items have changed, are added, or are removed, enabling efficient reconciliation.
-- Avoid using array index as a \`key\` if the list items can be reordered, added, or removed, as this can lead to performance issues and incorrect component state.`,
+      discover: "Re-read the WHAT / HOW for this step. The check verifies those requirements — not a pasted answer.",
       quickRules: `**Quick rules:**
 - ✅ Use \`map\` to render lists of elements from an array.
 - ✅ Always provide a unique and stable \`key\` prop for each list item.
@@ -1482,37 +1344,7 @@ function TaskAssignmentPanel() {
       hook: `Optimistic updates promise a faster, more responsive user experience, but they introduce a new layer of complexity. Imagine a scenario where a user rapidly clicks an "assign" button multiple times, or performs several optimistic actions in quick succession. What happens if the first API call succeeds, but the second one fails? How do you ensure the UI correctly reflects the final state, especially if the order of API responses doesn't match the order of user actions? Without careful planning, optimistic updates can lead to race conditions, inconsistent UI states, and a confusing experience for the user when the "optimism" doesn't match reality.`,
       pain: `⚠️ **Lesson:** Unmanaged optimistic updates can lead to race conditions, inconsistent UI, and difficult-to-debug state discrepancies. Symptom: UI "flashing" or reverting unexpectedly, actions appearing to succeed but not persisting, or multiple pending states conflicting.`,
       mentalModel: `**Mental model:** The "Temporary Ledger." Think of optimistic updates as maintaining a temporary ledger of changes in the UI. When an action occurs, you immediately record it in this temporary ledger and update the displayed balance. Simultaneously, you send the actual transaction to the bank (the API). If the bank confirms the transaction, you make it permanent in your ledger. If the bank rejects it, you "undo" the temporary entry, reverting to the last confirmed balance. The challenge is managing multiple temporary entries and ensuring the ledger always reflects the true state once all bank transactions are settled.`,
-      discover: `**Pattern - Robust Optimistic Update Flow:**
-\`\`\`tsx
-const handleAction = useCallback(async (itemId: string, newValue: string) => {
-  // 1. Store current state for potential rollback
-  const originalItems = items;
-
-  // 2. Optimistic UI update (add a pending flag)
-  setItems(prev => prev.map(item =>
-    item.id === itemId ? { ...item, value: newValue, isPending: true } : item
-  ));
-
-  try {
-    // 3. Make API call
-    await api.updateItem(itemId, newValue);
-
-    // 4. API success: Confirm update (remove pending flag)
-    setItems(prev => prev.map(item =>
-      item.id === itemId ? { ...item, isPending: false } : item
-    ));
-  } catch (error) {
-    // 5. API failure: Rollback to original state, show error
-    setError('Failed to update item.');
-    setItems(originalItems);
-  }
-}, [items]); // Dependency on 'items' for rollback reference
-\`\`\`
-- **Immediate UI Update:** The UI is updated *before* the API call, providing instant feedback.
-- **Pending State:** A visual indicator (\`isPending\` flag) is crucial to show the user that the change is not yet confirmed.
-- **Rollback Mechanism:** The original state is saved, allowing the UI to revert if the API call fails.
-- **Confirmation:** On API success, the pending state is removed, confirming the change.
-- **Error Handling:** Clear error messages are displayed to the user on failure.`,
+      discover: "Re-read the WHAT / HOW for this step. The check verifies those requirements — not a pasted answer.",
       quickRules: `**Quick rules:**
 - ✅ Always store the original state before an optimistic update for rollback.
 - ✅ Provide clear visual feedback (e.g., a 'pending' spinner or dimmed state) for optimistic changes.
@@ -1988,36 +1820,7 @@ function TaskAssignmentPanel() {
       hook: `Imagine building a form with several input fields, dropdowns, or checkboxes. If you let each input manage its own state internally (an "uncontrolled component"), retrieving the form's data when the user clicks "submit" becomes a challenge. You'd have to manually query the DOM for each input's current value. Furthermore, if you want to programmatically set an input's value, validate it in real-time, or disable it based on other form data, it becomes incredibly difficult to synchronize the UI with your application's logic. This can lead to inconsistent data, complex event handling, and a brittle form experience.`,
       pain: `⚠️ **Lesson:** Uncontrolled form inputs lead to difficulty in data retrieval, real-time validation, and programmatic control. Symptom: Manual DOM queries for form values, complex event listeners, and inconsistent UI behavior.`,
       mentalModel: `**Mental model:** The "Puppeteer and Puppet." Think of a controlled component as a puppet (the input field) whose every movement (its value) is dictated by a puppeteer (your React state). The puppeteer holds the strings (the \`value\` prop) and listens for the puppet's signals (the \`onChange\` event). When the puppet signals a change, the puppeteer updates its own state, and then, in turn, pulls the strings to update the puppet's display. This ensures that your React state is always the single source of truth for the input's value.`,
-      discover: `**Pattern - Controlled Input Component:**
-\`\`\`tsx
-import { useState } from 'react';
-
-function NameInput() {
-  const [name, setName] = useState(''); // State holds the input's value
-
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setName(event.target.value); // Update state on every change
-  };
-
-  return (
-    <div>
-      <label>
-        Name:
-        <input
-          type="text"
-          value={name} // Input's value is controlled by state
-          onChange={handleChange} // State is updated on change
-        />
-      </label>
-      <p>Hello, {name}!</p>
-    </div>
-  );
-}
-\`\`\`
-- A controlled component is a form input element whose value is controlled by React state.
-- The input's \`value\` prop is set by a state variable.
-- An \`onChange\` event handler updates that state variable whenever the input's value changes.
-- This creates a "single source of truth" for the input's data, making it easy to validate, manipulate, and submit.`,
+      discover: "Re-read the WHAT / HOW for this step. The check verifies those requirements — not a pasted answer.",
       quickRules: `**Quick rules:**
 - ✅ Always bind an input's \`value\` prop to a piece of React state.
 - ✅ Always provide an \`onChange\` handler that updates the bound state.

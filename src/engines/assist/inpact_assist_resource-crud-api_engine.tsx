@@ -192,19 +192,7 @@ if (__name__ === '__main__') {
       hook: `Imagine you're building a backend for a mobile app. The app sends data to your server, like a user's new profile picture or a list of items to add to a cart. This data often comes as JSON, a structured text format. If your server doesn't know how to read this JSON, it's like receiving a letter written in a secret code – you have the letter, but you can't understand its content. Your server would just see a stream of raw bytes, making it impossible to extract meaningful information like "username" or "item_id." This inability to parse incoming data is a common source of frustration and bugs in API development, leading to empty request bodies or malformed data errors.`,
       pain: `⚠️ **Lesson:** Without proper body parsing middleware, your server cannot easily access data sent in the request body, especially for \`POST\`, \`PUT\`, or \`PATCH\` requests. Symptom: \`req.body\` is \`undefined\` or an empty object, even when the client sends data.`,
       mentalModel: `**Mental model:** The "API Translator." Think of \`express.json()\` as a universal translator for your API. When a client sends data to your server, it often speaks in JSON. Without the translator, your server hears gibberish. The \`express.json()\` translator intercepts the incoming message, understands the JSON, and then converts it into a structured JavaScript object that your server can easily read and use. It ensures that when you look at \`req.body\`, you see a neatly organized object, not raw, unreadable data.`,
-      discover: `\`\`\`typescript
-import express from 'express';
-const app = express();
-app.use(express.json()); // This line is the key!
-app.post('/data', (req, res) => {
-  console.log(req.body); // Now this will contain the parsed JSON
-  res.status(200).send('Data received');
-});
-\`\`\`
-*   \`express.json()\` is a built-in middleware function in Express.
-*   It parses incoming requests with JSON payloads.
-*   It populates \`req.body\` with the parsed data.
-*   It's essential for handling \`POST\`, \`PUT\`, and \`PATCH\` requests where clients send JSON data.`,
+      discover: "Re-read the WHAT / HOW for this step. The check verifies those requirements — not a pasted answer.", \`PUT\`, and \`PATCH\` requests where clients send JSON data.`,
       quickRules: `**Quick rules:**
 - ✅ Always include \`app.use(express.json());\` when expecting JSON request bodies.
 - ✅ Place \`app.use(express.json());\` early in your middleware chain.
@@ -386,27 +374,7 @@ public static class ProductData
       hook: `Imagine you're collaborating on a large software project. One team is building the frontend, another the backend, and a third is working on a mobile app. All these teams need to understand the exact shape of the data being exchanged. If the backend sends a "user" object with \`firstName\` and \`lastName\`, but the frontend expects \`first_name\` and \`last_name\`, or if a field is sometimes a string and sometimes a number, chaos ensues. Developers spend hours debugging "undefined" errors, type mismatches, and unexpected data formats. This lack of a clear contract for data leads to brittle code, constant communication overhead, and a high risk of introducing bugs whenever the data structure changes.`,
       pain: `⚠️ **Lesson:** Without a clear data contract (like a TypeScript interface), it's easy for different parts of your application (or different teams) to misunderstand the expected shape, types, and presence of data fields. Symptom: Runtime type errors, unexpected \`undefined\` values, and difficulty in refactoring data structures.`,
       mentalModel: `**Mental model:** The "Data Blueprint." Think of a TypeScript interface as a detailed architectural blueprint for your data. Just as a blueprint specifies the exact dimensions, materials, and layout of a building, an interface specifies the exact names, types, and optionality of properties within a data object. This blueprint acts as a contract, ensuring that everyone working on the project (frontend, backend, database) has a shared, unambiguous understanding of what a "Resource" or "User" object looks like. It allows tools to check for consistency *before* the code even runs.`,
-      discover: `\`\`\`typescript
-interface Product {
-  id: string;
-  name: string;
-  price: number;
-  inStock: boolean;
-  category?: string; // Optional property
-}
-
-const myProduct: Product = {
-  id: 'prod-abc',
-  name: 'Wireless Mouse',
-  price: 25.99,
-  inStock: true,
-};
-// myProduct.price = "twenty-five"; // TypeScript would flag this as an error
-\`\`\`
-*   Interfaces define the shape of objects, enforcing type checking at compile time.
-*   They act as a contract for data structures, improving code readability and maintainability.
-*   They help catch type-related errors early in the development cycle.
-*   They are purely a compile-time construct and do not generate any JavaScript code.`,
+      discover: "Re-read the WHAT / HOW for this step. The check verifies those requirements — not a pasted answer.",
       quickRules: `**Quick rules:**
 - ✅ Use interfaces to define the expected shape of all data objects in your API.
 - ✅ Be explicit about property types (e.g., \`string\`, \`number\`, \`boolean\`, \`Date\`).
@@ -696,20 +664,7 @@ const sample_items = [
       hook: `Imagine you're browsing a large online store. You don't want to see *every* product; you want to see "laptops under $1000, sorted by price, on page 2." If the website had to create a completely new URL for every possible combination of filters, sorting, and pagination, it would be impossible to manage. How does the server know what you're looking for without creating an infinite number of distinct endpoints? Without a standardized way to pass these dynamic criteria, every client-server interaction would require custom logic, leading to rigid APIs that are hard to extend and maintain, and frustrating user experiences.`,
       pain: `⚠️ **Lesson:** Without query parameters, APIs struggle to provide flexible data retrieval, forcing clients to fetch all data and filter locally, or requiring an explosion of specific endpoints for every filtering need. Symptom: Inefficient data transfer, slow client-side processing, or an overly complex API design.`,
       mentalModel: `**Mental model:** The "API Request Form." Think of a URL with query parameters as filling out a specific request form for your API. The base URL (\`/resources\`) is like saying "I want resources." The \`?\` signifies the start of the form, and each \`key=value\` pair (like \`status=active\` or \`page=2\`) is like filling in a field on that form. The \`&\` separates different fields. Your API server then reads this "form" (\`req.query\`) and uses the provided information to customize the data it sends back, ensuring you get exactly what you asked for without needing a new form for every request.`,
-      discover: `\`\`\`typescript
-// Example URL: /products?category=electronics&minPrice=100&sort=price
-app.get('/products', (req, res) => {
-  const category = req.query.category; // 'electronics'
-  const minPrice = req.query.minPrice; // '100' (always string!)
-  const sort = req.query.sort;         // 'price'
-  // ... use these values to filter/sort data ...
-  res.json({ category, minPrice, sort });
-});
-\`\`\`
-*   Query parameters are appended to the URL after a \`?\`.
-*   They consist of key-value pairs, separated by \`&\`.
-*   In Express, they are accessible via \`req.query\` as an object.
-*   All values in \`req.query\` are strings, even if they represent numbers or booleans, and must be parsed.`,
+      discover: "Re-read the WHAT / HOW for this step. The check verifies those requirements — not a pasted answer.",
       quickRules: `**Quick rules:**
 - ✅ Use query parameters for filtering, sorting, pagination, and optional data inclusion.
 - ✅ Ensure query parameter values are properly parsed (e.g., \`parseInt\`, \`JSON.parse\`).
@@ -1041,23 +996,7 @@ end
       hook: `Imagine you're trying to locate a specific book in a library. You wouldn't ask "give me a book where the title is 'Moby Dick' and the author is 'Herman Melville' and the genre is 'classic'." Instead, you'd go directly to its unique call number or ISBN. Similarly, in an API, when you want *one specific item* identified by its unique identifier, how do you tell the server which one? If you tried to use query parameters for this, your URLs would become clunky and less intuitive, like \`/resources?id=res-101\`. This isn't wrong, but it's less RESTful and less clear about the *identity* of the resource being requested, making your API harder to understand and use.`,
       pain: `⚠️ **Lesson:** Misusing query parameters for resource identification or path parameters for filtering leads to less intuitive, less RESTful, and harder-to-maintain API designs. Symptom: URLs that don't clearly represent the resource hierarchy or actions, or inconsistent API patterns.`,
       mentalModel: `**Mental model:** "Identity vs. Attributes." Think of path parameters as defining the *identity* of the resource you're interacting with, like a unique serial number for a product. The path \` /resources/res-101 \` says "I am talking about *this specific resource*, \`res-101\`." Query parameters, on the other hand, are like *attributes* or *filters* you apply to a collection, like asking "show me all resources that have the attribute \`status=active\`." Path parameters narrow down to a single entity or a specific sub-resource, while query parameters refine a collection.`,
-      discover: `\`\`\`typescript
-// Path parameter: identifies a specific user
-app.get('/users/:userId', (req, res) => {
-  const userId = req.params.userId; // e.g., '123'
-  // ... fetch user by userId ...
-});
-
-// Query parameter: filters a collection of users
-app.get('/users', (req, res) => {
-  const status = req.query.status; // e.g., 'active'
-  // ... fetch users filtered by status ...
-});
-\`\`\`
-*   **Path Parameters (\`/resources/:id\`)**: Used to identify a specific resource or a hierarchical sub-resource. They are part of the URL path itself.
-*   **Query Parameters (\`/resources?status=active\`)**: Used for filtering, sorting, pagination, or optional parameters that apply to a collection or influence the representation of a resource.
-*   In Express, path parameters are accessed via \`req.params\`.
-*   In Express, query parameters are accessed via \`req.query\`.`,
+      discover: "Re-read the WHAT / HOW for this step. The check verifies those requirements — not a pasted answer.",
       quickRules: `**Quick rules:**
 - ✅ Use path parameters when the segment identifies a unique resource (e.g., \`/users/123\`).
 - ✅ Use path parameters for hierarchical relationships (e.g., \`/users/123/posts/456\`).
@@ -1458,23 +1397,7 @@ public class ProductController {
       hook: `Imagine you have a complex user profile with dozens of fields: name, email, address, preferences, profile picture, bio, etc. If a user only wants to change their email address, should your API require them to send *all* their profile data back, even the fields that haven't changed? If you use \`PUT\` for this, you'd have to send the entire, potentially large, user object. This is inefficient, increases network traffic, and makes it easier to accidentally overwrite or omit other fields. How do you update just a small part of a resource without sending the whole thing? This is a common dilemma in API design, leading to bloated requests or complex client-side logic to reconstruct full objects.`,
       pain: `⚠️ **Lesson:** Using \`PUT\` for partial updates forces clients to send the entire resource representation, leading to inefficient requests and potential data loss if fields are accidentally omitted. Symptom: Large request bodies for minor changes, or accidental overwrites of unchanged data.`,
       mentalModel: `**Mental model:** "Full Replacement vs. Surgical Edit." Think of \`PUT\` as completely replacing a document on a shelf with a brand new one. Whatever you send in the \`PUT\` request body *becomes* the new state of the resource, overwriting everything that was there before. \`PATCH\`, on the other hand, is like making a surgical edit to that document. You only send the specific changes you want to apply, and the server intelligently merges those changes into the existing resource. \`PUT\` is for "here's the new complete version," while \`PATCH\` is for "here are the specific modifications."`,
-      discover: `\`\`\`typescript
-// PUT: Replaces the entire resource
-// Request body: { "name": "New Name", "email": "new@example.com", "age": 30 }
-app.put('/users/:id', (req, res) => {
-  // ... logic to completely replace user with req.body ...
-});
-
-// PATCH: Applies partial modifications
-// Request body: { "email": "updated@example.com" }
-app.patch('/users/:id', (req, res) => {
-  // ... logic to update only specified fields in req.body ...
-});
-\`\`\`
-*   **\`PUT\`**: Used to replace an entire resource. The request body should contain the complete, updated representation of the resource.
-*   **\`PATCH\`**: Used to apply partial modifications to a resource. The request body should contain only the fields that need to be updated.
-*   \`PATCH\` is generally preferred for updating one or a few fields, as it's more efficient.
-*   \`PUT\` is suitable when you want to ensure the resource's state exactly matches the request body.`,
+      discover: "Re-read the WHAT / HOW for this step. The check verifies those requirements — not a pasted answer.",
       quickRules: `**Quick rules:**
 - ✅ Use \`PATCH\` for partial updates where only a few fields are changing.
 - ✅ Use \`PUT\` when the client sends the complete, updated representation of the resource.
@@ -1915,29 +1838,7 @@ WHERE id = 'task-101';
       hook: `Imagine you're building a project management tool. A task can be assigned to a user, and a user can be assigned to multiple tasks. How do you design your API endpoints to manage these relationships? Should you have \`/tasks/:taskId/assignUser\` or \`/users/:userId/assignTask\`? Or perhaps a completely separate endpoint like \`/assignments\`? If you don't have a clear strategy, your API can become confusing, with inconsistent URLs and redundant logic, making it hard for clients to understand how to link entities together. This often leads to developers guessing or implementing ad-hoc solutions, resulting in a messy and unmaintainable API.`,
       pain: `⚠️ **Lesson:** Without a consistent strategy for designing relationship endpoints, APIs become difficult to navigate, leading to inconsistent URL structures and ambiguous ways to manage connections between resources. Symptom: Confusing API documentation, redundant endpoint logic, or difficulty for clients to perform common linking operations.`,
       mentalModel: `**Mental model:** "Resource-Centric Actions." When designing relationship endpoints, think primarily about the *resource* that is being directly modified or acted upon. If you're assigning a user *to a task*, the task is the primary resource. So, the endpoint should typically be nested under the task, like \`/tasks/:taskId/assign\`. The \`userId\` then becomes part of the request body. This keeps the API intuitive: you're performing an action *on* a task, and that action involves a user. For many-to-many relationships, a dedicated "linking" resource (like \`/assignments\`) can also be appropriate, but for one-to-many or one-to-one, nesting under the primary resource is often cleaner.`,
-      discover: `\`\`\`typescript
-// Assign a user to a task (task-centric)
-// PATCH /tasks/:taskId/assign
-// Body: { "userId": "user-abc" }
-app.patch('/tasks/:taskId/assign', (req, res) => {
-  const taskId = req.params.taskId;
-  const { userId } = req.body;
-  // ... logic to update task's assignedTo field ...
-});
-
-// Add a tag to a product (product-centric)
-// POST /products/:productId/tags
-// Body: { "tagId": "tag-xyz" }
-app.post('/products/:productId/tags', (req, res) => {
-  const productId = req.params.productId;
-  const { tagId } = req.body;
-  // ... logic to link product and tag ...
-});
-\`\`\`
-*   For one-to-one or one-to-many relationships, nesting the action under the primary resource is common (e.g., \`/resources/:id/assign\`).
-*   The related entity's ID (e.g., \`userId\`) is typically sent in the request body for \`PATCH\` or \`POST\` operations.
-*   Using \`PATCH\` for assignment/unassignment is appropriate as it's a partial update to the resource's relationship field.
-*   Consider the semantic meaning: are you modifying the resource itself, or creating a new linking resource?`,
+      discover: "Re-read the WHAT / HOW for this step. The check verifies those requirements — not a pasted answer.",
       quickRules: `**Quick rules:**
 - ✅ Nest relationship actions under the primary resource being modified (e.g., \`/tasks/:taskId/assign\`).
 - ✅ Use \`PATCH\` for updating a resource's relationship field (e.g., \`assignedTo\`).
@@ -2454,30 +2355,7 @@ const server = http.createServer((req, res) => {
       hook: `Imagine you're building an API for a critical financial application. A client sends a request to transfer money, but instead of a valid account number, they send a random string, or instead of a positive amount, they send a negative number. If your API doesn't validate these inputs, it could lead to corrupted data, security vulnerabilities (like injection attacks), or even financial losses. Without proper validation, your backend becomes a "garbage in, garbage out" system, making it unreliable and dangerous. Developers spend countless hours debugging issues caused by unexpected data, and users experience frustrating errors or incorrect behavior.`,
       pain: `⚠️ **Lesson:** Lack of robust input validation exposes your API to invalid data, security risks, and unpredictable behavior, leading to data corruption, crashes, and a poor developer experience. Symptom: Unexpected server errors, inconsistent data states, or security vulnerabilities.`,
       mentalModel: `**Mental model:** The "API Security Checkpoint." Think of input validation as a security checkpoint at the entrance of your API. Every piece of data trying to enter your system must pass through this checkpoint. The checkpoint guards (your validation logic) inspect the data to ensure it meets all predefined rules: Is it the correct type? Is it within the expected range? Does it conform to the required format? Only data that passes all checks is allowed to proceed into your application logic. Any invalid data is immediately rejected with a clear explanation, protecting the integrity of your system.`,
-      discover: `\`\`\`typescript
-import { z } from 'zod'; // Example with Zod
-
-const resourceSchema = z.object({
-  name: z.string().min(3),
-  status: z.enum(['active', 'pending', 'inactive']),
-  assignedTo: z.string().nullable(),
-});
-
-app.post('/resources', (req, res) => {
-  try {
-    const validatedData = resourceSchema.parse(req.body);
-    // ... use validatedData ...
-    res.status(201).json(validatedData);
-  } catch (error: any) {
-    res.status(400).json({ message: 'Validation failed', errors: error.errors });
-  }
-});
-\`\`\`
-*   Input validation ensures that incoming data conforms to expected types, formats, and constraints.
-*   It prevents invalid data from reaching your application logic or database.
-*   Validation can be done manually (if/else checks) or using dedicated libraries (e.g., Zod, Joi, Yup).
-*   Error handling middleware catches unhandled exceptions and sends a consistent error response.
-*   Always return appropriate HTTP status codes (e.g., \`400 Bad Request\` for validation errors, \`500 Internal Server Error\` for unexpected server issues).`,
+      discover: "Re-read the WHAT / HOW for this step. The check verifies those requirements — not a pasted answer.",
       quickRules: `**Quick rules:**
 - ✅ Validate all incoming request bodies, query parameters, and path parameters.
 - ✅ Use appropriate HTTP status codes for errors (e.g., 400, 404, 500).
@@ -3025,28 +2903,7 @@ describe('sum function', () => {
       hook: `Imagine you've just finished building a complex API with many endpoints, filters, and update operations. You've manually tested a few requests with Postman or curl, and everything *seems* to work. But what happens when you add a new feature, refactor some code, or fix a bug? How can you be sure that your changes haven't broken existing functionality? Manually re-testing every single endpoint and every possible scenario after every change is tedious, error-prone, and unsustainable. This lack of automated verification leads to regressions, missed bugs, and a constant fear of deploying new code, ultimately slowing down development and eroding confidence in your system.`,
       pain: `⚠️ **Lesson:** Without automated integration tests, it's impossible to reliably verify that your API endpoints function correctly, leading to regressions, undetected bugs, and a lack of confidence in your deployed code. Symptom: Frequent production bugs, slow development cycles due to manual testing, or fear of making changes.`,
       mentalModel: `**Mental model:** The "API Quality Assurance Robot." Think of integration tests as a tireless robot that automatically sends requests to your API endpoints, just like a real client would. This robot then meticulously checks the responses: Is the status code correct (200 OK, 404 Not Found, 400 Bad Request)? Does the response body contain the expected data in the correct format? Did the database (or in-memory data) update as expected? This robot runs these checks repeatedly, every time you make a change, providing immediate feedback and ensuring that your API consistently meets its quality standards without human intervention.`,
-      discover: `\`\`\`typescript
-// Conceptual example of an API test
-// using a testing framework like Jest and Supertest
-/*
-import request from 'supertest';
-import { app } from '../src/server'; // Your Express app
-
-describe('GET /api/items', () => {
-  it('should return all items', async () => {
-    const res = await request(app).get('/api/items');
-    expect(res.statusCode).toEqual(200);
-    expect(res.body.length).toBeGreaterThan(0);
-    expect(res.body[0]).toHaveProperty('name');
-  });
-});
-*/
-\`\`\`
-*   Integration tests verify the interaction between different parts of your API (e.g., routes, middleware, data storage).
-*   They simulate real client requests to your API endpoints.
-*   Tests check for correct HTTP status codes, response body structure, and data consistency.
-*   Tools like \`supertest\` (for making HTTP requests) and \`jest\` or \`mocha\` (for test runners/assertions) are commonly used.
-*   Automated tests provide confidence that changes don't break existing functionality (prevent regressions).`,
+      discover: "Re-read the WHAT / HOW for this step. The check verifies those requirements — not a pasted answer.",
       quickRules: `**Quick rules:**
 - ✅ Write integration tests for all critical API endpoints.
 - ✅ Test both success paths and various error conditions (e.g., invalid input, not found).

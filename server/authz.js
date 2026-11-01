@@ -32,7 +32,7 @@
  * through /api/onedev today. Flagged, not fixed — see the technical-diligence audit this responds
  * to for the full writeup.
  */
-import { listIssues, listProjects } from "./onedev-client.js";
+import { listAllIssues, listProjects } from "./onedev-client.js";
 
 const COHORT_PROJECT_ID = 2;
 
@@ -47,7 +47,11 @@ export async function authorizedProjectIdsForJsSession(session) {
   const authorized = new Set();
   if (!session?.email) return authorized;
 
-  const issues = await listIssues({ offset: 0, count: 200 });
+  // Same corpus as GET /api/recruit/my-tasks — a single page of 200 misses Application:/Matched:
+  // after a full desk seed (audit P01: BookingDepositDesk / InvoiceFollowUpTracker /
+  // LeadFollowUpInbox showed in My tasks but git returned 403).
+  const issues = await listAllIssues();
+  const email = String(session.email).trim().toLowerCase();
 
   const myApplicationIds = new Set(
     issues
@@ -55,7 +59,9 @@ export async function authorizedProjectIdsForJsSession(session) {
         (i) =>
           i.projectId === COHORT_PROJECT_ID &&
           i.title.startsWith("Application:") &&
-          (i.description || "").split("\n").some((line) => line.trim() === `Email: ${session.email}`),
+          (i.description || "")
+            .split("\n")
+            .some((line) => line.trim().toLowerCase() === `email: ${email}`),
       )
       .map((i) => i.id),
   );
