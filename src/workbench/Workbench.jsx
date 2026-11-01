@@ -838,8 +838,12 @@ function OpenTaskView({ task, publishedModules, onBack, isJS, projects = [] }) {
 }
 
 export default function Workbench() {
-  const { session, status: authStatus, logout } = useAuth();
-  const isJS = session?.accountType === "js" && !hasRole(session, OPS_ROLES);
+  const { session, status: authStatus } = useAuth();
+  // accountType === "js" always means the aspirant My-tasks board — even when this email also
+  // holds PD/ID/… grants (IPF_SUPER_ADMIN_EMAILS / RoleGrant). Found live: a JS super-admin was
+  // routed into the core delivery board, hit /api/onedev 401 noise, and never saw their matches.
+  const isJS = session?.accountType === "js";
+  const canUseCoreBoard = session?.accountType === "core" || hasRole(session, OPS_ROLES);
 
   const [projects, setProjects] = useState([]);
   const [projectId, setProjectId] = useState(null);
@@ -933,7 +937,7 @@ export default function Workbench() {
 
   useEffect(() => {
     if (authStatus === "loading") return;
-    if (isJS) {
+    if (isJS || !canUseCoreBoard) {
       setLoading(false);
       return;
     }
@@ -955,7 +959,13 @@ export default function Workbench() {
       }
     })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [loadIssues, authStatus, isJS]);
+  }, [loadIssues, authStatus, isJS, canUseCoreBoard]);
+
+  async function handleAspirantLogout() {
+    await fetch("/api/auth/logout", { method: "POST" });
+    window.location.hash = "#/join";
+    window.location.reload();
+  }
 
   // Deep-link / lesson-return → open task detail once lists are ready.
   useEffect(() => {
@@ -1047,7 +1057,7 @@ export default function Workbench() {
               <span>
                 Signed in as <strong>{session?.name}</strong> ({session?.email}).
               </span>
-              <button type="button" onClick={logout} style={{ background: "none", border: "none", color: "#0891b2", cursor: "pointer", padding: 0 }}>
+              <button type="button" onClick={handleAspirantLogout} style={{ background: "none", border: "none", color: "#0891b2", cursor: "pointer", padding: 0 }}>
                 Sign out
               </button>
             </div>
@@ -1086,7 +1096,7 @@ export default function Workbench() {
             <span>
               Signed in as <strong>{session?.name}</strong> ({session?.email}).
             </span>
-            <button type="button" onClick={logout} style={{ background: "none", border: "none", color: "#0891b2", cursor: "pointer", padding: 0 }}>
+            <button type="button" onClick={handleAspirantLogout} style={{ background: "none", border: "none", color: "#0891b2", cursor: "pointer", padding: 0 }}>
               Sign out
             </button>
           </div>

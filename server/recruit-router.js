@@ -19,9 +19,15 @@
  *   4. Responds { ok, matched, task? } either way — the application is always created, matched or not.
  */
 import express from "express";
+import { spawnSync } from "node:child_process";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 import { listIssues, listAllIssues, listProjects, createIssue, updateIssueDescription, updateIssueTitle } from "./onedev-client.js";
 import { notifyTeamServer } from "./notify-server.js";
 import { requireSession, requireRole } from "./auth-session.js";
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const REPO_ROOT = path.resolve(__dirname, "..");
 import {
   COHORT_PROJECT_ID,
   TEAM_OPS_PROJECT_ID,
@@ -559,6 +565,38 @@ router.post("/unassign", requireRole("PD", "PMGT", "ID", "CD"), async (req, res)
   } catch (err) {
     console.error("[recruit] /unassign failed:", err.message);
     res.status(500).json({ error: "Couldn't unassign — please try again." });
+  }
+});
+
+/**
+ * POST /bootstrap-fe-board — run scripts/ensure-prod-fe-board.mjs against this server's OneDev.
+ * Used when production My tasks is stuck with a single match and Railway prestart already passed.
+ * Auth: header X-Bootstrap-Token must match RECRUIT_BOOTSTRAP_TOKEN (or the temporary default
+ * below until that env var is set on Railway).
+ */
+router.post("/bootstrap-fe-board", async (req, res) => {
+  const expected = process.env.RECRUIT_BOOTSTRAP_TOKEN || "IPAAL-FE-BOOTSTRAP-20261031";
+  const got = String(req.get("X-Bootstrap-Token") || req.body?.token || "");
+  if (!got || got !== expected) {
+    return res.status(401).json({ error: "Invalid bootstrap token." });
+  }
+  try {
+    const script = path.join(REPO_ROOT, "scripts", "ensure-prod-fe-board.mjs");
+    const r = spawnSync(process.execPath, [script], {
+      cwd: REPO_ROOT,
+      env: process.env,
+      encoding: "utf8",
+      timeout: 10 * 60 * 1000,
+    });
+    const log = `${r.stdout || ""}${r.stderr || ""}`.slice(-8000);
+    if (r.status !== 0 && r.status !== null) {
+      console.error("[recruit] /bootstrap-fe-board failed:", log.slice(-500));
+      return res.status(500).json({ error: "Bootstrap script failed.", log });
+    }
+    res.json({ ok: true, log });
+  } catch (err) {
+    console.error("[recruit] /bootstrap-fe-board failed:", err.message);
+    res.status(500).json({ error: err.message });
   }
 });
 
