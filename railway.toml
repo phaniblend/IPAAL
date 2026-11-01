@@ -1,0 +1,17 @@
+# Colocated OneDev (:6610 loopback) + IPF Node ($PORT).
+# In Railway: Settings → Build → Builder = Dockerfile (this file selects it).
+# Add a volume mounted at /opt/onedev so issue/git data survives redeploys.
+# Set Variables (at least once):
+#   ONEDEV_API_USER / ONEDEV_API_PASS  (also used as initial_user / initial_password on first boot)
+#   ONEDEV_INITIAL_EMAIL              (optional, default admin@inpact.live)
+# Existing Google/DB secrets stay as they are.
+
+[build]
+builder = "DOCKERFILE"
+dockerfilePath = "Dockerfile"
+
+[deploy]
+# SPA root is 200 once Node is listening (OneDev boot can take 1–2 min before npm start).
+healthcheckPath = "/"
+healthcheckTimeout = 300
+restartPolicyType = "ON_FAILURE"

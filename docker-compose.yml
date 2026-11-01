@@ -49,7 +49,7 @@ services:
       - ipf_mm_logs:/mattermost/logs
 
   onedev-inpact:
-    image: 1dev/server:latest
+    image: 1dev/server:16.3.4
     container_name: onedev-inpact
     restart: unless-stopped
     ports:
@@ -59,6 +59,27 @@ services:
       - ipf_onedev_data:/opt/onedev
     # First boot: create admin, then manually recreate cohort-applications (id may not stay 2),
     # team-ops, module-library — or restore a volume backup from the handoff machine.
+    # Production Railway uses Dockerfile (OneDev + Node same host). Local keeps OneDev separate.
+
+  # Optional: run the colocated production image locally (UI :8080, OneDev :6610 inside).
+  #   docker compose --profile colocated up --build ipf-colocated
+  ipf-colocated:
+    profiles: ["colocated"]
+    build: .
+    container_name: ipf-colocated
+    ports:
+      - "8080:8080"
+    volumes:
+      - ipf_onedev_data:/opt/onedev
+    environment:
+      ONEDEV_INTERNAL_URL: http://127.0.0.1:6610
+      ONEDEV_API_USER: ${ONEDEV_API_USER:-inpact-admin}
+      ONEDEV_API_PASS: ${ONEDEV_API_PASS:-inpact-onedev-change-me}
+      initial_user: ${ONEDEV_API_USER:-inpact-admin}
+      initial_password: ${ONEDEV_API_PASS:-inpact-onedev-change-me}
+      initial_email: ${ONEDEV_INITIAL_EMAIL:-admin@inpact.live}
+      initial_server_url: http://127.0.0.1:6610
+      PORT: "8080"
 
   ipf-ldap:
     image: osixia/openldap:1.5.0
