@@ -1,5 +1,6 @@
 import { Link, useLocation } from "react-router-dom";
 import InpactLogo from "./components/InpactLogo.jsx";
+import { useAuth } from "./auth/useAuth.js";
 import "./GlobalHeader.css";
 
 // Routes that already render their own logo — we still show My tasks, but skip a second logo.
@@ -11,13 +12,16 @@ function isAlreadyBranded(pathname) {
 }
 
 /**
- * Persistent corner chrome: brand (when the page doesn't already have one) + My tasks.
+ * Persistent corner chrome: brand (when the page doesn't already have one) + My tasks / Sign in.
  * Fixed-position so it never reflows page layouts.
  */
 export default function GlobalHeader() {
   const location = useLocation();
+  const { status } = useAuth();
   const branded = isAlreadyBranded(location.pathname);
   const onMyTasks = location.pathname === "/workbench";
+  const signedIn = status === "signedIn";
+  const googleHref = `/api/auth/google/start?returnTo=${encodeURIComponent("#/workbench")}`;
 
   return (
     <header className="gh-bar" aria-label="Inpact">
@@ -35,6 +39,11 @@ export default function GlobalHeader() {
         >
           My tasks
         </Link>
+        {!signedIn && status !== "loading" ? (
+          <a className="gh-nav-link gh-nav-link-google" href={googleHref}>
+            Sign in with Google
+          </a>
+        ) : null}
       </nav>
     </header>
   );

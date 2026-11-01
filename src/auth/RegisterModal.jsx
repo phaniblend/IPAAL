@@ -14,12 +14,6 @@ import {
   updateUserPassword,
   getUser,
 } from "./supabase.js";
-import {
-  isFirebaseConfigured,
-  signInWithGoogle,
-  profileFromFirebaseUser,
-} from "./firebase.js";
-
 const overlay = {
   position: "fixed",
   inset: 0,
@@ -132,16 +126,6 @@ function getDismissButtonText(dismissCount) {
   return "Not now — remind me later";
 }
 
-function mapGoogleSignInError(err) {
-  const code = err?.code || "";
-  const msg = (err?.message || "").trim();
-  if (code === "auth/popup-closed-by-user" || code === "auth/cancelled-popup-request")
-    return "Sign-in was closed before it finished. Try again when you’re ready.";
-  if (code === "auth/popup-blocked") return "Your browser blocked the pop-up. Allow pop-ups for this site and try again.";
-  if (code === "auth/network-request-failed") return "Network error. Check your connection and try again.";
-  return msg || "Google sign-in didn’t complete. Please try again.";
-}
-
 /** Map Supabase Auth errors to a short line + optional setup hint for operators. */
 function mapSignUpError(err) {
   const raw = (err?.message || "").trim();
@@ -198,31 +182,19 @@ export default function RegisterModal({
   const [confirmationSent, setConfirmationSent] = useState(false);
   const [confirmationEmail, setConfirmationEmail] = useState("");
 
-  /** Prefer Firebase when lesson sync is wired; otherwise use IPF Google OAuth — same path Apply
-   * uses — so aspirants who first joined with Gmail can return without inventing an email password. */
-  const handleGoogleSignIn = async () => {
+  /** Always use IPF Google OAuth (same as Apply) so aspirants land in a real session for My tasks.
+   * Firebase lesson sync is optional and must not replace / hide this path. */
+  const handleGoogleSignIn = () => {
     setSubmitError("");
     setSubmitErrorHint("");
-    if (isFirebaseConfigured) {
-      setSubmitLoading(true);
-      try {
-        const fbUser = await signInWithGoogle();
-        const profile = profileFromFirebaseUser(fbUser);
-        if (profile) {
-          markGoogleBoundEmail(profile.emailOrPhone || profile.email);
-          setRegistered({ ...profile, authProvider: "google" });
-        }
-        onSuccess?.({ flow: "google" });
-      } catch (err) {
-        setSubmitError(mapGoogleSignInError(err));
-      } finally {
-        setSubmitLoading(false);
-      }
-      return;
-    }
-    const hash = typeof window !== "undefined" ? window.location.hash || "#/" : "#/";
+    const hash = typeof window !== "undefined" ? window.location.hash || "#/workbench" : "#/workbench";
     const returnTo = hash.startsWith("#") ? hash : `#${hash}`;
-    window.location.href = `/api/auth/google/start?returnTo=${encodeURIComponent(returnTo)}`;
+    // Prefer returning to My tasks so a Google round-trip from this modal is useful.
+    const dest =
+      returnTo === "#/" || returnTo === "#" || returnTo.startsWith("#/?")
+        ? "#/workbench"
+        : returnTo;
+    window.location.href = `/api/auth/google/start?returnTo=${encodeURIComponent(dest)}`;
   };
 
   const GOOGLE_EMAIL_TAKEN =

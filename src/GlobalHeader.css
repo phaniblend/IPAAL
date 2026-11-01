@@ -69,6 +69,16 @@
   color: #0e7490;
 }
 
+.gh-nav-link-google {
+  background: #0e7490;
+  color: #fff !important;
+}
+
+.gh-nav-link-google:hover {
+  background: #155e75;
+  color: #fff !important;
+}
+
 @media (max-width: 600px) {
   .gh-bar {
     top: 10px;
