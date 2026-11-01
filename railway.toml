@@ -11,7 +11,7 @@ builder = "DOCKERFILE"
 dockerfilePath = "Dockerfile"
 
 [deploy]
-# SPA root is 200 once Node is listening (OneDev boot can take 1–2 min before npm start).
+# Health stub answers / immediately; real SPA replaces it after OneDev is up.
 healthcheckPath = "/"
-healthcheckTimeout = 300
+healthcheckTimeout = 600
 restartPolicyType = "ON_FAILURE"

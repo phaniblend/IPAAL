@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
-# Same-host boot: OneDev on :6610 (loopback only from the app's perspective) + IPF Node on $PORT.
-# Railway / Docker: one container, two ports. Public traffic hits Node only; OneDev stays private.
+# Same-host boot: OneDev on 127.0.0.1:6610 + IPF Node on $PORT (public).
+# A tiny health stub listens on $PORT immediately so Railway healthchecks pass
+# while OneDev (often slow on first boot) is still starting.
 set -euo pipefail
 
 export ONEDEV_INTERNAL_URL="${ONEDEV_INTERNAL_URL:-http://127.0.0.1:6610}"
@@ -15,13 +16,21 @@ export initial_server_url="${initial_server_url:-${ONEDEV_INITIAL_SERVER_URL:-ht
 export ONEDEV_API_USER="${ONEDEV_API_USER:-$initial_user}"
 export ONEDEV_API_PASS="${ONEDEV_API_PASS:-$initial_password}"
 
+# Prefer loopback so Railway does not treat 6610 as a public service port.
+export http_host="${http_host:-127.0.0.1}"
+export http_port="${http_port:-6610}"
+
 echo "[colocated] ONEDEV_INTERNAL_URL=$ONEDEV_INTERNAL_URL"
 echo "[colocated] Node PORT=$PORT"
-echo "[colocated] OneDev API user=$ONEDEV_API_USER"
+echo "[colocated] OneDev API user=$ONEDEV_API_USER http_host=$http_host"
 
 onedev_pid=""
+health_pid=""
 term() {
   echo "[colocated] shutting down…"
+  if [[ -n "${health_pid}" ]] && kill -0 "$health_pid" 2>/dev/null; then
+    kill -TERM "$health_pid" 2>/dev/null || true
+  fi
   if [[ -n "${onedev_pid}" ]] && kill -0 "$onedev_pid" 2>/dev/null; then
     kill -TERM "$onedev_pid" 2>/dev/null || true
     wait "$onedev_pid" 2>/dev/null || true
@@ -30,13 +39,28 @@ term() {
 }
 trap term SIGTERM SIGINT
 
-# Official OneDev image entrypoint (upgrade + wrapper).
+# Answer Railway healthchecks immediately (before OneDev / npm start).
+node --input-type=module -e "
+import http from 'node:http';
+const port = Number(process.env.PORT || 8080);
+http.createServer((_q, res) => {
+  res.writeHead(200, { 'content-type': 'text/plain' });
+  res.end('starting');
+}).listen(port, '0.0.0.0', () => console.log('[colocated] health stub on', port));
+" &
+health_pid=$!
+
+# If a prior volume has server.properties, force loopback bind.
+if [[ -f /opt/onedev/conf/server.properties ]]; then
+  sed -i 's/^http_host=.*/http_host=127.0.0.1/' /opt/onedev/conf/server.properties || true
+fi
+
 /root/bin/entrypoint.sh &
 onedev_pid=$!
 
 echo "[colocated] waiting for OneDev on 127.0.0.1:6610…"
 ready=0
-for i in $(seq 1 90); do
+for i in $(seq 1 180); do
   if curl -sf -o /dev/null "http://127.0.0.1:6610/"; then
     ready=1
     break
@@ -55,8 +79,15 @@ fi
 echo "[colocated] OneDev is up"
 
 cd /app
-# Reserved projects (ids 1–5 on a fresh instance) before FE board / migrate hooks.
 node scripts/ensure-onedev-foundation.mjs || echo "[colocated] foundation ensure warned — continuing"
 
-# npm start runs prestart (prisma migrate + FE board ensure) then the API/SPA server.
+# Free $PORT for the real app.
+if [[ -n "${health_pid}" ]] && kill -0 "$health_pid" 2>/dev/null; then
+  kill -TERM "$health_pid" 2>/dev/null || true
+  wait "$health_pid" 2>/dev/null || true
+  health_pid=""
+fi
+sleep 1
+
+# npm start runs prestart then the API/SPA server.
 exec npm start
