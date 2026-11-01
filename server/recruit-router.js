@@ -19,15 +19,10 @@
  *   4. Responds { ok, matched, task? } either way — the application is always created, matched or not.
  */
 import express from "express";
-import { spawnSync } from "node:child_process";
-import path from "node:path";
-import { fileURLToPath } from "node:url";
 import { listIssues, listAllIssues, listProjects, createIssue, updateIssueDescription, updateIssueTitle } from "./onedev-client.js";
 import { notifyTeamServer } from "./notify-server.js";
 import { requireSession, requireRole } from "./auth-session.js";
-
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const REPO_ROOT = path.resolve(__dirname, "..");
+import { ensureFeBoard } from "./ensure-fe-board.js";
 import {
   COHORT_PROJECT_ID,
   TEAM_OPS_PROJECT_ID,
@@ -569,10 +564,10 @@ router.post("/unassign", requireRole("PD", "PMGT", "ID", "CD"), async (req, res)
 });
 
 /**
- * POST /bootstrap-fe-board — run scripts/ensure-prod-fe-board.mjs against this server's OneDev.
- * Used when production My tasks is stuck with a single match and Railway prestart already passed.
- * Auth: header X-Bootstrap-Token must match RECRUIT_BOOTSTRAP_TOKEN (or the temporary default
- * below until that env var is set on Railway).
+ * POST /bootstrap-fe-board — in-process ensure of desk FE tasks + Matched: rows for the
+ * test aspirant. Prefer this over spawning a child script (Railway child got `fetch failed`
+ * talking to OneDev while the parent process could). Auth: X-Bootstrap-Token /
+ * RECRUIT_BOOTSTRAP_TOKEN (temporary default until env is set).
  */
 router.post("/bootstrap-fe-board", async (req, res) => {
   const expected = process.env.RECRUIT_BOOTSTRAP_TOKEN || "IPAAL-FE-BOOTSTRAP-20261031";
@@ -581,19 +576,12 @@ router.post("/bootstrap-fe-board", async (req, res) => {
     return res.status(401).json({ error: "Invalid bootstrap token." });
   }
   try {
-    const script = path.join(REPO_ROOT, "scripts", "ensure-prod-fe-board.mjs");
-    const r = spawnSync(process.execPath, [script], {
-      cwd: REPO_ROOT,
-      env: process.env,
-      encoding: "utf8",
-      timeout: 10 * 60 * 1000,
+    const result = await ensureFeBoard({
+      email: req.body?.email,
+      name: req.body?.name,
+      minMatches: req.body?.minMatches,
     });
-    const log = `${r.stdout || ""}${r.stderr || ""}`.slice(-8000);
-    if (r.status !== 0 && r.status !== null) {
-      console.error("[recruit] /bootstrap-fe-board failed:", log.slice(-500));
-      return res.status(500).json({ error: "Bootstrap script failed.", log });
-    }
-    res.json({ ok: true, log });
+    res.json(result);
   } catch (err) {
     console.error("[recruit] /bootstrap-fe-board failed:", err.message);
     res.status(500).json({ error: err.message });
