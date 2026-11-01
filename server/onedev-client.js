@@ -18,7 +18,10 @@
 // Local dev: OneDev's Docker container on localhost. Production (Railway): set ONEDEV_INTERNAL_URL
 // to the private-network address of the OneDev service (e.g. http://onedev.railway.internal:6610) —
 // never expose OneDev's own port publicly; only this server talks to it directly.
-const ONEDEV_URL = `${(process.env.ONEDEV_INTERNAL_URL || "http://localhost:6610").replace(/\/+$/, "")}/~api`;
+// Resolve per-request (not at module load) so late-injected env and prestart children see the real URL.
+function onedevApiBase() {
+  return `${(process.env.ONEDEV_INTERNAL_URL || "http://localhost:6610").replace(/\/+$/, "")}/~api`;
+}
 
 function authHeader() {
   const user = process.env.ONEDEV_API_USER || "";
@@ -27,15 +30,22 @@ function authHeader() {
 }
 
 async function onedevFetch(path, opts = {}) {
-  const res = await fetch(`${ONEDEV_URL}${path}`, {
-    ...opts,
-    headers: {
-      Authorization: authHeader(),
-      Accept: "application/json",
-      "Content-Type": "application/json",
-      ...(opts.headers || {}),
-    },
-  });
+  const url = `${onedevApiBase()}${path}`;
+  let res;
+  try {
+    res = await fetch(url, {
+      ...opts,
+      headers: {
+        Authorization: authHeader(),
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        ...(opts.headers || {}),
+      },
+    });
+  } catch (err) {
+    const cause = err.cause?.message || err.cause?.code || err.cause || "";
+    throw new Error(`Project service unreachable (${onedevApiBase()}): ${err.message}${cause ? ` [${cause}]` : ""}`);
+  }
   if (!res.ok) throw new Error(`Project service error (${res.status})`);
   const text = await res.text();
   return text ? JSON.parse(text) : null;
