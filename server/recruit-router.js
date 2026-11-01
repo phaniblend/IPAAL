@@ -563,6 +563,42 @@ router.post("/unassign", requireRole("PD", "PMGT", "ID", "CD"), async (req, res)
   }
 });
 
+function bootstrapTokenOk(req) {
+  const expected = process.env.RECRUIT_BOOTSTRAP_TOKEN || "IPAAL-FE-BOOTSTRAP-20261031";
+  const got = String(req.get("X-Bootstrap-Token") || req.body?.token || req.query?.token || "");
+  return Boolean(got && got === expected);
+}
+
+/** GET /onedev-ping — confirm this service can reach OneDev (no secrets in response). */
+router.get("/onedev-ping", async (req, res) => {
+  if (!bootstrapTokenOk(req)) {
+    return res.status(401).json({ error: "Invalid bootstrap token." });
+  }
+  const raw = (process.env.ONEDEV_INTERNAL_URL || "http://localhost:6610").replace(/\/+$/, "");
+  let host = raw;
+  try {
+    host = new URL(raw).host;
+  } catch {
+    /* keep raw */
+  }
+  try {
+    const projects = await listProjects({ offset: 0, count: 5 });
+    res.json({
+      ok: true,
+      host,
+      projectCount: Array.isArray(projects) ? projects.length : 0,
+      sample: Array.isArray(projects) ? projects.slice(0, 3).map((p) => p.name) : [],
+    });
+  } catch (err) {
+    res.status(500).json({
+      ok: false,
+      host,
+      error: err.message,
+      cause: err.cause?.message || err.cause?.code || null,
+    });
+  }
+});
+
 /**
  * POST /bootstrap-fe-board — in-process ensure of desk FE tasks + Matched: rows for the
  * test aspirant. Prefer this over spawning a child script (Railway child got `fetch failed`
@@ -570,9 +606,7 @@ router.post("/unassign", requireRole("PD", "PMGT", "ID", "CD"), async (req, res)
  * RECRUIT_BOOTSTRAP_TOKEN (temporary default until env is set).
  */
 router.post("/bootstrap-fe-board", async (req, res) => {
-  const expected = process.env.RECRUIT_BOOTSTRAP_TOKEN || "IPAAL-FE-BOOTSTRAP-20261031";
-  const got = String(req.get("X-Bootstrap-Token") || req.body?.token || "");
-  if (!got || got !== expected) {
+  if (!bootstrapTokenOk(req)) {
     return res.status(401).json({ error: "Invalid bootstrap token." });
   }
   try {
@@ -583,8 +617,11 @@ router.post("/bootstrap-fe-board", async (req, res) => {
     });
     res.json(result);
   } catch (err) {
-    console.error("[recruit] /bootstrap-fe-board failed:", err.message);
-    res.status(500).json({ error: err.message });
+    console.error("[recruit] /bootstrap-fe-board failed:", err.message, err.cause || "");
+    res.status(500).json({
+      error: err.message,
+      cause: err.cause?.message || err.cause?.code || null,
+    });
   }
 });
 
