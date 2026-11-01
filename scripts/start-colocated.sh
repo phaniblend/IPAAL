@@ -50,6 +50,10 @@ http.createServer((_q, res) => {
 " &
 health_pid=$!
 
+# OneDev requires this path (official image mounts it as a volume). Create it when no
+# Railway volume is attached yet so first boot does not die with "Unable to find directory".
+mkdir -p /opt/onedev
+
 # If a prior volume has server.properties, force loopback bind.
 if [[ -f /opt/onedev/conf/server.properties ]]; then
   sed -i 's/^http_host=.*/http_host=127.0.0.1/' /opt/onedev/conf/server.properties || true
