@@ -1,25 +1,21 @@
 /**
- * One-shot Railway/prod bootstrap: ensure the 8 desk products + FE Coding Matched:
- * rows exist for the test aspirant, then stop (OpsMarker in cohort-applications).
+ * Railway/prod bootstrap: ensure the 8 desk products exist and FE Coding Matched:
+ * rows for the test aspirant reach the expected count. Retries on every boot until
+ * match count is high enough (no sticky "success" marker that can mask a failed assign).
  *
- * Local already had this via seed-smb-pipeline + assign-fe-tasks-to-email; production
- * OneDev only had a single BatchCraft match, so My tasks showed one card.
- *
- * Safe to leave in prestart — subsequent boots see the marker and no-op.
+ * Also invokable via POST /api/recruit/bootstrap-fe-board (ops token).
  */
 import "dotenv/config";
 import { spawnSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
 import path from "node:path";
-import {
-  listProjects,
-  listAllIssues,
-  createIssue,
-} from "../server/onedev-client.js";
+import { listProjects, listAllIssues } from "../server/onedev-client.js";
 import { COHORT_PROJECT_ID } from "../src/cohort-matching/matching.js";
 
-const EMAIL = "bsit.setty@gmail.com";
-const MARKER_TITLE = "OpsMarker: ensure-prod-fe-board-v1";
+const EMAIL = String(process.env.ENSURE_FE_ASSIGN_EMAIL || "bsit.setty@gmail.com")
+  .trim()
+  .toLowerCase();
+const MIN_MATCHES = Number(process.env.ENSURE_FE_MIN_MATCHES || 20);
 const DESK = "BookingDepositDesk";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -36,10 +32,31 @@ function runNode(script, args = []) {
   }
 }
 
+function matchCountForEmail(issues, email) {
+  const appIds = new Set(
+    issues
+      .filter(
+        (i) =>
+          i.projectId === COHORT_PROJECT_ID &&
+          i.title.startsWith("Application:") &&
+          (i.description || "")
+            .split("\n")
+            .some((line) => line.trim().toLowerCase() === `email: ${email}`)
+      )
+      .map((i) => i.id)
+  );
+  return issues.filter((i) => {
+    if (i.projectId !== COHORT_PROJECT_ID || !i.title.startsWith("Matched:")) return false;
+    return appIds.has(Number(/ApplicationId:\s*(\d+)/.exec(i.description || "")?.[1]));
+  }).length;
+}
+
 try {
-  const issues = await listAllIssues();
-  if (issues.some((i) => i.projectId === COHORT_PROJECT_ID && i.title === MARKER_TITLE)) {
-    console.log(`[ensure-prod-fe] marker present — skip (${MARKER_TITLE})`);
+  let issues = await listAllIssues();
+  let matches = matchCountForEmail(issues, EMAIL);
+  console.log(`[ensure-prod-fe] ${EMAIL} currently has ${matches} Matched: row(s)`);
+  if (matches >= MIN_MATCHES) {
+    console.log(`[ensure-prod-fe] already ≥ ${MIN_MATCHES} — skip`);
     process.exit(0);
   }
 
@@ -55,18 +72,15 @@ try {
   console.log(`[ensure-prod-fe] assigning FE Coding tasks → ${EMAIL}`);
   runNode(path.join("scripts", "assign-fe-tasks-to-email.mjs"), [EMAIL]);
 
-  await createIssue({
-    projectId: COHORT_PROJECT_ID,
-    title: MARKER_TITLE,
-    description: [
-      `Email: ${EMAIL}`,
-      `CreatedAt: ${new Date().toISOString()}`,
-      `Note: one-shot from scripts/ensure-prod-fe-board.mjs (prestart)`,
-    ].join("\n"),
-  });
-  console.log(`[ensure-prod-fe] done — wrote ${MARKER_TITLE}`);
+  issues = await listAllIssues();
+  matches = matchCountForEmail(issues, EMAIL);
+  console.log(`[ensure-prod-fe] done — ${EMAIL} now has ${matches} Matched: row(s)`);
+  if (matches < MIN_MATCHES) {
+    console.warn(
+      `[ensure-prod-fe] still below ${MIN_MATCHES} — next boot (or bootstrap-fe-board) will retry`
+    );
+  }
 } catch (err) {
-  // Never block app boot if OneDev is down or seed partially fails.
   console.warn(`[ensure-prod-fe] skipped/failed: ${err.message}`);
   process.exit(0);
 }
