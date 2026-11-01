@@ -25,8 +25,8 @@ COPY . .
 RUN npm run build \
   && chmod +x scripts/start-colocated.sh
 
-# OneDev data dir (mount a Railway volume here in production).
-VOLUME ["/opt/onedev"]
+# OneDev data lives at /opt/onedev — attach a Railway Volume to that path in the dashboard
+# (do not use Dockerfile VOLUME; Railway rejects it).
 
 # Public app port only — do not publish 6610 on Railway.
 ENV PORT=8080 \
