@@ -20,7 +20,12 @@
 // never expose OneDev's own port publicly; only this server talks to it directly.
 // Resolve per-request (not at module load) so late-injected env and prestart children see the real URL.
 function onedevApiBase() {
-  return `${(process.env.ONEDEV_INTERNAL_URL || "http://localhost:6610").replace(/\/+$/, "")}/~api`;
+  const raw =
+    process.env.ONEDEV_INTERNAL_URL ||
+    process.env.ONEDEV_URL ||
+    process.env.ONEDEV_PRIVATE_URL ||
+    "http://localhost:6610";
+  return `${raw.replace(/\/+$/, "")}/~api`;
 }
 
 function authHeader() {
