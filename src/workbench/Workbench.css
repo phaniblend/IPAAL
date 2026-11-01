@@ -1,7 +1,8 @@
 .workbench {
   max-width: 1100px;
   margin: 0 auto;
-  padding: 40px 24px 90px;
+  /* Extra top padding clears the fixed GlobalHeader (logo + My tasks). */
+  padding: 72px 24px 90px;
   font-family: "Comfortaa", system-ui, sans-serif;
   color: #0f172a;
 }

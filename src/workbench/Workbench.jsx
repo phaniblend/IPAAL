@@ -276,9 +276,9 @@ function TaskAssistPanel({ task, publishedModules, onCloseLesson, autoStart = fa
           Stuck or learning the pattern for this task? Assist Me opens a guided lesson beside the work —
           you stay on this task.
         </p>
-        <button type="button" className="workbench-assist-btn" onClick={startAssistMe}>
+      <button type="button" className="workbench-assist-btn" onClick={startAssistMe}>
           Assist me
-        </button>
+      </button>
       </div>
     );
   }
@@ -1023,11 +1023,11 @@ export default function Workbench() {
 
   if (isJS) {
     if (openedTask) {
-      return (
-        <div className="workbench">
-          <header className="workbench-header">
+    return (
+      <div className="workbench">
+        <header className="workbench-header">
             <div className="workbench-kicker">Your work</div>
-            <h1>Your tasks</h1>
+          <h1>Your tasks</h1>
             <div className="workbench-auth-strip" style={{ display: "flex", alignItems: "center", gap: 12, marginTop: 8, fontSize: 13 }}>
               <span>
                 Signed in as <strong>{session?.name}</strong> ({session?.email}).
@@ -1036,7 +1036,7 @@ export default function Workbench() {
                 Sign out
               </button>
             </div>
-          </header>
+        </header>
           <OpenTaskView
             task={openedTask}
             publishedModules={publishedModules}
@@ -1052,8 +1052,17 @@ export default function Workbench() {
       <div className="workbench">
         <header className="workbench-header">
           <div className="workbench-kicker">Your work</div>
-          <h1>Your tasks</h1>
-          <p className="workbench-sub">Open a task to start. If you need help, Assist Me is inside each task.</p>
+          <h1>My tasks</h1>
+          <p className="workbench-sub">
+            Open a task to start. If you need help, Assist Me is inside each task.
+            {!myTasksLoading && myTasks.length > 0 ? (
+              <>
+                {" "}
+                <strong>{myTasks.length}</strong> assigned
+                {myTasks.length === 1 ? " task" : " tasks"}.
+              </>
+            ) : null}
+          </p>
           {/* Found live 2026-09-01: Apply has a sign-out link once signed in, Workbench never did —
               a JS landing here directly (a bookmark, a matched-confirmation link) had no way to sign
               out without navigating back to Apply first. Same control, same place it lives there. */}
