@@ -1,10 +1,34 @@
 import createINPACTEngine from "../inpact_engine_shared";
+
 const NODES = [
-  { id: "intro", type: "reveal", phase: "Lesson", content: { tag: "LESSON #94 (TypeScript)", title: "Test Context — Typed", body: "Test component consuming Auth Context with mock provider Use TypeScript where appropriate.", usecase: "Test context." } },
-  { id: "objectives", type: "objectives", phase: "Objectives", items: ["Establish a Notification interface and a typed NotificationContext with add and remove functions so the contract is explicit, and shared data can move without losing type safety across components.","Implement a typed useReducer with ADD_NOTIFICATION and REMOVE_NOTIFICATION action shapes in the provider so the feature works end to end and the resulting behavior can be observed and explained.","Write a useNotify hook typed as () => (n: Omit<Notification, 'id'>) => void that dispatches add actions so the abstraction solves a concrete UI lesson and exposes a reliable typed contract.","Auto-dismiss notifications by scheduling a setTimeout in the reducer's dispatch side effect and typing its cleanup so the learner can explain both the mechanism and the visible result, and the effect leaves no stale subscriptions, timers, or listeners behind."] },
-  { id: "step1", type: "question", phase: "Step 1 of 3", paal: "Define and create the structure and typed state this lesson needs; initialize defaults appropriately.", answer_keywords: ["import", "usestate", "interface"], seed_code: "import { useState } from 'react'\n\nexport default function App() {\n  // Step 1\n}", feedback_correct: "✅ Step 1 done.", feedback_partial: "Add typed setup.", feedback_wrong: "Set up structure", expected: "Initial setup" },
-  { id: "step2", type: "question", phase: "Step 2 of 3", paal: "Implement the core behavior or UI; keep types explicit throughout.", answer_keywords: ["return", "type"], seed_code: "import { useState } from 'react'\n\nexport default function App() {\n  // Step 2\n}", feedback_correct: "✅ Step 2 done.", feedback_partial: "Core logic in place.", feedback_wrong: "Implement core", expected: "Core implementation" },
-  { id: "step3", type: "question", phase: "Step 3 of 3", paal: "Wire interactions, complete the UI, and export the typed component.", answer_keywords: ["export", "default"], seed_code: "import { useState } from 'react'\n\nexport default function App() {\n  // Step 3\n}", feedback_correct: "✅ Lesson #94 (TS) complete.", feedback_partial: "Export and finish.", feedback_wrong: "Export component", expected: "Complete" },
+  {
+    id: "intro",
+    type: "reveal",
+    phase: "Lesson",
+    content: {
+      tag: "React TypeScript",
+      title: "Lesson 94",
+      body: "Temporarily cleared lesson content.",
+      usecase: "Placeholder engine to keep app compilation stable.",
+    },
+  },
+  {
+    id: "objectives",
+    type: "objectives",
+    phase: "Objectives",
+    items: ["This lesson is intentionally empty for now."],
+  },
 ];
-const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
-export default createINPACTEngine({ NODES, sideItems, lessonNum: 94, title: "Test Context (TS)", shortName: "TS — TEST CONTEXT" });
+
+const sideItems = [
+  { label: "Lesson", id: "intro" },
+  { label: "Objectives", id: "objectives" },
+];
+
+export default createINPACTEngine({
+  NODES,
+  sideItems,
+  lessonNum: 94,
+  title: "Lesson 94",
+  shortName: "TS - L94",
+});

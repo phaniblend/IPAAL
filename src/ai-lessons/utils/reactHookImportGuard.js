@@ -26,12 +26,20 @@ function stripComments(code) {
     .replace(/\/\*[\s\S]*?\*\//g, "");
 }
 
+// Real TypeScript hook calls almost always carry a generic type argument between the hook name
+// and its opening paren — useState<Financials>(...), useState<DriverEarnings>(...), etc. The
+// original regex required the hook name to sit immediately against '(' and never matched these,
+// so the guard silently thought useState/useEffect weren't being called at all (found live
+// 2026-09-07: this is why the guard kept passing code with useState<Financials>(...) and no
+// import, even after isReactTrack itself was fixed). `(<[^()]*>)?` optionally allows one
+// non-nested generic clause — doesn't handle deeply nested generics like useState<Array<T>>, but
+// that's a reasonable bound and strictly better than matching nothing at all.
 function usesBareHook(clean, hook) {
-  return new RegExp(`(^|[^\\w.])${hook}\\s*\\(`).test(clean);
+  return new RegExp(`(^|[^\\w.])${hook}\\s*(<[^()]*>)?\\s*\\(`).test(clean);
 }
 
 function usesNamespacedHook(clean, hook) {
-  return new RegExp(`(^|[^\\w.])React\\.${hook}\\s*\\(`).test(clean);
+  return new RegExp(`(^|[^\\w.])React\\.${hook}\\s*(<[^()]*>)?\\s*\\(`).test(clean);
 }
 
 /** Collect identifiers inside `{ a, b as c }` from all `import … from 'react'` lines. */
@@ -71,9 +79,23 @@ export function checkReactHookImports(userCode) {
     if (!usesBareHook(clean, hook)) continue;
     if (named.has(hook)) continue;
     if (ns && usesNamespacedHook(clean, hook)) continue;
+    // Structured for TaskStepsPanel's formatFeedbackText: backtick spans become inline <code>,
+    // and a paragraph that's a fenced ``` block becomes its own code block — a real action
+    // ("add this import line") shouldn't sit buried inside one dense sentence (user report,
+    // 2026-09-07: "his action... is lost in the bulk of alert").
     return {
       ok: false,
-      feedback: `This step uses ${hook}(), but it is not imported from 'react'. Add it to your import line (e.g. import { ${hook} } from 'react') or call it as React.${hook} with import * as React from 'react'.`,
+      feedback: `This step uses \`${hook}()\`, but it is not imported from \`react\`. Add it to your import line:
+
+\`\`\`
+import { ${hook} } from "react";
+\`\`\`
+
+Or call it as \`React.${hook}\` with:
+
+\`\`\`
+import * as React from "react";
+\`\`\``,
       errors: [`Hook ${hook} is used before being imported from 'react'.`],
       hint: `Import ${hook} from 'react' in the same file before using it.`,
     };

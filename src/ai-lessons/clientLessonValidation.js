@@ -3,6 +3,7 @@
  */
 
 import { getLanguageForValidation } from "./trackContext.js";
+import { lessonApiUrl } from "./lessonApiUrl.js";
 
 function aiValidationDisabled() {
   if (typeof import.meta === "undefined" || !import.meta.env) return false;
@@ -21,7 +22,7 @@ export async function fetchLessonCodeValidation({ track, node, userCode, languag
   const instruction = node.paal ?? node.instruction;
   const expected = node.expected ?? node.expectedOutcome;
   const seed = node.seed_code ?? node.seedCode;
-  const res = await fetch("/api/lessons/validate", {
+  const res = await fetch(lessonApiUrl("/api/lessons/validate"), {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({

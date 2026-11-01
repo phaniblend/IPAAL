@@ -1,10 +1,81 @@
 import createINPACTEngine from "../inpact_engine_shared";
+
 const NODES = [
-  { id: "intro", type: "reveal", phase: "Lesson", content: { tag: "LESSON #26 (TypeScript)", title: "Controlled vs Uncontrolled — Typed", body: "Controlled input: useState<string>. Uncontrolled: useRef<HTMLInputElement | null>(null), read .current?.value. Type both patterns.", usecase: "Typing refs and form state in TS." } },
-  { id: "objectives", type: "objectives", phase: "Objectives", items: ["Establish an AccordionItem interface with id, title, and content fields and declare useState<string | null> for the open item so the contract is explicit, and data shape and updates remain explicit throughout the lesson.","Use .map() over a typed AccordionItem[] array to render a list of panel elements so the pattern drives visible behavior and can be verified in the UI, runtime, or compiler.","Implement a toggle handler typed as (id: string) => void that sets state to null when the active panel is re-clicked so the feature works end to end and the resulting behavior can be observed and explained.","Pass an isOpen boolean prop to each panel child component and use it to conditionally render content so data crossing component boundaries stays explicit, safe, and easy to trace so the UI exposes only the branch that matches the current state."] },
-  { id: "step1", type: "question", phase: "Step 1 of 3", paal: "Define and create string state for the field; build a controlled input and show the live value beside it.", answer_keywords: ["usestate", "string", "value", "onchange", "input"], seed_code: "import { useState } from 'react'\n\nexport default function CompareInputs() {\n  const [value, setValue] = useState<string>('')\n  return (\n    <div>\n      <input value={value} onChange={e => setValue(e.target.value)} />\n      <span> → {value}</span>\n    </div>\n  )\n}", feedback_correct: "✅ Controlled input typed.", feedback_partial: "useState<string> and value/onChange.", feedback_wrong: "value={value} onChange", expected: "Controlled input with state" },
-  { id: "step2", type: "question", phase: "Step 2 of 3", paal: "Add an uncontrolled field with a typed element ref and initial default; read the current DOM value on demand (e.g. via a button).", answer_keywords: ["useref", "ref", "defaultvalue", "current"], seed_code: "import { useState, useRef } from 'react'\n\nexport default function CompareInputs() {\n  const [value, setValue] = useState<string>('')\n  const inputRef = useRef<HTMLInputElement | null>(null)\n  return (\n    <div>\n      <div>Controlled: <input value={value} onChange={e => setValue(e.target.value)} /> → {value}</div>\n      <div>Uncontrolled: <input ref={inputRef} defaultValue=\"\" /> <button onClick={() => alert(inputRef.current?.value)}>Read</button></div>\n    </div>\n  )\n}", feedback_correct: "✅ Uncontrolled input with typed ref.", feedback_partial: "useRef<HTMLInputElement | null> and ref.", feedback_wrong: "inputRef.current?.value", expected: "useRef<HTMLInputElement | null>, ref={inputRef}, defaultValue, button that reads inputRef.current?.value." },
-  { id: "step3", type: "question", phase: "Step 3 of 3", paal: "Comment briefly on controlled vs uncontrolled source of truth; export the component.", answer_keywords: ["//", "export"], seed_code: "import { useState, useRef } from 'react'\n\n// Controlled: state is source of truth. Uncontrolled: DOM holds value, read on demand.\nexport default function CompareInputs() {\n  const [value, setValue] = useState<string>('')\n  const inputRef = useRef<HTMLInputElement | null>(null)\n  return (\n    <div>\n      <div>Controlled: <input value={value} onChange={e => setValue(e.target.value)} /> → {value}</div>\n      <div>Uncontrolled: <input ref={inputRef} defaultValue=\"\" /> <button onClick={() => alert(inputRef.current?.value)}>Read</button></div>\n    </div>\n  )\n}", feedback_correct: "✅ Controlled vs uncontrolled with TypeScript complete.", feedback_partial: "Comment and export.", feedback_wrong: "export default", expected: "Add comment explaining controlled vs uncontrolled. Export the component." },
+  {
+    id: "intro",
+    type: "reveal",
+    phase: "Lesson",
+    content: {
+      tag: "LESSON #26 (React Hooks)",
+      title: "useEffect — Cleanup",
+      body: "A live shipment panel subscribes to timers or browser listeners while visible. When the panel changes or unmounts, old listeners must be removed. You will build a component where an effect sets up work and returns a cleanup function so no stale subscription keeps running.",
+      usecase:
+        "Dashboard cards frequently mount and unmount as routes change. Missing cleanup causes duplicate intervals, memory leaks, and stale updates from previous cards.",
+    },
+  },
+  {
+    id: "objectives",
+    type: "objectives",
+    phase: "Objectives",
+    items: [
+      "Return a cleanup function from useEffect to dispose subscriptions or timers",
+      "Explain when cleanup runs: before re-run and on unmount",
+      "Use dependency arrays so setup/cleanup pairs track the same input",
+      "Prevent duplicate intervals and stale event listeners in changing views",
+    ],
+  },
+  {
+    id: "step1",
+    type: "question",
+    phase: "Step 1 of 3",
+    paal: "Create polling state with `count` and a `shipmentId` prop; render both values.",
+    answer_keywords: ["useState", "shipmentId", "count"],
+    seed_code: "import { useState } from 'react';\n\nexport default function ShipmentPoller({ shipmentId }) {\n  // Step 1\n}",
+    feedback_correct: "Nice start — state and UI shell are ready.",
+    feedback_partial: "Add `count` state and show shipment id in JSX.",
+    feedback_wrong: "Set up `count` state and render shipment id + count.",
+    expected: "Initial state + shell",
+  },
+  {
+    id: "step2",
+    type: "question",
+    phase: "Step 2 of 3",
+    paal: "Inside `useEffect`, start an interval that increments count and depends on shipmentId.",
+    answer_keywords: ["useEffect", "setInterval", "shipmentId"],
+    seed_code:
+      "import { useEffect, useState } from 'react';\n\nexport default function ShipmentPoller({ shipmentId }) {\n  const [count, setCount] = useState(0);\n  // Step 2\n}",
+    feedback_correct: "Interval setup is wired correctly.",
+    feedback_partial: "Add useEffect and make it track `shipmentId`.",
+    feedback_wrong: "Create interval in effect and increment count.",
+    expected: "Effect setup",
+  },
+  {
+    id: "step3",
+    type: "question",
+    phase: "Step 3 of 3",
+    paal: "Return cleanup from the effect with `clearInterval` and export final component.",
+    answer_keywords: ["return", "clearInterval", "export", "default"],
+    seed_code:
+      "import { useEffect, useState } from 'react';\n\nexport default function ShipmentPoller({ shipmentId }) {\n  const [count, setCount] = useState(0);\n\n  useEffect(() => {\n    const id = setInterval(() => setCount(c => c + 1), 1000);\n    // Step 3\n  }, [shipmentId]);\n\n  return <p>{shipmentId}: {count}</p>;\n}",
+    feedback_correct: "Perfect — cleanup prevents duplicate timers and leaks.",
+    feedback_partial: "Return a cleanup function that clears the interval.",
+    feedback_wrong: "Add `return () => clearInterval(id)` from the effect.",
+    expected: "Effect cleanup",
+  },
 ];
-const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
-export default createINPACTEngine({ NODES, sideItems, lessonNum: 26, title: "Controlled vs Uncontrolled (TS)", shortName: "TS — CONTROLLED VS UNCONTROLLED" });
+
+const sideItems = [
+  { label: "Lesson", id: "intro" },
+  { label: "Objectives", id: "objectives" },
+  { label: "Step 1", id: "step1" },
+  { label: "Step 2", id: "step2" },
+  { label: "Step 3", id: "step3" },
+];
+
+export default createINPACTEngine({
+  NODES,
+  sideItems,
+  lessonNum: 26,
+  title: "useEffect — Cleanup",
+  shortName: "HOOKS — EFFECT CLEANUP",
+});

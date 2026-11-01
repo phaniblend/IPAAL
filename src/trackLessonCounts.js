@@ -21,8 +21,8 @@ import { MOBILE_ANGULAR_LESSON_COUNT } from "./mobileAngularLessons.js";
 
 const ANGULAR_EXTRA_LESSONS = 14; // QB01–QB05 (QuickBite) + ANG01–ANG09 before the shared React list
 
-/** React · JS and React · TS both have the same count (must match LESSON_LIST.length in LandingPage). */
-const REACT_TS_LESSON_COUNT = 122;
+/** React · JS and React · TS share the blueprint length (must match LESSON_LIST.length in LandingPage). */
+const REACT_TS_LESSON_COUNT = 151;
 
 /** Fallback when reactListLength not provided (e.g. for category summary). */
 const DEFAULT_REACT_LIST_LENGTH = REACT_TS_LESSON_COUNT;
@@ -34,7 +34,7 @@ const DEFAULT_REACT_LIST_LENGTH = REACT_TS_LESSON_COUNT;
  */
 export function getLessonCount(track, options = {}) {
   const reactLen = options.reactListLength ?? DEFAULT_REACT_LIST_LENGTH;
-  const reactCount = Math.max(reactLen, REACT_TS_LESSON_COUNT);
+  const reactCount = reactLen;
 
   switch (track) {
     case "react-js":

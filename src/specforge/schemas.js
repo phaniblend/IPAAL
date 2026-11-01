@@ -1,0 +1,162 @@
+/**
+ * SpecForge — Zod schemas for the staged pipeline's JSON contracts.
+ * Stage 1 captures release scope (in / out). Stage 2 turns in-scope features into
+ * screens + APIs. Stage 3 emits one FE task per screen and one BE task per API.
+ */
+import { z } from "zod";
+
+export const ProductConceptInputSchema = z.object({
+  product_name: z.string().min(1),
+  description: z.string().min(1),
+  target_users: z.array(z.string()).default([]),
+  business_goal: z.string().min(1),
+  constraints: z.array(z.string()).default([]),
+});
+
+export const Stage1OutputSchema = z.object({
+  product_name: z.string(),
+  problem_statement: z.string(),
+  target_users: z.array(z.string()),
+  business_outcomes: z.array(z.string()),
+  /** Named product features for THIS first release — Stage 2 must only plan these. */
+  release_features: z
+    .array(z.string())
+    .min(1)
+    .max(8)
+    .describe(
+      'Short feature names for the initial release only, e.g. "Ingredient Manager", "Dish sales log". Max 8.',
+    ),
+  /** Explicitly deferred — never planned or tasked in this SpecForge run. */
+  out_of_scope: z
+    .array(z.string())
+    .default([])
+    .describe('Deferred for later releases, e.g. "POS integration", "multi-location".'),
+  known_integrations: z.array(z.string()).default([]),
+  constraints: z.array(z.string()).default([]),
+  assumptions: z.array(z.string()).default([]),
+  questions: z
+    .array(z.string())
+    .max(5)
+    .describe("The 3-5 most important missing questions, not an exhaustive list"),
+});
+
+/** One in-scope product feature delivered as a user-facing screen/flow. */
+export const SurfaceSchema = z.object({
+  name: z.string().describe('Must match (or closely mirror) a Stage 1 release_features entry'),
+  kind: z.enum(["screen", "flow", "dashboard"]).default("screen"),
+  pages: z
+    .array(z.string())
+    .min(1)
+    .describe('UI pieces inside this one feature, e.g. ["status list", "add/edit form", "detail"]'),
+  user_jobs: z
+    .array(z.string())
+    .min(1)
+    .describe("What the user achieves here"),
+  description: z.string(),
+  data_notes: z
+    .string()
+    .default("")
+    .describe("Brief data shown/edited — prose, not a DB schema dump"),
+});
+
+export const ApiCapabilitySchema = z.object({
+  name: z.string().describe('e.g. "Ingredients API"'),
+  description: z.string(),
+  operations: z.array(z.string()).min(1),
+  backs_surfaces: z
+    .array(z.string())
+    .min(1)
+    .describe("Exact Stage 2 surface names this API powers"),
+});
+
+export const Stage2OutputSchema = z.object({
+  surfaces: z
+    .array(SurfaceSchema)
+    .min(1)
+    .describe("One surface per Stage 1 release_features entry (not per database entity)"),
+  apis: z
+    .array(ApiCapabilitySchema)
+    .min(1)
+    .describe("Usually ~one API per surface that needs server state"),
+  scope_notes: z
+    .array(z.string())
+    .default([])
+    .describe("Constraints to fold into tasks — never new features"),
+});
+
+export const Stage3TaskSchema = z.object({
+  epic: z.string().min(1),
+  story: z.string().min(1),
+  title: z.string().min(1),
+  description: z
+    .string()
+    .min(1)
+    .describe(
+      "1-2 sentences a total beginner can follow, shown directly to the developer above the acceptance criteria. " +
+        'Explain what this piece does and why, via a real-world analog (e.g. "You might have noticed that in Gmail, a shared inbox lets you \'Assign to\' a teammate — this is that assign action."). ' +
+        "Never name proprietary/internal tools (OneDev, Mattermost, etc.) or B2B software a beginner wouldn't know (Zendesk, Jira, etc.) — use everyday consumer products instead (Gmail, Instagram, Amazon). " +
+        "Never frame this as a simulation, exercise, or practice task — it is real, shipped work.",
+    ),
+  trade: z.string().min(1),
+  acceptance_criteria: z.array(z.string()).default([]),
+  no_tutorial_needed: z.boolean().default(false),
+  tech_level: z
+    .enum(["html-css", "js", "ts", "advanced", "http-api", "crud"])
+    .nullable()
+    .default(null),
+  coding_focus: z.enum(["frontend", "backend", "both"]).nullable().default(null),
+  // Real language/framework label (e.g. "React", "TypeScript", "Go", "Java") — separate from
+  // tech_level, which is only a JS-skill-ladder rung and can't express a non-JS stack at all.
+  tech_stack: z.string().min(1).nullable().default(null),
+});
+
+export const Stage3OutputSchema = z.object({
+  tasks: z.array(Stage3TaskSchema).min(1),
+});
+
+export const TutorialDraftGroupSchema = z.object({
+  moduleTag: z.string(),
+  concept: z.string(),
+  build: z.string(),
+  keyTeaching: z.string(),
+  taskIndexes: z.array(z.number().int()).min(1),
+  suggestedFundas: z
+    .array(z.string())
+    .default([])
+    .describe(
+      "Prerequisite fundamental lesson titles (generic, e.g. 'Model local UI state', 'HTTP request/response') the apprentice should know before this assistance module. Empty if none.",
+    ),
+});
+
+export const TutorialDraftOutputSchema = z.object({
+  groups: z.array(TutorialDraftGroupSchema),
+});
+
+/** One candidate SMB product for the Product Forge's "Propose New Products" button — see
+ * server/product-forge-router.js. Sourced from the "free/open alternative to a paid product's
+ * paywalled feature" strategy: the paid product's existing customer base already proves demand
+ * (pain + look/inquire), so what's left to state is the specific paywall and the narrow slice. */
+export const ProductProposalSchema = z.object({
+  name: z.string().min(1).describe('Short product name in the existing CamelCase style, e.g. "VendorBillTracker"'),
+  tagline: z.string().min(1).describe("One sentence: who it's for and what it replaces buying"),
+  description: z
+    .string()
+    .min(1)
+    .describe(
+      'Complete description, e.g. an eBay-style entry: "A marketplace for reselling and auctioning secondhand goods between individuals." 2-4 sentences — what it is, who uses it, what it replaces.',
+    ),
+  inspiredBy: z
+    .array(z.string())
+    .min(1)
+    .describe('The real paid/freemium product(s) this is functionally inspired by, e.g. ["DocuSign", "HelloSign"] — never copy their name, brand, or UI, only the category and the paywalled capability.'),
+  painPoint: z.string().min(1).describe("What breaks for a solo/micro business without this capability"),
+  costBarrier: z.string().min(1).describe("The specific pricing/seat/usage wall in the real paid product(s) that locks this out for a solo/micro operator"),
+  narrowSlice: z
+    .string()
+    .min(1)
+    .describe("The one narrow, teachable slice to actually build — list+form+API+filtered-board grain, not the whole paid product"),
+});
+
+export const ProductProposalOutputSchema = z.object({
+  proposals: z.array(ProductProposalSchema).min(1),
+});

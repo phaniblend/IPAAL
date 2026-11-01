@@ -1,0 +1,101 @@
+/* Fixed corner chrome: logo chip + My tasks — never reflows page layouts. */
+.gh-bar {
+  position: fixed;
+  top: 16px;
+  left: 16px;
+  right: 16px;
+  z-index: 10050;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  pointer-events: none;
+}
+
+.gh-logo-link,
+.gh-nav {
+  pointer-events: auto;
+}
+
+.gh-logo-link {
+  display: flex;
+  align-items: center;
+  padding: 8px 14px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.06), 0 8px 20px rgba(15, 23, 42, 0.12);
+  opacity: 0.96;
+  text-decoration: none;
+}
+
+.gh-logo-link:hover {
+  opacity: 1;
+}
+
+.gh-logo-spacer {
+  width: 0;
+  height: 0;
+}
+
+.gh-nav {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto;
+  padding: 6px 8px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.06), 0 8px 20px rgba(15, 23, 42, 0.12);
+}
+
+.gh-nav-link {
+  font-family: "Plus Jakarta Sans", "DM Sans", system-ui, sans-serif;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #155e75;
+  text-decoration: none;
+  padding: 6px 12px;
+  border-radius: 8px;
+  letter-spacing: 0.01em;
+}
+
+.gh-nav-link:hover {
+  background: #e8f4f7;
+  color: #0e7490;
+}
+
+.gh-nav-link-active {
+  background: #e8f4f7;
+  color: #0e7490;
+}
+
+.gh-nav-link-google {
+  background: #0e7490;
+  color: #fff !important;
+}
+
+.gh-nav-link-google:hover {
+  background: #155e75;
+  color: #fff !important;
+}
+
+@media (max-width: 600px) {
+  .gh-bar {
+    top: 10px;
+    left: 10px;
+    right: 10px;
+  }
+
+  .gh-logo-link {
+    padding: 6px 10px;
+  }
+
+  .gh-logo-link img {
+    height: 30px !important;
+  }
+
+  .gh-nav-link {
+    font-size: 0.8rem;
+    padding: 5px 10px;
+  }
+}

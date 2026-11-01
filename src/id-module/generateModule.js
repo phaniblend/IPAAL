@@ -1,0 +1,298 @@
+/**
+ * ID Module — generates one standalone assistance module (a "building block" tutorial,
+ * not part of a numbered curriculum track) using the house-style prompt in
+ * scripts/prompts/assist-module-gemini-prompt.txt, following the exact same NODES schema
+ * the real INPACT lessons use (see D:\IPAAL\src\engines\react-js\inpact_p01_engine.jsx).
+ *
+ * Server-side only (reads the prompt file from disk) — imported by server/id-router.js.
+ */
+import fs from "fs";
+import path from "path";
+import { fileURLToPath } from "url";
+import { createRequire } from "module";
+import vm from "vm";
+import { transformSync } from "esbuild";
+import { callGemini, extractSingleTypescriptBlock } from "./geminiClient.js";
+
+const nodeRequire = createRequire(import.meta.url);
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const rootDir = path.resolve(__dirname, "..", "..");
+const PROMPT_PATH = path.join(rootDir, "scripts", "prompts", "assist-module-gemini-prompt.txt");
+const TARGET_DIR = path.join(rootDir, "src", "engines", "assist");
+// Deliberately outside TARGET_DIR and not .tsx/.jsx — see the comment where this is used.
+const REJECTED_DIR = path.join(rootDir, "src", "engines", "assist-rejected");
+
+function slugify(tag) {
+  return String(tag)
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/(^-|-$)/g, "");
+}
+
+function buildModuleSpecBlock({ moduleTag, concept, build, keyTeaching, newConcepts }) {
+  return [
+    `Module tag: ${moduleTag}`,
+    `Concept: ${concept}`,
+    `Build: ${build}`,
+    `Key teaching: ${keyTeaching}`,
+    newConcepts ? `New concepts: ${newConcepts}` : null,
+  ]
+    .filter(Boolean)
+    .join("\n");
+}
+
+/** Permissive stand-ins for the two imports every generated module makes (`react`,
+ * `../inpact_engine_shared`) — just enough surface that top-level module evaluation doesn't
+ * crash on them, never real rendering. Anything else gets a no-op Proxy so an unanticipated
+ * import doesn't fail validation for reasons unrelated to the module's own logic. */
+function sandboxRequire(specifier) {
+  if (specifier === "react") {
+    const noop = () => undefined;
+    return { __esModule: true, useState: () => [undefined, noop], useEffect: noop, useMemo: (fn) => fn(), useCallback: (fn) => fn, useRef: () => ({ current: undefined }), useContext: noop, default: { createElement: noop, Fragment: Symbol("Fragment") } };
+  }
+  if (specifier === "react/jsx-runtime" || specifier === "react/jsx-dev-runtime") {
+    const stub = () => null;
+    return { __esModule: true, jsx: stub, jsxs: stub, jsxDEV: stub, Fragment: Symbol("Fragment") };
+  }
+  if (specifier.includes("inpact_engine_shared")) {
+    return { __esModule: true, default: () => ({}) };
+  }
+  // Anything else the model imports is unexpected — the master prompt only ever shows react and
+  // the shared engine import, so a bare import of something else (msw, axios, lodash, ...) means
+  // the model reached for a real library it doesn't actually need, usually while writing a
+  // "testing" or "API call" themed lesson. Rather than mocking it permissively (which would let a
+  // genuinely unresolvable import — one that was never `npm install`ed — sail through undetected,
+  // exactly the failure mode found live: a draft imported 'msw/node', a package not in package.json
+  // or node_modules at all, which would break Vite's bundling the moment this file is loaded by the
+  // eager glob), actually check whether it resolves as a real installed package first. Only mock it
+  // permissively if it does; throw a clear error if it doesn't, so this is caught before the write,
+  // not discovered later by a human reviewing the draft in ID Studio.
+  try {
+    nodeRequire.resolve(specifier);
+  } catch {
+    throw new Error(
+      `Generated module imports "${specifier}", which isn't installed in this project (not in package.json/node_modules). Assist modules should only ever import react and ../inpact_engine_shared.`
+    );
+  }
+  const inert = () => inert;
+  return new Proxy(inert, { get: () => inert });
+}
+
+/** Throws with a clear message if `code` isn't valid JSX/TSX, or if evaluating its top-level
+ * module body throws at runtime. Two distinct failure classes, both real, both seen live:
+ * (1) syntax — e.g. a literal newline inside a regular string instead of `\n` — caught by
+ * esbuild's own parser (already a direct dependency via Vite).
+ * (2) runtime reference errors — e.g. Gemini writes `${identifier}` inside a nested example-code
+ * string meant to *display* as JSX text, when only `{identifier}` (no `$`) is safe there; the
+ * unescaped `$` makes it a real template-literal interpolation that fires the moment the NODES
+ * array literal is constructed, throwing `ReferenceError` at module load — which is exactly the
+ * eager-glob blast radius (every file in src/engines/assist/ loads at once) this whole validation
+ * step exists to keep out of the app. Syntax checking alone can't catch this: `${identifier}` is
+ * syntactically fine, just wrong. Caught here by actually running the transpiled module's
+ * top-level body in a sandboxed context with `react`/`inpact_engine_shared` stubbed out — cheap
+ * because nothing in a real generated module does meaningful work outside a component's render,
+ * so nothing legitimate should throw when only the top-level body executes. */
+/** Throws a specific, actionable message when the intro node's designMock is missing or the
+ * wrong shape for its declared `kind` — the same class of check as the syntax/runtime checks
+ * above, just for content completeness instead of validity. Without this, "every module gets a
+ * mock" is only ever a prompt request Gemini can quietly skip — found live, the master prompt had
+ * no designMock rule at all until this fix, so every module generated before it has none. */
+function assertHasDesignMock(exports) {
+  const nodes = exports?.NODES;
+  if (!Array.isArray(nodes) || !nodes.length) {
+    throw new Error("Module has no exported NODES array — cannot check for intro.content.designMock.");
+  }
+  const mock = nodes[0]?.content?.designMock;
+  if (!mock || typeof mock !== "object") {
+    throw new Error(
+      "intro.content.designMock is missing. Every module must include it — see the designMock rules and both example shapes in the prompt.",
+    );
+  }
+  const kind = String(mock.kind || "");
+  if (kind.includes("api")) {
+    if (!mock.getSample || !mock.postSample) {
+      throw new Error("designMock kind is api-style but getSample/postSample are missing — both are required.");
+    }
+  } else if (kind === "list-and-form") {
+    if (!Array.isArray(mock.rows) || mock.rows.length < 1) {
+      throw new Error("designMock kind is list-and-form but rows is missing or empty — needs sample rows.");
+    }
+    if (!Array.isArray(mock.fields) || mock.fields.length < 1) {
+      throw new Error("designMock kind is list-and-form but fields is missing or empty — needs the form's fields.");
+    }
+    if (mock.rowToggle !== undefined) {
+      const values = mock.rowToggle?.values;
+      if (!Array.isArray(values) || values.length !== 2) {
+        throw new Error("designMock.rowToggle is present but values isn't a 2-element array — need exactly the two states a row toggles between.");
+      }
+      if (mock.rowToggle.subtitleValues !== undefined) {
+        const sv = mock.rowToggle.subtitleValues;
+        if (!Array.isArray(sv) || sv.length !== 2) {
+          throw new Error("designMock.rowToggle.subtitleValues, if present, must be a 2-element array paired index-for-index with values.");
+        }
+      }
+    }
+    for (const field of mock.fields) {
+      if (field.options !== undefined && (!Array.isArray(field.options) || field.options.length < 1)) {
+        throw new Error(`designMock field "${field.label}" has options but it's empty — needs at least one choice.`);
+      }
+    }
+    if (mock.metaFromField !== undefined) {
+      const { index, whenFilled, whenEmpty } = mock.metaFromField;
+      if (!Number.isInteger(index) || index < 0 || index >= mock.fields.length) {
+        throw new Error("designMock.metaFromField.index must be a valid index into fields.");
+      }
+      if (!whenFilled || !whenEmpty) {
+        throw new Error("designMock.metaFromField needs both whenFilled and whenEmpty text.");
+      }
+    }
+  } else {
+    throw new Error(`designMock.kind "${mock.kind}" isn't recognized — use "list-and-form" or "api-request-response".`);
+  }
+}
+
+/** Transpiles + runs a module's top-level body in the same sandbox assertValidModule uses, and
+ * returns whatever it exported (NODES, default). Shared by the validity check below and by
+ * id-router.js's /design-mock, which needs a published module's NODES[0].content.designMock at
+ * request time without re-deriving the whole validity-check plumbing. */
+export function evalModuleExports(code) {
+  const { code: cjs } = transformSync(code, { loader: "tsx", jsx: "automatic", format: "cjs" });
+  const moduleObj = { exports: {} };
+  const context = vm.createContext({ module: moduleObj, exports: moduleObj.exports, require: sandboxRequire, console });
+  new vm.Script(cjs, { filename: "module-eval.js" }).runInContext(context, { timeout: 2000 });
+  return moduleObj.exports;
+}
+
+/** A published module's intro.content.designMock, or null if it has none (e.g. it predates the
+ * designMock prompt rule). Used by id-router.js's GET /design-mock — the runtime counterpart to
+ * write-smb-assist-engines.mjs's build-time designMocks.generated.js, for modules Gemini generated
+ * at request time rather than the 40 hand-authored seed modules. */
+export function extractDesignMock(code) {
+  try {
+    return evalModuleExports(code)?.NODES?.[0]?.content?.designMock || null;
+  } catch {
+    return null;
+  }
+}
+
+export function assertValidModule(code) {
+  transformSync(code, { loader: "tsx", jsx: "automatic" }); // (1) syntax
+
+  let exportsObj;
+  try {
+    exportsObj = evalModuleExports(code);
+  } catch (err) {
+    throw new Error(`Module throws at load time (not just a syntax issue): ${err?.message ?? err}`);
+  }
+
+  assertHasDesignMock(exportsObj); // (3) content completeness — see comment above
+  assertNoStrayCodeFences(exportsObj); // (4) content correctness — see comment above the function
+}
+
+/** Found live 2026-09-01: a whole module (every question step) came back with every code field and
+ * intro.content.body wrapped in a literal ```tsx / ``` fence — syntactically valid JS (the fence is
+ * just characters inside a string), so it sailed through (1)-(3) above, but it's real breakage: the
+ * starter code shown in the editor literally started with the text "```tsx" as if it were code, and
+ * intro.content.body renders via RichLearnerText's default *inline* mode, which doesn't parse fences
+ * at all (only DeepDive fields render with contentMode="blocks", where a fence is legitimate — this
+ * check deliberately excludes deepDive). Failing fast here means a retry, not a silently broken
+ * lesson shipped to a real learner. */
+function assertNoStrayCodeFences(exports) {
+  const nodes = exports?.NODES;
+  if (!Array.isArray(nodes)) return;
+  const CODE_FIELDS = ["example_code", "seed_code", "starter_code", "expected", "analog_example"];
+  for (const node of nodes) {
+    if (node?.type === "reveal" && typeof node?.content?.body === "string" && node.content.body.includes("```")) {
+      throw new Error(`Node "${node.id}"'s content.body contains a literal \`\`\` fence — that field renders as plain prose, never fenced code.`);
+    }
+    for (const field of CODE_FIELDS) {
+      if (typeof node?.[field] === "string" && node[field].includes("```")) {
+        throw new Error(`Node "${node.id}"'s ${field} contains a literal \`\`\` fence — that field is raw code, not markdown; strip the fence wrapper.`);
+      }
+    }
+  }
+}
+
+/**
+ * Generates one module and writes it to src/engines/assist/. Does NOT register it in the
+ * Module Library — that's a separate, explicit "publish" step (Generate -> Review -> Publish),
+ * same discipline SpecForge follows.
+ *
+ * Validated *before* it's written to disk — every file in src/engines/assist/ is loaded eagerly
+ * by Assist Me's import.meta.glob, so one syntactically broken file there doesn't just fail that
+ * one tutorial, it fails Vite's build for the entire app. A generation that can't be made valid
+ * within one retry is a hard failure, on purpose — better than silently corrupting the app.
+ */
+export async function generateAssistModule(spec) {
+  if (!fs.existsSync(PROMPT_PATH)) {
+    throw new Error(`Prompt not found at ${PROMPT_PATH}`);
+  }
+  const masterPrompt = fs.readFileSync(PROMPT_PATH, "utf8");
+  const filled = masterPrompt.replace("{{MODULE_SPEC}}", buildModuleSpecBlock(spec));
+
+  let code;
+  let lastError;
+  let lastCandidate;
+  // 3, not 2: running the real pipeline for the first time after the escaping-discipline rule was
+  // added, two attempts in a row still wasn't enough headroom for the retry's sharper feedback to
+  // land — a third try costs one more Gemini call, which is cheap next to a whole module failing
+  // to generate at all.
+  for (let attempt = 0; attempt < 3; attempt++) {
+    const prompt =
+      attempt === 0
+        ? filled
+        : `${filled}\n\n---\n\nYour previous attempt was not valid JavaScript/JSX — it failed to parse with: ${lastError}\n\nThis is very likely one unescaped backtick or double-quote inside a field's own content — see the STRING ESCAPING section above. Re-check every field's content for a delimiter character matching that field's own quote type, escape it, and return the corrected module as a single fenced code block, following every rule above exactly.`;
+
+    const raw = await callGemini(prompt);
+    const candidate = extractSingleTypescriptBlock(raw);
+    if (!candidate.trim()) {
+      lastError = "No parseable code block returned by draft generation.";
+      continue;
+    }
+    lastCandidate = candidate;
+    try {
+      assertValidModule(candidate);
+      code = candidate;
+      break;
+    } catch (err) {
+      lastError = err?.message ?? String(err);
+    }
+  }
+  if (!code) {
+    // Was silently discarded before — with nothing but the parser's error message, there was no
+    // way to tell an unescaped backtick inside a nested code-sample string (a known risk class,
+    // see assertValidModule's own comment above) apart from any other cause. Save the last rejected
+    // candidate for a human to actually look at. REJECTED_DIR is deliberately *not*
+    // src/engines/assist/ and *not* a .tsx/.jsx extension — Assist Me's import.meta.glob there is
+    // eager, so a second broken file next to the real ones would revive the exact blast-radius
+    // failure this whole validation step exists to prevent.
+    if (lastCandidate) {
+      try {
+        fs.mkdirSync(REJECTED_DIR, { recursive: true });
+        const rejectedPath = path.join(REJECTED_DIR, `${slugify(spec.moduleTag)}-${Date.now()}.rejected.txt`);
+        fs.writeFileSync(rejectedPath, `Error: ${lastError}\n\n---\n\n${lastCandidate}`, "utf8");
+        lastError += ` (rejected candidate saved to ${rejectedPath})`;
+      } catch {
+        /* best-effort — don't let a logging failure mask the real error */
+      }
+    }
+    throw new Error(`Generated module failed to produce valid code after retry — not written to disk. Last error: ${lastError}`);
+  }
+
+  // .tsx, not .jsx: the master prompt generates TypeScript+JSX (interfaces, type annotations —
+  // "JSX.Element is globally available in .tsx" is baked into its own rules), and Vite's react
+  // plugin only applies the TS-aware transform to .tsx/.ts files. A generated file with real TS
+  // syntax saved as .jsx passes esbuild's permissive validation (loader: "tsx" tolerates it) but
+  // then breaks Vite's actual dev transform for the *whole app* — discovered live, the same
+  // blast-radius failure mode as the raw-newline bug, just from the opposite direction: this file
+  // was syntactically valid, just saved under the wrong extension for what it contains.
+  const slug = slugify(spec.moduleTag);
+  const fileName = `inpact_assist_${slug}_engine.tsx`;
+  fs.mkdirSync(TARGET_DIR, { recursive: true });
+  const outPath = path.join(TARGET_DIR, fileName);
+  fs.writeFileSync(outPath, code, "utf8");
+
+  return { fileName, filePath: outPath, code, slug };
+}

@@ -1,10 +1,34 @@
 import createINPACTEngine from "../inpact_engine_shared";
+
 const NODES = [
-  { id: "intro", type: "reveal", phase: "Lesson", content: { tag: "LESSON #62 (TypeScript)", title: "Infinite Scroll — Typed", body: "Load more on scroll (IntersectionObserver) Use TypeScript where appropriate.", usecase: "Infinite scroll." } },
-  { id: "objectives", type: "objectives", phase: "Objectives", items: ["Write a generic component List<T> that accepts items: T[] and a renderItem prop typed as (item: T) => React.ReactNode so the abstraction solves a concrete UI lesson and exposes a reliable typed contract.","Add a keyExtractor prop typed as (item: T) => string | number to supply stable keys in the .map() call so the UI becomes more robust, accessible, or verifiable in use.","Apply a generic type constraint <T extends { id: string }> to guarantee a fallback key field so the learner sees how a typed pattern changes behavior, reuse, or safety in practice.","Instantiate list<Product>, List<User>, and List<Order> at the call site and confirm each enforces its typed item shape so the generic or runtime object proves its value in a concrete case."] },
-  { id: "step1", type: "question", phase: "Step 1 of 3", paal: "Define and create the structure and typed state this lesson needs; initialize defaults appropriately.", answer_keywords: ["import", "usestate", "interface"], seed_code: "import { useState } from 'react'\n\nexport default function App() {\n  // Step 1\n}", feedback_correct: "✅ Step 1 done.", feedback_partial: "Add typed setup.", feedback_wrong: "Set up structure", expected: "Initial setup" },
-  { id: "step2", type: "question", phase: "Step 2 of 3", paal: "Implement the core behavior or UI; keep types explicit throughout.", answer_keywords: ["return", "type"], seed_code: "import { useState } from 'react'\n\nexport default function App() {\n  // Step 2\n}", feedback_correct: "✅ Step 2 done.", feedback_partial: "Core logic in place.", feedback_wrong: "Implement core", expected: "Core implementation" },
-  { id: "step3", type: "question", phase: "Step 3 of 3", paal: "Wire interactions, complete the UI, and export the typed component.", answer_keywords: ["export", "default"], seed_code: "import { useState } from 'react'\n\nexport default function App() {\n  // Step 3\n}", feedback_correct: "✅ Lesson #62 (TS) complete.", feedback_partial: "Export and finish.", feedback_wrong: "Export component", expected: "Complete" },
+  {
+    id: "intro",
+    type: "reveal",
+    phase: "Lesson",
+    content: {
+      tag: "React TypeScript",
+      title: "Lesson 62",
+      body: "Temporarily cleared lesson content.",
+      usecase: "Placeholder engine to keep app compilation stable.",
+    },
+  },
+  {
+    id: "objectives",
+    type: "objectives",
+    phase: "Objectives",
+    items: ["This lesson is intentionally empty for now."],
+  },
 ];
-const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
-export default createINPACTEngine({ NODES, sideItems, lessonNum: 62, title: "Infinite Scroll (TS)", shortName: "TS — INFINITE SCROLL" });
+
+const sideItems = [
+  { label: "Lesson", id: "intro" },
+  { label: "Objectives", id: "objectives" },
+];
+
+export default createINPACTEngine({
+  NODES,
+  sideItems,
+  lessonNum: 62,
+  title: "Lesson 62",
+  shortName: "TS - L62",
+});

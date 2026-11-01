@@ -1,9 +1,34 @@
 import createINPACTEngine from "../inpact_engine_shared";
-import { aiLessonToEngineConfig } from "../../ai-lessons/adapters/normalizeToEngineConfig.js";
-import raw from "../../../content/react-ts/121_Query_Building_in_RTK_lesson.json";
 
-const lesson = raw.config;
-const engineConfig = aiLessonToEngineConfig(lesson, { track: "react-ts", language: "typescript" });
+const NODES = [
+  {
+    id: "intro",
+    type: "reveal",
+    phase: "Lesson",
+    content: {
+      tag: "React TypeScript",
+      title: "Lesson 121",
+      body: "Temporarily cleared lesson content.",
+      usecase: "Placeholder engine to keep app compilation stable.",
+    },
+  },
+  {
+    id: "objectives",
+    type: "objectives",
+    phase: "Objectives",
+    items: ["This lesson is intentionally empty for now."],
+  },
+];
 
-const INPACTEngineTS121 = createINPACTEngine(engineConfig);
-export default INPACTEngineTS121;
+const sideItems = [
+  { label: "Lesson", id: "intro" },
+  { label: "Objectives", id: "objectives" },
+];
+
+export default createINPACTEngine({
+  NODES,
+  sideItems,
+  lessonNum: 121,
+  title: "Lesson 121",
+  shortName: "TS - L121",
+});

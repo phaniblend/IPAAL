@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Inpact Platform — How It Works</title>
+  <style>
+    :root {
+      --bg: #070b14;
+      --card-bg: #0f172a;
+      --panel-border: #1e293b;
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --accent: #06b6d4;
+      --accent-strong: #22d3ee;
+      --emerald: #10b981;
+      --rose: #f43f5e;
+      --amber: #f59e0b;
+      --violet: #8b5cf6;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    body { background: var(--bg); color: var(--text); display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; padding: 16px; }
+
+    .stage {
+      width: 1040px;
+      height: 640px;
+      background: #090e1a;
+      border: 1px solid var(--panel-border);
+      border-radius: 14px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 25px 60px -15px rgba(0,0,0,0.8);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .topbar {
+      height: 56px;
+      border-bottom: 1px solid var(--panel-border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 18px;
+      background: rgba(15, 23, 42, 0.85);
+      backdrop-filter: blur(12px);
+      z-index: 10;
+      gap: 16px;
+    }
+    .brand { font-weight: 700; font-size: 16px; display: flex; align-items: center; gap: 10px; color: #fff; flex-shrink: 0; }
+    .brand svg { color: var(--accent); }
+    .urlbar {
+      flex: 1;
+      max-width: 480px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--panel-border);
+      border-radius: 20px;
+      padding: 6px 16px;
+      font-size: 12px;
+      color: var(--text-muted);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, monospace;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: color 0.3s ease;
+    }
+    .urlbar::before { content: "🔒"; font-size: 10px; }
+    .pill {
+      font-size: 11px;
+      font-weight: 600;
+      padding: 4px 12px;
+      border-radius: 20px;
+      border: 1px solid var(--panel-border);
+      background: rgba(255, 255, 255, 0.04);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      white-space: nowrap;
+      transition: all 0.5s ease;
+    }
+
+    .viewport {
+      flex: 1;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .screen {
+      position: absolute;
+      inset: 0;
+      padding: 22px;
+      opacity: 0;
+      transform: translateY(10px);
+      pointer-events: none;
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+    .screen.active { opacity: 1; transform: translateY(0); pointer-events: auto; }
+
+    .panel {
+      background: var(--card-bg);
+      border: 1px solid var(--panel-border);
+      border-radius: 10px;
+      padding: 16px;
+      position: relative;
+      overflow: hidden;
+    }
+    .panel-header {
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-muted);
+      margin-bottom: 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+    }
+    .badge-amber { background: rgba(245, 158, 11, 0.15); color: var(--amber); border: 1px solid var(--amber); }
+    .badge-emerald { background: rgba(16, 185, 129, 0.15); color: var(--emerald); border: 1px solid var(--emerald); }
+    .badge-cyan { background: rgba(6, 182, 212, 0.15); color: var(--accent-strong); border: 1px solid var(--accent); }
+    .badge-violet { background: rgba(139, 92, 246, 0.15); color: var(--violet); border: 1px solid var(--violet); }
+
+    /* ---- Screen 1: Welcome ---- */
+    #screen-overview { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 28px; }
+    .overview-title { font-size: 22px; font-weight: 800; color: #fff; text-align: center; }
+    .overview-sub { font-size: 13px; color: var(--text-muted); text-align: center; max-width: 560px; }
+    .pipeline-row { display: flex; gap: 14px; }
+    .pipeline-node {
+      width: 150px;
+      background: var(--card-bg);
+      border: 1px solid var(--panel-border);
+      border-radius: 10px;
+      padding: 16px 12px;
+      text-align: center;
+      transition: all 0.4s ease;
+    }
+    .pipeline-node .icon { font-size: 24px; margin-bottom: 8px; }
+    .pipeline-node .label { font-size: 12px; font-weight: 700; color: #fff; }
+    .pipeline-node .desc { font-size: 10px; color: var(--text-muted); margin-top: 4px; }
+    .pipeline-arrow { align-self: center; color: var(--panel-border); font-size: 18px; }
+
+    /* ---- Screen 2: Workbench ---- */
+    #screen-workbench { display: grid; grid-template-columns: 1fr; gap: 12px; }
+    .task-card { display: flex; flex-direction: column; gap: 10px; }
+    .task-title-row { display: flex; justify-content: space-between; align-items: flex-start; }
+    .task-title { font-size: 15px; font-weight: 700; color: #fff; }
+    .task-desc { font-size: 12px; color: #cbd5e1; line-height: 1.5; }
+    .ac-list { font-size: 11px; color: var(--text-muted); padding-left: 16px; line-height: 1.8; }
+    .api-contract {
+      background: #05080f;
+      border: 1px solid var(--panel-border);
+      border-radius: 6px;
+      padding: 10px 12px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, monospace;
+      font-size: 11px;
+      color: #7dd3fc;
+    }
+    .assist-btn {
+      align-self: flex-start;
+      background: var(--violet);
+      color: #fff;
+      font-weight: 700;
+      font-size: 12px;
+      border: none;
+      padding: 9px 16px;
+      border-radius: 6px;
+      transition: transform 0.2s ease;
+    }
+
+    /* ---- Screen 3: Assist Me ---- */
+    #screen-assist { display: flex; flex-direction: column; gap: 12px; }
+    .lesson-step-title { font-size: 13px; font-weight: 700; color: #fff; }
+    .lesson-body { font-size: 12px; color: #cbd5e1; line-height: 1.5; }
+    .code-block {
+      background: #05080f;
+      border: 1px solid var(--panel-border);
+      border-radius: 6px;
+      padding: 12px 14px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, monospace;
+      font-size: 11.5px;
+      color: #86efac;
+      white-space: pre;
+      line-height: 1.6;
+    }
+    .check-btn {
+      align-self: flex-start;
+      background: var(--accent);
+      color: #04141a;
+      font-weight: 700;
+      font-size: 12px;
+      border: none;
+      padding: 9px 16px;
+      border-radius: 6px;
+    }
+    .check-result { font-size: 12px; font-weight: 700; color: var(--emerald); opacity: 0; transition: opacity 0.4s ease; }
+    .check-result.show { opacity: 1; }
+
+    /* ---- Screen 4: Ship (terminal) ---- */
+    #screen-ship { display: flex; align-items: center; justify-content: center; }
+    .terminal {
+      width: 620px;
+      background: #05080f;
+      border: 1px solid var(--panel-border);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .terminal-bar { height: 30px; background: #0f172a; display: flex; align-items: center; gap: 6px; padding: 0 12px; }
+    .term-dot { width: 10px; height: 10px; border-radius: 50%; }
+    .terminal-body { padding: 16px; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, monospace; font-size: 12px; line-height: 1.9; min-height: 160px; }
+    .term-line { opacity: 0; transform: translateY(6px); transition: all 0.3s ease; }
+    .term-line.show { opacity: 1; transform: translateY(0); }
+    .term-prompt { color: var(--accent-strong); }
+    .term-out { color: #94a3b8; }
+    .term-ok { color: var(--emerald); }
+
+    /* ---- Screen 5: CD Review ---- */
+    #screen-review { display: flex; flex-direction: column; gap: 12px; }
+    .pr-row { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+    .pr-title { font-size: 13px; font-weight: 700; color: #fff; }
+    .pr-meta { font-size: 11px; color: var(--text-muted); margin-top: 3px; }
+    .review-comment {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--panel-border);
+      border-radius: 8px;
+      padding: 12px 14px;
+      opacity: 0;
+      transform: translateY(8px);
+      transition: all 0.5s cubic-bezier(0.16,1,0.3,1);
+    }
+    .review-comment.show { opacity: 1; transform: translateY(0); }
+    .review-comment .rc-name { font-size: 11px; font-weight: 700; color: var(--accent-strong); }
+    .review-comment .rc-body { font-size: 12px; color: #cbd5e1; margin-top: 4px; }
+
+    /* ---- Screen 6: Growth ---- */
+    #screen-growth { display: flex; flex-direction: column; gap: 16px; align-items: center; justify-content: center; }
+    .growth-count { font-size: 40px; font-weight: 800; color: #fff; transition: color 0.4s ease; }
+    .growth-label { font-size: 12px; color: var(--text-muted); }
+    .badge-row { display: flex; gap: 10px; }
+    .growth-badge {
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 700;
+      border: 1px solid var(--panel-border);
+      color: var(--text-muted);
+      background: rgba(255,255,255,0.02);
+      transition: all 0.5s ease;
+    }
+    .growth-badge.unlocked { border-color: var(--emerald); color: var(--emerald); background: rgba(16,185,129,0.1); }
+
+    #highlightBox {
+      position: absolute;
+      border: 2px solid var(--accent);
+      background: rgba(6, 182, 212, 0.08);
+      border-radius: 8px;
+      pointer-events: none;
+      z-index: 40;
+      box-shadow: 0 0 25px rgba(6, 182, 212, 0.35), inset 0 0 15px rgba(6, 182, 212, 0.15);
+      opacity: 0;
+      transform: scale(0.96);
+      transition: top 0.6s cubic-bezier(0.2, 0.8, 0.2, 1),
+                  left 0.6s cubic-bezier(0.2, 0.8, 0.2, 1),
+                  width 0.6s cubic-bezier(0.2, 0.8, 0.2, 1),
+                  height 0.6s cubic-bezier(0.2, 0.8, 0.2, 1),
+                  opacity 0.4s ease,
+                  transform 0.4s ease,
+                  border-color 0.4s ease,
+                  box-shadow 0.4s ease;
+    }
+    #highlightBox.active { opacity: 1; transform: scale(1); }
+    #highlightBox.accent-emerald { border-color: var(--emerald); background: rgba(16, 185, 129, 0.08); box-shadow: 0 0 25px rgba(16, 185, 129, 0.35), inset 0 0 15px rgba(16, 185, 129, 0.15); }
+    #highlightBox.accent-violet { border-color: var(--violet); background: rgba(139, 92, 246, 0.08); box-shadow: 0 0 25px rgba(139, 92, 246, 0.35), inset 0 0 15px rgba(139, 92, 246, 0.15); }
+
+    #cursor {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 22px;
+      height: 22px;
+      pointer-events: none;
+      z-index: 99;
+      transform: translate(180px, 260px);
+      transition: transform 1s cubic-bezier(0.25, 1, 0.5, 1);
+    }
+    #cursor svg { filter: drop-shadow(0 4px 8px rgba(0,0,0,0.6)); }
+
+    .tray {
+      width: 1040px;
+      margin-top: 14px;
+      background: #0f172a;
+      border: 1px solid var(--panel-border);
+      border-radius: 10px;
+      padding: 14px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .tray-row { display: flex; justify-content: space-between; align-items: center; gap: 16px; }
+    .captions { font-size: 14px; color: #cbd5e1; flex: 1; min-height: 42px; line-height: 1.45; }
+
+    .btn-group { display: flex; align-items: center; gap: 8px; }
+    .ctl-btn {
+      background: var(--accent);
+      border: none;
+      color: #04141a;
+      padding: 9px 18px;
+      font-size: 13px;
+      font-weight: 700;
+      border-radius: 6px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+    .ctl-btn:hover { background: var(--accent-strong); }
+    .ctl-btn.secondary { background: #1e293b; color: #e2e8f0; border: 1px solid #334155; }
+    .ctl-btn.secondary:hover { background: #334155; }
+    .ctl-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+    .chapter-bar { display: flex; align-items: center; gap: 6px; border-top: 1px solid #1e293b; padding-top: 10px; flex-wrap: wrap; }
+    .chapter-label { font-size: 11px; text-transform: uppercase; font-weight: 700; color: var(--text-muted); margin-right: 6px; }
+    .chapter-btn {
+      flex: 1;
+      min-width: 100px;
+      padding: 7px 10px;
+      font-size: 11px;
+      font-weight: 600;
+      border-radius: 5px;
+      border: 1px solid #1e293b;
+      background: rgba(15, 23, 42, 0.6);
+      color: var(--text-muted);
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.2s;
+    }
+    .chapter-btn:hover { color: #fff; background: #1e293b; }
+    .chapter-btn.active { background: rgba(6, 182, 212, 0.15); border-color: var(--accent); color: var(--accent-strong); }
+  </style>
+</head>
+<body>
+
+  <div class="stage" id="mainStage">
+    <div id="highlightBox"></div>
+
+    <div class="topbar">
+      <div class="brand">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+          <path d="M13 2 3 14h7l-1 8 10-12h-7l1-8z"></path>
+        </svg>
+        Inpact
+      </div>
+      <div class="urlbar" id="urlBar">inpact.live</div>
+      <div class="pill" id="statusPill">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="3"><circle cx="12" cy="12" r="9"></circle></svg>
+        <span id="statusText">HOW IT WORKS</span>
+      </div>
+    </div>
+
+    <div class="viewport">
+
+      <!-- Screen 1: Welcome -->
+      <div class="screen" id="screen-overview">
+        <div class="overview-title">You're in. Here's how the rest of this actually works.</div>
+        <div class="overview-sub" id="overviewSub">One real task, from the moment it lands in your Workbench to the moment a real engineer ships it — walk through it once here, then do it for real.</div>
+        <div class="pipeline-row">
+          <div class="pipeline-node" id="pnWorkbench"><div class="icon">🗂️</div><div class="label">Workbench</div><div class="desc">Your real task</div></div>
+          <div class="pipeline-arrow">→</div>
+          <div class="pipeline-node" id="pnAssist"><div class="icon">💡</div><div class="label">Assist Me</div><div class="desc">Stuck? One click helps</div></div>
+          <div class="pipeline-arrow">→</div>
+          <div class="pipeline-node" id="pnShip"><div class="icon">🚀</div><div class="label">Ship It</div><div class="desc">Real code, real git</div></div>
+          <div class="pipeline-arrow">→</div>
+          <div class="pipeline-node" id="pnGrow"><div class="icon">📈</div><div class="label">Review & Grow</div><div class="desc">Reviewed. Real. Yours.</div></div>
+        </div>
+      </div>
+
+      <!-- Screen 2: Workbench -->
+      <div class="screen" id="screen-workbench">
+        <div class="panel task-card">
+          <div class="panel-header"><span>Workbench</span><span class="badge badge-emerald">Your real task</span></div>
+          <div class="task-title-row">
+            <div class="task-title" id="taskTitle">Build the low-stock reorder board</div>
+            <span class="badge badge-cyan">Coding · React + TypeScript</span>
+          </div>
+          <div class="task-desc" id="taskDesc">Same idea as an Amazon seller dashboard flagging items about to run out — except this one is wired to a real, running inventory API.</div>
+          <ul class="ac-list" id="acList">
+            <li>Fetch and list every item with its stock level</li>
+            <li>Flag any item at or below its reorder point</li>
+            <li>Show empty/loading/error states, not just the happy path</li>
+          </ul>
+          <div class="api-contract" id="apiContract">GET /api/items → 200 Item[]&#10;{ id, sku, name, stockOnHand, reorderPoint }</div>
+          <button class="assist-btn" id="assistBtn">💡 Assist Me</button>
+        </div>
+      </div>
+
+      <!-- Screen 3: Assist Me -->
+      <div class="screen" id="screen-assist">
+        <div class="panel" style="flex:1; display:flex; flex-direction:column; gap:12px;">
+          <div class="panel-header"><span>Assist Me</span><span class="badge badge-violet">Matched to this exact pattern</span></div>
+          <div class="lesson-step-title" id="lessonTitle">Fetching a list on mount</div>
+          <div class="lesson-body" id="lessonBody">Every list screen you'll ever build starts the same way: fetch once when the component appears, track loading, and render what comes back.</div>
+          <div class="code-block" id="codeBlock">useEffect(() => {
+  fetch("/api/items")
+    .then(r => r.json())
+    .then(setItems)
+    .finally(() => setLoading(false));
+}, []);</div>
+          <button class="check-btn" id="checkBtn">Check my answer</button>
+          <div class="check-result" id="checkResult">✓ Correct — that's the exact pattern your real task needs.</div>
+        </div>
+      </div>
+
+      <!-- Screen 4: Ship -->
+      <div class="screen" id="screen-ship">
+        <div class="terminal">
+          <div class="terminal-bar">
+            <div class="term-dot" style="background:#f43f5e;"></div>
+            <div class="term-dot" style="background:#f59e0b;"></div>
+            <div class="term-dot" style="background:#10b981;"></div>
+          </div>
+          <div class="terminal-body" id="terminalBody">
+            <div class="term-line" id="tline1"><span class="term-prompt">$</span> git add .</div>
+            <div class="term-line" id="tline2"><span class="term-prompt">$</span> git commit -m "Add low-stock reorder board"</div>
+            <div class="term-line" id="tline3"><span class="term-prompt">$</span> git push origin task/reorder-board</div>
+            <div class="term-line" id="tline4"><span class="term-out">Enumerating objects, writing... done.</span></div>
+            <div class="term-line" id="tline5"><span class="term-ok">✓ Pushed to your real project. Ready for review.</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Screen 5: CD Review -->
+      <div class="screen" id="screen-review">
+        <div class="panel" style="display:flex; flex-direction:column; gap:14px;">
+          <div class="panel-header"><span>CD Review</span><span class="badge badge-amber">Pending human review</span></div>
+          <div class="pr-row">
+            <div>
+              <div class="pr-title" id="prTitle">#42 Add low-stock reorder board</div>
+              <div class="pr-meta">BookingDepositDesk · opened by you</div>
+            </div>
+            <span class="badge badge-amber" id="prStatus">OPEN</span>
+          </div>
+          <div class="review-comment" id="reviewComment">
+            <div class="rc-name">Priya · Core Dev</div>
+            <div class="rc-body">Clean loading/error handling. Approved — this is going live as-is.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Screen 6: Growth -->
+      <div class="screen" id="screen-growth">
+        <div class="growth-count" id="growthCount">1</div>
+        <div class="growth-label">real task shipped and reviewed</div>
+        <div class="badge-row">
+          <div class="growth-badge unlocked" id="badgeJs">JS tasks</div>
+          <div class="growth-badge" id="badgeTs">TS / Advanced</div>
+          <div class="growth-badge" id="badgePortfolio">Real portfolio</div>
+        </div>
+      </div>
+
+    </div>
+
+    <div id="cursor">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+        <path d="M3 3L10.07 19.97L12.58 12.58L19.97 10.07L3 3Z" fill="#22d3ee" stroke="#ffffff" stroke-width="2" stroke-linejoin="round"/>
+      </svg>
+    </div>
+  </div>
+
+  <div class="tray">
+    <div class="tray-row">
+      <div class="captions" id="captionText">Select a chapter below or click "Start Tour" to begin.</div>
+      <div class="btn-group">
+        <button class="ctl-btn secondary" id="pauseBtn" onclick="togglePause()" disabled>
+          <span id="pauseIcon">⏸</span> <span id="pauseLabel">Pause</span>
+        </button>
+        <button class="ctl-btn" id="mainPlayBtn" onclick="togglePlayTour()">
+          <span id="playIcon">▶</span> <span id="playLabel">Start Tour</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="chapter-bar">
+      <span class="chapter-label">Jump To:</span>
+      <button class="chapter-btn" id="chapBtn0" onclick="jumpToChapter(0)">1. Welcome</button>
+      <button class="chapter-btn" id="chapBtn1" onclick="jumpToChapter(1)">2. Workbench</button>
+      <button class="chapter-btn" id="chapBtn2" onclick="jumpToChapter(2)">3. Assist Me</button>
+      <button class="chapter-btn" id="chapBtn3" onclick="jumpToChapter(3)">4. Ship It</button>
+      <button class="chapter-btn" id="chapBtn4" onclick="jumpToChapter(4)">5. Real Review</button>
+      <button class="chapter-btn" id="chapBtn5" onclick="jumpToChapter(5)">6. Grow</button>
+    </div>
+  </div>
+
+  <script>
+    const synth = window.speechSynthesis;
+    let baseMaleVoice = null;
+    let currentSessionId = 0;
+    let isRunning = false;
+    let isPaused = false;
+
+    function loadVoices() {
+      const voices = synth.getVoices();
+      baseMaleVoice = voices.find(v =>
+        (v.name.includes('Natural') || v.name.includes('Guy') || v.name.includes('David') || v.name.includes('Male')) &&
+        v.lang.startsWith('en')
+      ) || voices.find(v => v.lang.startsWith('en'));
+    }
+    if (speechSynthesis.onvoiceschanged !== undefined) speechSynthesis.onvoiceschanged = loadVoices;
+    loadVoices();
+
+    const stage = document.getElementById('mainStage');
+    const highlightBox = document.getElementById('highlightBox');
+    const cursor = document.getElementById('cursor');
+    const caption = document.getElementById('captionText');
+    const urlBar = document.getElementById('urlBar');
+    const pauseBtn = document.getElementById('pauseBtn');
+    const playLabel = document.getElementById('playLabel');
+    const playIcon = document.getElementById('playIcon');
+    const pauseLabel = document.getElementById('pauseLabel');
+    const pauseIcon = document.getElementById('pauseIcon');
+
+    const SCREEN_IDS = ['screen-overview', 'screen-workbench', 'screen-assist', 'screen-ship', 'screen-review', 'screen-growth'];
+
+    function showScreen(id) {
+      SCREEN_IDS.forEach(sid => document.getElementById(sid).classList.toggle('active', sid === id));
+    }
+
+    function setUrl(path) {
+      urlBar.innerText = path;
+    }
+
+    function highlightElement(elOrId, styleClass = '', padding = 6) {
+      const el = typeof elOrId === 'string' ? document.getElementById(elOrId) : elOrId;
+      if (!el) return;
+      const stageRect = stage.getBoundingClientRect();
+      const elRect = el.getBoundingClientRect();
+      highlightBox.className = '';
+      if (styleClass) highlightBox.classList.add(styleClass);
+      highlightBox.style.top = `${elRect.top - stageRect.top - padding}px`;
+      highlightBox.style.left = `${elRect.left - stageRect.left - padding}px`;
+      highlightBox.style.width = `${elRect.width + (padding * 2)}px`;
+      highlightBox.style.height = `${elRect.height + (padding * 2)}px`;
+      highlightBox.classList.add('active');
+    }
+    function clearHighlight() { highlightBox.classList.remove('active'); }
+
+    function moveCursorTo(x, y, duration = 1000) {
+      return new Promise(resolve => {
+        cursor.style.transition = `transform ${duration}ms cubic-bezier(0.25, 1, 0.5, 1)`;
+        cursor.style.transform = `translate(${x}px, ${y}px)`;
+        setTimeout(resolve, duration);
+      });
+    }
+
+    function speakText(text, sessionId) {
+      return new Promise((resolve, reject) => {
+        if (!synth) { resolve(); return; }
+        synth.cancel();
+        const utter = new SpeechSynthesisUtterance(text);
+        if (baseMaleVoice) utter.voice = baseMaleVoice;
+        utter.pitch = 0.95;
+        utter.rate = 0.95;
+        utter.onend = () => (sessionId === currentSessionId ? resolve() : reject('CANCELED'));
+        utter.onerror = () => (sessionId === currentSessionId ? resolve() : reject('CANCELED'));
+        synth.speak(utter);
+      });
+    }
+
+    function sleep(ms, sessionId) {
+      return new Promise((resolve, reject) => {
+        const interval = 50;
+        let elapsed = 0;
+        const timer = setInterval(() => {
+          if (sessionId !== currentSessionId) { clearInterval(timer); reject('CANCELED'); return; }
+          if (!isPaused) {
+            elapsed += interval;
+            if (elapsed >= ms) { clearInterval(timer); resolve(); }
+          }
+        }, interval);
+      });
+    }
+
+    function resetAll() {
+      synth.cancel();
+      isPaused = false;
+      pauseLabel.innerText = "Pause";
+      pauseIcon.innerText = "⏸";
+      clearHighlight();
+
+      document.getElementById('checkResult').classList.remove('show');
+
+      ['tline1','tline2','tline3','tline4','tline5'].forEach(id => document.getElementById(id).classList.remove('show'));
+
+      document.getElementById('reviewComment').classList.remove('show');
+      document.getElementById('prStatus').innerText = 'OPEN';
+      document.getElementById('prStatus').className = 'badge badge-amber';
+
+      document.getElementById('growthCount').innerText = '1';
+      document.getElementById('badgeTs').classList.remove('unlocked');
+      document.getElementById('badgePortfolio').classList.remove('unlocked');
+    }
+
+    function setChapterActive(idx) {
+      for (let i = 0; i <= 5; i++) {
+        const b = document.getElementById(`chapBtn${i}`);
+        if (b) b.classList.toggle('active', i === idx);
+      }
+    }
+
+    const chapters = [
+      {
+        title: "1. Welcome",
+        caption: "You're already placed on a real product team. This walkthrough is about what happens next.",
+        narration: "You're already in — matched to a real product team, building software a real small business actually uses. This walkthrough isn't about signing up. It's about what happens from here: picking up your task in Workbench, getting unstuck with Assist Me, shipping real code, having it reviewed by a real engineer, and growing into harder work over time.",
+        setup: () => { resetAll(); showScreen('screen-overview'); setUrl('inpact.live'); },
+        run: async (sId) => {
+          highlightElement('pnWorkbench', 'accent-emerald', 8);
+          await moveCursorTo(160, 260);
+          await speakText(chapters[0].narration, sId);
+          await sleep(400, sId);
+        }
+      },
+      {
+        title: "2. Workbench",
+        caption: "Your real task — a real acceptance criteria list, and a real, already-running API to build against.",
+        narration: "This is Workbench — your task, in full. Real acceptance criteria, not vague busywork. And notice this API contract: that endpoint is already live. You're not guessing what the backend might return one day. It's running right now, and you're building the screen that talks to it.",
+        setup: () => { resetAll(); showScreen('screen-workbench'); setUrl('inpact.live/#/workbench'); },
+        run: async (sId) => {
+          highlightElement('taskTitle', '', 6);
+          await moveCursorTo(200, 150);
+          await sleep(600, sId);
+          highlightElement('apiContract', 'accent-emerald', 6);
+          await moveCursorTo(300, 330);
+          await speakText(chapters[1].narration, sId);
+          await sleep(400, sId);
+        }
+      },
+      {
+        title: "3. Assist Me",
+        caption: "Stuck on a pattern, not the whole subject — one click drops you into the exact lesson for it.",
+        narration: "Stuck isn't a dead end here. One click on Assist Me, and instead of a generic course, you land on the exact lesson for the exact pattern your task needs — fetch-on-mount, in this case — work through it in minutes, and come straight back to finish the real thing.",
+        setup: () => { resetAll(); showScreen('screen-workbench'); setUrl('inpact.live/#/workbench'); },
+        run: async (sId) => {
+          highlightElement('assistBtn', 'accent-violet', 6);
+          await moveCursorTo(150, 300);
+          await sleep(500, sId);
+          showScreen('screen-assist');
+          setUrl('inpact.live/#/assist-me');
+          highlightElement('codeBlock', 'accent-violet', 6);
+          await moveCursorTo(300, 260);
+          await speakText(chapters[2].narration, sId);
+          document.getElementById('checkResult').classList.add('show');
+          await sleep(400, sId);
+        }
+      },
+      {
+        title: "4. Ship It",
+        caption: "You push real code with real git — the same command every working developer uses, not a form submission.",
+        narration: "When it's done, you ship it exactly the way a professional developer does — git add, commit, push. No simulated submit button. This lands in a real repository, on a real branch, waiting on a real review.",
+        setup: () => { resetAll(); showScreen('screen-ship'); setUrl('terminal'); },
+        run: async (sId) => {
+          await moveCursorTo(400, 300);
+          for (const id of ['tline1','tline2','tline3']) {
+            document.getElementById(id).classList.add('show');
+            await sleep(350, sId);
+          }
+          await speakText(chapters[3].narration, sId);
+          document.getElementById('tline4').classList.add('show');
+          await sleep(250, sId);
+          document.getElementById('tline5').classList.add('show');
+          highlightElement('terminalBody', 'accent-emerald', 8);
+          await sleep(300, sId);
+        }
+      },
+      {
+        title: "5. Real Review",
+        caption: "A real engineer reviews your pull request before it ships — the same gate every real engineering job has.",
+        narration: "This part is real too. A Core Dev — an actual engineer on the team — reviews your pull request, the same as any job you'll ever have. Sometimes it's approved outright. Sometimes it comes back with real feedback. Either way, that's the review a hiring manager will actually believe.",
+        setup: () => { resetAll(); showScreen('screen-review'); setUrl('inpact.live/#/cd-review'); },
+        run: async (sId) => {
+          highlightElement('prTitle', '', 6);
+          await moveCursorTo(200, 150);
+          await sleep(500, sId);
+          document.getElementById('reviewComment').classList.add('show');
+          document.getElementById('prStatus').innerText = 'APPROVED';
+          document.getElementById('prStatus').className = 'badge badge-emerald';
+          highlightElement('reviewComment', 'accent-emerald', 6);
+          await moveCursorTo(250, 260);
+          await speakText(chapters[4].narration, sId);
+          await sleep(400, sId);
+        }
+      },
+      {
+        title: "6. Grow",
+        caption: "Every shipped, reviewed task is real — and it's what unlocks harder trades and heavier tools next.",
+        narration: "Every task you finish here is real, referenceable work — not a certificate of completion. And it compounds: close out enough at this level, and the platform unlocks harder trades and heavier tools for you automatically. This is the whole point — you didn't simulate experience. You built it.",
+        setup: () => { resetAll(); showScreen('screen-growth'); setUrl('inpact.live/#/workbench'); },
+        run: async (sId) => {
+          highlightElement('growthCount', '', 10);
+          await moveCursorTo(400, 200);
+          await sleep(500, sId);
+          document.getElementById('badgeTs').classList.add('unlocked');
+          document.getElementById('badgePortfolio').classList.add('unlocked');
+          highlightElement('badgeTs', 'accent-emerald', 6);
+          await speakText(chapters[5].narration, sId);
+          clearHighlight();
+        }
+      }
+    ];
+
+    async function executeFlowFrom(index) {
+      const thisSession = ++currentSessionId;
+      isRunning = true;
+      pauseBtn.disabled = false;
+      playLabel.innerText = "Restart Tour";
+      playIcon.innerText = "↺";
+
+      for (let i = index; i < chapters.length; i++) {
+        if (thisSession !== currentSessionId) return;
+        setChapterActive(i);
+        caption.innerText = chapters[i].caption;
+        try {
+          chapters[i].setup();
+          await chapters[i].run(thisSession);
+        } catch (e) {
+          if (e === 'CANCELED') return;
+        }
+      }
+
+      if (thisSession === currentSessionId) {
+        caption.innerText = "Tour complete. Choose any chapter to replay or restart.";
+        isRunning = false;
+        pauseBtn.disabled = true;
+        playLabel.innerText = "Start Tour";
+        playIcon.innerText = "▶";
+        setChapterActive(-1);
+      }
+    }
+
+    function togglePlayTour() { executeFlowFrom(0); }
+
+    function togglePause() {
+      if (!isRunning) return;
+      if (!isPaused) {
+        isPaused = true;
+        synth.pause();
+        pauseLabel.innerText = "Resume";
+        pauseIcon.innerText = "▶";
+      } else {
+        isPaused = false;
+        synth.resume();
+        pauseLabel.innerText = "Pause";
+        pauseIcon.innerText = "⏸";
+      }
+    }
+
+    function jumpToChapter(idx) { executeFlowFrom(idx); }
+  </script>
+</body>
+</html>

@@ -1,10 +1,84 @@
 import createINPACTEngine from "../inpact_engine_shared";
+
 const NODES = [
-  { id: "intro", type: "reveal", phase: "Lesson", content: { tag: "LESSON #28 (TypeScript)", title: "Star Rating Component — Typed", body: "Clickable 5-star rating. Use useState<number>(0) for rating (0–5). Type the star click handler and optional toggle (same star clears).", usecase: "Typed numeric state for ratings." } },
-  { id: "objectives", type: "objectives", phase: "Objectives", items: ["Write a custom hook useFetch<T>(url: string) with a generic type parameter T for the response data so the abstraction solves a concrete UI lesson and exposes a reliable typed contract.","Model typed state variables for data (T | null), loading (boolean), and error (Error | null) so state, refs, or values keep a predictable shape as the feature evolves.","Call fetch inside useEffect, parse the JSON response, and cast it to T using the generic parameter so the hook or API is used with an intentional contract, and async data is handled with an explicit and safe data shape.","Return a typed object { data, loading, error } from the custom hook and consume it in a component so consumers receive a stable contract and the effect of that contract can be tested immediately."] },
-  { id: "step1", type: "question", phase: "Step 1 of 3", paal: "Define and create numeric rating state; render five clickable controls that set the rating to 1–5.", answer_keywords: ["usestate", "number", "rating", "setrating", "button", "onclick"], seed_code: "import { useState } from 'react'\n\nexport default function StarRating() {\n  const [rating, setRating] = useState<number>(0)\n  return (\n    <div>\n      {[1,2,3,4,5].map(i => (\n        <button key={i} onClick={() => setRating(i)}>★</button>\n      ))}\n    </div>\n  )\n}", feedback_correct: "✅ Clickable stars set rating.", feedback_partial: "Five elements, onClick sets rating.", feedback_wrong: "setRating(i)", expected: "5 stars, click sets rating" },
-  { id: "step2", type: "question", phase: "Step 2 of 3", paal: "Differentiate filled vs empty stars (color or glyph) based on the current rating.", answer_keywords: ["rating", "color", "?", "gold"], seed_code: "import { useState } from 'react'\n\nexport default function StarRating() {\n  const [rating, setRating] = useState<number>(0)\n  return (\n    <div>\n      {[1,2,3,4,5].map(i => (\n        <button key={i} onClick={() => setRating(rating === i ? 0 : i)} style={{ fontSize: 24, background: 'none', border: 'none', cursor: 'pointer', color: i <= rating ? 'gold' : '#ccc' }}>\n          ★\n        </button>\n      ))}\n    </div>\n  )\n}", feedback_correct: "✅ Filled/empty by rating.", feedback_partial: "Conditional color by rating.", feedback_wrong: "i <= rating ? 'gold' : '#ccc'", expected: "Use i <= rating ? 'gold' : '#ccc' for star color (or ★ vs ☆). Toggle: setRating(rating === i ? 0 : i)." },
-  { id: "step3", type: "question", phase: "Step 3 of 3", paal: "Show the numeric rating in the UI; export the component.", answer_keywords: ["rating", "export"], seed_code: "import { useState } from 'react'\n\nexport default function StarRating() {\n  const [rating, setRating] = useState<number>(0)\n  return (\n    <div>\n      {[1,2,3,4,5].map(i => (\n        <button key={i} onClick={() => setRating(rating === i ? 0 : i)} style={{ fontSize: 24, background: 'none', border: 'none', cursor: 'pointer', color: i <= rating ? 'gold' : '#ccc' }}>\n          ★\n        </button>\n      ))}\n      <span>Rating: {rating}</span>\n    </div>\n  )\n}", feedback_correct: "✅ Star rating with TypeScript complete.", feedback_partial: "Show rating and export.", feedback_wrong: "export default", expected: "Display rating (e.g. <span>Rating: {rating}</span>). Export the component." },
+  {
+    id: "intro",
+    type: "reveal",
+    phase: "Lesson",
+    content: {
+      tag: "LESSON #28 (React Data)",
+      title: "fetch + Loading + Error State",
+      body: "A shipment detail screen fetches by id and must clearly represent loading, success, and failure. You will implement a typed fetch flow with explicit state branches so the user always sees the correct UI while data is in-flight or failed.",
+      usecase:
+        "Most real product screens fetch async data; stable loading and error UX is a baseline requirement for reliability.",
+    },
+  },
+  {
+    id: "objectives",
+    type: "objectives",
+    phase: "Objectives",
+    items: [
+      "Model loading, error, and data states explicitly in TypeScript",
+      "Run fetch in `useEffect` keyed by id changes",
+      "Handle non-OK HTTP responses with user-visible error messaging",
+      "Render deterministic UI branches for loading, error, empty, and success",
+    ],
+  },
+  {
+    id: "step1",
+    type: "question",
+    phase: "Step 1 of 3",
+    paal: "Define `Shipment` type and state: `isLoading`, `error`, `data`.",
+    answer_keywords: ["type Shipment", "useState", "isLoading", "error", "data"],
+    seed_code:
+      "import { useState } from 'react';\n\nexport default function ShipmentPanel({ shipmentId }) {\n  // Step 1\n}",
+    feedback_correct: "Good — state model is explicit and typed.",
+    feedback_partial: "Add all three state variables with proper defaults.",
+    feedback_wrong: "Define `Shipment` and state for loading/error/data.",
+    expected: "Typed fetch state",
+  },
+  {
+    id: "step2",
+    type: "question",
+    phase: "Step 2 of 3",
+    paal: "Fetch `/api/shipments/${shipmentId}` in `useEffect`, update state in try/catch/finally.",
+    answer_keywords: ["useEffect", "fetch", "try", "catch", "finally", "shipmentId"],
+    seed_code:
+      "import { useEffect, useState } from 'react';\n\nexport default function ShipmentPanel({ shipmentId }) {\n  const [isLoading, setIsLoading] = useState(true);\n  const [error, setError] = useState(null);\n  const [data, setData] = useState(null);\n  // Step 2\n}",
+    feedback_correct: "Nice — async flow is wired to id changes.",
+    feedback_partial: "Ensure non-OK response throws and final state clears loading.",
+    feedback_wrong: "Implement fetch in effect with try/catch/finally.",
+    expected: "Effect fetch flow",
+  },
+  {
+    id: "step3",
+    type: "question",
+    phase: "Step 3 of 3",
+    paal: "Render UI branches: loading spinner, error message, and success detail card.",
+    answer_keywords: ["if (isLoading)", "if (error)", "return", "data"],
+    seed_code:
+      "import { useEffect, useState } from 'react';\n\nexport default function ShipmentPanel({ shipmentId }) {\n  const [isLoading, setIsLoading] = useState(true);\n  const [error, setError] = useState(null);\n  const [data, setData] = useState(null);\n\n  useEffect(() => {\n    // existing fetch logic\n  }, [shipmentId]);\n\n  // Step 3\n}",
+    feedback_correct: "Perfect — predictable UX for each async state.",
+    feedback_partial: "Add explicit loading and error returns before success JSX.",
+    feedback_wrong: "Return conditional branches for loading, error, and success.",
+    expected: "Final state-based rendering",
+  },
 ];
-const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
-export default createINPACTEngine({ NODES, sideItems, lessonNum: 28, title: "Star Rating (TS)", shortName: "TS — STAR RATING" });
+
+const sideItems = [
+  { label: "Lesson", id: "intro" },
+  { label: "Objectives", id: "objectives" },
+  { label: "Step 1", id: "step1" },
+  { label: "Step 2", id: "step2" },
+  { label: "Step 3", id: "step3" },
+  { label: "Step 4", id: "step4" },
+  { label: "Step 5", id: "step5" },
+];
+
+export default createINPACTEngine({
+  NODES,
+  sideItems,
+  lessonNum: 28,
+  title: "fetch + Loading + Error State",
+  shortName: "DATA — FETCH STATES",
+});

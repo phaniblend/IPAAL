@@ -1,0 +1,298 @@
+import { useEffect, useRef, useState } from "react";
+import "./GuidedTour.css";
+
+/**
+ * The reusable cinematic guided-tour engine — chrome + orchestration only. All product-specific
+ * content (the mock UI, and each chapter's own DOM mutations) lives in a per-product file like
+ * MiniERPTour.jsx, which supplies `renderStage` (the mock UI, wiring named refs via `reg(name)`)
+ * and `chapters` (each with title/caption/narration/setup(refs)/run(sId, helpers)).
+ *
+ * Deliberately imperative for the animated bits (cursor position, highlight-box geometry, ledger
+ * entries sliding in) — same choice the original hand-authored version made: CSS transitions read
+ * DOM style changes, not React re-renders, so those particular mutations go straight through refs
+ * rather than through state. Chapter/caption/play-pause UI state is ordinary React state since none
+ * of that needs to animate smoothly frame-by-frame.
+ *
+ * Narration uses the real Web Speech API (window.speechSynthesis) — gracefully absent (silently
+ * skipped) wherever it isn't available, exactly like the original.
+ */
+export default function GuidedTour({ renderStage, chapters, autoStart = false }) {
+  const stageRef = useRef(null);
+  const highlightRef = useRef(null);
+  const cursorRef = useRef(null);
+  const elRefs = useRef({});
+  const sessionRef = useRef(0);
+  const pausedRef = useRef(false);
+  const voiceRef = useRef(null);
+
+  const [caption, setCaption] = useState('Select a chapter below or click "Start Tour" to begin.');
+  const [isRunning, setIsRunning] = useState(false);
+  const [isPaused, setIsPaused] = useState(false);
+  const [activeChapter, setActiveChapter] = useState(-1);
+  const [playLabel, setPlayLabel] = useState("Start Tour");
+  // Fullscreen (user report, 2026-09-13: "the product tour is hiding in small screen" — on a phone,
+  // the desktop-oriented mock UI plus the tray/chapter bar below it easily runs taller than the
+  // viewport, and inside WalkthroughNudge's modal that meant scrolling past the fold to reach the
+  // controls at all, with nothing signaling there was more below). Toggling this escapes whatever
+  // modal/page it's mounted in (`position: fixed` on the wrapper) and gives the stage the full
+  // viewport to work with instead of a capped max-height.
+  const [isFullscreen, setIsFullscreen] = useState(false);
+
+  function toggleFullscreen() {
+    setIsFullscreen((f) => !f);
+  }
+
+  // Esc to exit (standard fullscreen convention), and lock the page behind it from scrolling while
+  // active — otherwise the background page and the tour both take wheel/touch input at once.
+  useEffect(() => {
+    if (!isFullscreen) return;
+    function onKeyDown(e) {
+      if (e.key === "Escape") setIsFullscreen(false);
+    }
+    window.addEventListener("keydown", onKeyDown);
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      window.removeEventListener("keydown", onKeyDown);
+      document.body.style.overflow = prevOverflow;
+    };
+  }, [isFullscreen]);
+
+  // Invalidates the currently-running chapter loop on unmount — executeFlowFrom is a plain async
+  // function, so unmounting this component doesn't stop it on its own; the next sleep()/speakText()
+  // check rejects with "CANCELED" instead of continuing. Kept unconditional (not just when
+  // speechSynthesis exists below) since the loop itself should stop either way, not only its audio.
+  useEffect(() => {
+    return () => {
+      sessionRef.current += 1;
+    };
+  }, []);
+
+  useEffect(() => {
+    const synth = window.speechSynthesis;
+    if (!synth) return;
+    function loadVoices() {
+      const voices = synth.getVoices();
+      voiceRef.current =
+        voices.find((v) => /Natural|Guy|David|Male/.test(v.name) && v.lang.startsWith("en")) ||
+        voices.find((v) => v.lang.startsWith("en")) ||
+        null;
+    }
+    loadVoices();
+    synth.onvoiceschanged = loadVoices;
+    // Silences whatever's speaking *right now* the instant this unmounts — the session-invalidation
+    // effect above stops the loop from starting anything new, but without this, whatever utterance
+    // was already mid-playback keeps running to completion (user report, 2026-09-13: "the audio
+    // keeps playing even after closing the product tour").
+    return () => {
+      synth.cancel();
+    };
+  }, []);
+
+  function register(name) {
+    return (node) => {
+      elRefs.current[name] = node;
+    };
+  }
+
+  function highlightElement(name, styleClass = "", padding = 6) {
+    const el = elRefs.current[name];
+    const box = highlightRef.current;
+    const stage = stageRef.current;
+    if (!el || !box || !stage) return;
+    const stageRect = stage.getBoundingClientRect();
+    const elRect = el.getBoundingClientRect();
+    box.className = "gt-highlight" + (styleClass ? ` ${styleClass}` : "");
+    box.style.top = `${elRect.top - stageRect.top - padding}px`;
+    box.style.left = `${elRect.left - stageRect.left - padding}px`;
+    box.style.width = `${elRect.width + padding * 2}px`;
+    box.style.height = `${elRect.height + padding * 2}px`;
+    box.classList.add("active");
+  }
+
+  function clearHighlight() {
+    if (highlightRef.current) highlightRef.current.classList.remove("active");
+  }
+
+  function moveCursorTo(x, y, duration = 1000) {
+    return new Promise((resolve) => {
+      const cur = cursorRef.current;
+      if (!cur) return resolve();
+      cur.style.transition = `transform ${duration}ms cubic-bezier(0.25, 1, 0.5, 1)`;
+      cur.style.transform = `translate(${x}px, ${y}px)`;
+      setTimeout(resolve, duration);
+    });
+  }
+
+  /** Moves the cursor to a real, measured position near a named element — robust to layout, unlike
+   * hardcoded pixel coordinates tuned to one exact stage size. `offsetX`/`offsetY` nudge it off the
+   * element's top-left corner (e.g. toward its center or just past its edge). */
+  function moveCursorToRef(name, offsetX = 16, offsetY = 16, duration = 1000) {
+    const el = elRefs.current[name];
+    const stage = stageRef.current;
+    if (!el || !stage) return Promise.resolve();
+    const stageRect = stage.getBoundingClientRect();
+    const elRect = el.getBoundingClientRect();
+    return moveCursorTo(elRect.left - stageRect.left + offsetX, elRect.top - stageRect.top + offsetY, duration);
+  }
+
+  function speakText(text, sId) {
+    return new Promise((resolve, reject) => {
+      const synth = window.speechSynthesis;
+      if (!synth) return resolve();
+      // Guard at the actual point of speaking, not just in onend/onerror below — a step earlier in
+      // this same chapter (e.g. moveCursorTo, which doesn't take a session id) can still be in
+      // flight when the tour gets torn down, so by the time execution reaches here the session may
+      // already be stale. Refusing to start new audio here is what actually stops it, since once
+      // synth.speak() runs the browser will speak it through to completion regardless of whether
+      // anything is still mounted to show for it.
+      if (sId !== sessionRef.current) return reject("CANCELED");
+      synth.cancel();
+      const utter = new SpeechSynthesisUtterance(text);
+      if (voiceRef.current) utter.voice = voiceRef.current;
+      utter.pitch = 0.95;
+      utter.rate = 0.95;
+      utter.onend = () => (sId === sessionRef.current ? resolve() : reject("CANCELED"));
+      utter.onerror = () => (sId === sessionRef.current ? resolve() : reject("CANCELED"));
+      synth.speak(utter);
+    });
+  }
+
+  function sleep(ms, sId) {
+    return new Promise((resolve, reject) => {
+      const interval = 50;
+      let elapsed = 0;
+      const timer = setInterval(() => {
+        if (sId !== sessionRef.current) {
+          clearInterval(timer);
+          reject("CANCELED");
+          return;
+        }
+        if (!pausedRef.current) {
+          elapsed += interval;
+          if (elapsed >= ms) {
+            clearInterval(timer);
+            resolve();
+          }
+        }
+      }, interval);
+    });
+  }
+
+  const helpers = { highlightElement, clearHighlight, moveCursorTo, moveCursorToRef, speakText, sleep };
+
+  async function executeFlowFrom(index) {
+    const thisSession = ++sessionRef.current;
+    pausedRef.current = false;
+    setIsPaused(false);
+    setIsRunning(true);
+    setPlayLabel("Restart Tour");
+
+    for (let i = index; i < chapters.length; i++) {
+      if (thisSession !== sessionRef.current) return;
+      setActiveChapter(i);
+      setCaption(chapters[i].caption);
+      try {
+        chapters[i].setup(elRefs.current);
+        await chapters[i].run(thisSession, helpers, elRefs.current);
+      } catch (e) {
+        if (e === "CANCELED") return;
+      }
+    }
+
+    if (thisSession === sessionRef.current) {
+      setCaption("Tour complete. Choose any chapter to replay or restart.");
+      setIsRunning(false);
+      setPlayLabel("Start Tour");
+      setActiveChapter(-1);
+    }
+  }
+
+  function togglePlayTour() {
+    executeFlowFrom(0);
+  }
+
+  // Fires once, only when a caller (the curiosity-nudge modal) asks for it — the standalone
+  // overview page and lesson-intro embed still start on a deliberate click, same as always.
+  const autoStartedRef = useRef(false);
+  useEffect(() => {
+    if (autoStart && !autoStartedRef.current) {
+      autoStartedRef.current = true;
+      executeFlowFrom(0);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [autoStart]);
+
+  function togglePause() {
+    if (!isRunning) return;
+    const synth = window.speechSynthesis;
+    if (!isPaused) {
+      pausedRef.current = true;
+      setIsPaused(true);
+      synth?.pause();
+    } else {
+      pausedRef.current = false;
+      setIsPaused(false);
+      synth?.resume();
+    }
+  }
+
+  function jumpToChapter(idx) {
+    executeFlowFrom(idx);
+  }
+
+  return (
+    <div className={`gt-wrapper${isFullscreen ? " gt-fullscreen" : ""}`}>
+      <div className="gt-toolbar">
+        {/* Its own slim row above the stage, not overlaid on it — every product's own topbar
+            (brand name, status pill) already fills that corner, and a floating button on top of it
+            collided with the pill on narrow screens (found live testing this fix). */}
+        <button
+          type="button"
+          className="gt-fullscreen-btn"
+          onClick={toggleFullscreen}
+          title={isFullscreen ? "Exit fullscreen" : "Fullscreen"}
+          aria-label={isFullscreen ? "Exit fullscreen" : "Fullscreen"}
+        >
+          {isFullscreen ? "⤡ Exit fullscreen" : "⤢ Fullscreen"}
+        </button>
+      </div>
+      <div className="gt-stage" ref={stageRef}>
+        <div className="gt-highlight" ref={highlightRef} />
+        {renderStage(register)}
+        <div className="gt-cursor" ref={cursorRef}>
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+            <path d="M3 3L10.07 19.97L12.58 12.58L19.97 10.07L3 3Z" fill="#3b82f6" stroke="#ffffff" strokeWidth="2" strokeLinejoin="round" />
+          </svg>
+        </div>
+      </div>
+
+      <div className="gt-tray">
+        <div className="gt-tray-row">
+          <div className="gt-captions">{caption}</div>
+          <div className="gt-btn-group">
+            <button type="button" className="gt-ctl-btn gt-ctl-btn-secondary" onClick={togglePause} disabled={!isRunning}>
+              {isPaused ? "▶ Resume" : "⏸ Pause"}
+            </button>
+            <button type="button" className="gt-ctl-btn" onClick={togglePlayTour}>
+              {isRunning ? "↺" : "▶"} {playLabel}
+            </button>
+          </div>
+        </div>
+        <div className="gt-chapter-bar">
+          <span className="gt-chapter-label">Jump to:</span>
+          {chapters.map((c, i) => (
+            <button
+              key={c.title}
+              type="button"
+              className={`gt-chapter-btn${activeChapter === i ? " active" : ""}`}
+              onClick={() => jumpToChapter(i)}
+            >
+              {i + 1}. {c.title}
+            </button>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}

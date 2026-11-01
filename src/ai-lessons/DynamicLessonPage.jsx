@@ -11,6 +11,7 @@ import RichLearnerText from "../engines/RichLearnerText.jsx";
 import DeepDiveModal from "../engines/DeepDiveModal.jsx";
 import DeepDiveImageButton from "../engines/DeepDiveImageButton.jsx";
 import { fetchLessonCodeValidation } from "./clientLessonValidation.js";
+import { lessonApiUrl } from "./lessonApiUrl.js";
 import { getIntroDeepDiveConcept } from "../learn/conceptGlossary.js";
 
 const wrapStyle = {
@@ -164,7 +165,7 @@ export default function DynamicLessonPage({
     };
     const lessonKey = `${track ?? ""}:${params.lessonTitle ?? ""}:${params.lessonIndex ?? ""}`;
     const onAskMentor = async (node, userMessage) => {
-      const res = await fetch("/api/lessons/mentor", {
+      const res = await fetch(lessonApiUrl("/api/lessons/mentor"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

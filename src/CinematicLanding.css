@@ -2,7 +2,7 @@
   position: fixed;
   inset: 0;
   z-index: 10000;
-  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-family: "Comfortaa", system-ui, sans-serif;
   cursor: none;
   color: #0f172a;
 }
@@ -152,7 +152,16 @@
   opacity: 0;
   transition: opacity 0.9s ease;
   box-sizing: border-box;
-  overflow: visible;
+  /* documentElement/body get overflow: hidden for this whole page's lifetime (see the mount effect
+     below) to keep the WebGL background from ever page-scrolling — but that also blocked reaching
+     anything here taller than the viewport, since .cin-copy itself had overflow: visible (content
+     past the bottom edge just had nowhere to scroll at all). Confirmed live: the CTA card sits
+     below the fold on a shorter viewport with no way to reach it (user report: "the page has
+     content below the fold and not scrollable too"). overflow-y: auto here gives this box its own
+     internal scroll region, independent of the body's — reachable via wheel/touch/keyboard even
+     though page-level scrolling stays off. */
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
 .cin-copy.cin-copy-show {
@@ -182,7 +191,7 @@
 }
 
 .cin-line {
-  font-family: 'Syne', sans-serif;
+  font-family: "Comfortaa", system-ui, sans-serif;
   font-size: clamp(1.3rem, 3.5vw, 2.4rem);
   font-weight: 800;
   letter-spacing: -0.03em;
@@ -191,10 +200,17 @@
   margin-bottom: 0.85rem;
   min-height: 1.35em;
   white-space: pre-wrap;
+  /* "Code your way into enterprise software." wraps inside the ~780px-wide copy column with just
+     "software." left alone on its own line — a lone short word on a line reads as a glitch, not
+     a deliberate line break (user report: "the word 'software' is animated in the first line and
+     then jumping to the next line.. it looks like a bug"). text-wrap: balance evens out where a
+     multi-line heading breaks instead of leaving a widow word; unsupported browsers just fall
+     back to normal wrapping (today's behavior), so this is a pure improvement, never a regression. */
+  text-wrap: balance;
 }
 
 .cin-line.cin-line-playwrite {
-  font-family: 'Playwrite DK Uloopet Guides', cursive;
+  font-family: "Comfortaa", system-ui, sans-serif;
   font-weight: 400;
   letter-spacing: 0.02em;
   margin-bottom: 0.95rem;
@@ -213,7 +229,7 @@
 
 /* Syne tagline — extra line-height + padding so g, p descenders aren’t clipped by tight line boxes */
 .cin-line.cin-tag {
-  font-family: 'Syne', sans-serif;
+  font-family: "Comfortaa", system-ui, sans-serif;
   font-size: clamp(0.95rem, 2.1vw, 1.4rem);
   font-weight: 700;
   color: #0369a1;
@@ -247,8 +263,8 @@
 }
 
 .cin-cta-wrap {
-  margin-top: 3.25rem;
-  width: min(90vw, 780px);
+  margin-top: clamp(2.5rem, 6vh, 4.5rem);
+  width: min(94vw, 720px);
   max-width: 100%;
   opacity: 0;
   transform: translateY(12px);
@@ -267,18 +283,52 @@
   transform: none;
 }
 
+.cin-cta-card {
+  padding: clamp(1.75rem, 4vh, 2.5rem) clamp(1.6rem, 4vw, 2.75rem) clamp(1.85rem, 4vh, 2.6rem);
+  background: rgba(255, 255, 255, 0.96);
+  border-radius: 18px;
+  box-shadow: 0 0 0 1px rgba(8, 145, 178, 0.12), 0 10px 32px rgba(15, 23, 42, 0.08);
+  display: flex;
+  flex-direction: column;
+  gap: clamp(1.35rem, 3vh, 1.85rem);
+  text-align: center;
+}
+
+.cin-cta-sub {
+  margin: 0;
+  font-family: "Comfortaa", system-ui, sans-serif;
+  font-size: clamp(0.95rem, 2.3vw, 1.08rem);
+  color: #334155;
+  letter-spacing: 0.01em;
+  line-height: 1.75;
+  font-weight: 500;
+  max-width: 38rem;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.cin-cta-choices {
+  display: flex;
+  flex-direction: column;
+  gap: 0.95rem;
+  width: 100%;
+  max-width: 34rem;
+  margin: 0.15rem auto 0;
+}
+
 .cin-cta-btn {
   background: #0891b2;
   color: #fff;
   border: none;
-  padding: 1.15rem 2.75rem;
+  padding: 1.1rem 1.5rem;
   border-radius: 12px;
-  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-family: "Comfortaa", system-ui, sans-serif;
   font-weight: 700;
-  font-size: 1.05rem;
+  font-size: clamp(0.9rem, 2vw, 1rem);
+  line-height: 1.4;
   cursor: pointer;
   box-shadow: 0 4px 24px rgba(8, 145, 178, 0.3);
-  transition: transform 0.15s, box-shadow 0.2s;
+  transition: transform 0.15s, box-shadow 0.2s, background 0.15s;
 }
 
 .cin-cta-btn:hover {
@@ -286,21 +336,16 @@
   box-shadow: 0 6px 36px rgba(8, 145, 178, 0.45);
 }
 
-.cin-cta-sub {
-  margin-top: 1.35rem;
-  font-family: 'DM Mono', monospace;
-  font-size: clamp(0.78rem, 2.1vw, 0.95rem);
-  color: #475569;
-  letter-spacing: 0.03em;
-  line-height: 1.65;
-  max-width: 42rem;
-  margin-left: auto;
-  margin-right: auto;
-  padding: 0.85rem 1.15rem;
-  background: rgba(255, 255, 255, 0.94);
-  border-radius: 10px;
-  box-shadow: 0 0 0 1px rgba(8, 145, 178, 0.1), 0 8px 28px rgba(15, 23, 42, 0.06);
-  text-align: center;
+.cin-cta-btn-secondary {
+  background: #fff;
+  color: #0e7490;
+  border: 2px solid #67e8f9;
+  box-shadow: none;
+}
+
+.cin-cta-btn-secondary:hover {
+  background: #ecfeff;
+  box-shadow: 0 4px 18px rgba(8, 145, 178, 0.18);
 }
 
 @media (max-width: 600px) {
@@ -319,15 +364,21 @@
     margin-top: 0.7rem;
   }
   .cin-cta-wrap {
-    margin-top: 1.5rem;
+    margin-top: 1.75rem;
+  }
+  .cin-cta-card {
+    padding: 1.35rem 1.15rem 1.45rem;
+    gap: 1.15rem;
+  }
+  .cin-cta-choices {
+    gap: 0.75rem;
   }
   .cin-cta-btn {
-    padding: 0.85rem 1.8rem;
-    font-size: 0.95rem;
+    padding: 0.95rem 1.1rem;
+    font-size: 0.9rem;
   }
   .cin-cta-sub {
-    margin-top: 0.85rem;
-    padding: 0.6rem 0.85rem;
-    font-size: 0.72rem;
+    font-size: 0.92rem;
+    line-height: 1.7;
   }
 }

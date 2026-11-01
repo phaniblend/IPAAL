@@ -105,14 +105,20 @@ const T = {
   TYPE_START: 2400,
 }
 
+// Explicit \n breaks on L1/L2 (white-space: pre-wrap on .cin-line renders them as real line
+// breaks) — text-wrap: balance alone picked a different break depending on the exact viewport
+// width (fine on one test width, back to stranding a single word on its own line on another —
+// user report, live: "now the 'enterprise software' in the first line and jumping to the next").
+// A fixed, designer-chosen break point is deterministic across every width, where balance's
+// per-width heuristic isn't.
 const LINES = [
-  { id: 'cin-L1', text: 'Think and react in React.' },
-  { id: 'cin-L2', text: 'Type your future with TypeScript.' },
+  { id: 'cin-L1', text: 'Code your way into\nenterprise software.' },
+  { id: 'cin-L2', text: 'Join a team. Ship real work.\nClaim the experience.' },
   { id: 'cin-L3', text: '' },
   { id: 'cin-L4', text: 'Start doing.  Stop watching.' },
 ]
 
-export default function CinematicLanding({ onEnterLessons }) {
+export default function CinematicLanding({ onEnterEnterprise, onEnterLessons }) {
   const canvasRef = useRef(null)
   const curRef = useRef(null)
   const ringRef = useRef(null)
@@ -273,7 +279,7 @@ export default function CinematicLanding({ onEnterLessons }) {
       const el = ts - startTs
 
       gridMat.uniforms.uTime.value = ts / 1000
-      gridMat.uniforms.uAlpha.value = 0.82
+      gridMat.uniforms.uAlpha.value = 0.41
 
       if (!typeTriggeredRef.current && el >= T.TYPE_START) {
         typeTriggeredRef.current = true
@@ -309,7 +315,7 @@ export default function CinematicLanding({ onEnterLessons }) {
       skip: () => {
         if (!startTs) startTs = performance.now()
         startTs = performance.now() - T.TYPE_START - 200
-        gridMat.uniforms.uAlpha.value = 0.82
+        gridMat.uniforms.uAlpha.value = 0.41
         if (hintRef.current) hintRef.current.style.opacity = '0'
         if (!typeTriggeredRef.current) {
           typeTriggeredRef.current = true
@@ -361,10 +367,21 @@ export default function CinematicLanding({ onEnterLessons }) {
           <div className="cin-line cin-tag" id="cin-L4" />
         </div>
         <div ref={ctaWrapRef} className="cin-cta-wrap">
-          <button type="button" className="cin-cta-btn" onClick={() => onEnterLessons?.()}>
-            Start doing — it&apos;s free →
-          </button>
-          <p className="cin-cta-sub">No sign up for first 5 lessons · React + TypeScript · 122 lessons</p>
+          <div className="cin-cta-card">
+            <p className="cin-cta-sub">
+              These aren&apos;t coding tutorials. This is an experience builder — you join a product
+              team shipping enterprise applications in the tech and trade you choose. Ready to
+              continue? It&apos;s free.
+            </p>
+            <div className="cin-cta-choices">
+              <button type="button" className="cin-cta-btn" onClick={() => onEnterEnterprise?.()}>
+                Yes, show me how it works
+              </button>
+              <button type="button" className="cin-cta-btn cin-cta-btn-secondary" onClick={() => onEnterLessons?.()}>
+                Not yet — just teach me React with TypeScript
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </div>

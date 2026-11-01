@@ -3,49 +3,35 @@ import InpactLogo from "./components/InpactLogo.jsx";
 import { getLessonCount, TRACK_LABELS } from "./trackLessonCounts.js";
 import { FUNDA_ANGULAR_LESSONS } from "./angularFundaLessons.js";
 import { MOBILE_ANGULAR_LESSONS } from "./mobileAngularLessons.js";
+import { isReduxRtkLessonIndex, REDUX_LANDING_SUBSECTIONS } from "./reduxRtkLessonIndices.js";
+import {
+  LESSON_LIST as REACT_TS_LESSON_LIST,
+  REACT_TS_CURRICULUM_SLOT_COUNT,
+  REACT_TS_GUIDED_LESSON_COUNT,
+} from "./reactTsCurriculum.js";
 
-// Must match ENGINES order in App.jsx (p01…p100 minus 10/16/17/88, then p101–p110, p113–p125, p126–p127; React TS adds TS120–TS122).
-export const LESSON_LIST = [
-  "Counter App", "Toggle Visibility", "Controlled Input", "Multiple State Variables",
-  "Conditional Rendering with Ternary", "List Rendering with map()", "useEffect & Side Effects", "Forms & Validation",
-  "Color Picker", "Reusable Button", "Card Component",
-  "Props Drilling", "Default Props", "Children Prop",
-  "PropTypes / TypeScript Interface", "Component Composition", "Event Handling",
-  "Conditional Classes", "Inline Styles", "CSS Modules", "Styled Component Pattern",
-  "Lifting State Up", "Controlled vs Uncontrolled", "Simple Todo List", "Star Rating Component",
-  "Accordion", "Image Gallery",
-  "useFetch", "useDebounce", "useLocalStorage", "useToggle", "useWindowSize", "usePrevious", "useClickOutside", "useKeyPress", "useOnlineStatus", "useMediaQuery",
-  "Theme Context", "Auth Context", "Cart Context", "Notification Context", "Context Performance", "useReducer vs useState", "Compound Component (Tabs)",
-  "Unnecessary Re-renders", "useMemo for Expensive Computation", "useCallback for Stable References", "React.memo", "List Virtualization", "Lazy Loading Routes", "Image Lazy Loading",
-  "HOC withAuth", "Render Props (MouseTracker)", "Controlled DatePicker", "Portal", "Error Boundary", "Recursive TreeView", "Pagination", "Infinite Scroll", "Debounced Search", "Multi-Step Form",
-  "Generic List<T>", "Discriminated Union Props", "useRef Typing", "Event Typing", "Generic useFetch<T>", "Utility Types",
-  "useImperativeHandle", "useSyncExternalStore", "useTransition", "useDeferredValue", "useLayoutEffect vs useEffect",
-  "Mini Redux", "Optimistic UI", "Request Deduplication", "Polling Hook", "WebSocket Hook", "Feature Flag Hook", "Undo/Redo", "Form Library from Scratch", "Component Library Theming", "Micro-frontend Shell",
-  "Race Condition Fix", "Memoization Strategy", "Concurrent Mode Gotchas", "Memory Leak Hunt",
-  "Test useFetch", "Test Async Component", "Test User Interactions", "Test Context", "Test Error Boundary",
-  "Design DataTable API", "Design Auth Flow", "Design Notification System", "Design Permission System", "Design Real-Time Dashboard",
-  // New lessons 101–110, 113–125
-  "useId & Stable IDs", "forwardRef & Exposing DOM Nodes", "AbortController & Cleanup in useEffect",
-  "React Router Basics", "Nested Routes & Protected Routes", "TanStack Query Basics", "Zustand for Global State",
-  "Next.js App Router Fundamentals", "React Server Components & SSR vs SSG", "Accessibility (a11y) Fundamentals",
-  "JWT Storage & Decode in React", "Session Timeout Hook", "Token Refresh with Axios Interceptor", "Role-Based Route Protection", "Cookie-Based Auth Flow",
-  "Zustand Persist Middleware", "OAuth2 PKCE Flow in a SPA", "RBAC Permission Hook", "Multi-Tab Auth Sync", "Secure Token Rotation",
-  "Form Validation with Zod + React Hook Form", "Redux Toolkit — createSlice & createAsyncThunk", "RTK Query — Data Fetching & Cache",
-  "Creating RTK Endpoints (from zero)",
-  "Query Building in RTK",
-  "Redux Toolkit: Writing Your First createAsyncThunk",
-];
+/** Full shared blueprint (151 titles). App.jsx pads react-js / vue engine arrays to this length where needed. */
+export const LESSON_LIST = REACT_TS_LESSON_LIST;
 
 /**
  * Groupings for the lessons grid (React · JS / React · TS / Vue) — indices align with LESSON_LIST.
  * Lesson numbers in the UI are index + 1 (01 … N).
+ * Redux ∪ RTK lessons are omitted here; see `reduxRtkLessonIndices.js` and the Redux block below.
  */
 const REACT_GRID_GROUPS = [
-  { key: "foundations", title: "Foundations", start: 0, end: 8 },
-  { key: "core", title: "Core patterns", start: 8, end: 15 },
-  { key: "component", title: "Component design", start: 15, end: 21 },
-  { key: "state", title: "State & interaction", start: 21, end: 27 },
-  { key: "hooks", title: "Hooks & utilities", start: 27, end: 30 },
+  { key: "tier1", title: "Tier 1 — JSX + TypeScript Foundations", start: 0, end: 19 },
+  { key: "tier2", title: "Tier 2 — Hooks + Async", start: 19, end: 39 },
+  { key: "tier3", title: "Tier 3 — Performance", start: 39, end: 51 },
+  { key: "tier4", title: "Tier 4 — State Architecture", start: 51, end: 73 },
+  { key: "tier5", title: "Tier 5 — Component Patterns + TS Generics", start: 73, end: 87 },
+  { key: "tier6", title: "Tier 6 — Forms at Scale", start: 87, end: 99 },
+  { key: "tier7", title: "Tier 7 — Routing", start: 99, end: 104 },
+  { key: "tier8", title: "Tier 8 — Auth + Security", start: 104, end: 116 },
+  { key: "tier9", title: "Tier 9 — Data Patterns", start: 116, end: 122 },
+  { key: "tier10", title: "Tier 10 — UX Patterns", start: 122, end: 135 },
+  { key: "tier11", title: "Tier 11 — TypeScript Advanced (Now Earned)", start: 135, end: 138 },
+  { key: "tier12", title: "Tier 12 — Accessibility", start: 138, end: 143 },
+  { key: "tier13", title: "Tier 13 — Testing", start: 143, end: 151 },
 ];
 
 /** Angular track lesson order — must match App.jsx lessonList for next/prev and content indices. */
@@ -131,19 +117,6 @@ const LP = {
   phaseBody: { fontSize: "14px", lineHeight: 1.6, color: "#475569", margin: 0 },
   blueprintBlock: { fontSize: "14px", lineHeight: 1.65, color: "#475569", marginBottom: "14px" },
   deepEnd: { fontSize: "14px", fontStyle: "italic", color: "#64748b", marginBottom: "8px" },
-  btn: {
-    display: "inline-block",
-    marginTop: 0,
-    padding: "10px 22px",
-    background: "#00d4ff",
-    color: "#0f172a",
-    border: "none",
-    borderRadius: "10px",
-    fontWeight: 700,
-    fontSize: "15px",
-    cursor: "pointer",
-    fontFamily: "'DM Sans', sans-serif",
-  },
   strong: { color: "#0f172a", fontWeight: 600 },
   btnOutline: {
     display: "inline-block",
@@ -180,6 +153,17 @@ const LP = {
     color: "#0f172a",
     margin: "0 0 6px",
     letterSpacing: "0.02em",
+  },
+  /** Major split: React curriculum vs Redux (Toolkit & RTK) */
+  trackSectionHeading: {
+    fontSize: "13px",
+    letterSpacing: "0.12em",
+    textTransform: "uppercase",
+    color: "#64748b",
+    marginBottom: "16px",
+    fontWeight: 600,
+    textAlign: "center",
+    width: "100%",
   },
   modalOverlay: {
     position: "fixed",
@@ -230,11 +214,11 @@ const LP = {
   },
 };
 
-export default function LandingPage({ track, onSelectLesson, onStartFree, lessonList, freeLessonsHint }) {
+export default function LandingPage({ track, onSelectLesson, lessonList, freeLessonsHint }) {
   const [hover, setHover] = useState(null);
   const [howItWorksOpen, setHowItWorksOpen] = useState(false);
 
-  // lessonList: null = use LESSON_LIST (100 React lessons); array = curriculum (TSF/JSF: title, shortName, why)
+  // lessonList: null = use LESSON_LIST (shared blueprint); array = curriculum (TSF/JSF: title, shortName, why)
   let list = lessonList ?? LESSON_LIST.map((title) => ({ title }));
 
   // Angular track: QuickBite (QB01–QB05), then ANG01–ANG09, then React list, then FUNDA
@@ -340,11 +324,21 @@ export default function LandingPage({ track, onSelectLesson, onStartFree, lesson
   /** Full blueprint sections + deep bucket — only when list follows LESSON_LIST order (default React/Vue). */
   const useBlueprintGroupedGrid = showReactBlueprint && !lessonList;
 
-  const startFirstLesson = () => {
-    if (list.length === 0) return;
-    if (onStartFree) onStartFree(0, list[0]);
-    else onSelectLesson(0, list[0]);
-  };
+  const reactDeepIndices = [];
+  for (let idx = 30; idx < list.length; idx++) {
+    if (!isReduxRtkLessonIndex(idx)) reactDeepIndices.push(idx);
+  }
+
+  const showReduxLandingSection = REDUX_LANDING_SUBSECTIONS.some((sub) =>
+    sub.indices.some((idx) => idx < list.length),
+  );
+
+  const reactSectionTitle =
+    track === "react-ts"
+      ? "React + TypeScript"
+      : track === "react-js"
+        ? "React + JavaScript"
+        : "Vue";
 
   useEffect(() => {
     if (!howItWorksOpen) return undefined;
@@ -452,14 +446,75 @@ export default function LandingPage({ track, onSelectLesson, onStartFree, lesson
               marginTop: "8px",
             }}
           >
-            <button type="button" style={LP.btn} onClick={startFirstLesson}>
-              Start free
-            </button>
             <button type="button" style={LP.btnOutline} onClick={() => setHowItWorksOpen(true)}>
               How it works
             </button>
+            {/* IPF: entry points for the core team — not part of the JS-facing lesson flow */}
+            <a href="#/workbench" style={LP.btnOutline}>Workbench</a>
+            <a href="#/pd-studio" style={LP.btnOutline}>PD Studio</a>
+            <a href="#/apply" style={LP.btnOutline}>Apply</a>
+            <a href="#/matching-queue" style={LP.btnOutline}>Matching Queue</a>
+            <a href="#/cohorts" style={LP.btnOutline}>Cohorts</a>
+            <a href="#/pmgt" style={LP.btnOutline}>PMGT</a>
+            <a href="#/core-studio" style={LP.btnOutline}>Core Studio</a>
+            <a href="#/cd-review" style={LP.btnOutline}>CD Review</a>
+            <a href="#/huddle-calendar" style={LP.btnOutline}>Huddle Calendar</a>
+            <a href="#/contribution-monitor" style={LP.btnOutline}>Contribution Monitor</a>
+            <a href="#/human-capital-reports" style={LP.btnOutline}>Human Capital Reports</a>
+            <a href="#/id-studio" style={LP.btnOutline}>ID Studio</a>
+            <a href="#/module-library" style={LP.btnOutline}>Module Library</a>
           </div>
         </header>
+
+        {/* Real, visible SEO/discovery content (2026-09-07) — a student searching "react tutorial" or
+            "typescript tutorial" is exactly Inpact's audience, even though Inpact deliberately isn't
+            one (never frame this as "like a tutorial" — say plainly what it actually is instead: real,
+            live tasks, paid in experience). This intro is genuine and accurate, not keyword-stuffed —
+            the tier list below is the real REACT_GRID_GROUPS curriculum, not fabricated copy. */}
+        <section
+          aria-labelledby="lp-intro-heading"
+          style={{ maxWidth: "760px", margin: "0 auto", padding: "0 16px 6px", textAlign: "center" }}
+        >
+          <h2 id="lp-intro-heading" style={{ ...LP.h2, fontSize: "clamp(1rem, 2.2vw, 1.2rem)" }}>
+            Learn front-end, UI, React &amp; TypeScript by shipping real, live product features
+          </h2>
+          <p style={{ ...LP.p, color: "#475569", maxWidth: "680px", margin: "0 auto 10px" }}>
+            Inpact isn't a video course or a coding-tutorial site. Every lesson connects straight into
+            a real, live cohort task — the same React, TypeScript, and UI-engineering skills a
+            front-end developer uses on a real product team, on a real codebase, with real acceptance
+            criteria.
+          </p>
+          {track === "react-ts" && (
+            <ul
+              style={{
+                listStyle: "none",
+                margin: "8px auto 0",
+                padding: 0,
+                display: "flex",
+                flexWrap: "wrap",
+                gap: "6px 10px",
+                justifyContent: "center",
+                maxWidth: "700px",
+              }}
+            >
+              {REACT_GRID_GROUPS.map((group) => (
+                <li
+                  key={group.key}
+                  style={{
+                    fontSize: "12px",
+                    color: "#0891b2",
+                    background: "#ecfeff",
+                    border: "1px solid #a5f3fc",
+                    borderRadius: "999px",
+                    padding: "4px 10px",
+                  }}
+                >
+                  {group.title.replace(/^Tier \d+ — /, "")}
+                </li>
+              ))}
+            </ul>
+          )}
+        </section>
 
         <div
           style={{
@@ -473,38 +528,104 @@ export default function LandingPage({ track, onSelectLesson, onStartFree, lesson
           }}
         >
           <div style={{ ...subtitle, color: "#00d4ff", fontWeight: 600, letterSpacing: "0.04em", marginBottom: 0 }}>
-            {TRACK_LABELS[track] ?? track} — {lessonCount} lessons
+            {track === "react-ts" ? (
+              <>
+                {TRACK_LABELS[track] ?? track} — {REACT_TS_GUIDED_LESSON_COUNT} guided lessons ·{" "}
+                {REACT_TS_CURRICULUM_SLOT_COUNT}-step roadmap
+              </>
+            ) : (
+              <>
+                {TRACK_LABELS[track] ?? track} — {lessonCount} lessons
+              </>
+            )}
           </div>
-          {freeLessonsHint ? (
-            <div
-              role="status"
-              style={{
-                fontSize: "13px",
-                color: "#64748b",
-                marginTop: "8px",
-                lineHeight: 1.45,
-              }}
-            >
-              {freeLessonsHint}
-            </div>
-          ) : null}
         </div>
 
         {useBlueprintGroupedGrid ? (
           <div id="inpact-lesson-grid">
-            {REACT_GRID_GROUPS.map((group) => {
-              const end = Math.min(group.end, list.length);
-              if (group.start >= list.length) return null;
-              const slice = list.slice(group.start, end);
-              if (slice.length === 0) return null;
-              return (
-                <section key={group.key} style={LP.categorySection} aria-labelledby={`lp-cat-${group.key}`}>
-                  <h3 id={`lp-cat-${group.key}`} style={LP.categoryHeading}>
-                    {group.title}
+            <section aria-labelledby="lp-react-curriculum-heading" style={{ marginBottom: "4px" }}>
+              <h2 id="lp-react-curriculum-heading" style={LP.trackSectionHeading}>
+                {reactSectionTitle}
+              </h2>
+              {REACT_GRID_GROUPS.map((group) => {
+                const end = Math.min(group.end, list.length);
+                if (group.start >= list.length) return null;
+                const slice = list.slice(group.start, end);
+                if (slice.length === 0) return null;
+                return (
+                  <section key={group.key} style={LP.categorySection} aria-labelledby={`lp-cat-${group.key}`}>
+                    <h3 id={`lp-cat-${group.key}`} style={LP.categoryHeading}>
+                      {group.title}
+                    </h3>
+                    <div className="lp-lesson-grid">
+                      {slice.map((item, j) => {
+                        const i = group.start + j;
+                        return (
+                          <div
+                            key={i}
+                            style={card(i)}
+                            onClick={() => onSelectLesson(i, item)}
+                            onMouseEnter={() => setHover(i)}
+                            onMouseLeave={() => setHover(null)}
+                            role="button"
+                            tabIndex={0}
+                            onKeyDown={(e) => {
+                              if (e.key === "Enter" || e.key === " ") {
+                                e.preventDefault();
+                                onSelectLesson(i, item);
+                              }
+                            }}
+                          >
+                            <div style={cardNum}>
+                              {item.shortName ? item.shortName : item.id || String(i + 1).padStart(2, "0")}
+                            </div>
+                            <div style={cardTitle}>{item.title}</div>
+                            {(item.why || item.pattern || item.difficulty) && (
+                              <div
+                                style={{
+                                  fontSize: "10px",
+                                  color: "#64748b",
+                                  marginTop: "6px",
+                                  lineHeight: 1.35,
+                                  textAlign: "center",
+                                  display: "-webkit-box",
+                                  WebkitLineClamp: 2,
+                                  WebkitBoxOrient: "vertical",
+                                  overflow: "hidden",
+                                  maxWidth: "100%",
+                                }}
+                              >
+                                {item.why || [item.pattern, item.difficulty].filter(Boolean).join(" · ")}
+                              </div>
+                            )}
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </section>
+                );
+              })}
+
+              {reactDeepIndices.length > 0 && (
+                <section style={LP.categorySection} aria-labelledby="lp-cat-deep">
+                  <h3 id="lp-cat-deep" style={LP.categoryHeading}>
+                    The deep end
                   </h3>
+                  <p
+                    style={{
+                      fontSize: "12px",
+                      color: "#64748b",
+                      margin: "0 0 10px",
+                      lineHeight: 1.45,
+                      textAlign: "center",
+                    }}
+                  >
+                    Advanced patterns through the rest of the React track. Lessons whose primary focus is Redux or RTK
+                    Query are grouped in the section below (including Mini Redux).
+                  </p>
                   <div className="lp-lesson-grid">
-                    {slice.map((item, j) => {
-                      const i = group.start + j;
+                    {reactDeepIndices.map((i) => {
+                      const item = list[i];
                       return (
                         <div
                           key={i}
@@ -548,60 +669,74 @@ export default function LandingPage({ track, onSelectLesson, onStartFree, lesson
                     })}
                   </div>
                 </section>
-              );
-            })}
+              )}
+            </section>
 
-            {list.length > 30 && (
-              <section style={LP.categorySection} aria-labelledby="lp-cat-deep">
-                <h3 id="lp-cat-deep" style={LP.categoryHeading}>
-                  The deep end (31–{lessonCount})
-                </h3>
-                <div className="lp-lesson-grid">
-                  {list.slice(30).map((item, j) => {
-                    const i = 30 + j;
+            {showReduxLandingSection && (
+              <>
+                <hr style={{ ...LP.hr, margin: "28px auto 20px", maxWidth: "960px" }} />
+                <section aria-labelledby="lp-redux-curriculum-heading" style={{ marginBottom: "4px" }}>
+                  <h2 id="lp-redux-curriculum-heading" style={LP.trackSectionHeading}>
+                    Redux ∪ RTK
+                  </h2>
+                  {REDUX_LANDING_SUBSECTIONS.map((group) => {
+                    const indices = group.indices.filter((idx) => idx < list.length);
+                    if (indices.length === 0) return null;
                     return (
-                      <div
-                        key={i}
-                        style={card(i)}
-                        onClick={() => onSelectLesson(i, item)}
-                        onMouseEnter={() => setHover(i)}
-                        onMouseLeave={() => setHover(null)}
-                        role="button"
-                        tabIndex={0}
-                        onKeyDown={(e) => {
-                          if (e.key === "Enter" || e.key === " ") {
-                            e.preventDefault();
-                            onSelectLesson(i, item);
-                          }
-                        }}
-                      >
-                        <div style={cardNum}>
-                          {item.shortName ? item.shortName : item.id || String(i + 1).padStart(2, "0")}
+                      <section key={group.key} style={LP.categorySection} aria-labelledby={`lp-cat-${group.key}`}>
+                        <h3 id={`lp-cat-${group.key}`} style={LP.categoryHeading}>
+                          {group.title}
+                        </h3>
+                        <div className="lp-lesson-grid">
+                          {indices.map((i) => {
+                            const item = list[i];
+                            return (
+                              <div
+                                key={i}
+                                style={card(i)}
+                                onClick={() => onSelectLesson(i, item)}
+                                onMouseEnter={() => setHover(i)}
+                                onMouseLeave={() => setHover(null)}
+                                role="button"
+                                tabIndex={0}
+                                onKeyDown={(e) => {
+                                  if (e.key === "Enter" || e.key === " ") {
+                                    e.preventDefault();
+                                    onSelectLesson(i, item);
+                                  }
+                                }}
+                              >
+                                <div style={cardNum}>
+                                  {item.shortName ? item.shortName : item.id || String(i + 1).padStart(2, "0")}
+                                </div>
+                                <div style={cardTitle}>{item.title}</div>
+                                {(item.why || item.pattern || item.difficulty) && (
+                                  <div
+                                    style={{
+                                      fontSize: "10px",
+                                      color: "#64748b",
+                                      marginTop: "6px",
+                                      lineHeight: 1.35,
+                                      textAlign: "center",
+                                      display: "-webkit-box",
+                                      WebkitLineClamp: 2,
+                                      WebkitBoxOrient: "vertical",
+                                      overflow: "hidden",
+                                      maxWidth: "100%",
+                                    }}
+                                  >
+                                    {item.why || [item.pattern, item.difficulty].filter(Boolean).join(" · ")}
+                                  </div>
+                                )}
+                              </div>
+                            );
+                          })}
                         </div>
-                        <div style={cardTitle}>{item.title}</div>
-                        {(item.why || item.pattern || item.difficulty) && (
-                          <div
-                            style={{
-                              fontSize: "10px",
-                              color: "#64748b",
-                              marginTop: "6px",
-                              lineHeight: 1.35,
-                              textAlign: "center",
-                              display: "-webkit-box",
-                              WebkitLineClamp: 2,
-                              WebkitBoxOrient: "vertical",
-                              overflow: "hidden",
-                              maxWidth: "100%",
-                            }}
-                          >
-                            {item.why || [item.pattern, item.difficulty].filter(Boolean).join(" · ")}
-                          </div>
-                        )}
-                      </div>
+                      </section>
                     );
                   })}
-                </div>
-              </section>
+                </section>
+              </>
             )}
           </div>
         ) : (
@@ -692,11 +827,17 @@ export default function LandingPage({ track, onSelectLesson, onStartFree, lesson
 
             <div style={{ ...LP.section, marginBottom: "24px", maxWidth: "100%" }}>
               <div style={LP.kicker}>00 · The philosophy</div>
-              <p style={LP.quote}>&ldquo;Brain over fingers.&rdquo;</p>
+              <p style={LP.quote}>&ldquo;Brain before fingers.&rdquo;</p>
               <p style={LP.p}>
-                In a world of copy-paste solutions, we prioritize the pause. We believe in{" "}
-                <strong style={LP.strong}>Clarity before creation</strong>. You don&apos;t just learn to write React and
-                TypeScript; you learn to <strong style={LP.strong}>architect</strong> them.
+                Copy-paste can ship a demo; it cannot ship judgment. We teach you to{" "}
+                <strong style={LP.strong}>see structure first</strong>—what must stay stable, what is allowed to vary,
+                what failure modes matter in real UIs—then let React and TypeScript be the notation for a decision you
+                already made.
+              </p>
+              <p style={LP.p}>
+                <strong style={LP.strong}>Clarity, then creation.</strong> You are not collecting syntax. You are
+                practicing how to hold a problem in your head long enough to choose a shape that survives the next
+                requirement.
               </p>
               <p style={{ ...LP.p, fontWeight: 600, color: "#0f172a", marginBottom: 0 }}>Think first → Code next.</p>
             </div>
@@ -705,26 +846,27 @@ export default function LandingPage({ track, onSelectLesson, onStartFree, lesson
 
             <div style={{ ...LP.section, marginBottom: "24px", maxWidth: "100%" }}>
               <div style={LP.kicker}>01 · The learning loop</div>
-              <em style={LP.em}>A deliberate cycle designed to build thinking, not just output.</em>
+              <em style={LP.em}>A deliberate cycle for reasoning, not output volume.</em>
               <div style={LP.phase}>
-                <div style={LP.phaseTitle}>Phase 01: The Scenario (Context → Component)</div>
+                <div style={LP.phaseTitle}>Phase 01 · The scenario (context → component)</div>
                 <p style={LP.phaseBody}>
-                  Every line of code starts with a &ldquo;Why.&rdquo; You begin with a focused use case—a real-world
-                  situation where a component must perform. We identify what matters most before a single key is pressed.
+                  Every meaningful component begins as a situation: a user goal, a constraint, a risk. We start with a
+                  tight use case so &ldquo;what matters most&rdquo; is visible before the editor becomes a distraction.
                 </p>
               </div>
               <div style={LP.phase}>
-                <div style={LP.phaseTitle}>Phase 02: The Model (Break → Understand)</div>
+                <div style={LP.phaseTitle}>Phase 02 · The model (break → understand)</div>
                 <p style={LP.phaseBody}>
-                  We strip the syntax away to examine behavior. What changes? What stays? What drives the logic? You form
-                  a mental model first, then recognize the reusable pattern hiding behind the noise.
+                  We pause to separate behavior from notation. What changes when inputs change? What invariants must hold?
+                  What is the reusable idea hiding inside this one-off screen? A mental model is the real deliverable;
+                  code is evidence that the model worked.
                 </p>
               </div>
               <div style={LP.phase}>
-                <div style={LP.phaseTitle}>Phase 03: The Build (Predict → Implement)</div>
+                <div style={LP.phaseTitle}>Phase 03 · The build (predict → implement)</div>
                 <p style={LP.phaseBody}>
-                  Before the IDE opens, you predict outcomes. You anticipate what could break. By the time you write the
-                  code, it&apos;s an act of implementation, not an act of trial and error.{" "}
+                  Before typing, you predict: what should render, what should fail, what should feel obviously wrong if you
+                  misunderstand the contract. By the time you implement, coding is confirmation, not roulette.{" "}
                   <strong style={LP.strong}>Code follows understanding.</strong>
                 </p>
               </div>
@@ -734,16 +876,17 @@ export default function LandingPage({ track, onSelectLesson, onStartFree, lesson
 
             <div style={{ ...LP.section, marginBottom: "24px", maxWidth: "100%" }}>
               <div style={LP.kicker}>02 · Your digital mentor</div>
-              <h3 style={{ ...LP.h2, fontSize: "1.05rem" }}>Guidance, not answers.</h3>
+              <h3 style={{ ...LP.h2, fontSize: "1.05rem" }}>Guidance, not a vending machine for answers.</h3>
               <p style={LP.p}>
-                Stuck? A mentor is embedded in every step. They won&apos;t give you the solution, but they will sharpen
-                your trajectory.
+                Stuck is normal; staying stuck is optional. The mentor is tuned for thinking prompts—reframing, checks
+                for assumptions, and next diagnostic moves—not a polished final file that bypasses your reasoning.
               </p>
               <p style={{ ...LP.p, fontWeight: 600, color: "#0f172a", marginBottom: "12px" }}>
-                Hints → Direction → Clarity.
+                Hints → direction → clarity.
               </p>
               <p style={{ ...LP.p, fontSize: "14px", marginBottom: 0 }}>
-                In the app— inside any lesson, use &ldquo;Ask your mentor&rdquo; for step-scoped help.
+                In the app, inside any lesson, use <strong style={LP.strong}>Ask mentor</strong> for help that stays
+                scoped to the step you are on.
               </p>
             </div>
 
@@ -754,7 +897,14 @@ export default function LandingPage({ track, onSelectLesson, onStartFree, lesson
               <h3 style={{ ...LP.h2, fontSize: "1.05rem" }}>
                 The blueprint · {lessonCount} lessons
               </h3>
-              <em style={LP.em}>Our curriculum is non-linear. Pick a concept, build a block, and expand your toolkit.</em>
+              <em style={LP.em}>
+                The curriculum stays non-linear by design: you can enter where curiosity pulls you and assemble
+                competence in the order that matches a project you care about. Recommended prerequisites are not a
+                cage—they are a cognitive map: when a lesson assumes you can already see props as contracts, generics as
+                reusable constraints, or JSX as structured UI logic, we label that honestly so you choose between building
+                the missing mental model first or accepting a steeper climb. Either path is valid; only one is kind to
+                beginners.
+              </em>
 
               {showReactBlueprint ? (
                 <>
@@ -782,8 +932,11 @@ export default function LandingPage({ track, onSelectLesson, onStartFree, lesson
                   <p style={LP.blueprintBlock}>28 · useFetch · 29 · useDebounce · 30 · useLocalStorage</p>
                   <p style={LP.deepEnd}>Scale first → Optimize next → Architect next</p>
                   <p style={{ ...LP.blueprintBlock, marginBottom: 0 }}>
-                    <strong style={LP.strong}>The deep end (31–{lessonCount})</strong> — advanced patterns, performance,
-                    testing, auth, data libraries, and architecture. Browse the full list below.
+                    <strong style={LP.strong}>The deep end</strong> — advanced patterns, performance, testing, auth, and
+                    architecture (see the first grid block).{" "}
+                    <strong style={LP.strong}>Redux ∪ RTK</strong> — Mini Redux (lesson 73), then Redux Toolkit, RTK
+                    Query, and guided RTK lessons (lessons 118–{lessonCount}); see the second block. Lesson 43 stays in the
+                    React track (useReducer vs useState — not the Redux library).
                   </p>
                 </>
               ) : (

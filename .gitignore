@@ -14,6 +14,9 @@ dist
 dist-ssr
 *.local
 
+# Google OAuth credentials pasted during local setup (use .env instead)
+oauthcreds.json
+
 # Lesson pedagogy pipeline backups (scripts/lesson-pedagogy-deepseek.mjs --apply)
 *.pedagogy.bak
 
@@ -31,3 +34,25 @@ dist-ssr
 cache/
 
 .cursor/
+
+# Local-only scratch, personal files, and generated mirrors — never belong in the repo
+mini-erp/
+.repo-stats/
+scripts/_batch-output/
+src/engines/assist-rejected/
+NUL.css
+Untitled.txt
+*.pdf
+\# Demo narration — Test user token.txt
+
+# Everything moved here by the 2026-09-11 repo-hygiene pass (scratch text/docs, design-reference
+# mockups, and the untracked-and-regenerable audit/report JSONs the scripts below write to repo
+# root) — kept on disk locally, never tracked. See each script for how to regenerate its report:
+# audit-lesson-quality.js, audit-multifile-integrity.js, quality-pass-content-lessons.js,
+# sanitize-content-lessons.js, apply-task-splitting.js.
+.archive/
+/audit-lesson-quality-report.json
+/audit-multifile-integrity-report.json
+/quality-pass-report.json
+/sanitize-lessons-report.json
+/task-splitting-report.json

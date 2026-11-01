@@ -1,8 +1,11 @@
+import { lessonApiUrl } from "./lessonApiUrl.js";
+
 /**
  * POST /api/lessons/step-example — server checks disk cache, then DeepSeek if needed.
  */
+
 export async function fetchStepExample(body) {
-  const res = await fetch("/api/lessons/step-example", {
+  const res = await fetch(lessonApiUrl("/api/lessons/step-example"), {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(body),

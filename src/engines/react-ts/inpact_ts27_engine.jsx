@@ -1,10 +1,84 @@
 import createINPACTEngine from "../inpact_engine_shared";
+
 const NODES = [
-  { id: "intro", type: "reveal", phase: "Lesson", content: { tag: "LESSON #27 (TypeScript)", title: "Simple Todo List — Typed", body: "Add, complete, delete todos with useState. Type state as array of { id: number; text: string; done: boolean }. Full CRUD with typed handlers.", usecase: "Typing list state and item shape is essential for todo-style UIs." } },
-  { id: "objectives", type: "objectives", phase: "Objectives", items: ["Establish an Image interface and declare useState<Image[]> to hold the gallery data so the contract is explicit, and data shape and updates remain explicit throughout the lesson.","Use .map() over typed Image objects to render a grid of <img> elements with typed src and alt props so the pattern drives visible behavior and can be verified in the UI, runtime, or compiler.","Model a useState<Image | null> variable to track the selected image for a lightbox view so state, refs, or values keep a predictable shape as the feature evolves, and data shape and updates remain explicit throughout the lesson.","Type the onClick handler on each gallery item as React.MouseEventHandler<HTMLImageElement> so invalid interactions are rejected by the compiler instead of leaking into runtime."] },
-  { id: "step1", type: "question", phase: "Step 1 of 3", paal: "Define and create typed list state and string state for new text; add a way to append a todo with id, text, and done flag.", answer_keywords: ["usestate", "todo", "todos", "text", "id", "done", "add"], seed_code: "import { useState } from 'react'\n\ninterface Todo { id: number; text: string; done: boolean }\n\nexport default function TodoList() {\n  const [todos, setTodos] = useState<Todo[]>([])\n  const [text, setText] = useState<string>('')\n  const add = () => { if (!text.trim()) return; setTodos([...todos, { id: Date.now(), text, done: false }]); setText('') }\n  return (\n    <div>\n      <input value={text} onChange={e => setText(e.target.value)} />\n      <button onClick={add}>Add</button>\n    </div>\n  )\n}", feedback_correct: "✅ Add todo with typed state.", feedback_partial: "Todo interface and add handler.", feedback_wrong: "setTodos([...todos, { id, text, done: false }])", expected: "Add handler and Todo type" },
-  { id: "step2", type: "question", phase: "Step 2 of 3", paal: "Render each todo with text, a done toggle, and delete; update the list immutably when toggling or removing.", answer_keywords: ["map", "filter", "toggle", "delete", "checkbox"], seed_code: "import { useState } from 'react'\n\ninterface Todo { id: number; text: string; done: boolean }\n\nexport default function TodoList() {\n  const [todos, setTodos] = useState<Todo[]>([])\n  const [text, setText] = useState<string>('')\n  const add = () => { if (!text.trim()) return; setTodos([...todos, { id: Date.now(), text, done: false }]); setText('') }\n  const toggle = (id: number) => setTodos(todos.map(t => t.id === id ? { ...t, done: !t.done } : t))\n  const del = (id: number) => setTodos(todos.filter(t => t.id !== id))\n  return (\n    <div>\n      <input value={text} onChange={e => setText(e.target.value)} onKeyDown={e => e.key === 'Enter' && add()} />\n      <button onClick={add}>Add</button>\n      <ul>\n        {todos.map(t => (\n          <li key={t.id} style={{ textDecoration: t.done ? 'line-through' : 'none' }}>\n            <input type=\"checkbox\" checked={t.done} onChange={() => toggle(t.id)} />\n            {t.text}\n            <button onClick={() => del(t.id)}>Delete</button>\n          </li>\n        ))}\n      </ul>\n    </div>\n  )\n}", feedback_correct: "✅ Toggle and delete typed.", feedback_partial: "List with toggle and delete.", feedback_wrong: "map for toggle, filter for delete", expected: "List with map; toggle (setTodos map) and delete (filter). Checkbox and delete button per item." },
-  { id: "step3", type: "question", phase: "Step 3 of 3", paal: "Visually distinguish completed items; export the component.", answer_keywords: ["linethrough", "export"], seed_code: "import { useState } from 'react'\n\ninterface Todo { id: number; text: string; done: boolean }\n\nexport default function TodoList() {\n  const [todos, setTodos] = useState<Todo[]>([])\n  const [text, setText] = useState<string>('')\n  const add = () => { if (!text.trim()) return; setTodos([...todos, { id: Date.now(), text, done: false }]); setText('') }\n  const toggle = (id: number) => setTodos(todos.map(t => t.id === id ? { ...t, done: !t.done } : t))\n  const del = (id: number) => setTodos(todos.filter(t => t.id !== id))\n  return (\n    <div>\n      <input value={text} onChange={e => setText(e.target.value)} onKeyDown={e => e.key === 'Enter' && add()} />\n      <button onClick={add}>Add</button>\n      <ul>\n        {todos.map(t => (\n          <li key={t.id} style={{ textDecoration: t.done ? 'line-through' : 'none' }}>\n            <input type=\"checkbox\" checked={t.done} onChange={() => toggle(t.id)} />\n            {t.text}\n            <button onClick={() => del(t.id)}>Delete</button>\n          </li>\n        ))}\n      </ul>\n    </div>\n  )\n}", feedback_correct: "✅ Simple Todo List with TypeScript complete.", feedback_partial: "Completed style and export.", feedback_wrong: "Export default", expected: "Style completed items with textDecoration: 'line-through'. Export the component." },
+  {
+    id: "intro",
+    type: "reveal",
+    phase: "Lesson",
+    content: {
+      tag: "LESSON #27 (React Hooks)",
+      title: "useLayoutEffect vs useEffect",
+      body: "A shipment header measures element width to align status badges. With `useEffect`, the first paint can show wrong alignment for one frame. You will compare `useEffect` and `useLayoutEffect` timing and choose the right hook for DOM measurement work.",
+      usecase:
+        "UI that depends on measured layout (tooltips, sticky headers, chart labels) must avoid visible jump on first paint.",
+    },
+  },
+  {
+    id: "objectives",
+    type: "objectives",
+    phase: "Objectives",
+    items: [
+      "Describe timing difference: `useEffect` after paint vs `useLayoutEffect` before paint",
+      "Use `useLayoutEffect` for DOM reads/writes that must happen before paint",
+      "Keep non-visual side effects in `useEffect` to avoid blocking paint",
+      "Select hook based on user-visible flicker risk",
+    ],
+  },
+  {
+    id: "step1",
+    type: "question",
+    phase: "Step 1 of 3",
+    paal: "Create a `ref` for a header element and state for its measured width.",
+    answer_keywords: ["useRef", "useState", "offsetWidth"],
+    seed_code:
+      "import { useRef, useState } from 'react';\n\nexport default function ShipmentHeader() {\n  // Step 1\n}",
+    feedback_correct: "Great — measurement state scaffold is in place.",
+    feedback_partial: "Add a header ref and width state.",
+    feedback_wrong: "Create `headerRef` and `headerWidth` state.",
+    expected: "Ref + width state",
+  },
+  {
+    id: "step2",
+    type: "question",
+    phase: "Step 2 of 3",
+    paal: "Measure width in `useLayoutEffect` and update state before paint.",
+    answer_keywords: ["useLayoutEffect", "headerRef.current", "setHeaderWidth"],
+    seed_code:
+      "import { useLayoutEffect, useRef, useState } from 'react';\n\nexport default function ShipmentHeader() {\n  const headerRef = useRef(null);\n  const [headerWidth, setHeaderWidth] = useState(0);\n  // Step 2\n}",
+    feedback_correct: "Perfect — pre-paint measurement prevents flicker.",
+    feedback_partial: "Use `useLayoutEffect` for measurement, not `useEffect`.",
+    feedback_wrong: "Measure in `useLayoutEffect` and update width state.",
+    expected: "Layout effect measurement",
+  },
+  {
+    id: "step3",
+    type: "question",
+    phase: "Step 3 of 3",
+    paal: "Render header width and export final component; keep analytics/logging in a regular `useEffect` comment block.",
+    answer_keywords: ["return", "headerWidth", "export", "default"],
+    seed_code:
+      "import { useEffect, useLayoutEffect, useRef, useState } from 'react';\n\nexport default function ShipmentHeader() {\n  const headerRef = useRef(null);\n  const [headerWidth, setHeaderWidth] = useState(0);\n\n  useLayoutEffect(() => {\n    if (headerRef.current) setHeaderWidth(headerRef.current.offsetWidth);\n  }, []);\n\n  // Step 3\n}",
+    feedback_correct: "Done — hook choice is now intentional and clear.",
+    feedback_partial: "Render measured width and keep non-visual work in `useEffect`.",
+    feedback_wrong: "Return JSX using `headerRef` and `headerWidth`.",
+    expected: "Final measured header component",
+  },
 ];
-const sideItems = [{ label: "Lesson", id: "intro" }, { label: "Objectives", id: "objectives" }, { label: "Step 1", id: "step1" }, { label: "Step 2", id: "step2" }, { label: "Step 3", id: "step3" }];
-export default createINPACTEngine({ NODES, sideItems, lessonNum: 27, title: "Simple Todo List (TS)", shortName: "TS — TODO LIST" });
+
+const sideItems = [
+  { label: "Lesson", id: "intro" },
+  { label: "Objectives", id: "objectives" },
+  { label: "Step 1", id: "step1" },
+  { label: "Step 2", id: "step2" },
+  { label: "Step 3", id: "step3" },
+  { label: "Step 4", id: "step4" },
+  { label: "Step 5", id: "step5" },
+];
+
+export default createINPACTEngine({
+  NODES,
+  sideItems,
+  lessonNum: 27,
+  title: "useLayoutEffect vs useEffect",
+  shortName: "HOOKS — LAYOUT EFFECT",
+});

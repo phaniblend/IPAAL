@@ -51,8 +51,20 @@ function setupAutoCloseTags(editor, monaco) {
 const MONACO_OPTIONS = {
   ...MONACO_SHARED_OPTIONS,
   fontSize: 14,
-  fontFamily: "'JetBrains Mono', 'Fira Code', 'Cascadia Code', Menlo, monospace",
-  fontLigatures: true,
+  // 'JetBrains Mono'/'Fira Code'/'Cascadia Code' were never actually loaded anywhere in this app
+  // (no <link>, no @font-face) — they only worked if a visitor happened to have them installed
+  // locally. When Monaco can't truly measure the requested font, its decoration positioning
+  // (guides, highlights) drifts — the likely real cause behind three rounds of "grey rectangle"
+  // reports that survived turning off bracketPairs and highlightActiveIndentation individually.
+  // Menlo/Consolas/Courier New are always present without any loading step, so there's no
+  // measurement race to begin with.
+  fontFamily: "Menlo, Consolas, 'Courier New', monospace",
+  fontLigatures: false,
+  // Highlighting other occurrences of the word/tag under the cursor is exactly what rendered as
+  // the misplaced grey blocks (user report, 2026-09-07) — off entirely rather than guessed at
+  // feature-by-feature again.
+  occurrencesHighlight: "off",
+  selectionHighlight: false,
   lineNumbers: "on",
   minimap: { enabled: false },
   scrollBeyondLastLine: false,
@@ -72,7 +84,14 @@ const MONACO_OPTIONS = {
   hideCursorInOverviewRuler: true,
   padding: { top: 12, bottom: 12 },
   bracketPairColorization: { enabled: true },
-  guides: { bracketPairs: true },
+  // guides.bracketPairs: true draws a filled vertical column down the whole height of every
+  // bracket scope in view, and highlightActiveIndentation (on by default even with bracketPairs
+  // off) fills the CURRENT indentation column with a background tint the same way — both read as
+  // ugly grey rectangles, not thin guide lines (user report, 2026-09-07, recurred after only
+  // turning off bracketPairs — highlightActiveIndentation is the separate setting actually
+  // responsible for the still-visible blocks). bracketPairColorization above already colors the
+  // bracket characters themselves, so matching is still visible without either kind of block.
+  guides: { bracketPairs: false, highlightActiveIndentation: false },
   quickSuggestions: false,
   suggestOnTriggerCharacters: false,
   parameterHints: { enabled: false },

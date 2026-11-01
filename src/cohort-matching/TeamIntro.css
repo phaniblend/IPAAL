@@ -1,0 +1,172 @@
+.ti-root {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin: 4px 0 20px;
+}
+
+.ti-panel {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 18px 20px;
+}
+
+.ti-panel h2 {
+  font-family: "Comfortaa", system-ui, sans-serif;
+  font-size: 15px;
+  margin: 0 0 12px;
+  color: #0f172a;
+}
+
+.ti-hint {
+  font-family: 'DM Mono', monospace;
+  font-size: 12.5px;
+  color: #64748b;
+  margin: 0;
+}
+
+.ti-error {
+  color: #991b1b;
+}
+
+.ti-repo-stat {
+  display: block;
+  margin-top: 6px;
+  color: #0f172a;
+  font-weight: 600;
+}
+
+.ti-say-hello-btn {
+  margin-top: 14px;
+  padding: 9px 16px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #0f172a;
+  background: #fff;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.ti-say-hello-btn:hover:not(:disabled) {
+  border-color: #0891b2;
+}
+
+.ti-say-hello-btn:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+
+.ti-hello-sent {
+  margin: 14px 0 0;
+  font-family: 'DM Mono', monospace;
+  font-size: 12.5px;
+  color: #64748b;
+  line-height: 1.6;
+}
+
+.ti-hello-sent strong {
+  color: #0f172a;
+  font-family: "Comfortaa", system-ui, sans-serif;
+}
+
+.ti-open-chat-link {
+  margin-left: 8px;
+  padding: 0;
+  border: none;
+  background: none;
+  font-family: 'DM Mono', monospace;
+  font-size: 12.5px;
+  font-weight: 700;
+  color: #0891b2;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.ti-open-chat-link:hover {
+  color: #0e7490;
+}
+
+/* The chat window itself moved to a global widget (team-messaging/TeamChatWidget.css), mounted
+   once above the router so it's reachable from every page (user request, 2026-09-08 — "add chat
+   option everywhere in the platform.. not just on first visit"), not scoped to this one screen. */
+
+.ti-roster {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.ti-roster li {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 9px 12px;
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+}
+
+.ti-roster-you {
+  background: #f0fdfa !important;
+  border-color: #00d4ff !important;
+}
+
+.ti-roster-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: #0f172a;
+  flex-shrink: 0;
+}
+
+.ti-roster-task {
+  font-size: 12.5px;
+  color: #64748b;
+  text-align: right;
+}
+
+.ti-rituals {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.ti-ritual-row {
+  display: grid;
+  grid-template-columns: 130px 1fr;
+  gap: 12px;
+  align-items: baseline;
+}
+
+.ti-ritual-day {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #0891b2;
+}
+
+.ti-ritual-label {
+  font-size: 14px;
+  font-weight: 700;
+  color: #0f172a;
+  margin-bottom: 2px;
+}
+
+.ti-ritual-detail {
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: #475569;
+}
+
+@media (max-width: 520px) {
+  .ti-ritual-row {
+    grid-template-columns: 1fr;
+    gap: 2px;
+  }
+}

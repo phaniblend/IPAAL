@@ -1,0 +1,149 @@
+import { Link } from "react-router-dom";
+import InpactLogo from "./components/InpactLogo.jsx";
+import HowItWorks from "./HowItWorks.jsx";
+import "./JsExperienceHome.css";
+
+/**
+ * Advert / “try us” landing for aspirants.
+ * Flow: #/join or #/try → this page → #/apply (interests) → matched product tasks.
+ */
+export default function JsExperienceHome() {
+  // Comfortaa loads globally from index.html now (2026-09-05 global font lock) — no
+  // page-specific font injection needed here any more.
+
+  return (
+    <div className="jxh">
+      <div className="jxh-atmosphere" aria-hidden />
+
+      <header className="jxh-top">
+        <InpactLogo height={56} />
+        <nav className="jxh-top-nav" aria-label="Aspirant">
+          <Link className="jxh-top-link" to="/workbench">
+            My tasks
+          </Link>
+          <Link className="jxh-top-link" to="/apply">
+            Apply
+          </Link>
+        </nav>
+      </header>
+
+      <main>
+        <section className="jxh-hero">
+          <p className="jxh-kicker">For aspirants — students &amp; early-career builders</p>
+          <h1 className="jxh-brand">INPACT</h1>
+          <p className="jxh-headline">
+            Not another coding tutorial.
+            <br />
+            Join the industry — and become hireable by shipping.
+          </p>
+          <p className="jxh-lede">
+            Schools, colleges, and universities teach concepts. We induct you into a product team
+            building enterprise applications that will go live soon. You
+            learn by doing the work — and leave with proof you can contribute.
+          </p>
+          <div className="jxh-cta-row">
+            <Link className="jxh-cta-primary" to="/apply">
+              Apply — tell us your interests
+            </Link>
+            <a
+              className="jxh-cta-quiet"
+              href="#how"
+              onClick={(e) => {
+                // Plain href="#how" fights HashRouter — the browser treats the whole thing after
+                // the FIRST "#" as the route, so this would navigate to a nonexistent "/how" route
+                // instead of scrolling (found live: the page went blank). Scroll manually instead.
+                e.preventDefault();
+                document.getElementById("how")?.scrollIntoView({ behavior: "smooth" });
+              }}
+            >
+              How it works
+            </a>
+          </div>
+        </section>
+
+        <section className="jxh-section jxh-section-how" id="how">
+          <HowItWorks />
+        </section>
+
+        <section className="jxh-section">
+          <h2 className="jxh-h2">The gap nobody names out loud</h2>
+          <p className="jxh-p">
+            You can pass exams and still freeze on a ticket with incomplete requirements, a messy
+            codebase, and a reviewer who expects a clean pull request. That is not a character flaw —
+            it is missing reps. Tutorials end when the green checkmark appears. Careers begin when a
+            team trusts you with work customers will use.
+          </p>
+        </section>
+
+        <section className="jxh-section">
+          <h2 className="jxh-h2">What we are (and are not)</h2>
+          <p className="jxh-p">
+            We are <strong>experience builders</strong> — and we are the industry floor you stand on.
+            You work with a team of developers on enterprise applications heading toward real
+            customers. Your tickets ship into that product. Full stop.
+          </p>
+          <p className="jxh-p">
+            We are not a binge-watch course. There is no certificate that replaces a merge. Your
+            portfolio grows from work scoped with a team, assisted when you need it, and reviewed by
+            humans who own the product.
+          </p>
+        </section>
+
+        <section className="jxh-section">
+          <h2 className="jxh-h2">Your path in three moves</h2>
+          <ol className="jxh-steps">
+            <li>
+              <span className="jxh-step-n">1</span>
+              <div>
+                <strong>Share your academic &amp; career interests</strong>
+                <p>
+                  Trade, frontend/backend focus, and where you are today. No fluff resume — just
+                  enough to place you honestly.
+                </p>
+              </div>
+            </li>
+            <li>
+              <span className="jxh-step-n">2</span>
+              <div>
+                <strong>Join a product team</strong>
+                <p>
+                  You are matched into open work on enterprise apps moving toward launch. Frontend,
+                  backend, or both — requirements, review, and customers on the other side of the
+                  merge.
+                </p>
+              </div>
+            </li>
+            <li>
+              <span className="jxh-step-n">3</span>
+              <div>
+                <strong>Learn in the loop, not in a silo</strong>
+                <p>
+                  Stuck? Assist Me teaches the skill in context. Done? Open a PR. Humans review.
+                  That loop is how you go from campus to desk.
+                </p>
+              </div>
+            </li>
+          </ol>
+        </section>
+
+        <section className="jxh-section jxh-section-close">
+          <h2 className="jxh-h2">A note from your future self</h2>
+          <p className="jxh-p">
+            Employers will not ask how many hours of video you watched. They will ask what you built,
+            how you handled feedback, and whether you can own a slice without being babysat. Start
+            collecting those answers here — on live product work, not another solo demo.
+          </p>
+          <p className="jxh-p jxh-p-em">It is free to apply. The only cost is showing up.</p>
+          <Link className="jxh-cta-primary jxh-cta-bottom" to="/apply">
+            Start with Apply
+          </Link>
+        </section>
+      </main>
+
+      <footer className="jxh-foot">
+        <span>INPACT · for aspirants</span>
+        <Link to="/">Back</Link>
+      </footer>
+    </div>
+  );
+}

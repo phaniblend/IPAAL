@@ -1,276 +1,258 @@
-/**
- * 🔒 LOCKED — React · TS lesson 6 — List Rendering with map (TypeScript).
- * Do not change steps, copy, or evaluation without explicit product/content sign-off.
- * Generated mirror: content/generated/react-ts/006_list-rendering-with-map_lesson.json
- */
 import createINPACTEngine from "../inpact_engine_shared";
 
 const NODES = [
   {
-    "id": "intro",
-    "type": "reveal",
-    "phase": "Lesson",
-    "content": {
-      "tag": "LESSON #6 (TypeScript)",
-      "title": "List Rendering with map() — Typed",
-      "body": "In React, you often need to display lists of data. Instead of manually writing repetitive JSX, you can use JavaScript's map() method to transform arrays into React elements. With TypeScript, you'll add type safety to ensure your data structures are well-defined.",
-      "usecase": "Displaying lists of users, products, tasks, or any collection where each item shares a similar visual structure."
-    }
+    id: "intro",
+    type: "reveal",
+    phase: "Lesson",
+    content: {
+      tag: "LESSON #6 (TypeScript)",
+      title: "TypeScript — Type Guards",
+      body: "A union type says a value could be one of several shapes — but TypeScript only narrows the union when you prove which shape you have. Type guards are those proofs: built-in checks like typeof and instanceof, the in operator for discriminated fields, and user-defined predicates that return x is SomeType. This lesson connects guards to real React patterns — handlers that accept unknown API payloads, discriminated union props, and safe filtering of mixed arrays.",
+      usecase:
+        "A webhook delivers JSON that might be a shipment update, a driver update, or a ping event. One handler receives unknown data, inspects a discriminant field, and routes to the right UI branch. Without type guards every branch would need manual casts — guards let TypeScript verify the control flow so refactors stay safe.",
+    },
   },
   {
-    "id": "objectives",
-    "type": "objectives",
-    "phase": "Objectives",
-    "items": [
-      "Transform an array of typed data into JSX elements using map()",
-      "Add a unique key prop to each rendered list item",
-      "Handle empty arrays gracefully with conditional rendering",
-      "Type event handlers for list interactions"
-    ]
+    id: "prereqs",
+    type: "prereqs",
+    phase: "Prerequisites",
+    items: [
+      {
+        lesson: 1,
+        label: "JSX — The Full Language",
+        reason: "Guards often sit inside event handlers and conditional JSX. You need JSX and conditional rendering before combining guards with component output.",
+      },
+      {
+        lesson: 2,
+        label: "Inventory row — readonly fields, unions, nested types",
+        reason: "You narrow to interface shapes — Lesson 2 is where structured props and records become familiar.",
+      },
+      {
+        lesson: 5,
+        label: "TypeScript — Enums",
+        reason: "Discriminants are often enums or string literals. Lesson 5 covers named constant sets that appear in discriminated unions.",
+      },
+    ],
   },
   {
-    "id": "step1",
-    "type": "question",
-    "phase": "Step 1 of 7",
-    "paal": "Import React and the useState hook from the 'react' package.",
-    "hint": "Use a combination of default and named imports in a single statement.",
-    "example_code": "import React, { useEffect } from 'react'",
-    "think_prompt": "Which import statement gives us both React and the useState hook?",
-    "mc_options": [
-      "import React from 'react'",
-      "import { useState } from 'react'",
-      "import React, { useState } from 'react'"
+    id: "objectives",
+    type: "objectives",
+    phase: "Objectives",
+    items: [
+      "Use typeof and instanceof to narrow primitive and class-based values",
+      "Use the in operator to narrow discriminated union types",
+      "Write a user-defined type predicate (parameterName is SomeType)",
+      "Explain how control-flow analysis applies type guards after a check",
+      "Recognise when discriminated unions replace long chains of optional fields",
     ],
-    "mc_correct_option": "import React, { useState } from 'react'",
-    "mc_anchor": "We need both the default React import (for JSX) and the named useState import (for state management).",
-    "why_this_matters": "React provides the core library for building components, and useState lets us manage dynamic data that will drive our list rendering.",
-    "answer_keywords": [
-      "import",
-      "React",
-      "{ useState }",
-      "'react'"
-    ],
-    "seed_code": "",
-    "starter_code": "",
-    "feedback_correct": "Perfect! You've imported the essential tools for building a stateful React component.",
-    "feedback_partial": "You're close! Remember we need both React (for JSX) and useState (for state).",
-    "feedback_wrong": "Let's try again. We need to import both React and the useState hook from 'react'.",
-    "expected": "The component will have access to React and useState."
   },
   {
-    "id": "step2",
-    "type": "question",
-    "phase": "Step 2 of 7",
-    "paal": "Define a type called Item that has id (number) and text (string) properties, then create a functional component called ItemList.",
-    "hint": "Start with 'type Item = {...}', then define 'const ItemList = () => {...}'.",
-    "example_code": "type User = { id: string; name: string };\nconst UserList = () => { ... }",
-    "think_prompt": "Where should we define the type for our list items to make it accessible throughout the component?",
-    "mc_options": [
-      "Inside the component function",
-      "As a global variable",
-      "Outside the component, before its definition"
+    id: "step1",
+    type: "question",
+    phase: "Step 1 of 5",
+    paal: "Given `function logPayload(data: unknown)`, which check correctly narrows `data` to a string before calling `data.toUpperCase()`?",
+    hint: "typeof returns a string union of runtime types — compare to 'string'.",
+    example_code: `if (typeof value === 'number') { value.toFixed(2); }`,
+    think_prompt: "unknown must be narrowed — which guard proves a primitive string?",
+    mc_options: [
+      "`if (data)` then call `data.toUpperCase()`",
+      "`if (typeof data === 'string')` then call `data.toUpperCase()`",
+      "`if (data as string)` then call `data.toUpperCase()`",
     ],
-    "mc_correct_option": "Outside the component, before its definition",
-    "mc_anchor": "Type definitions should be placed outside components so they can be reused and don't get recreated on every render.",
-    "why_this_matters": "TypeScript requires us to define the shape of our data before using it. This prevents runtime errors and makes our code self-documenting.",
-    "answer_keywords": [
-      "type Item",
-      "id:",
-      "text:",
-      "const ItemList",
-      "=>"
-    ],
-    "seed_code": "",
-    "starter_code": "",
-    "feedback_correct": "Great! You've created a well-typed foundation for your list component.",
-    "feedback_partial": "Almost there! Make sure you define both the Item type and the ItemList component.",
-    "feedback_wrong": "Let's review: we need a type definition for our list items, then a component function.",
-    "expected": "A typed component skeleton ready for state and JSX."
+    mc_correct_option: "`if (typeof data === 'string')` then call `data.toUpperCase()`",
+    mc_anchor:
+      "Truthiness does not remove unknown — only typeof / comparison / custom predicates narrow unknown safely. Casts bypass checking.",
+    why_this_matters:
+      "API boundaries often start as unknown — typeof is the first line of defence before touching string methods.",
+    answer_keywords: ["typeof", "string", "unknown"],
+    seed_code: "",
+    starter_code: "",
+    feedback_correct: "Yes — typeof narrows unknown to string inside the block.",
+    feedback_partial: "",
+    feedback_wrong: "Use `if (typeof data === 'string') { data.toUpperCase(); }`.",
+    expected: "`if (typeof data === 'string')` then call `data.toUpperCase()`",
+    analog_example: "",
+    deepDiveLabel: "unknown vs any",
+    deepDive: {
+      hook: "any disables checking; unknown forces you to narrow — prefer unknown at boundaries.",
+      pain: "⚠️ Casting unknown to a shape without a runtime check revives any's problems.",
+      mentalModel: "Treat unknown as a sealed box — open it only with guards.",
+      discover: "```ts\nfunction safeLen(x: unknown) {\n  if (typeof x === 'string' || Array.isArray(x)) return x.length;\n}\n```",
+      quickRules: "- ✅ typeof / Array.isArray / in / custom predicates\n- ❌ `as` without validation",
+      watchOut: "",
+      dryRun: "",
+      build: "",
+    },
   },
   {
-    "id": "step3",
-    "type": "question",
-    "phase": "Step 3 of 7",
-    "paal": "Declare state to hold an array of Item objects. Initialize it with at least two sample items (each with unique id and text).",
-    "hint": "Use useState<Item[]> with an initial array containing objects matching your Item type.",
-    "example_code": "const [users] = useState<User[]>([{ id: 1, name: 'Alice' }])",
-    "think_prompt": "What's the correct way to type useState for an array of Item objects?",
-    "mc_options": [
-      "const [items] = useState([])",
-      "const [items] = useState<Item[]>([])",
-      "const [items] = useState<Array>([])"
+    id: "step2",
+    type: "question",
+    phase: "Step 2 of 5",
+    paal: "You have `type UiEvent = { kind: 'click'; x: number } | { kind: 'keydown'; key: string }`. Inside `function handle(e: UiEvent)`, which condition narrows to the keydown branch?",
+    hint: "Compare the discriminant field kind to a literal — TypeScript narrows the union.",
+    example_code: `if (msg.type === 'error') { console.log(msg.code); }`,
+    think_prompt: "Discriminated unions carry a shared field whose literal type differs per variant.",
+    mc_options: [
+      "`if ('key' in e)`",
+      "`if (e.kind === 'keydown')`",
+      "`if (e.key)`",
     ],
-    "mc_correct_option": "const [items] = useState<Item[]>([])",
-    "mc_anchor": "TypeScript needs the generic parameter <Item[]> to know what type of array useState should manage.",
-    "why_this_matters": "State provides the dynamic data that React will render. By typing our state, TypeScript ensures we only store data matching our Item structure.",
-    "answer_keywords": [
-      "useState<Item[]>",
-      "[{",
-      "id:",
-      "text:",
-      "}]"
-    ],
-    "seed_code": "",
-    "starter_code": "",
-    "feedback_correct": "Excellent! You've created typed state that will drive your list rendering.",
-    "feedback_partial": "Good start! Make sure you include the Item[] type parameter and provide initial data.",
-    "feedback_wrong": "Let's adjust: useState needs the Item[] type and an initial array of items.",
-    "expected": "State variable containing an array of typed items."
+    mc_correct_option: "`if (e.kind === 'keydown')`",
+    mc_anchor:
+      "`in` checks property existence, not discriminant equality. `e.key` might error on the click variant. Comparing `kind` to the literal narrows correctly.",
+    why_this_matters:
+      "Event payloads and Redux actions commonly use discriminated unions — comparing the discriminant is the idiomatic guard.",
+    answer_keywords: ["kind", "keydown", "UiEvent"],
+    seed_code: "",
+    starter_code: "",
+    feedback_correct: "Correct — literal comparison on the discriminant narrows the union.",
+    feedback_partial: "",
+    feedback_wrong: "Use `if (e.kind === 'keydown') { /* e.key is string here */ }`.",
+    expected: "`if (e.kind === 'keydown')`",
+    analog_example: "",
+    deepDiveLabel: "in vs discriminant compare",
+    deepDive: {
+      hook: "`in` answers 'does this object have a property' — not 'which variant am I holding'.",
+      pain: "⚠️ Using `in` on a union can narrow oddly if both variants share property names.",
+      mentalModel: "Prefer a dedicated discriminant field with unique literals per variant.",
+      discover: "```ts\ntype A = { t: 'a'; n: number };\ntype B = { t: 'b'; s: string };\nfunction f(x: A | B) { if (x.t === 'a') return x.n; return x.s; }\n```",
+      quickRules: "- ✅ Compare discriminant to literal\n- ⚠️ `in` when shapes differ by presence",
+      watchOut: "",
+      dryRun: "",
+      build: "",
+    },
   },
   {
-    "id": "step4",
-    "type": "question",
-    "phase": "Step 4 of 7",
-    "paal": "Make your component return a div containing an h1 with the text 'My Items' and an empty unordered list (ul).",
-    "hint": "Use return ( ... ) with JSX syntax for div, h1, and ul elements.",
-    "example_code": "return (\n  <div>\n    <h1>My List</h1>\n    <ul></ul>\n  </div>\n)",
-    "think_prompt": "What should a React component return from its function body?",
-    "mc_options": [
-      "A string of HTML",
-      "JSX elements",
-      "A plain JavaScript object"
+    id: "step3",
+    type: "question",
+    phase: "Step 3 of 5",
+    paal: "Pick the valid user-defined type predicate signature for testing whether an unknown value is a number.",
+    hint: "Return type `arg is number` tells TypeScript the relationship when the function returns true.",
+    example_code: `function isNonEmptyString(v: unknown): v is string {\n  return typeof v === 'string' && v.length > 0;\n}`,
+    think_prompt: "A type predicate lives in the return type position after the parameter list.",
+    mc_options: [
+      "`function isNumber(n: unknown): boolean`",
+      "`function isNumber(n: unknown): n is number`",
+      "`function isNumber(n: number): unknown`",
     ],
-    "mc_correct_option": "JSX elements",
-    "mc_anchor": "React components return JSX, which looks like HTML but gets transformed into React elements.",
-    "why_this_matters": "Every React component must return JSX. Starting with a simple structure helps us build incrementally.",
-    "answer_keywords": [
-      "return",
-      "<div>",
-      "<h1>",
-      "My Items",
-      "<ul>"
-    ],
-    "seed_code": "",
-    "starter_code": "",
-    "feedback_correct": "Perfect! You've set up the visual structure for your list.",
-    "feedback_partial": "Almost! Make sure you're returning JSX with both a heading and a list container.",
-    "feedback_wrong": "Let's try again: the component needs to return JSX with a heading and list.",
-    "expected": "Component renders a heading and empty list container."
+    mc_correct_option: "`function isNumber(n: unknown): n is number`",
+    mc_anchor:
+      "Boolean return types do not communicate narrowing. Predicate return `n is number` couples truthiness to the narrowed type.",
+    why_this_matters:
+      "Reusable predicates keep validation logic in one place and compose inside filter/map pipelines.",
+    answer_keywords: ["is", "unknown", "number"],
+    seed_code: "",
+    starter_code: "",
+    feedback_correct: "Exactly — `n is number` is the predicate form.",
+    feedback_partial: "",
+    feedback_wrong: "Use `function isNumber(n: unknown): n is number`.",
+    expected: "`function isNumber(n: unknown): n is number`",
+    analog_example: "",
+    deepDiveLabel: "Predicates + filter",
+    deepDive: {
+      hook: "`array.filter(isNumber)` returns number[] when the callback is a predicate.",
+      pain: "⚠️ Predicate must be a named function reference — inline arrows rarely infer as predicates.",
+      mentalModel: "The type system trusts your boolean only when you promise `x is T`.",
+      discover: "```ts\nconst nums = mixed.filter(isNumber);\n```",
+      quickRules: "- ✅ export reusable predicates\n- ❌ lying predicates — runtime bugs",
+      watchOut: "",
+      dryRun: "",
+      build: "",
+    },
   },
   {
-    "id": "step5",
-    "type": "question",
-    "phase": "Step 5 of 7",
-    "paal": "Inside the ul, use map() on your items array to render each item as an li element showing its text.",
-    "hint": "Use {items.map(item => ...)} inside the ul tags.",
-    "example_code": "{users.map(user => <li>{user.name}</li>)}",
-    "think_prompt": "How do we convert an array of data into an array of JSX elements?",
-    "mc_options": [
-      "Using a for loop inside JSX",
-      "Using the map() method",
-      "Using the filter() method"
+    id: "step4",
+    type: "question",
+    phase: "Step 4 of 5",
+    paal: "After `if (typeof value === 'object' && value !== null && 'id' in value)` inside a function, what does TypeScript know about `value`?",
+    hint: "in narrows to an object type that includes at least property id — not a specific interface unless combined further.",
+    example_code: "",
+    think_prompt: "in produces a structural narrowing — you still may need another check for the full shape.",
+    mc_options: [
+      "`value` is definitely a string",
+      "`value` is `object & Record<'id', unknown>` (an object with an id key)",
+      "`value` is `null`",
     ],
-    "mc_correct_option": "Using the map() method",
-    "mc_anchor": "map() creates a new array by calling a function on each element, perfect for transforming data to JSX.",
-    "why_this_matters": "The map() method transforms data into UI. This is the core pattern for rendering lists in React.",
-    "answer_keywords": [
-      "items.map",
-      "item =>",
-      "<li>",
-      "{item.text}"
-    ],
-    "seed_code": "",
-    "starter_code": "",
-    "feedback_correct": "Excellent! You're transforming data into UI with map().",
-    "feedback_partial": "Good progress! Make sure you're calling map() on items and rendering li elements.",
-    "feedback_wrong": "Let's review: we need to map over items and render each one as an li.",
-    "expected": "Each item appears as a list item with its text displayed."
+    mc_correct_option: "`value` is `object & Record<'id', unknown>` (an object with an id key)",
+    mc_anchor:
+      "typeof object excludes primitives except null edge case — you added `value !== null`. `in` adds that id exists; TypeScript still does not know id's value type without more checks.",
+    why_this_matters:
+      "Incremental guards mirror how you validate JSON — peel layers instead of one giant cast.",
+    answer_keywords: ["in", "object", "id"],
+    seed_code: "",
+    starter_code: "",
+    feedback_correct: "Right — this is structural narrowing, not a full domain type yet.",
+    feedback_partial: "",
+    feedback_wrong: "Choose the option describing an object with an id property.",
+    expected: "`value` is `object & Record<'id', unknown>` (an object with an id key)",
+    analog_example: "",
+    deepDiveLabel: "Layered validation",
+    deepDive: {
+      hook: "Combine typeof, null checks, and in before reading specific fields.",
+      pain: "⚠️ Optional chaining is not a substitute for narrowing unknown.",
+      mentalModel: "Each guard adds facts the checker remembers in that branch.",
+      discover: "Follow with discriminant compare or schema validation for full safety.",
+      quickRules: "- ✅ small guards composed\n- ❌ one `as FullType`",
+      watchOut: "",
+      dryRun: "",
+      build: "",
+    },
   },
   {
-    "id": "step6",
-    "type": "question",
-    "phase": "Step 6 of 7",
-    "paal": "Add a key prop to each li element using the item's id property.",
-    "hint": "Add key={item.id} to the li element.",
-    "example_code": "<li key={user.id}>{user.name}</li>",
-    "think_prompt": "Why does React need a key prop when rendering lists?",
-    "mc_options": [
-      "To apply CSS styles",
-      "To identify elements during updates",
-      "To make the HTML valid"
+    id: "step5",
+    type: "question",
+    phase: "Step 5 of 5",
+    paal: "In `switch (event.kind)` handling every member of a union of literals, what do you put in the `default` branch to let TypeScript verify exhaustiveness?",
+    hint: "Assign the narrowed remaining type to `never` — if any variant is missing, TypeScript errors.",
+    example_code: `const _exhaustive: never = event;`,
+    think_prompt: "never means 'should be unreachable' — leverage it after all cases.",
+    mc_options: [
+      "`return null`",
+      "`const _check: never = event;`",
+      "`console.log(event)`",
     ],
-    "mc_correct_option": "To identify elements during updates",
-    "mc_anchor": "Keys help React track elements efficiently. Without them, React might re-render the entire list unnecessarily.",
-    "why_this_matters": "React uses keys to identify which items have changed, been added, or removed. This is essential for performance and correct rendering.",
-    "answer_keywords": [
-      "key={item.id}"
-    ],
-    "seed_code": "",
-    "starter_code": "",
-    "feedback_correct": "Perfect! You've added the essential key prop for React's rendering optimization.",
-    "feedback_partial": "Almost! Make sure you're adding the key prop to the li element.",
-    "feedback_wrong": "Let's adjust: each li needs a key prop using item.id.",
-    "expected": "Each list item has a unique key prop."
+    mc_correct_option: "`const _check: never = event;`",
+    mc_anchor:
+      "If a new union member is added, the default branch becomes assignable to never and fails — forcing you to handle the new case.",
+    why_this_matters:
+      "Exhaustive switches are how teams keep domain event handling safe as enums grow.",
+    answer_keywords: ["never", "default", "exhaustive"],
+    seed_code: "",
+    starter_code: "",
+    feedback_correct: "Yes — the never assignment is the standard exhaustiveness pattern.",
+    feedback_partial: "",
+    feedback_wrong: "Use `const _check: never = event;` in default after all cases.",
+    expected: "`const _check: never = event;`",
+    analog_example: "",
+    deepDiveLabel: "Exhaustiveness checking",
+    deepDive: {
+      hook: "Combine discriminated unions + switch + never default for compiler-backed coverage.",
+      pain: "⚠️ Forgetting default lets cases fall through without errors.",
+      mentalModel: "never is the empty type — nothing should inhabit it at the end of a full switch.",
+      discover: "```ts\ntype Kind = 'a' | 'b';\nfunction f(k: Kind) {\n  switch (k) {\n    case 'a': return 1;\n    case 'b': return 2;\n    default: {\n      const _x: never = k;\n      return _x;\n    }\n  }\n}\n```",
+      quickRules: "- ✅ default: never assign\n- ❌ silent fall-through",
+      watchOut: "",
+      dryRun: "",
+      build: "",
+    },
   },
-  {
-    "id": "step7",
-    "type": "question",
-    "phase": "Step 7 of 7",
-    "paal": "If the items array is empty, display a paragraph saying 'No items yet' instead of the list.",
-    "hint": "Use a ternary operator: {items.length ? ... : <p>No items yet</p>}",
-    "example_code": "{todos.length ? todos.map(...) : <p>No todos</p>}",
-    "think_prompt": "How can we conditionally render content based on whether an array is empty?",
-    "mc_options": [
-      "Using an if statement inside JSX",
-      "Using the ternary operator",
-      "Using the logical AND operator"
-    ],
-    "mc_correct_option": "Using the ternary operator",
-    "mc_anchor": "Conditional rendering lets us show different UI based on application state, making our components more robust.",
-    "why_this_matters": "Real applications often deal with empty data states. Providing a user-friendly message improves the experience.",
-    "answer_keywords": [
-      "items.length",
-      "?",
-      ":",
-      "<p>",
-      "No items yet"
-    ],
-    "seed_code": "",
-    "starter_code": "",
-    "feedback_correct": "Excellent! Your component now handles all states gracefully.",
-    "feedback_partial": "Good! Make sure you're using a ternary operator to check items.length.",
-    "feedback_wrong": "Let's review: we need to check if items is empty and show a message if it is.",
-    "expected": "Empty state shows friendly message instead of empty list."
-  }
 ];
 
 const sideItems = [
-  {
-    "label": "Lesson",
-    "id": "intro"
-  },
-  {
-    "label": "Objectives",
-    "id": "objectives"
-  },
-  {
-    "label": "Step 1",
-    "id": "step1"
-  },
-  {
-    "label": "Step 2",
-    "id": "step2"
-  },
-  {
-    "label": "Step 3",
-    "id": "step3"
-  },
-  {
-    "label": "Step 4",
-    "id": "step4"
-  },
-  {
-    "label": "Step 5",
-    "id": "step5"
-  },
-  {
-    "label": "Step 6",
-    "id": "step6"
-  },
-  {
-    "label": "Step 7",
-    "id": "step7"
-  }
+  { label: "Lesson", id: "intro" },
+  { label: "Objectives", id: "objectives" },
+  { label: "Step 1", id: "step1" },
+  { label: "Step 2", id: "step2" },
+  { label: "Step 3", id: "step3" },
+  { label: "Step 4", id: "step4" },
+  { label: "Step 5", id: "step5" },
 ];
 
-export default createINPACTEngine({ NODES, sideItems, lessonNum: 6, title: "List Rendering with map() (TypeScript)", shortName: "TS — LIST RENDERING WITH MAP()" });
+export default createINPACTEngine({
+  NODES,
+  sideItems,
+  lessonNum: 6,
+  title: "TypeScript — Type Guards",
+  shortName: "TS — TYPE GUARDS",
+});

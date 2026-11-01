@@ -1,4 +1,4 @@
-import { useRef, useEffect, useState, useContext, useMemo } from "react";
+import { useRef, useEffect, useLayoutEffect, useState, useContext, useMemo, useCallback } from "react";
 import RichLearnerText from "./RichLearnerText";
 import ReadingModeModal from "./ReadingModeModal";
 import DeepDiveModal from "./DeepDiveModal";
@@ -14,6 +14,18 @@ import { getDeepDiveConceptsForStep, getIntroDeepDiveConcept } from "../learn/co
  *   Babel Standalone when code looks like a React component; formatted code
  *   preview for Angular/other templates.
  */
+
+/** Engine / JSON may use `deepDive` or `deep_dive` on question nodes. */
+function getQuestionNodeDeepDiveObject(node) {
+  if (!node || node.type !== "question") return null;
+  const dd = node.deepDive ?? node.deep_dive;
+  if (dd && typeof dd === "object" && !Array.isArray(dd)) return dd;
+  return null;
+}
+
+function deepDiveLabelFromNode(node) {
+  return node?.deepDiveLabel ?? node?.deep_dive_label ?? node?.title ?? "Deep dive";
+}
 
 /** Map common live-preview errors to a short, actionable markdown line for learners. */
 function learnerPreviewCoachHint(message) {
@@ -44,7 +56,7 @@ function injectBaseStyles(html) {
   if (typeof html !== "string" || !html) return html;
   const base = `<style>
     *, *::before, *::after { box-sizing: border-box; }
-    body { margin: 0; padding: 20px; background: #f0f4f8; font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif; font-size: 14px; color: #1a202c; line-height: 1.5; }
+    body { margin: 0; padding: 20px; background: #f0f4f8; font-family: "Comfortaa", system-ui, sans-serif; font-size: 14px; color: #1a202c; line-height: 1.5; }
   </style>`;
   return html.includes("</head>")
     ? html.replace("</head>", base + "</head>")
@@ -96,7 +108,7 @@ function generateSandboxBlockedPreview() {
   <meta charset="utf-8">
   <style>
     *, *::before, *::after { box-sizing: border-box; }
-    body { margin: 0; padding: 24px; background: #f0f4f8; font-family: system-ui, -apple-system, sans-serif; font-size: 14px; color: #334155; line-height: 1.6; max-width: 520px; }
+    body { margin: 0; padding: 24px; background: #f0f4f8; font-family: "Comfortaa", system-ui, sans-serif; font-size: 14px; color: #334155; line-height: 1.6; max-width: 520px; }
     h1 { font-size: 15px; color: #0f172a; margin: 0 0 12px 0; }
     p { margin: 0 0 10px 0; }
     .box { background: #fff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 16px 18px; border-left: 4px solid #0891b2; }
@@ -107,7 +119,7 @@ function generateSandboxBlockedPreview() {
   <div class="box">
     <h1>Preview isn’t available for this setup</h1>
     <p>This lesson uses <strong>Redux</strong> and/or <strong>RTK Query</strong> with imports from <code>./store</code>, <code>./api</code>, or <code>react-redux</code>. The in-app preview runs a single file in an iframe and removes import lines, so the store and hooks are not defined — the browser then often shows only <code>Script error.</code></p>
-    <p>Use <strong>Check my code</strong> for validation, or run the project in your own dev environment (e.g. Vite) to see the real UI.</p>
+    <p>Use <strong>CHECK MY CODE{CTRL+SHIFT+ENTER}{ctrl+shift+enter}</strong> for validation, or run the project in your own local development environment to see the real UI.</p>
   </div>
 </body>
 </html>`;
@@ -195,7 +207,7 @@ function stripTsForBabelPreview(src) {
 /** Generate a live React preview iframe HTML using Babel Standalone CDN */
 function generateReactPreview(code) {
   if (!code || !code.trim()) {
-    return `<!DOCTYPE html><html><body style="background:#f0f4f8;padding:24px;font-family:system-ui,sans-serif;color:#64748b;font-size:14px">Write your React component in the Editor tab to see a live preview here.</body></html>`;
+    return `<!DOCTYPE html><html><body style="background:#f0f4f8;padding:24px;font-family: "Comfortaa", system-ui, sans-serif;color:#64748b;font-size:14px">Write your React component in the Editor tab to see a live preview here.</body></html>`;
   }
 
   // Find the main component name from the source code (`const X = (): JSX.Element =>`, legacy `React.FC`, or `function X`)
@@ -225,7 +237,7 @@ function generateReactPreview(code) {
   <meta charset="utf-8">
   <style>
     *, *::before, *::after { box-sizing: border-box; }
-    body { margin: 0; padding: 20px; background: #f0f4f8; font-family: system-ui, -apple-system, sans-serif; font-size: 14px; color: #1a202c; }
+    body { margin: 0; padding: 20px; background: #f0f4f8; font-family: "Comfortaa", system-ui, sans-serif; font-size: 14px; color: #1a202c; }
     .error-box { background: #fff1f0; border: 1px solid #ffa39e; color: #c0392b; padding: 12px 16px; border-radius: 6px; font-family: ui-monospace, monospace; font-size: 12px; white-space: pre-wrap; margin-top: 8px; max-width: 100%; overflow-x: auto; }
     .loading { color: #94a3b8; font-size: 13px; }
   </style>
@@ -275,7 +287,7 @@ function generateReactPreview(code) {
         if (msg === "Script error." || msg === "Script error") {
           detail =
             (detail ? detail + " — " : "") +
-            "Browsers often hide the real line for cross-origin scripts. Missing imports after the preview strips them (Redux / RTK Query) is a common cause — use Check my code or run locally.";
+            "Browsers often hide the real line for cross-origin scripts. Missing imports after the preview strips them (Redux / RTK Query) is a common cause — use CHECK MY CODE{CTRL+SHIFT+ENTER}{ctrl+shift+enter} or run locally.";
         }
         showPreviewError("Preview error: " + msg, detail);
         return true;
@@ -362,7 +374,7 @@ function generateReactPreview(code) {
 /** Generate a formatted Angular/HTML template preview */
 function generateTemplatePreview(code) {
   if (!code || !code.trim()) {
-    return `<!DOCTYPE html><html><body style="background:#f0f4f8;padding:24px;font-family:system-ui,sans-serif;color:#64748b;font-size:14px">Write your template code in the Editor tab to see a preview here.</body></html>`;
+    return `<!DOCTYPE html><html><body style="background:#f0f4f8;padding:24px;font-family: "Comfortaa", system-ui, sans-serif;color:#64748b;font-size:14px">Write your template code in the Editor tab to see a preview here.</body></html>`;
   }
   const escaped = code.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   return `<!DOCTYPE html>
@@ -372,7 +384,7 @@ function generateTemplatePreview(code) {
   <style>
     body { margin: 0; padding: 20px; background: #f8fafc; font-family: monospace; font-size: 13px; color: #334155; }
     pre { color: #0f172a; white-space: pre-wrap; word-break: break-word; line-height: 1.7; margin: 0; }
-    .note { font-family: system-ui, sans-serif; font-size: 12px; color: #64748b; margin-bottom: 14px; padding: 10px 14px; background: rgba(100,116,139,0.1); border-left: 3px solid #475569; border-radius: 4px; }
+    .note { font-family: "Comfortaa", system-ui, sans-serif; font-size: 12px; color: #64748b; margin-bottom: 14px; padding: 10px 14px; background: rgba(100,116,139,0.1); border-left: 3px solid #475569; border-radius: 4px; }
     .tag { color: #7dd3fc; }
     .attr { color: #86efac; }
     .val { color: #fde68a; }
@@ -392,8 +404,8 @@ const lessonStyles = {
   card: { background: "#ffffff", border: "1px solid #e2e8f0", borderLeft: "4px solid #f28a8a", borderRadius: "12px", padding: "24px 28px", marginBottom: "24px", boxShadow: "0 1px 3px rgba(0,0,0,0.06)" },
   paalLabel: { fontSize: "10px", color: "#f28a8a", letterSpacing: "2px", marginBottom: "10px", fontWeight: 600 },
   paalText: { fontSize: "16px", color: "#334155", lineHeight: "1.75", whiteSpace: "pre-wrap" },
-  taskCard: { background: "rgba(245,158,11,0.1)", border: "1px solid rgba(245,158,11,0.35)", borderLeft: "4px solid #f59e0b", borderRadius: "10px", padding: "18px 22px", marginTop: "20px", marginBottom: "24px" },
-  taskLabel: { fontSize: "10px", fontWeight: 700, letterSpacing: "0.15em", color: "#b45309", marginBottom: "8px" },
+  taskCard: { background: "rgba(255,107,107,0.12)", border: "1px solid rgba(255,107,107,0.45)", borderLeft: "4px solid #FF6B6B", borderRadius: "10px", padding: "18px 22px", marginTop: "20px", marginBottom: "24px" },
+  taskLabel: { fontSize: "10px", fontWeight: 700, letterSpacing: "0.15em", color: "#124559", marginBottom: "8px" },
   taskText: { fontSize: "15px", color: "#422006", lineHeight: "1.65", whiteSpace: "pre-wrap" },
   editorTaskWrap: { width: "100%", marginBottom: "4px", flexShrink: 0, boxSizing: "border-box" },
   editorTaskBox: { background: "#ffffff", border: "1px solid #e2e8f0", borderLeft: "4px solid #f28a8a", borderRadius: "8px", padding: "8px 12px", boxShadow: "0 1px 2px rgba(0,0,0,0.04)" },
@@ -412,6 +424,8 @@ export function EditorTaskBlock({
   taskInstructionPulseNonce = 0,
   deepDiveConcepts = [],
   onOpenDeepDive,
+  /** When true, host gets `data-tour-id="deep-dive-editor-button"` (omit when modal workspace is closed so the id is not duplicated). */
+  tourAnchorEditorDeepDive = false,
 }) {
   const paal = node?.paal || "";
   const markerMatch = paal.match(/your\s+(?:task|turn)\s*:/i);
@@ -471,8 +485,11 @@ export function EditorTaskBlock({
             boxSizing: "border-box",
           }}
         >
-          <div className="inpact-editor-deep-dive-toolbar inpact-editor-deep-dive-toolbar--beside-task">
-            {dives.map((c) => (
+          <div
+            className="inpact-editor-deep-dive-toolbar inpact-editor-deep-dive-toolbar--beside-task inpact-editor-task-deep-dive-host"
+            {...(tourAnchorEditorDeepDive ? { "data-tour-id": "deep-dive-editor-button" } : {})}
+          >
+            {dives.map((c, di) => (
               <DeepDiveImageButton
                 key={c.id}
                 onClick={() => onOpenDeepDive(c)}
@@ -490,9 +507,20 @@ const introNodeFromNodes = (nodes) => nodes?.find((n) => n.type === "reveal" && 
 const objectivesNodeFromNodes = (nodes) => nodes?.find((n) => n.type === "objectives");
 
 /** Same PROGRESS affordance as the main lesson sidebar, embedded beside the code editor. */
-function EditorProgressRail({ items, activeNodeIndex, completedIds, onSelectIndex }) {
+/**
+ * `items` is a hand-authored list per module (module tag, "Lesson", "Objectives", "Step N: ...")
+ * that's expected to line up position-for-position with the engine's real NODES array — but any
+ * node inserted ahead of the question steps (e.g. the "funda-gate" prereq check, added later and
+ * never a `sideItems` entry) throws that alignment off by however many nodes were inserted, so a
+ * raw index match silently highlights the wrong row. Found live 2026-09-02. Match by the node's own
+ * `id` instead — `activeItemId` — so the highlight is correct regardless of what NODES contains
+ * before the current node; `activeNodeIndex` stays as a fallback for callers that don't pass it.
+ */
+function EditorProgressRail({ items, activeNodeIndex, activeItemId, completedIds, onSelectIndex }) {
   if (!Array.isArray(items) || items.length === 0 || typeof onSelectIndex !== "function") return null;
   const doneSet = new Set(Array.isArray(completedIds) ? completedIds : []);
+  const activeIndexById = activeItemId != null ? items.findIndex((it) => it.id === activeItemId) : -1;
+  const resolvedActiveIndex = activeIndexById >= 0 ? activeIndexById : activeNodeIndex;
   const railStyles = {
     wrap: {
       width: "220px",
@@ -544,7 +572,7 @@ function EditorProgressRail({ items, activeNodeIndex, completedIds, onSelectInde
     >
         <div style={railStyles.label}>PROGRESS</div>
         {items.map((item, i) => {
-          const isActive = activeNodeIndex === i;
+          const isActive = resolvedActiveIndex === i;
           const isDone = doneSet.has(item.id);
           return (
             <div
@@ -594,15 +622,43 @@ export default function LessonEditorOutputTabs({
   editorWorkspaceTitle = "",
   /** When editor workspace (or inline editor) is shown, optional PROGRESS rail; indices align with lesson nodes. */
   editorProgress = null,
+  /** Hide the objectives block on the Lesson tab (e.g. intro reveal should mirror legacy single-screen intro). */
+  omitObjectivesFromLessonTab = false,
+  /** Extra controls after the Lesson tab CTA (e.g. CONTINUE / LET'S BUILD on React · TS lesson 1 shell). */
+  preQuestionFooter = null,
+  /**
+   * When set (e.g. intro MCQ from the engine), replaces the default TOPICS card on the Lesson tab so the slot owns the full intro UI.
+   */
+  lessonIntroSlot = null,
   children,
 }) {
   const lessonValidationCtx = useContext(LessonValidationContext);
   const track = lessonTrack || lessonValidationCtx?.track;
-  const deepDiveConcepts = useMemo(
-    () =>
-      getDeepDiveConceptsForStep(track, lessonNum, node?.id, node?.introduces_concepts),
-    [track, lessonNum, node?.id, node?.introduces_concepts]
-  );
+  const deepDiveConcepts = useMemo(() => {
+    const dd = getQuestionNodeDeepDiveObject(node);
+    const inlineStepConcept =
+      node?.type === "question" && dd
+        ? {
+            label: deepDiveLabelFromNode(node),
+            deepDive: dd,
+          }
+        : null;
+    const introduces =
+      node?.introduces_concepts ?? node?.introducesConcepts ?? undefined;
+    return getDeepDiveConceptsForStep(track, lessonNum, node?.id, introduces, inlineStepConcept);
+  }, [
+    track,
+    lessonNum,
+    node?.id,
+    node?.introduces_concepts,
+    node?.introducesConcepts,
+    node?.type,
+    node?.deepDive,
+    node?.deep_dive,
+    node?.deepDiveLabel,
+    node?.deep_dive_label,
+    node?.title,
+  ]);
   const [deepDiveConcept, setDeepDiveConcept] = useState(null);
   const code = typeof previewCode === "string" && previewCode.trim() ? previewCode : (typeof answer === "string" ? answer : "");
   const hasOutput = typeof getOutputPreview === "function";
@@ -612,16 +668,32 @@ export default function LessonEditorOutputTabs({
   const [showOutputModal, setShowOutputModal] = useState(false);
   const [previewCoach, setPreviewCoach] = useState(null);
   const [showReadingModal, setShowReadingModal] = useState(false);
+  /** True when the Lesson tab scroll area has more content below the fold (real scroll host is here, not engine main). */
+  const [lessonScrollMoreBelow, setLessonScrollMoreBelow] = useState(false);
   const lessonScrollRef = useRef(null);
+  const lessonObjectivesAnchorRef = useRef(null);
   const previewIframeRef = useRef(null);
   const introNode = introNodeFromNodes(nodes);
-  const objectivesNode = objectivesNodeFromNodes(nodes);
+  const objectivesNode = omitObjectivesFromLessonTab ? null : objectivesNodeFromNodes(nodes);
   const lessonContent = introNode?.content || (lessonIntro && { tag: lessonIntro.tag, title: lessonIntro.title, body: lessonIntro.body, usecase: lessonIntro.usecase }) || {};
   const objectives = objectivesNode?.items || (Array.isArray(lessonObjectives) ? lessonObjectives : []);
   const introDeepDiveConcept = useMemo(
     () => getIntroDeepDiveConcept(track, lessonNum, lessonContent.title),
     [track, lessonNum, lessonContent.title]
   );
+
+  const updateLessonScrollMoreBelow = useCallback(() => {
+    const el = lessonScrollRef.current;
+    if (!el) {
+      setLessonScrollMoreBelow(false);
+      return;
+    }
+    const { scrollTop, scrollHeight, clientHeight } = el;
+    const bottomGap = scrollHeight - scrollTop - clientHeight;
+    const hasOverflow = scrollHeight > clientHeight + 8;
+    const notAtBottom = bottomGap > 12;
+    setLessonScrollMoreBelow(hasOverflow && notAtBottom);
+  }, []);
 
   /** Same content as former Output tab: HTML for iframe or placeholder */
   const outputContent = hasOutput
@@ -634,14 +706,80 @@ export default function LessonEditorOutputTabs({
           ? generateTemplatePreview(code)
           : null;
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const showLessonMain = useEditorWorkspaceModal || mainTab === "lesson";
     if (!showLessonMain) return;
-    const el = lessonScrollRef.current;
-    if (!el) return;
-    const id = requestAnimationFrame(() => { el.scrollTop = 0; });
+    const scrollEl = lessonScrollRef.current;
+    if (!scrollEl) return;
+    const run = () => {
+      if (node?.type === "objectives" && objectives.length > 0) {
+        const anchor = lessonObjectivesAnchorRef.current;
+        if (anchor) {
+          const sRect = scrollEl.getBoundingClientRect();
+          const aRect = anchor.getBoundingClientRect();
+          const delta = aRect.top - sRect.top - 8;
+          scrollEl.scrollTop = Math.max(0, scrollEl.scrollTop + delta);
+          const lets = scrollEl.querySelector("[data-inpact-lesson-lets-build]");
+          if (lets instanceof HTMLElement) {
+            const sRect2 = scrollEl.getBoundingClientRect();
+            const bRect = lets.getBoundingClientRect();
+            if (bRect.bottom > sRect2.bottom - 12) {
+              const bump = bRect.bottom - sRect2.bottom + 12;
+              scrollEl.scrollTop = Math.min(
+                scrollEl.scrollHeight - scrollEl.clientHeight,
+                scrollEl.scrollTop + bump
+              );
+            }
+          }
+          return;
+        }
+      }
+      scrollEl.scrollTop = 0;
+    };
+    const id = requestAnimationFrame(() => {
+      run();
+      requestAnimationFrame(() => {
+        updateLessonScrollMoreBelow();
+      });
+    });
     return () => cancelAnimationFrame(id);
-  }, [mainTab, useEditorWorkspaceModal, node?.id]);
+  }, [mainTab, useEditorWorkspaceModal, node?.id, node?.type, objectives.length, updateLessonScrollMoreBelow]);
+
+  useLayoutEffect(() => {
+    const showLessonMain = useEditorWorkspaceModal || mainTab === "lesson";
+    if (!showLessonMain) {
+      setLessonScrollMoreBelow(false);
+      return undefined;
+    }
+    const el = lessonScrollRef.current;
+    if (!el) return undefined;
+    updateLessonScrollMoreBelow();
+    const onScroll = () => updateLessonScrollMoreBelow();
+    el.addEventListener("scroll", onScroll, { passive: true });
+    let ro;
+    if (typeof ResizeObserver !== "undefined") {
+      ro = new ResizeObserver(() => updateLessonScrollMoreBelow());
+      ro.observe(el);
+      const inner = el.querySelector(".inpact-lesson-scroll-inner");
+      if (inner instanceof Element) ro.observe(inner);
+    }
+    return () => {
+      el.removeEventListener("scroll", onScroll);
+      if (ro) ro.disconnect();
+    };
+  }, [
+    updateLessonScrollMoreBelow,
+    mainTab,
+    useEditorWorkspaceModal,
+    editorWorkspaceOpen,
+    node?.id,
+    node?.type,
+    lessonContent?.body,
+    lessonContent?.title,
+    lessonContent?.usecase,
+    objectives.length,
+    omitObjectivesFromLessonTab,
+  ]);
 
   useEffect(() => {
     if (!useEditorWorkspaceModal || !editorWorkspaceOpen) return undefined;
@@ -704,10 +842,35 @@ export default function LessonEditorOutputTabs({
               flex-shrink: 0;
             }
           }
+          @keyframes inpact-lesson-scroll-hint-bounce {
+            0%, 100% { transform: translateY(0); opacity: 0.5; }
+            50% { transform: translateY(6px); opacity: 1; }
+          }
+          .inpact-lesson-scroll-hint-chevrons {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1px;
+          }
+          .inpact-lesson-scroll-hint-chevron {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            line-height: 0;
+            color: #0891b2;
+            animation: inpact-lesson-scroll-hint-bounce 1.2s ease-in-out infinite;
+            will-change: transform;
+          }
+          .inpact-lesson-scroll-hint-chevrons .inpact-lesson-scroll-hint-chevron:nth-child(1) { animation-delay: 0s; }
+          .inpact-lesson-scroll-hint-chevrons .inpact-lesson-scroll-hint-chevron:nth-child(2) { animation-delay: 0.14s; }
+          .inpact-lesson-scroll-hint-chevrons .inpact-lesson-scroll-hint-chevron:nth-child(3) { animation-delay: 0.28s; }
         `}
       </style>
       {!tabsInSidebar && (
-        <div style={{ ...lessonStyles.tabBar, alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: "8px" }}>
+        <div
+          className="inpact-main-tabs-row"
+          style={{ ...lessonStyles.tabBar, alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: "8px" }}
+        >
           <div style={{ display: "flex", gap: "6px" }}>
             <button
               type="button"
@@ -737,7 +900,7 @@ export default function LessonEditorOutputTabs({
           <div style={{ display: "flex", gap: "6px", flexWrap: "wrap" }}>
             <button
               type="button"
-              style={{ ...lessonStyles.tab(false), borderColor: "#a89880", color: "#6b5c4c", fontSize: "11px" }}
+              style={{ ...lessonStyles.tab(false), borderColor: "#00C49A", color: "#124559", fontSize: "11px" }}
               data-tour-id="reading-button"
               onClick={() => setShowReadingModal(true)}
               title="Skim the lesson like a book — steps, code, and explanations"
@@ -748,9 +911,12 @@ export default function LessonEditorOutputTabs({
         </div>
       )}
       {(useEditorWorkspaceModal || mainTab === "lesson") && (
-        <div ref={lessonScrollRef} style={lessonStyles.lessonScroll}>
-            <div style={lessonStyles.wrap}>
-            {(lessonContent.title || lessonContent.body || lessonContent.usecase) && (
+        <div style={{ position: "relative", width: "100%" }}>
+          <div ref={lessonScrollRef} style={lessonStyles.lessonScroll}>
+            <div className="inpact-lesson-scroll-inner" style={lessonStyles.wrap}>
+            {lessonIntroSlot ? (
+              <div style={{ marginBottom: "8px" }}>{lessonIntroSlot}</div>
+            ) : (lessonContent.title || lessonContent.body || lessonContent.usecase) ? (
               <div style={lessonStyles.card}>
                 <div style={lessonStyles.paalLabel}>TOPICS & CONCEPTS</div>
                 {lessonContent.tag && <div style={{ fontSize: "11px", color: "#f28a8a", marginBottom: "8px" }}>{lessonContent.tag}</div>}
@@ -775,9 +941,9 @@ export default function LessonEditorOutputTabs({
                   />
                 )}
               </div>
-            )}
+            ) : null}
             {objectives.length > 0 && (
-              <div style={lessonStyles.card}>
+              <div ref={node?.type === "objectives" ? lessonObjectivesAnchorRef : undefined} style={lessonStyles.card}>
                 <div style={lessonStyles.paalLabel}>LEARNING OBJECTIVES</div>
                 <ul style={{ margin: 0, paddingLeft: "20px", color: "#334155", lineHeight: 1.85, fontSize: "15px" }}>
                   {objectives.map((item, i) => (
@@ -788,25 +954,155 @@ export default function LessonEditorOutputTabs({
                 </ul>
               </div>
             )}
-            <div style={lessonStyles.cta}>
-              <span style={{ fontSize: "18px" }}>👉</span>
-              <span>
-                {useEditorWorkspaceModal ? (
-                  <>
-                    Open the <strong style={{ color: "#0891b2" }}>Editor</strong> tab to code in full screen, then <strong style={{ color: "#0891b2" }}>Preview</strong> to run output.
-                  </>
-                ) : (
-                  <>
-                    Switch to the <strong style={{ color: "#0891b2" }}>Editor</strong> tab to write your code, then click <strong style={{ color: "#0891b2" }}>Preview</strong> to see the output.
-                  </>
-                )}
-              </span>
+            {lessonIntroSlot ? null : (
+              <div style={lessonStyles.cta}>
+                <span style={{ fontSize: "18px" }}>👉</span>
+                <span>
+                  {useEditorWorkspaceModal ? (
+                    <>
+                      Open the <strong style={{ color: "#0891b2" }}>Editor</strong> tab to code in full screen, then <strong style={{ color: "#0891b2" }}>Preview</strong> to run output.
+                    </>
+                  ) : (
+                    <>
+                      Switch to the <strong style={{ color: "#0891b2" }}>Editor</strong> tab to write your code, then click <strong style={{ color: "#0891b2" }}>Preview</strong> to see the output.
+                    </>
+                  )}
+                </span>
+                <button
+                  type="button"
+                  style={{
+                    marginLeft: "auto",
+                    padding: "9px 18px",
+                    fontSize: "12px",
+                    fontWeight: 700,
+                    background: "#0891b2",
+                    color: "#fff",
+                    border: "none",
+                    borderRadius: "8px",
+                    cursor: "pointer",
+                    fontFamily: "'DM Sans', sans-serif",
+                    flexShrink: 0,
+                  }}
+                  onClick={() => {
+                    if (useEditorWorkspaceModal) onOpenEditorWorkspace?.();
+                    else setMainTab("editor");
+                  }}
+                >
+                  Continue →
+                </button>
+              </div>
+            )}
+            {preQuestionFooter}
+            {node?.type === "question" && deepDiveConcepts.length > 0 ? (
+              <div style={{ ...lessonStyles.card, marginTop: "12px" }}>
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "flex-start",
+                    justifyContent: "space-between",
+                    gap: "14px",
+                    flexWrap: "wrap",
+                    marginBottom: "10px",
+                  }}
+                >
+                  <div style={{ flex: "1 1 180px", minWidth: 0 }}>
+                    <div style={lessonStyles.paalLabel}>OPTIONAL DEEP DIVE · THIS STEP</div>
+                    <div
+                      style={{
+                        marginTop: "6px",
+                        fontSize: "11px",
+                        fontWeight: 700,
+                        letterSpacing: "0.08em",
+                        color: "#0e7490",
+                      }}
+                    >
+                      Hungry for more?
+                    </div>
+                  </div>
+                  <div
+                    className="inpact-editor-deep-dive-toolbar inpact-deep-dive-lesson-toolbar"
+                    data-tour-id="deep-dive-lesson-button"
+                    style={{ flexShrink: 0, marginLeft: "auto", alignSelf: "flex-start" }}
+                  >
+                    {deepDiveConcepts.map((c, di) => (
+                      <DeepDiveImageButton
+                        key={c.id}
+                        onClick={() => setDeepDiveConcept(c)}
+                        title={
+                          deepDiveConcepts.length > 1
+                            ? `Deep dive: ${c.label || c.id}`
+                            : `Open concept guide: ${c.label || c.id}`
+                        }
+                      />
+                    ))}
+                  </div>
+                </div>
+                <p style={{ margin: "0 0 0", fontSize: "13px", color: "#64748b", lineHeight: 1.55 }}>
+                  Extra diagrams and plain-language context for this step — open anytime; the same strip appears next to the task in the Editor workspace.
+                </p>
+              </div>
+            ) : null}
             </div>
           </div>
+          {lessonScrollMoreBelow ? (
+            <div
+              aria-hidden
+              style={{
+                position: "absolute",
+                left: "50%",
+                bottom: "14px",
+                transform: "translateX(-50%)",
+                zIndex: 6,
+                pointerEvents: "none",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                gap: "4px",
+                padding: "8px 16px 6px",
+                borderRadius: "999px",
+                background: "linear-gradient(180deg, rgba(255,255,255,0.02) 0%, rgba(248,250,252,0.92) 40%, rgba(248,250,252,0.98) 100%)",
+                boxShadow: "0 -6px 18px rgba(15,23,42,0.08)",
+                fontFamily: "'DM Sans', sans-serif",
+              }}
+            >
+              <span style={{ fontSize: "10px", fontWeight: 700, letterSpacing: "0.08em", color: "#64748b" }}>
+                SROLL
+              </span>
+              <div className="inpact-lesson-scroll-hint-chevrons" aria-hidden>
+                {[
+                  { w: 22, sw: 2.25 },
+                  { w: 18, sw: 2 },
+                  { w: 14, sw: 1.75 },
+                ].map(({ w, sw }) => (
+                  <span key={w} className="inpact-lesson-scroll-hint-chevron">
+                    <svg
+                      width={w}
+                      height={Math.round(w * 0.42)}
+                      viewBox="0 0 24 11"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                      aria-hidden
+                    >
+                      <path
+                        d="M3 3.5L12 9.5L21 3.5"
+                        stroke="currentColor"
+                        strokeWidth={sw}
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                  </span>
+                ))}
+              </div>
+            </div>
+          ) : null}
         </div>
       )}
       {!useEditorWorkspaceModal && mainTab === "editor" && (
-        <div style={{ display: "flex", flexDirection: "column", flex: 1, minHeight: 0, width: "100%", maxWidth: "100%", overflow: "hidden" }}>
+        <div
+          className="inpact-inline-editor-root"
+          style={{ display: "flex", flexDirection: "column", flex: 1, minHeight: 0, width: "100%", maxWidth: "100%", overflow: "hidden" }}
+        >
           <div style={{ marginBottom: "4px", flexShrink: 0 }}>
             <button
               type="button"
@@ -823,6 +1119,7 @@ export default function LessonEditorOutputTabs({
               taskInstructionPulseNonce={taskInstructionPulseNonce}
               deepDiveConcepts={deepDiveConcepts}
               onOpenDeepDive={setDeepDiveConcept}
+              tourAnchorEditorDeepDive
             />
           )}
           <div
@@ -842,6 +1139,7 @@ export default function LessonEditorOutputTabs({
               <EditorProgressRail
                 items={editorProgress.items}
                 activeNodeIndex={editorProgress.activeNodeIndex}
+                activeItemId={editorProgress.activeItemId}
                 completedIds={editorProgress.completedIds}
                 onSelectIndex={editorProgress.onSelectIndex}
               />
@@ -880,6 +1178,7 @@ export default function LessonEditorOutputTabs({
               role="dialog"
               aria-modal="true"
               aria-label="Editor workspace"
+              data-inpact-editor-workspace={editorWorkspaceOpen ? "open" : "closed"}
               onClick={(e) => e.stopPropagation()}
               style={{
                 position: "absolute",
@@ -948,6 +1247,7 @@ export default function LessonEditorOutputTabs({
                       taskInstructionPulseNonce={taskInstructionPulseNonce}
                       deepDiveConcepts={deepDiveConcepts}
                       onOpenDeepDive={setDeepDiveConcept}
+                      tourAnchorEditorDeepDive={editorWorkspaceOpen}
                     />
                   </div>
                 )}
@@ -966,6 +1266,7 @@ export default function LessonEditorOutputTabs({
                     <EditorProgressRail
                       items={editorProgress.items}
                       activeNodeIndex={editorProgress.activeNodeIndex}
+                      activeItemId={editorProgress.activeItemId}
                       completedIds={editorProgress.completedIds}
                       onSelectIndex={editorProgress.onSelectIndex}
                     />
@@ -1050,14 +1351,14 @@ export default function LessonEditorOutputTabs({
                 style={{
                   flexShrink: 0,
                   padding: "12px 16px",
-                  background: "linear-gradient(180deg, #fffbeb 0%, #fef3c7 100%)",
+                  background: "linear-gradient(180deg, #EAFBFF 0%, #ffffff 100%)",
                   borderBottom: "1px solid #fcd34d",
                   fontSize: "13px",
-                  color: "#78350f",
+                  color: "#124559",
                   lineHeight: 1.55,
                 }}
               >
-                <div style={{ fontWeight: 700, fontSize: "10px", letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: "6px", color: "#b45309" }}>
+                <div style={{ fontWeight: 700, fontSize: "10px", letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: "6px", color: "#124559" }}>
                   Learner hint
                 </div>
                 {learnerPreviewCoachHint(previewCoach.message) ? (

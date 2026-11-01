@@ -1,0 +1,514 @@
+.tsp-root {
+  width: 100%;
+  height: 100%;
+  background: #f8fafc;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.tsp-header {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  color: #64748b;
+  border-bottom: 1px solid #e2e8f0;
+  background: #f1f5f9;
+}
+
+.tsp-progress {
+  color: #0891b2;
+  font-weight: 800;
+}
+
+.tsp-check-bar {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border-bottom: 1px solid #e2e8f0;
+  background: #fff;
+}
+
+.tsp-check-btn {
+  flex-shrink: 0;
+  padding: 7px 14px;
+  font-size: 12px;
+  font-weight: 800;
+  background: #0891b2;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.tsp-check-btn:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+/* Check my code's result — a floating card (same pattern as the step detail card, .tsp-card-float
+   below), not the old cramped inline strip that clipped real feedback text (user report,
+   2026-09-07). Centered by default so it reads as a "toast" rather than anchored to a corner. */
+.tsp-check-float {
+  z-index: 2001; /* above the step card when both happen to be open */
+}
+
+.tsp-check-float-body {
+  font-size: 13px;
+  color: #0f172a;
+  line-height: 1.6;
+}
+
+/* Wider once annotated code is showing — a code block needs real room, unlike the plain-text
+   feedback message the card starts with. Compound selector so this reliably beats
+   .tsp-card-float's own width rule regardless of source order. */
+.tsp-card-float.tsp-check-float-wide {
+  width: min(680px, calc(100vw - 48px));
+}
+
+.tsp-annotate-btn {
+  margin-top: 4px;
+}
+
+.tsp-annotate-error {
+  margin-top: 8px;
+  font-size: 12px;
+  color: #b91c1c;
+}
+
+/* "Annotate my code" output — the learner's code with coaching comments inserted on their own
+   lines, rendered with real line numbers so a mistake reads as "line 9", not just a description
+   (user report, 2026-09-07: "i know finanials is wrong but where? ... no ckuse"). A fixed
+   max-height left a big dead gap below the code block whenever the card was resized taller (user
+   report, 2026-09-08, with a screenshot circling the empty space: "the annotation box shud expand
+   along with the model") — flex: 1 inside .tsp-check-float's column layout instead, so it actually
+   grows to fill whatever room the resize handle gives the card, with min-height as a floor for the
+   card's own default (unresized) size. */
+.tsp-annotated-code {
+  margin-top: 10px;
+  background: #0f172a;
+  border-radius: 8px;
+  padding: 8px 0;
+  font-family: ui-monospace, monospace;
+  font-size: 12.5px;
+  line-height: 1.6;
+  overflow-x: auto;
+  flex: 1;
+  min-height: 160px;
+  overflow-y: auto;
+}
+
+/* Marks where one file's lines end and the next one's begin — the annotated block can span
+   several concatenated files (see renderAnnotatedCode's file-marker handling in
+   formatFeedbackText.jsx), so without this the line numbers resetting to 1 would look like a
+   glitch instead of "you're looking at a different file now". */
+.tsp-annotated-file {
+  padding: 10px 12px 4px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  color: #67e8f9;
+  border-top: 1px solid rgba(148, 163, 184, 0.25);
+  margin-top: 4px;
+}
+
+.tsp-annotated-file:first-child {
+  border-top: none;
+  margin-top: 0;
+}
+
+.tsp-annotated-line {
+  display: flex;
+  padding: 0 12px;
+  white-space: pre;
+}
+
+.tsp-annotated-lineno {
+  flex-shrink: 0;
+  width: 30px;
+  text-align: right;
+  margin-right: 12px;
+  color: #64748b;
+  user-select: none;
+}
+
+.tsp-annotated-linecode {
+  color: #e2e8f0;
+}
+
+.tsp-annotated-line-note {
+  background: rgba(8, 145, 178, 0.18);
+}
+
+.tsp-annotated-line-note .tsp-annotated-linecode {
+  color: #67e8f9;
+  font-style: italic;
+}
+
+.tsp-feedback-p {
+  margin: 0 0 10px;
+}
+
+.tsp-feedback-p:last-child {
+  margin-bottom: 0;
+}
+
+/* A visible border + real vertical padding — tried removing both (2026-09-13) to fight a "wall of
+   buttons" feeling in one over-stuffed check-result line, but that made every other, more normal
+   use (a short field list in "How", one or two terms in a sentence) nearly invisible against the
+   body font instead — a lowercase word like `id` or `name` with a near-white background and zero
+   border reads as plain text (user report, 2026-09-13: "THE INCIDENT FIELDS ARENT DISTINGUISHABLE").
+   The actual cause of the cramped feeling was structural (every numbered item glued onto one
+   physical line — fixed separately, see checkMessageLabel and the isNumberedParagraph line-count
+   check), not this styling; restoring real contrast here doesn't reintroduce that. */
+.tsp-feedback-p code,
+.tsp-feedback-list code {
+  font-family: ui-monospace, monospace;
+  font-size: 0.92em;
+  background: #f1f5f9;
+  border: 1px solid #e2e8f0;
+  border-radius: 4px;
+  padding: 1px 5px;
+  color: #0f172a;
+}
+
+/* The actual fix, not just a mention of it — a standalone code block reads as "do this", not
+   "here's a code-ish phrase in a sentence" (user report, 2026-09-07: the fix line was "lost in
+   the bulk"). */
+.tsp-feedback-code {
+  margin: 0 0 10px;
+  background: #0f172a;
+  color: #e2e8f0;
+  border-radius: 6px;
+  padding: 10px 12px;
+  font-size: 12.5px;
+  font-family: ui-monospace, monospace;
+  white-space: pre-wrap;
+  overflow-x: auto;
+}
+
+.tsp-feedback-code:last-child {
+  margin-bottom: 0;
+}
+
+@keyframes tsp-pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.45);
+  }
+  70% {
+    box-shadow: 0 0 0 9px rgba(16, 185, 129, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
+  }
+}
+
+.tsp-row-just-passed {
+  animation: tsp-pulse 0.8s ease-out 2;
+}
+
+.tsp-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+/* Compact row — a step is a label to pick, not a wall of text to scroll past. Clicking anywhere
+   on the row (other than the checkbox) opens that step's detail card below. */
+.tsp-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 10px 12px;
+  cursor: pointer;
+}
+
+.tsp-row:hover {
+  border-color: #a5f3fc;
+  background: #ecfeff;
+}
+
+.tsp-row-done {
+  background: #f0fdf4;
+  border-color: #bbf7d0;
+}
+
+.tsp-row-active {
+  border-color: #0891b2;
+  box-shadow: 0 0 0 1px #0891b2 inset;
+}
+
+.tsp-row-num {
+  flex: 1;
+  font-size: 13px;
+  font-weight: 600;
+  color: #0f172a;
+}
+
+.tsp-row-done .tsp-row-num {
+  color: #86877e;
+}
+
+.tsp-row-arrow {
+  color: #94a3b8;
+  font-size: 16px;
+}
+
+.tsp-check {
+  flex-shrink: 0;
+  padding-top: 2px;
+}
+
+.tsp-check input {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+
+.tsp-tag {
+  font-size: 10px;
+  font-weight: 800;
+  color: #0891b2;
+  margin-right: 4px;
+}
+
+/* Which step this check result is for — its own tag above the feedback body, never concatenated
+   into the feedback string itself (see the checkMessageLabel comment in TaskStepsPanel.jsx for why
+   that string-gluing approach was actually the bug). */
+.tsp-check-step-tag {
+  display: block;
+  margin-bottom: 6px;
+}
+
+.tsp-what {
+  font-size: 14px;
+  color: #0f172a;
+  line-height: 1.6;
+  margin-bottom: 10px;
+}
+
+.tsp-how {
+  font-size: 13px;
+  color: #64748b;
+  line-height: 1.6;
+  margin-bottom: 14px;
+}
+
+/* Reuses .tsp-feedback-p/.tsp-feedback-list/.tsp-feedback-code from formatFeedbackText.jsx (2026-
+   09-07, user request: "give instructions more formatted, bulleted... instead of a lump of text")
+   — the same renderer already built for Check my code's feedback, so a step's "How" text can now
+   be written as real bullets/inline-code/fenced-code instead of one dense paragraph. */
+.tsp-how-body {
+  margin-top: 6px;
+}
+
+.tsp-how-body .tsp-feedback-list {
+  margin: 0 0 8px;
+  padding-left: 18px;
+}
+
+.tsp-how-body .tsp-feedback-list li {
+  margin-bottom: 6px;
+}
+
+.tsp-how-body .tsp-feedback-p:first-child {
+  margin-top: 0;
+}
+
+.tsp-assist-btn {
+  padding: 5px 10px;
+  font-size: 11px;
+  font-weight: 700;
+  background: #ecfeff;
+  color: #0891b2;
+  border: 1px solid #a5f3fc;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+/* Floating single-step detail card (2026-09-07 rebuild) — a movable window, not a slot squeezed
+   into the ~300px sidebar column. Positioned via inline left/top (JS-driven drag), sized generously
+   so What/How text actually has room, and stays on top of the rest of the workbench. The compact
+   row list keeps rendering underneath/behind it so picking a different step never means closing
+   this first. */
+.tsp-card-float {
+  position: fixed;
+  width: min(460px, calc(100vw - 48px));
+  max-height: calc(100vh - 48px);
+  overflow: hidden;
+  box-sizing: border-box;
+  background: #fff;
+  border: 1px solid #cbd5e1;
+  border-radius: 12px;
+  box-shadow: 0 20px 45px rgba(15, 23, 42, 0.25), 0 2px 10px rgba(15, 23, 42, 0.12);
+  z-index: 2000;
+  padding: 16px 20px 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* The drag handle + Close button stay put — only .tsp-card-body (everything below the head)
+   scrolls underneath it (user request, 2026-09-10: the header was scrolling out of view along
+   with the rest of the card's content, taking Close and the drag handle with it). */
+.tsp-card-body {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+/* Bottom-right resize handle (2026-09-07, user request — "resize handles on all models especially
+   anotation"). A small diagonal-lines glyph via layered gradients, no image asset. */
+.tsp-resize-handle {
+  position: absolute;
+  right: 2px;
+  bottom: 2px;
+  width: 16px;
+  height: 16px;
+  cursor: nwse-resize;
+  touch-action: none;
+  background-image: repeating-linear-gradient(
+    135deg,
+    #94a3b8 0,
+    #94a3b8 1.5px,
+    transparent 1.5px,
+    transparent 5px
+  );
+  background-position: bottom right;
+  background-repeat: no-repeat;
+  background-size: 10px 10px;
+  opacity: 0.7;
+}
+
+.tsp-resize-handle:hover {
+  opacity: 1;
+}
+
+.tsp-card-head {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.tsp-card-close {
+  flex-shrink: 0;
+  padding: 5px 10px;
+  font-size: 11px;
+  font-weight: 700;
+  background: #f1f5f9;
+  color: #475569;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.tsp-card-close:hover {
+  background: #e2e8f0;
+}
+
+/* The grab handle — everything but the Close button, so a drag can start almost anywhere along
+   the header without ever eating the Close click. */
+.tsp-card-drag {
+  flex: 1;
+  text-align: right;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  color: #94a3b8;
+  padding: 6px 4px;
+  cursor: grab;
+  user-select: none;
+  touch-action: none;
+}
+
+.tsp-card-drag:active {
+  cursor: grabbing;
+}
+
+/* Which real file this step is about (user request, 2026-09-08 — "include the filepath the step
+   is talking about"). Monospace + a real accent color so it reads as a path, not prose. */
+.tsp-card-file {
+  font-family: "DM Mono", monospace;
+  font-size: 12.5px;
+  font-weight: 700;
+  color: #0891b2;
+  margin-bottom: 10px;
+  word-break: break-all;
+}
+
+.tsp-card-check {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: #475569;
+  margin-bottom: 10px;
+  cursor: pointer;
+}
+
+.tsp-card-check input {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+
+.tsp-card-nav {
+  display: flex;
+  gap: 8px;
+  margin-top: auto;
+  padding-top: 14px;
+}
+
+.tsp-nav-btn {
+  flex: 1;
+  padding: 8px 12px;
+  font-size: 12px;
+  font-weight: 700;
+  background: #f1f5f9;
+  color: #334155;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.tsp-nav-btn:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.tsp-nav-btn-primary {
+  background: #0891b2;
+  color: #fff;
+  border-color: #0891b2;
+}
+
+.tsp-nav-btn-primary:disabled {
+  background: #a5f3fc;
+  border-color: #a5f3fc;
+}
+
+.tsp-empty {
+  width: 100%;
+  height: 100%;
+  padding: 20px 16px;
+  color: #94a3b8;
+  font-size: 13px;
+  background: #f8fafc;
+  box-sizing: border-box;
+}

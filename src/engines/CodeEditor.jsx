@@ -1,6 +1,7 @@
 import Editor from "@monaco-editor/react";
-import { useRef, useEffect, useCallback } from "react";
+import { useRef, useEffect, useCallback, useState, useMemo } from "react";
 import { configureMonacoDiagnosticsOff, MONACO_SHARED_OPTIONS } from "./monacoEditorConfig.js";
+import { registerReactSnippetPacks, SNIPPET_PACK_IDS } from "./monacoReactSnippetPacks.js";
 
 /**
  * Auto-insert a closing tag when the user types '>'.
@@ -76,6 +77,8 @@ function setupAutoCloseTags(editor, monaco) {
  *   cursorAtEndOfLine   — 1-based line number; place cursor at end of that line
  *   placeholderClearOnFocus — if set, first editor focus while value matches (trim) clears to ""
  *   focusOnMount — call editor.focus() after positioning (default true; set false when using placeholderClearOnFocus so seed text is not wiped on load)
+ *   onSubmitShortcut — Ctrl+Shift+Enter / ⌘⇧↵ (Monaco is iframe-hosted; parent window key handlers never see these keys)
+ *   snippetPacks — ['react-ts'] and/or ['react'] — which React snippet packs to merge for completions (see monacoReactSnippetPacks.js)
  */
 export default function CodeEditor({
   value = "",
@@ -86,15 +89,25 @@ export default function CodeEditor({
   cursorAtEndOfLine,
   placeholderClearOnFocus,
   focusOnMount = true,
+  onSubmitShortcut,
+  snippetPacks = [],
 }) {
   const editorRef = useRef(null);
   const monacoRef = useRef(null);
   const disposeRef = useRef(null);
+  const snippetDisposableRef = useRef(null);
   const placeholderRef = useRef(placeholderClearOnFocus);
   const onChangeRef = useRef(onChange);
+  const onSubmitShortcutRef = useRef(onSubmitShortcut);
+  const [monacoMountGen, setMonacoMountGen] = useState(0);
+  const snippetPacksKey = useMemo(
+    () => JSON.stringify([...(snippetPacks || [])].sort()),
+    [snippetPacks]
+  );
 
   placeholderRef.current = placeholderClearOnFocus;
   onChangeRef.current = onChange;
+  onSubmitShortcutRef.current = onSubmitShortcut;
 
   const applyPosition = useCallback(
     (editor) => {
@@ -126,6 +139,21 @@ export default function CodeEditor({
     if (editorRef.current) applyPosition(editorRef.current);
   }, [applyPosition]);
 
+  useEffect(() => {
+    const monaco = monacoRef.current;
+    if (!monaco) return undefined;
+    snippetDisposableRef.current?.dispose();
+    snippetDisposableRef.current = null;
+    const allowed = new Set(SNIPPET_PACK_IDS);
+    const ids = (snippetPacks || []).filter((id) => allowed.has(id));
+    if (!ids.length) return undefined;
+    snippetDisposableRef.current = registerReactSnippetPacks(monaco, ids);
+    return () => {
+      snippetDisposableRef.current?.dispose();
+      snippetDisposableRef.current = null;
+    };
+  }, [snippetPacksKey, monacoMountGen]);
+
   const handleMount = useCallback(
     (editor, monaco) => {
       editorRef.current = editor;
@@ -133,6 +161,12 @@ export default function CodeEditor({
 
       disposeRef.current?.dispose();
       const autoClose = setupAutoCloseTags(editor, monaco);
+      const submitShortcutId = editor.addCommand(
+        monaco.KeyMod.CtrlCmd | monaco.KeyMod.Shift | monaco.KeyCode.Enter,
+        () => {
+          onSubmitShortcutRef.current?.();
+        }
+      );
       const clearPlaceholder = editor.onDidFocusEditorWidget(() => {
         const ph = placeholderRef.current;
         if (ph == null || ph === "") return;
@@ -144,11 +178,21 @@ export default function CodeEditor({
       });
       disposeRef.current = {
         dispose() {
+          snippetDisposableRef.current?.dispose();
+          snippetDisposableRef.current = null;
           autoClose.dispose();
           clearPlaceholder.dispose();
+          if (submitShortcutId != null && typeof editor.removeCommand === "function") {
+            try {
+              editor.removeCommand(submitShortcutId);
+            } catch {
+              /* ignore */
+            }
+          }
         },
       };
 
+      setMonacoMountGen((g) => g + 1);
       requestAnimationFrame(() => applyPosition(editor));
     },
     [applyPosition]
@@ -168,8 +212,20 @@ export default function CodeEditor({
       options={{
         ...MONACO_SHARED_OPTIONS,
         fontSize: 14,
-        fontFamily: "'JetBrains Mono', 'Fira Code', 'Cascadia Code', Menlo, monospace",
-        fontLigatures: true,
+        // 'JetBrains Mono'/'Fira Code'/'Cascadia Code' were never actually loaded anywhere in this
+        // app (no <link>, no @font-face) — they only worked if a visitor happened to have them
+        // installed locally. When Monaco can't truly measure the requested font, its decoration
+        // positioning (guides, highlights) drifts — the likely real cause behind three rounds of
+        // "grey rectangle" reports that survived turning off bracketPairs and
+        // highlightActiveIndentation individually. Menlo/Consolas/Courier New are always present
+        // without any loading step, so there's no measurement race to begin with.
+        fontFamily: "Menlo, Consolas, 'Courier New', monospace",
+        fontLigatures: false,
+        // Highlighting other occurrences of the word/tag under the cursor is exactly what rendered
+        // as the misplaced grey blocks (user report, 2026-09-07) — off entirely rather than guessed
+        // at feature-by-feature again.
+        occurrencesHighlight: "off",
+        selectionHighlight: false,
         lineNumbers: "on",
         minimap: { enabled: false },
         scrollBeyondLastLine: false,
@@ -189,7 +245,15 @@ export default function CodeEditor({
         hideCursorInOverviewRuler: true,
         padding: { top: 12, bottom: 12 },
         bracketPairColorization: { enabled: true },
-        guides: { bracketPairs: true },
+        // guides.bracketPairs: true draws a filled vertical column down the whole height of every
+        // bracket scope in view, and highlightActiveIndentation (on by default even with
+        // bracketPairs off) fills the CURRENT indentation column with a background tint the same
+        // way — both read as ugly grey rectangles, not thin guide lines (user report, 2026-09-07,
+        // recurred after only turning off bracketPairs — highlightActiveIndentation is the separate
+        // setting actually responsible for the still-visible blocks). bracketPairColorization above
+        // already colors the bracket characters themselves, so matching is still visible without
+        // either kind of block.
+        guides: { bracketPairs: false, highlightActiveIndentation: false },
       }}
     />
   );

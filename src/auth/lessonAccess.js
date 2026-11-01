@@ -16,6 +16,8 @@ const STORAGE_KEY_EVER_REGISTERED = "inpact_ever_registered";
 const STORAGE_KEY_BALANCE = "inpact_balance_cents";
 const STORAGE_KEY_USER = "inpact_user";
 const STORAGE_KEY_DISMISS_COUNT = "inpact_register_dismiss_count";
+/** Emails that signed in via Google (IPF OAuth) — must not get a second email/password account. */
+const STORAGE_KEY_GOOGLE_EMAILS = "inpact_google_bound_emails";
 
 /** @deprecated Use gate copy only; anonymous prompts start at lesson 1. */
 export const FREE_LESSONS_SILENT = 0;
@@ -90,6 +92,59 @@ export function setRegistered(user = null) {
   } catch (_) {}
 }
 
+function normalizeEmail(email) {
+  return String(email || "")
+    .trim()
+    .toLowerCase();
+}
+
+function readGoogleBoundEmails() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY_GOOGLE_EMAILS);
+    const arr = raw ? JSON.parse(raw) : [];
+    return Array.isArray(arr) ? arr.map(normalizeEmail).filter(Boolean) : [];
+  } catch {
+    return [];
+  }
+}
+
+/** Remember that this email authenticates via Google — blocks a parallel email/password register. */
+export function markGoogleBoundEmail(email) {
+  const em = normalizeEmail(email);
+  if (!em) return;
+  try {
+    const next = Array.from(new Set([...readGoogleBoundEmails(), em]));
+    localStorage.setItem(STORAGE_KEY_GOOGLE_EMAILS, JSON.stringify(next));
+  } catch (_) {}
+}
+
+export function isGoogleBoundEmail(email) {
+  const em = normalizeEmail(email);
+  if (!em) return false;
+  if (readGoogleBoundEmails().includes(em)) return true;
+  try {
+    const user = getStoredUser();
+    const stored = normalizeEmail(user?.emailOrPhone || user?.email);
+    return Boolean(stored && stored === em && user?.authProvider === "google");
+  } catch {
+    return false;
+  }
+}
+
+/** Mirror an IPF Google (or aspirant) session into the lesson-app identity so one email = one account. */
+export function syncIpfSessionToLessonUser(session) {
+  if (!session?.email) return;
+  const email = normalizeEmail(session.email);
+  const viaGoogle = session.accountType === "js" || String(session.sub || "").length > 0;
+  if (viaGoogle) markGoogleBoundEmail(email);
+  setRegistered({
+    id: session.sub || email,
+    name: session.name || email.split("@")[0],
+    emailOrPhone: email,
+    authProvider: "google",
+  });
+}
+
 export function logout() {
   try {
     if (localStorage.getItem(STORAGE_KEY_REGISTERED) === "true") {
@@ -160,69 +215,36 @@ export function getLessonPriceCents() {
  * @returns {"first" | "second" | null}
  */
 export function getSoftGateKind(track, index, opts = {}) {
-  const keys = getAccessedKeys();
-  const key = lessonKey(track, index);
-  if (keys.includes(key)) return null;
-  if (isRegistered() || opts.loggedIn) return null;
-  if (hasEverRegistered()) return null;
-  if (keys.length > MAX_FREE_UNREGISTERED - 1) return null;
-  if (keys.length === 0) return "first";
-  if (keys.length === 1) return "second";
+  // App is fully free: disable all signup prompts.
   return null;
 }
 
 /** Soft gate: 1st and 2nd new anonymous lessons (dismissible). */
 export function mustSoftRegisterToAccess(track, index, opts = {}) {
-  return getSoftGateKind(track, index, opts) != null;
+  return false;
 }
 
 /**
  * Hard register gate: never-registered anonymous user on the 3rd new unique lesson.
  */
 export function mustHardRegisterToAccess(track, index, opts = {}) {
-  const keys = getAccessedKeys();
-  const key = lessonKey(track, index);
-  if (keys.includes(key)) return false;
-  if (opts.loggedIn || isRegistered()) return false;
-  if (hasEverRegistered()) return false;
-  return keys.length >= MAX_FREE_UNREGISTERED;
+  return false;
 }
 
 /**
  * Returning user: registered before, logged out — must log in to open lesson 9+ (new unique past 8).
  */
 export function mustLoginToUnlockPastAnonymousLimit(track, index, opts = {}) {
-  const keys = getAccessedKeys();
-  const key = lessonKey(track, index);
-  if (keys.includes(key)) return false;
-  if (opts.loggedIn || isRegistered()) return false;
-  if (!hasEverRegistered()) return false;
-  return keys.length >= MAX_FREE_UNREGISTERED;
+  return false;
 }
 
 /** Registered user past free tier opening a new lesson — needs balance (mock until payment). */
 export function mustPayToAccess(track, index, opts = {}) {
-  const keys = getAccessedKeys();
-  const key = lessonKey(track, index);
-  if (keys.includes(key)) return false;
-  if (!isRegistered() && !opts.loggedIn) return false;
-  return keys.length >= TOTAL_FREE_LESSONS;
+  return false;
 }
 
 export function canAccessLesson(track, index, opts = {}) {
-  const keys = getAccessedKeys();
-  const key = lessonKey(track, index);
-  if (keys.includes(key)) return true;
-  if (mustLoginToUnlockPastAnonymousLimit(track, index, opts)) return false;
-  if (!opts.loggedIn && !isRegistered() && hasEverRegistered()) {
-    return keys.length < MAX_FREE_UNREGISTERED;
-  }
-  if (!isRegistered() && !opts.loggedIn) {
-    if (keys.length < MAX_FREE_UNREGISTERED) return true;
-    return false;
-  }
-  if (keys.length < TOTAL_FREE_LESSONS) return true;
-  return getBalanceCents() >= getLessonPriceCents();
+  return true;
 }
 
 export function deductLessonPayment() {

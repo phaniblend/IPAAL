@@ -4,9 +4,11 @@
  * Run: npm run server from project root. Loads .env from project root.
  */
 
+import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
 import crypto from "crypto";
+import { execFile } from "child_process";
 import dotenv from "dotenv";
 import express from "express";
 import { cacheGet, cacheSet, getCacheDir } from "./cache.js";
@@ -19,10 +21,33 @@ import {
   assembleLessonConfig,
 } from "../src/ai-lessons/services/realLessonService.js";
 import { validateCodeWithAI } from "../src/ai-lessons/services/codeValidationService.js";
+import { annotateFeedbackOnCode } from "../src/ai-lessons/services/feedbackAnnotateService.js";
 import { validateLessonConfig } from "../src/ai-lessons/schema.js";
 import { completeWithAI } from "../src/ai-lessons/providers/aiProvider.js";
 import { buildMentorSystemPrompt, OFF_TOPIC_PREFIX, OFF_TOPIC_FALLBACK } from "../src/ai-lessons/prompt-templates/mentorChat.js";
+import cookieParser from "cookie-parser";
 import mentorRouter from "./mentor/mentor-router.js";
+import specforgeRouter from "./specforge-router.js";
+import productForgeRouter from "./product-forge-router.js";
+import idRouter from "./id-router.js";
+import assistMeRouter from "./assist-me-router.js";
+import authRouter from "./auth-router.js";
+import { isCoreSession } from "./authz.js";
+import recruitRouter from "./recruit-router.js";
+import adminRouter from "./admin-router.js";
+import gitProxyRouter from "./git-proxy-router.js";
+import smbDeskRouter from "./smb-desk-router.js";
+import minierpRouter from "./minierp-router.js";
+import sentinelposRouter from "./sentinelpos-router.js";
+// Starting this import runs the BullMQ Worker constructor (workers/sentinelpos-ingest.worker.js),
+// which begins polling Redis for jobs immediately — this app has no separate worker dyno, so the
+// one Node process that serves HTTP also runs every product's ingestion worker. Side-effect import,
+// not used directly here; kept even though no binding is referenced so it isn't tree-shaken/pruned
+// by an editor's "unused import" instinct — its entire job is the side effect.
+import "./workers/sentinelpos-ingest.worker.js";
+import routematrixRouter from "./routematrix-router.js";
+import batchcraftRouter from "./batchcraft-router.js";
+import { requireSession } from "./auth-session.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const rootDir = path.resolve(__dirname, "..");
@@ -102,6 +127,7 @@ function mentorSessionMiddleware(req, res, next) {
 }
 
 app.use(express.json());
+app.use(cookieParser());
 
 app.use((_req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
@@ -117,13 +143,169 @@ app.options("/api/lessons/objectives", (_req, res) => res.sendStatus(204));
 app.options("/api/lessons/validate", (_req, res) => res.sendStatus(204));
 app.options("/api/lessons/mentor", (_req, res) => res.sendStatus(204));
 app.options("/api/lessons/step-example", (_req, res) => res.sendStatus(204));
+app.options("/api/lessons/feedback-annotate", (_req, res) => res.sendStatus(204));
+
+app.get("/health", (_req, res) => res.json({ ok: true }));
+
+// Real repo activity for the "You're in!" team screen — replaces a fabricated teammate/PR count
+// with a genuine number so nothing shown there needs explaining away if a partner asks about it.
+// Reads a dedicated bare mirror (D:\IPAAL\.repo-stats\<project>.git) kept separate from any
+// project's live working clone (e.g. mini-erp/apps/api) so a stats request can never race or
+// interfere with that clone's own git state. Allowlisted project names only — this shells out to
+// git, so the project param must never reach the shell unvalidated.
+const REPO_STATS_ALLOWLIST = new Set(["MiniERP"]);
+const repoStatsRoot = path.join(rootDir, ".repo-stats");
+
+function execFileP(cmd, args, opts) {
+  return new Promise((resolve, reject) => {
+    execFile(cmd, args, opts, (err, stdout) => (err ? reject(err) : resolve(stdout)));
+  });
+}
+
+app.get("/api/repo-stats/:project", requireSession, async (req, res) => {
+  const { project } = req.params;
+  if (!REPO_STATS_ALLOWLIST.has(project)) return res.status(404).json({ error: "unknown project" });
+  const gitDir = path.join(repoStatsRoot, `${project}.git`);
+  try {
+    await execFileP("git", ["--git-dir", gitDir, "fetch", "-q", "origin", "main"], { timeout: 10000 });
+    const out = await execFileP("git", ["--git-dir", gitDir, "rev-list", "--count", "origin/main"], { timeout: 10000 });
+    res.json({ commits: parseInt(out.trim(), 10) || 0 });
+  } catch (err) {
+    console.error("[repo-stats] failed:", err.message);
+    res.status(502).json({ error: "could not read repo stats" });
+  }
+});
 
 app.use("/api/mentor", mentorSessionMiddleware, mentorRouter);
+app.use("/api/specforge", specforgeRouter);
+app.use("/api/product-forge", productForgeRouter);
+app.use("/api/id", idRouter);
+app.use("/api/assist-me", assistMeRouter);
+app.use("/api/auth", authRouter);
+app.use("/api/recruit", recruitRouter);
+app.use("/api/admin", adminRouter);
+app.use("/api/git", requireSession, gitProxyRouter);
+// Real, in-memory backend for the SMB product APIs (Booking/Package/Invoice/Lead/Shift/Quote/
+// Review/Reminder desks) — generated from the same MODULES config the FE task lesson content
+// comes from (scripts/generate-smb-backend-routes.mjs), then hand-fixed against each product's
+// real acceptance criteria (see server/smb-desk-router.js's own comments). Mounted at bare /api
+// since each resource already owns a distinct top-level path (/api/packages, /api/punches, etc.)
+app.use("/api", smbDeskRouter);
+// Real MiniERP backend (Tasks 1-5 of that product's spec) — double-entry GL, item/MAC valuation,
+// P2P and O2C transactional flows, reports, and the reorder sweep. See minierp-router.js's own
+// header for why this is Express + in-memory rather than the spec's literal Prisma/Postgres/
+// Fastify/BullMQ stack. No path here collides with smbDeskRouter's resources above.
+app.use("/api", minierpRouter);
+// Real backends for the three newest catalog products (2026-09-10) — each mounted under its own
+// /api/v1 prefix (SentinelPOS/RouteMatrix/BatchCraft's own FE tasks were written against /api/v1/...
+// paths, unlike the bare /api/... convention above) so none collide with smbDeskRouter/minierpRouter
+// or each other. See each router's own header for exactly which of that product's spec tasks are
+// real here vs. deliberately not built (nothing an FE task doesn't actually call).
+app.use("/api", sentinelposRouter);
+app.use("/api", routematrixRouter);
+app.use("/api", batchcraftRouter);
+
+/**
+ * Authenticated pass-through to OneDev's REST API — replaces the old `/onedev-api` path, which
+ * only ever existed as a Vite **dev-server** proxy (vite.config.js `server.proxy`) that forwarded
+ * to OneDev with zero session check and injected the OneDev admin credentials on every request.
+ * That's fine on localhost; it's a wide-open OneDev-admin hole the moment this is public. Credentials
+ * are injected here, server-side, and never reach the browser.
+ * Ops pages (PD Studio, Workbench, Cohorts, ModuleLibrary, ContributionMonitor, HuddleCalendar,
+ * CD Review, HumanCapitalReports, MatchingQueue, Apply) call this the same generic way the old
+ * `/onedev-api` path worked: `fetch(\`/api/onedev${onedevApiPath}\`, opts)`.
+ *
+ * Write access requires a core (`-core`) session, added 2026-09-11 (server/authz.js): this used to
+ * let *any* signed-in session — JS applicants included — issue arbitrary writes (create/edit/delete
+ * any issue or project) through the shared OneDev admin credential, with nothing checking who was
+ * asking. Confirmed by reading every caller that every JS-facing screen (Workbench, TeamIntro) only
+ * ever GETs through this proxy — the one write call in Workbench.jsx (`handleCreate`, the new-issue
+ * form) is only rendered in that file's non-JS branch — so this is a complete fix for the write path
+ * with no real workflow broken. Reads are NOT yet scoped down to a JS's own project(s) here — this
+ * proxy takes an arbitrary OneDev query string, and safely restricting that per-caller is a bigger
+ * job than this pass; see authz.js's top comment.
+ */
+app.use("/api/onedev", requireSession, async (req, res) => {
+  try {
+    if (!isCoreSession(req.session) && !["GET", "HEAD"].includes(req.method)) {
+      return res.status(403).json({
+        error: "Only core accounts may write through this endpoint — use the dedicated task/application routes instead.",
+      });
+    }
+    const base = (process.env.ONEDEV_INTERNAL_URL || "http://localhost:6610").replace(/\/+$/, "");
+    const target = `${base}/~api${req.url}`;
+    const user = process.env.ONEDEV_API_USER || "";
+    const pass = process.env.ONEDEV_API_PASS || "";
+    const auth = "Basic " + Buffer.from(`${user}:${pass}`).toString("base64");
+    const hasBody = !["GET", "HEAD"].includes(req.method);
+    const upstream = await fetch(target, {
+      method: req.method,
+      headers: {
+        Authorization: auth,
+        Accept: "application/json",
+        "Content-Type": req.headers["content-type"] || "application/json",
+      },
+      body: hasBody ? (typeof req.body === "string" ? req.body : JSON.stringify(req.body ?? {})) : undefined,
+    });
+    const text = await upstream.text();
+    res.status(upstream.status);
+    res.setHeader("Content-Type", upstream.headers.get("content-type") || "application/json");
+    res.send(text);
+  } catch (err) {
+    console.error("[onedev-proxy] upstream error:", err.message);
+    res.status(502).json({ error: "OneDev upstream error" });
+  }
+});
+
+/**
+ * Mattermost incoming-webhook pass-through — replaces the old `/mattermost-api` Vite-dev-only
+ * proxy. No session gate: the webhook URL/id itself is the credential (write-only, narrowly
+ * scoped to posting into one channel), same design note as src/team-messaging/notify.js.
+ */
+app.use("/api/mattermost", async (req, res) => {
+  try {
+    const base = (process.env.MATTERMOST_INTERNAL_URL || "http://localhost:8065").replace(/\/+$/, "");
+    const target = `${base}${req.url}`;
+    const hasBody = !["GET", "HEAD"].includes(req.method);
+    const upstream = await fetch(target, {
+      method: req.method,
+      headers: { "Content-Type": req.headers["content-type"] || "application/json" },
+      body: hasBody ? (typeof req.body === "string" ? req.body : JSON.stringify(req.body ?? {})) : undefined,
+    });
+    const text = await upstream.text();
+    res.status(upstream.status);
+    res.setHeader("Content-Type", upstream.headers.get("content-type") || "application/json");
+    res.send(text);
+  } catch (err) {
+    console.error("[mattermost-proxy] upstream error:", err.message);
+    res.status(502).json({ error: "Mattermost upstream error" });
+  }
+});
 
 /** Resolve AI API key from env. DeepSeek only. */
 function getAIOptions() {
   const apiKey = process.env.DEEPSEEK_API_KEY || process.env.VITE_DEEPSEEK_API_KEY;
   return { apiKey, provider: "deepseek" };
+}
+
+function summarizeDeepSeekError(err) {
+  const message = err instanceof Error ? err.message : String(err || "");
+  const status = typeof err?.status === "number" ? err.status : null;
+  const lower = message.toLowerCase();
+  const isAuth = status === 401 || status === 403 || /\b(invalid api key|unauthorized|forbidden)\b/i.test(message);
+  const isQuota = /\b(insufficient|quota|credit|billing|balance)\b/i.test(message);
+  const isRateLimit = status === 429 || /\b429|rate limit|too many requests\b/i.test(lower);
+  const isServer = status != null && status >= 500;
+  const category = isAuth
+    ? "auth-invalid-or-revoked-key"
+    : isQuota
+      ? "quota-or-credits-exhausted"
+      : isRateLimit
+        ? "rate-limited"
+        : isServer
+          ? "deepseek-server-error"
+          : "unknown";
+  return { status, category, message };
 }
 
 function getLessonParams(req) {
@@ -446,7 +628,24 @@ app.post("/api/lessons/validate", async (req, res) => {
   }
   const lang = language || "javascript";
   // Bump v when validation prompt/rules change so old cache entries are bypassed (e.g. interface placement rules)
-  const VALIDATION_CACHE_VERSION = 11;
+  // v12 (2026-09-07): isReactTrack/getTrackContext now recognize idt-*/funda-* task tags as React —
+  // previously every idt-*/funda-* step silently skipped checkReactHookImports and got the generic
+  // "General" framework validation prompt. Old cache entries for those tracks were validated under
+  // the broken behavior (e.g. missing-import code marked "correct") and must not be served anymore.
+  // v13 (2026-09-07): the v12 fix alone wasn't enough — checkReactHookImports's own hook-detection
+  // regex required the hook name to sit immediately against '(' (useState() ) and never matched
+  // useState<Financials>(...), the actual pattern nearly all TypeScript React code in this platform
+  // uses. Verified live: v12 was still serving "correct" for useState<Financials>(...) with zero
+  // react imports. Fixed the regex to allow an optional generic clause; must invalidate again.
+  // v14 (2026-09-07): user report — "why am i getting different results every time i check my
+  // code" — the SAME unchanged broken code (a typo'd generic type argument) failed one check and
+  // passed the next with zero edits between them. Root cause: no temperature was set on the
+  // DeepSeek call, so it used the provider's own non-zero default — classic sampling variance on a
+  // borderline judgment. Set temperature: 0 on the validation (and feedback-annotate) calls, and
+  // added a new deterministic guard (checkGenericTypeTypos) catching the specific pattern that
+  // exposed this. A "correct" that only sometimes cached under the old flaky behavior must not
+  // keep being served now that both fixes are in.
+  const VALIDATION_CACHE_VERSION = 14;
   const sc = step.successCriteria;
   const criteriaKey = Array.isArray(sc) ? sc.join("|") : String(sc || "");
   const kw = step.answer_keywords;
@@ -485,6 +684,61 @@ app.post("/api/lessons/validate", async (req, res) => {
     const message = err instanceof Error ? err.message : String(err);
     console.error("[AI server] validate error:", message);
     res.status(500).json({ error: message });
+  }
+});
+
+/** Map validation feedback onto the learner's code (inline comments) via DeepSeek. */
+app.post("/api/lessons/feedback-annotate", async (req, res) => {
+  const { apiKey, provider } = getAIOptions();
+  const { instruction, feedback, hint, userCode, language } = req.body || {};
+  if (userCode == null) {
+    res.status(400).json({ error: "Missing userCode" });
+    return;
+  }
+  if (!apiKey) {
+    console.warn(
+      `[AI server] feedback-annotate fallback: missing API key. env(DEEPSEEK_API_KEY)=${
+        process.env.DEEPSEEK_API_KEY ? "set" : "NOT SET"
+      }, env(VITE_DEEPSEEK_API_KEY)=${process.env.VITE_DEEPSEEK_API_KEY ? "set" : "NOT SET"}`
+    );
+    const fb = String(feedback || "").trim();
+    const h = String(hint || "").trim();
+    const base = fb || h || "Review the step requirements and add the missing required pattern.";
+    const safe = base.replace(/\r?\n+/g, " ").trim();
+    const coach = `On this line you started the solution — but you still need: ${safe}`;
+    return res.json({
+      annotatedCode: `// ${coach}\n${String(userCode)}`,
+      note: "fallback-without-ai-key",
+    });
+  }
+  try {
+    const result = await annotateFeedbackOnCode(
+      {
+        instruction: instruction != null ? String(instruction) : "",
+        feedback: feedback != null ? String(feedback) : "",
+        hint: hint != null ? String(hint) : "",
+        userCode: String(userCode),
+        language: language != null ? String(language) : "typescript",
+      },
+      { apiKey, provider }
+    );
+    res.json(result);
+  } catch (err) {
+    const summary = summarizeDeepSeekError(err);
+    console.error(
+      `[AI server] feedback-annotate error: category=${summary.category}, status=${
+        summary.status ?? "n/a"
+      }, message=${summary.message}`
+    );
+    const userSafeMessage =
+      summary.category === "auth-invalid-or-revoked-key"
+        ? "DeepSeek rejected the API key (401/403). Key may be invalid or revoked."
+        : summary.category === "quota-or-credits-exhausted"
+          ? "DeepSeek quota/credits appear exhausted. Check account balance/billing."
+          : summary.category === "rate-limited"
+            ? "DeepSeek rate limit hit (429). Please retry in a moment."
+            : summary.message;
+    res.status(500).json({ error: userSafeMessage });
   }
 });
 
@@ -598,12 +852,34 @@ app.post("/api/lessons/generate", async (req, res) => {
   }
 });
 
+/**
+ * Production: serve Vite `dist/` from the same process as `/api` so POST /api/lessons/* works on one host.
+ * (A static-only host like Caddy often returns 405 for POST to /api.)
+ * When `dist/index.html` exists (e.g. after `npm run build`), static assets + SPA fallback are enabled.
+ */
+const distDir = path.join(rootDir, "dist");
+const distIndexHtml = path.join(distDir, "index.html");
+if (fs.existsSync(distIndexHtml)) {
+  app.use(express.static(distDir));
+  app.use((req, res, next) => {
+    if (req.method !== "GET" && req.method !== "HEAD") return next();
+    if (req.path.startsWith("/api")) return next();
+    res.sendFile(distIndexHtml, (err) => {
+      if (err) next(err);
+    });
+  });
+}
+const servingStatic = fs.existsSync(distIndexHtml);
+
 const server = app.listen(PORT, () => {
   const { apiKey, provider } = getAIOptions();
   const keyName = "DEEPSEEK_API_KEY";
   console.log(
-    `AI lesson server at http://localhost:${PORT} (POST /api/lessons/intro, /objectives, /generate, /preview, /validate, /step-example)`
+    `AI lesson server at http://localhost:${PORT} (POST /api/lessons/intro, /objectives, /generate, /preview, /validate, /step-example, /feedback-annotate)`
   );
+  if (servingStatic) {
+    console.log(`Also serving SPA from ${distDir} (same origin as /api — use one Node service in production).`);
+  }
   console.log(`Content: ${getContentDir()} (checked before cache/API). Cache: ${getCacheDir()}. AI_PROVIDER=${provider}, ${keyName}: ${apiKey ? "set" : "NOT SET"}`);
 });
 

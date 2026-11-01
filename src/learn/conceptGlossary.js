@@ -11,6 +11,8 @@ const PACKS = {
  * React · TS extended dives: `content/react-ts/000_deep_dives.json`. Keys like `001_Counter_App` → lessonNum 1.
  * Optional `introductionStepId` (default `step1`) registers the dive on that step; other steps get the
  * same dive via `byLesson` fallback — unless `showDeepDiveInIntro` is true (then only the Lesson intro shows it).
+ * Per-step dives from the engine: pass `inlineStepConcept` from a question node with `deepDive` — that step uses
+ * only that content (no extended JSON merge for that step), so the button does not repeat on every step.
  */
 const { REACT_TS_EXTENDED_BY_LESSON_AND_STEP, REACT_TS_EXTENDED_BY_LESSON, REACT_TS_INTRO_DEEP_DIVE_BY_LESSON } =
   (() => {
@@ -52,9 +54,10 @@ const { REACT_TS_EXTENDED_BY_LESSON_AND_STEP, REACT_TS_EXTENDED_BY_LESSON, REACT
  * @param {number} lessonNum
  * @param {string} stepId
  * @param {string[]|undefined} nodeIntroduces - from step JSON `introducesConcepts`, copied to node
+ * @param {{ label?: string, deepDive: Record<string, string> }|null|undefined} inlineStepConcept - from engine question node `deepDive` (+ optional `deepDiveLabel` / `title` as label)
  * @returns {{ id: string, label: string, deepDive: Record<string, string> }[]}
  */
-export function getDeepDiveConceptsForStep(track, lessonNum, stepId, nodeIntroduces) {
+export function getDeepDiveConceptsForStep(track, lessonNum, stepId, nodeIntroduces, inlineStepConcept) {
   const chosenPack = PACKS[track];
   const packs = chosenPack ? [chosenPack] : Object.values(PACKS).filter(Boolean);
   if (!packs.length) return [];
@@ -73,18 +76,36 @@ export function getDeepDiveConceptsForStep(track, lessonNum, stepId, nodeIntrodu
     if (typeof id === "string" && id.trim()) ids.add(id.trim());
   }
 
+  const inlineDd = inlineStepConcept?.deepDive ?? inlineStepConcept?.deep_dive;
+  const hasInlineDeepDive = Boolean(
+    inlineDd && typeof inlineDd === "object" && !Array.isArray(inlineDd)
+  );
+
   const out = [];
-  for (const id of ids) {
-    const c = packs.map((p) => p?.concepts?.[id]).find(Boolean);
-    if (!c?.deepDive) continue;
-    out.push({
-      id,
-      label: c.label || id,
-      deepDive: c.deepDive,
-    });
+  // When the engine defines `deepDive` on the step, use that as the single source — skip glossary
+  // introductions for this step (they often duplicate the same concept, e.g. createAsyncThunk + JSON).
+  if (!hasInlineDeepDive) {
+    for (const id of ids) {
+      const c = packs.map((p) => p?.concepts?.[id]).find(Boolean);
+      if (!c?.deepDive) continue;
+      out.push({
+        id,
+        label: c.label || id,
+        deepDive: c.deepDive,
+      });
+    }
   }
 
-  if (track === "react-ts" && pNum != null && stepId) {
+  if (hasInlineDeepDive) {
+    const id = `inline-${pNum != null && !Number.isNaN(Number(pNum)) ? pNum : "x"}-${stepId || "step"}`;
+    if (!out.some((o) => o.id === id)) {
+      out.push({
+        id,
+        label: inlineStepConcept.label || inlineStepConcept.deepDiveLabel || "Deep dive",
+        deepDive: inlineDd,
+      });
+    }
+  } else if (track === "react-ts" && pNum != null && stepId) {
     let ext = REACT_TS_EXTENDED_BY_LESSON_AND_STEP[`${pNum}::${stepId}`];
     if (!ext?.deepDive) ext = REACT_TS_EXTENDED_BY_LESSON[pNum];
     if (ext?.deepDive && !out.some((o) => o.id === ext.id)) {
@@ -92,7 +113,47 @@ export function getDeepDiveConceptsForStep(track, lessonNum, stepId, nodeIntrodu
     }
   }
 
-  return out;
+  return dedupeDeepDiveConceptsByContent(out);
+}
+
+/** Same conceptual guide attached twice (glossary + extended JSON, etc.) → one button. Prefer `inline-*` ids. */
+function deepDiveContentKey(dd) {
+  if (!dd || typeof dd !== "object") return null;
+  try {
+    return JSON.stringify(dd, Object.keys(dd).sort());
+  } catch {
+    return null;
+  }
+}
+
+function dedupeDeepDiveConceptsByContent(items) {
+  if (!Array.isArray(items) || items.length < 2) return items;
+  const bestByKey = new Map();
+  for (const item of items) {
+    const k = deepDiveContentKey(item?.deepDive);
+    if (k == null) continue;
+    const prev = bestByKey.get(k);
+    if (!prev) {
+      bestByKey.set(k, item);
+    } else {
+      const prefer =
+        String(item.id).startsWith("inline-") && !String(prev.id).startsWith("inline-") ? item : prev;
+      bestByKey.set(k, prefer);
+    }
+  }
+  const emitted = new Set();
+  const result = [];
+  for (const item of items) {
+    const k = deepDiveContentKey(item?.deepDive);
+    if (k == null) {
+      result.push(item);
+      continue;
+    }
+    if (emitted.has(k)) continue;
+    emitted.add(k);
+    result.push(bestByKey.get(k));
+  }
+  return result;
 }
 
 /** Lowercase alphanumerics only — compare lesson titles to extended JSON keys like `029_useDebounce`. */

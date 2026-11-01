@@ -53,6 +53,10 @@ export default function MultiFileEditor({
   placeholderByFile,
   /** When false (default), never clear editor on focus — avoids wiping carry-forward code on later steps. */
   clearPlaceholderOnFirstFocus = false,
+  /** Passed to CodeEditor — Ctrl+Shift+Enter / ⌘⇧↵ */
+  onSubmitShortcut,
+  /** Passed to CodeEditor — enabled React snippet pack ids */
+  snippetPacks = [],
 }) {
   const parsed = useMemo(() => parseAnswer(value), [value]);
   const files = parsed?.files ?? { [defaultFileName]: "" };
@@ -161,6 +165,8 @@ export default function MultiFileEditor({
           language={editorLanguage}
           placeholderClearOnFocus={placeholderClearOnFocus}
           focusOnMount={!placeholderClearOnFocus}
+          onSubmitShortcut={onSubmitShortcut}
+          snippetPacks={snippetPacks}
         />
       </div>
     </div>
