@@ -569,34 +569,87 @@ function bootstrapTokenOk(req) {
   return Boolean(got && got === expected);
 }
 
-/** GET /onedev-ping — confirm this service can reach OneDev (no secrets in response). */
+/** GET /onedev-ping — confirm this service can reach OneDev (no secrets in response).
+ *  If the configured URL fails, probes common Railway private hostnames so we can see which
+ *  OneDev service name is reachable on the private network. */
 router.get("/onedev-ping", async (req, res) => {
   if (!bootstrapTokenOk(req)) {
     return res.status(401).json({ error: "Invalid bootstrap token." });
   }
-  const raw = (process.env.ONEDEV_INTERNAL_URL || "http://localhost:6610").replace(/\/+$/, "");
-  let host = raw;
+  const configured = (
+    process.env.ONEDEV_INTERNAL_URL ||
+    process.env.ONEDEV_URL ||
+    process.env.ONEDEV_PRIVATE_URL ||
+    "http://localhost:6610"
+  ).replace(/\/+$/, "");
+  let host = configured;
   try {
-    host = new URL(raw).host;
+    host = new URL(configured).host;
   } catch {
     /* keep raw */
   }
-  try {
-    const projects = await listProjects({ offset: 0, count: 5 });
-    res.json({
-      ok: true,
-      host,
-      projectCount: Array.isArray(projects) ? projects.length : 0,
-      sample: Array.isArray(projects) ? projects.slice(0, 3).map((p) => p.name) : [],
-    });
-  } catch (err) {
-    res.status(500).json({
-      ok: false,
-      host,
-      error: err.message,
-      cause: err.cause?.message || err.cause?.code || null,
-    });
+
+  const user = process.env.ONEDEV_API_USER || "";
+  const pass = process.env.ONEDEV_API_PASS || "";
+  const auth = "Basic " + Buffer.from(`${user}:${pass}`).toString("base64");
+  const candidates = [
+    configured,
+    "http://onedev.railway.internal:6610",
+    "http://onedev-inpact.railway.internal:6610",
+    "http://onedev-inpact.railway.internal:80",
+    "http://ipaals-onedev.railway.internal:6610",
+    "http://one-dev.railway.internal:6610",
+  ].filter((v, i, a) => a.indexOf(v) === i);
+
+  const probes = [];
+  for (const base of candidates) {
+    const url = `${base.replace(/\/+$/, "")}/~api/projects?offset=0&count=3`;
+    try {
+      const upstream = await fetch(url, {
+        headers: { Authorization: auth, Accept: "application/json" },
+        signal: AbortSignal.timeout(4000),
+      });
+      const text = await upstream.text();
+      let sample = [];
+      try {
+        const json = text ? JSON.parse(text) : [];
+        sample = Array.isArray(json) ? json.slice(0, 3).map((p) => p.name) : [];
+      } catch {
+        /* ignore */
+      }
+      probes.push({ base, status: upstream.status, ok: upstream.ok, sample });
+      if (upstream.ok) {
+        return res.json({
+          ok: true,
+          host: new URL(base).host,
+          configuredHost: host,
+          usedFallback: base !== configured,
+          projectCount: sample.length,
+          sample,
+          probes,
+          hint: base !== configured
+            ? `Set Railway var ONEDEV_INTERNAL_URL=${base}`
+            : null,
+        });
+      }
+    } catch (err) {
+      probes.push({
+        base,
+        ok: false,
+        error: err.message,
+        cause: err.cause?.message || err.cause?.code || null,
+      });
+    }
   }
+
+  res.status(500).json({
+    ok: false,
+    host,
+    hasApiUser: Boolean(user),
+    error: "No reachable OneDev on configured URL or common Railway private hosts.",
+    probes,
+    hint: "In Railway → IPAAL-rest app → Variables, set ONEDEV_INTERNAL_URL to http://<onedev-service-name>.railway.internal:6610 (Private Networking).",
+  });
 });
 
 /**
